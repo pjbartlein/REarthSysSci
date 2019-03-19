@@ -1,0 +1,218 @@
+/* html-md-01.css */
+
+div#TOC li {
+  list-style-type: none;
+  list-style-position: outside;
+  list-style-image: none;
+  background-image: none;
+  background-position: 0px center;
+}
+
+.navbar-brand, .navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse, .pre-scrollable {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: normal;
+}
+
+/* exercise */
+body, td {
+   font-family: Times, TimesNewRoman, serif;
+   background-color: white;
+   font-size: 16px;
+   margin: 30px;
+   text-align:justify;
+}
+
+/*/* web page */
+/*body, td {
+  font-family: Times, TimesNewRoman, serif;
+  background-color: white;
+  font-size: 16px;
+  font-weight: normal;
+}*/
+
+/*exercise*/
+tt, code, pre {
+   font-family: Consolas, "Courier New", Monaco, monospace;
+   font-size: 13px;
+   font-weight: bolder;
+}
+
+/*web page*/
+tt, code, pre {
+  font-family: "Consolas", "Courier New", Monaco, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+h1 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 24px;
+  font-weight: normal;
+}
+
+h1.title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  font-weight: normal;
+}
+
+h2 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 20px;
+  font-weight: normal;
+}
+
+h3 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 20px;
+  font-weight: normal;
+  font-style: italic;
+}
+
+h4 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+h5 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 18px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+h6 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 16px;
+  font-weight: bolder;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+tt, code, pre {
+  font-family: "Consolas", "Courier New", Monaco, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+/*pre { 
+   margin-top: 0;
+   max-width: 100%;
+   border: 1px solid #999999;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; 
+/*   padding: 0.2em;*/
+/*   background-color:  #E0E0E0;*/
+}
+
+code.r, code.noeval, code.cpp {
+   background-color: #eeeeee;
+}*/
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#000000;
+   margin:0;
+   padding-left: 1em;
+   padding-right: 1em;
+   border-left: 0.5em #E0E0E0 solid;
+   border-right: 0.5em #E0E0E0 solid
+  font-family: Times, TimesNewRoman, serif;
+  background-color: white;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+  * {
+    background-color: transparent !important;
+    background-image: none !important;
+    background-repeat: repeat !important;
+    background-attachment: scroll !important;
+    background-position: 0% 0% !important;
+    color: black !important;
+    filter: none !important;
+  }
+  body, td {
+    font-family: Times, TimesNewRoman, serif;
+    background-color: white;
+    font-size: 13px;
+    font-weight: normal;
+    width:  940px;
+    margin: 30px;
+    right:  860px;
+    text-align:justify;
+  }
+  h1 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 18px;
+    font-weight: normal;
+  }
+  h1.title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+  }
+  h2 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 16px;
+    font-weight: normal;
+  }
+  h3 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: italic;
+  }
+  h4 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  h5 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+  }
+  h6 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 13px;
+    font-weight: bolder;
+  }
+  tt, code, pre {
+    font-family: "Consolas", "Courier New", Monaco, monospace;
+    font-size: 13px;
+    font-weight: bold;
+  }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
