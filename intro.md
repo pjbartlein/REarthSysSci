@@ -1,6 +1,6 @@
 # R and RStudio #
 
-Before getting into doing actual analyses of Earth-system science-type data using R, there is a bit of set-up and infrastructure installation to do.  Although the list may seem daunting at first, the installations are quite straightforward. 
+Before doing actual analyses of Earth-system science-type data using R, there is a bit of set-up and infrastructure installation to do.  Although the list may seem daunting at first, the installations are quite straightforward. 
 
 ## R, CRAN, and Bioconductor ##
 

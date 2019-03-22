@@ -7,8 +7,8 @@ navbar:
   - text: Topics
     menu:
     - text: Lecture topics
-    - text: Introduction to the course
-      href: lec01.html
+    - text: "Introduction: R, RStudio, and other infrastructure"
+      href: intro.html
 
   - text: Tasks 
     menu:
