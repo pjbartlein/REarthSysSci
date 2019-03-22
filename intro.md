@@ -1,4 +1,6 @@
-# R, RStudio, and other infrastructure#
+# R and RStudio #
+
+Before getting into doing actual analyses of Earth-system science-type data using R, there is a bit of set-up and infrastructure installation to do.  Although the list may seem daunting at first, the installations are quite straightforward. 
 
 ## R, CRAN, and Bioconductor ##
 
@@ -8,7 +10,7 @@ The "R Project" (or simply "R") grew out of the development of the S language fo
 - CRAN:  http://cran.us.r-project.org/index.html (download R and CRAN packages)
 - Bioconductor:  http://bioconductor.org/ (download Bioconductor packages)
 
-The current version of R is 3.5.3 (22 March 2019)
+The current version of R is 3.5.3 (22 March 2019).
 
 Here are a few links to some GEOG 4/595 materials on R (note that the installation directions may pertain to a previous version):
 
@@ -19,7 +21,7 @@ Here are a few links to some GEOG 4/595 materials on R (note that the installati
 
 ## RStudio ##
 
-RStudio is a development environment for R that is much more powerful than the "built-in" Windows and OS X graphical user interfaces (GUIs), and additionally nicely supports the development of "R Markdown" documents that combine text, code and R output.
+RStudio is a development environment for R that is much more powerful than the "built-in" Windows or Mac graphical user interfaces (GUIs), and additionally nicely supports the development of "R Markdown" documents that combine text, code and R output.
 
 - RStudio:  [https://www.rstudio.com/](https://www.rstudio.com/)
 - RStudio blog:  [https://blog.rstudio.org/](https://blog.rstudio.org/)
@@ -35,13 +37,22 @@ Microsoft sponsors something called the Microsoft R Application Network (MRAN), 
 
 NOTE:  It will likely not be necessary to use MRO for the course project, but the information is here for completeness.
 
+# Other infrastructure and utilities #
+
 ## Git and GitHub (Version Control)
 
 "Git" is an open-source version-control system, that allows one to track (and backup) the development of software by building a "local repository" of current and previous versions of code, data, markdown files, etc. on one's machine, while "GitHub" is a website that hosts "remote repositories", allowing them to be reached (or restored) from any machine, which greatly facilitates collaboration.   
 
 - GitHub:  [https://github.com](https://github.com) 
 
-The installation of 
-It is becoming standard practice that any specialized software used in writing a journal article be made available via a repository like GitHub, and to be searchable via a DOI—a "digital object identifier"— all in aid of fostering "reproducible research".  
+The key resources for setting up and using Git and GitHub with RStudio is a bookdown web page by Jenny Bryan and others at [https://happygitwithr.com/index.html](https://happygitwithr.com/index.html).
+See the Tasks tab above for directions for installing Git and establishing an account on GitHub.
 
-For example, for a paper currently under review in the journal *Geoscientific Model Development* we developed a number of Fortran programs and data sets that reside in a GitHub repository, and then added that repository to the list of those cataloged by an operation
+It is becoming standard practice that any specialized software used in writing a journal article be made available via a repository like GitHub, and to be searchable via a DOI—a "digital object identifier"— all in aid of fostering "reproducible research".  For example, for a paper currently under review in the journal *Geoscientific Model Development* we developed a number of Fortran programs and data sets that reside in a GitHub repository, and then added that repository to the list of those cataloged by an operation called Zenodo, which provides a "permanent" DOI.
+
+- GitHub repository:  [https://github.com/pjbartlein/PaleoCalAdjust](https://github.com/pjbartlein/PaleoCalAdjust)
+- Zenodo-issued DOI:  [https://doi.org/10.5281/zenodo.1478824](https://doi.org/10.5281/zenodo.1478824)  
+
+Here's the GitHub repository for the course web page:  
+
+- [https://github.com/pjbartlein/REarthSysSci](https://github.com/pjbartlein/REarthSysSci)

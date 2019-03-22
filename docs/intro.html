@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Introduction: R, RStudio and other infrastructure</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Earth-System Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="lec01.html">Introduction to the course</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tasks
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Exercises</li>
+    <li>
+      <a href="ex01.html">Exercise 01 -- Getting R and RStudio</a>
+    </li>
+    <li>
+      <a href="ex02.html">Exercise 02 -- Univariate plots</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Introduction: R, RStudio and other infrastructure</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#r-and-rstudio"><span class="toc-section-number">1</span> R and RStudio</a><ul>
+<li><a href="#r-cran-and-bioconductor"><span class="toc-section-number">1.1</span> R, CRAN, and Bioconductor</a></li>
+<li><a href="#rstudio"><span class="toc-section-number">1.2</span> RStudio</a></li>
+<li><a href="#microsoft-r-open"><span class="toc-section-number">1.3</span> Microsoft R Open</a></li>
+</ul></li>
+<li><a href="#other-infrastructure-and-utilities"><span class="toc-section-number">2</span> Other infrastructure and utilities</a><ul>
+<li><a href="#git-and-github-version-control"><span class="toc-section-number">2.1</span> Git and GitHub (Version Control)</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="r-and-rstudio" class="section level1">
+<h1><span class="header-section-number">1</span> R and RStudio</h1>
+<p>Before getting into doing actual analyses of Earth-system science-type data using R, there is a bit of set-up and infrastructure installation to do. Although the list may seem daunting at first, the installations are quite straightforward.</p>
+<div id="r-cran-and-bioconductor" class="section level2">
+<h2><span class="header-section-number">1.1</span> R, CRAN, and Bioconductor</h2>
+<p>The “R Project” (or simply “R”) grew out of the development of the S language for data analysis and statistics at Bell Laboratories in the 1980s (and can be said to be an open-source version of S). R for different operating systems can be downloaded from “CRAN” (Comprehensive R Archive Network) site listed below. The basic installation of R is supplemented by a large number of packages (or libraries) that are also obtainable from CRAN or from Bioconductor, the latter being a collection of packages oriented to the analysis of life-science data.</p>
+<ul>
+<li>R Project webpage: <a href="https://www.r-project.org/" class="uri">https://www.r-project.org/</a><br />
+</li>
+<li>CRAN: <a href="http://cran.us.r-project.org/index.html" class="uri">http://cran.us.r-project.org/index.html</a> (download R and CRAN packages)</li>
+<li>Bioconductor: <a href="http://bioconductor.org/" class="uri">http://bioconductor.org/</a> (download Bioconductor packages)</li>
+</ul>
+<p>The current version of R is 3.5.3 (22 March 2019).</p>
+<p>Here are a few links to some GEOG 4/595 materials on R (note that the installation directions may pertain to a previous version):</p>
+<ul>
+<li>GEOG 4/595 (Geographic Data Analysis): <a href="https://pjbartlein.github.io/GeogDataAnalysis/index.html" class="uri">https://pjbartlein.github.io/GeogDataAnalysis/index.html</a></li>
+<li>Getting and using R: <a href="https://pjbartlein.github.io/GeogDataAnalysis/ex01.html" class="uri">https://pjbartlein.github.io/GeogDataAnalysis/ex01.html</a></li>
+<li>Installing packages: <a href="https://pjbartlein.github.io/GeogDataAnalysis/packages-and-data.html" class="uri">https://pjbartlein.github.io/GeogDataAnalysis/packages-and-data.html</a></li>
+</ul>
+</div>
+<div id="rstudio" class="section level2">
+<h2><span class="header-section-number">1.2</span> RStudio</h2>
+<p>RStudio is a development environment for R that is much more powerful than the “built-in” Windows or Mac graphical user interfaces (GUIs), and additionally nicely supports the development of “R Markdown” documents that combine text, code and R output.</p>
+<ul>
+<li>RStudio: <a href="https://www.rstudio.com/" class="uri">https://www.rstudio.com/</a></li>
+<li>RStudio blog: <a href="https://blog.rstudio.org/" class="uri">https://blog.rstudio.org/</a></li>
+<li>R Markdown: <a href="http://rmarkdown.rstudio.com/index.html" class="uri">http://rmarkdown.rstudio.com/index.html</a></li>
+</ul>
+</div>
+<div id="microsoft-r-open" class="section level2">
+<h2><span class="header-section-number">1.3</span> Microsoft R Open</h2>
+<p>Microsoft sponsors something called the Microsoft R Application Network (MRAN), which is a collection of tools and resources that includes a specialized build of R known as Microsoft R Open (which was formerly knows as Revolution Analytics R). The version has been compiled to use the highly optimized Intel Math Kernel Library (MKL), which can greatly speed up some of the calculations involved in analyzing big data sets. In addition, to support reproducible research, MRAN supports “snapshots” of the CRAN packages that can be used by the <code>checkpoint()</code> function to use a fixed (i.e. not randomly updated) set of packages.</p>
+<ul>
+<li>MRAN: <a href="https://mran.microsoft.com/" class="uri">https://mran.microsoft.com/</a></li>
+<li>Microsoft R Open: <a href="https://mran.microsoft.com/download/" class="uri">https://mran.microsoft.com/download/</a></li>
+<li>Installation notes: <a href="https://mran.microsoft.com/documents/rro/installation" class="uri">https://mran.microsoft.com/documents/rro/installation</a></li>
+</ul>
+<p>NOTE: It will likely not be necessary to use MRO for the course project, but the information is here for completeness.</p>
+</div>
+</div>
+<div id="other-infrastructure-and-utilities" class="section level1">
+<h1><span class="header-section-number">2</span> Other infrastructure and utilities</h1>
+<div id="git-and-github-version-control" class="section level2">
+<h2><span class="header-section-number">2.1</span> Git and GitHub (Version Control)</h2>
+<p>“Git” is an open-source version-control system, that allows one to track (and backup) the development of software by building a “local repository” of current and previous versions of code, data, markdown files, etc. on one’s machine, while “GitHub” is a website that hosts “remote repositories”, allowing them to be reached (or restored) from any machine, which greatly facilitates collaboration.</p>
+<ul>
+<li>GitHub: <a href="https://github.com" class="uri">https://github.com</a></li>
+</ul>
+<p>The key resources for setting up and using Git and GitHub with RStudio is a bookdown web page by Jenny Bryan and others at <a href="https://happygitwithr.com/index.html" class="uri">https://happygitwithr.com/index.html</a>. See the Tasks tab above for directions for installing Git and establishing an account on GitHub.</p>
+<p>It is becoming standard practice that any specialized software used in writing a journal article be made available via a repository like GitHub, and to be searchable via a DOI—a “digital object identifier”— all in aid of fostering “reproducible research”. For example, for a paper currently under review in the journal <em>Geoscientific Model Development</em> we developed a number of Fortran programs and data sets that reside in a GitHub repository, and then added that repository to the list of those cataloged by an operation called Zenodo, which provides a “permanent” DOI.</p>
+<ul>
+<li>GitHub repository: <a href="https://github.com/pjbartlein/PaleoCalAdjust" class="uri">https://github.com/pjbartlein/PaleoCalAdjust</a></li>
+<li>Zenodo-issued DOI: <a href="https://doi.org/10.5281/zenodo.1478824" class="uri">https://doi.org/10.5281/zenodo.1478824</a></li>
+</ul>
+<p>Here’s the GitHub repository for the course web page:</p>
+<ul>
+<li><a href="https://github.com/pjbartlein/REarthSysSci" class="uri">https://github.com/pjbartlein/REarthSysSci</a></li>
+</ul>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
