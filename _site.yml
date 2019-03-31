@@ -13,8 +13,8 @@ navbar:
   - text: Tasks 
     menu:
     - text: Exercises
-    - text: Exercise 01 -- Getting R and RStudio
-      href: ex01.html
+    - text: Installing R and RStudio
+      href: geog495_ex01.html
     - text: Exercise 02 -- Univariate plots
       href: ex02.html
   - text: Resources

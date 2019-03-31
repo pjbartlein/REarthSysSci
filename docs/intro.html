@@ -292,7 +292,7 @@ $(document).ready(function () {
   <ul class="dropdown-menu" role="menu">
     <li class="dropdown-header">Exercises</li>
     <li>
-      <a href="ex01.html">Exercise 01 -- Getting R and RStudio</a>
+      <a href="geog495_ex01.html">Installing R and RStudio</a>
     </li>
     <li>
       <a href="ex02.html">Exercise 02 -- Univariate plots</a>
@@ -338,13 +338,18 @@ $(document).ready(function () {
 </ul></li>
 <li><a href="#other-infrastructure-and-utilities"><span class="toc-section-number">2</span> Other infrastructure and utilities</a><ul>
 <li><a href="#git-and-github-version-control"><span class="toc-section-number">2.1</span> Git and GitHub (Version Control)</a></li>
+<li><a href="#markdown"><span class="toc-section-number">2.2</span> Markdown</a></li>
+<li><a href="#other-useful-utilities-and-apps"><span class="toc-section-number">2.3</span> Other useful utilities and apps</a><ul>
+<li><a href="#data-storage"><span class="toc-section-number">2.3.1</span> Data storage</a></li>
+<li><a href="#data-viewing"><span class="toc-section-number">2.3.2</span> Data viewing</a></li>
+</ul></li>
 </ul></li>
 </ul>
 </div>
 
 <div id="r-and-rstudio" class="section level1">
 <h1><span class="header-section-number">1</span> R and RStudio</h1>
-<p>Before getting into doing actual analyses of Earth-system science-type data using R, there is a bit of set-up and infrastructure installation to do. Although the list may seem daunting at first, the installations are quite straightforward.</p>
+<p>Before doing actual analyses of Earth-system science-type data using R, there is a bit of set-up and infrastructure installation to do. Although the list may seem daunting at first, the installations are quite straightforward.</p>
 <div id="r-cran-and-bioconductor" class="section level2">
 <h2><span class="header-section-number">1.1</span> R, CRAN, and Bioconductor</h2>
 <p>The “R Project” (or simply “R”) grew out of the development of the S language for data analysis and statistics at Bell Laboratories in the 1980s (and can be said to be an open-source version of S). R for different operating systems can be downloaded from “CRAN” (Comprehensive R Archive Network) site listed below. The basic installation of R is supplemented by a large number of packages (or libraries) that are also obtainable from CRAN or from Bioconductor, the latter being a collection of packages oriented to the analysis of life-science data.</p>
@@ -386,7 +391,7 @@ $(document).ready(function () {
 <h1><span class="header-section-number">2</span> Other infrastructure and utilities</h1>
 <div id="git-and-github-version-control" class="section level2">
 <h2><span class="header-section-number">2.1</span> Git and GitHub (Version Control)</h2>
-<p>“Git” is an open-source version-control system, that allows one to track (and backup) the development of software by building a “local repository” of current and previous versions of code, data, markdown files, etc. on one’s machine, while “GitHub” is a website that hosts “remote repositories”, allowing them to be reached (or restored) from any machine, which greatly facilitates collaboration.</p>
+<p>“Git” is an open-source version-control system, that allows one to track (and backup) the development of software by building a “local repository” of current and previous versions of code, data, markdown files, etc. on one’s machine, while “GitHub” is a website that hosts “remote repositories”, allowing them to be saved, reached (or restored) from any machine (using Git), which greatly facilitates collaboration.</p>
 <ul>
 <li>GitHub: <a href="https://github.com" class="uri">https://github.com</a></li>
 </ul>
@@ -400,6 +405,60 @@ $(document).ready(function () {
 <ul>
 <li><a href="https://github.com/pjbartlein/REarthSysSci" class="uri">https://github.com/pjbartlein/REarthSysSci</a></li>
 </ul>
+</div>
+<div id="markdown" class="section level2">
+<h2><span class="header-section-number">2.2</span> Markdown</h2>
+<p>This document is written in Markdown, which is a “lightweight” markup language (like HTML), that used a relatively simple syntax, and facilitates the transformation of human-readible text files into .html or .pdf documents. RMarkdown is a an R package, and a set of tools that are deeply embedded in RStudio that facilitates the construction of documents that combine text, R code and the output from the execution of that code, and that range in complexity from a single .html or .pdf file, to multi-page web sites, to books.</p>
+<p>RMarkdown thereby facilitates the concepts of “literate programming” <a href="https://en.wikipedia.org/wiki/Literate_programming">link</a>, and “reproducible research” <a href="https://en.wikipedia.org/wiki/Reproducibility">link</a>, which, in addition to explaining or documenting itself, also allows others (including an original investigator after some time has passed) to reproduce a data analysis or other research result.</p>
+<p>Here is a simple Markdown (<code>.md</code>) file:</p>
+<pre><code>## Introduction ##
+
+Some text, and little discussion, including a bulleted list
+- first list item
+- second list time
+
+### Some code ###
+
+Here is a little code:
+</code></pre>
+<p>plot(orstationc<span class="math inline">\(elev, orstationc\)</span>tann) ``` and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</strong>.</p>
+<pre><code>And here is what the file looks like when rendered into .html:
+&lt;hr&gt;
+
+&lt;h2&gt; Introduction &lt;/h2&gt;
+
+Some text, and little discussion, including a bulleted list
+
+- first list item
+- second list time
+
+&lt;h3&gt; Some code &lt;/h3&gt;
+
+Here is a little code:
+</code></pre>
+<p>plot(orstationc<span class="math inline">\(elev, orstationc\)</span>tann) ```</p>
+and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</strong>.
+<hr>
+<p>See the <code>Markdown &amp; RMarkdown</code> task for some basic information and resources on Markdown and RMarkdown</p>
+<p>Although the syntax of Markdown is relatively simple, complex documents can be generated using conversion tools like Pandoc. (see the <code>Markdown &amp; RMarkdown</code> task).</p>
+</div>
+<div id="other-useful-utilities-and-apps" class="section level2">
+<h2><span class="header-section-number">2.3</span> Other useful utilities and apps</h2>
+<div id="data-storage" class="section level3">
+<h3><span class="header-section-number">2.3.1</span> Data storage</h3>
+<p>There are two related formats for storing and distributing Earth-system science data that are in widespread use:</p>
+<ul>
+<li>HDF5 (and the older HDF4 format and variants) <em><a href="https://www.hdfgroup.org/solutions/hdf5/">(The HDF Group)</a></em>, and</li>
+<li>netCDF <em><a href="https://www.unidata.ucar.edu/software/netcdf/">(UCAR UNIDATA)</a></em></li>
+</ul>
+<p>The two formats are actually related, in that netCDF uses the internal HDF format for storage. Both formats are self-documenting (i.e. they contain attributes or metadata that describe the contents of a particular file) and are machine independent. Each has an associated set of command-line utilities that can be used to rapidly learn what a particular file contains.</p>
+<p>See the <code>netCDF</code> task for directions on installing these utilities.</p>
+</div>
+<div id="data-viewing" class="section level3">
+<h3><span class="header-section-number">2.3.2</span> Data viewing</h3>
+<p>Panoply is a data viewer that can open and display netCDF, HDF, and related files, and is great for inspecting the contents of a file. It is downloadable from <a href="https://www.unidata.ucar.edu/software/netcdf/">[NASA Goddard Institude for Space Studies]</a></p>
+<p>It is, of course, possible to open and view netCDF and HDF files in R, but Panoply is much faster.</p>
+</div>
 </div>
 </div>
 

@@ -60,15 +60,15 @@ Student effort in the course will involve the analysis of a typical or interesti
 
 Here's an example of an R Markdown HTML page describing the analysis of the Global Charcoal Database (GCD): 
 
-- [https://pjbartlein.github.io/GCDv3Analysis/index.html](https://pjbartlein.github.io/GCDv3Analysis/index.html) 
+- [https://pjbartlein.github.io/GCDv3Analysis/index.html](https://pjbartlein.github.io/GCDv3Analysis/index.html). 
 
 and a simpler, one-HTML-document description of a particular analysis comparing two approaches for curve-fitting can be found at:
 
-- [http://geog.uoregon.edu/bartlein/courses/geog490/locfit_boot_v3.html](http://geog.uoregon.edu/bartlein/courses/geog490/locfit_boot_v3.html)
+- [http://geog.uoregon.edu/bartlein/courses/geog490/locfit_boot_v3.html](http://geog.uoregon.edu/bartlein/courses/geog490/locfit_boot_v3.html).
 
 Here's a link to a web page describing the development of a daily fire-start data set for the U.S. and Canada:
 
-- [http://geog.uoregon.edu/bartlein/FireStarts/index.html](http://geog.uoregon.edu/bartlein/FireStarts/index.html)
+- [http://geog.uoregon.edu/bartlein/FireStarts/index.html](http://geog.uoregon.edu/bartlein/FireStarts/index.html).
 
 This is a link to a "supplemental file" accompanying an article on biomass-burning contribution to climate-carbon cycle feedback, created as a Word document (and converted to a .pdf):
 
@@ -76,8 +76,8 @@ This is a link to a "supplemental file" accompanying an article on biomass-burni
 
 … and here's a link to the article:
 
-- [https://www.earth-syst-dynam.net/9/663/2018/](https://www.earth-syst-dynam.net/9/663/2018/)
+- [https://www.earth-syst-dynam.net/9/663/2018/](https://www.earth-syst-dynam.net/9/663/2018/).
 
 Also, this web page, as well as that for GEOG 4/595 Geographic Data Analysis provide examples of web pages created using R, RStudio and RMarkdown:
 
-- [https://pjbartlein.github.io/GeogDataAnalysis/](https://pjbartlein.github.io/GeogDataAnalysis/)
+- [https://pjbartlein.github.io/GeogDataAnalysis/](https://pjbartlein.github.io/GeogDataAnalysis/).

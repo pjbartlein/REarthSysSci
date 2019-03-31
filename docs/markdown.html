@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>markdown.utf8.md</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Earth-System Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="intro.html">Introduction: R, RStudio, and other infrastructure</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tasks
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Exercises</li>
+    <li>
+      <a href="geog495_ex01.html">Installing R and RStudio</a>
+    </li>
+    <li>
+      <a href="ex02.html">Exercise 02 -- Univariate plots</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#markdown-and-rmarkdown"><span class="toc-section-number">1</span> Markdown and RMarkdown</a><ul>
+<li><a href="#markdown"><span class="toc-section-number">1.1</span> Markdown</a></li>
+<li><a href="#some-code"><span class="toc-section-number">1.2</span> Some code</a></li>
+</ul></li>
+<li><a href="#introduction"><span class="toc-section-number">2</span> Introduction</a><ul>
+<li><a href="#some-code-1"><span class="toc-section-number">2.1</span> Some code</a></li>
+<li><a href="#rstudiormarkdown"><span class="toc-section-number">2.2</span> RStudio/RMarkdown</a></li>
+</ul></li>
+<li><a href="#resources"><span class="toc-section-number">3</span> Resources</a><ul>
+<li><a href="#markdown-1"><span class="toc-section-number">3.1</span> Markdown</a><ul>
+<li><a href="#markdown-editors"><span class="toc-section-number">3.1.1</span> Markdown editors</a></li>
+<li><a href="#pandoc"><span class="toc-section-number">3.1.2</span> Pandoc</a></li>
+</ul></li>
+<li><a href="#rstudio-resources"><span class="toc-section-number">3.2</span> RStudio Resources</a><ul>
+<li><a href="#rmarkdown"><span class="toc-section-number">3.2.1</span> RMarkdown</a></li>
+<li><a href="#cheatsheets"><span class="toc-section-number">3.2.2</span> Cheatsheets</a></li>
+<li><a href="#publishing"><span class="toc-section-number">3.2.3</span> Publishing</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="markdown-and-rmarkdown" class="section level1">
+<h1><span class="header-section-number">1</span> Markdown and RMarkdown</h1>
+<p>This document is written in Markdown, which is a “lightweight” markup language (like HTML), that used a relatively simple syntax, and facilitates the transformation of human-readible text files into .html or .pdf documents. RMarkdown is a an R package, and a set of tools that are deeply embedded in RStudio that facilitates the construction of documents that combine text, R code and the output from the execution of that code, and that range in complexity from a single .html or .pdf file, to multi-page web sites, to books.</p>
+<p>RMardown thereby facilitates the concepts of “literate programming” <a href="https://en.wikipedia.org/wiki/Literate_programming">link</a>, and “reproducible research” <a href="https://en.wikipedia.org/wiki/Reproducibility">link</a>, which, in addition to explaining or documenting itself, also allows others (including an original investigator after some time has passed) to reproduce a data analysis or other research result.</p>
+<div id="markdown" class="section level2">
+<h2><span class="header-section-number">1.1</span> Markdown</h2>
+<p>Here is a simple Markdown (<code>.md</code>) file:</p>
+<p>``` # Introduction #</p>
+<p>Some text, and little discussion, including a bulleted list - first list item - second list time</p>
+</div>
+<div id="some-code" class="section level2">
+<h2><span class="header-section-number">1.2</span> Some code</h2>
+<p>Here is a little code: <code>(r)  plot(orstationc$elev, orstationc$tann)</code> and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</strong>.</p>
+``` And here is what the file looks like when rendered:
+<hr>
+</div>
+</div>
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">2</span> Introduction</h1>
+<p>Some text, and little discussion, including a bulleted list</p>
+<ul>
+<li>first list item</li>
+<li>second list time</li>
+</ul>
+<div id="some-code-1" class="section level2">
+<h2><span class="header-section-number">2.1</span> Some code</h2>
+<p>Here is a little code:</p>
+<pre class="(r)"><code>plot(orstationc$elev, orstationc$tann)</code></pre>
+and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</strong>.
+<hr>
+<p>Although the syntax of Markdown is relatively simple, quite complex documents can be generated using conversion tools like Pandoc (see the Resources section below).</p>
+</div>
+<div id="rstudiormarkdown" class="section level2">
+<h2><span class="header-section-number">2.2</span> RStudio/RMarkdown</h2>
+<p>RStudio allows the use of Markdown formatting styles within RMarkdown <code>.Rmd</code> files, allowing the resulting combinations of text, code and output to be nicely formatted. RNotebook and RMarkdown files in RStudio can be viewed as elements in a hierarchy of increasingly well-documented and reproducible code, with ordinary R script files <code>*.R</code> as the lowest level, and complicated RMarkdown web sites or even books at the highest level.</p>
+<ul>
+<li><code>*.R</code> scripts: input is a plain script, and output appears in the <code>Console</code> or <code>Plots</code> pane. <a href="http://geog.uoregon.edu/bartlein/courses/geog490/plot_alpha_01.R.txt">plot_alpha_01.R</a></li>
+<li><code>*.Rmd</code> RNotebook files: input is an RMarkdown file (with a special header), output appears “inline” in RStudio and code, comments and output are saved in a <code>*.nb.html</code> file that is portable. <a href="http://geog.uoregon.edu/bartlein/courses/geog490/plot_alpha_RNotebook.Rmd.txt">plot_alpha_RNotebook.Rmd</a></li>
+<li><code>*.Rmd</code> RMarkdown files: input is an RMarkdown file (with a special header), output appears as an <code>.html</code> file, viewable in a browser or internally in RStudio <a href="http://geog.uoregon.edu/bartlein/courses/geog490/plot_alpha_RMarkdown.Rmd.txt">plot_alpha_RMarkdown.Rmd</a></li>
+<li><code>*.Rmd</code> RMarkdown files: input is an RMarkdown file (with a different special header) and a <code>*.css</code> file, output appears as an <code>.html</code> file, viewable in a browser or internally in RStudio <a href="http://geog.uoregon.edu/bartlein/courses/geog490/plot_alpha_RMarkdown_v2.Rmd.txt">plot_alpha_RMarkdown_v2.Rmd</a></li>
+<li>multiple <code>*.Rmd</code> and <code>.md</code> files, along with a “site YAML” file, as input, a multipage website or book with internal navigation as output. (This is how the course web pages are constructed.)</li>
+</ul>
+</div>
+</div>
+<div id="resources" class="section level1">
+<h1><span class="header-section-number">3</span> Resources</h1>
+<div id="markdown-1" class="section level2">
+<h2><span class="header-section-number">3.1</span> Markdown</h2>
+<ul>
+<li>Markdown site <a href="http://daringfireball.net/projects/markdown/" class="uri">http://daringfireball.net/projects/markdown/</a></li>
+<li>Markdown (Wikipedia) <a href="https://en.wikipedia.org/wiki/Markdown" class="uri">https://en.wikipedia.org/wiki/Markdown</a></li>
+<li>Markdown quick reference <a href="http://geog.uoregon.edu/bartlein/courses/geog607/Rmd/MDquick-refcard.pdf" class="uri">http://geog.uoregon.edu/bartlein/courses/geog607/Rmd/MDquick-refcard.pdf</a></li>
+</ul>
+<div id="markdown-editors" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> Markdown editors</h3>
+<ul>
+<li>Markdown Pad (Windows) <a href="http://markdownpad.com" class="uri">http://markdownpad.com</a></li>
+<li>Macdown (OS X) <a href="http://macdown.uranusjr.com" class="uri">http://macdown.uranusjr.com</a>
+<ul>
+<li>to get the formatting style used in this document (and the course web page), download and copy <code>SI-md-08.css</code> to the folder <code>/Users/bartlein/Library/Application Support/MacDown/Styles/</code>. Restart Macdown, and use the Preferences &gt; Rendering tab to set <code>SI-md-08</code> in the CSS field. Here’s a link to that file: <a href="http://geog.uoregon.edu/bartlein/courses/geog490/SI-md-08.css" class="uri">http://geog.uoregon.edu/bartlein/courses/geog490/SI-md-08.css</a></li>
+</ul></li>
+</ul>
+</div>
+<div id="pandoc" class="section level3">
+<h3><span class="header-section-number">3.1.2</span> Pandoc</h3>
+<ul>
+<li>Pandoc <a href="pandoc.org" class="uri">pandoc.org</a></li>
+</ul>
+</div>
+</div>
+<div id="rstudio-resources" class="section level2">
+<h2><span class="header-section-number">3.2</span> RStudio Resources</h2>
+<div id="rmarkdown" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> RMarkdown</h3>
+<ul>
+<li>RMarkdown guide: <a href="http://rmarkdown.rstudio.com/index.html" class="uri">http://rmarkdown.rstudio.com/index.html</a></li>
+<li>RNotebooks: <a href="http://rmarkdown.rstudio.com/r_notebooks.html" class="uri">http://rmarkdown.rstudio.com/r_notebooks.html</a></li>
+<li>Websites: <a href="http://rmarkdown.rstudio.com/rmarkdown_websites.html" class="uri">http://rmarkdown.rstudio.com/rmarkdown_websites.html</a></li>
+<li>Bookdown: <a href="https://bookdown.org" class="uri">https://bookdown.org</a></li>
+</ul>
+</div>
+<div id="cheatsheets" class="section level3">
+<h3><span class="header-section-number">3.2.2</span> Cheatsheets</h3>
+<ul>
+<li>RMarkdown cheat sheet: <a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf</a></li>
+<li>RMarkdown reference guide: <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf</a></li>
+</ul>
+</div>
+<div id="publishing" class="section level3">
+<h3><span class="header-section-number">3.2.3</span> Publishing</h3>
+<ul>
+<li>RPubs <a href="http://rpubs.com/" class="uri">http://rpubs.com/</a></li>
+<li>RMarkdown websites: <a href="http://rmarkdown.rstudio.com/rmarkdown_websites.html#publishing_websites" class="uri">http://rmarkdown.rstudio.com/rmarkdown_websites.html#publishing_websites</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

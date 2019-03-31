@@ -41,7 +41,7 @@ NOTE:  It will likely not be necessary to use MRO for the course project, but th
 
 ## Git and GitHub (Version Control)
 
-"Git" is an open-source version-control system, that allows one to track (and backup) the development of software by building a "local repository" of current and previous versions of code, data, markdown files, etc. on one's machine, while "GitHub" is a website that hosts "remote repositories", allowing them to be reached (or restored) from any machine, which greatly facilitates collaboration.   
+"Git" is an open-source version-control system, that allows one to track (and backup) the development of software by building a "local repository" of current and previous versions of code, data, markdown files, etc. on one's machine, while "GitHub" is a website that hosts "remote repositories", allowing them to be saved, reached (or restored) from any machine (using Git), which greatly facilitates collaboration.   
 
 - GitHub:  [https://github.com](https://github.com) 
 
@@ -56,3 +56,72 @@ It is becoming standard practice that any specialized software used in writing a
 Here's the GitHub repository for the course web page:  
 
 - [https://github.com/pjbartlein/REarthSysSci](https://github.com/pjbartlein/REarthSysSci)
+
+## Markdown ##
+
+This document is written in Markdown, which is a "lightweight" markup language (like HTML), that used a relatively simple syntax, and facilitates the transformation of human-readible text files into .html or .pdf documents.  RMarkdown is a an R package, and a set of tools that are deeply embedded in RStudio that facilitates the construction of documents that combine text, R code and the output from the execution of that code, and that range in complexity from a single .html or .pdf file, to multi-page web sites, to books.
+
+RMarkdown thereby facilitates the concepts of "literate programming" [link](https://en.wikipedia.org/wiki/Literate_programming), and "reproducible research" [link](https://en.wikipedia.org/wiki/Reproducibility), which, in addition to explaining or documenting itself, also allows others (including an original investigator after some time has passed) to reproduce a data analysis or other research result.
+
+Here is a simple Markdown (`.md`) file:
+
+```
+## Introduction ##
+
+Some text, and little discussion, including a bulleted list
+- first list item
+- second list time
+
+### Some code ###
+
+Here is a little code:
+
+ ```
+ plot(orstationc$elev, orstationc$tann)
+ ```
+and some more text, possibly *decorated* or **otherwise formatted**.
+
+```
+And here is what the file looks like when rendered into .html:
+<hr>
+
+<h2> Introduction </h2>
+
+Some text, and little discussion, including a bulleted list
+
+- first list item
+- second list time
+
+<h3> Some code </h3>
+
+Here is a little code:
+
+ ```
+ plot(orstationc$elev, orstationc$tann)
+ ```
+ 
+and some more text, possibly *decorated* or **otherwise formatted**.
+<hr>
+
+See the `Markdown & RMarkdown` task for some basic information and resources on Markdown and RMarkdown
+
+Although the syntax of Markdown is relatively simple, complex documents can be generated using conversion tools like Pandoc. (see the `Markdown & RMarkdown` task).
+
+## Other useful utilities and apps ##
+
+### Data storage ###
+
+There are two related formats for storing and distributing Earth-system science data that are in widespread use:  
+
+- HDF5 (and the older HDF4 format and variants) *[(The HDF Group)](https://www.hdfgroup.org/solutions/hdf5/)*, and
+- netCDF *[(UCAR UNIDATA)](https://www.unidata.ucar.edu/software/netcdf/)*
+
+The two formats are actually related, in that netCDF uses the internal HDF format for storage.  Both formats are self-documenting (i.e. they contain attributes or metadata that describe the contents of a particular file) and are machine independent.  Each has an associated set of command-line utilities that can be used to rapidly learn what a particular file contains.
+
+See the `netCDF` task for directions on installing these utilities.
+
+### Data viewing##
+
+Panoply is a data viewer that can open and display netCDF, HDF, and related files, and is great for inspecting the contents of a file.  It is downloadable from [[NASA Goddard Institude for Space Studies]](https://www.unidata.ucar.edu/software/netcdf/)
+
+It is, of course, possible to open and view netCDF and HDF files in R, but Panoply is much faster.
