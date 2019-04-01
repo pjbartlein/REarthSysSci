@@ -65,14 +65,13 @@ RMarkdown thereby facilitates the concepts of "literate programming" [link](http
 
 Here is a simple Markdown (`.md`) file:
 
-```
-## Introduction ##
+<pre><code># Introduction #
 
 Some text, and little discussion, including a bulleted list
 - first list item
 - second list time
 
-### Some code ###
+## Some code ##
 
 Here is a little code:
 
@@ -80,27 +79,23 @@ Here is a little code:
  plot(orstationc$elev, orstationc$tann)
  ```
 and some more text, possibly *decorated* or **otherwise formatted**.
-
-```
-And here is what the file looks like when rendered into .html:
+</code></pre>
+And here is what the file looks like when rendered:
 <hr>
-
-<h2> Introduction </h2>
-
-Some text, and little discussion, including a bulleted list
-
-- first list item
-- second list time
-
-<h3> Some code </h3>
-
-Here is a little code:
-
- ```
- plot(orstationc$elev, orstationc$tann)
- ```
- 
-and some more text, possibly *decorated* or **otherwise formatted**.
+<h1>
+Introduction
+</h1>
+<p>Some text, and little discussion, including a bulleted list</p>
+<ul>
+<li>first list item</li>
+<li>second list time</li>
+</ul>
+<h2>
+Some code
+</h2>
+<p>Here is a little code:</p>
+<p><code>plot(orstationc$elev, orstationc$tann)</code></p>
+and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</strong>.
 <hr>
 
 See the `Markdown & RMarkdown` task for some basic information and resources on Markdown and RMarkdown

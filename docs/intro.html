@@ -413,32 +413,46 @@ $(document).ready(function () {
 <p>This document is written in Markdown, which is a “lightweight” markup language (like HTML), that used a relatively simple syntax, and facilitates the transformation of human-readible text files into .html or .pdf documents. RMarkdown is a an R package, and a set of tools that are deeply embedded in RStudio that facilitates the construction of documents that combine text, R code and the output from the execution of that code, and that range in complexity from a single .html or .pdf file, to multi-page web sites, to books.</p>
 <p>RMarkdown thereby facilitates the concepts of “literate programming” <a href="https://en.wikipedia.org/wiki/Literate_programming">link</a>, and “reproducible research” <a href="https://en.wikipedia.org/wiki/Reproducibility">link</a>, which, in addition to explaining or documenting itself, also allows others (including an original investigator after some time has passed) to reproduce a data analysis or other research result.</p>
 <p>Here is a simple Markdown (<code>.md</code>) file:</p>
-<pre><code>## Introduction ##
+<pre><code># Introduction #
 
 Some text, and little discussion, including a bulleted list
 - first list item
 - second list time
 
-### Some code ###
+## Some code ##
 
 Here is a little code:
+
+ ```
+ plot(orstationc$elev, orstationc$tann)
+ ```
+and some more text, possibly *decorated* or **otherwise formatted**.
 </code></pre>
-<p>plot(orstationc<span class="math inline">\(elev, orstationc\)</span>tann) ``` and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</strong>.</p>
-<pre><code>And here is what the file looks like when rendered into .html:
-&lt;hr&gt;
-
-&lt;h2&gt; Introduction &lt;/h2&gt;
-
+And here is what the file looks like when rendered:
+<hr>
+<h1>
+Introduction
+</h1>
+<p>
 Some text, and little discussion, including a bulleted list
-
-- first list item
-- second list time
-
-&lt;h3&gt; Some code &lt;/h3&gt;
-
+</p>
+<ul>
+<li>
+first list item
+</li>
+<li>
+second list time
+</li>
+</ul>
+<h2>
+Some code
+</h2>
+<p>
 Here is a little code:
-</code></pre>
-<p>plot(orstationc<span class="math inline">\(elev, orstationc\)</span>tann) ```</p>
+</p>
+<p>
+<code>plot(orstationc<span class="math inline">\(elev, orstationc\)</span>tann)</code>
+</p>
 and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</strong>.
 <hr>
 <p>See the <code>Markdown &amp; RMarkdown</code> task for some basic information and resources on Markdown and RMarkdown</p>
