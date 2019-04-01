@@ -52,7 +52,7 @@ RMarkdown is implemented by two packages (and their dependencies), `rmarkdown` a
 	install.packages("rmarkdown')
 	install.packages("knitr")
 
-The following examples can be reproduced using this data set:  [[cru10min30_bio.nc]](http://geog.uoregon.edu/GeogR/data/raster/cru10min30_bio.nc), and the following shapefile components:  [[world2013.shp]](http://geog.uoregon.edu/GeogR/data/shp/world2013.dbf)  [[world2013.dbf]](http://geog.uoregon.edu/GeogR/data/shp/world2013.dbf)   [[world2013.shx]](http://geog.uoregon.edu/GeogR/data/shp/world2013.shx).  Download the files to a convenient working folder.
+The following examples can be reproduced using this data set:  `cru10min30_bio.nc`, and the following shapefile components:  `world2013.shp`, `world2013.dbf`, `world2013.shx`.  (Transfer the files to a convenient working folder(s), and modify the paths in the scripts below.)
 
 - `*.R` scripts:  input is a plain script, and output appears in the `Console` or `Plots` pane. [plot\_alpha\_01.R](http://geog.uoregon.edu/bartlein/courses/geog490/plot_alpha_01.R.txt)
 - `*.Rmd` RNotebook files:  input is an RMarkdown file (with a special header), output appears "inline" in RStudio and code, comments and output are saved in a `*.nb.html` file that is portable.  [plot\_alpha\_RNotebook.Rmd](http://geog.uoregon.edu/bartlein/courses/geog490/plot_alpha_RNotebook.Rmd.txt)

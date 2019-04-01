@@ -11,7 +11,7 @@
 
 
 
-<title>README.utf8.md</title>
+<title>File transfer</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -336,21 +336,43 @@ $(document).ready(function () {
 
 
 
+<h1 class="title toc-ignore">File transfer</h1>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#rearthsyssci"><span class="toc-section-number">1</span> REarthSysSci</a></li>
+<li><a href="#ftp-and-sftp">FTP and SFTP</a></li>
+<li><a href="#globus">Globus</a></li>
 </ul>
 </div>
 
-<div id="rearthsyssci" class="section level1">
-<h1><span class="header-section-number">1</span> REarthSysSci</h1>
-<p>R for Earth-System Science</p>
-<p>Repository for GEOG 4/590 R for Earth-System Science, Spring 2019<br />
-Department of Geography, University of Oregon</p>
-<p>Web page: <a href="https://pjbartlein.github.io/REarthSysSci/index.html" class="uri">https://pjbartlein.github.io/REarthSysSci/index.html</a></p>
+<div id="ftp-and-sftp" class="section level2">
+<h2>FTP and SFTP</h2>
+<p>FTP (File Transfer Protocol) and SFTP (SSH File Transfer Protocol, also known as “Secure FTP”) are built into most operating systems, and can be run at the command line. However, it is much more convenient to use an FTP client to browse to and transfer data. The most ubiquitous cross-platform (Windows and MacOS) client is likely Filezilla, which can be downloaded from <a href="https://filezilla-project.org">[https://filezilla-project.org]</a> (download the Filezilla client). Filezilla features a dual-pane file browser that shows both the local and remote file systems.</p>
+<p>To configure Filezilla to transfer files from an FTP server with data files for GEOG 4/595, click on File &gt; Site manager (or click the Site Manager icon on he Filezilla toolbar), and then click on the New Site button.</p>
+<p>Fill in the Site Manager fields as follows</p>
+<ul>
+<li>New site name: <code>ESSData</code><br />
+</li>
+<li>Protocol: <code>SFTP - SSH File Transfer Protocol</code></li>
+<li>Host: <code>ClimateLab.uoregon.edu   Port:2222</code></li>
+<li>Logon Type: <code>Normal</code></li>
+<li>User: <code>RESS</code></li>
+<li>Password: <code>geog_490</code></li>
+</ul>
+<p>Then click on Connect, and you should see the remote (i.e. the FTP server) server’s file structure. Individual files can be dragged back and forth between the Local and Remote sites.</p>
+</div>
+<div id="globus" class="section level2">
+<h2>Globus</h2>
+<p>Globus <a href="https://www.globus.org">[https://www.globus.org]</a> is a file-transfer system that runs in a browser. Globus transfers files between “Endpoints”— folders on individual machines. To transfer files from <code>ClimateLab.uoregon.edu</code> you will need to set up an account, and install Globus Connect Personal, and create an endpoint:</p>
+<ul>
+<li>Setting up an account is explained on the page <a href="https://docs.globus.org/how-to/get-started/">[How to Log In and Transfer Files with Globus]</a></li>
+<li>Installation of Globus Connect Personal and creation of an Endpoint: <a href="https://docs.globus.org/how-to/globus-connect-personal-mac/">[Mac]</a> <a href="https://docs.globus.org/how-to/globus-connect-personal-windows/">[Windows]</a></li>
+</ul>
+<p>Then to browse the files on the Globus Endpoint at ClimateLab.uoregon.edu, paste the following into the address bar in a browser:</p>
+<p><code>https://app.globus.org/file-manager?origin_id=d74454ce-e6b4-11e7-80f5-0a208f818180&amp;origin_path=%2FESSData%2F</code></p>
+<p>This wiil open the endpoint on <code>ClimateLab.uoregon.edu</code>. Then, see Section 4 of <a href="https://docs.globus.org/how-to/get-started/">[How to Log In and Transfer Files with Globus]</a>, for instructions on how to transfer files.</p>
 </div>
 
 
