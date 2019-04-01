@@ -12,12 +12,16 @@ navbar:
 
   - text: Tasks 
     menu:
-    - text: Installing R and RStudio
+    - text: Install R and RStudio
       href: geog495_ex01.html
     - text: Git and GitHub
       href: GitHub.html
     - text: Markdown and RMarkdown
       href: markdown.html
+    - text: Install netCDF
+      href: install_netCDF.html
+    - text: Install Panoply
+      href: install_Panoply.html
   - text: Resources
     menu:
     - text: Readings

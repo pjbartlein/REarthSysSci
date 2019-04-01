@@ -73,7 +73,7 @@ Some text, and little discussion, including a bulleted list
 
 ## Some code ##
 
-Here is a little code:
+Here is a little code (and note the different font):
 
  ```
  plot(orstationc$elev, orstationc$tann)
@@ -93,8 +93,8 @@ Introduction
 <h2>
 Some code
 </h2>
-<p>Here is a little code:</p>
-<p><code>plot(orstationc$elev, orstationc$tann)</code></p>
+<p>Here is a little code (and note the different font):</p>
+<p><code>plot(orstationc\$elev, orstationc\$tann)</code></p>
 and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</strong>.
 <hr>
 
@@ -113,10 +113,10 @@ There are two related formats for storing and distributing Earth-system science 
 
 The two formats are actually related, in that netCDF uses the internal HDF format for storage.  Both formats are self-documenting (i.e. they contain attributes or metadata that describe the contents of a particular file) and are machine independent.  Each has an associated set of command-line utilities that can be used to rapidly learn what a particular file contains.
 
-See the `netCDF` task for directions on installing these utilities.
+See the `Install netCDF` task for directions on installing netCDF and related utilities.
 
 ### Data viewing##
 
 Panoply is a data viewer that can open and display netCDF, HDF, and related files, and is great for inspecting the contents of a file.  It is downloadable from [[NASA Goddard Institude for Space Studies]](https://www.unidata.ucar.edu/software/netcdf/)
 
-It is, of course, possible to open and view netCDF and HDF files in R, but Panoply is much faster.
+It is, of course, possible to open and view netCDF and HDF files in R, but Panoply is much faster.  See the `Install Panoply` task for installation directions.

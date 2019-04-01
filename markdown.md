@@ -16,11 +16,11 @@ Some text, and little discussion, including a bulleted list
 
 ## Some code ##
 
-Here is a little code:
+Here is a little code (and note the different font):
 
- ```
- plot(orstationc$elev, orstationc$tann)
- ```
+```
+plot(orstationc$elev, orstationc$tann)
+```
 and some more text, possibly *decorated* or **otherwise formatted**.
 </code></pre>
 And here is what the file looks like when rendered:
@@ -36,8 +36,8 @@ Introduction
 <h2>
 Some code
 </h2>
-<p>Here is a little code:</p>
-<p><code>plot(orstationc$elev, orstationc$tann)</code></p>
+<p>Here is a little code (and note the different font):</p>
+<p><code>plot(orstationc\$elev, orstationc\$tann)</code></p>
 and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</strong>.
 <hr>
 
