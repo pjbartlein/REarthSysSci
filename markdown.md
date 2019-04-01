@@ -73,7 +73,7 @@ The following examples can be reproduced using this data set:  [[cru10min30_bio.
 
 ### Markdown editors
 
-The easiest way to learn markdown is to use a dual pane (editing and previewing) Markdown editor, where it's easy to instantly see the consequences of applying Markdown formatting.
+The easiest way to learn Markdown is to use a dual pane (editing and previewing) Markdown editor, where it's easy to instantly see the consequences of applying Markdown formatting.
 
 -   Markdown Pad (Windows) <http://markdownpad.com>
 -   Macdown (OS X) <http://macdown.uranusjr.com>
@@ -92,7 +92,7 @@ used by itself to convert a large array of document types.
 -   Pandoc [pandoc.org](pandoc.org)
 
 
-##RStudio resources
+## RStudio resources
 
 ###  RMarkdown
 
