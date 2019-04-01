@@ -11,7 +11,7 @@
 
 
 
-<title>R for Earth-System Science</title>
+<title>Git and GitHub</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -327,19 +327,60 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">R for Earth-System Science</h1>
+<h1 class="title toc-ignore">Git and GitHub</h1>
 
 </div>
 
-
-<p><strong>GEOG 4/590: Spring 2019, 10:00-11:50 TTh, 106 Condon Hall</strong></p>
+<div id="TOC">
 <ul>
-<li>Topic: R for Earth-System Science</li>
-<li>Instructor: Pat Bartlein, <a href="mailto:bartlein@uoregon.edu">bartlein@uoregon.edu</a>, 154 Condon, +1 541 346 4967</li>
+<li><a href="#getting-going"><span class="toc-section-number">0.1</span> Getting going</a></li>
 </ul>
-<p>The web pages here support the Spring 2019 course offering of GEOG 4/590 GIScience: [Topic]</p>
-<p>Note that the data sets on this web page are instructional in nature, intended for illustrating various aspects of data analysis and visualization. It would be a bad idea to use them as research-grade data sets.</p>
-<p>The GitHub repository for these pages is at: <a href="https://github.com/pjbartlein/REarthSysSci">[https://github.com/pjbartlein/REarthSysSci]</a></p>
+</div>
+
+<p>A repository is a collection of files, including code, data, and documents, that can be used to store multiple versions of files as the development of a project proceeds. Repositories can be local (i.e. file on the machine being used for development), but they are most effective if that are <em>remote</em> or offsite. Offsite repositories provide two important advantages: 1) they backup files that could be lost for any number of reasons (hard-drive failures, machine loss or meltdown), and 2) they are accessible from other machines, and by collaborators.</p>
+<p>“Git” is one version-control system that creates and manages repositories (and note “Git” is purported not to mean anything), and “GitHub” is a website that hosts remote repositories, web pages, and some (smallish) data sets.</p>
+<p>The use of Git and GitHub in R and RStudio is excellently described in the Bookdown document <a href="https://happygitwithr.com/index.html">[<em>Happy Git and GitHub for the useR (HappyGitWithR)</em>]</a> by Jenny Bryan at the Univ. British Columbia. This is the primary source for guidance and use of Git and GitHub from within RStudio.</p>
+<div id="getting-going" class="section level2">
+<h2><span class="header-section-number">0.1</span> Getting going</h2>
+<p>The key steps include:</p>
+<ol style="list-style-type: decimal">
+<li>registering a (free) GitHub account at <a href="github.com">[github.com]</a> (see Section 4 of <em>HappyGitWithR</em>) (See also the <a href="https://education.github.com">[GitHub Education]</a> page.)</li>
+<li>installing Git (Section 6)</li>
+<li>installing a Git client (Sourcetree)</li>
+<li>configuring RStudio and GitHub (Sections 9-14)</li>
+<li>starting a new project (Section 15)</li>
+</ol>
+<p>The basic idea is to create a (mostly) empty new repository on GitHub, and then “clone” to a local machine. The steps include:</p>
+<p>At GitHub:</p>
+<ol start="6" style="list-style-type: decimal">
+<li>create a new repository (e.g. <code>REarthSysSci</code>)</li>
+<li>edit its <code>README.md</code> file</li>
+</ol>
+<p>On the local machine:</p>
+<ol start="8" style="list-style-type: decimal">
+<li>create a folder, e.g. <code>~/Projects/DataVis/working/REarthSysSci</code></li>
+</ol>
+<p>In RStudio:</p>
+<ol start="9" style="list-style-type: decimal">
+<li>create a project in an existing folder (File &gt; New Project… &gt; Version Control &gt; Git<br />
+</li>
+<li>Repository URL (e.g.): <code>https://github.com/pjbartlein/REarthSysSci</code><br />
+</li>
+<li>Project directory name: <code>REarthSysSci</code><br />
+</li>
+<li>Browse to folder: <code>~/Projects/DataVis/working/</code></li>
+<li>click on “Create Project”</li>
+</ol>
+<p>(note that <code>.gitignore</code>, <code>README.md</code> and <code>REarthSysSci</code> have turned up in working directory)</p>
+<p>Then, on the local machine:</p>
+<ol start="14" style="list-style-type: decimal">
+<li>Edit <code>README.md</code> and save (perhaps using a Markdown editor, or in RStudio)</li>
+<li>Click on <code>Tools &gt; Version Control &gt; Commit</code><br />
+</li>
+<li>Click on checkboxes to “stage” files</li>
+<li>Click on the <code>Push</code> button to synchronize the local repository with the remote GitHub repository.</li>
+</ol>
+</div>
 
 
 

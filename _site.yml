@@ -12,11 +12,12 @@ navbar:
 
   - text: Tasks 
     menu:
-    - text: Exercises
     - text: Installing R and RStudio
       href: geog495_ex01.html
-    - text: Exercise 02 -- Univariate plots
-      href: ex02.html
+    - text: Git and GitHub
+      href: GitHub.html
+    - text: Markdown and RMarkdown
+      href: markdown.html
   - text: Resources
     menu:
     - text: Readings

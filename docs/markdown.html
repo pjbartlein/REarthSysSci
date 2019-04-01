@@ -11,7 +11,7 @@
 
 
 
-<title>markdown.utf8.md</title>
+<title>Markdown and RMarkdown</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -290,12 +290,14 @@ $(document).ready(function () {
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-    <li class="dropdown-header">Exercises</li>
     <li>
       <a href="geog495_ex01.html">Installing R and RStudio</a>
     </li>
     <li>
-      <a href="ex02.html">Exercise 02 -- Univariate plots</a>
+      <a href="GitHub.html">Git and GitHub</a>
+    </li>
+    <li>
+      <a href="markdown.html">Markdown and RMarkdown</a>
     </li>
   </ul>
 </li>
@@ -325,6 +327,7 @@ $(document).ready(function () {
 
 
 
+<h1 class="title toc-ignore">Markdown and RMarkdown</h1>
 
 </div>
 
@@ -332,21 +335,14 @@ $(document).ready(function () {
 <ul>
 <li><a href="#markdown-and-rmarkdown"><span class="toc-section-number">1</span> Markdown and RMarkdown</a><ul>
 <li><a href="#markdown"><span class="toc-section-number">1.1</span> Markdown</a></li>
-<li><a href="#some-code"><span class="toc-section-number">1.2</span> Some code</a></li>
-</ul></li>
-<li><a href="#introduction"><span class="toc-section-number">2</span> Introduction</a><ul>
-<li><a href="#some-code-1"><span class="toc-section-number">2.1</span> Some code</a></li>
-<li><a href="#rstudiormarkdown"><span class="toc-section-number">2.2</span> RStudio/RMarkdown</a></li>
-</ul></li>
-<li><a href="#resources"><span class="toc-section-number">3</span> Resources</a><ul>
-<li><a href="#markdown-1"><span class="toc-section-number">3.1</span> Markdown</a><ul>
-<li><a href="#markdown-editors"><span class="toc-section-number">3.1.1</span> Markdown editors</a></li>
-<li><a href="#pandoc"><span class="toc-section-number">3.1.2</span> Pandoc</a></li>
-</ul></li>
-<li><a href="#rstudio-resources"><span class="toc-section-number">3.2</span> RStudio Resources</a><ul>
-<li><a href="#rmarkdown"><span class="toc-section-number">3.2.1</span> RMarkdown</a></li>
-<li><a href="#cheatsheets"><span class="toc-section-number">3.2.2</span> Cheatsheets</a></li>
-<li><a href="#publishing"><span class="toc-section-number">3.2.3</span> Publishing</a></li>
+<li><a href="#rstudiormarkdown"><span class="toc-section-number">1.2</span> RStudio/RMarkdown</a></li>
+<li><a href="#markdown-resources"><span class="toc-section-number">1.3</span> Markdown resources</a><ul>
+<li><a href="#markdown-1"><span class="toc-section-number">1.3.1</span> Markdown</a></li>
+<li><a href="#markdown-editors"><span class="toc-section-number">1.3.2</span> Markdown editors</a></li>
+<li><a href="#pandoc"><span class="toc-section-number">1.3.3</span> Pandoc</a></li>
+<li><a href="#rmarkdown"><span class="toc-section-number">1.3.4</span> RMarkdown</a></li>
+<li><a href="#cheatsheets"><span class="toc-section-number">1.3.5</span> Cheatsheets</a></li>
+<li><a href="#publishing"><span class="toc-section-number">1.3.6</span> Publishing</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -355,38 +351,61 @@ $(document).ready(function () {
 <div id="markdown-and-rmarkdown" class="section level1">
 <h1><span class="header-section-number">1</span> Markdown and RMarkdown</h1>
 <p>This document is written in Markdown, which is a “lightweight” markup language (like HTML), that used a relatively simple syntax, and facilitates the transformation of human-readible text files into .html or .pdf documents. RMarkdown is a an R package, and a set of tools that are deeply embedded in RStudio that facilitates the construction of documents that combine text, R code and the output from the execution of that code, and that range in complexity from a single .html or .pdf file, to multi-page web sites, to books.</p>
-<p>RMardown thereby facilitates the concepts of “literate programming” <a href="https://en.wikipedia.org/wiki/Literate_programming">link</a>, and “reproducible research” <a href="https://en.wikipedia.org/wiki/Reproducibility">link</a>, which, in addition to explaining or documenting itself, also allows others (including an original investigator after some time has passed) to reproduce a data analysis or other research result.</p>
+<p>RMarkdown thereby facilitates the concepts of “literate programming” <a href="https://en.wikipedia.org/wiki/Literate_programming">link</a>, and “reproducible research” <a href="https://en.wikipedia.org/wiki/Reproducibility">link</a>, which, in addition to explaining or documenting itself, also allows others (including an original investigator after some time has passed) to reproduce a data analysis or other research result.</p>
 <div id="markdown" class="section level2">
 <h2><span class="header-section-number">1.1</span> Markdown</h2>
 <p>Here is a simple Markdown (<code>.md</code>) file:</p>
-<p>``` # Introduction #</p>
-<p>Some text, and little discussion, including a bulleted list - first list item - second list time</p>
-</div>
-<div id="some-code" class="section level2">
-<h2><span class="header-section-number">1.2</span> Some code</h2>
-<p>Here is a little code: <code>(r)  plot(orstationc$elev, orstationc$tann)</code> and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</strong>.</p>
-``` And here is what the file looks like when rendered:
+<pre><code># Introduction #
+
+Some text, and little discussion, including a bulleted list
+- first list item
+- second list time
+
+## Some code ##
+
+Here is a little code:
+
+ ```
+ plot(orstationc$elev, orstationc$tann)
+ ```
+and some more text, possibly *decorated* or **otherwise formatted**.
+</code></pre>
+And here is what the file looks like when rendered:
 <hr>
-</div>
-</div>
-<div id="introduction" class="section level1">
-<h1><span class="header-section-number">2</span> Introduction</h1>
-<p>Some text, and little discussion, including a bulleted list</p>
+<h1>
+Introduction
+</h1>
+<p>
+Some text, and little discussion, including a bulleted list
+</p>
 <ul>
-<li>first list item</li>
-<li>second list time</li>
+<li>
+first list item
+</li>
+<li>
+second list time
+</li>
 </ul>
-<div id="some-code-1" class="section level2">
-<h2><span class="header-section-number">2.1</span> Some code</h2>
-<p>Here is a little code:</p>
-<pre class="(r)"><code>plot(orstationc$elev, orstationc$tann)</code></pre>
+<h2>
+Some code
+</h2>
+<p>
+Here is a little code:
+</p>
+<p>
+<code>plot(orstationc<span class="math inline">\(elev, orstationc\)</span>tann)</code>
+</p>
 and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</strong>.
 <hr>
 <p>Although the syntax of Markdown is relatively simple, quite complex documents can be generated using conversion tools like Pandoc (see the Resources section below).</p>
 </div>
 <div id="rstudiormarkdown" class="section level2">
-<h2><span class="header-section-number">2.2</span> RStudio/RMarkdown</h2>
+<h2><span class="header-section-number">1.2</span> RStudio/RMarkdown</h2>
 <p>RStudio allows the use of Markdown formatting styles within RMarkdown <code>.Rmd</code> files, allowing the resulting combinations of text, code and output to be nicely formatted. RNotebook and RMarkdown files in RStudio can be viewed as elements in a hierarchy of increasingly well-documented and reproducible code, with ordinary R script files <code>*.R</code> as the lowest level, and complicated RMarkdown web sites or even books at the highest level.</p>
+<p>RMarkdown is implemented by two packages (and their dependencies), <code>rmarkdown</code> and <code>knitr</code>. The packages can be installed as follows</p>
+<pre><code>install.packages(&quot;rmarkdown&#39;)
+install.packages(&quot;knitr&quot;)</code></pre>
+<p>The following examples can be reproduced using this data set: <a href="http://geog.uoregon.edu/GeogR/data/raster/cru10min30_bio.nc">[cru10min30_bio.nc]</a>, and the following shapefile components: <a href="http://geog.uoregon.edu/GeogR/data/shp/world2013.dbf">[world2013.shp]</a> <a href="http://geog.uoregon.edu/GeogR/data/shp/world2013.dbf">[world2013.dbf]</a> <a href="http://geog.uoregon.edu/GeogR/data/shp/world2013.shx">[world2013.shx]</a>. Download the files to a convenient working folder.</p>
 <ul>
 <li><code>*.R</code> scripts: input is a plain script, and output appears in the <code>Console</code> or <code>Plots</code> pane. <a href="http://geog.uoregon.edu/bartlein/courses/geog490/plot_alpha_01.R.txt">plot_alpha_01.R</a></li>
 <li><code>*.Rmd</code> RNotebook files: input is an RMarkdown file (with a special header), output appears “inline” in RStudio and code, comments and output are saved in a <code>*.nb.html</code> file that is portable. <a href="http://geog.uoregon.edu/bartlein/courses/geog490/plot_alpha_RNotebook.Rmd.txt">plot_alpha_RNotebook.Rmd</a></li>
@@ -395,37 +414,40 @@ and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</
 <li>multiple <code>*.Rmd</code> and <code>.md</code> files, along with a “site YAML” file, as input, a multipage website or book with internal navigation as output. (This is how the course web pages are constructed.)</li>
 </ul>
 </div>
-</div>
-<div id="resources" class="section level1">
-<h1><span class="header-section-number">3</span> Resources</h1>
-<div id="markdown-1" class="section level2">
-<h2><span class="header-section-number">3.1</span> Markdown</h2>
+<div id="markdown-resources" class="section level2">
+<h2><span class="header-section-number">1.3</span> Markdown resources</h2>
+<div id="markdown-1" class="section level3">
+<h3><span class="header-section-number">1.3.1</span> Markdown</h3>
 <ul>
 <li>Markdown site <a href="http://daringfireball.net/projects/markdown/" class="uri">http://daringfireball.net/projects/markdown/</a></li>
 <li>Markdown (Wikipedia) <a href="https://en.wikipedia.org/wiki/Markdown" class="uri">https://en.wikipedia.org/wiki/Markdown</a></li>
-<li>Markdown quick reference <a href="http://geog.uoregon.edu/bartlein/courses/geog607/Rmd/MDquick-refcard.pdf" class="uri">http://geog.uoregon.edu/bartlein/courses/geog607/Rmd/MDquick-refcard.pdf</a></li>
+<li>Markdown Guide <a href="https://www.markdownguide.org" class="uri">https://www.markdownguide.org</a></li>
+<li>Markdown cheat sheet <a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf</a></li>
 </ul>
+</div>
 <div id="markdown-editors" class="section level3">
-<h3><span class="header-section-number">3.1.1</span> Markdown editors</h3>
+<h3><span class="header-section-number">1.3.2</span> Markdown editors</h3>
+<p>The easiest way to learn markdown is to use a dual pane (editing and previewing) Markdown editor, where it’s easy to instantly see the consequences of applying Markdown formatting.</p>
 <ul>
 <li>Markdown Pad (Windows) <a href="http://markdownpad.com" class="uri">http://markdownpad.com</a></li>
-<li>Macdown (OS X) <a href="http://macdown.uranusjr.com" class="uri">http://macdown.uranusjr.com</a>
+<li>Macdown (OS X) <a href="http://macdown.uranusjr.com" class="uri">http://macdown.uranusjr.com</a></li>
+</ul>
+<p>To get the formatting style used in this document (and the course web page), download and copy <code>html-d-01.css</code> (<a href="https://pjbartlein.github.io/REarthSysSci/html-md-01.css" class="uri">https://pjbartlein.github.io/REarthSysSci/html-md-01.css</a>):</p>
 <ul>
-<li>to get the formatting style used in this document (and the course web page), download and copy <code>SI-md-08.css</code> to the folder <code>/Users/bartlein/Library/Application Support/MacDown/Styles/</code>. Restart Macdown, and use the Preferences &gt; Rendering tab to set <code>SI-md-08</code> in the CSS field. Here’s a link to that file: <a href="http://geog.uoregon.edu/bartlein/courses/geog490/SI-md-08.css" class="uri">http://geog.uoregon.edu/bartlein/courses/geog490/SI-md-08.css</a></li>
-</ul></li>
+<li>MarkdownPad: Download the file and open it in a text editor. Then in the MarkdownPad <code>Tools &gt; Options &gt; Stylesheets</code> dialog, click on add, and paste the contents of <code>html-md-01.css</code>, and save and close with that name.</li>
+<li>Macdown: Download the file to e.g. <code>/Users/bartlein/Library/Application Support/MacDown/Styles/</code>. Restart Macdown, and use the Preferences &gt; Rendering tab to set <code>html-md-01.css</code> in the CSS field. Here’s a link to that file: <a href="https://pjbartlein.github.io/REarthSysSci/html-md-01.css" class="uri">https://pjbartlein.github.io/REarthSysSci/html-md-01.css</a> (Note that the Library folder is usually hidden from Finder, and you may have to use a file manager that can reveal hidden files,.)</li>
 </ul>
 </div>
 <div id="pandoc" class="section level3">
-<h3><span class="header-section-number">3.1.2</span> Pandoc</h3>
+<h3><span class="header-section-number">1.3.3</span> Pandoc</h3>
+<p>Pandoc is the rendering engine that RMarkdown uses, and it can also be used by itself to convert a large array of document types.</p>
 <ul>
 <li>Pandoc <a href="pandoc.org" class="uri">pandoc.org</a></li>
 </ul>
+<p>##RStudio resources</p>
 </div>
-</div>
-<div id="rstudio-resources" class="section level2">
-<h2><span class="header-section-number">3.2</span> RStudio Resources</h2>
 <div id="rmarkdown" class="section level3">
-<h3><span class="header-section-number">3.2.1</span> RMarkdown</h3>
+<h3><span class="header-section-number">1.3.4</span> RMarkdown</h3>
 <ul>
 <li>RMarkdown guide: <a href="http://rmarkdown.rstudio.com/index.html" class="uri">http://rmarkdown.rstudio.com/index.html</a></li>
 <li>RNotebooks: <a href="http://rmarkdown.rstudio.com/r_notebooks.html" class="uri">http://rmarkdown.rstudio.com/r_notebooks.html</a></li>
@@ -434,14 +456,16 @@ and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</
 </ul>
 </div>
 <div id="cheatsheets" class="section level3">
-<h3><span class="header-section-number">3.2.2</span> Cheatsheets</h3>
+<h3><span class="header-section-number">1.3.5</span> Cheatsheets</h3>
 <ul>
-<li>RMarkdown cheat sheet: <a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf</a></li>
-<li>RMarkdown reference guide: <a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf</a></li>
+<li>RMarkdown cheat sheet:<br />
+<a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf</a></li>
+<li>RMarkdown reference guide:<br />
+<a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf" class="uri">https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf</a></li>
 </ul>
 </div>
 <div id="publishing" class="section level3">
-<h3><span class="header-section-number">3.2.3</span> Publishing</h3>
+<h3><span class="header-section-number">1.3.6</span> Publishing</h3>
 <ul>
 <li>RPubs <a href="http://rpubs.com/" class="uri">http://rpubs.com/</a></li>
 <li>RMarkdown websites: <a href="http://rmarkdown.rstudio.com/rmarkdown_websites.html#publishing_websites" class="uri">http://rmarkdown.rstudio.com/rmarkdown_websites.html#publishing_websites</a></li>
