@@ -115,8 +115,27 @@ The two formats are actually related, in that netCDF uses the internal HDF forma
 
 See the `Install netCDF` task for directions on installing netCDF and related utilities.
 
-### Data viewing##
+### Data viewing ###
 
 Panoply is a data viewer that can open and display netCDF, HDF, and related files, and is great for inspecting the contents of a file.  It is downloadable from [[NASA Goddard Institude for Space Studies]](https://www.unidata.ucar.edu/software/netcdf/)
 
 It is, of course, possible to open and view netCDF and HDF files in R, but Panoply is much faster.  See the `Install Panoply` task for installation directions.
+
+### File transfer ###
+
+Earth-system science data sets are typically large, multiple gigabytes (GB) in size each, with collections of variables ranging to multiple terabytes (TB).  For example, individual variables in the "TraCE-21ka" transient paleoclimmte simulation data set (which contains monthly data from 22,000 to the late 20th Century) are 4.6 GB each, and collection of about 40 variables is around 3 TB. Data sets of this size are too large to  conveniently download from web pages, particularly because some user interaction is required, and the individual files take a while to download.  
+
+There are two main approaches for the batch transfer of files:
+
+- FTP and SFTP (File Transfer Protocol and SSH File Transfer Protocol), which is built into may operating systems, but is conveniently used with a client application (such as Filezilla)
+- Globus, a browser-based file-transfer client.
+
+See the `File transfer` task for information on installing and using Filezilla and Globus.
+
+### Text editors ###
+
+It's often necessary to simply view, or to edit, text files.  This can be in RStudio, or Word, but for a file of any size, this ranges from cumbersome to impossible.  There are dozens of text editors, and adoption of one or another often winds up being a highly personal decision—a text editor either seems intuitive, or it doesn't.  A reasonable thing to do when adopting a text editor is to choose a cross-platform one, which can greatly facilitates moving from machine to machine.  Three candidates, that behave somewhat similarly and include dozens of "packages" are:
+
+- Sublime Text [[https://www.sublimehq.com]](https://www.sublimehq.com) (License required for continuous use);
+- Atom [[https://atom.io]](https://atom.io), free, from the operators of GitHub; and 
+- Visual Studio Code [[https://code.visualstudio.com]](https://code.visualstudio.com), free, from Microsoft.

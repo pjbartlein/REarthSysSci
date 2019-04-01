@@ -350,6 +350,8 @@ $(document).ready(function () {
 <li><a href="#other-useful-utilities-and-apps"><span class="toc-section-number">2.3</span> Other useful utilities and apps</a><ul>
 <li><a href="#data-storage"><span class="toc-section-number">2.3.1</span> Data storage</a></li>
 <li><a href="#data-viewing"><span class="toc-section-number">2.3.2</span> Data viewing</a></li>
+<li><a href="#file-transfer"><span class="toc-section-number">2.3.3</span> File transfer</a></li>
+<li><a href="#text-editors"><span class="toc-section-number">2.3.4</span> Text editors</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -480,6 +482,25 @@ and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</
 <h3><span class="header-section-number">2.3.2</span> Data viewing</h3>
 <p>Panoply is a data viewer that can open and display netCDF, HDF, and related files, and is great for inspecting the contents of a file. It is downloadable from <a href="https://www.unidata.ucar.edu/software/netcdf/">[NASA Goddard Institude for Space Studies]</a></p>
 <p>It is, of course, possible to open and view netCDF and HDF files in R, but Panoply is much faster. See the <code>Install Panoply</code> task for installation directions.</p>
+</div>
+<div id="file-transfer" class="section level3">
+<h3><span class="header-section-number">2.3.3</span> File transfer</h3>
+<p>Earth-system science data sets are typically large, multiple gigabytes (GB) in size each, with collections of variables ranging to multiple terabytes (TB). For example, individual variables in the “TraCE-21ka” transient paleoclimmte simulation data set (which contains monthly data from 22,000 to the late 20th Century) are 4.6 GB each, and collection of about 40 variables is around 3 TB. Data sets of this size are too large to conveniently download from web pages, particularly because some user interaction is required, and the individual files take a while to download.</p>
+<p>There are two main approaches for the batch transfer of files:</p>
+<ul>
+<li>FTP and SFTP (File Transfer Protocol and SSH File Transfer Protocol), which is built into may operating systems, but is conveniently used with a client application (such as Filezilla)</li>
+<li>Globus, a browser-based file-transfer client.</li>
+</ul>
+<p>See the <code>File transfer</code> task for information on installing and using Filezilla and Globus.</p>
+</div>
+<div id="text-editors" class="section level3">
+<h3><span class="header-section-number">2.3.4</span> Text editors</h3>
+<p>It’s often necessary to simply view, or to edit, text files. This can be in RStudio, or Word, but for a file of any size, this ranges from cumbersome to impossible. There are dozens of text editors, and adoption of one or another often winds up being a highly personal decision—a text editor either seems intuitive, or it doesn’t. A reasonable thing to do when adopting a text editor is to choose a cross-platform one, which can greatly facilitates moving from machine to machine. Three candidates, that behave somewhat similarly and include dozens of “packages” are:</p>
+<ul>
+<li>Sublime Text <a href="https://www.sublimehq.com">[https://www.sublimehq.com]</a> (License required for continuous use);</li>
+<li>Atom <a href="https://atom.io">[https://atom.io]</a>, free, from the operators of GitHub; and</li>
+<li>Visual Studio Code <a href="https://code.visualstudio.com">[https://code.visualstudio.com]</a>, free, from Microsoft.</li>
+</ul>
 </div>
 </div>
 </div>
