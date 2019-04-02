@@ -54,11 +54,16 @@ RMarkdown is implemented by two packages (and their dependencies), `rmarkdown` a
 
 The following examples can be reproduced using this data set:  `cru10min30_bio.nc`, and the following shapefile components:  `world2013.shp`, `world2013.dbf`, `world2013.shx`.  (Transfer the files to a convenient working folder(s), and modify the paths in the scripts below.)
 
-- `*.R` scripts:  input is a plain script, and output appears in the `Console` or `Plots` pane. [plot\_alpha\_01.R](http://geog.uoregon.edu/bartlein/courses/geog490/plot_alpha_01.R.txt)
-- `*.Rmd` RNotebook files:  input is an RMarkdown file (with a special header), output appears "inline" in RStudio and code, comments and output are saved in a `*.nb.html` file that is portable.  [plot\_alpha\_RNotebook.Rmd](http://geog.uoregon.edu/bartlein/courses/geog490/plot_alpha_RNotebook.Rmd.txt)
-- `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a special header), output appears as an `.html` file, viewable in a browser or internally in RStudio  [plot\_alpha\_RMarkdown.Rmd](http://geog.uoregon.edu/bartlein/courses/geog490/plot_alpha_RMarkdown.Rmd.txt)
-- `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a different special header) and a `*.css` file, output appears as an `.html` file, viewable in a browser or internally in RStudio  [plot\_alpha\_RMarkdown\_v2.Rmd](http://geog.uoregon.edu/bartlein/courses/geog490/plot_alpha\_RMarkdown\_v2.Rmd.txt)
-- multiple `*.Rmd` and `.md` files, along with a "site YAML" file, as input, a multipage website or book with internal navigation as output.  (This is how the course web pages are constructed.)
+- `*.R` scripts:  input is a plain script, and output appears in the `Console` or `Plots` pane.  
+[[plot\_alpha\_01.R]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_01.R)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_01.R.txt)
+- `*.Rmd` RNotebook files:  input is an RMarkdown file (with a special header), output appears "inline" in RStudio and code, comments and output are saved in a `*.nb.html` file that is portable.  
+[[plot\_alpha\_RNotebook.Rmd]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RNotebook.Rmd)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RNotebook.Rmd.txt)
+- `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a special header), output appears as an `.html` file, viewable in a browser or internally in RStudio  
+[[plot\_alpha\_RMarkdown.Rmd]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown.Rmd)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown.Rmd.txt)
+- `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a different special header) and a `*.css` file, output appears as an `.html` file, viewable in a browser or internally in RStudio  
+[[plot\_alpha\_RMarkdown\_v2.Rmd]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown.Rmdplot_alpha\_RMarkdown\_v2.Rmd)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown.Rmd.txt)
+- multiple `*.Rmd` and `.md` files, along with a "site YAML" file, as input, a multipage website or book with internal navigation as output.  (This is how the course web pages are constructed.) 
+[[https://github.com/pjbartlein/REarthSysSci]](https://github.com/pjbartlein/REarthSysSci)
 
 
 ## Markdown resources
