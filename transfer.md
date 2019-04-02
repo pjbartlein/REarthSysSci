@@ -11,7 +11,7 @@ Fill in the Site Manager fields as follows
 - Host:  `ClimateLab.uoregon.edu   Port:2222`
 - Logon Type:  `Normal`
 - User:  `RESS`
-- Password:  `geog_490`
+- Password:  <displayed in class>
 
 Then click on Connect, and you should see the remote (i.e. the FTP server) server's file structure.  Individual files can be dragged back and forth between the Local and Remote sites.
 
