@@ -56,7 +56,14 @@ Setting up an effective and efficient environment for data analysis (i.e. a "too
 
 # Project #
 
-Student effort in the course will involve the analysis of a typical or interesting ESS data set using R, and the documentation of that analysis as an R Markdown Notebook, HTML web page, Word document, or some other useful format supported by RMarkdown.  Some examples follow:
+Student effort in the course will involve  
+
+- the analysis of a typical or interesting ESS data set using R, and the documentation of that analysis as an R Markdown Notebook, HTML web page, Word document, or some other useful format supported by RMarkdown.  
+- participating in a collaborative research environment, which involves both
+	- asking questions and asking for help as issues arise, and
+	- answering questions, as far as possible. 
+
+Some examples of analyses and documentation follow:
 
 Here's an example of an R Markdown HTML page describing the analysis of the Global Charcoal Database (GCD): 
 
@@ -81,3 +88,5 @@ This is a link to a "supplemental file" accompanying an article on biomass-burni
 Also, this web page, as well as that for GEOG 4/595 Geographic Data Analysis provide examples of web pages created using R, RStudio and RMarkdown:
 
 - [https://pjbartlein.github.io/GeogDataAnalysis/](https://pjbartlein.github.io/GeogDataAnalysis/).
+
+As to the two elements of participating in collaborative research, the first bullet (asking questions) is the more important of the two.
