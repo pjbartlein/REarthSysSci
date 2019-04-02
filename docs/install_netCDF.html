@@ -53,7 +53,9 @@ h6 {
 
 <link rel="stylesheet" href="html-md-01.css" type="text/css" />
 
+</head>
 
+<body>
 
 <style type = "text/css">
 .main-container {
@@ -172,6 +174,8 @@ $(document).ready(function () {
 });
 </script>
 
+<div class="container-fluid main-container">
+
 <!-- tabsets -->
 
 <style type="text/css">
@@ -242,15 +246,6 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
-
-
-
-</head>
-
-<body>
-
-
-<div class="container-fluid main-container">
 
 
 
@@ -352,11 +347,11 @@ $(document).ready(function () {
 <h2>Windows</h2>
 <p>To set up the netCDF command-line utilities in Windows,</p>
 <ol style="list-style-type: decimal">
-<li>download and install the netCDF-C library and utilites from<br />
-<a href="http://www.unidata.ucar.edu/software/netcdf/docs/winbin.html" class="uri">http://www.unidata.ucar.edu/software/netcdf/docs/winbin.html</a> (e.g. netCDF4.6.3-NC4-DAP-64.exe)</li>
-<li>Install as usual by clicking on the file; the destination folder will likely be <code>c:\Program Files\netCDF 4.6.3\</code></li>
-<li>When prompted, select “Add netCDF to the system PATH for all users”</li>
-<li>Check to make sure the <code>PATH</code> environment variable has been set: Control Panel &gt; All Control Panel Items &gt; System &gt; Advanced System Settings &gt; Environment Variables &gt; System Variables Pane, Click on Path, and add the following if not present: <code>c:\Program Files\netCDF 4.6.3\;c:\Program Files\netCDF 4.6.3\bin\;c:\Program Files\netCDF 4.6.3\lib\</code></li>
+<li><p>download and install the netCDF-C library and utilites from<br />
+<a href="http://www.unidata.ucar.edu/software/netcdf/docs/winbin.html">http://www.unidata.ucar.edu/software/netcdf/docs/winbin.html</a> (e.g. netCDF4.6.3-NC4-DAP-64.exe)</p></li>
+<li><p>Install as usual by clicking on the file; the destination folder will likely be <code>c:\Program Files\netCDF 4.6.3\</code></p></li>
+<li><p>When prompted, select “Add netCDF to the system PATH for all users”</p></li>
+<li><p>Check to make sure the <code>PATH</code> environment variable has been set: Control Panel &gt; All Control Panel Items &gt; System &gt; Advanced System Settings &gt; Environment Variables &gt; System Variables Pane, Click on Path, and add the following if not present: <code>c:\Program Files\netCDF 4.6.3\;c:\Program Files\netCDF 4.6.3\bin\;c:\Program Files\netCDF 4.6.3\lib\</code></p></li>
 <li><p>create a <code>.bat</code> (batch) file named <code>ncd.bat</code> in the netCDF folder created in the second step, with the following contents:</p>
 <pre><code> c:\Program Files\netCDF 4.6.3\bin\ncdump -c %1
  rem netCDF_4.6.3
