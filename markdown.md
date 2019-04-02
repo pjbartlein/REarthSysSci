@@ -73,8 +73,6 @@ The following examples can be reproduced using this data set:  `cru10min30_bio.n
 -   Markdown site <http://daringfireball.net/projects/markdown/>
 -   Markdown (Wikipedia) <https://en.wikipedia.org/wiki/Markdown>
 -   Markdown Guide <https://www.markdownguide.org>
--   Markdown cheat sheet
-    <https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf>
 
 ### Markdown editors
 
@@ -83,9 +81,9 @@ The easiest way to learn Markdown is to use a dual pane (editing and previewing)
 -   Markdown Pad (Windows) <http://markdownpad.com>
 -   Macdown (OS X) <http://macdown.uranusjr.com>
 
-To get the formatting style used in this document (and the course web page), download and copy `html-d-01.css` (<https://pjbartlein.github.io/REarthSysSci/html-md-01.css>):
+To get the formatting style used in this document (and the course web page), download `html-d-01.css` (<https://pjbartlein.github.io/REarthSysSci/html-md-01.css>):
 
-- MarkdownPad:  Download the file and open it in a text editor.  Then in the MarkdownPad `Tools > Options > Stylesheets` dialog, click on add, and paste the contents of `html-md-01.css`, and save and close with that name.
+- MarkdownPad:  Download the file and open it in a text editor.  Then in the MarkdownPad `Tools > Options > Stylesheets` dialog, click on add, and copy and paste the contents of `html-md-01.css`, and then save and close with that name.
 - Macdown:  Download the file to e.g. `/Users/bartlein/Library/Application Support/MacDown/Styles/`. Restart Macdown, and use the Preferences \> Rendering tab to set `html-md-01.css` in the CSS field. Here's a link to that file:
 <https://pjbartlein.github.io/REarthSysSci/html-md-01.css> (Note that the Library folder is usually hidden from Finder, and you may have to use a file manager that can reveal hidden files,.)
 
