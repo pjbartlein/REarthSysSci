@@ -10,3 +10,5 @@
 
 <span style="color: green;">NOTE:&nbsp; This is the curent web page for GEOG
 4/590, R for Earth-System Science.  It is currently under construction, and will evolve over the next few weeks.&nbsp; <br>
+
+Course Web Page URL:  `https://pjbartlein.github.io/REarthSysSci/`
