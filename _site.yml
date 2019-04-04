@@ -14,6 +14,8 @@ navbar:
     menu:
     - text: Install R and RStudio
       href: geog495_ex01.html
+    - text: Install packages and data
+      href: packages-and-data.html
     - text: Git and GitHub
       href: GitHub.html
     - text: Markdown and RMarkdown

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Packages and data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Earth-System Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="intro.html">Introduction: R, RStudio, and other infrastructure</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tasks
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="geog495_ex01.html">Install R and RStudio</a>
+    </li>
+    <li>
+      <a href="packages-and-data.html">Install packages and data</a>
+    </li>
+    <li>
+      <a href="GitHub.html">Git and GitHub</a>
+    </li>
+    <li>
+      <a href="markdown.html">Markdown and RMarkdown</a>
+    </li>
+    <li>
+      <a href="install_netCDF.html">Install netCDF</a>
+    </li>
+    <li>
+      <a href="install_Panoply.html">Install Panoply</a>
+    </li>
+    <li>
+      <a href="transfer.html">File transfer</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="websites.html">Old course web pages</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Packages and data</h1>
+
+</div>
+
+
+<div id="installing-r-packages-loading-a-saved-workspace-and-creating-rstudio-projects" class="section level2">
+<h2>Installing R Packages, Loading a saved Workspace, and creating RStudio Projects</h2>
+<p><strong>1. Introduction</strong></p>
+<p>Several things are covered in this document:</p>
+<ol style="list-style-type: decimal">
+<li>some basic setting up that needs to be done on Windows;</li>
+<li>installation of a single R package using the Windows and Mac Console command line, GUIs, or RStudio;</li>
+<li>“batch” installation of the packages required for doing the exercises and illustrating the lectures;</li>
+<li>loading a saved workspace that includes the data necessary for completing the exercises; and</li>
+<li>setting up an RStudio “project”</li>
+</ol>
+<p>Note that you will need to be connected to the Internet to download the various packages and data sets, and be sure to notice the <strong>Warning</strong> about deleting the contents of the workspace in section 6 below.</p>
+<p><strong>2. Initial set-up on Windows</strong></p>
+<p>Because Windows objects to the idea of programs installing files into the <code>C:\Program Files</code> folder, R will run into trouble when it attempts to install add-in packages there. The most reliable work-around seems to be to create what’s known as a “personal library” where the packages are stored. The R GUI for Windows and RStudio will generally offer to create one the first time you download a package (see the examples below), but Windows sometimes does not get the permissions entirely correct. The best thing to do is to create the folder yourself before downloading a package the first time, i.e., create the folder</p>
+<p><code>C:\Users\username\Documents\R\win-library\3.5\</code></p>
+<p>using Windows Explorer (the file manager, not Internet Explorer, the web browser), where <code>username</code> is your specific Windows user name. Use Windows Explorer to browse to your <code>\Documents</code> (or “<code>\My Documents</code>”) folder and successively create the sub-folders <code>\R</code>, <code>\win-library</code>, and <code>\3.5</code>. (Later, when you update R to a new version (e.g. R 3.6.x) you can create another new personal library folder named, for example, <code>C:\Users\username\Documents\R\win-library\3.6\</code>, move the old packages there, and then use R or RStudio to update them.)</p>
+<p><strong>3. Installing a single package</strong></p>
+<p>Much of the time only a single package must be installed. In those instances, using the Console command line, or the Windows or Mac GUI, or RStudio is quite efficient. The following illustrates several different ways that, for example, the <code>sp</code> or “spatial” package can be installed.</p>
+<p>The various ways of running R (Windows or Mac OS X/MacOS GUIs, RStudio) all have in common the simple Console command-line approach, where the following can be typed in or copied to the “Console” window (Note that the package name here must be surrounded by quotes):</p>
+<pre><code>install.packages(&quot;sp&quot;)</code></pre>
+<p>On Windows, this approach requires that the “personal library” described above has been set up, and on both Windows and Mac OS X/MacOS, and that the “binary” or pre-built packages are actually available in a repository like CRAN.</p>
+<p>NOTE: The base packages of R are updated every few months or so, and sometimes there may be a delay of a few days or even a month before the individual packages “catch up”. More about that below.</p>
+<p><em>Windows (R GUI)</em></p>
+<p>In the R for Windows GUI, packages can be installed at the Console command line, or through the Packages &gt; Install package(s) menu. That latter choice produces a long list of packages that must be scrolled through, which is why the direct Console command-line approach works better. If the “personal library” file has been set up correctly, then typing or copying <code>install.packages("sp")</code> to the Console command line should work without a problem. If the library was not correctly created, R will respond with the following:</p>
+<pre><code>## install.packages(&quot;sp&quot;)  
+## Warning in install.packages(&quot;sp&quot;) :  
+##   &#39;lib = &quot;C:/Program Files/R/R-3.5.2/library&quot;&#39; is not writable</code></pre>
+<p>This message indicates that the personal library file hadn’t been created earlier. R will immediately pop up two dialog boxes, one after the other:</p>
+<ol style="list-style-type: decimal">
+<li>Would you like to use a personal library instead?`<br />
+</li>
+<li>Would you like to create a personal library <code>'C:\Users\bartlein\Documents\R\win-library\3.5'</code> to install packages into?</li>
+</ol>
+<p>Respond yes to both.</p>
+<p>Generally, the first time a package is installed, R will want to know which “CRAN Mirror” you want to use. The closest one to us is in Seattle, and if the message <code>--- Please select a CRAN mirror for use in this session ---</code> appears, select “<code>USA (WA) [https]</code>”.</p>
+<p>and something like the following confirmation should appear:</p>
+<pre><code>## trying URL &#39;https://cran.rstudio.com/bin/macosx/el-capitan/contrib/3.5/sp_1.3-1.tgz&#39;
+## Content type &#39;application/x-gzip&#39; length 1873005 bytes (1.8 MB)
+## ==================================================
+## downloaded 1.5 MB
+## package ‘sp’ successfully unpacked and MD5 sums checked
+
+## The downloaded binary packages are in
+##        C:\Users\bartlein\AppData\Local\Temp\RtmpymDcKp\downloaded_packages</code></pre>
+<p>The message indicates that the “personal library” folder was created, and the <code>sp</code> package was successfully downloaded.</p>
+<p><em>Windows (RStudio)</em></p>
+<p>In RStudio, the Console command-line approach works the same as in the Windows R GUI, and usually simply installs the package, but it may also respond as follows:</p>
+<pre><code>## Error in install.packages : missing value where TRUE/FALSE needed</code></pre>
+<p>If that happens, quit RStudio and try again. Note that if RStudio occupies the whole screen, the individual questions about creating the library may be hidden.</p>
+<p>You can also use the Tools &gt; Install packages… menu. If the personal library does not exist, the following message will appear</p>
+<pre><code>## Would you like to create a personal library &#39;C:\Users\bartlein\Documents\R\win-library\3.5&#39; 
+## to install packages into?  </code></pre>
+<p>Reply yes, and select or type in the following in the dialog box that appears:</p>
+<ol style="list-style-type: decimal">
+<li>Install from: <code>Repository (CRAN, CRANextras)</code><br />
+</li>
+<li>Packages: <code>sp</code><br />
+</li>
+<li>Install to Library: <code>C:\Users\bartlein\Documents\R\win-library\3.5 (Default)</code></li>
+<li>Make sure “install dependencies” is checked</li>
+</ol>
+<p>The following confirmation should appear:</p>
+<pre><code>## Installing package into ‘C:/Users/bartlein/Documents/R/win-library/3.5’
+## (as ‘lib’ is unspecified)
+## trying URL &#39;https://cran.rstudio.com/bin/macosx/el-capitan/contrib/3.5/sp_1.3-1.tgz&#39;
+## Content type &#39;application/x-gzip&#39; length 1873005 bytes (1.8 MB)
+## downloaded 1.5 MB
+
+## package ‘sp’ successfully unpacked and MD5 sums checked
+
+## The downloaded binary packages are in
+##  C:\Users\bartlein\AppData\Local\Temp\RtmpOIfXVB\downloaded_packages</code></pre>
+<p><em>R on Mac OS X, MacOS</em></p>
+<p>The R GUI on the Mac has a useful package installer built in. Before using the installer (or Console (command-line) approach) the first time, it’s useful to sent the “Default CRAN mirror” (repository) using the R &gt; Preferences &gt; Startup dialog box. Select “<code>USA (WA) [https]</code>” which will display the URL <code>https://cran.fhcrc.org</code>.</p>
+<p>The Packages &amp; Data &gt; Package Installer dialog allows you to get a list of all available packages from a particular repository, by clicking on the “get list” button, or to search for a particular package by typing its name in the “Package Search” field (but even that can produce a long list, as in the case of the <code>sp</code> package, because the letters “sp” appear in many package names). In either case, once a package is selected by clicking on it, the “Install Selected” button starts the download and installation.</p>
+<p>You should see a confirmation like the following:</p>
+<pre><code>## trying URL &#39;https://cran.rstudio.com/bin/macosx/el-capitan/contrib/3.5/sp_1.3-1.tgz&#39;
+## Content type &#39;application/x-gzip&#39; length 1873005 bytes (1.8 MB)
+## ==================================================
+## downloaded 1.8 MB
+
+## package ‘sp’ successfully unpacked and MD5 sums checked
+
+## The downloaded binary packages are in
+##        C:\Users\bartlein\AppData\Local\Temp\RtmpymDcKp\downloaded_packages</code></pre>
+<p><em>RStudio on Mac OS X, MacOS</em></p>
+<p>In RStudio running on the Mac, the Tools &gt; Install Packages menu brings up a dialog box. Select or type in the following in the dialog box:</p>
+<ol style="list-style-type: decimal">
+<li>Install from: <code>Repository (CRAN)</code><br />
+</li>
+<li>Packages: <code>sp</code><br />
+</li>
+<li>Install to Library:<br />
+<code>/Volumes/Macintosh HD/Library/Frameworks/R.framework/Resources/library [Default]</code></li>
+<li>Make sure “Install dependencies” is checked</li>
+</ol>
+<p>After clicking on install, you should get a confirmation like the one just above.</p>
+<p><em>RStudio in general</em></p>
+<p>One of the “window panes” in RStudio can be configured to have a “Packages” tab, which reveals a nice list of the packages that have been installed, and indicates with a check mark the packages that are currently loaded (via the <code>library()</code> function). There is also a convenient “Update” button in the display.</p>
+<p><strong>4. Updating packages</strong></p>
+<p>R packages are continuously being updated or revised, and from time to time it’s a good idea to refresh the currently installed packages. There are various ways of doing this, but the simplest is to type or copy the following to the Console:</p>
+<pre><code>update.packages()</code></pre>
+<p>Note that here as elsewhere, the <code>update.packages</code> function needs be accompanied by the parentheses, i.e. <code>update.packages()</code>, even though the “argument” of the function is null.</p>
+<p><strong>5. Installation of multiple packages at a time</strong></p>
+<p>It’s possible to use the various GUIs to install more than one package at time, but this most conveniently done via the Console command line. The following packages will be used in the exercises:</p>
+<p><code>sp, maptools, rgeos, gpclib, rgdal, maps, mapproj, mapdata, classInt,</code><br />
+<code>scatterplot3d, RColorBrewer, gstat, spdep, vcd, sf</code>.</p>
+<p>These packages can be installed as a group (<em>but note that this will take a while</em>) by copying and pasting the two lines of code to the Console command line <strong>one line at at time</strong> :</p>
+<pre><code>url_string &lt;- &quot;https://pjbartlein.github.io/GeogDataAnalysis/R/sources/install-exercise-packages.R.txt&quot;</code></pre>
+<p>and then</p>
+<pre><code>source(url_string)</code></pre>
+<p>This procedure first assigns the URL of a file on GitHub server, a single-line R script that includes the <code>install.packages()</code> function with a list of packages as its argument, and then the <code>source(url)</code> function executes that script. The contents of the file can be seen by clicking on the following link <a href="https://pjbartlein.github.io/GeogDataAnalysis/R/sources/install-exercise-packages.R.txt">install-exercise-packages.R.txt</a>. Many more packages will actually be installed than appear in that list because “dependencies” (or other packages that the packages being installed use) are also installed. If R complains about attempting to update packages that are already loaded, reply “No” to the dialog asking whether or not to resart R.</p>
+<p><em>Mac OS X Note:</em></p>
+<p>At the time of this writing, the “source” versions of several of the spatial packages are newer than binary versions. R will indicate something like</p>
+<pre><code>## There is a binary version available but the source version is later:
+##     binary source needs_compilation
+## sp     1.2-5  1.2-6              TRUE
+
+## Do you want to install from sources the packages which need compilation?
+## y/n: </code></pre>
+<p><strong>Reply no.</strong> “Building” these packages locally, or finding and downloading prebuilt binaries is not straightforward at first, and for the things we do in lectures and exercises it will probably be fine to use the older versions.</p>
+<p>There are several packages that are used in lectures, and if you want to reproduce those examples, the packages can be downloaded the same way.</p>
+<pre><code>url_string &lt;- &quot;https://pjbartlein.github.io/GeogDataAnalysis/R/sources/install-lecture-packages.R.txt&quot;</code></pre>
+<p>and then</p>
+<pre><code>source(url_string)</code></pre>
+<p>Here’s the list of those packages: <a href="https://pjbartlein.github.io/GeogDataAnalysis/R/sources/install-lecture-packages.R.txt">install-lecture-packages.R.txt</a></p>
+<p>There are additional packages, like <code>lattice</code> and <code>MASS</code>, that are “built-into” R which do not need to be specifically installed (but which can be updated as above).</p>
+<p><strong>6. Downloading a workspace</strong></p>
+<p>After a while, it gets tedious to download one at a time the individual spreadsheet and shape files used in the exercises. You can load a copy of a workspace that contains most of the data used in the class by doing the following:</p>
+<p>First, clear the workspace:</p>
+<pre><code>rm(list=ls(all=TRUE))</code></pre>
+<p><strong>WARNING: This will indeed remove everything in the current workspace.</strong> That will be ok, unless you’re in the middle of an exercise. Then, enter the following, which uses a “connection” to download data from a URL:</p>
+<pre><code>con &lt;- url(&quot;https://pjbartlein.github.io/GeogDataAnalysis/data/Rdata/geog495.RData&quot;)
+load(file=con)
+close(con)</code></pre>
+<p>Note that this workspace will overwrite the existing one. You can check its contents using <code>ls()</code>. This workspace contains the shape files that are used in the exercises, so if you load it, you won’t have to download and read in the individual shape file components.</p>
+<p>The first exercises use the <code>RColorBrewer</code>, <code>classInt</code>, <code>rgeos</code>, <code>maptools</code>, <code>gstat</code>, and <code>spdep</code> packages. On the Mac, remember to check the “Install dependencies” box on the R Package Installer dialog box to make sure all of the necessary packages are installed.</p>
+<p><strong>7. RStudio Projects</strong></p>
+<p>RStudio “Projects” are collections of workspaces, history files, and source documents (e.g. <code>.R</code> and <code>.Rmd</code> files) along with a specific working directory that make it easy to separate individual projects (in the sense of different tasks, e.g. exercises for GEOG 4/595, thesis project work, individual field study data sets, etc.). The RStudio Support documentation on creating and using projects is very clear on how to do these tasks:</p>
+<ul>
+<li><a href="https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects">https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects</a></li>
+</ul>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
