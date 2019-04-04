@@ -121,7 +121,7 @@ See the **Install netCDF** task for directions on installing netCDF and related 
 
 ### Data viewing ###
 
-Panoply is a data viewer that can open and display netCDF, HDF, and related files, and is great for inspecting the contents of a file.  It is downloadable from [[NASA Goddard Institude for Space Studies]](https://www.unidata.ucar.edu/software/netcdf/)
+Panoply is a data viewer that can open and display netCDF, HDF, and related files, and is great for inspecting the contents of a file.  It is downloadable from [[NASA Goddard Institude for Space Studies]](https://www.giss.nasa.gov/tools/panoply/)
 
 It is, of course, possible to open and view netCDF and HDF files in R, but Panoply is much faster.  
 
