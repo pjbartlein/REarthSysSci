@@ -1,0 +1,21 @@
+---
+title: "Packages and data"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: no
+    toc_float: false
+    collapsed: no
+    css: html-md-01.css
+    highlight: haddock
+---
+
+```{r set-options, echo=FALSE}
+options(width = 115)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
+pdf.options(useDingbats = TRUE)
+```
+
+```{r child="packages-and-data.md"}
+```
