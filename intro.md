@@ -27,6 +27,8 @@ RStudio is a development environment for R that is much more powerful than the "
 - RStudio blog:  [https://blog.rstudio.org/](https://blog.rstudio.org/)
 - R Markdown:  [http://rmarkdown.rstudio.com/index.html](http://rmarkdown.rstudio.com/index.html)
 
+Note:  See **Install R and RStudio** under the Tasks tab for an exercise that describes the installation of R and RStudio.
+
 ## Microsoft R Open ##
 
 Microsoft sponsors something called the Microsoft R Application Network (MRAN), which is a collection of tools and resources that includes a specialized build of R known as Microsoft R Open (which was formerly knows as Revolution Analytics R).  The version has been compiled to use the highly optimized Intel Math Kernel Library (MKL), which can greatly speed up some of the calculations involved in analyzing big data sets.  In addition, to support reproducible research, MRAN supports "snapshots" of the CRAN packages that can be used by the `checkpoint()` function to use a fixed (i.e. not randomly updated) set of packages.  
@@ -56,6 +58,8 @@ It is becoming standard practice that any specialized software used in writing a
 Here's the GitHub repository for the course web page:  
 
 - [https://github.com/pjbartlein/REarthSysSci](https://github.com/pjbartlein/REarthSysSci)
+
+Note:  See **Git and GitHub** under the Tasks tab for instructions on getting a GitHub account and setting up a Git repository.
 
 ## Markdown ##
 
@@ -98,9 +102,9 @@ Some code
 and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</strong>.
 <hr>
 
-See the `Markdown & RMarkdown` task for some basic information and resources on Markdown and RMarkdown
+Although the syntax of Markdown is relatively simple, complex documents can be generated using conversion tools like Pandoc. 
 
-Although the syntax of Markdown is relatively simple, complex documents can be generated using conversion tools like Pandoc. (see the `Markdown & RMarkdown` task).
+See the **Markdown & RMarkdown** task for some basic information and resources on Markdown and RMarkdown
 
 ## Other useful utilities and apps ##
 
@@ -113,13 +117,15 @@ There are two related formats for storing and distributing Earth-system science 
 
 The two formats are actually related, in that netCDF uses the internal HDF format for storage.  Both formats are self-documenting (i.e. they contain attributes or metadata that describe the contents of a particular file) and are machine independent.  Each has an associated set of command-line utilities that can be used to rapidly learn what a particular file contains.
 
-See the `Install netCDF` task for directions on installing netCDF and related utilities.
+See the **Install netCDF** task for directions on installing netCDF and related utilities.
 
 ### Data viewing ###
 
 Panoply is a data viewer that can open and display netCDF, HDF, and related files, and is great for inspecting the contents of a file.  It is downloadable from [[NASA Goddard Institude for Space Studies]](https://www.unidata.ucar.edu/software/netcdf/)
 
-It is, of course, possible to open and view netCDF and HDF files in R, but Panoply is much faster.  See the `Install Panoply` task for installation directions.
+It is, of course, possible to open and view netCDF and HDF files in R, but Panoply is much faster.  
+
+See the **Install Panoply** task for installation directions.
 
 ### File transfer ###
 
@@ -130,7 +136,7 @@ There are two main approaches for the batch transfer of files:
 - FTP and SFTP (File Transfer Protocol and SSH File Transfer Protocol), which is built into may operating systems, but is conveniently used with a client application (such as Filezilla)
 - Globus, a browser-based file-transfer client.
 
-See the `File transfer` task for information on installing and using Filezilla and Globus.
+See the **File transfer** task for information on installing and using Filezilla and Globus.
 
 ### Text editors ###
 
