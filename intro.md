@@ -27,7 +27,7 @@ RStudio is a development environment for R that is much more powerful than the "
 - RStudio blog:  [https://blog.rstudio.org/](https://blog.rstudio.org/)
 - R Markdown:  [http://rmarkdown.rstudio.com/index.html](http://rmarkdown.rstudio.com/index.html)
 
-Note:  See **Install R and RStudio** under the Tasks tab for an exercise that describes the installation of R and RStudio.
+Note:  See **Install R and RStudio** under the Tasks tab for an exercise that describes the installation of R and RStudio.  **Install packages and data** under the Tasks tab describes how to install packages individually and en masse, as well as how to the workspace used for exercises in GEOG 4/595. 
 
 ## Microsoft R Open ##
 
