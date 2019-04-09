@@ -27,7 +27,9 @@ The first step in the analysis of a data set, of course, is to read the data int
 ## Read a .csv file ##
 
 Although it is possible to browse to a particular file in order to open it (i.e. using the `file.choose()` function), for reproducibility, it's better to explicitly specify the source (i.e. path) of the data.  The following code reads a .csv file `IPCC-RF.csv` that contains radiative forcing values for various controls of global climate since 1750 CE, expressed in terms of Wm<sup>-2</sup> contributions to the Earth's preindustrial energy balance.  The data can be downloaded from 
-[[https://pjbartlein.github.io/REarthSysSci/data/csv/IPCC-RF.csv]](https://pjbartlein.github.io/REarthSysSci/data/csv/IPCC-RF.csv) by right-clicking on the link, and saving to a suitable directory.  Here, the file is assumed to have been dowloaded to the folder `/Users/bartlein/projects/geog490/data/csv_files/`.  (Note that this folder is not necessarly the default working directory of R, which can found using the function `getwd()`)
+[[https://pjbartlein.github.io/REarthSysSci/data/csv/IPCC-RF.csv]](https://pjbartlein.github.io/REarthSysSci/data/csv/IPCC-RF.csv) by right-clicking on the link, and saving to a suitable directory.  
+
+Here, the file is assumed to have been dowloaded to the folder `/Users/bartlein/projects/geog490/data/csv_files/`.  (Note that this folder is not necessarly the default working directory of R, which can found using the function `getwd()`)
 
 Read the radiative forcing .csv file:
 
