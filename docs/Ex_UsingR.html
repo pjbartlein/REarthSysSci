@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Using R – Exercise</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Earth-System Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="intro.html">Introduction: R, RStudio, and other infrastructure</a>
+    </li>
+    <li>
+      <a href="usingR.html">Using R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tasks
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="geog495_ex01.html">Install R and RStudio</a>
+    </li>
+    <li>
+      <a href="packages-and-data.html">Install packages and data</a>
+    </li>
+    <li>
+      <a href="GitHub.html">Git and GitHub</a>
+    </li>
+    <li>
+      <a href="Ex_UsingR.html">Using R exercise</a>
+    </li>
+    <li>
+      <a href="markdown.html">Markdown and RMarkdown</a>
+    </li>
+    <li>
+      <a href="install_netCDF.html">Install netCDF</a>
+    </li>
+    <li>
+      <a href="install_Panoply.html">Install Panoply</a>
+    </li>
+    <li>
+      <a href="transfer.html">File transfer</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="websites.html">Old course web pages</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Using R – Exercise</h1>
+
+</div>
+
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<p><strong>Geography 4/590: R for Earth-System Science</strong><br />
+<strong>Spring 2019</strong></p>
+<p><strong>Exercise Using R</strong><br />
+<strong>Finish by Friday, April 19</strong></p>
+<p><strong>1. Introduction</strong></p>
+<p>The aim of this exercise is to use R for doing some simple analyses of “typical” Earth-system science data sets (with “typical” in quotes because the data sets aren’t as big as many). The excersize parallels the lecture presentation, and genrally involves the simple modification of existing code (to, say, plot a different variable) than the creating of new code. (But modification of existing code is generally what one does.)</p>
+<p>Note that the code below can be copied using the little clipboard links, and pasted into RStudio. For this first exercise, opening a new R script file (<code>*.R</code>) will probably be sufficient, but you may wish to also experiment with an RMarkdown “Notebook” file, or a full RMarkdown file. In RStudio, a new file can be created with the File &gt; New File menu, or from the “new” icon on the toolbar. The first thing to do is to save the file with a sensible name, and in a sensible place (where you can find it again).</p>
+<p><strong>2. Read data sets</strong></p>
+<p>The first task is usually to read a data set, and this first part of the exercise simply repeats the lecture material. There are two basic sources for data to be read into R: 1) data (e.g. a .csv file or netCDF) on disk (or from the web), and 2) an existing R workspace (i.e. a <code>*.RData</code>) file that might contain, in addition to the input data, function or intermediate results, for example.</p>
+<p><em>Read a .csv file</em></p>
+<p>Although it is possible to browse to a particular file in order to open it (i.e. using the <code>file.choose()</code> function), for reproducibility, it’s better to explicitly specify the source (i.e. path) of the data. The following code reads a .csv file <code>IPCC-RF.csv</code> that contains radiative forcing values for various controls of global climate since 1750 CE, expressed in terms of Wm<sup>-2</sup> contributions to the Earth’s preindustrial energy balance. The data can be downloaded from <a href="https://pjbartlein.github.io/REarthSysSci/data/csv/IPCC-RF.csv">[https://pjbartlein.github.io/REarthSysSci/data/csv/IPCC-RF.csv]</a> by right-clicking on the link, and saving to a suitable directory. Here, the file is assumed to have been dowloaded to the folder <code>/Users/bartlein/projects/geog490/data/csv_files/</code>. (Note that this folder is not necessarly the default working directory of R, which can found using the function <code>getwd()</code>)</p>
+<p>Read the radiative forcing .csv file:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># read a .csv file</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/projects/geog490/data/csv_files/&quot;</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">csv_name &lt;-<span class="st"> &quot;IPCC-RF.csv&quot;</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">csv_file &lt;-<span class="st"> </span><span class="kw">paste</span>(csv_path, csv_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">IPCC_RF &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_file)</a></code></pre></div>
+<p><em>Load a saved .RData file (from the web)</em></p>
+<p>An alternative way of reading data is to read in an entire workspace (<code>*.RData</code>) at once. The following code reads those data from the web, by opening a “connection” to a URL, and then using the <code>load()</code> function (which also can be used to load a workspace file from a local folder).</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># load data from a saved .RData file</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">con &lt;-<span class="st"> </span><span class="kw">url</span>(<span class="st">&quot;https://pjbartlein.github.io/REarthSysSci/data/RData/geog490.RData&quot;</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">load</span>(<span class="dt">file=</span>con) </a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">close</span>(con) </a></code></pre></div>
+<p>Note how the “Environment” tab in RStudio has become populated with individual objects.</p>
+<p><strong>3. Data set summaries</strong></p>
+<p>A quick look at the data can be gotten using the <code>str()</code> (“structure”) function, and a five number&quot; (plus the mean) summary of the data can be gotten using the <code>summary()</code> function. Here the data are the Oregon cirques data set, which contains the location of cirque basins around the state, and an indicator variable that notes whether they currently contain glaciers or not.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">summary</span>(cirques)</a></code></pre></div>
+<p>Other summary functions provide other basic information on a data set:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># other summaries</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">names</span>(cirques)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="kw">head</span>(cirques)</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw">tail</span>(cirques)</a></code></pre></div>
+<p><strong>4. Simple visualization</strong></p>
+<p><em>Univariate enumerative plots – Index plots</em></p>
+<p>Here is the code for generating the index plot of oxygen-isotope values from the <code>specmap</code> data set.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># attach SPECMAP data, index plot</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">attach</span>(specmap)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="kw">plot</span>(O18)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># time-series plot</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">plot</span>(Age, O18, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">-2</span>), <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
+<p>And here’s the first task/question:</p>
+<blockquote>
+<p>Q1: Modify the above code to plot the variable <code>specmap$Insol</code> instead of <code>specmap$O18</code>, and describe the pattern of variability in that plot relative to the plot of <code>O18</code>: Is it similar? More regularly periodic? Completely random?</p>
+</blockquote>
+<p> </p>
+<p>The answers don’t have to be elaborate, but should be full sentences, with capitalization, punctuation, etc.</p>
+<p><em>Univariate summary plots – stripcharts, histograms and density plots</em></p>
+<p>Here is the code for producing stripcharts, histograms and density plots of the <code>O18</code> data.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># stacked stripchart</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">stripchart</span>(O18, <span class="dt">method=</span><span class="st">&quot;stack&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>)   <span class="co"># stack points to reduce overlap</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># histogram, more bars</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">hist</span>(O18, <span class="dt">breaks =</span> <span class="dv">20</span>)</a></code></pre></div>
+<blockquote>
+<p>Q2: Modify the code above to product a stripchart or histogram for <code>Insol</code>, being sure to experiment with the number of breaks. What is the distribution of <code>Insol</code> like relative to that of <code>O18</code>?</p>
+</blockquote>
+<p> </p>
+<p>Here’s the code for a density plot:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># density plot, different bandwidth</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">O18.density &lt;-<span class="st"> </span><span class="kw">density</span>(O18, <span class="dt">bw =</span> <span class="fl">0.10</span>)</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw">plot</span>(O18.density)</a></code></pre></div>
+<blockquote>
+<p>Q3: Once again, modify the code to get a density plot for <code>Insol</code>. Is the density plot consitent with the information provided by the histogram?</p>
+</blockquote>
+<p> </p>
+<p>After finishing with an attached data set, it’s good practice to detach it using <code>detach()</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># detach specmap</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">detach</span>(specmap)</a></code></pre></div>
+<p><em>Univariate summary plots – boxplots</em></p>
+<p>Before working on the <code>cirques</code> dataframe, attach it, and get the names of the variables:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># attach cirques dataframe and getnames</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw">attach</span>(cirques)</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw">names</span>(cirques)</a></code></pre></div>
+<p>This will produce a quick-and-dirty map of the data:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># simple map</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw">plot</span>(Lon, Lat, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw">points</span>(Lon, Lat, <span class="dt">col=</span><span class="kw">as.factor</span>(Glacier))</a></code></pre></div>
+<p>Here is the code for producing boxplots of elevation, as a function of glaciation at present:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># boxplot of elevations of glaciated and not-glaciated cirques</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">boxplot</span>(Elev <span class="op">~</span><span class="st"> </span>Glacier)</a></code></pre></div>
+<blockquote>
+<p>Q4: Modify the code above to produce paired (not-glaciated/glaciated) boxplots for longitude and latitude. Keeping in mind that longitude increases (i.e. becomes less negative) to the east, describe the spatial distribution of glaciated cirques relative to unglaciated ones.</p>
+</blockquote>
+<p> </p>
+<p><strong>5. Bivariate plots</strong></p>
+<p><em>Scatter diagrams</em></p>
+<p>Here is the code for plotting cirque elevation as a function of longitude (i.e. longitude on the x-axis, elevation on the y-axis).</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># cirques: Elev vs. Lon</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">attach</span>(cirques)</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">plot</span>(Elev <span class="op">~</span><span class="st"> </span>Lon, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="kw">points</span>(Elev <span class="op">~</span><span class="st"> </span>Lon, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">as.factor</span>(Glacier))</a></code></pre></div>
+<blockquote>
+<p>Q5: Examine the relationship between cirque elevation and latitude. Is there any kind of systematic relationship, or is the relationship completely random?</p>
+</blockquote>
+<p> </p>
+<p><strong>6. Enhanced (ggplot2) graphics</strong></p>
+<p>Before continuing, it would be efficient to calculate a new variable, the July:January precipitation ratio for the Oregon climate-station data set. This can be conveniently done as follows, where the <code>names()</code> function used to verify that the variable has been added. (Note that if at the end of the current R session the workspace is not saved, this new variable will go away.)</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># new variable</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">orstationc<span class="op">$</span>pjulpjan &lt;-<span class="st"> </span>orstationc<span class="op">$</span>pjul <span class="op">/</span><span class="st"> </span>orstationc<span class="op">$</span>pjan</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="kw">names</span>(orstationc)</a></code></pre></div>
+<p>Here is some code for plotting the new variable:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># load the `ggplot2` package</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># ggplot2 histogram</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw">ggplot</span>(orstationc, <span class="kw">aes</span>(<span class="dt">x=</span>pjulpjan)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># ggplot2 boxplots</span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">ggplot</span>(orstationc, <span class="kw">aes</span>(<span class="dt">y =</span> pjulpjan)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() </a></code></pre></div>
+<blockquote>
+<p>Q6: Describe the distribution of <code>orstationc$pjulpjan</code>. Is the distribution symmetric or not? Does the distribution of the precipitation ratio explain the particular scale cutpoints that have been used to map the precipitationratio variables?</p>
+</blockquote>
+<p> </p>
+<p>Plot the precipitation-ratio data again, this time transformed by taking the logarithms (base 10) of the data:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># ggplot2 boxplots</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw">ggplot</span>(orstationc, <span class="kw">aes</span>(<span class="dt">y =</span> <span class="kw">log10</span>(pjulpjan))) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() </a></code></pre></div>
+<blockquote>
+<p>Q7: What does the log tranformation do to the distribution of the precipitation-ratio data?</p>
+</blockquote>
+<p> </p>
+<p>Next, take a look at the relationship between the precipitation-ratio variable and elevation.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">## ggplot2 scatter diagram of Oregon climate-station data</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">ggplot</span>(orstationc, <span class="kw">aes</span>(elev, pjulpjan)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb20-3" data-line-number="3"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Elevation (m)&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;July:January Precipitation Ratio&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb20-4" data-line-number="4"><span class="st">          </span><span class="kw">ggtitle</span>(<span class="st">&quot;Oregon Climate Station Data&quot;</span>)</a></code></pre></div>
+<blockquote>
+<p>Q8: Describe the relationship. One issue that might be influencing this relationship is that there is a strong relationship between longitude and elevation across the state. How might that be addressed by simple plots?</p>
+</blockquote>
+<p> </p>
+<p><strong>7. Simple maps</strong></p>
+<p>The following code produces a simple map of one of the Oregon climate-station data.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># Code chunk 1:  set up</span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw">library</span>(rgeos)</a>
+<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="kw">library</span>(maptools)</a>
+<a class="sourceLine" id="cb21-4" data-line-number="4"><span class="kw">library</span>(sp)</a>
+<a class="sourceLine" id="cb21-5" data-line-number="5"><span class="kw">library</span>(RColorBrewer)</a>
+<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="kw">library</span>(classInt)</a>
+<a class="sourceLine" id="cb21-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb21-8" data-line-number="8"><span class="co"># Code chunk 2: set variable and get colors</span></a>
+<a class="sourceLine" id="cb21-9" data-line-number="9">plotvar &lt;-<span class="st"> </span>orstationc<span class="op">$</span>pjan <span class="co"># pick a variable to plot</span></a>
+<a class="sourceLine" id="cb21-10" data-line-number="10">plottitle &lt;-<span class="st"> &quot;January Precipitation&quot;</span></a>
+<a class="sourceLine" id="cb21-11" data-line-number="11">nclr &lt;-<span class="st"> </span><span class="dv">8</span> <span class="co"># number of colors</span></a>
+<a class="sourceLine" id="cb21-12" data-line-number="12">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(nclr,<span class="st">&quot;PuBu&quot;</span>) <span class="co"># get nclr colors</span></a>
+<a class="sourceLine" id="cb21-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb21-14" data-line-number="14"><span class="co"># find equal-frequency intervals</span></a>
+<a class="sourceLine" id="cb21-15" data-line-number="15">class &lt;-<span class="st"> </span><span class="kw">classIntervals</span>(plotvar, nclr, <span class="dt">style=</span><span class="st">&quot;quantile&quot;</span>)</a>
+<a class="sourceLine" id="cb21-16" data-line-number="16">colcode &lt;-<span class="st"> </span><span class="kw">findColours</span>(class, plotclr)</a>
+<a class="sourceLine" id="cb21-17" data-line-number="17">cutpts &lt;-<span class="st"> </span><span class="kw">round</span>(class<span class="op">$</span>brks, <span class="dt">digits=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb21-18" data-line-number="18">cutpts</a>
+<a class="sourceLine" id="cb21-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb21-20" data-line-number="20"><span class="co"># Code chunk 3: plot the shape file and the selected variable</span></a>
+<a class="sourceLine" id="cb21-21" data-line-number="21"><span class="kw">plot</span>(orotl_shp)</a>
+<a class="sourceLine" id="cb21-22" data-line-number="22"></a>
+<a class="sourceLine" id="cb21-23" data-line-number="23"><span class="co"># add points</span></a>
+<a class="sourceLine" id="cb21-24" data-line-number="24"><span class="kw">points</span>(orstationc<span class="op">$</span>lon, orstationc<span class="op">$</span>lat, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span>colcode, <span class="dt">cex=</span><span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb21-25" data-line-number="25"><span class="kw">points</span>(orstationc<span class="op">$</span>lon, orstationc<span class="op">$</span>lat, <span class="dt">cex=</span><span class="dv">2</span>) <span class="co"># draws black line around each point</span></a>
+<a class="sourceLine" id="cb21-26" data-line-number="26"></a>
+<a class="sourceLine" id="cb21-27" data-line-number="27"><span class="co"># add legend</span></a>
+<a class="sourceLine" id="cb21-28" data-line-number="28"><span class="kw">legend</span>(<span class="dt">x=</span><span class="op">-</span><span class="dv">118</span>, <span class="dt">y=</span><span class="fl">43.5</span>, <span class="dt">legend=</span><span class="kw">names</span>(<span class="kw">attr</span>(colcode, <span class="st">&quot;table&quot;</span>)),</a>
+<a class="sourceLine" id="cb21-29" data-line-number="29">    <span class="dt">fill=</span><span class="kw">attr</span>(colcode, <span class="st">&quot;palette&quot;</span>), <span class="dt">cex=</span><span class="fl">0.6</span>, <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>)</a>
+<a class="sourceLine" id="cb21-30" data-line-number="30"></a>
+<a class="sourceLine" id="cb21-31" data-line-number="31"><span class="co"># add the title</span></a>
+<a class="sourceLine" id="cb21-32" data-line-number="32"><span class="kw">title</span>(plottitle)</a></code></pre></div>
+<p><strong>8. Maps with ggplot2</strong></p>
+<p>The next code chunk translates the Oregon county shapefile into a “tidyverse” format suitable for plotting with <code>ggplot2</code>:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="co"># fortify shapefile</span></a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">orcounty_gg &lt;-<span class="st"> </span><span class="kw">fortify</span>(orcounty_shp)</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3"><span class="kw">head</span>(orcounty_gg)</a></code></pre></div>
+<p>Here’s what the translated shapfile looks like, plotted using <code>ggplot2</code>:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co"># ggplot map of orcounty_gg</span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="kw">ggplot</span>(orcounty_gg, <span class="kw">aes</span>(long,lat)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">group =</span> group), <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="st">  </span><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<p>The following code creates a “bubble plot” of the elevations of the climate station.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co"># bubble plot</span></a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="kw">ggplot</span>(orstationc, <span class="kw">aes</span>(lon, lat))  <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group), orcounty_gg, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">size =</span> elev)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-5" data-line-number="5"><span class="st">  </span><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<p>The following code will plot the July:January precipitation data using <code>ggplot2</code>. First, recode the data to a factor variable indicating the particular class interval each data value falls in. (And note the (quasi) logarithmic scale used).</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># recode pjulpjan to a factor</span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.0</span>, <span class="fl">.100</span>, <span class="fl">.200</span>, <span class="fl">.500</span>, <span class="fl">.800</span>, <span class="fl">1.0</span>, <span class="fl">1.25</span>, <span class="fl">2.0</span>, <span class="fl">5.0</span>, <span class="fl">10.0</span>)</a>
+<a class="sourceLine" id="cb25-3" data-line-number="3">pjulpjan_factor &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">findInterval</span>(orstationc<span class="op">$</span>pjulpjan, cutpts))</a>
+<a class="sourceLine" id="cb25-4" data-line-number="4"><span class="kw">head</span>(<span class="kw">cbind</span>(orstationc<span class="op">$</span>pjulpjan, pjulpjan_factor, cutpts[pjulpjan_factor]))</a></code></pre></div>
+<p>Here is code for the map:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># ggplot2 map of pjulpjan</span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="kw">ggplot</span>(orstationc, <span class="kw">aes</span>(lon, lat))  <span class="op">+</span></a>
+<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group), orcounty_gg, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="st">  </span><span class="kw">scale_color_brewer</span>(<span class="dt">type =</span> <span class="st">&quot;div&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;PRGn&quot;</span>, <span class="dt">aesthetics =</span> <span class="st">&quot;color&quot;</span>, <span class="dt">direction =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb26-5" data-line-number="5">    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;0.0 - 0.1&quot;</span>, <span class="st">&quot;0.1 - 0.2&quot;</span>, <span class="st">&quot;0.2 - 0.5&quot;</span>, <span class="st">&quot;0.5 - 0.8&quot;</span>, <span class="st">&quot;0.8 - 1.0&quot;</span>,</a>
+<a class="sourceLine" id="cb26-6" data-line-number="6">               <span class="st">&quot;1.0 - 1.25&quot;</span>, <span class="st">&quot;1.25 - 2.0&quot;</span>, <span class="st">&quot;2.0 - 5.0&quot;</span>, <span class="st">&quot;5.0 - 10.0&quot;</span>, <span class="st">&quot;&gt; 10.0&quot;</span>),</a>
+<a class="sourceLine" id="cb26-7" data-line-number="7">    <span class="dt">name =</span> <span class="st">&quot;Jul:Jan Ppt. Ratio&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb26-8" data-line-number="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(lon, lat, <span class="dt">color =</span> pjulpjan_factor), <span class="dt">size =</span> <span class="fl">3.0</span> ) <span class="op">+</span></a>
+<a class="sourceLine" id="cb26-9" data-line-number="9"><span class="st">  </span><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<p>Note that the Purple to Green color scale spans the range of precipitation-ratio data for the state, as opposed to the whole of the western U.S.</p>
+<blockquote>
+<p>Q9: Describe the pattern of July:January precipitation ratios across the state.</p>
+</blockquote>
+<p> </p>
+<p><strong>9. Univariate statistics</strong></p>
+<p>Here is code for summarizing the Oregon climate-station data:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="co"># univariate descriptive statistics</span></a>
+<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="kw">summary</span>(orstationc)</a></code></pre></div>
+<p><strong>10. Bivariate descriptive statistics (correlations)</strong></p>
+<p>The following code produces a correlation matrix and <code>corrplot()</code> graphical depiction of the matrix. Note the use of the <code>round()</code> function to reduce the number of digits in the correlation. “Unwrap” the <code>cor()</code> function to see what the correlation matrix looks like unrounded.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># correlations among Oregon climate-station variables</span></a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">round</span>(<span class="kw">cor</span>(orstationc[<span class="dv">2</span><span class="op">:</span><span class="dv">10</span>]), <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="co"># corrplot of correlation matrix</span></a>
+<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw">library</span>(corrplot)</a>
+<a class="sourceLine" id="cb29-3" data-line-number="3"><span class="kw">corrplot</span>(<span class="kw">cor</span>(orstationc[<span class="dv">2</span><span class="op">:</span><span class="dv">10</span>]), <span class="dt">method =</span> <span class="st">&quot;color&quot;</span>)</a></code></pre></div>
+<p><strong>11. Parallel-coordinate plots</strong></p>
+<p>Next, take a look at some parallel-coordinate plots for the Oregon climate-station data. First, create a new datafram, eliminating the character and x- and y-coordinate variables from the data frame. The the use of the “square-bracket” selection method to grab specific columns from the <code>orstationc</code> dataframe.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># create new data frame without text</span></a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">orstationc2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(orstationc[<span class="dv">2</span><span class="op">:</span><span class="dv">10</span>],orstationc[<span class="dv">15</span>])</a>
+<a class="sourceLine" id="cb30-3" data-line-number="3"><span class="kw">names</span>(orstationc2)</a></code></pre></div>
+<p>Here is the code for a parallel-coordinate plot:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># load library</span></a>
+<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="kw">library</span>(GGally)</a>
+<a class="sourceLine" id="cb31-3" data-line-number="3"><span class="kw">library</span>(gridExtra)</a>
+<a class="sourceLine" id="cb31-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb31-5" data-line-number="5"><span class="co"># parallel coordinate plot</span></a>
+<a class="sourceLine" id="cb31-6" data-line-number="6"><span class="kw">ggparcoord</span>(<span class="dt">data =</span> orstationc2,</a>
+<a class="sourceLine" id="cb31-7" data-line-number="7">  <span class="dt">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="dt">alphaLines =</span> <span class="fl">0.1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb31-8" data-line-number="8"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x  =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">315</span>, <span class="dt">vjust=</span><span class="fl">1.0</span>, <span class="dt">hjust=</span><span class="fl">0.0</span>, <span class="dt">size=</span><span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb31-9" data-line-number="9">        <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb31-10" data-line-number="10">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>() )</a></code></pre></div>
+<p>Next, explore the spatial patterns of the Oregon climate-station data (including the July:January precipitation-ratio variable). Here’s the code for a selection of points by latitude/longitude ranges:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co"># lon/lat window</span></a>
+<a class="sourceLine" id="cb32-2" data-line-number="2">lonmin &lt;-<span class="st"> </span><span class="fl">-125.0</span>; lonmax &lt;-<span class="st"> </span><span class="fl">-120.0</span>; latmin &lt;-<span class="st"> </span><span class="fl">42.0</span>; latmax &lt;-<span class="st"> </span><span class="fl">49.0</span> </a>
+<a class="sourceLine" id="cb32-3" data-line-number="3">lon &lt;-<span class="st"> </span>orstationc2<span class="op">$</span>lon; lat &lt;-<span class="st"> </span>orstationc2<span class="op">$</span>lat</a>
+<a class="sourceLine" id="cb32-4" data-line-number="4">orstationc2<span class="op">$</span>select_pts &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">ifelse</span>(lat <span class="op">&gt;=</span><span class="st"> </span>latmin <span class="op">&amp;</span><span class="st"> </span>lat <span class="op">&lt;=</span><span class="st"> </span>latmax <span class="op">&amp;</span><span class="st"> </span>lon <span class="op">&gt;=</span><span class="st"> </span>lonmin <span class="op">&amp;</span><span class="st"> </span>lon <span class="op">&lt;=</span><span class="st"> </span>lonmax, <span class="dv">1</span>, <span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb32-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb32-6" data-line-number="6"><span class="co"># pcp</span></a>
+<a class="sourceLine" id="cb32-7" data-line-number="7">a &lt;-<span class="st"> </span><span class="kw">ggparcoord</span>(<span class="dt">data =</span> orstationc2[<span class="kw">order</span>(orstationc2<span class="op">$</span>select_pts),],</a>
+<a class="sourceLine" id="cb32-8" data-line-number="8">  <span class="dt">columns =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>), <span class="dt">groupColumn =</span> <span class="st">&quot;select_pts&quot;</span>,</a>
+<a class="sourceLine" id="cb32-9" data-line-number="9">  <span class="dt">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="dt">alphaLines=</span><span class="fl">0.3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb32-10" data-line-number="10"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x  =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">315</span>, <span class="dt">vjust=</span><span class="fl">1.0</span>, <span class="dt">hjust=</span><span class="fl">0.0</span>, <span class="dt">size=</span><span class="dv">8</span>),</a>
+<a class="sourceLine" id="cb32-11" data-line-number="11">        <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb32-12" data-line-number="12">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>(),</a>
+<a class="sourceLine" id="cb32-13" data-line-number="13">        <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb32-14" data-line-number="14"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="kw">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.3</span>), <span class="st">&quot;red&quot;</span>))</a>
+<a class="sourceLine" id="cb32-15" data-line-number="15">  </a>
+<a class="sourceLine" id="cb32-16" data-line-number="16"><span class="co"># map</span></a>
+<a class="sourceLine" id="cb32-17" data-line-number="17">b &lt;-<span class="st"> </span><span class="kw">ggplot</span>(orstationc2, <span class="kw">aes</span>(lon, lat))  <span class="op">+</span></a>
+<a class="sourceLine" id="cb32-18" data-line-number="18"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group), orcounty_gg, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb32-19" data-line-number="19"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(lon, lat, <span class="dt">color =</span> select_pts), <span class="dt">size =</span> <span class="fl">1.0</span> ) <span class="op">+</span></a>
+<a class="sourceLine" id="cb32-20" data-line-number="20"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb32-21" data-line-number="21"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb32-22" data-line-number="22"><span class="st">  </span><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>))</a>
+<a class="sourceLine" id="cb32-23" data-line-number="23"></a>
+<a class="sourceLine" id="cb32-24" data-line-number="24"><span class="kw">grid.arrange</span>(a, b, <span class="dt">nrow =</span> <span class="dv">1</span>)</a></code></pre></div>
+<p>And here is the code for a variable-value selection:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co"># variable-value selection</span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2">cutpoint &lt;-<span class="st"> </span><span class="fl">0.2</span></a>
+<a class="sourceLine" id="cb33-3" data-line-number="3">v &lt;-<span class="st"> </span>orstationc2<span class="op">$</span>pjulpjan</a>
+<a class="sourceLine" id="cb33-4" data-line-number="4">v &lt;-<span class="st"> </span>(v<span class="op">-</span><span class="kw">min</span>(v))<span class="op">/</span>(<span class="kw">max</span>(v)<span class="op">-</span><span class="kw">min</span>(v))</a>
+<a class="sourceLine" id="cb33-5" data-line-number="5">orstationc2<span class="op">$</span>select_pts &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">ifelse</span>(v <span class="op">&gt;=</span><span class="st"> </span>cutpoint, <span class="dv">1</span>, <span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb33-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb33-7" data-line-number="7"><span class="co"># pcp</span></a>
+<a class="sourceLine" id="cb33-8" data-line-number="8">a &lt;-<span class="st"> </span><span class="kw">ggparcoord</span>(<span class="dt">data =</span> orstationc2[<span class="kw">order</span>(orstationc2<span class="op">$</span>select_pts),],</a>
+<a class="sourceLine" id="cb33-9" data-line-number="9">                <span class="dt">columns =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>), <span class="dt">groupColumn =</span> <span class="st">&quot;select_pts&quot;</span>,</a>
+<a class="sourceLine" id="cb33-10" data-line-number="10">                <span class="dt">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="dt">alphaLines=</span><span class="fl">0.3</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb33-11" data-line-number="11"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x  =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">315</span>, <span class="dt">vjust=</span><span class="fl">1.0</span>, <span class="dt">hjust=</span><span class="fl">0.0</span>, <span class="dt">size=</span><span class="dv">8</span>),</a>
+<a class="sourceLine" id="cb33-12" data-line-number="12">        <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb33-13" data-line-number="13">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>(),</a>
+<a class="sourceLine" id="cb33-14" data-line-number="14">        <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb33-15" data-line-number="15"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="kw">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.3</span>), <span class="st">&quot;red&quot;</span>))</a>
+<a class="sourceLine" id="cb33-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb33-17" data-line-number="17"><span class="co"># map</span></a>
+<a class="sourceLine" id="cb33-18" data-line-number="18">b &lt;-<span class="st"> </span><span class="kw">ggplot</span>(orstationc2, <span class="kw">aes</span>(lon, lat))  <span class="op">+</span></a>
+<a class="sourceLine" id="cb33-19" data-line-number="19"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group), orcounty_gg, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb33-20" data-line-number="20"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(lon, lat, <span class="dt">color =</span> select_pts), <span class="dt">size =</span> <span class="fl">1.0</span> ) <span class="op">+</span></a>
+<a class="sourceLine" id="cb33-21" data-line-number="21"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb33-22" data-line-number="22"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb33-23" data-line-number="23"><span class="st">  </span><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>))</a>
+<a class="sourceLine" id="cb33-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb33-25" data-line-number="25"><span class="kw">grid.arrange</span>(a, b, <span class="dt">nrow =</span> <span class="dv">1</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
+<p>Experiment with the longitudinal cutoff, as well as different variables for selecting points.</p>
+<blockquote>
+<p>Q10: Describe the seasonality of precipitation and temperature across the state. Don’t worry if that’s hard to put into words–data-analytical visualizations are possibly the best instance of the “One picture is worth a thousand words.” maxim.</p>
+</blockquote>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
