@@ -94,7 +94,7 @@ a:visited {
 }
 
 tt, code, pre {
-  font-family: "Consolas", "Courier New", Monaco, monospace;
+  font-family: Consolas, "Courier New", Monaco, monospace;
   font-size: 13px;
   font-weight: bold;
 }
@@ -199,7 +199,7 @@ hr {
     font-weight: bolder;
   }
   tt, code, pre {
-    font-family: "Consolas", "Courier New", Monaco, monospace;
+    font-family: Consolas, "Courier New", Monaco, monospace;
     font-size: 13px;
     font-weight: bold;
   }
