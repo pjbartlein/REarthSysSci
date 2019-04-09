@@ -40,7 +40,7 @@ tt, code, pre {
 
 /*web page*/
 tt, code, pre {
-  font-family: "Consolas", "Courier New", Monaco, monospace;
+  font-family: Consolas, "Courier New", Monaco, monospace;
   font-size: 13px;
   font-weight: bold;
 }
