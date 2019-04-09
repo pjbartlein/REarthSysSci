@@ -9,6 +9,8 @@ navbar:
     - text: Lecture topics
     - text: "Introduction: R, RStudio, and other infrastructure"
       href: intro.html
+    - text: Using R
+      href: usingR.html
 
   - text: Tasks 
     menu:

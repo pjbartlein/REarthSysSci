@@ -25,10 +25,11 @@ Grolemund, G. and H. Wickham, 2016, *R for Data Science*, [http://r4ds.had.co.nz
 
 Peng, R.D., 2016, *Exploratory Data Analysis with R*, [https://bookdown.org/rdpeng/exdata/](https://bookdown.org/rdpeng/exdata/)
 
-
 Phillips, N.D., 2017, *YaRrr — The Pirate's Guide to R* [[https://bookdown.org/ndphillips/YaRrr/]](https://bookdown.org/ndphillips/YaRrr/) 
 
 Ismay, C. 2016, *Getting used to R, RStudio, and Markdown* [[https://bookdown.org/chesterismay/rbasics/]](https://bookdown.org/chesterismay/rbasics/)
+
+Kabacoff, R., 2018, *Data Visualization with R* [https://rkabacoff.github.io/datavis/](https://rkabacoff.github.io/datavis/)
 
 
 # Geospatial developments in R #
