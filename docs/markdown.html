@@ -284,6 +284,16 @@ $(document).ready(function () {
     <li>
       <a href="usingR.html">Using R</a>
     </li>
+    <li>
+      <a href="ESSdata.html">Earth-system science data</a>
+    </li>
+    <li class="dropdown-header">Data input and output</li>
+    <li class="dropdown-header">Geospatial analyses and mapping</li>
+    <li class="dropdown-header">Visualization</li>
+    <li class="dropdown-header">Multivariate analysis</li>
+    <li class="dropdown-header">Prediction</li>
+    <li class="dropdown-header">Clustering</li>
+    <li class="dropdown-header">Other R packages</li>
   </ul>
 </li>
 <li class="dropdown">
@@ -373,7 +383,7 @@ $(document).ready(function () {
 
 <div id="markdown-and-rmarkdown" class="section level1">
 <h1><span class="header-section-number">1</span> Markdown and RMarkdown</h1>
-<p>This document is written in Markdown, which is a “lightweight” markup language (like HTML), that used a relatively simple syntax, and facilitates the transformation of human-readible text files into .html or .pdf documents. RMarkdown is a an R package, and a set of tools that are deeply embedded in RStudio that facilitates the construction of documents that combine text, R code and the output from the execution of that code, and that range in complexity from a single .html or .pdf file, to multi-page web sites, to books.</p>
+<p>This document is written in Markdown, which is a “lightweight” markup language (like HTML), that uses a relatively simple syntax, and facilitates the transformation of human-readible text files into .html or .pdf documents. RMarkdown is a an R package, and a set of tools that are deeply embedded in RStudio that facilitates the construction of documents that combine text, R code and the output from the execution of that code, and that range in complexity from a single .html or .pdf file, to multi-page web sites, to books.</p>
 <p>RMarkdown thereby facilitates the concepts of “literate programming” <a href="https://en.wikipedia.org/wiki/Literate_programming">link</a>, and “reproducible research” <a href="https://en.wikipedia.org/wiki/Reproducibility">link</a>, which, in addition to explaining or documenting itself, also allows others (including an original investigator after some time has passed) to reproduce a data analysis or other research result.</p>
 <div id="markdown" class="section level2">
 <h2><span class="header-section-number">1.1</span> Markdown</h2>
@@ -428,7 +438,15 @@ and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</
 <p>RMarkdown is implemented by two packages (and their dependencies), <code>rmarkdown</code> and <code>knitr</code>. The packages can be installed as follows</p>
 <pre><code>install.packages(&quot;rmarkdown&#39;)
 install.packages(&quot;knitr&quot;)</code></pre>
-<p>The following examples can be reproduced using this data set: <code>cru10min30_bio.nc</code>, and the following shapefile components: <code>world2013.shp</code>, <code>world2013.dbf</code>, <code>world2013.shx</code>. (Transfer the files to a convenient working folder(s), and modify the paths in the scripts below.)</p>
+<p>The following examples can be reproduced using this data set: <code>cru10min30_bio.nc</code>, and the following shapefile components:</p>
+<ul>
+<li><code>ne_110m_admin_0_countries.cpg</code></li>
+<li><code>ne_110m_admin_0_countries.dbf</code></li>
+<li><code>ne_110m_admin_0_countries.prj</code></li>
+<li><code>ne_110m_admin_0_countries.shp</code></li>
+<li><code>ne_110m_admin_0_countries.shx</code></li>
+</ul>
+<p>(Transfer the files to a convenient working folder(s), and modify the paths in the scripts below.)</p>
 <ul>
 <li><code>*.R</code> scripts: input is a plain script, and output appears in the <code>Console</code> or <code>Plots</code> pane.<br />
 <a href="https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RScript.R">[plot_alpha_RScript.R]</a> <a href="https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RScript.R.txt">[View file]</a></li>
@@ -462,7 +480,10 @@ install.packages(&quot;knitr&quot;)</code></pre>
 (<a href="https://pjbartlein.github.io/REarthSysSci/html-md-01.css" class="uri">https://pjbartlein.github.io/REarthSysSci/html-md-01.css</a>):</p>
 <ul>
 <li>MarkdownPad: Download the file and open it in a text editor. Then in the MarkdownPad <code>Tools &gt; Options &gt; Stylesheets</code> dialog, click on add, and copy and paste the contents of <code>html-md-01.css</code>, and then save and close with that name.</li>
-<li>Macdown: Download the file to e.g. <code>/Users/bartlein/Library/Application Support/MacDown/Styles/</code>. Restart Macdown, and use the Preferences &gt; Rendering tab to set <code>html-md-01.css</code> in the CSS field. Here’s a link to that file: <a href="https://pjbartlein.github.io/REarthSysSci/html-md-01.css" class="uri">https://pjbartlein.github.io/REarthSysSci/html-md-01.css</a> (Note that the Library folder is usually hidden from Finder, and you may have to use a file manager that can reveal hidden files,.)</li>
+<li>Macdown:<br />
+</li>
+<li>Download the file to e.g. <code>/Users/bartlein/Library/Application Support/MacDown/Styles/</code>. (Note that the Library folder is usually hidden from Finder, and you may have to use a file manager that can reveal hidden files.)</li>
+<li>Restart Macdown, and use the Preferences &gt; Rendering tab to set <code>html-md-01.css</code> in the CSS field.</li>
 </ul>
 </div>
 <div id="pandoc" class="section level3">

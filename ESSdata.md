@@ -2,7 +2,7 @@
 
 Twenty years ago, there were a large number of disparate formats for storing large data sets, and the transfer of data from one computing system to another was a big deal, often relying on frequent playing of the "find-the-continents" game.  Now, however, there are two general styles of dataset storage: 1) machine-independent self-documenting gridded datasets, and 2) relational data bases (e.g. MS Access, mySQL) (with common Excel formats (.csv, .xlsx) as special cases of database tables).  Gridded data sets are chiefly represented by the netCDF and HDF5 formats, which include self-documenting "attribute" data, with an older "binary" data format (GRIB2) still in widespread use for exachanging real-time weather forecasting data, and there is growing "interoperatability" among these formats.  Databases are in widespread use for storing data that may be heterogeneous in the sense of not being gridded, and possibly having multiple tables.
 
-## netCDF ## 
+## netCDF  
 
 netCDF (or Network Common Data Format) is the format most frequently used for storing climate-model output as well as some observational data.  There is a well-documented convention (CF, for Climate-and-Forecast) for arranging and internally documenting netCDF datasets, which further contributes to simple transfer of data from one system to another. 
 
@@ -14,7 +14,7 @@ There are several R packages for handling netCDF data.  Of these, the `ncdf4` an
 - ncdf4:  https://cloud.r-project.org/web/packages/ncdf4/index.html
 - ncdf.helpers:  https://cloud.r-project.org/web/packages/ncdf4.helpers/index.html
 
-## HDF ## 
+## HDF  
 
 HDF (or Hierarchical Data Format), like netCDF is a machine-independent self-documenting gridded dataset format, that is in common use for storing satellite and remote-sensing imagery data.  It currently exists in several formats (HDF4, HDF5, HDF-EOS) which can generally converted to one another.  (netCDF4 in fact uses the HDF5 format for storing data.)
 
@@ -31,7 +31,7 @@ The National Snow and Ice Data Center (NSIDC) as a nice tutorial on HDF-EOS:  [h
 
 NOAA's Coral Reef Watch [http://www.coralreefwatch.noaa.gov/satellite/hdf/index.php](http://www.coralreefwatch.noaa.gov/satellite/hdf/index.php) serves up a variety of HDF files for coral-bleaching monitoring.
 
-## GRIB ##
+## GRIB 
 
 GRIB (or GRIdded Binary / General Regularly-distributed Information in Binary form, https://en.wikipedia.org/wiki/GRIB)
 

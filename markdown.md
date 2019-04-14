@@ -1,6 +1,6 @@
 # Markdown and RMarkdown #
 
-This document is written in Markdown, which is a "lightweight" markup language (like HTML), that used a relatively simple syntax, and facilitates the transformation of human-readible text files into .html or .pdf documents.  RMarkdown is a an R package, and a set of tools that are deeply embedded in RStudio that facilitates the construction of documents that combine text, R code and the output from the execution of that code, and that range in complexity from a single .html or .pdf file, to multi-page web sites, to books.
+This document is written in Markdown, which is a "lightweight" markup language (like HTML), that uses a relatively simple syntax, and facilitates the transformation of human-readible text files into .html or .pdf documents.  RMarkdown is a an R package, and a set of tools that are deeply embedded in RStudio that facilitates the construction of documents that combine text, R code and the output from the execution of that code, and that range in complexity from a single .html or .pdf file, to multi-page web sites, to books.
 
 RMarkdown thereby facilitates the concepts of "literate programming" [link](https://en.wikipedia.org/wiki/Literate_programming), and "reproducible research" [link](https://en.wikipedia.org/wiki/Reproducibility), which, in addition to explaining or documenting itself, also allows others (including an original investigator after some time has passed) to reproduce a data analysis or other research result.
 
@@ -52,7 +52,16 @@ RMarkdown is implemented by two packages (and their dependencies), `rmarkdown` a
 	install.packages("rmarkdown')
 	install.packages("knitr")
 
-The following examples can be reproduced using this data set:  `cru10min30_bio.nc`, and the following shapefile components:  `world2013.shp`, `world2013.dbf`, `world2013.shx`.  (Transfer the files to a convenient working folder(s), and modify the paths in the scripts below.)
+The following examples can be reproduced using this data set:  `cru10min30_bio.nc`, and the following shapefile components:  
+
+- `ne_110m_admin_0_countries.cpg` 
+- `ne_110m_admin_0_countries.dbf` 
+- `ne_110m_admin_0_countries.prj` 
+- `ne_110m_admin_0_countries.shp` 
+- `ne_110m_admin_0_countries.shx` 
+
+(Transfer the files to a convenient working folder(s), and modify the paths in the scripts below.)
+
 
 - `*.R` scripts:  input is a plain script, and output appears in the `Console` or `Plots` pane.  
 [[plot\_alpha\_RScript.R]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RScript.R)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RScript.R.txt)
@@ -85,8 +94,9 @@ To get the formatting style used in this document (and the course web page), dow
  (<https://pjbartlein.github.io/REarthSysSci/html-md-01.css>):
 
 - MarkdownPad:  Download the file and open it in a text editor.  Then in the MarkdownPad `Tools > Options > Stylesheets` dialog, click on add, and copy and paste the contents of `html-md-01.css`, and then save and close with that name.
-- Macdown:  Download the file to e.g. `/Users/bartlein/Library/Application Support/MacDown/Styles/`. Restart Macdown, and use the Preferences \> Rendering tab to set `html-md-01.css` in the CSS field. Here's a link to that file:
-<https://pjbartlein.github.io/REarthSysSci/html-md-01.css> (Note that the Library folder is usually hidden from Finder, and you may have to use a file manager that can reveal hidden files,.)
+- Macdown:  
+ - Download the file to e.g. `/Users/bartlein/Library/Application Support/MacDown/Styles/`. (Note that the Library folder is usually hidden from Finder, and you may have to use a file manager that can reveal hidden files.)
+ - Restart Macdown, and use the Preferences \> Rendering tab to set `html-md-01.css` in the CSS field. 
 
 ###  Pandoc
 
