@@ -86,7 +86,7 @@ Here is the THREDDS data server at Unidata (aka "motherlode")
 
 ## Panoply ##
 
-Panoply is cross-platform application that can read and display netCDF, HDF and GRIB datasets.  See the Tasks tab on this page for directions for installing Panoply.  In addition to being able to read and display files on the local file system.  Panoply can also open catalogues and individual data sets
+Panoply [[link]](https://www.giss.nasa.gov/tools/panoply/) is cross-platform application that can read and display netCDF, HDF and GRIB datasets.  See the Tasks tab on this page for directions for installing Panoply.  In addition to being able to read and display files on the local file system.  Panoply can also open catalogues and individual data sets.  UNIDATA's Integrated Data Viewer [[IDV]](https://www.unidata.ucar.edu/software/idv/) provides some additional viewing options.
 
 # Some ESS Data Sources #
 
@@ -105,6 +105,11 @@ The NOAA Earth System Research Laboratory (formerly the Climate Diagnostics Cent
 	- Gridded climate data [[https://www.esrl.noaa.gov/psd/data/gridded/index.html]](https://www.esrl.noaa.gov/psd/data/gridded/index.html)
 	- THREDDS catalog:  [[http://www.esrl.noaa.gov/psd/thredds/catalog.html]](http://www.esrl.noaa.gov/psd/thredds/catalog.html)
 	- OPenDAP:  [[http://www.esrl.noaa.gov/psd/data/gridded/using_dods.html]](http://www.esrl.noaa.gov/psd/data/gridded/using_dods.html)
+
+## UNIDATA Meteorological case studies ##
+
+UNIDATA provides a number of case-study data sets of "unique atmospheric phenomena" that can be accessed via their THREDDS server.  Here is a [[link]](https://www.unidata.ucar.edu/projects/#casestudies) to the information page, and to the 
+[[Case Studies Library]](http://atm.ucar.edu/repository/entry/show/RAMADDA/Case+Studies) 
 
 ## Paleoclimatic datasets ##
 
