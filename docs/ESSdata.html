@@ -392,36 +392,42 @@ $(document).ready(function () {
 <h2>netCDF</h2>
 <p>netCDF (or Network Common Data Format) is the format most frequently used for storing climate-model output as well as some observational data. There is a well-documented convention (CF, for Climate-and-Forecast) for arranging and internally documenting netCDF datasets, which further contributes to simple transfer of data from one system to another.</p>
 <ul>
-<li>netCDF: <a href="http://www.unidata.ucar.edu/software/netcdf/docs/index.html" class="uri">http://www.unidata.ucar.edu/software/netcdf/docs/index.html</a></li>
-<li>CF Conventions: <a href="http://cfconventions.org/" class="uri">http://cfconventions.org/</a></li>
+<li>netCDF: <a href="http://www.unidata.ucar.edu/software/netcdf/docs/index.html">[http://www.unidata.ucar.edu/software/netcdf/docs/]</a></li>
+<li>CF Conventions (“best practice” format for netCDF files: <a href="http://cfconventions.org/">[http://cfconventions.org/]</a></li>
 </ul>
 <p>There are several R packages for handling netCDF data. Of these, the <code>ncdf4</code> and the related <code>ncdf.helpers</code> packages are the most useful in practice.</p>
+<p>Several other packages exist for working with netCDF data sets (this is not an exhaustive list):</p>
 <ul>
-<li>ncdf4: <a href="https://cloud.r-project.org/web/packages/ncdf4/index.html" class="uri">https://cloud.r-project.org/web/packages/ncdf4/index.html</a></li>
-<li>ncdf.helpers: <a href="https://cloud.r-project.org/web/packages/ncdf4.helpers/index.html" class="uri">https://cloud.r-project.org/web/packages/ncdf4.helpers/index.html</a></li>
+<li><code>RCMIP5</code>: tools for reading and summarizing “CMIP5” data <a href="https://cran.r-project.org/web/packages/RCMIP5/vignettes/atmospheric_co2.html">link</a></li>
+<li><code>easyNCDF</code>: a set of functions for reading and writing netCDF data sets from and to R arrays</li>
+<li><code>cmsaf</code>: tools for reading EUMETSAT energy- and water-balance variables <a href="https://www.cmsaf.eu/EN/Products/Tools/Tools_node.html">link</a></li>
+<li><code>efts</code>: functions for reading ensemble forecast data;</li>
+<li><code>RNetCDF</code> and <code>ncdf.tools</code>: functions for working with older netCDF 3 files.</li>
+<li><code>ncdump</code>: reads netCDF attribute data, and organizes it into dataframes</li>
 </ul>
+<p>In addition, the <code>rgdal</code> and <code>raster</code> packages support the reading and writing of netCDF files.</p>
 </div>
 <div id="hdf" class="section level2">
 <h2>HDF</h2>
 <p>HDF (or Hierarchical Data Format), like netCDF is a machine-independent self-documenting gridded dataset format, that is in common use for storing satellite and remote-sensing imagery data. It currently exists in several formats (HDF4, HDF5, HDF-EOS) which can generally converted to one another. (netCDF4 in fact uses the HDF5 format for storing data.)</p>
 <ul>
-<li>HDF: <a href="https://www.hdfgroup.org/" class="uri">https://www.hdfgroup.org/</a></li>
-<li>HDF Tools: <a href="https://support.hdfgroup.org/tools/" class="uri">https://support.hdfgroup.org/tools/</a> (including conversion tools)</li>
-<li>HDFView: <a href="https://support.hdfgroup.org/products/java/hdfview/" class="uri">https://support.hdfgroup.org/products/java/hdfview/</a> (and HDF viewer, but not as powerful as Panoply)</li>
-<li>HDF5 R tutorials: <a href="http://neondataskills.org/HDF5/" class="uri">http://neondataskills.org/HDF5/</a></li>
+<li>HDF: <a href="https://www.hdfgroup.org/">[https://www.hdfgroup.org/]</a></li>
+<li>HDF Tools: <a href="https://support.hdfgroup.org/tools/">[https://support.hdfgroup.org/tools/]</a> (including conversion tools)</li>
+<li>HDFView: <a href="https://support.hdfgroup.org/products/java/hdfview/">[https://support.hdfgroup.org/products/java/hdfview/]</a> (an HDF viewer, but not as powerful as Panoply)</li>
+<li>HDF5 R tutorials: <a href="http://neondataskills.org/HDF5/">[http://neondataskills.org/HDF5/]</a></li>
 </ul>
 <p>Reading and writing HDF5 files in R is supported by the <code>rhdf5</code> package in the Bioconductor collection:</p>
 <ul>
-<li>rhdf5: <a href="http://bioconductor.org/packages/release/bioc/html/rhdf5.html" class="uri">http://bioconductor.org/packages/release/bioc/html/rhdf5.html</a></li>
+<li><code>rhdf5</code>: a Bioconductor package for reading and writing HDF5 files <a href="http://bioconductor.org/packages/release/bioc/html/rhdf5.html">[link]</a></li>
 </ul>
 <p>The National Snow and Ice Data Center (NSIDC) as a nice tutorial on HDF-EOS: <a href="https://nsidc.org/data/hdfeos/intro.html" class="uri">https://nsidc.org/data/hdfeos/intro.html</a></p>
-<p>NOAA’s Coral Reef Watch <a href="http://www.coralreefwatch.noaa.gov/satellite/hdf/index.php" class="uri">http://www.coralreefwatch.noaa.gov/satellite/hdf/index.php</a> serves up a variety of HDF files for coral-bleaching monitoring.</p>
+<p>NOAA’s Coral Reef Watch <a href="http://www.coralreefwatch.noaa.gov/satellite/hdf/index.php" class="uri">http://www.coralreefwatch.noaa.gov/satellite/hdf/index.php</a> serves up a variety of HDF (and netCDF) files for coral-bleaching monitoring.</p>
 </div>
 <div id="grib" class="section level2">
 <h2>GRIB</h2>
 <p>GRIB (or GRIdded Binary / General Regularly-distributed Information in Binary form, <a href="https://en.wikipedia.org/wiki/GRIB" class="uri">https://en.wikipedia.org/wiki/GRIB</a>)</p>
 <ul>
-<li>GRIB: <a href="http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc.shtml" class="uri">http://www.nco.ncep.noaa.gov/pmb/docs/grib2/grib2_doc.shtml</a></li>
+<li>GRIB: <a href="https://www.nco.ncep.noaa.gov/pmb/docs/grib2/">[https://www.nco.ncep.noaa.gov/pmb/docs/grib2/]</a></li>
 </ul>
 </div>
 <div id="relational-data-bases" class="section level2">
@@ -429,13 +435,13 @@ $(document).ready(function () {
 <p>Relational databases can be thought of as a set of linked tables that efficiently store data that, if stored as a single rectangular table would be inefficiently large and difficult to extract data from. Nevertheless, there are multiple ESS data sets, usually collections of site-specific data (where the sites are irregularly distributed) that can be efficiently stored and queried</p>
 <p>An example ESS dataset stored as a relational database:</p>
 <ul>
-<li>Global Charcoal Database: <a href="http://paleofire.org/" class="uri">http://paleofire.org/</a></li>
-<li>Analyzing the GCDv3: <a href="http://geog.uoregon.edu/bartlein/GPWG/GPWGAnalysis/index.html" class="uri">http://geog.uoregon.edu/bartlein/GPWG/GPWGAnalysis/index.html</a></li>
+<li>Global Charcoal Database: <a href="http://paleofire.org/">[http://paleofire.org/]</a></li>
+<li>Analyzing the GCDv3: <a href="https://pjbartlein.github.io/GCDv3Analysis/">[https://pjbartlein.github.io/GCDv3Analysis/]</a></li>
 </ul>
-<p>The gridded dataset formats described above are sometimes referred to as nonSQL databases, for the simple reason that they are not SQL databased (where SQL (pronounced “sequel”) stands for Structured Query Language). The distinction between the two is described here:</p>
+<p>The gridded dataset formats described above are sometimes referred to as nonSQL databases, for the simple reason that they are not SQL databases (where SQL (pronounced “sequel”) stands for Structured Query Language). The distinction between the two is described here:</p>
 <ul>
-<li>SQL: <a href="https://en.wikipedia.org/wiki/SQL" class="uri">https://en.wikipedia.org/wiki/SQL</a></li>
-<li>nonSQL: <a href="https://en.wikipedia.org/wiki/NoSQL" class="uri">https://en.wikipedia.org/wiki/NoSQL</a></li>
+<li>SQL: <a href="https://en.wikipedia.org/wiki/SQL">[https://en.wikipedia.org/wiki/SQL]</a></li>
+<li>nonSQL: <a href="https://en.wikipedia.org/wiki/NoSQL">[https://en.wikipedia.org/wiki/NoSQL]</a></li>
 </ul>
 </div>
 </div>
@@ -443,20 +449,28 @@ $(document).ready(function () {
 <h1>Getting, Reading and Displaying ESS Datasets</h1>
 <div id="panoply" class="section level2">
 <h2>Panoply</h2>
-<p>Panoply is cross-platform application that can read and display netCDF, HDF and GRIB datasets. See <a href="install_Panoply.html">Other Information</a> on this web page for directions for installing Panoply.</p>
+<p>Panoply is cross-platform application that can read and display netCDF, HDF and GRIB datasets. See the Tasks tab on this page for directions for installing Panoply.</p>
 </div>
 <div id="ftp" class="section level2">
 <h2>FTP</h2>
-<p>FTP (for File Transfer Protocol) is a now pretty-old traditional way of moving data around. In its standard form, it’s not very secrure (and hence IT service hate it), but it’s still quite functional. An ftp “site” has been created for this course, on a server here called “climate”. Here are the details – host name: climate.uoregon.edu user name: geog490user password: (displayed in class).</p>
+<p>FTP (for File Transfer Protocol) is a now pretty-old traditional way of moving data around. In its standard form, it’s not very secure (and hence IT service hate it), but it’s still quite functional. An ftp “site” has been created for this course, on a server here called “climate”. Here are the details – host name: climate.uoregon.edu user name: geog490user password: (displayed in class).</p>
 <p>The most widely used “client” for interacting with ftp sites is likely Filezilla <a href="https://filezilla-project.org/" class="uri">https://filezilla-project.org/</a></p>
 </div>
 <div id="thredds-and-opendap" class="section level2">
 <h2>THREDDS and OPeNDAP</h2>
 <p>THREDDS (Thematic Real-time Environmental Distributed Data Services) Data Servers (TDS) provide a mechanism for making remote datasets (generally netCDF datasets) “visible” to local applications (like Panoply). TDS display “catalogs” of multiple files that can, for example, be browsed by Panoply, and individual data sets can then be opened. OPeNDAP provides a further mechanism for subsetting data sets, i.e. selecting an individual slice from a 3d or 4d data set. Both THREDDS and OPeNDAP thus provide a way of avoiding downloading and storing data locally. (Once data are downloaded to a local machine, they are in a sense “frozen”. By not storing datasets locally, and instead accessing them remotely, any updates are automatically included.</p>
-<p>THREDDS: <a href="http://www.unidata.ucar.edu/software/thredds/current/tds/dd" class="uri">http://www.unidata.ucar.edu/software/thredds/current/tds/dd</a> OPeNDAP: <a href="https://www.opendap.org/" class="uri">https://www.opendap.org/</a></p>
+<ul>
+<li>THREDDS: <a href="https://www.unidata.ucar.edu/software/thredds/current/tds/">[https://www.unidata.ucar.edu/software/thredds/current/tds/]</a><br />
+</li>
+<li>OPeNDAP: <a href="https://www.opendap.org/">[https://www.opendap.org/]</a></li>
+</ul>
 <p>Here is a local example of THREDDS-served data:</p>
 <ul>
-<li>USGS at OSU Regclim THREDDS catalog: <a href="http://regclim.coas.oregonstate.edu:8080/thredds/catalog.html" class="uri">http://regclim.coas.oregonstate.edu:8080/thredds/catalog.html</a></li>
+<li>USGS at OSU Regclim THREDDS catalog: <a href="http://regclim.coas.oregonstate.edu:8080/thredds/catalog.html">[http://regclim.coas.oregonstate.edu:8080/thredds/catalog.html]</a></li>
+</ul>
+<p>Here is the THREDDS data server at Unidata (aka “motherlode”)</p>
+<ul>
+<li><a href="http://thredds.ucar.edu/thredds/catalog.html">[http://thredds.ucar.edu/thredds/catalog.html]</a></li>
 </ul>
 </div>
 </div>
@@ -465,23 +479,33 @@ $(document).ready(function () {
 <div id="climate-model-output" class="section level2">
 <h2>Climate-model output</h2>
 <p>CMIP5 is the climate-modeling component of the IPCC AR5 assessment, and nearly all of the data are available online through the ESG (Earth System Grid). Additional climate-simulation data are available from the National Center for Atmospheric Research (NCAR).</p>
-<p>CMIP5: <a href="https://pcmdi.llnl.gov/search/esgf-llnl/" class="uri">https://pcmdi.llnl.gov/search/esgf-llnl/</a> NCAR: <a href="https://www.earthsystemgrid.org/home.html" class="uri">https://www.earthsystemgrid.org/home.html</a></p>
+<ul>
+<li>CMIP 5 &amp; 6: <a href="https://esgf-node.llnl.gov/projects/esgf-llnl/">[https://esgf-node.llnl.gov/projects/esgf-llnl/]</a></li>
+<li>NCAR: <a href="https://www.earthsystemgrid.org/home.html">[https://www.earthsystemgrid.org/home.html]</a></li>
+</ul>
 </div>
 <div id="noaa-esrl-psd" class="section level2">
 <h2>NOAA ESRL PSD</h2>
 <p>The NOAA Earth System Research Laboratory (formerly the Climate Diagnostics Center, CDC) provides an array of gridded data sets, both historical and observational, including the historical “reanalysis” data sets.</p>
-<p>NOAA ESRL PSD: <a href="http://www.esrl.noaa.gov/psd/" class="uri">http://www.esrl.noaa.gov/psd/</a> THREDDS catalog: <a href="http://www.esrl.noaa.gov/psd/thredds/catalog.html" class="uri">http://www.esrl.noaa.gov/psd/thredds/catalog.html</a> OPenDAP: <a href="http://www.esrl.noaa.gov/psd/data/gridded/using_dods.html" class="uri">http://www.esrl.noaa.gov/psd/data/gridded/using_dods.html</a></p>
+<ul>
+<li>NOAA ESRL PSD: <a href="http://www.esrl.noaa.gov/psd/">[http://www.esrl.noaa.gov/psd/]</a>
+<ul>
+<li>Gridded climate data <a href="https://www.esrl.noaa.gov/psd/data/gridded/index.html">[https://www.esrl.noaa.gov/psd/data/gridded/index.html]</a></li>
+<li>THREDDS catalog: <a href="http://www.esrl.noaa.gov/psd/thredds/catalog.html">[http://www.esrl.noaa.gov/psd/thredds/catalog.html]</a></li>
+<li>OPenDAP: <a href="http://www.esrl.noaa.gov/psd/data/gridded/using_dods.html">[http://www.esrl.noaa.gov/psd/data/gridded/using_dods.html]</a></li>
+</ul></li>
+</ul>
 </div>
 <div id="paleoclimatic-datasets" class="section level2">
 <h2>Paleoclimatic datasets</h2>
 <p>There are two main repositories of paleoclimatic data, Pangaea (European) and NOAA Paleoclimatology:</p>
 <ul>
-<li>Pangaea: <a href="https://www.pangaea.de/" class="uri">https://www.pangaea.de/</a></li>
-<li>NOAA WDS Paleoclimatology: <a href="https://www.ncdc.noaa.gov/data-access/paleoclimatology-data" class="uri">https://www.ncdc.noaa.gov/data-access/paleoclimatology-data</a></li>
+<li>Pangaea: <a href="https://www.pangaea.de/">[https://www.pangaea.de/]</a></li>
+<li>NOAA WDS Paleoclimatology: <a href="https://www.ncdc.noaa.gov/data-access/paleoclimatology-data">[https://www.ncdc.noaa.gov/data-access/paleoclimatology-data]</a></li>
 </ul>
 <p>Other sources of paleoclimatic data include:</p>
 <ul>
-<li>Neotoma: <a href="http://www.neotomadb.org/" class="uri">http://www.neotomadb.org/</a></li>
+<li>Neotoma: <a href="http://www.neotomadb.org/">[http://www.neotomadb.org/]</a></li>
 </ul>
 </div>
 <div id="general-global-change-data" class="section level2">
@@ -492,8 +516,10 @@ $(document).ready(function () {
 </div>
 <div id="some-big-data-initiatives" class="section level2">
 <h2>Some “Big Data” initiatives</h2>
-<p>ICSU World Data System: <a href="https://www.icsu-wds.org/" class="uri">https://www.icsu-wds.org/</a> SciDataCon: <a href="http://www.scidatacon.org/site/about/" class="uri">http://www.scidatacon.org/site/about/</a></p>
-<p>EarthCube: <a href="https://www.earthcube.org/" class="uri">https://www.earthcube.org/</a> EarthCube netCDF: <a href="https://www.earthcube.org/group/advancing-netcdf-cf" class="uri">https://www.earthcube.org/group/advancing-netcdf-cf</a></p>
+<p>ICSU World Data System: <a href="https://www.icsu-wds.org/">[https://www.icsu-wds.org/]</a><br />
+SciDataCon: <a href="http://www.scidatacon.org/">[http://www.scidatacon.org/]</a></p>
+<p>EarthCube: <a href="https://www.earthcube.org/">[https://www.earthcube.org/]</a><br />
+EarthCube netCDF: <a href="https://www.earthcube.org/group/advancing-netcdf-cf">[https://www.earthcube.org/group/advancing-netcdf-cf]</a></p>
 </div>
 </div>
 
