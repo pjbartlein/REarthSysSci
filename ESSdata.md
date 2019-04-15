@@ -61,17 +61,13 @@ The gridded dataset formats described above are sometimes referred to as nonSQL 
 - nonSQL:  [[https://en.wikipedia.org/wiki/NoSQL]](https://en.wikipedia.org/wiki/NoSQL)
 
 
-# Getting, Reading and Displaying ESS Datasets #
+# Getting and Displaying ESS Datasets #
 
-## Panoply ##
+There are several approaches for getting or transferring the usually large data sets that are employed in doing Earth-system science.
 
-Panoply is cross-platform application that can read and display netCDF, HDF and GRIB datasets.  See the Tasks tab on this page for directions for installing Panoply.
+## SFTP and Globus ##
 
-## FTP ##
-
-FTP (for File Transfer Protocol) is a now pretty-old traditional way of moving data around.  In its standard form, it's not very secure (and hence IT service hate it), but it's still quite functional.  An ftp "site" has been created for this course, on a server here called "climate".  Here are the details -- host name:  climate.uoregon.edu  user name:  geog490user  password: (displayed in class).
-
-The most widely used "client" for interacting with ftp sites is likely Filezilla [https://filezilla-project.org/](https://filezilla-project.org/)
+FTP (for File Transfer Protocol) is a now pretty-old traditional way of moving data around.  In its standard form, it's not very secure (and hence IT services hate it), but it's still quite functional.  A more secure variant is SFTP (SSH File Transfer Protocol, also known as "Secure FTP").  The most widely used "client" for interacting with ftp sites is likely Filezilla [https://filezilla-project.org/](https://filezilla-project.org/).  An SFTP "site" has been created for this course, for directions on its use, see File Transfer the Tasks tab, as well for instructions on using Filezilla.  Another newer approach for transferring files is Globus, which provides a browser-based application for transferring files among "endpoints".  
 
 ## THREDDS and OPeNDAP ##
 
@@ -87,6 +83,10 @@ Here is a local example of THREDDS-served data:
 Here is the THREDDS data server at Unidata (aka "motherlode")  
 
 - [[http://thredds.ucar.edu/thredds/catalog.html]](http://thredds.ucar.edu/thredds/catalog.html)
+
+## Panoply ##
+
+Panoply is cross-platform application that can read and display netCDF, HDF and GRIB datasets.  See the Tasks tab on this page for directions for installing Panoply.  In addition to being able to read and display files on the local file system.  Panoply can also open catalogues and individual data sets
 
 # Some ESS Data Sources #
 
