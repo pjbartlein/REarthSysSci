@@ -3,7 +3,7 @@ title: "Earth-system science data"
 output: 
   html_document:
     fig_caption: no
-    number_sections: no
+    number_sections: yes
     toc: yes
     toc_float: false
     collapsed: no

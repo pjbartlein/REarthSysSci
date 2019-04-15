@@ -364,32 +364,32 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#ess-data-formats">ESS Data Formats</a><ul>
-<li><a href="#netcdf">netCDF</a></li>
-<li><a href="#hdf">HDF</a></li>
-<li><a href="#grib">GRIB</a></li>
-<li><a href="#relational-data-bases">Relational Data Bases</a></li>
+<li><a href="#ess-data-formats"><span class="toc-section-number">1</span> ESS Data Formats</a><ul>
+<li><a href="#netcdf"><span class="toc-section-number">1.1</span> netCDF</a></li>
+<li><a href="#hdf"><span class="toc-section-number">1.2</span> HDF</a></li>
+<li><a href="#grib"><span class="toc-section-number">1.3</span> GRIB</a></li>
+<li><a href="#relational-data-bases"><span class="toc-section-number">1.4</span> Relational Data Bases</a></li>
 </ul></li>
-<li><a href="#getting-reading-and-displaying-ess-datasets">Getting, Reading and Displaying ESS Datasets</a><ul>
-<li><a href="#panoply">Panoply</a></li>
-<li><a href="#ftp">FTP</a></li>
-<li><a href="#thredds-and-opendap">THREDDS and OPeNDAP</a></li>
+<li><a href="#getting-reading-and-displaying-ess-datasets"><span class="toc-section-number">2</span> Getting, Reading and Displaying ESS Datasets</a><ul>
+<li><a href="#panoply"><span class="toc-section-number">2.1</span> Panoply</a></li>
+<li><a href="#ftp"><span class="toc-section-number">2.2</span> FTP</a></li>
+<li><a href="#thredds-and-opendap"><span class="toc-section-number">2.3</span> THREDDS and OPeNDAP</a></li>
 </ul></li>
-<li><a href="#some-ess-data-sources">Some ESS Data Sources</a><ul>
-<li><a href="#climate-model-output">Climate-model output</a></li>
-<li><a href="#noaa-esrl-psd">NOAA ESRL PSD</a></li>
-<li><a href="#paleoclimatic-datasets">Paleoclimatic datasets</a></li>
-<li><a href="#general-global-change-data">General global-change data</a></li>
-<li><a href="#some-big-data-initiatives">Some “Big Data” initiatives</a></li>
+<li><a href="#some-ess-data-sources"><span class="toc-section-number">3</span> Some ESS Data Sources</a><ul>
+<li><a href="#climate-model-output"><span class="toc-section-number">3.1</span> Climate-model output</a></li>
+<li><a href="#noaa-esrl-psd"><span class="toc-section-number">3.2</span> NOAA ESRL PSD</a></li>
+<li><a href="#paleoclimatic-datasets"><span class="toc-section-number">3.3</span> Paleoclimatic datasets</a></li>
+<li><a href="#general-global-change-data"><span class="toc-section-number">3.4</span> General global-change data</a></li>
+<li><a href="#some-big-data-initiatives"><span class="toc-section-number">3.5</span> Some “Big Data” initiatives</a></li>
 </ul></li>
 </ul>
 </div>
 
 <div id="ess-data-formats" class="section level1">
-<h1>ESS Data Formats</h1>
+<h1><span class="header-section-number">1</span> ESS Data Formats</h1>
 <p>Twenty years ago, there were a large number of disparate formats for storing large data sets, and the transfer of data from one computing system to another was a big deal, often relying on frequent playing of the “find-the-continents” game. Now, however, there are two general styles of dataset storage: 1) machine-independent self-documenting gridded datasets, and 2) relational data bases (e.g. MS Access, mySQL) (with common Excel formats (.csv, .xlsx) as special cases of database tables). Gridded data sets are chiefly represented by the netCDF and HDF5 formats, which include self-documenting “attribute” data, with an older “binary” data format (GRIB2) still in widespread use for exachanging real-time weather forecasting data, and there is growing “interoperatability” among these formats. Databases are in widespread use for storing data that may be heterogeneous in the sense of not being gridded, and possibly having multiple tables.</p>
 <div id="netcdf" class="section level2">
-<h2>netCDF</h2>
+<h2><span class="header-section-number">1.1</span> netCDF</h2>
 <p>netCDF (or Network Common Data Format) is the format most frequently used for storing climate-model output as well as some observational data. There is a well-documented convention (CF, for Climate-and-Forecast) for arranging and internally documenting netCDF datasets, which further contributes to simple transfer of data from one system to another.</p>
 <ul>
 <li>netCDF: <a href="http://www.unidata.ucar.edu/software/netcdf/docs/index.html">[http://www.unidata.ucar.edu/software/netcdf/docs/]</a></li>
@@ -408,7 +408,7 @@ $(document).ready(function () {
 <p>In addition, the <code>rgdal</code> and <code>raster</code> packages support the reading and writing of netCDF files.</p>
 </div>
 <div id="hdf" class="section level2">
-<h2>HDF</h2>
+<h2><span class="header-section-number">1.2</span> HDF</h2>
 <p>HDF (or Hierarchical Data Format), like netCDF is a machine-independent self-documenting gridded dataset format, that is in common use for storing satellite and remote-sensing imagery data. It currently exists in several formats (HDF4, HDF5, HDF-EOS) which can generally converted to one another. (netCDF4 in fact uses the HDF5 format for storing data.)</p>
 <ul>
 <li>HDF: <a href="https://www.hdfgroup.org/">[https://www.hdfgroup.org/]</a></li>
@@ -424,14 +424,14 @@ $(document).ready(function () {
 <p>NOAA’s Coral Reef Watch <a href="http://www.coralreefwatch.noaa.gov/satellite/hdf/index.php" class="uri">http://www.coralreefwatch.noaa.gov/satellite/hdf/index.php</a> serves up a variety of HDF (and netCDF) files for coral-bleaching monitoring.</p>
 </div>
 <div id="grib" class="section level2">
-<h2>GRIB</h2>
+<h2><span class="header-section-number">1.3</span> GRIB</h2>
 <p>GRIB (or GRIdded Binary / General Regularly-distributed Information in Binary form, <a href="https://en.wikipedia.org/wiki/GRIB" class="uri">https://en.wikipedia.org/wiki/GRIB</a>)</p>
 <ul>
 <li>GRIB: <a href="https://www.nco.ncep.noaa.gov/pmb/docs/grib2/">[https://www.nco.ncep.noaa.gov/pmb/docs/grib2/]</a></li>
 </ul>
 </div>
 <div id="relational-data-bases" class="section level2">
-<h2>Relational Data Bases</h2>
+<h2><span class="header-section-number">1.4</span> Relational Data Bases</h2>
 <p>Relational databases can be thought of as a set of linked tables that efficiently store data that, if stored as a single rectangular table would be inefficiently large and difficult to extract data from. Nevertheless, there are multiple ESS data sets, usually collections of site-specific data (where the sites are irregularly distributed) that can be efficiently stored and queried</p>
 <p>An example ESS dataset stored as a relational database:</p>
 <ul>
@@ -446,18 +446,18 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="getting-reading-and-displaying-ess-datasets" class="section level1">
-<h1>Getting, Reading and Displaying ESS Datasets</h1>
+<h1><span class="header-section-number">2</span> Getting, Reading and Displaying ESS Datasets</h1>
 <div id="panoply" class="section level2">
-<h2>Panoply</h2>
+<h2><span class="header-section-number">2.1</span> Panoply</h2>
 <p>Panoply is cross-platform application that can read and display netCDF, HDF and GRIB datasets. See the Tasks tab on this page for directions for installing Panoply.</p>
 </div>
 <div id="ftp" class="section level2">
-<h2>FTP</h2>
+<h2><span class="header-section-number">2.2</span> FTP</h2>
 <p>FTP (for File Transfer Protocol) is a now pretty-old traditional way of moving data around. In its standard form, it’s not very secure (and hence IT service hate it), but it’s still quite functional. An ftp “site” has been created for this course, on a server here called “climate”. Here are the details – host name: climate.uoregon.edu user name: geog490user password: (displayed in class).</p>
 <p>The most widely used “client” for interacting with ftp sites is likely Filezilla <a href="https://filezilla-project.org/" class="uri">https://filezilla-project.org/</a></p>
 </div>
 <div id="thredds-and-opendap" class="section level2">
-<h2>THREDDS and OPeNDAP</h2>
+<h2><span class="header-section-number">2.3</span> THREDDS and OPeNDAP</h2>
 <p>THREDDS (Thematic Real-time Environmental Distributed Data Services) Data Servers (TDS) provide a mechanism for making remote datasets (generally netCDF datasets) “visible” to local applications (like Panoply). TDS display “catalogs” of multiple files that can, for example, be browsed by Panoply, and individual data sets can then be opened. OPeNDAP provides a further mechanism for subsetting data sets, i.e. selecting an individual slice from a 3d or 4d data set. Both THREDDS and OPeNDAP thus provide a way of avoiding downloading and storing data locally. (Once data are downloaded to a local machine, they are in a sense “frozen”. By not storing datasets locally, and instead accessing them remotely, any updates are automatically included.</p>
 <ul>
 <li>THREDDS: <a href="https://www.unidata.ucar.edu/software/thredds/current/tds/">[https://www.unidata.ucar.edu/software/thredds/current/tds/]</a><br />
@@ -475,9 +475,9 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="some-ess-data-sources" class="section level1">
-<h1>Some ESS Data Sources</h1>
+<h1><span class="header-section-number">3</span> Some ESS Data Sources</h1>
 <div id="climate-model-output" class="section level2">
-<h2>Climate-model output</h2>
+<h2><span class="header-section-number">3.1</span> Climate-model output</h2>
 <p>CMIP5 is the climate-modeling component of the IPCC AR5 assessment, and nearly all of the data are available online through the ESG (Earth System Grid). Additional climate-simulation data are available from the National Center for Atmospheric Research (NCAR).</p>
 <ul>
 <li>CMIP 5 &amp; 6: <a href="https://esgf-node.llnl.gov/projects/esgf-llnl/">[https://esgf-node.llnl.gov/projects/esgf-llnl/]</a></li>
@@ -485,7 +485,7 @@ $(document).ready(function () {
 </ul>
 </div>
 <div id="noaa-esrl-psd" class="section level2">
-<h2>NOAA ESRL PSD</h2>
+<h2><span class="header-section-number">3.2</span> NOAA ESRL PSD</h2>
 <p>The NOAA Earth System Research Laboratory (formerly the Climate Diagnostics Center, CDC) provides an array of gridded data sets, both historical and observational, including the historical “reanalysis” data sets.</p>
 <ul>
 <li>NOAA ESRL PSD: <a href="http://www.esrl.noaa.gov/psd/">[http://www.esrl.noaa.gov/psd/]</a>
@@ -497,7 +497,7 @@ $(document).ready(function () {
 </ul>
 </div>
 <div id="paleoclimatic-datasets" class="section level2">
-<h2>Paleoclimatic datasets</h2>
+<h2><span class="header-section-number">3.3</span> Paleoclimatic datasets</h2>
 <p>There are two main repositories of paleoclimatic data, Pangaea (European) and NOAA Paleoclimatology:</p>
 <ul>
 <li>Pangaea: <a href="https://www.pangaea.de/">[https://www.pangaea.de/]</a></li>
@@ -509,13 +509,13 @@ $(document).ready(function () {
 </ul>
 </div>
 <div id="general-global-change-data" class="section level2">
-<h2>General global-change data</h2>
+<h2><span class="header-section-number">3.4</span> General global-change data</h2>
 <ul>
 <li>NASA Global Change Master Directory <a href="http://gcmd.nasa.gov/" class="uri">http://gcmd.nasa.gov/</a></li>
 </ul>
 </div>
 <div id="some-big-data-initiatives" class="section level2">
-<h2>Some “Big Data” initiatives</h2>
+<h2><span class="header-section-number">3.5</span> Some “Big Data” initiatives</h2>
 <p>ICSU World Data System: <a href="https://www.icsu-wds.org/">[https://www.icsu-wds.org/]</a><br />
 SciDataCon: <a href="http://www.scidatacon.org/">[http://www.scidatacon.org/]</a></p>
 <p>EarthCube: <a href="https://www.earthcube.org/">[https://www.earthcube.org/]</a><br />
