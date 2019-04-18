@@ -126,12 +126,19 @@ Other sources of paleoclimatic data include:
 
 - NASA Global Change Master Directory [http://gcmd.nasa.gov/](http://gcmd.nasa.gov/)
 
+## Data.gov ##
+
+- Search for `climate` or `earth science` and `netCDF`  [[https://www.data.gov]](https://www.data.gov)
+
+## Oregon lidar
+
+- DOGAMI [[https://www.oregongeology.org/lidar/]](https://www.oregongeology.org/lidar/)
+
 ## Some "Big Data" initiatives ##
 
-ICSU World Data System:  [[https://www.icsu-wds.org/]](https://www.icsu-wds.org/)  
-SciDataCon:  [[http://www.scidatacon.org/]](http://www.scidatacon.org/)
-
-EarthCube:  [[https://www.earthcube.org/]](https://www.earthcube.org/)   
-EarthCube netCDF:  [[https://www.earthcube.org/group/advancing-netcdf-cf]](https://www.earthcube.org/group/advancing-netcdf-cf)
+* ICSU World Data System:  [[https://www.icsu-wds.org/]](https://www.icsu-wds.org/)
+	* SciDataCon:  [[http://www.scidatacon.org/]](http://www.scidatacon.org/)
+- EarthCube:  [[https://www.earthcube.org/]](https://www.earthcube.org/)
+	- EarthCube netCDF:  [[https://www.earthcube.org/group/advancing-netcdf-cf]](https://www.earthcube.org/group/advancing-netcdf-cf)
 
 
