@@ -13,7 +13,8 @@ navbar:
       href: usingR.html
     - text: "Earth-system science data"
       href: ESSdata.html
-    - text: Data input and output
+    - text: netCDF in R
+      href: netCDF.html
     - text: Geospatial analyses and mapping
     - text: Visualization
     - text: Multivariate analysis
