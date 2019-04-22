@@ -494,6 +494,16 @@ $(document).ready(function () {
 </ul></li>
 </ul></li>
 <li><a href="#create-and-write-a-netcdf-file"><span class="toc-section-number">5</span> Create and write a netCDF file</a></li>
+<li><a href="#reading-and-writing-a-projected-netcdf-file"><span class="toc-section-number">6</span> Reading and writing a projected netCDF file</a><ul>
+<li><a href="#open-the-netcdf-file-1"><span class="toc-section-number">6.1</span> Open the netCDF file</a></li>
+<li><a href="#get-coordinate-including-time-variables-1"><span class="toc-section-number">6.2</span> Get coordinate (including time) variables</a></li>
+<li><a href="#get-a-variable-1"><span class="toc-section-number">6.3</span> Get a variable</a></li>
+</ul></li>
+<li><a href="#map-the-data"><span class="toc-section-number">7</span> Map the data</a><ul>
+<li><a href="#get-a-single-slice-of-data-1"><span class="toc-section-number">7.1</span> Get a single slice of data</a></li>
+<li><a href="#maps"><span class="toc-section-number">7.2</span> Maps</a></li>
+</ul></li>
+<li><a href="#create-and-write-a-projected-netcdf-file"><span class="toc-section-number">8</span> Create and write a projected netCDF file</a></li>
 </ul>
 </div>
 
@@ -839,6 +849,7 @@ $(document).ready(function () {
 ## [31] &quot;tmonth&quot;       &quot;tmp_array&quot;    &quot;tmp_df01&quot;     &quot;tmp_df02&quot;     &quot;tmp_df03&quot;     &quot;tmp_mat&quot;     
 ## [37] &quot;tmp_slice&quot;    &quot;tmp_vec&quot;      &quot;tmp_vec_long&quot; &quot;tunits&quot;       &quot;tustr&quot;        &quot;tyear&quot;</code></pre>
 <p><a href="netCDF.html">[Back to top]</a></p>
+<p><a href="netCDF.html">[Back to top]</a></p>
 </div>
 </div>
 </div>
@@ -1142,6 +1153,326 @@ $(document).ready(function () {
 <p>Finally, close the file, which writes the data to disk.</p>
 <div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" data-line-number="1"><span class="co"># close the file, writing data to disk</span></a>
 <a class="sourceLine" id="cb89-2" data-line-number="2"><span class="kw">nc_close</span>(ncout)</a></code></pre></div>
+<p><a href="netCDF.html">[Back to top]</a></p>
+</div>
+<div id="reading-and-writing-a-projected-netcdf-file" class="section level1">
+<h1><span class="header-section-number">6</span> Reading and writing a projected netCDF file</h1>
+<p>NetCDF files aren’t restricted to unprojected or longitude-by-latitude files, but may also contain projected grids, or those indexed by x- and y-coordinates (as opposed to longitude and latitude). An example data set is provided by output from the North American Regional Reanalysis (NARR), which uses a Lambert Conformal Conic projection. The example here uses file of long-term mean soil-moisture data.</p>
+<p>The data are available on <code>ClimateLab.uoregon.edu</code> (see File transfer on the Tasks tab), in the <code>/nc_files</code> folder, with the file name <code>NARR_soilm.mon.ltm.nc</code>. Download the netCDF file to a convenient folder.</p>
+<div id="open-the-netcdf-file-1" class="section level2">
+<h2><span class="header-section-number">6.1</span> Open the netCDF file</h2>
+<p>Set up the path to a local copy of the NARR (North American Regional Reanalysis) soil-moisture file</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" data-line-number="1"><span class="co"># set path and filename</span></a>
+<a class="sourceLine" id="cb90-2" data-line-number="2">ncpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb90-3" data-line-number="3">ncname &lt;-<span class="st"> &quot;NARR_soilm.mon.ltm.nc&quot;</span>  </a>
+<a class="sourceLine" id="cb90-4" data-line-number="4">ncfname &lt;-<span class="st"> </span><span class="kw">paste</span>(ncpath, ncname, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb90-5" data-line-number="5">dname &lt;-<span class="st"> &quot;soilm&quot;</span>  <span class="co"># soil moisture 1 kg m-2 = 1 mm</span></a></code></pre></div>
+<p>Open the NetCDF data set, and print some basic information. The <code>print()</code> function applied to the <code>ncin</code> object produces information similar to that produced by the command-line utility <code>ncdump</code>.</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" data-line-number="1"><span class="co"># open a netCDF file</span></a>
+<a class="sourceLine" id="cb91-2" data-line-number="2">ncin &lt;-<span class="st"> </span><span class="kw">nc_open</span>(ncfname)</a>
+<a class="sourceLine" id="cb91-3" data-line-number="3"><span class="kw">print</span>(ncin)</a></code></pre></div>
+<pre><code>## File /Users/bartlein/Projects/ESSD/data/nc_files/NARR_soilm.mon.ltm.nc (NC_FORMAT_NETCDF4_CLASSIC):
+## 
+##      5 variables (excluding dimension variables):
+##         double climatological_bnds[nbnds,time]   
+##             long_name: Time Boundaries
+##         float lat[x,y]   
+##             long_name: latitude coordinate
+##             units: degrees_north
+##             axis: Y
+##             coordinate_defines: point
+##             standard_name: latitude
+##         float lon[x,y]   
+##             units: degrees_east
+##             long_name: longitude coordinate
+##             axis: X
+##             coordinate_defines: point
+##             standard_name: longitude
+##         int Lambert_Conformal[]   
+##             grid_mapping_name: lambert_conformal_conic
+##             standard_parallel: 50
+##              standard_parallel: 50
+##             longitude_of_central_meridian: -107
+##             latitude_of_projection_origin: 50
+##             false_easting: 5632642.22547
+##             false_northing: 4612545.65137
+##         float soilm[x,y,time]   
+##             units: kg/m^2
+##             long_name: Long Term Monthly Mean Soil Moisture Content                                                                                        
+##             precision: 1
+##             GRIB_name: SOILM
+##             GRIB_id: 86
+##             var_desc: Soil Moisture Content
+##             standard_name: soil_moisture_content
+##             level_desc: 0-200cm down
+##             dataset: NARR Monthly Averages
+##             statistic: Long Term Mean
+##             parent_stat: Mean
+##             grid_mapping: Lambert_Conformal
+##             coordinates: lat lon
+##             cell_methods: time: mean within months time: mean over months time: mean over years                                                               
+##             missing_value: -9.96920996838687e+36
+##             actual_range: 59.900146484375
+##              actual_range: 927.800048828125
+##             valid_range: 0
+##              valid_range: 1200
+## 
+##      4 dimensions:
+##         y  Size:277
+##             long_name: northward distance from southwest corner of domain in projection coordinates
+##             units: m
+##             standard_name: projection_y_coordinate
+##         x  Size:349
+##             long_name: eastward distance from southwest corner of domain in projection coordinates
+##             units: m
+##             standard_name: projection_x_coordinate
+##         time  Size:12   *** is unlimited ***
+##             units: hours since 1800-1-1 00:00:0.0
+##             long_name: Time
+##             axis: T
+##             standard_name: time
+##             coordinate_defines: start
+##             delta_t: 0000-01-00 00:00:00
+##             avg_period: 0025-00-00 00:00:00
+##             ltm_range: 1586616
+##              ltm_range: 1849560
+##             prev_avg_period: 0000-00-01 00:00:00
+##             actual_range: -15769752
+##              actual_range: -15761736
+##         nbnds  Size:2
+## 
+##     14 global attributes:
+##         standardpar1: 50
+##         standardpar2: 50.000001
+##         centerlon: -107
+##         centerlat: 50
+##         latcorners: 1.00000095367432
+##          latcorners: 0.897944986820221
+##          latcorners: 46.3544006347656
+##          latcorners: 46.6343307495117
+##         loncorners: -145.5
+##          loncorners: -68.3200531005859
+##          loncorners: -2.56989097595215
+##          loncorners: 148.641799926758
+##         stream: s1
+##         title: Monthly NARR
+##         Conventions: CF-1.0
+##         history: created 2006/07 by data management at NOAA/ESRL/PSD
+##         institution: National Centers for Environmental Prediction
+##         platform: Model
+##         References: http://wwwt.emc.ncep.noaa.gov/mmb/rreanl/index.html
+## http://www.esrl.noaa.gov/psd/data/gridded/data.narr.html
+##         dataset_title: NCEP North American Regional Reanalysis (NARR)</code></pre>
+<p>Note the presence of the variable <code>Lambert_Conformal</code>. The attributes of this variable describe the particular projection that this file uses. Also note that longitude and latitude are 2-D variables in this data set, and are simple variables as opposed to dimension variables. In this data set, <code>x</code> and <code>y</code> are the dimension variables, and together define a rectangular grid.</p>
+</div>
+<div id="get-coordinate-including-time-variables-1" class="section level2">
+<h2><span class="header-section-number">6.2</span> Get coordinate (including time) variables</h2>
+<p>Next, get the coordinate variables <code>x</code> and <code>y</code> are read using the <code>ncvar_get()</code> function, and the first few values of each are listed using the <code>head()</code> and <code>tail()</code> functions. The number of <code>x</code>’s (columns) and <code>y</code>’s (rows) values can be verified using the <code>dim()</code> function:</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" data-line-number="1"><span class="co"># get x&#39;s and y&#39;s</span></a>
+<a class="sourceLine" id="cb93-2" data-line-number="2">x &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,<span class="st">&quot;x&quot;</span>)</a>
+<a class="sourceLine" id="cb93-3" data-line-number="3">xlname &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="st">&quot;x&quot;</span>,<span class="st">&quot;long_name&quot;</span>)</a>
+<a class="sourceLine" id="cb93-4" data-line-number="4">xunits &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="st">&quot;x&quot;</span>,<span class="st">&quot;units&quot;</span>)</a>
+<a class="sourceLine" id="cb93-5" data-line-number="5">nx &lt;-<span class="st"> </span><span class="kw">dim</span>(x)</a>
+<a class="sourceLine" id="cb93-6" data-line-number="6"><span class="kw">head</span>(x)</a></code></pre></div>
+<pre><code>## [1]      0  32463  64926  97389 129852 162315</code></pre>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" data-line-number="1">y &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,<span class="st">&quot;y&quot;</span>)</a>
+<a class="sourceLine" id="cb95-2" data-line-number="2">ylname &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="st">&quot;y&quot;</span>,<span class="st">&quot;long_name&quot;</span>)</a>
+<a class="sourceLine" id="cb95-3" data-line-number="3">yunits &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="st">&quot;y&quot;</span>,<span class="st">&quot;units&quot;</span>)</a>
+<a class="sourceLine" id="cb95-4" data-line-number="4">ny &lt;-<span class="st"> </span><span class="kw">dim</span>(y)</a>
+<a class="sourceLine" id="cb95-5" data-line-number="5"><span class="kw">head</span>(y)</a></code></pre></div>
+<pre><code>## [1]      0  32463  64926  97389 129852 162315</code></pre>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb97-1" data-line-number="1"><span class="kw">print</span>(<span class="kw">c</span>(nx,ny))</a></code></pre></div>
+<pre><code>## [1] 349 277</code></pre>
+<p>Get the time variable and its attributes using the <code>ncvar_get()</code> and <code>ncatt_get()</code> functions, and list them, and also get the number of time steps using the <code>dim()</code> function.</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" data-line-number="1"><span class="co"># get time</span></a>
+<a class="sourceLine" id="cb99-2" data-line-number="2">time &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,<span class="st">&quot;time&quot;</span>)</a>
+<a class="sourceLine" id="cb99-3" data-line-number="3">time</a></code></pre></div>
+<pre><code>##  [1] -15769752 -15769008 -15768336 -15767592 -15766872 -15766128 -15765408 -15764664 -15763920 -15763200
+## [11] -15762456 -15761736</code></pre>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb101-1" data-line-number="1">tunits &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="st">&quot;time&quot;</span>,<span class="st">&quot;units&quot;</span>)</a>
+<a class="sourceLine" id="cb101-2" data-line-number="2">nt &lt;-<span class="st"> </span><span class="kw">dim</span>(time)</a>
+<a class="sourceLine" id="cb101-3" data-line-number="3">nt</a></code></pre></div>
+<pre><code>## [1] 12</code></pre>
+<p>Note that these are particularly bizzare time values, and were constructed just to represent 12 monthly mean values.</p>
+</div>
+<div id="get-a-variable-1" class="section level2">
+<h2><span class="header-section-number">6.3</span> Get a variable</h2>
+<p>Get the the variable (<code>soilm</code>) and its attributes, and verify the size of the array.</p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" data-line-number="1"><span class="co"># get soil moisture</span></a>
+<a class="sourceLine" id="cb103-2" data-line-number="2">soilm_array &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,dname)</a>
+<a class="sourceLine" id="cb103-3" data-line-number="3">dlname &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,dname,<span class="st">&quot;long_name&quot;</span>)</a>
+<a class="sourceLine" id="cb103-4" data-line-number="4">dunits &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,dname,<span class="st">&quot;units&quot;</span>)</a>
+<a class="sourceLine" id="cb103-5" data-line-number="5">fillvalue &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,dname,<span class="st">&quot;_FillValue&quot;</span>)</a>
+<a class="sourceLine" id="cb103-6" data-line-number="6"><span class="kw">dim</span>(soilm_array)</a></code></pre></div>
+<pre><code>## [1] 349 277  12</code></pre>
+<p>Note that in a projected file, each grid point has a unique latitude and longitude value. We can read those in just like any other 2-d variable. Keep in mind, however, that these values aren’t used for plotting the data.</p>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" data-line-number="1">lon &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin, <span class="st">&quot;lon&quot;</span>)</a>
+<a class="sourceLine" id="cb105-2" data-line-number="2"><span class="kw">dim</span>(lon)</a></code></pre></div>
+<pre><code>## [1] 349 277</code></pre>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb107-1" data-line-number="1">lat &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin, <span class="st">&quot;lat&quot;</span>)</a>
+<a class="sourceLine" id="cb107-2" data-line-number="2"><span class="kw">dim</span>(lat)</a></code></pre></div>
+<pre><code>## [1] 349 277</code></pre>
+<p>The last thing to get is the coordinate reference system information, which is provided as the attributes of the variable <code>Lambert Conformal</code>.</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" data-line-number="1">grid_mapping_name &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;grid_mappping_name&quot;</span>)</a>
+<a class="sourceLine" id="cb109-2" data-line-number="2">standard_parallel &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;standard_parallel&quot;</span>)</a>
+<a class="sourceLine" id="cb109-3" data-line-number="3">longitude_of_central_meridian &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;longitude_of_central_meridian&quot;</span>)</a>
+<a class="sourceLine" id="cb109-4" data-line-number="4">latitude_of_projection_origin &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;latitude_of_projection_origin&quot;</span>)</a>
+<a class="sourceLine" id="cb109-5" data-line-number="5">false_easting &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;false_easting&quot;</span>)</a>
+<a class="sourceLine" id="cb109-6" data-line-number="6">false_northing &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;false_northing&quot;</span>)</a></code></pre></div>
+<p>Close the netCDF file using the <code>nc_close()</code> function.</p>
+<p><a href="netCDF.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="map-the-data" class="section level1">
+<h1><span class="header-section-number">7</span> Map the data</h1>
+<div id="get-a-single-slice-of-data-1" class="section level2">
+<h2><span class="header-section-number">7.1</span> Get a single slice of data</h2>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb110-1" data-line-number="1"><span class="co"># get a single slice or layer (e.g the January long-term mean)</span></a>
+<a class="sourceLine" id="cb110-2" data-line-number="2">m &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb110-3" data-line-number="3">soilm_slice &lt;-<span class="st"> </span>soilm_array[,,m]</a></code></pre></div>
+<p>The dimensions of <code>soilm_slice</code>, e.g. 349, 277, can be verified using the <code>dim()</code> function.</p>
+</div>
+<div id="maps" class="section level2">
+<h2><span class="header-section-number">7.2</span> Maps</h2>
+<p>A quick look (map) of the extracted slice of data can be gotten using the <code>image()</code> function. Here is an <code>image()</code> function map.</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" data-line-number="1"><span class="co"># quick map</span></a>
+<a class="sourceLine" id="cb111-2" data-line-number="2"><span class="kw">image</span>(x,y,soilm_slice, <span class="dt">col=</span><span class="kw">c</span>(<span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>),<span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Blues&quot;</span>)) )</a></code></pre></div>
+<p><img src="netCDF_files/figure-html/image2-1.png" width="75%" height="75%" /></p>
+<p>A better map can be obtained using the <code>levelplot()</code> function from the <code>lattice</code> package. The <code>expand.grid()</code> function is used to create a set of 349, 277 by 349, 277 pairs of latitude and longitude values (with latitudes varying most rapidly), one for each element in the <code>soilm_slice</code> array. Specific values of the cutpoints of soil moisture categories are defined to cover the range of soil moisture values here.</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb112-1" data-line-number="1"><span class="co"># levelplot of the slice</span></a>
+<a class="sourceLine" id="cb112-2" data-line-number="2">grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>y)</a>
+<a class="sourceLine" id="cb112-3" data-line-number="3">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">400</span>, <span class="dv">500</span>, <span class="dv">600</span>, <span class="dv">700</span>, <span class="dv">800</span>, <span class="dv">900</span>, <span class="dv">1000</span>)</a>
+<a class="sourceLine" id="cb112-4" data-line-number="4"><span class="kw">levelplot</span>(soilm_slice <span class="op">~</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>y, <span class="dt">data=</span>grid, <span class="dt">at=</span>cutpts, <span class="dt">cuts=</span><span class="dv">11</span>, <span class="dt">pretty=</span>T, </a>
+<a class="sourceLine" id="cb112-5" data-line-number="5">  <span class="dt">col.regions=</span><span class="kw">c</span>(<span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>),<span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Blues&quot;</span>)) )</a></code></pre></div>
+<p><img src="netCDF_files/figure-html/levelplot2-1.png" width="75%" height="75%" /></p>
+<p><a href="netCDF.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="create-and-write-a-projected-netcdf-file" class="section level1">
+<h1><span class="header-section-number">8</span> Create and write a projected netCDF file</h1>
+<p>In this example, the array read in above is written out using the <code>ncdf4</code> package. Creating and writing (new) netCDF files involves first defining or “laying out” the dimensions and coordiate variables and the individual variables, and the attrributes of each, and then creating the file and “putting” the data into the file, along with additional attributes or metadata.</p>
+<p>First, create the netCDF filename:</p>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" data-line-number="1"><span class="co"># path and file name, set dname</span></a>
+<a class="sourceLine" id="cb113-2" data-line-number="2">ncpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb113-3" data-line-number="3">ncname &lt;-<span class="st"> &quot;soilm.mon.ltm_test&quot;</span>  </a>
+<a class="sourceLine" id="cb113-4" data-line-number="4">ncfname &lt;-<span class="st"> </span><span class="kw">paste</span>(ncpath, ncname, <span class="st">&quot;.nc&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb113-5" data-line-number="5">dname &lt;-<span class="st"> &quot;soilm&quot;</span>  </a></code></pre></div>
+<p>Then create the file:</p>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" data-line-number="1"><span class="co"># create and write the netCDF file -- ncdf4 version</span></a>
+<a class="sourceLine" id="cb114-2" data-line-number="2"><span class="co"># define dimensions</span></a>
+<a class="sourceLine" id="cb114-3" data-line-number="3">xdim &lt;-<span class="st"> </span><span class="kw">ncdim_def</span>(<span class="st">&quot;x&quot;</span>,<span class="dt">units=</span><span class="st">&quot;m&quot;</span>,</a>
+<a class="sourceLine" id="cb114-4" data-line-number="4">  <span class="dt">longname=</span><span class="st">&quot;eastward distance from southwest corner of domain in projection coordinates&quot;</span>,<span class="kw">as.double</span>(x))</a>
+<a class="sourceLine" id="cb114-5" data-line-number="5">ydim &lt;-<span class="st"> </span><span class="kw">ncdim_def</span>(<span class="st">&quot;y&quot;</span>,<span class="dt">units=</span><span class="st">&quot;m&quot;</span>,</a>
+<a class="sourceLine" id="cb114-6" data-line-number="6">  <span class="dt">longname=</span><span class="st">&quot;northward distance from southwest corner of domain in projection coordinates&quot;</span>,<span class="kw">as.double</span>(y))</a>
+<a class="sourceLine" id="cb114-7" data-line-number="7">timedim &lt;-<span class="st"> </span><span class="kw">ncdim_def</span>(<span class="st">&quot;time&quot;</span>,tunits<span class="op">$</span>value,<span class="kw">as.double</span>(time))</a>
+<a class="sourceLine" id="cb114-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb114-9" data-line-number="9"><span class="co"># define variables also include longitude and latitude and the CRS variable</span></a>
+<a class="sourceLine" id="cb114-10" data-line-number="10">fillvalue &lt;-<span class="st"> </span><span class="fl">1e32</span></a>
+<a class="sourceLine" id="cb114-11" data-line-number="11">dlname &lt;-<span class="st"> &quot;soil moisture&quot;</span></a>
+<a class="sourceLine" id="cb114-12" data-line-number="12">soilm_def &lt;-<span class="st"> </span><span class="kw">ncvar_def</span>(<span class="st">&quot;soilm&quot;</span>,dunits<span class="op">$</span>value,<span class="kw">list</span>(xdim,ydim,timedim),fillvalue,dlname,<span class="dt">prec=</span><span class="st">&quot;single&quot;</span>)</a>
+<a class="sourceLine" id="cb114-13" data-line-number="13">dlname &lt;-<span class="st"> &quot;Longitude of cell center&quot;</span></a>
+<a class="sourceLine" id="cb114-14" data-line-number="14">lon_def &lt;-<span class="st"> </span><span class="kw">ncvar_def</span>(<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;degrees_east&quot;</span>,<span class="kw">list</span>(xdim,ydim),<span class="ot">NULL</span>,dlname,<span class="dt">prec=</span><span class="st">&quot;double&quot;</span>)</a>
+<a class="sourceLine" id="cb114-15" data-line-number="15">dlname &lt;-<span class="st"> &quot;Latitude of cell center&quot;</span></a>
+<a class="sourceLine" id="cb114-16" data-line-number="16">lat_def &lt;-<span class="st"> </span><span class="kw">ncvar_def</span>(<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;degrees_north&quot;</span>,<span class="kw">list</span>(xdim,ydim),<span class="ot">NULL</span>,dlname,<span class="dt">prec=</span><span class="st">&quot;double&quot;</span>)</a>
+<a class="sourceLine" id="cb114-17" data-line-number="17">dlname &lt;-<span class="st"> &quot;Lambert_Conformal&quot;</span></a>
+<a class="sourceLine" id="cb114-18" data-line-number="18">proj_def &lt;-<span class="st"> </span><span class="kw">ncvar_def</span>(<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;1&quot;</span>,<span class="ot">NULL</span>,<span class="ot">NULL</span>,<span class="dt">longname=</span>dlname,<span class="dt">prec=</span><span class="st">&quot;char&quot;</span>)</a></code></pre></div>
+<p>Next, create the file, and put the variables into it, along with additional variable and “global” attributes (those that apply to the whole file). Note that the attributes are of key importance to the self-documenting properties of netCDF files.</p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" data-line-number="1"><span class="co"># create netCDF file and put arrays</span></a>
+<a class="sourceLine" id="cb115-2" data-line-number="2">ncout &lt;-<span class="st"> </span><span class="kw">nc_create</span>(ncfname,<span class="kw">list</span>(soilm_def,lon_def,lat_def,proj_def),<span class="dt">force_v4=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" data-line-number="1"><span class="co"># put variables</span></a>
+<a class="sourceLine" id="cb116-2" data-line-number="2"><span class="kw">ncvar_put</span>(ncout,soilm_def,soilm_array)</a>
+<a class="sourceLine" id="cb116-3" data-line-number="3"><span class="kw">ncvar_put</span>(ncout,lon_def,lon)</a>
+<a class="sourceLine" id="cb116-4" data-line-number="4"><span class="kw">ncvar_put</span>(ncout,lat_def,lat)</a>
+<a class="sourceLine" id="cb116-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb116-6" data-line-number="6"><span class="co"># put additional attributes into dimension and data variables</span></a>
+<a class="sourceLine" id="cb116-7" data-line-number="7"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;x&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;X&quot;</span>)</a>
+<a class="sourceLine" id="cb116-8" data-line-number="8"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;x&quot;</span>,<span class="st">&quot;standard_name&quot;</span>,<span class="st">&quot;projection_x_coordinate&quot;</span>)</a>
+<a class="sourceLine" id="cb116-9" data-line-number="9"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;x&quot;</span>,<span class="st">&quot;_CoordinateAxisType&quot;</span>,<span class="st">&quot;GeoX&quot;</span>)</a>
+<a class="sourceLine" id="cb116-10" data-line-number="10"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;y&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;Y&quot;</span>)</a>
+<a class="sourceLine" id="cb116-11" data-line-number="11"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;y&quot;</span>,<span class="st">&quot;standard_name&quot;</span>,<span class="st">&quot;projection_y_coordinate&quot;</span>)</a>
+<a class="sourceLine" id="cb116-12" data-line-number="12"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;y&quot;</span>,<span class="st">&quot;_CoordinateAxisType&quot;</span>,<span class="st">&quot;GeoY&quot;</span>)</a>
+<a class="sourceLine" id="cb116-13" data-line-number="13"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;soilm&quot;</span>,<span class="st">&quot;grid_mapping&quot;</span>, <span class="st">&quot;Lambert_Conformal&quot;</span>)</a>
+<a class="sourceLine" id="cb116-14" data-line-number="14"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;soilm&quot;</span>,<span class="st">&quot;coordinates&quot;</span>, <span class="st">&quot;lat lon&quot;</span>)</a>
+<a class="sourceLine" id="cb116-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb116-16" data-line-number="16"><span class="co"># put the CRS attributes</span></a>
+<a class="sourceLine" id="cb116-17" data-line-number="17">projname &lt;-<span class="st"> &quot;lambert_conformal_conic&quot;</span></a>
+<a class="sourceLine" id="cb116-18" data-line-number="18">false_easting &lt;-<span class="st"> </span><span class="fl">5632642.22547</span></a>
+<a class="sourceLine" id="cb116-19" data-line-number="19">false_northing &lt;-<span class="st"> </span><span class="fl">4612545.65137</span></a>
+<a class="sourceLine" id="cb116-20" data-line-number="20"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;name&quot;</span>,projname)</a>
+<a class="sourceLine" id="cb116-21" data-line-number="21"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;long_name&quot;</span>,projname)</a>
+<a class="sourceLine" id="cb116-22" data-line-number="22"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;grid_mapping_name&quot;</span>,projname)</a>
+<a class="sourceLine" id="cb116-23" data-line-number="23"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;longitude_of_central_meridian&quot;</span>, <span class="kw">as.double</span>(longitude_of_central_meridian<span class="op">$</span>value))</a>
+<a class="sourceLine" id="cb116-24" data-line-number="24"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;latitude_of_projection_origin&quot;</span>, <span class="kw">as.double</span>(latitude_of_projection_origin<span class="op">$</span>value))</a>
+<a class="sourceLine" id="cb116-25" data-line-number="25"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;standard_parallel&quot;</span>, <span class="kw">c</span>(<span class="fl">50.0</span>, <span class="fl">50.0</span>))</a>
+<a class="sourceLine" id="cb116-26" data-line-number="26"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;false_easting&quot;</span>,false_easting)</a>
+<a class="sourceLine" id="cb116-27" data-line-number="27"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;false_northing&quot;</span>,false_northing)</a>
+<a class="sourceLine" id="cb116-28" data-line-number="28"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;_CoordinateTransformType&quot;</span>,<span class="st">&quot;Projection&quot;</span>)</a>
+<a class="sourceLine" id="cb116-29" data-line-number="29"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;_CoordinateAxisTypes&quot;</span>,<span class="st">&quot;GeoX GeoY&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" data-line-number="1"><span class="co"># add global attributes</span></a>
+<a class="sourceLine" id="cb117-2" data-line-number="2"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;title&quot;</span>,<span class="st">&quot;test output of projected data&quot;</span>)</a>
+<a class="sourceLine" id="cb117-3" data-line-number="3"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;institution&quot;</span>,<span class="st">&quot;NOAA ESRL PSD&quot;</span>)</a>
+<a class="sourceLine" id="cb117-4" data-line-number="4"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;source&quot;</span>,<span class="st">&quot;soilm.mon.ltm.nc&quot;</span>)</a>
+<a class="sourceLine" id="cb117-5" data-line-number="5">history &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;P.J. Bartlein&quot;</span>, <span class="kw">date</span>(), <span class="dt">sep=</span><span class="st">&quot;, &quot;</span>)</a>
+<a class="sourceLine" id="cb117-6" data-line-number="6"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;history&quot;</span>,history)</a>
+<a class="sourceLine" id="cb117-7" data-line-number="7"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;Conventions&quot;</span>,<span class="st">&quot;CF=1.6&quot;</span>)</a>
+<a class="sourceLine" id="cb117-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb117-9" data-line-number="9"><span class="co"># Get a summary of the created file:</span></a>
+<a class="sourceLine" id="cb117-10" data-line-number="10">ncout</a></code></pre></div>
+<pre><code>## File /Users/bartlein/Projects/ESSD/data/nc_files/soilm.mon.ltm_test.nc (NC_FORMAT_NETCDF4):
+## 
+##      4 variables (excluding dimension variables):
+##         float soilm[x,y,time]   (Contiguous storage)  
+##             units: kg/m^2
+##             _FillValue: 1.00000003318135e+32
+##             long_name: soil moisture
+##             grid_mapping: Lambert_Conformal
+##             coordinates: lat lon
+##         double lon[x,y]   (Contiguous storage)  
+##             units: degrees_east
+##             long_name: Longitude of cell center
+##         double lat[x,y]   (Contiguous storage)  
+##             units: degrees_north
+##             long_name: Latitude of cell center
+##         char Lambert_Conformal[]   (Contiguous storage)  
+##             units: 1
+##             name: lambert_conformal_conic
+##             long_name: lambert_conformal_conic
+##             grid_mapping_name: lambert_conformal_conic
+##             longitude_of_central_meridian: -107
+##             latitude_of_projection_origin: 50
+##             standard_parallel: 50
+##              standard_parallel: 50
+##             false_easting: 5632642.22547
+##             false_northing: 4612545.65137
+##             _CoordinateTransformType: Projection
+##             _CoordinateAxisTypes: GeoX GeoY
+## 
+##      3 dimensions:
+##         x  Size:349
+##             units: m
+##             long_name: eastward distance from southwest corner of domain in projection coordinates
+##             axis: X
+##             standard_name: projection_x_coordinate
+##             _CoordinateAxisType: GeoX
+##         y  Size:277
+##             units: m
+##             long_name: northward distance from southwest corner of domain in projection coordinates
+##             axis: Y
+##             standard_name: projection_y_coordinate
+##             _CoordinateAxisType: GeoY
+##         time  Size:12
+##             units: hours since 1800-1-1 00:00:0.0
+##             long_name: time
+## 
+##     5 global attributes:
+##         title: test output of projected data
+##         institution: NOAA ESRL PSD
+##         source: soilm.mon.ltm.nc
+##         history: P.J. Bartlein, Mon Apr 22 09:49:01 2019
+##         Conventions: CF=1.6</code></pre>
+<p>Finally, close the file, which writes the data to disk.</p>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" data-line-number="1"><span class="co"># close the file, writing data to disk</span></a>
+<a class="sourceLine" id="cb119-2" data-line-number="2"><span class="kw">nc_close</span>(ncout)</a></code></pre></div>
 <p><a href="netCDF.html">[Back to top]</a></p>
 </div>
 
