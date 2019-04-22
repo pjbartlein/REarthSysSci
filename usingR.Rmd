@@ -11,7 +11,7 @@ output:
 
 ```{r set-options, echo=FALSE}
 options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "75%", out.height = "75%")
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE, out.width = "75%", out.height = "75%")
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
@@ -35,7 +35,7 @@ Read the radiative forcing .csv file:
 
 ```{r read_csv, eval=TRUE, echo=TRUE}
 # read a .csv file
-csv_path <- "/Users/bartlein/projects/geog490/data/csv_files/"
+csv_path <- "/Users/bartlein/projects/ESSD/data/csv_files/"
 csv_name <- "IPCC-RF.csv"
 csv_file <- paste(csv_path, csv_name, sep="")
 IPCC_RF <- read.csv(csv_file)
