@@ -163,7 +163,7 @@ Close the open files before moving on:
 h5closeAll()
 ```
 
-# Read a more complicated HDF5
+# Read a more complicated HDF5 file
 
 A much more stuctured file that exploits the ability of HDF5 to store data in "groups" that mimics in some ways the directory or folder structure on a local computer is represented by the GFED4.1 fire data set.  As usual, begin by setting paths and file names.
 
