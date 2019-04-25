@@ -462,60 +462,85 @@ $(document).ready(function () {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#preliminary-set-up"><span class="toc-section-number">2</span> Preliminary set up</a><ul>
+<li><a href="#convert-an-hdf4-file-to-hdf5"><span class="toc-section-number">2.1</span> Convert an HDF4 file to HDF5</a></li>
+</ul></li>
+<li><a href="#read-a-simple-hdf5-file"><span class="toc-section-number">3</span> Read a simple HDF5 file</a><ul>
+<li><a href="#plot-the-uv-data"><span class="toc-section-number">3.1</span> Plot the UV data</a></li>
+</ul></li>
+<li><a href="#read-a-more-complicated-hdf5"><span class="toc-section-number">4</span> Read a more complicated HDF5</a><ul>
+<li><a href="#plot-the-gfed-burned-fraction-data"><span class="toc-section-number">4.1</span> plot the GFED burned fraction data</a></li>
+</ul></li>
+</ul>
+</div>
 
 <script>
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># # install rhdf5</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co"># if (!requireNamespace(&quot;rhdf5&quot;, quietly = TRUE))</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co">#   install.packages(&quot;BiocManager&quot;)</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co"># BiocManager::install(&quot;rhdf5&quot;, version = &quot;3.8&quot;)</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co"># http://neonscience.github.io/neon-data-institute-2016//R/intro-hdf5-R/</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co"># https://www.neonscience.org/hdf5-intro-r</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co"># https://github.com/NEONScience/NEON-Data-Skills/tree/master/code/HDF5</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co"># http://www.temis.nl/index.php  </span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co"># Daily UV</span></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="co"># https://coralreefwatch.noaa.gov/satellite/hdf/index.php</span></a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co"># current ssts</span></a>
-<a class="sourceLine" id="cb1-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb1-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb1-17" data-line-number="17"><span class="co"># HDF4 to netCDF-3 and netCDF-4 conversion (h4tonccf and h4tonccf_nc4)</span></a>
-<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="co"># http://hdfeos.org/software/h4cflib.php</span></a>
-<a class="sourceLine" id="cb1-19" data-line-number="19"></a>
-<a class="sourceLine" id="cb1-20" data-line-number="20"><span class="co"># HDF5 (and others) to netCDF conversion (ncl_convert2nc)</span></a>
-<a class="sourceLine" id="cb1-21" data-line-number="21"><span class="co"># https://www.ncl.ucar.edu/overview.shtml</span></a>
-<a class="sourceLine" id="cb1-22" data-line-number="22"></a>
-<a class="sourceLine" id="cb1-23" data-line-number="23"><span class="co"># HDF4 to HDF5 conversion (h4toh5convert)</span></a>
-<a class="sourceLine" id="cb1-24" data-line-number="24"><span class="co"># https://portal.hdfgroup.org/display/support/Download+h4h5tools</span></a>
-<a class="sourceLine" id="cb1-25" data-line-number="25"></a>
-<a class="sourceLine" id="cb1-26" data-line-number="26"><span class="kw">library</span>(sf)</a></code></pre></div>
-<pre><code>## Linking to GEOS 3.6.1, GDAL 2.1.3, PROJ 4.9.3</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(rhdf5)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">library</span>(raster)</a></code></pre></div>
-<pre><code>## Loading required package: sp</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(rasterVis)</a></code></pre></div>
-<pre><code>## Loading required package: lattice</code></pre>
-<pre><code>## Loading required package: latticeExtra</code></pre>
-<pre><code>## Loading required package: RColorBrewer</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">shp_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/&quot;</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">shp_name &lt;-<span class="st"> &quot;ne_110m_admin_0_countries.shp&quot;</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">shp_file &lt;-<span class="st"> </span><span class="kw">paste</span>(shp_path, shp_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">world_shp &lt;-<span class="st"> </span><span class="kw">read_sf</span>(shp_file)</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5">world_outline &lt;-<span class="st"> </span><span class="kw">as</span>(<span class="kw">st_geometry</span>(world_shp), <span class="dt">Class=</span><span class="st">&quot;Spatial&quot;</span>)</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co"># plot the outline</span></a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="kw">plot</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="dv">1</span>)</a></code></pre></div>
-<p><img src="hdf5_intro_files/figure-html/unnamed-chunk-1-1.png" width="75%" height="75%" /></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># set path and filename</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">hdf_path &lt;-<span class="st"> &quot;/Users/bartlein/Dropbox/DataVis/working/geog490/data/hdf_files/&quot;</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3">hdf_name &lt;-<span class="st"> &quot;uvief20190423.h5&quot;</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">hdf_file &lt;-<span class="st"> </span><span class="kw">paste</span>(hdf_path, hdf_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="kw">h5ls</span>(hdf_file)</a></code></pre></div>
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>HDF (Hierarchical Data Format), see <a href="https://www.hdfgroup.org">[https://www.hdfgroup.org]</a> is another format for storing large data files and associated metadata, that is not unrealted to netCDF, because in fact netCDF-4 uses the HDF-5 “data model” to store data. There are currently two versions of HDF in use HDF4 and HDF5, and two special cases designed for handling satellite remote-sensing data (HDF-EOS and HDF-EOS5). Unlike netCDF-4, which is backward compatible with netCDF-3, the two versions are not mutually readible, but there are tools for converting between the different versions (as well as for converting HDF files to netCDF files).</p>
+<p>HDF5 files can be read and written in R using the <code>rhdf5</code> package, which is part of the Bioconductor collection of packages. HDF4 files can also be handled via the <code>rgdal</code> package, but the process is more cumbersome. Consequently, the current standard approach for analyzing HDF4 data in R is to first convert it to HDF5 or netCDF, and proceed from there using <code>rhdf5</code>.</p>
+<p>Compared to netCDF files, HDF files can be messy: they can contain images as well as data, and HDF5 files in particular may contain groups of datasets, which emulated in some ways the folder/directory stucture on a local machine. This will become evident below.</p>
+</div>
+<div id="preliminary-set-up" class="section level1">
+<h1><span class="header-section-number">2</span> Preliminary set up</h1>
+<p>The <code>rhdf5</code> package can be retrived from Bioconductor, and installed as follows. Generally, a lot of dependent packages will also need to be installed, as well, but the process is usually straightforward.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># install rhdf5</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">&quot;rhdf5&quot;</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">  <span class="kw">install.packages</span>(<span class="st">&quot;BiocManager&quot;</span>)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">&quot;rhdf5&quot;</span>, <span class="dt">version =</span> <span class="st">&quot;3.8&quot;</span>)</a></code></pre></div>
+<p>The examples below use data from TEMIS, the Tropospheric Emission Monitoring Internet Service (<a href="http://www.temis.nl/index.php">[http://www.temis.nl/index.php]</a>), and the Global Fire Emissions Database (GFED, <a href="https://www.globalfiredata.org/index.html">[https://www.globalfiredata.org/index.html]</a>). The TEMIS data are HDF4 and need to be converted, while the GFED data are HDF5. The specific data sets can be found on the ClimateLab SFTP server.</p>
+<p>The various conversion tasks and tools are:</p>
+<ul>
+<li>HDF4 to HDF5: <code>h4toh5convert</code> from the HDFGroup <a href="https://portal.hdfgroup.org/display/support/Download+h4h5tools">[h4h5tools]</a></li>
+<li>HDF4 to netCDF: <code>h4tonccf</code> (netCDF-3), and <code>h4tonccf_nc4</code> (netCDF-4), from HDF-EOS <a href="http://hdfeos.org/software/h4cflib.php">[http://hdfeos.org/software/h4cflib.php]</a></li>
+<li>HDF4 and HDF5 (and other file types) to netCDF: <code>ncl_convert2nc</code> from Unidata <a href="https://www.ncl.ucar.edu/overview.shtml">[https://www.ncl.ucar.edu/]</a></li>
+</ul>
+<p>The first two conversion tools have installers for MacOS, Windows and Linux. On the Mac, it will usually be the case that the executable file should be moved to the /Applications folder, while on Windows the usual fooling around with paths will be required. The <code>ncl_convert2nc</code> tool is part of NCL, which can be installed on run on Windows 10 machines using the Linux subsystem for Windows.</p>
+<p>There are some useful tutorials on using HDF in R from the NSF NEON program:</p>
+<ul>
+<li><a href="http://neonscience.github.io/neon-data-institute-2016//R/intro-hdf5-R/">[intro-hdf5-R]</a></li>
+<li><a href="https://www.neonscience.org/hdf5-intro-r">[hdf5-intro-r]</a></li>
+<li><a href="https://github.com/NEONScience/NEON-Data-Skills/tree/master/code/HDF5">[HDF5]</a></li>
+</ul>
+<p>Begin by loading the appropriate packages:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># load packages</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">library</span>(sf)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">library</span>(rhdf5)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">library</span>(raster)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="kw">library</span>(rasterVis)</a></code></pre></div>
+<p>For latter plotting of the data, also read a world outline shape file:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># read a world shapefile</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">shp_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/&quot;</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">shp_name &lt;-<span class="st"> &quot;ne_110m_admin_0_countries.shp&quot;</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">shp_file &lt;-<span class="st"> </span><span class="kw">paste</span>(shp_path, shp_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">world_shp &lt;-<span class="st"> </span><span class="kw">read_sf</span>(shp_file)</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">world_outline &lt;-<span class="st"> </span><span class="kw">as</span>(<span class="kw">st_geometry</span>(world_shp), <span class="dt">Class=</span><span class="st">&quot;Spatial&quot;</span>)</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co"># plot the outline</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="kw">plot</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="dv">1</span>)</a></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/shapefile-1.png" width="75%" height="75%" /></p>
+<div id="convert-an-hdf4-file-to-hdf5" class="section level2">
+<h2><span class="header-section-number">2.1</span> Convert an HDF4 file to HDF5</h2>
+<p>In this example, a data set of the “Clear-Sky UV Index”&quot; from TEMIS was downloaded (i.e. <code>uvief20190423.hdf</code> – 2019-04-23) from the website listed above. This is an HDF4 file, which can be verified in Panoply. Viewing files in Panoply is always good practice–in this case the particular layout of the data in file is rather ambiguous at first glance, and so getting a look at the contents of the file before attempting to read it is a good idea.</p>
+<p>The HDF4 file can be converted by</p>
+</div>
+</div>
+<div id="read-a-simple-hdf5-file" class="section level1">
+<h1><span class="header-section-number">3</span> Read a simple HDF5 file</h1>
+<p>Begin by setting paths and filenames:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># set path and filename</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">hdf_path &lt;-<span class="st"> &quot;/Users/bartlein/Dropbox/DataVis/working/geog490/data/hdf_files/&quot;</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">hdf_name &lt;-<span class="st"> &quot;uvief20190423.h5&quot;</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">hdf_file &lt;-<span class="st"> </span><span class="kw">paste</span>(hdf_path, hdf_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a></code></pre></div>
+<p>List the contents of the file. (WARNING: This can produce a lot of output)</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># list the file content</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">h5ls</span>(hdf_file)</a></code></pre></div>
 <pre><code>##   group         name       otype  dclass        dim
 ## 0     /    Latitudes H5I_DATASET   FLOAT        720
 ## 1     /   Longitudes H5I_DATASET   FLOAT       1440
@@ -524,7 +549,9 @@ $(document).ready(function () {
 ## 4     /    UVI_field H5I_DATASET INTEGER 1440 x 720
 ## 5     /     fakeDim0 H5I_DATASET INTEGER        720
 ## 6     /     fakeDim1 H5I_DATASET INTEGER       1440</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">h5readAttributes</span>(hdf_file, <span class="dt">name =</span> <span class="st">&quot;UVI_field&quot;</span>)</a></code></pre></div>
+<p>Read the attributes of the <code>UVI_field</code> variable, the UV index:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># read the attributes of UVI_field</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">h5readAttributes</span>(hdf_file, <span class="dt">name =</span> <span class="st">&quot;UVI_field&quot;</span>)</a></code></pre></div>
 <pre><code>## Warning in H5Aread(A): Reading attribute data of type &#39;VLEN&#39; not yet implemented. Values replaced by
 ## NA&#39;s.</code></pre>
 <pre><code>## $DIMENSION_LIST
@@ -541,26 +568,30 @@ $(document).ready(function () {
 ## 
 ## $Units
 ## [1] &quot;1  [ 1 UV index unit equals 25 mW/m2 ]&quot;</code></pre>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">lon &lt;-<span class="st"> </span><span class="kw">h5read</span>(hdf_file, <span class="st">&quot;/Longitudes&quot;</span>)</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2">nlon &lt;-<span class="st"> </span><span class="kw">length</span>(lon)</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3">nlon</a></code></pre></div>
+<p>Get the latitudes and longitudes of the grid:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># get lons and lats</span></a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">lon &lt;-<span class="st"> </span><span class="kw">h5read</span>(hdf_file, <span class="st">&quot;/Longitudes&quot;</span>)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">nlon &lt;-<span class="st"> </span><span class="kw">length</span>(lon)</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">nlon</a></code></pre></div>
 <pre><code>## [1] 1440</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">head</span>(lon); <span class="kw">tail</span>(lon)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">head</span>(lon); <span class="kw">tail</span>(lon)</a></code></pre></div>
 <pre><code>## [1] -179.875 -179.625 -179.375 -179.125 -178.875 -178.625</code></pre>
 <pre><code>## [1] 178.625 178.875 179.125 179.375 179.625 179.875</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">lat &lt;-<span class="st"> </span><span class="kw">h5read</span>(hdf_file, <span class="st">&quot;/Latitudes&quot;</span>)</a>
-<a class="sourceLine" id="cb20-2" data-line-number="2">nlat &lt;-<span class="st"> </span><span class="kw">length</span>(lat)</a>
-<a class="sourceLine" id="cb20-3" data-line-number="3">nlat</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">lat &lt;-<span class="st"> </span><span class="kw">h5read</span>(hdf_file, <span class="st">&quot;/Latitudes&quot;</span>)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">nlat &lt;-<span class="st"> </span><span class="kw">length</span>(lat)</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">nlat</a></code></pre></div>
 <pre><code>## [1] 720</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">head</span>(lat); <span class="kw">tail</span>(lat)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">head</span>(lat); <span class="kw">tail</span>(lat)</a></code></pre></div>
 <pre><code>## [1] -89.875 -89.625 -89.375 -89.125 -88.875 -88.625</code></pre>
 <pre><code>## [1] 88.625 88.875 89.125 89.375 89.625 89.875</code></pre>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">h1 &lt;-<span class="st"> </span><span class="kw">h5read</span>(hdf_file, <span class="st">&quot;/UVI_field&quot;</span>)</a>
-<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw">class</span>(h1); <span class="kw">str</span>(h1)</a></code></pre></div>
+<p>Get the UV data, and convert it to a <code>raster</code> object, and get a short summary:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># read the UV data</span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">h1 &lt;-<span class="st"> </span><span class="kw">h5read</span>(hdf_file, <span class="st">&quot;/UVI_field&quot;</span>)</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3"><span class="kw">class</span>(h1); <span class="kw">str</span>(h1)</a></code></pre></div>
 <pre><code>## [1] &quot;matrix&quot;</code></pre>
 <pre><code>##  int [1:1440, 1:720] 0 0 0 0 0 0 0 0 0 0 ...</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">UVI &lt;-<span class="st"> </span><span class="kw">raster</span>(h1)</a>
-<a class="sourceLine" id="cb28-2" data-line-number="2">UVI</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">UVI &lt;-<span class="st"> </span><span class="kw">raster</span>(h1)</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">UVI</a></code></pre></div>
 <pre><code>## class       : RasterLayer 
 ## dimensions  : 1440, 720, 1036800  (nrow, ncol, ncell)
 ## resolution  : 0.001388889, 0.0006944444  (x, y)
@@ -569,10 +600,14 @@ $(document).ready(function () {
 ## data source : in memory
 ## names       : layer 
 ## values      : 0, 18342  (min, max)</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">image</span>( UVI)</a></code></pre></div>
-<p><img src="hdf5_intro_files/figure-html/unnamed-chunk-1-2.png" width="75%" height="75%" /></p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">UVI &lt;-<span class="st"> </span><span class="kw">flip</span>(<span class="kw">raster</span>(<span class="kw">t</span>(h1), <span class="dt">xmn=</span>lon[<span class="dv">1</span>], <span class="dt">xmx=</span>lon[nlon], <span class="dt">ymn=</span>lat[<span class="dv">1</span>], <span class="dt">ymx=</span>lat[nlat]), <span class="st">&quot;y&quot;</span>)</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">UVI</a></code></pre></div>
+<p>Get a quick look using the <code>raster</code> version of the <code>image()</code> function:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># quick look</span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw">image</span>(UVI)</a></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/image1-1.png" width="50%" height="50%" /></p>
+<p>The layout of the data in the file is obviously not straightforward. First, the coordinates of the data are not longitudes and latitudes but simply values that range from 0 to 1, and the orientation of the grid is such that the <code>raster</code> object needs to be both tranposed (exchanging x and y), and flipped north to south. this can be done as follows, also adding explicit longitude and latitude dimensions:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># transpose and flip the raster </span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2">UVI &lt;-<span class="st"> </span><span class="kw">flip</span>(<span class="kw">raster</span>(<span class="kw">t</span>(h1), <span class="dt">xmn=</span>lon[<span class="dv">1</span>], <span class="dt">xmx=</span>lon[nlon], <span class="dt">ymn=</span>lat[<span class="dv">1</span>], <span class="dt">ymx=</span>lat[nlat]), <span class="st">&quot;y&quot;</span>)</a>
+<a class="sourceLine" id="cb26-3" data-line-number="3">UVI</a></code></pre></div>
 <pre><code>## class       : RasterLayer 
 ## dimensions  : 720, 1440, 1036800  (nrow, ncol, ncell)
 ## resolution  : 0.2498264, 0.2496528  (x, y)
@@ -581,829 +616,84 @@ $(document).ready(function () {
 ## data source : in memory
 ## names       : layer 
 ## values      : 0, 18342  (min, max)</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co"># rasterVis plot</span></a>
-<a class="sourceLine" id="cb33-2" data-line-number="2">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;Purples&quot;</span>))</a>
-<a class="sourceLine" id="cb33-3" data-line-number="3">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(UVI, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme, <span class="dt">main=</span><span class="st">&quot;UV Index&quot;</span>)</a>
-<a class="sourceLine" id="cb33-4" data-line-number="4">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">1.0</span>))</a></code></pre></div>
-<p><img src="hdf5_intro_files/figure-html/unnamed-chunk-1-3.png" width="75%" height="75%" /></p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">h5closeAll</span>()</a>
-<a class="sourceLine" id="cb34-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb34-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb34-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb34-5" data-line-number="5"><span class="co"># set path </span></a>
-<a class="sourceLine" id="cb34-6" data-line-number="6">hdf_path &lt;-<span class="st"> &quot;/Users/bartlein/Dropbox/DataVis/working/geog490/data/hdf_files/&quot;</span></a>
-<a class="sourceLine" id="cb34-7" data-line-number="7">hdf_name &lt;-<span class="st"> &quot;GFED4.1s_2016.hdf5&quot;</span></a>
-<a class="sourceLine" id="cb34-8" data-line-number="8">hdf_file &lt;-<span class="st"> </span><span class="kw">paste</span>(hdf_path, hdf_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb34-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb34-10" data-line-number="10"><span class="kw">h5ls</span>(hdf_file) <span class="co"># may create a lot of output</span></a></code></pre></div>
-<pre><code>##                            group                name       otype  dclass        dim
-## 0                              /              ancill   H5I_GROUP                   
-## 1                        /ancill       basis_regions H5I_DATASET INTEGER 1440 x 720
-## 2                        /ancill      grid_cell_area H5I_DATASET   FLOAT 1440 x 720
-## 3                              /           biosphere   H5I_GROUP                   
-## 4                     /biosphere                  01   H5I_GROUP                   
-## 5                  /biosphere/01                  BB H5I_DATASET   FLOAT 1440 x 720
-## 6                  /biosphere/01                 NPP H5I_DATASET   FLOAT 1440 x 720
-## 7                  /biosphere/01                  Rh H5I_DATASET   FLOAT 1440 x 720
-## 8                     /biosphere                  02   H5I_GROUP                   
-## 9                  /biosphere/02                  BB H5I_DATASET   FLOAT 1440 x 720
-## 10                 /biosphere/02                 NPP H5I_DATASET   FLOAT 1440 x 720
-## 11                 /biosphere/02                  Rh H5I_DATASET   FLOAT 1440 x 720
-## 12                    /biosphere                  03   H5I_GROUP                   
-## 13                 /biosphere/03                  BB H5I_DATASET   FLOAT 1440 x 720
-## 14                 /biosphere/03                 NPP H5I_DATASET   FLOAT 1440 x 720
-## 15                 /biosphere/03                  Rh H5I_DATASET   FLOAT 1440 x 720
-## 16                    /biosphere                  04   H5I_GROUP                   
-## 17                 /biosphere/04                  BB H5I_DATASET   FLOAT 1440 x 720
-## 18                 /biosphere/04                 NPP H5I_DATASET   FLOAT 1440 x 720
-## 19                 /biosphere/04                  Rh H5I_DATASET   FLOAT 1440 x 720
-## 20                    /biosphere                  05   H5I_GROUP                   
-## 21                 /biosphere/05                  BB H5I_DATASET   FLOAT 1440 x 720
-## 22                 /biosphere/05                 NPP H5I_DATASET   FLOAT 1440 x 720
-## 23                 /biosphere/05                  Rh H5I_DATASET   FLOAT 1440 x 720
-## 24                    /biosphere                  06   H5I_GROUP                   
-## 25                 /biosphere/06                  BB H5I_DATASET   FLOAT 1440 x 720
-## 26                 /biosphere/06                 NPP H5I_DATASET   FLOAT 1440 x 720
-## 27                 /biosphere/06                  Rh H5I_DATASET   FLOAT 1440 x 720
-## 28                    /biosphere                  07   H5I_GROUP                   
-## 29                 /biosphere/07                  BB H5I_DATASET   FLOAT 1440 x 720
-## 30                 /biosphere/07                 NPP H5I_DATASET   FLOAT 1440 x 720
-## 31                 /biosphere/07                  Rh H5I_DATASET   FLOAT 1440 x 720
-## 32                    /biosphere                  08   H5I_GROUP                   
-## 33                 /biosphere/08                  BB H5I_DATASET   FLOAT 1440 x 720
-## 34                 /biosphere/08                 NPP H5I_DATASET   FLOAT 1440 x 720
-## 35                 /biosphere/08                  Rh H5I_DATASET   FLOAT 1440 x 720
-## 36                    /biosphere                  09   H5I_GROUP                   
-## 37                 /biosphere/09                  BB H5I_DATASET   FLOAT 1440 x 720
-## 38                 /biosphere/09                 NPP H5I_DATASET   FLOAT 1440 x 720
-## 39                 /biosphere/09                  Rh H5I_DATASET   FLOAT 1440 x 720
-## 40                    /biosphere                  10   H5I_GROUP                   
-## 41                 /biosphere/10                  BB H5I_DATASET   FLOAT 1440 x 720
-## 42                 /biosphere/10                 NPP H5I_DATASET   FLOAT 1440 x 720
-## 43                 /biosphere/10                  Rh H5I_DATASET   FLOAT 1440 x 720
-## 44                    /biosphere                  11   H5I_GROUP                   
-## 45                 /biosphere/11                  BB H5I_DATASET   FLOAT 1440 x 720
-## 46                 /biosphere/11                 NPP H5I_DATASET   FLOAT 1440 x 720
-## 47                 /biosphere/11                  Rh H5I_DATASET   FLOAT 1440 x 720
-## 48                    /biosphere                  12   H5I_GROUP                   
-## 49                 /biosphere/12                  BB H5I_DATASET   FLOAT 1440 x 720
-## 50                 /biosphere/12                 NPP H5I_DATASET   FLOAT 1440 x 720
-## 51                 /biosphere/12                  Rh H5I_DATASET   FLOAT 1440 x 720
-## 52                             /         burned_area   H5I_GROUP                   
-## 53                  /burned_area                  01   H5I_GROUP                   
-## 54               /burned_area/01     burned_fraction H5I_DATASET   FLOAT 1440 x 720
-## 55               /burned_area/01              source H5I_DATASET INTEGER 1440 x 720
-## 56                  /burned_area                  02   H5I_GROUP                   
-## 57               /burned_area/02     burned_fraction H5I_DATASET   FLOAT 1440 x 720
-## 58               /burned_area/02              source H5I_DATASET INTEGER 1440 x 720
-## 59                  /burned_area                  03   H5I_GROUP                   
-## 60               /burned_area/03     burned_fraction H5I_DATASET   FLOAT 1440 x 720
-## 61               /burned_area/03              source H5I_DATASET INTEGER 1440 x 720
-## 62                  /burned_area                  04   H5I_GROUP                   
-## 63               /burned_area/04     burned_fraction H5I_DATASET   FLOAT 1440 x 720
-## 64               /burned_area/04              source H5I_DATASET INTEGER 1440 x 720
-## 65                  /burned_area                  05   H5I_GROUP                   
-## 66               /burned_area/05     burned_fraction H5I_DATASET   FLOAT 1440 x 720
-## 67               /burned_area/05              source H5I_DATASET INTEGER 1440 x 720
-## 68                  /burned_area                  06   H5I_GROUP                   
-## 69               /burned_area/06     burned_fraction H5I_DATASET   FLOAT 1440 x 720
-## 70               /burned_area/06              source H5I_DATASET INTEGER 1440 x 720
-## 71                  /burned_area                  07   H5I_GROUP                   
-## 72               /burned_area/07     burned_fraction H5I_DATASET   FLOAT 1440 x 720
-## 73               /burned_area/07              source H5I_DATASET INTEGER 1440 x 720
-## 74                  /burned_area                  08   H5I_GROUP                   
-## 75               /burned_area/08     burned_fraction H5I_DATASET   FLOAT 1440 x 720
-## 76               /burned_area/08              source H5I_DATASET INTEGER 1440 x 720
-## 77                  /burned_area                  09   H5I_GROUP                   
-## 78               /burned_area/09     burned_fraction H5I_DATASET   FLOAT 1440 x 720
-## 79               /burned_area/09              source H5I_DATASET INTEGER 1440 x 720
-## 80                  /burned_area                  10   H5I_GROUP                   
-## 81               /burned_area/10     burned_fraction H5I_DATASET   FLOAT 1440 x 720
-## 82               /burned_area/10              source H5I_DATASET INTEGER 1440 x 720
-## 83                  /burned_area                  11   H5I_GROUP                   
-## 84               /burned_area/11     burned_fraction H5I_DATASET   FLOAT 1440 x 720
-## 85               /burned_area/11              source H5I_DATASET INTEGER 1440 x 720
-## 86                  /burned_area                  12   H5I_GROUP                   
-## 87               /burned_area/12     burned_fraction H5I_DATASET   FLOAT 1440 x 720
-## 88               /burned_area/12              source H5I_DATASET INTEGER 1440 x 720
-## 89                             /           emissions   H5I_GROUP                   
-## 90                    /emissions                  01   H5I_GROUP                   
-## 91                 /emissions/01                   C H5I_DATASET   FLOAT 1440 x 720
-## 92                 /emissions/01                  DM H5I_DATASET   FLOAT 1440 x 720
-## 93                 /emissions/01      daily_fraction   H5I_GROUP                   
-## 94  /emissions/01/daily_fraction               day_1 H5I_DATASET   FLOAT 1440 x 720
-## 95  /emissions/01/daily_fraction              day_10 H5I_DATASET   FLOAT 1440 x 720
-## 96  /emissions/01/daily_fraction              day_11 H5I_DATASET   FLOAT 1440 x 720
-## 97  /emissions/01/daily_fraction              day_12 H5I_DATASET   FLOAT 1440 x 720
-## 98  /emissions/01/daily_fraction              day_13 H5I_DATASET   FLOAT 1440 x 720
-## 99  /emissions/01/daily_fraction              day_14 H5I_DATASET   FLOAT 1440 x 720
-## 100 /emissions/01/daily_fraction              day_15 H5I_DATASET   FLOAT 1440 x 720
-## 101 /emissions/01/daily_fraction              day_16 H5I_DATASET   FLOAT 1440 x 720
-## 102 /emissions/01/daily_fraction              day_17 H5I_DATASET   FLOAT 1440 x 720
-## 103 /emissions/01/daily_fraction              day_18 H5I_DATASET   FLOAT 1440 x 720
-## 104 /emissions/01/daily_fraction              day_19 H5I_DATASET   FLOAT 1440 x 720
-## 105 /emissions/01/daily_fraction               day_2 H5I_DATASET   FLOAT 1440 x 720
-## 106 /emissions/01/daily_fraction              day_20 H5I_DATASET   FLOAT 1440 x 720
-## 107 /emissions/01/daily_fraction              day_21 H5I_DATASET   FLOAT 1440 x 720
-## 108 /emissions/01/daily_fraction              day_22 H5I_DATASET   FLOAT 1440 x 720
-## 109 /emissions/01/daily_fraction              day_23 H5I_DATASET   FLOAT 1440 x 720
-## 110 /emissions/01/daily_fraction              day_24 H5I_DATASET   FLOAT 1440 x 720
-## 111 /emissions/01/daily_fraction              day_25 H5I_DATASET   FLOAT 1440 x 720
-## 112 /emissions/01/daily_fraction              day_26 H5I_DATASET   FLOAT 1440 x 720
-## 113 /emissions/01/daily_fraction              day_27 H5I_DATASET   FLOAT 1440 x 720
-## 114 /emissions/01/daily_fraction              day_28 H5I_DATASET   FLOAT 1440 x 720
-## 115 /emissions/01/daily_fraction              day_29 H5I_DATASET   FLOAT 1440 x 720
-## 116 /emissions/01/daily_fraction               day_3 H5I_DATASET   FLOAT 1440 x 720
-## 117 /emissions/01/daily_fraction              day_30 H5I_DATASET   FLOAT 1440 x 720
-## 118 /emissions/01/daily_fraction              day_31 H5I_DATASET   FLOAT 1440 x 720
-## 119 /emissions/01/daily_fraction               day_4 H5I_DATASET   FLOAT 1440 x 720
-## 120 /emissions/01/daily_fraction               day_5 H5I_DATASET   FLOAT 1440 x 720
-## 121 /emissions/01/daily_fraction               day_6 H5I_DATASET   FLOAT 1440 x 720
-## 122 /emissions/01/daily_fraction               day_7 H5I_DATASET   FLOAT 1440 x 720
-## 123 /emissions/01/daily_fraction               day_8 H5I_DATASET   FLOAT 1440 x 720
-## 124 /emissions/01/daily_fraction               day_9 H5I_DATASET   FLOAT 1440 x 720
-## 125                /emissions/01       diurnal_cycle   H5I_GROUP                   
-## 126  /emissions/01/diurnal_cycle            UTC_0-3h H5I_DATASET   FLOAT 1440 x 720
-## 127  /emissions/01/diurnal_cycle          UTC_12-15h H5I_DATASET   FLOAT 1440 x 720
-## 128  /emissions/01/diurnal_cycle          UTC_15-18h H5I_DATASET   FLOAT 1440 x 720
-## 129  /emissions/01/diurnal_cycle          UTC_18-21h H5I_DATASET   FLOAT 1440 x 720
-## 130  /emissions/01/diurnal_cycle          UTC_21-24h H5I_DATASET   FLOAT 1440 x 720
-## 131  /emissions/01/diurnal_cycle            UTC_3-6h H5I_DATASET   FLOAT 1440 x 720
-## 132  /emissions/01/diurnal_cycle            UTC_6-9h H5I_DATASET   FLOAT 1440 x 720
-## 133  /emissions/01/diurnal_cycle           UTC_9-12h H5I_DATASET   FLOAT 1440 x 720
-## 134                /emissions/01        partitioning   H5I_GROUP                   
-## 135   /emissions/01/partitioning              C_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 136   /emissions/01/partitioning              C_BORF H5I_DATASET   FLOAT 1440 x 720
-## 137   /emissions/01/partitioning              C_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 138   /emissions/01/partitioning              C_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 139   /emissions/01/partitioning              C_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 140   /emissions/01/partitioning              C_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 141   /emissions/01/partitioning             DM_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 142   /emissions/01/partitioning             DM_BORF H5I_DATASET   FLOAT 1440 x 720
-## 143   /emissions/01/partitioning             DM_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 144   /emissions/01/partitioning             DM_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 145   /emissions/01/partitioning             DM_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 146   /emissions/01/partitioning             DM_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 147                /emissions/01 small_fire_fraction H5I_DATASET   FLOAT 1440 x 720
-## 148                   /emissions                  02   H5I_GROUP                   
-## 149                /emissions/02                   C H5I_DATASET   FLOAT 1440 x 720
-## 150                /emissions/02                  DM H5I_DATASET   FLOAT 1440 x 720
-## 151                /emissions/02      daily_fraction   H5I_GROUP                   
-## 152 /emissions/02/daily_fraction               day_1 H5I_DATASET   FLOAT 1440 x 720
-## 153 /emissions/02/daily_fraction              day_10 H5I_DATASET   FLOAT 1440 x 720
-## 154 /emissions/02/daily_fraction              day_11 H5I_DATASET   FLOAT 1440 x 720
-## 155 /emissions/02/daily_fraction              day_12 H5I_DATASET   FLOAT 1440 x 720
-## 156 /emissions/02/daily_fraction              day_13 H5I_DATASET   FLOAT 1440 x 720
-## 157 /emissions/02/daily_fraction              day_14 H5I_DATASET   FLOAT 1440 x 720
-## 158 /emissions/02/daily_fraction              day_15 H5I_DATASET   FLOAT 1440 x 720
-## 159 /emissions/02/daily_fraction              day_16 H5I_DATASET   FLOAT 1440 x 720
-## 160 /emissions/02/daily_fraction              day_17 H5I_DATASET   FLOAT 1440 x 720
-## 161 /emissions/02/daily_fraction              day_18 H5I_DATASET   FLOAT 1440 x 720
-## 162 /emissions/02/daily_fraction              day_19 H5I_DATASET   FLOAT 1440 x 720
-## 163 /emissions/02/daily_fraction               day_2 H5I_DATASET   FLOAT 1440 x 720
-## 164 /emissions/02/daily_fraction              day_20 H5I_DATASET   FLOAT 1440 x 720
-## 165 /emissions/02/daily_fraction              day_21 H5I_DATASET   FLOAT 1440 x 720
-## 166 /emissions/02/daily_fraction              day_22 H5I_DATASET   FLOAT 1440 x 720
-## 167 /emissions/02/daily_fraction              day_23 H5I_DATASET   FLOAT 1440 x 720
-## 168 /emissions/02/daily_fraction              day_24 H5I_DATASET   FLOAT 1440 x 720
-## 169 /emissions/02/daily_fraction              day_25 H5I_DATASET   FLOAT 1440 x 720
-## 170 /emissions/02/daily_fraction              day_26 H5I_DATASET   FLOAT 1440 x 720
-## 171 /emissions/02/daily_fraction              day_27 H5I_DATASET   FLOAT 1440 x 720
-## 172 /emissions/02/daily_fraction              day_28 H5I_DATASET   FLOAT 1440 x 720
-## 173 /emissions/02/daily_fraction              day_29 H5I_DATASET   FLOAT 1440 x 720
-## 174 /emissions/02/daily_fraction               day_3 H5I_DATASET   FLOAT 1440 x 720
-## 175 /emissions/02/daily_fraction               day_4 H5I_DATASET   FLOAT 1440 x 720
-## 176 /emissions/02/daily_fraction               day_5 H5I_DATASET   FLOAT 1440 x 720
-## 177 /emissions/02/daily_fraction               day_6 H5I_DATASET   FLOAT 1440 x 720
-## 178 /emissions/02/daily_fraction               day_7 H5I_DATASET   FLOAT 1440 x 720
-## 179 /emissions/02/daily_fraction               day_8 H5I_DATASET   FLOAT 1440 x 720
-## 180 /emissions/02/daily_fraction               day_9 H5I_DATASET   FLOAT 1440 x 720
-## 181                /emissions/02       diurnal_cycle   H5I_GROUP                   
-## 182  /emissions/02/diurnal_cycle            UTC_0-3h H5I_DATASET   FLOAT 1440 x 720
-## 183  /emissions/02/diurnal_cycle          UTC_12-15h H5I_DATASET   FLOAT 1440 x 720
-## 184  /emissions/02/diurnal_cycle          UTC_15-18h H5I_DATASET   FLOAT 1440 x 720
-## 185  /emissions/02/diurnal_cycle          UTC_18-21h H5I_DATASET   FLOAT 1440 x 720
-## 186  /emissions/02/diurnal_cycle          UTC_21-24h H5I_DATASET   FLOAT 1440 x 720
-## 187  /emissions/02/diurnal_cycle            UTC_3-6h H5I_DATASET   FLOAT 1440 x 720
-## 188  /emissions/02/diurnal_cycle            UTC_6-9h H5I_DATASET   FLOAT 1440 x 720
-## 189  /emissions/02/diurnal_cycle           UTC_9-12h H5I_DATASET   FLOAT 1440 x 720
-## 190                /emissions/02        partitioning   H5I_GROUP                   
-## 191   /emissions/02/partitioning              C_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 192   /emissions/02/partitioning              C_BORF H5I_DATASET   FLOAT 1440 x 720
-## 193   /emissions/02/partitioning              C_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 194   /emissions/02/partitioning              C_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 195   /emissions/02/partitioning              C_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 196   /emissions/02/partitioning              C_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 197   /emissions/02/partitioning             DM_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 198   /emissions/02/partitioning             DM_BORF H5I_DATASET   FLOAT 1440 x 720
-## 199   /emissions/02/partitioning             DM_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 200   /emissions/02/partitioning             DM_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 201   /emissions/02/partitioning             DM_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 202   /emissions/02/partitioning             DM_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 203                /emissions/02 small_fire_fraction H5I_DATASET   FLOAT 1440 x 720
-## 204                   /emissions                  03   H5I_GROUP                   
-## 205                /emissions/03                   C H5I_DATASET   FLOAT 1440 x 720
-## 206                /emissions/03                  DM H5I_DATASET   FLOAT 1440 x 720
-## 207                /emissions/03      daily_fraction   H5I_GROUP                   
-## 208 /emissions/03/daily_fraction               day_1 H5I_DATASET   FLOAT 1440 x 720
-## 209 /emissions/03/daily_fraction              day_10 H5I_DATASET   FLOAT 1440 x 720
-## 210 /emissions/03/daily_fraction              day_11 H5I_DATASET   FLOAT 1440 x 720
-## 211 /emissions/03/daily_fraction              day_12 H5I_DATASET   FLOAT 1440 x 720
-## 212 /emissions/03/daily_fraction              day_13 H5I_DATASET   FLOAT 1440 x 720
-## 213 /emissions/03/daily_fraction              day_14 H5I_DATASET   FLOAT 1440 x 720
-## 214 /emissions/03/daily_fraction              day_15 H5I_DATASET   FLOAT 1440 x 720
-## 215 /emissions/03/daily_fraction              day_16 H5I_DATASET   FLOAT 1440 x 720
-## 216 /emissions/03/daily_fraction              day_17 H5I_DATASET   FLOAT 1440 x 720
-## 217 /emissions/03/daily_fraction              day_18 H5I_DATASET   FLOAT 1440 x 720
-## 218 /emissions/03/daily_fraction              day_19 H5I_DATASET   FLOAT 1440 x 720
-## 219 /emissions/03/daily_fraction               day_2 H5I_DATASET   FLOAT 1440 x 720
-## 220 /emissions/03/daily_fraction              day_20 H5I_DATASET   FLOAT 1440 x 720
-## 221 /emissions/03/daily_fraction              day_21 H5I_DATASET   FLOAT 1440 x 720
-## 222 /emissions/03/daily_fraction              day_22 H5I_DATASET   FLOAT 1440 x 720
-## 223 /emissions/03/daily_fraction              day_23 H5I_DATASET   FLOAT 1440 x 720
-## 224 /emissions/03/daily_fraction              day_24 H5I_DATASET   FLOAT 1440 x 720
-## 225 /emissions/03/daily_fraction              day_25 H5I_DATASET   FLOAT 1440 x 720
-## 226 /emissions/03/daily_fraction              day_26 H5I_DATASET   FLOAT 1440 x 720
-## 227 /emissions/03/daily_fraction              day_27 H5I_DATASET   FLOAT 1440 x 720
-## 228 /emissions/03/daily_fraction              day_28 H5I_DATASET   FLOAT 1440 x 720
-## 229 /emissions/03/daily_fraction              day_29 H5I_DATASET   FLOAT 1440 x 720
-## 230 /emissions/03/daily_fraction               day_3 H5I_DATASET   FLOAT 1440 x 720
-## 231 /emissions/03/daily_fraction              day_30 H5I_DATASET   FLOAT 1440 x 720
-## 232 /emissions/03/daily_fraction              day_31 H5I_DATASET   FLOAT 1440 x 720
-## 233 /emissions/03/daily_fraction               day_4 H5I_DATASET   FLOAT 1440 x 720
-## 234 /emissions/03/daily_fraction               day_5 H5I_DATASET   FLOAT 1440 x 720
-## 235 /emissions/03/daily_fraction               day_6 H5I_DATASET   FLOAT 1440 x 720
-## 236 /emissions/03/daily_fraction               day_7 H5I_DATASET   FLOAT 1440 x 720
-## 237 /emissions/03/daily_fraction               day_8 H5I_DATASET   FLOAT 1440 x 720
-## 238 /emissions/03/daily_fraction               day_9 H5I_DATASET   FLOAT 1440 x 720
-## 239                /emissions/03       diurnal_cycle   H5I_GROUP                   
-## 240  /emissions/03/diurnal_cycle            UTC_0-3h H5I_DATASET   FLOAT 1440 x 720
-## 241  /emissions/03/diurnal_cycle          UTC_12-15h H5I_DATASET   FLOAT 1440 x 720
-## 242  /emissions/03/diurnal_cycle          UTC_15-18h H5I_DATASET   FLOAT 1440 x 720
-## 243  /emissions/03/diurnal_cycle          UTC_18-21h H5I_DATASET   FLOAT 1440 x 720
-## 244  /emissions/03/diurnal_cycle          UTC_21-24h H5I_DATASET   FLOAT 1440 x 720
-## 245  /emissions/03/diurnal_cycle            UTC_3-6h H5I_DATASET   FLOAT 1440 x 720
-## 246  /emissions/03/diurnal_cycle            UTC_6-9h H5I_DATASET   FLOAT 1440 x 720
-## 247  /emissions/03/diurnal_cycle           UTC_9-12h H5I_DATASET   FLOAT 1440 x 720
-## 248                /emissions/03        partitioning   H5I_GROUP                   
-## 249   /emissions/03/partitioning              C_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 250   /emissions/03/partitioning              C_BORF H5I_DATASET   FLOAT 1440 x 720
-## 251   /emissions/03/partitioning              C_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 252   /emissions/03/partitioning              C_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 253   /emissions/03/partitioning              C_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 254   /emissions/03/partitioning              C_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 255   /emissions/03/partitioning             DM_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 256   /emissions/03/partitioning             DM_BORF H5I_DATASET   FLOAT 1440 x 720
-## 257   /emissions/03/partitioning             DM_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 258   /emissions/03/partitioning             DM_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 259   /emissions/03/partitioning             DM_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 260   /emissions/03/partitioning             DM_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 261                /emissions/03 small_fire_fraction H5I_DATASET   FLOAT 1440 x 720
-## 262                   /emissions                  04   H5I_GROUP                   
-## 263                /emissions/04                   C H5I_DATASET   FLOAT 1440 x 720
-## 264                /emissions/04                  DM H5I_DATASET   FLOAT 1440 x 720
-## 265                /emissions/04      daily_fraction   H5I_GROUP                   
-## 266 /emissions/04/daily_fraction               day_1 H5I_DATASET   FLOAT 1440 x 720
-## 267 /emissions/04/daily_fraction              day_10 H5I_DATASET   FLOAT 1440 x 720
-## 268 /emissions/04/daily_fraction              day_11 H5I_DATASET   FLOAT 1440 x 720
-## 269 /emissions/04/daily_fraction              day_12 H5I_DATASET   FLOAT 1440 x 720
-## 270 /emissions/04/daily_fraction              day_13 H5I_DATASET   FLOAT 1440 x 720
-## 271 /emissions/04/daily_fraction              day_14 H5I_DATASET   FLOAT 1440 x 720
-## 272 /emissions/04/daily_fraction              day_15 H5I_DATASET   FLOAT 1440 x 720
-## 273 /emissions/04/daily_fraction              day_16 H5I_DATASET   FLOAT 1440 x 720
-## 274 /emissions/04/daily_fraction              day_17 H5I_DATASET   FLOAT 1440 x 720
-## 275 /emissions/04/daily_fraction              day_18 H5I_DATASET   FLOAT 1440 x 720
-## 276 /emissions/04/daily_fraction              day_19 H5I_DATASET   FLOAT 1440 x 720
-## 277 /emissions/04/daily_fraction               day_2 H5I_DATASET   FLOAT 1440 x 720
-## 278 /emissions/04/daily_fraction              day_20 H5I_DATASET   FLOAT 1440 x 720
-## 279 /emissions/04/daily_fraction              day_21 H5I_DATASET   FLOAT 1440 x 720
-## 280 /emissions/04/daily_fraction              day_22 H5I_DATASET   FLOAT 1440 x 720
-## 281 /emissions/04/daily_fraction              day_23 H5I_DATASET   FLOAT 1440 x 720
-## 282 /emissions/04/daily_fraction              day_24 H5I_DATASET   FLOAT 1440 x 720
-## 283 /emissions/04/daily_fraction              day_25 H5I_DATASET   FLOAT 1440 x 720
-## 284 /emissions/04/daily_fraction              day_26 H5I_DATASET   FLOAT 1440 x 720
-## 285 /emissions/04/daily_fraction              day_27 H5I_DATASET   FLOAT 1440 x 720
-## 286 /emissions/04/daily_fraction              day_28 H5I_DATASET   FLOAT 1440 x 720
-## 287 /emissions/04/daily_fraction              day_29 H5I_DATASET   FLOAT 1440 x 720
-## 288 /emissions/04/daily_fraction               day_3 H5I_DATASET   FLOAT 1440 x 720
-## 289 /emissions/04/daily_fraction              day_30 H5I_DATASET   FLOAT 1440 x 720
-## 290 /emissions/04/daily_fraction               day_4 H5I_DATASET   FLOAT 1440 x 720
-## 291 /emissions/04/daily_fraction               day_5 H5I_DATASET   FLOAT 1440 x 720
-## 292 /emissions/04/daily_fraction               day_6 H5I_DATASET   FLOAT 1440 x 720
-## 293 /emissions/04/daily_fraction               day_7 H5I_DATASET   FLOAT 1440 x 720
-## 294 /emissions/04/daily_fraction               day_8 H5I_DATASET   FLOAT 1440 x 720
-## 295 /emissions/04/daily_fraction               day_9 H5I_DATASET   FLOAT 1440 x 720
-## 296                /emissions/04       diurnal_cycle   H5I_GROUP                   
-## 297  /emissions/04/diurnal_cycle            UTC_0-3h H5I_DATASET   FLOAT 1440 x 720
-## 298  /emissions/04/diurnal_cycle          UTC_12-15h H5I_DATASET   FLOAT 1440 x 720
-## 299  /emissions/04/diurnal_cycle          UTC_15-18h H5I_DATASET   FLOAT 1440 x 720
-## 300  /emissions/04/diurnal_cycle          UTC_18-21h H5I_DATASET   FLOAT 1440 x 720
-## 301  /emissions/04/diurnal_cycle          UTC_21-24h H5I_DATASET   FLOAT 1440 x 720
-## 302  /emissions/04/diurnal_cycle            UTC_3-6h H5I_DATASET   FLOAT 1440 x 720
-## 303  /emissions/04/diurnal_cycle            UTC_6-9h H5I_DATASET   FLOAT 1440 x 720
-## 304  /emissions/04/diurnal_cycle           UTC_9-12h H5I_DATASET   FLOAT 1440 x 720
-## 305                /emissions/04        partitioning   H5I_GROUP                   
-## 306   /emissions/04/partitioning              C_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 307   /emissions/04/partitioning              C_BORF H5I_DATASET   FLOAT 1440 x 720
-## 308   /emissions/04/partitioning              C_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 309   /emissions/04/partitioning              C_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 310   /emissions/04/partitioning              C_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 311   /emissions/04/partitioning              C_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 312   /emissions/04/partitioning             DM_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 313   /emissions/04/partitioning             DM_BORF H5I_DATASET   FLOAT 1440 x 720
-## 314   /emissions/04/partitioning             DM_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 315   /emissions/04/partitioning             DM_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 316   /emissions/04/partitioning             DM_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 317   /emissions/04/partitioning             DM_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 318                /emissions/04 small_fire_fraction H5I_DATASET   FLOAT 1440 x 720
-## 319                   /emissions                  05   H5I_GROUP                   
-## 320                /emissions/05                   C H5I_DATASET   FLOAT 1440 x 720
-## 321                /emissions/05                  DM H5I_DATASET   FLOAT 1440 x 720
-## 322                /emissions/05      daily_fraction   H5I_GROUP                   
-## 323 /emissions/05/daily_fraction               day_1 H5I_DATASET   FLOAT 1440 x 720
-## 324 /emissions/05/daily_fraction              day_10 H5I_DATASET   FLOAT 1440 x 720
-## 325 /emissions/05/daily_fraction              day_11 H5I_DATASET   FLOAT 1440 x 720
-## 326 /emissions/05/daily_fraction              day_12 H5I_DATASET   FLOAT 1440 x 720
-## 327 /emissions/05/daily_fraction              day_13 H5I_DATASET   FLOAT 1440 x 720
-## 328 /emissions/05/daily_fraction              day_14 H5I_DATASET   FLOAT 1440 x 720
-## 329 /emissions/05/daily_fraction              day_15 H5I_DATASET   FLOAT 1440 x 720
-## 330 /emissions/05/daily_fraction              day_16 H5I_DATASET   FLOAT 1440 x 720
-## 331 /emissions/05/daily_fraction              day_17 H5I_DATASET   FLOAT 1440 x 720
-## 332 /emissions/05/daily_fraction              day_18 H5I_DATASET   FLOAT 1440 x 720
-## 333 /emissions/05/daily_fraction              day_19 H5I_DATASET   FLOAT 1440 x 720
-## 334 /emissions/05/daily_fraction               day_2 H5I_DATASET   FLOAT 1440 x 720
-## 335 /emissions/05/daily_fraction              day_20 H5I_DATASET   FLOAT 1440 x 720
-## 336 /emissions/05/daily_fraction              day_21 H5I_DATASET   FLOAT 1440 x 720
-## 337 /emissions/05/daily_fraction              day_22 H5I_DATASET   FLOAT 1440 x 720
-## 338 /emissions/05/daily_fraction              day_23 H5I_DATASET   FLOAT 1440 x 720
-## 339 /emissions/05/daily_fraction              day_24 H5I_DATASET   FLOAT 1440 x 720
-## 340 /emissions/05/daily_fraction              day_25 H5I_DATASET   FLOAT 1440 x 720
-## 341 /emissions/05/daily_fraction              day_26 H5I_DATASET   FLOAT 1440 x 720
-## 342 /emissions/05/daily_fraction              day_27 H5I_DATASET   FLOAT 1440 x 720
-## 343 /emissions/05/daily_fraction              day_28 H5I_DATASET   FLOAT 1440 x 720
-## 344 /emissions/05/daily_fraction              day_29 H5I_DATASET   FLOAT 1440 x 720
-## 345 /emissions/05/daily_fraction               day_3 H5I_DATASET   FLOAT 1440 x 720
-## 346 /emissions/05/daily_fraction              day_30 H5I_DATASET   FLOAT 1440 x 720
-## 347 /emissions/05/daily_fraction              day_31 H5I_DATASET   FLOAT 1440 x 720
-## 348 /emissions/05/daily_fraction               day_4 H5I_DATASET   FLOAT 1440 x 720
-## 349 /emissions/05/daily_fraction               day_5 H5I_DATASET   FLOAT 1440 x 720
-## 350 /emissions/05/daily_fraction               day_6 H5I_DATASET   FLOAT 1440 x 720
-## 351 /emissions/05/daily_fraction               day_7 H5I_DATASET   FLOAT 1440 x 720
-## 352 /emissions/05/daily_fraction               day_8 H5I_DATASET   FLOAT 1440 x 720
-## 353 /emissions/05/daily_fraction               day_9 H5I_DATASET   FLOAT 1440 x 720
-## 354                /emissions/05       diurnal_cycle   H5I_GROUP                   
-## 355  /emissions/05/diurnal_cycle            UTC_0-3h H5I_DATASET   FLOAT 1440 x 720
-## 356  /emissions/05/diurnal_cycle          UTC_12-15h H5I_DATASET   FLOAT 1440 x 720
-## 357  /emissions/05/diurnal_cycle          UTC_15-18h H5I_DATASET   FLOAT 1440 x 720
-## 358  /emissions/05/diurnal_cycle          UTC_18-21h H5I_DATASET   FLOAT 1440 x 720
-## 359  /emissions/05/diurnal_cycle          UTC_21-24h H5I_DATASET   FLOAT 1440 x 720
-## 360  /emissions/05/diurnal_cycle            UTC_3-6h H5I_DATASET   FLOAT 1440 x 720
-## 361  /emissions/05/diurnal_cycle            UTC_6-9h H5I_DATASET   FLOAT 1440 x 720
-## 362  /emissions/05/diurnal_cycle           UTC_9-12h H5I_DATASET   FLOAT 1440 x 720
-## 363                /emissions/05        partitioning   H5I_GROUP                   
-## 364   /emissions/05/partitioning              C_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 365   /emissions/05/partitioning              C_BORF H5I_DATASET   FLOAT 1440 x 720
-## 366   /emissions/05/partitioning              C_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 367   /emissions/05/partitioning              C_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 368   /emissions/05/partitioning              C_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 369   /emissions/05/partitioning              C_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 370   /emissions/05/partitioning             DM_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 371   /emissions/05/partitioning             DM_BORF H5I_DATASET   FLOAT 1440 x 720
-## 372   /emissions/05/partitioning             DM_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 373   /emissions/05/partitioning             DM_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 374   /emissions/05/partitioning             DM_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 375   /emissions/05/partitioning             DM_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 376                /emissions/05 small_fire_fraction H5I_DATASET   FLOAT 1440 x 720
-## 377                   /emissions                  06   H5I_GROUP                   
-## 378                /emissions/06                   C H5I_DATASET   FLOAT 1440 x 720
-## 379                /emissions/06                  DM H5I_DATASET   FLOAT 1440 x 720
-## 380                /emissions/06      daily_fraction   H5I_GROUP                   
-## 381 /emissions/06/daily_fraction               day_1 H5I_DATASET   FLOAT 1440 x 720
-## 382 /emissions/06/daily_fraction              day_10 H5I_DATASET   FLOAT 1440 x 720
-## 383 /emissions/06/daily_fraction              day_11 H5I_DATASET   FLOAT 1440 x 720
-## 384 /emissions/06/daily_fraction              day_12 H5I_DATASET   FLOAT 1440 x 720
-## 385 /emissions/06/daily_fraction              day_13 H5I_DATASET   FLOAT 1440 x 720
-## 386 /emissions/06/daily_fraction              day_14 H5I_DATASET   FLOAT 1440 x 720
-## 387 /emissions/06/daily_fraction              day_15 H5I_DATASET   FLOAT 1440 x 720
-## 388 /emissions/06/daily_fraction              day_16 H5I_DATASET   FLOAT 1440 x 720
-## 389 /emissions/06/daily_fraction              day_17 H5I_DATASET   FLOAT 1440 x 720
-## 390 /emissions/06/daily_fraction              day_18 H5I_DATASET   FLOAT 1440 x 720
-## 391 /emissions/06/daily_fraction              day_19 H5I_DATASET   FLOAT 1440 x 720
-## 392 /emissions/06/daily_fraction               day_2 H5I_DATASET   FLOAT 1440 x 720
-## 393 /emissions/06/daily_fraction              day_20 H5I_DATASET   FLOAT 1440 x 720
-## 394 /emissions/06/daily_fraction              day_21 H5I_DATASET   FLOAT 1440 x 720
-## 395 /emissions/06/daily_fraction              day_22 H5I_DATASET   FLOAT 1440 x 720
-## 396 /emissions/06/daily_fraction              day_23 H5I_DATASET   FLOAT 1440 x 720
-## 397 /emissions/06/daily_fraction              day_24 H5I_DATASET   FLOAT 1440 x 720
-## 398 /emissions/06/daily_fraction              day_25 H5I_DATASET   FLOAT 1440 x 720
-## 399 /emissions/06/daily_fraction              day_26 H5I_DATASET   FLOAT 1440 x 720
-## 400 /emissions/06/daily_fraction              day_27 H5I_DATASET   FLOAT 1440 x 720
-## 401 /emissions/06/daily_fraction              day_28 H5I_DATASET   FLOAT 1440 x 720
-## 402 /emissions/06/daily_fraction              day_29 H5I_DATASET   FLOAT 1440 x 720
-## 403 /emissions/06/daily_fraction               day_3 H5I_DATASET   FLOAT 1440 x 720
-## 404 /emissions/06/daily_fraction              day_30 H5I_DATASET   FLOAT 1440 x 720
-## 405 /emissions/06/daily_fraction               day_4 H5I_DATASET   FLOAT 1440 x 720
-## 406 /emissions/06/daily_fraction               day_5 H5I_DATASET   FLOAT 1440 x 720
-## 407 /emissions/06/daily_fraction               day_6 H5I_DATASET   FLOAT 1440 x 720
-## 408 /emissions/06/daily_fraction               day_7 H5I_DATASET   FLOAT 1440 x 720
-## 409 /emissions/06/daily_fraction               day_8 H5I_DATASET   FLOAT 1440 x 720
-## 410 /emissions/06/daily_fraction               day_9 H5I_DATASET   FLOAT 1440 x 720
-## 411                /emissions/06       diurnal_cycle   H5I_GROUP                   
-## 412  /emissions/06/diurnal_cycle            UTC_0-3h H5I_DATASET   FLOAT 1440 x 720
-## 413  /emissions/06/diurnal_cycle          UTC_12-15h H5I_DATASET   FLOAT 1440 x 720
-## 414  /emissions/06/diurnal_cycle          UTC_15-18h H5I_DATASET   FLOAT 1440 x 720
-## 415  /emissions/06/diurnal_cycle          UTC_18-21h H5I_DATASET   FLOAT 1440 x 720
-## 416  /emissions/06/diurnal_cycle          UTC_21-24h H5I_DATASET   FLOAT 1440 x 720
-## 417  /emissions/06/diurnal_cycle            UTC_3-6h H5I_DATASET   FLOAT 1440 x 720
-## 418  /emissions/06/diurnal_cycle            UTC_6-9h H5I_DATASET   FLOAT 1440 x 720
-## 419  /emissions/06/diurnal_cycle           UTC_9-12h H5I_DATASET   FLOAT 1440 x 720
-## 420                /emissions/06        partitioning   H5I_GROUP                   
-## 421   /emissions/06/partitioning              C_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 422   /emissions/06/partitioning              C_BORF H5I_DATASET   FLOAT 1440 x 720
-## 423   /emissions/06/partitioning              C_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 424   /emissions/06/partitioning              C_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 425   /emissions/06/partitioning              C_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 426   /emissions/06/partitioning              C_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 427   /emissions/06/partitioning             DM_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 428   /emissions/06/partitioning             DM_BORF H5I_DATASET   FLOAT 1440 x 720
-## 429   /emissions/06/partitioning             DM_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 430   /emissions/06/partitioning             DM_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 431   /emissions/06/partitioning             DM_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 432   /emissions/06/partitioning             DM_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 433                /emissions/06 small_fire_fraction H5I_DATASET   FLOAT 1440 x 720
-## 434                   /emissions                  07   H5I_GROUP                   
-## 435                /emissions/07                   C H5I_DATASET   FLOAT 1440 x 720
-## 436                /emissions/07                  DM H5I_DATASET   FLOAT 1440 x 720
-## 437                /emissions/07      daily_fraction   H5I_GROUP                   
-## 438 /emissions/07/daily_fraction               day_1 H5I_DATASET   FLOAT 1440 x 720
-## 439 /emissions/07/daily_fraction              day_10 H5I_DATASET   FLOAT 1440 x 720
-## 440 /emissions/07/daily_fraction              day_11 H5I_DATASET   FLOAT 1440 x 720
-## 441 /emissions/07/daily_fraction              day_12 H5I_DATASET   FLOAT 1440 x 720
-## 442 /emissions/07/daily_fraction              day_13 H5I_DATASET   FLOAT 1440 x 720
-## 443 /emissions/07/daily_fraction              day_14 H5I_DATASET   FLOAT 1440 x 720
-## 444 /emissions/07/daily_fraction              day_15 H5I_DATASET   FLOAT 1440 x 720
-## 445 /emissions/07/daily_fraction              day_16 H5I_DATASET   FLOAT 1440 x 720
-## 446 /emissions/07/daily_fraction              day_17 H5I_DATASET   FLOAT 1440 x 720
-## 447 /emissions/07/daily_fraction              day_18 H5I_DATASET   FLOAT 1440 x 720
-## 448 /emissions/07/daily_fraction              day_19 H5I_DATASET   FLOAT 1440 x 720
-## 449 /emissions/07/daily_fraction               day_2 H5I_DATASET   FLOAT 1440 x 720
-## 450 /emissions/07/daily_fraction              day_20 H5I_DATASET   FLOAT 1440 x 720
-## 451 /emissions/07/daily_fraction              day_21 H5I_DATASET   FLOAT 1440 x 720
-## 452 /emissions/07/daily_fraction              day_22 H5I_DATASET   FLOAT 1440 x 720
-## 453 /emissions/07/daily_fraction              day_23 H5I_DATASET   FLOAT 1440 x 720
-## 454 /emissions/07/daily_fraction              day_24 H5I_DATASET   FLOAT 1440 x 720
-## 455 /emissions/07/daily_fraction              day_25 H5I_DATASET   FLOAT 1440 x 720
-## 456 /emissions/07/daily_fraction              day_26 H5I_DATASET   FLOAT 1440 x 720
-## 457 /emissions/07/daily_fraction              day_27 H5I_DATASET   FLOAT 1440 x 720
-## 458 /emissions/07/daily_fraction              day_28 H5I_DATASET   FLOAT 1440 x 720
-## 459 /emissions/07/daily_fraction              day_29 H5I_DATASET   FLOAT 1440 x 720
-## 460 /emissions/07/daily_fraction               day_3 H5I_DATASET   FLOAT 1440 x 720
-## 461 /emissions/07/daily_fraction              day_30 H5I_DATASET   FLOAT 1440 x 720
-## 462 /emissions/07/daily_fraction              day_31 H5I_DATASET   FLOAT 1440 x 720
-## 463 /emissions/07/daily_fraction               day_4 H5I_DATASET   FLOAT 1440 x 720
-## 464 /emissions/07/daily_fraction               day_5 H5I_DATASET   FLOAT 1440 x 720
-## 465 /emissions/07/daily_fraction               day_6 H5I_DATASET   FLOAT 1440 x 720
-## 466 /emissions/07/daily_fraction               day_7 H5I_DATASET   FLOAT 1440 x 720
-## 467 /emissions/07/daily_fraction               day_8 H5I_DATASET   FLOAT 1440 x 720
-## 468 /emissions/07/daily_fraction               day_9 H5I_DATASET   FLOAT 1440 x 720
-## 469                /emissions/07       diurnal_cycle   H5I_GROUP                   
-## 470  /emissions/07/diurnal_cycle            UTC_0-3h H5I_DATASET   FLOAT 1440 x 720
-## 471  /emissions/07/diurnal_cycle          UTC_12-15h H5I_DATASET   FLOAT 1440 x 720
-## 472  /emissions/07/diurnal_cycle          UTC_15-18h H5I_DATASET   FLOAT 1440 x 720
-## 473  /emissions/07/diurnal_cycle          UTC_18-21h H5I_DATASET   FLOAT 1440 x 720
-## 474  /emissions/07/diurnal_cycle          UTC_21-24h H5I_DATASET   FLOAT 1440 x 720
-## 475  /emissions/07/diurnal_cycle            UTC_3-6h H5I_DATASET   FLOAT 1440 x 720
-## 476  /emissions/07/diurnal_cycle            UTC_6-9h H5I_DATASET   FLOAT 1440 x 720
-## 477  /emissions/07/diurnal_cycle           UTC_9-12h H5I_DATASET   FLOAT 1440 x 720
-## 478                /emissions/07        partitioning   H5I_GROUP                   
-## 479   /emissions/07/partitioning              C_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 480   /emissions/07/partitioning              C_BORF H5I_DATASET   FLOAT 1440 x 720
-## 481   /emissions/07/partitioning              C_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 482   /emissions/07/partitioning              C_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 483   /emissions/07/partitioning              C_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 484   /emissions/07/partitioning              C_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 485   /emissions/07/partitioning             DM_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 486   /emissions/07/partitioning             DM_BORF H5I_DATASET   FLOAT 1440 x 720
-## 487   /emissions/07/partitioning             DM_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 488   /emissions/07/partitioning             DM_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 489   /emissions/07/partitioning             DM_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 490   /emissions/07/partitioning             DM_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 491                /emissions/07 small_fire_fraction H5I_DATASET   FLOAT 1440 x 720
-## 492                   /emissions                  08   H5I_GROUP                   
-## 493                /emissions/08                   C H5I_DATASET   FLOAT 1440 x 720
-## 494                /emissions/08                  DM H5I_DATASET   FLOAT 1440 x 720
-## 495                /emissions/08      daily_fraction   H5I_GROUP                   
-## 496 /emissions/08/daily_fraction               day_1 H5I_DATASET   FLOAT 1440 x 720
-## 497 /emissions/08/daily_fraction              day_10 H5I_DATASET   FLOAT 1440 x 720
-## 498 /emissions/08/daily_fraction              day_11 H5I_DATASET   FLOAT 1440 x 720
-## 499 /emissions/08/daily_fraction              day_12 H5I_DATASET   FLOAT 1440 x 720
-## 500 /emissions/08/daily_fraction              day_13 H5I_DATASET   FLOAT 1440 x 720
-## 501 /emissions/08/daily_fraction              day_14 H5I_DATASET   FLOAT 1440 x 720
-## 502 /emissions/08/daily_fraction              day_15 H5I_DATASET   FLOAT 1440 x 720
-## 503 /emissions/08/daily_fraction              day_16 H5I_DATASET   FLOAT 1440 x 720
-## 504 /emissions/08/daily_fraction              day_17 H5I_DATASET   FLOAT 1440 x 720
-## 505 /emissions/08/daily_fraction              day_18 H5I_DATASET   FLOAT 1440 x 720
-## 506 /emissions/08/daily_fraction              day_19 H5I_DATASET   FLOAT 1440 x 720
-## 507 /emissions/08/daily_fraction               day_2 H5I_DATASET   FLOAT 1440 x 720
-## 508 /emissions/08/daily_fraction              day_20 H5I_DATASET   FLOAT 1440 x 720
-## 509 /emissions/08/daily_fraction              day_21 H5I_DATASET   FLOAT 1440 x 720
-## 510 /emissions/08/daily_fraction              day_22 H5I_DATASET   FLOAT 1440 x 720
-## 511 /emissions/08/daily_fraction              day_23 H5I_DATASET   FLOAT 1440 x 720
-## 512 /emissions/08/daily_fraction              day_24 H5I_DATASET   FLOAT 1440 x 720
-## 513 /emissions/08/daily_fraction              day_25 H5I_DATASET   FLOAT 1440 x 720
-## 514 /emissions/08/daily_fraction              day_26 H5I_DATASET   FLOAT 1440 x 720
-## 515 /emissions/08/daily_fraction              day_27 H5I_DATASET   FLOAT 1440 x 720
-## 516 /emissions/08/daily_fraction              day_28 H5I_DATASET   FLOAT 1440 x 720
-## 517 /emissions/08/daily_fraction              day_29 H5I_DATASET   FLOAT 1440 x 720
-## 518 /emissions/08/daily_fraction               day_3 H5I_DATASET   FLOAT 1440 x 720
-## 519 /emissions/08/daily_fraction              day_30 H5I_DATASET   FLOAT 1440 x 720
-## 520 /emissions/08/daily_fraction              day_31 H5I_DATASET   FLOAT 1440 x 720
-## 521 /emissions/08/daily_fraction               day_4 H5I_DATASET   FLOAT 1440 x 720
-## 522 /emissions/08/daily_fraction               day_5 H5I_DATASET   FLOAT 1440 x 720
-## 523 /emissions/08/daily_fraction               day_6 H5I_DATASET   FLOAT 1440 x 720
-## 524 /emissions/08/daily_fraction               day_7 H5I_DATASET   FLOAT 1440 x 720
-## 525 /emissions/08/daily_fraction               day_8 H5I_DATASET   FLOAT 1440 x 720
-## 526 /emissions/08/daily_fraction               day_9 H5I_DATASET   FLOAT 1440 x 720
-## 527                /emissions/08       diurnal_cycle   H5I_GROUP                   
-## 528  /emissions/08/diurnal_cycle            UTC_0-3h H5I_DATASET   FLOAT 1440 x 720
-## 529  /emissions/08/diurnal_cycle          UTC_12-15h H5I_DATASET   FLOAT 1440 x 720
-## 530  /emissions/08/diurnal_cycle          UTC_15-18h H5I_DATASET   FLOAT 1440 x 720
-## 531  /emissions/08/diurnal_cycle          UTC_18-21h H5I_DATASET   FLOAT 1440 x 720
-## 532  /emissions/08/diurnal_cycle          UTC_21-24h H5I_DATASET   FLOAT 1440 x 720
-## 533  /emissions/08/diurnal_cycle            UTC_3-6h H5I_DATASET   FLOAT 1440 x 720
-## 534  /emissions/08/diurnal_cycle            UTC_6-9h H5I_DATASET   FLOAT 1440 x 720
-## 535  /emissions/08/diurnal_cycle           UTC_9-12h H5I_DATASET   FLOAT 1440 x 720
-## 536                /emissions/08        partitioning   H5I_GROUP                   
-## 537   /emissions/08/partitioning              C_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 538   /emissions/08/partitioning              C_BORF H5I_DATASET   FLOAT 1440 x 720
-## 539   /emissions/08/partitioning              C_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 540   /emissions/08/partitioning              C_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 541   /emissions/08/partitioning              C_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 542   /emissions/08/partitioning              C_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 543   /emissions/08/partitioning             DM_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 544   /emissions/08/partitioning             DM_BORF H5I_DATASET   FLOAT 1440 x 720
-## 545   /emissions/08/partitioning             DM_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 546   /emissions/08/partitioning             DM_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 547   /emissions/08/partitioning             DM_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 548   /emissions/08/partitioning             DM_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 549                /emissions/08 small_fire_fraction H5I_DATASET   FLOAT 1440 x 720
-## 550                   /emissions                  09   H5I_GROUP                   
-## 551                /emissions/09                   C H5I_DATASET   FLOAT 1440 x 720
-## 552                /emissions/09                  DM H5I_DATASET   FLOAT 1440 x 720
-## 553                /emissions/09      daily_fraction   H5I_GROUP                   
-## 554 /emissions/09/daily_fraction               day_1 H5I_DATASET   FLOAT 1440 x 720
-## 555 /emissions/09/daily_fraction              day_10 H5I_DATASET   FLOAT 1440 x 720
-## 556 /emissions/09/daily_fraction              day_11 H5I_DATASET   FLOAT 1440 x 720
-## 557 /emissions/09/daily_fraction              day_12 H5I_DATASET   FLOAT 1440 x 720
-## 558 /emissions/09/daily_fraction              day_13 H5I_DATASET   FLOAT 1440 x 720
-## 559 /emissions/09/daily_fraction              day_14 H5I_DATASET   FLOAT 1440 x 720
-## 560 /emissions/09/daily_fraction              day_15 H5I_DATASET   FLOAT 1440 x 720
-## 561 /emissions/09/daily_fraction              day_16 H5I_DATASET   FLOAT 1440 x 720
-## 562 /emissions/09/daily_fraction              day_17 H5I_DATASET   FLOAT 1440 x 720
-## 563 /emissions/09/daily_fraction              day_18 H5I_DATASET   FLOAT 1440 x 720
-## 564 /emissions/09/daily_fraction              day_19 H5I_DATASET   FLOAT 1440 x 720
-## 565 /emissions/09/daily_fraction               day_2 H5I_DATASET   FLOAT 1440 x 720
-## 566 /emissions/09/daily_fraction              day_20 H5I_DATASET   FLOAT 1440 x 720
-## 567 /emissions/09/daily_fraction              day_21 H5I_DATASET   FLOAT 1440 x 720
-## 568 /emissions/09/daily_fraction              day_22 H5I_DATASET   FLOAT 1440 x 720
-## 569 /emissions/09/daily_fraction              day_23 H5I_DATASET   FLOAT 1440 x 720
-## 570 /emissions/09/daily_fraction              day_24 H5I_DATASET   FLOAT 1440 x 720
-## 571 /emissions/09/daily_fraction              day_25 H5I_DATASET   FLOAT 1440 x 720
-## 572 /emissions/09/daily_fraction              day_26 H5I_DATASET   FLOAT 1440 x 720
-## 573 /emissions/09/daily_fraction              day_27 H5I_DATASET   FLOAT 1440 x 720
-## 574 /emissions/09/daily_fraction              day_28 H5I_DATASET   FLOAT 1440 x 720
-## 575 /emissions/09/daily_fraction              day_29 H5I_DATASET   FLOAT 1440 x 720
-## 576 /emissions/09/daily_fraction               day_3 H5I_DATASET   FLOAT 1440 x 720
-## 577 /emissions/09/daily_fraction              day_30 H5I_DATASET   FLOAT 1440 x 720
-## 578 /emissions/09/daily_fraction               day_4 H5I_DATASET   FLOAT 1440 x 720
-## 579 /emissions/09/daily_fraction               day_5 H5I_DATASET   FLOAT 1440 x 720
-## 580 /emissions/09/daily_fraction               day_6 H5I_DATASET   FLOAT 1440 x 720
-## 581 /emissions/09/daily_fraction               day_7 H5I_DATASET   FLOAT 1440 x 720
-## 582 /emissions/09/daily_fraction               day_8 H5I_DATASET   FLOAT 1440 x 720
-## 583 /emissions/09/daily_fraction               day_9 H5I_DATASET   FLOAT 1440 x 720
-## 584                /emissions/09       diurnal_cycle   H5I_GROUP                   
-## 585  /emissions/09/diurnal_cycle            UTC_0-3h H5I_DATASET   FLOAT 1440 x 720
-## 586  /emissions/09/diurnal_cycle          UTC_12-15h H5I_DATASET   FLOAT 1440 x 720
-## 587  /emissions/09/diurnal_cycle          UTC_15-18h H5I_DATASET   FLOAT 1440 x 720
-## 588  /emissions/09/diurnal_cycle          UTC_18-21h H5I_DATASET   FLOAT 1440 x 720
-## 589  /emissions/09/diurnal_cycle          UTC_21-24h H5I_DATASET   FLOAT 1440 x 720
-## 590  /emissions/09/diurnal_cycle            UTC_3-6h H5I_DATASET   FLOAT 1440 x 720
-## 591  /emissions/09/diurnal_cycle            UTC_6-9h H5I_DATASET   FLOAT 1440 x 720
-## 592  /emissions/09/diurnal_cycle           UTC_9-12h H5I_DATASET   FLOAT 1440 x 720
-## 593                /emissions/09        partitioning   H5I_GROUP                   
-## 594   /emissions/09/partitioning              C_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 595   /emissions/09/partitioning              C_BORF H5I_DATASET   FLOAT 1440 x 720
-## 596   /emissions/09/partitioning              C_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 597   /emissions/09/partitioning              C_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 598   /emissions/09/partitioning              C_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 599   /emissions/09/partitioning              C_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 600   /emissions/09/partitioning             DM_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 601   /emissions/09/partitioning             DM_BORF H5I_DATASET   FLOAT 1440 x 720
-## 602   /emissions/09/partitioning             DM_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 603   /emissions/09/partitioning             DM_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 604   /emissions/09/partitioning             DM_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 605   /emissions/09/partitioning             DM_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 606                /emissions/09 small_fire_fraction H5I_DATASET   FLOAT 1440 x 720
-## 607                   /emissions                  10   H5I_GROUP                   
-## 608                /emissions/10                   C H5I_DATASET   FLOAT 1440 x 720
-## 609                /emissions/10                  DM H5I_DATASET   FLOAT 1440 x 720
-## 610                /emissions/10      daily_fraction   H5I_GROUP                   
-## 611 /emissions/10/daily_fraction               day_1 H5I_DATASET   FLOAT 1440 x 720
-## 612 /emissions/10/daily_fraction              day_10 H5I_DATASET   FLOAT 1440 x 720
-## 613 /emissions/10/daily_fraction              day_11 H5I_DATASET   FLOAT 1440 x 720
-## 614 /emissions/10/daily_fraction              day_12 H5I_DATASET   FLOAT 1440 x 720
-## 615 /emissions/10/daily_fraction              day_13 H5I_DATASET   FLOAT 1440 x 720
-## 616 /emissions/10/daily_fraction              day_14 H5I_DATASET   FLOAT 1440 x 720
-## 617 /emissions/10/daily_fraction              day_15 H5I_DATASET   FLOAT 1440 x 720
-## 618 /emissions/10/daily_fraction              day_16 H5I_DATASET   FLOAT 1440 x 720
-## 619 /emissions/10/daily_fraction              day_17 H5I_DATASET   FLOAT 1440 x 720
-## 620 /emissions/10/daily_fraction              day_18 H5I_DATASET   FLOAT 1440 x 720
-## 621 /emissions/10/daily_fraction              day_19 H5I_DATASET   FLOAT 1440 x 720
-## 622 /emissions/10/daily_fraction               day_2 H5I_DATASET   FLOAT 1440 x 720
-## 623 /emissions/10/daily_fraction              day_20 H5I_DATASET   FLOAT 1440 x 720
-## 624 /emissions/10/daily_fraction              day_21 H5I_DATASET   FLOAT 1440 x 720
-## 625 /emissions/10/daily_fraction              day_22 H5I_DATASET   FLOAT 1440 x 720
-## 626 /emissions/10/daily_fraction              day_23 H5I_DATASET   FLOAT 1440 x 720
-## 627 /emissions/10/daily_fraction              day_24 H5I_DATASET   FLOAT 1440 x 720
-## 628 /emissions/10/daily_fraction              day_25 H5I_DATASET   FLOAT 1440 x 720
-## 629 /emissions/10/daily_fraction              day_26 H5I_DATASET   FLOAT 1440 x 720
-## 630 /emissions/10/daily_fraction              day_27 H5I_DATASET   FLOAT 1440 x 720
-## 631 /emissions/10/daily_fraction              day_28 H5I_DATASET   FLOAT 1440 x 720
-## 632 /emissions/10/daily_fraction              day_29 H5I_DATASET   FLOAT 1440 x 720
-## 633 /emissions/10/daily_fraction               day_3 H5I_DATASET   FLOAT 1440 x 720
-## 634 /emissions/10/daily_fraction              day_30 H5I_DATASET   FLOAT 1440 x 720
-## 635 /emissions/10/daily_fraction              day_31 H5I_DATASET   FLOAT 1440 x 720
-## 636 /emissions/10/daily_fraction               day_4 H5I_DATASET   FLOAT 1440 x 720
-## 637 /emissions/10/daily_fraction               day_5 H5I_DATASET   FLOAT 1440 x 720
-## 638 /emissions/10/daily_fraction               day_6 H5I_DATASET   FLOAT 1440 x 720
-## 639 /emissions/10/daily_fraction               day_7 H5I_DATASET   FLOAT 1440 x 720
-## 640 /emissions/10/daily_fraction               day_8 H5I_DATASET   FLOAT 1440 x 720
-## 641 /emissions/10/daily_fraction               day_9 H5I_DATASET   FLOAT 1440 x 720
-## 642                /emissions/10       diurnal_cycle   H5I_GROUP                   
-## 643  /emissions/10/diurnal_cycle            UTC_0-3h H5I_DATASET   FLOAT 1440 x 720
-## 644  /emissions/10/diurnal_cycle          UTC_12-15h H5I_DATASET   FLOAT 1440 x 720
-## 645  /emissions/10/diurnal_cycle          UTC_15-18h H5I_DATASET   FLOAT 1440 x 720
-## 646  /emissions/10/diurnal_cycle          UTC_18-21h H5I_DATASET   FLOAT 1440 x 720
-## 647  /emissions/10/diurnal_cycle          UTC_21-24h H5I_DATASET   FLOAT 1440 x 720
-## 648  /emissions/10/diurnal_cycle            UTC_3-6h H5I_DATASET   FLOAT 1440 x 720
-## 649  /emissions/10/diurnal_cycle            UTC_6-9h H5I_DATASET   FLOAT 1440 x 720
-## 650  /emissions/10/diurnal_cycle           UTC_9-12h H5I_DATASET   FLOAT 1440 x 720
-## 651                /emissions/10        partitioning   H5I_GROUP                   
-## 652   /emissions/10/partitioning              C_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 653   /emissions/10/partitioning              C_BORF H5I_DATASET   FLOAT 1440 x 720
-## 654   /emissions/10/partitioning              C_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 655   /emissions/10/partitioning              C_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 656   /emissions/10/partitioning              C_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 657   /emissions/10/partitioning              C_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 658   /emissions/10/partitioning             DM_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 659   /emissions/10/partitioning             DM_BORF H5I_DATASET   FLOAT 1440 x 720
-## 660   /emissions/10/partitioning             DM_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 661   /emissions/10/partitioning             DM_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 662   /emissions/10/partitioning             DM_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 663   /emissions/10/partitioning             DM_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 664                /emissions/10 small_fire_fraction H5I_DATASET   FLOAT 1440 x 720
-## 665                   /emissions                  11   H5I_GROUP                   
-## 666                /emissions/11                   C H5I_DATASET   FLOAT 1440 x 720
-## 667                /emissions/11                  DM H5I_DATASET   FLOAT 1440 x 720
-## 668                /emissions/11      daily_fraction   H5I_GROUP                   
-## 669 /emissions/11/daily_fraction               day_1 H5I_DATASET   FLOAT 1440 x 720
-## 670 /emissions/11/daily_fraction              day_10 H5I_DATASET   FLOAT 1440 x 720
-## 671 /emissions/11/daily_fraction              day_11 H5I_DATASET   FLOAT 1440 x 720
-## 672 /emissions/11/daily_fraction              day_12 H5I_DATASET   FLOAT 1440 x 720
-## 673 /emissions/11/daily_fraction              day_13 H5I_DATASET   FLOAT 1440 x 720
-## 674 /emissions/11/daily_fraction              day_14 H5I_DATASET   FLOAT 1440 x 720
-## 675 /emissions/11/daily_fraction              day_15 H5I_DATASET   FLOAT 1440 x 720
-## 676 /emissions/11/daily_fraction              day_16 H5I_DATASET   FLOAT 1440 x 720
-## 677 /emissions/11/daily_fraction              day_17 H5I_DATASET   FLOAT 1440 x 720
-## 678 /emissions/11/daily_fraction              day_18 H5I_DATASET   FLOAT 1440 x 720
-## 679 /emissions/11/daily_fraction              day_19 H5I_DATASET   FLOAT 1440 x 720
-## 680 /emissions/11/daily_fraction               day_2 H5I_DATASET   FLOAT 1440 x 720
-## 681 /emissions/11/daily_fraction              day_20 H5I_DATASET   FLOAT 1440 x 720
-## 682 /emissions/11/daily_fraction              day_21 H5I_DATASET   FLOAT 1440 x 720
-## 683 /emissions/11/daily_fraction              day_22 H5I_DATASET   FLOAT 1440 x 720
-## 684 /emissions/11/daily_fraction              day_23 H5I_DATASET   FLOAT 1440 x 720
-## 685 /emissions/11/daily_fraction              day_24 H5I_DATASET   FLOAT 1440 x 720
-## 686 /emissions/11/daily_fraction              day_25 H5I_DATASET   FLOAT 1440 x 720
-## 687 /emissions/11/daily_fraction              day_26 H5I_DATASET   FLOAT 1440 x 720
-## 688 /emissions/11/daily_fraction              day_27 H5I_DATASET   FLOAT 1440 x 720
-## 689 /emissions/11/daily_fraction              day_28 H5I_DATASET   FLOAT 1440 x 720
-## 690 /emissions/11/daily_fraction              day_29 H5I_DATASET   FLOAT 1440 x 720
-## 691 /emissions/11/daily_fraction               day_3 H5I_DATASET   FLOAT 1440 x 720
-## 692 /emissions/11/daily_fraction              day_30 H5I_DATASET   FLOAT 1440 x 720
-## 693 /emissions/11/daily_fraction               day_4 H5I_DATASET   FLOAT 1440 x 720
-## 694 /emissions/11/daily_fraction               day_5 H5I_DATASET   FLOAT 1440 x 720
-## 695 /emissions/11/daily_fraction               day_6 H5I_DATASET   FLOAT 1440 x 720
-## 696 /emissions/11/daily_fraction               day_7 H5I_DATASET   FLOAT 1440 x 720
-## 697 /emissions/11/daily_fraction               day_8 H5I_DATASET   FLOAT 1440 x 720
-## 698 /emissions/11/daily_fraction               day_9 H5I_DATASET   FLOAT 1440 x 720
-## 699                /emissions/11       diurnal_cycle   H5I_GROUP                   
-## 700  /emissions/11/diurnal_cycle            UTC_0-3h H5I_DATASET   FLOAT 1440 x 720
-## 701  /emissions/11/diurnal_cycle          UTC_12-15h H5I_DATASET   FLOAT 1440 x 720
-## 702  /emissions/11/diurnal_cycle          UTC_15-18h H5I_DATASET   FLOAT 1440 x 720
-## 703  /emissions/11/diurnal_cycle          UTC_18-21h H5I_DATASET   FLOAT 1440 x 720
-## 704  /emissions/11/diurnal_cycle          UTC_21-24h H5I_DATASET   FLOAT 1440 x 720
-## 705  /emissions/11/diurnal_cycle            UTC_3-6h H5I_DATASET   FLOAT 1440 x 720
-## 706  /emissions/11/diurnal_cycle            UTC_6-9h H5I_DATASET   FLOAT 1440 x 720
-## 707  /emissions/11/diurnal_cycle           UTC_9-12h H5I_DATASET   FLOAT 1440 x 720
-## 708                /emissions/11        partitioning   H5I_GROUP                   
-## 709   /emissions/11/partitioning              C_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 710   /emissions/11/partitioning              C_BORF H5I_DATASET   FLOAT 1440 x 720
-## 711   /emissions/11/partitioning              C_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 712   /emissions/11/partitioning              C_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 713   /emissions/11/partitioning              C_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 714   /emissions/11/partitioning              C_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 715   /emissions/11/partitioning             DM_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 716   /emissions/11/partitioning             DM_BORF H5I_DATASET   FLOAT 1440 x 720
-## 717   /emissions/11/partitioning             DM_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 718   /emissions/11/partitioning             DM_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 719   /emissions/11/partitioning             DM_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 720   /emissions/11/partitioning             DM_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 721                /emissions/11 small_fire_fraction H5I_DATASET   FLOAT 1440 x 720
-## 722                   /emissions                  12   H5I_GROUP                   
-## 723                /emissions/12                   C H5I_DATASET   FLOAT 1440 x 720
-## 724                /emissions/12                  DM H5I_DATASET   FLOAT 1440 x 720
-## 725                /emissions/12      daily_fraction   H5I_GROUP                   
-## 726 /emissions/12/daily_fraction               day_1 H5I_DATASET   FLOAT 1440 x 720
-## 727 /emissions/12/daily_fraction              day_10 H5I_DATASET   FLOAT 1440 x 720
-## 728 /emissions/12/daily_fraction              day_11 H5I_DATASET   FLOAT 1440 x 720
-## 729 /emissions/12/daily_fraction              day_12 H5I_DATASET   FLOAT 1440 x 720
-## 730 /emissions/12/daily_fraction              day_13 H5I_DATASET   FLOAT 1440 x 720
-## 731 /emissions/12/daily_fraction              day_14 H5I_DATASET   FLOAT 1440 x 720
-## 732 /emissions/12/daily_fraction              day_15 H5I_DATASET   FLOAT 1440 x 720
-## 733 /emissions/12/daily_fraction              day_16 H5I_DATASET   FLOAT 1440 x 720
-## 734 /emissions/12/daily_fraction              day_17 H5I_DATASET   FLOAT 1440 x 720
-## 735 /emissions/12/daily_fraction              day_18 H5I_DATASET   FLOAT 1440 x 720
-## 736 /emissions/12/daily_fraction              day_19 H5I_DATASET   FLOAT 1440 x 720
-## 737 /emissions/12/daily_fraction               day_2 H5I_DATASET   FLOAT 1440 x 720
-## 738 /emissions/12/daily_fraction              day_20 H5I_DATASET   FLOAT 1440 x 720
-## 739 /emissions/12/daily_fraction              day_21 H5I_DATASET   FLOAT 1440 x 720
-## 740 /emissions/12/daily_fraction              day_22 H5I_DATASET   FLOAT 1440 x 720
-## 741 /emissions/12/daily_fraction              day_23 H5I_DATASET   FLOAT 1440 x 720
-## 742 /emissions/12/daily_fraction              day_24 H5I_DATASET   FLOAT 1440 x 720
-## 743 /emissions/12/daily_fraction              day_25 H5I_DATASET   FLOAT 1440 x 720
-## 744 /emissions/12/daily_fraction              day_26 H5I_DATASET   FLOAT 1440 x 720
-## 745 /emissions/12/daily_fraction              day_27 H5I_DATASET   FLOAT 1440 x 720
-## 746 /emissions/12/daily_fraction              day_28 H5I_DATASET   FLOAT 1440 x 720
-## 747 /emissions/12/daily_fraction              day_29 H5I_DATASET   FLOAT 1440 x 720
-## 748 /emissions/12/daily_fraction               day_3 H5I_DATASET   FLOAT 1440 x 720
-## 749 /emissions/12/daily_fraction              day_30 H5I_DATASET   FLOAT 1440 x 720
-## 750 /emissions/12/daily_fraction              day_31 H5I_DATASET   FLOAT 1440 x 720
-## 751 /emissions/12/daily_fraction               day_4 H5I_DATASET   FLOAT 1440 x 720
-## 752 /emissions/12/daily_fraction               day_5 H5I_DATASET   FLOAT 1440 x 720
-## 753 /emissions/12/daily_fraction               day_6 H5I_DATASET   FLOAT 1440 x 720
-## 754 /emissions/12/daily_fraction               day_7 H5I_DATASET   FLOAT 1440 x 720
-## 755 /emissions/12/daily_fraction               day_8 H5I_DATASET   FLOAT 1440 x 720
-## 756 /emissions/12/daily_fraction               day_9 H5I_DATASET   FLOAT 1440 x 720
-## 757                /emissions/12       diurnal_cycle   H5I_GROUP                   
-## 758  /emissions/12/diurnal_cycle            UTC_0-3h H5I_DATASET   FLOAT 1440 x 720
-## 759  /emissions/12/diurnal_cycle          UTC_12-15h H5I_DATASET   FLOAT 1440 x 720
-## 760  /emissions/12/diurnal_cycle          UTC_15-18h H5I_DATASET   FLOAT 1440 x 720
-## 761  /emissions/12/diurnal_cycle          UTC_18-21h H5I_DATASET   FLOAT 1440 x 720
-## 762  /emissions/12/diurnal_cycle          UTC_21-24h H5I_DATASET   FLOAT 1440 x 720
-## 763  /emissions/12/diurnal_cycle            UTC_3-6h H5I_DATASET   FLOAT 1440 x 720
-## 764  /emissions/12/diurnal_cycle            UTC_6-9h H5I_DATASET   FLOAT 1440 x 720
-## 765  /emissions/12/diurnal_cycle           UTC_9-12h H5I_DATASET   FLOAT 1440 x 720
-## 766                /emissions/12        partitioning   H5I_GROUP                   
-## 767   /emissions/12/partitioning              C_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 768   /emissions/12/partitioning              C_BORF H5I_DATASET   FLOAT 1440 x 720
-## 769   /emissions/12/partitioning              C_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 770   /emissions/12/partitioning              C_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 771   /emissions/12/partitioning              C_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 772   /emissions/12/partitioning              C_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 773   /emissions/12/partitioning             DM_AGRI H5I_DATASET   FLOAT 1440 x 720
-## 774   /emissions/12/partitioning             DM_BORF H5I_DATASET   FLOAT 1440 x 720
-## 775   /emissions/12/partitioning             DM_DEFO H5I_DATASET   FLOAT 1440 x 720
-## 776   /emissions/12/partitioning             DM_PEAT H5I_DATASET   FLOAT 1440 x 720
-## 777   /emissions/12/partitioning             DM_SAVA H5I_DATASET   FLOAT 1440 x 720
-## 778   /emissions/12/partitioning             DM_TEMF H5I_DATASET   FLOAT 1440 x 720
-## 779                /emissions/12 small_fire_fraction H5I_DATASET   FLOAT 1440 x 720
-## 780                            /                 lat H5I_DATASET   FLOAT 1440 x 720
-## 781                            /                 lon H5I_DATASET   FLOAT 1440 x 720</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">lon_array &lt;-<span class="st"> </span><span class="kw">h5read</span>(hdf_file, <span class="st">&quot;lon&quot;</span>)</a>
-<a class="sourceLine" id="cb36-2" data-line-number="2">lon &lt;-<span class="st"> </span>lon_array[,<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb36-3" data-line-number="3">nlon &lt;-<span class="st"> </span><span class="kw">length</span>(lon)</a>
-<a class="sourceLine" id="cb36-4" data-line-number="4">nlon</a></code></pre></div>
+<div id="plot-the-uv-data" class="section level2">
+<h2><span class="header-section-number">3.1</span> Plot the UV data</h2>
+<p>A <code>rasterVis</code> plot can be produced as follows:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># rasterVis plot</span></a>
+<a class="sourceLine" id="cb28-2" data-line-number="2">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;YlOrRd&quot;</span>))</a>
+<a class="sourceLine" id="cb28-3" data-line-number="3">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(UVI, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme, <span class="dt">main=</span><span class="st">&quot;UV Index&quot;</span>)</a>
+<a class="sourceLine" id="cb28-4" data-line-number="4">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">1.0</span>))</a></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/rasterVis1-1.png" width="75%" height="75%" /></p>
+<p>Close the open files before moving on:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="co"># close open HDF5 files</span></a>
+<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw">h5closeAll</span>()</a></code></pre></div>
+</div>
+</div>
+<div id="read-a-more-complicated-hdf5" class="section level1">
+<h1><span class="header-section-number">4</span> Read a more complicated HDF5</h1>
+<p>A much more stuctured file that exploits the ability of HDF5 to store data in “groups” that mimics in some ways the directory or folder structure on a local computer is represented by the GFED4.1 fire data set. As usual, begin by setting paths and file names.</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># set path </span></a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">hdf_path &lt;-<span class="st"> &quot;/Users/bartlein/Dropbox/DataVis/working/geog490/data/hdf_files/&quot;</span></a>
+<a class="sourceLine" id="cb30-3" data-line-number="3">hdf_name &lt;-<span class="st"> &quot;GFED4.1s_2016.hdf5&quot;</span></a>
+<a class="sourceLine" id="cb30-4" data-line-number="4">hdf_file &lt;-<span class="st"> </span><span class="kw">paste</span>(hdf_path, hdf_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a></code></pre></div>
+<p>List the file contents, DOUBLE WARNING: This really does produce a lot of output, only some is included here:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># list the file contents</span></a>
+<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="kw">h5ls</span>(hdf_file) <span class="co"># may create a lot of output</span></a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">##                            group                name       otype  dclass        dim</a>
+<a class="sourceLine" id="cb32-2" data-line-number="2">## 0                              /              ancill   H5I_GROUP                   </a>
+<a class="sourceLine" id="cb32-3" data-line-number="3">## 1                        /ancill       basis_regions H5I_DATASET INTEGER 1440 x 720</a>
+<a class="sourceLine" id="cb32-4" data-line-number="4">## 2                        /ancill      grid_cell_area H5I_DATASET   FLOAT 1440 x 720</a>
+<a class="sourceLine" id="cb32-5" data-line-number="5">## 3                              /           biosphere   H5I_GROUP                   </a>
+<a class="sourceLine" id="cb32-6" data-line-number="6">## 4                     /biosphere                  01   H5I_GROUP                   </a>
+<a class="sourceLine" id="cb32-7" data-line-number="7">## 5                  /biosphere/01                  BB H5I_DATASET   FLOAT 1440 x 720</a>
+<a class="sourceLine" id="cb32-8" data-line-number="8">## 6                  /biosphere/01                 NPP H5I_DATASET   FLOAT 1440 x 720</a>
+<a class="sourceLine" id="cb32-9" data-line-number="9">## 7                  /biosphere/01                  Rh H5I_DATASET   FLOAT 1440 x 720</a>
+<a class="sourceLine" id="cb32-10" data-line-number="10">## 8                     /biosphere                  02   H5I_GROUP                   </a>
+<a class="sourceLine" id="cb32-11" data-line-number="11">## 9                  /biosphere/02                  BB H5I_DATASET   FLOAT 1440 x 720</a>
+<a class="sourceLine" id="cb32-12" data-line-number="12">## 10                 /biosphere/02                 NPP H5I_DATASET   FLOAT 1440 x 720</a>
+<a class="sourceLine" id="cb32-13" data-line-number="13">## 11                 /biosphere/02                  Rh H5I_DATASET   FLOAT 1440 x 720</a>
+<a class="sourceLine" id="cb32-14" data-line-number="14">...</a>
+<a class="sourceLine" id="cb32-15" data-line-number="15"></a>
+<a class="sourceLine" id="cb32-16" data-line-number="16">## 52                             /         burned_area   H5I_GROUP                   </a>
+<a class="sourceLine" id="cb32-17" data-line-number="17">## 53                  /burned_area                  01   H5I_GROUP                   </a>
+<a class="sourceLine" id="cb32-18" data-line-number="18">## 54               /burned_area/01     burned_fraction H5I_DATASET   FLOAT 1440 x 720</a>
+<a class="sourceLine" id="cb32-19" data-line-number="19">## 55               /burned_area/01              source H5I_DATASET INTEGER 1440 x 720</a>
+<a class="sourceLine" id="cb32-20" data-line-number="20">## 56                  /burned_area                  02   H5I_GROUP                   </a>
+<a class="sourceLine" id="cb32-21" data-line-number="21">## 57               /burned_area/02     burned_fraction H5I_DATASET   FLOAT 1440 x 720</a>
+<a class="sourceLine" id="cb32-22" data-line-number="22">## 58               /burned_area/02              source H5I_DATASET INTEGER 1440 x 720</a>
+<a class="sourceLine" id="cb32-23" data-line-number="23">## 59                  /burned_area                  03   H5I_GROUP                   </a>
+<a class="sourceLine" id="cb32-24" data-line-number="24">...</a></code></pre></div>
+<p>Read the longtidues and latiudes. A preliminary look at the file in Panoply revealed that longitudes and latitudes were stored as full matices, as opposed to vectors. Consequently, after reading, only the first row (for longitude) and first column (for latitude) were stored.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co"># read lons and lats</span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2">lon_array &lt;-<span class="st"> </span><span class="kw">h5read</span>(hdf_file, <span class="st">&quot;lon&quot;</span>)</a>
+<a class="sourceLine" id="cb33-3" data-line-number="3">lon &lt;-<span class="st"> </span>lon_array[,<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb33-4" data-line-number="4">nlon &lt;-<span class="st"> </span><span class="kw">length</span>(lon)</a>
+<a class="sourceLine" id="cb33-5" data-line-number="5">nlon</a></code></pre></div>
 <pre><code>## [1] 1440</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">head</span>(lon); <span class="kw">tail</span>(lon)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="kw">head</span>(lon); <span class="kw">tail</span>(lon)</a></code></pre></div>
 <pre><code>## [1] -179.875 -179.625 -179.375 -179.125 -178.875 -178.625</code></pre>
 <pre><code>## [1] 178.625 178.875 179.125 179.375 179.625 179.875</code></pre>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">lat_array &lt;-<span class="st"> </span><span class="kw">h5read</span>(hdf_file, <span class="st">&quot;lat&quot;</span>)</a>
-<a class="sourceLine" id="cb41-2" data-line-number="2">lat &lt;-<span class="st"> </span>lat_array[<span class="dv">1</span>,]</a>
-<a class="sourceLine" id="cb41-3" data-line-number="3">nlat &lt;-<span class="st"> </span><span class="kw">length</span>(lat)</a>
-<a class="sourceLine" id="cb41-4" data-line-number="4">nlat</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1">lat_array &lt;-<span class="st"> </span><span class="kw">h5read</span>(hdf_file, <span class="st">&quot;lat&quot;</span>)</a>
+<a class="sourceLine" id="cb38-2" data-line-number="2">lat &lt;-<span class="st"> </span>lat_array[<span class="dv">1</span>,]</a>
+<a class="sourceLine" id="cb38-3" data-line-number="3">nlat &lt;-<span class="st"> </span><span class="kw">length</span>(lat)</a>
+<a class="sourceLine" id="cb38-4" data-line-number="4">nlat</a></code></pre></div>
 <pre><code>## [1] 720</code></pre>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">lat &lt;-<span class="st"> </span>lat[nlat<span class="op">:</span><span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb43-2" data-line-number="2"><span class="kw">head</span>(lat); <span class="kw">tail</span>(lat)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">lat &lt;-<span class="st"> </span>lat[nlat<span class="op">:</span><span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="kw">head</span>(lat); <span class="kw">tail</span>(lat)</a></code></pre></div>
 <pre><code>## [1] -89.875 -89.625 -89.375 -89.125 -88.875 -88.625</code></pre>
 <pre><code>## [1] 88.625 88.875 89.125 89.375 89.625 89.875</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="kw">h5readAttributes</span>(hdf_file, <span class="dt">name =</span> <span class="st">&quot;burned_area&quot;</span>)</a></code></pre></div>
+<p>Read the attributes of the <code>burned_area</code> variable:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="co"># read the attributes of the burned_area variable</span></a>
+<a class="sourceLine" id="cb43-2" data-line-number="2"><span class="kw">h5readAttributes</span>(hdf_file, <span class="dt">name =</span> <span class="st">&quot;burned_area&quot;</span>)</a></code></pre></div>
 <pre><code>## list()</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1">h2 &lt;-<span class="st"> </span><span class="kw">h5read</span>(hdf_file, <span class="st">&quot;/burned_area/07/burned_fraction&quot;</span>)</a>
-<a class="sourceLine" id="cb48-2" data-line-number="2"><span class="kw">class</span>(h2); <span class="kw">str</span>(h2)</a></code></pre></div>
+<p>From the listing of the contents of the file, and the information provided in Panoply, it can be seen that, for example, the burned fraction (the proportion of a grid cell burned), for July 2016 is in the variable named <code>/burned_area/07/burned_fraction</code>. Get that variable:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="co"># read a raster slice</span></a>
+<a class="sourceLine" id="cb45-2" data-line-number="2">h2 &lt;-<span class="st"> </span><span class="kw">h5read</span>(hdf_file, <span class="st">&quot;/burned_area/07/burned_fraction&quot;</span>)</a>
+<a class="sourceLine" id="cb45-3" data-line-number="3"><span class="kw">class</span>(h2); <span class="kw">str</span>(h2)</a></code></pre></div>
 <pre><code>## [1] &quot;matrix&quot;</code></pre>
 <pre><code>##  num [1:1440, 1:720] 0 0 0 0 0 0 0 0 0 0 ...</code></pre>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1">BF &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">raster</span>(h2))</a>
-<a class="sourceLine" id="cb51-2" data-line-number="2">BF</a></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1">BF &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">raster</span>(h2))</a>
+<a class="sourceLine" id="cb48-2" data-line-number="2">BF</a></code></pre></div>
 <pre><code>## class       : RasterLayer 
 ## dimensions  : 720, 1440, 1036800  (nrow, ncol, ncell)
 ## resolution  : 0.0006944444, 0.001388889  (x, y)
@@ -1412,10 +702,14 @@ $(document).ready(function () {
 ## data source : in memory
 ## names       : layer 
 ## values      : 0, 0.8838143  (min, max)</code></pre>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="kw">image</span>(<span class="kw">log10</span>(BF))</a></code></pre></div>
-<p><img src="hdf5_intro_files/figure-html/unnamed-chunk-1-4.png" width="75%" height="75%" /></p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1">BF &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="kw">t</span>(h2), <span class="dt">xmn=</span>lon[<span class="dv">1</span>], <span class="dt">xmx=</span>lon[nlon], <span class="dt">ymn=</span>lat[<span class="dv">1</span>], <span class="dt">ymx=</span>lat[nlat])</a>
-<a class="sourceLine" id="cb54-2" data-line-number="2">BF</a></code></pre></div>
+<p>Take a quick look:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="co"># image plot</span></a>
+<a class="sourceLine" id="cb50-2" data-line-number="2"><span class="kw">image</span>(<span class="kw">log10</span>(BF))</a></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/image2-1.png" width="75%" height="75%" /></p>
+<p>The image plot, confirmed by Panoply, suggests that the raster needs to be transposed.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="co"># tranpose the raster</span></a>
+<a class="sourceLine" id="cb51-2" data-line-number="2">BF &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="kw">t</span>(h2), <span class="dt">xmn=</span>lon[<span class="dv">1</span>], <span class="dt">xmx=</span>lon[nlon], <span class="dt">ymn=</span>lat[<span class="dv">1</span>], <span class="dt">ymx=</span>lat[nlat])</a>
+<a class="sourceLine" id="cb51-3" data-line-number="3">BF</a></code></pre></div>
 <pre><code>## class       : RasterLayer 
 ## dimensions  : 720, 1440, 1036800  (nrow, ncol, ncell)
 ## resolution  : 0.2498264, 0.2496528  (x, y)
@@ -1424,11 +718,16 @@ $(document).ready(function () {
 ## data source : in memory
 ## names       : layer 
 ## values      : 0, 0.8838143  (min, max)</code></pre>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="co"># rasterVis plot</span></a>
-<a class="sourceLine" id="cb56-2" data-line-number="2">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;OrRd&quot;</span>))</a>
-<a class="sourceLine" id="cb56-3" data-line-number="3">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(<span class="kw">log10</span>(BF), <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme, <span class="dt">main=</span><span class="st">&quot;Burned Fraction&quot;</span>)</a>
-<a class="sourceLine" id="cb56-4" data-line-number="4">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">1.0</span>))</a></code></pre></div>
-<p><img src="hdf5_intro_files/figure-html/unnamed-chunk-1-5.png" width="75%" height="75%" /></p>
+<div id="plot-the-gfed-burned-fraction-data" class="section level2">
+<h2><span class="header-section-number">4.1</span> plot the GFED burned fraction data</h2>
+<p>Plot the data:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co"># rasterVis plot</span></a>
+<a class="sourceLine" id="cb53-2" data-line-number="2">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;OrRd&quot;</span>))</a>
+<a class="sourceLine" id="cb53-3" data-line-number="3">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(<span class="kw">log10</span>(BF), <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme, <span class="dt">main=</span><span class="st">&quot;log10 Burned Fraction&quot;</span>)</a>
+<a class="sourceLine" id="cb53-4" data-line-number="4">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">1.0</span>))</a></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/rasterVis2-1.png" width="75%" height="75%" /></p>
+</div>
+</div>
 
 
 
