@@ -78,7 +78,13 @@ plot(world_outline, col="blue", lwd=1)
 
 In this example, a data set of the "Clear-Sky UV Index"" from TEMIS was downloaded (i.e. `uvief20190423.hdf` -- 2019-04-23) from the website listed above.  This is an HDF4 file, which can be verified in Panoply.  Viewing files in Panoply is always good practice--in this case the particular layout of the data in file is rather ambiguous at first glance, and so getting a look at the contents of the file before attempting to read it is a good idea.
 
-The HDF4 file can be converted by 
+The HDF4 file can be converted by typing in a terminal or command window (for example):
+
+```{r convert, echo=TRUE, eval=FALSE}
+h4toh5convert uvief20190423.hdf
+```
+
+This will create the file `uvief20190423.h5`.  (Note that an explicit output filename and path can be included.  Not everything in the HDF4 file will be converted, and it's likely that a number of error messages will appear, giving the impression that the operation has failed.  Check to see whether in fact the HDF5 was indeed created.)
 
 # Read a simple HDF5 file #
 
