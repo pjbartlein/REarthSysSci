@@ -15,6 +15,10 @@ navbar:
       href: ESSdata.html
     - text: netCDF in R
       href: netCDF.html
+    - text: netCDF and the raster package
+      href: raster_intro.html
+    - text: HDF in R
+      href: hdf5_intro.html
     - text: Geospatial analyses and mapping
     - text: Visualization
     - text: Multivariate analysis

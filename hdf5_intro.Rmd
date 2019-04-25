@@ -1,0 +1,133 @@
+---
+title: "HDF"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: False
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE, out.width = "75%", out.height = "75%")
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+
+```{r}
+# # install rhdf5
+# if (!requireNamespace("rhdf5", quietly = TRUE))
+#   install.packages("BiocManager")
+# BiocManager::install("rhdf5", version = "3.8")
+
+# http://neonscience.github.io/neon-data-institute-2016//R/intro-hdf5-R/
+# https://www.neonscience.org/hdf5-intro-r
+# https://github.com/NEONScience/NEON-Data-Skills/tree/master/code/HDF5
+
+# http://www.temis.nl/index.php  
+# Daily UV
+
+# https://coralreefwatch.noaa.gov/satellite/hdf/index.php
+# current ssts
+
+
+# HDF4 to netCDF-3 and netCDF-4 conversion (h4tonccf and h4tonccf_nc4)
+# http://hdfeos.org/software/h4cflib.php
+
+# HDF5 (and others) to netCDF conversion (ncl_convert2nc)
+# https://www.ncl.ucar.edu/overview.shtml
+
+# HDF4 to HDF5 conversion (h4toh5convert)
+# https://portal.hdfgroup.org/display/support/Download+h4h5tools
+
+library(sf)
+library(rhdf5)
+library(raster)
+library(rasterVis)
+
+shp_path <- "/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/"
+shp_name <- "ne_110m_admin_0_countries.shp"
+shp_file <- paste(shp_path, shp_name, sep="")
+world_shp <- read_sf(shp_file)
+world_outline <- as(st_geometry(world_shp), Class="Spatial")
+
+# plot the outline
+plot(world_outline, col="blue", lwd=1)
+
+# set path and filename
+hdf_path <- "/Users/bartlein/Dropbox/DataVis/working/geog490/data/hdf_files/"
+hdf_name <- "uvief20190423.h5"
+hdf_file <- paste(hdf_path, hdf_name, sep="")
+
+h5ls(hdf_file)
+
+h5readAttributes(hdf_file, name = "UVI_field")
+
+lon <- h5read(hdf_file, "/Longitudes")
+nlon <- length(lon)
+nlon
+head(lon); tail(lon)
+
+lat <- h5read(hdf_file, "/Latitudes")
+nlat <- length(lat)
+nlat
+head(lat); tail(lat)
+
+h1 <- h5read(hdf_file, "/UVI_field")
+class(h1); str(h1)
+UVI <- raster(h1)
+UVI
+image( UVI)
+
+UVI <- flip(raster(t(h1), xmn=lon[1], xmx=lon[nlon], ymn=lat[1], ymx=lat[nlat]), "y")
+UVI
+
+# rasterVis plot
+mapTheme <- rasterTheme(region=brewer.pal(8,"Purples"))
+plt <- levelplot(UVI, margin=F, par.settings=mapTheme, main="UV Index")
+plt + layer(sp.lines(world_outline, col="black", lwd=1.0))
+
+h5closeAll()
+
+
+
+# set path 
+hdf_path <- "/Users/bartlein/Dropbox/DataVis/working/geog490/data/hdf_files/"
+hdf_name <- "GFED4.1s_2016.hdf5"
+hdf_file <- paste(hdf_path, hdf_name, sep="")
+
+h5ls(hdf_file) # may create a lot of output
+
+lon_array <- h5read(hdf_file, "lon")
+lon <- lon_array[,1]
+nlon <- length(lon)
+nlon
+head(lon); tail(lon)
+
+lat_array <- h5read(hdf_file, "lat")
+lat <- lat_array[1,]
+nlat <- length(lat)
+nlat
+lat <- lat[nlat:1]
+head(lat); tail(lat)
+
+h5readAttributes(hdf_file, name = "burned_area")
+
+h2 <- h5read(hdf_file, "/burned_area/07/burned_fraction")
+class(h2); str(h2)
+BF <- t(raster(h2))
+BF
+image(log10(BF))
+
+BF <- raster(t(h2), xmn=lon[1], xmx=lon[nlon], ymn=lat[1], ymx=lat[nlat])
+BF
+
+# rasterVis plot
+mapTheme <- rasterTheme(region=brewer.pal(8,"OrRd"))
+plt <- levelplot(log10(BF), margin=F, par.settings=mapTheme, main="Burned Fraction")
+plt + layer(sp.lines(world_outline, col="black", lwd=1.0))
+```
+
+
