@@ -15,7 +15,7 @@ navbar:
       href: ESSdata.html
     - text: "netCDF in R"
       href: netCDF.html
-    - text: "netCDF and the raster package"
+    - text: "raster and netCDF in R"
       href: raster_intro.html
     - text: "HDF in R"
       href: hdf5_intro.html

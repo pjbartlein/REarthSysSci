@@ -383,7 +383,7 @@ $(document).ready(function () {
       <a href="netCDF.html">netCDF in R</a>
     </li>
     <li>
-      <a href="raster_intro.html">netCDF and the raster package</a>
+      <a href="raster_intro.html">raster and netCDF in R</a>
     </li>
     <li>
       <a href="hdf5_intro.html">HDF in R</a>
@@ -471,7 +471,7 @@ $(document).ready(function () {
 <li><a href="#read-a-simple-hdf5-file"><span class="toc-section-number">3</span> Read a simple HDF5 file</a><ul>
 <li><a href="#plot-the-uv-data"><span class="toc-section-number">3.1</span> Plot the UV data</a></li>
 </ul></li>
-<li><a href="#read-a-more-complicated-hdf5"><span class="toc-section-number">4</span> Read a more complicated HDF5</a><ul>
+<li><a href="#read-a-more-complicated-hdf5-file"><span class="toc-section-number">4</span> Read a more complicated HDF5 file</a><ul>
 <li><a href="#plot-the-gfed-burned-fraction-data"><span class="toc-section-number">4.1</span> plot the GFED burned fraction data</a></li>
 </ul></li>
 </ul>
@@ -629,8 +629,8 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw">h5closeAll</span>()</a></code></pre></div>
 </div>
 </div>
-<div id="read-a-more-complicated-hdf5" class="section level1">
-<h1><span class="header-section-number">4</span> Read a more complicated HDF5</h1>
+<div id="read-a-more-complicated-hdf5-file" class="section level1">
+<h1><span class="header-section-number">4</span> Read a more complicated HDF5 file</h1>
 <p>A much more stuctured file that exploits the ability of HDF5 to store data in “groups” that mimics in some ways the directory or folder structure on a local computer is represented by the GFED4.1 fire data set. As usual, begin by setting paths and file names.</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># set path </span></a>
 <a class="sourceLine" id="cb30-2" data-line-number="2">hdf_path &lt;-<span class="st"> &quot;/Users/bartlein/Dropbox/DataVis/working/geog490/data/hdf_files/&quot;</span></a>
