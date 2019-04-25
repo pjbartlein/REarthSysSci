@@ -16,7 +16,7 @@ pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
 
-# Raster 
+# The raster package 
 
 The `raster` package is large library of functions and methods for dealing with, as its name implies, raster data sets, including many geospatial formats, including netCDF.  The functions support many different kinds of geospatial procedures applied to raster data, like regridding and interpolation, hillslope shading calculations, logical and mathematical manipulations and so on, but it also can efficiently read and manipulate large data sets.  In particular `raster` is designed to only read into memory those parts of a data set that are necessar for some analysis, raising the possibility of analyzing data sets that are much larger than the availble machine memory.  In addition, some of the "flatting" and "reshaping" manoevers that are required to get netCDF data sets into "tidy" formats are supported by individual functions.
 

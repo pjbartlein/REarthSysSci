@@ -464,7 +464,7 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#raster"><span class="toc-section-number">1</span> Raster</a><ul>
+<li><a href="#the-raster-package"><span class="toc-section-number">1</span> The raster package</a><ul>
 <li><a href="#read-a-netcdf-file"><span class="toc-section-number">1.1</span> Read a netCDF file</a></li>
 <li><a href="#flatting-a-raster-brick"><span class="toc-section-number">1.2</span> “Flatting” a raster brick</a></li>
 </ul></li>
@@ -481,8 +481,8 @@ $(document).ready(function () {
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
-<div id="raster" class="section level1">
-<h1><span class="header-section-number">1</span> Raster</h1>
+<div id="the-raster-package" class="section level1">
+<h1><span class="header-section-number">1</span> The raster package</h1>
 <p>The <code>raster</code> package is large library of functions and methods for dealing with, as its name implies, raster data sets, including many geospatial formats, including netCDF. The functions support many different kinds of geospatial procedures applied to raster data, like regridding and interpolation, hillslope shading calculations, logical and mathematical manipulations and so on, but it also can efficiently read and manipulate large data sets. In particular <code>raster</code> is designed to only read into memory those parts of a data set that are necessar for some analysis, raising the possibility of analyzing data sets that are much larger than the availble machine memory. In addition, some of the “flatting” and “reshaping” manoevers that are required to get netCDF data sets into “tidy” formats are supported by individual functions.</p>
 <p>To illustrate the <code>raster</code> appoach to reading and displaying the CRU temperature data, first load the required packages:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># load packages  </span></a>
