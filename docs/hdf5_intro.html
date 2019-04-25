@@ -692,11 +692,11 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb45-3" data-line-number="3"><span class="kw">class</span>(h2); <span class="kw">str</span>(h2)</a></code></pre></div>
 <pre><code>## [1] &quot;matrix&quot;</code></pre>
 <pre><code>##  num [1:1440, 1:720] 0 0 0 0 0 0 0 0 0 0 ...</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1">BF &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">raster</span>(h2))</a>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1">BF &lt;-<span class="st"> </span><span class="kw">raster</span>(h2)</a>
 <a class="sourceLine" id="cb48-2" data-line-number="2">BF</a></code></pre></div>
 <pre><code>## class       : RasterLayer 
-## dimensions  : 720, 1440, 1036800  (nrow, ncol, ncell)
-## resolution  : 0.0006944444, 0.001388889  (x, y)
+## dimensions  : 1440, 720, 1036800  (nrow, ncol, ncell)
+## resolution  : 0.001388889, 0.0006944444  (x, y)
 ## extent      : 0, 1, 0, 1  (xmin, xmax, ymin, ymax)
 ## coord. ref. : NA 
 ## data source : in memory
@@ -705,7 +705,7 @@ $(document).ready(function () {
 <p>Take a quick look:</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="co"># image plot</span></a>
 <a class="sourceLine" id="cb50-2" data-line-number="2"><span class="kw">image</span>(<span class="kw">log10</span>(BF))</a></code></pre></div>
-<p><img src="hdf5_intro_files/figure-html/image2-1.png" width="75%" height="75%" /></p>
+<p><img src="hdf5_intro_files/figure-html/image2-1.png" width="50%" height="50%" /></p>
 <p>The image plot, confirmed by Panoply, suggests that the raster needs to be transposed.</p>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="co"># tranpose the raster</span></a>
 <a class="sourceLine" id="cb51-2" data-line-number="2">BF &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="kw">t</span>(h2), <span class="dt">xmn=</span>lon[<span class="dv">1</span>], <span class="dt">xmx=</span>lon[nlon], <span class="dt">ymn=</span>lat[<span class="dv">1</span>], <span class="dt">ymx=</span>lat[nlat])</a>

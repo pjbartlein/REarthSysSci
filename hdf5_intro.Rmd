@@ -239,13 +239,13 @@ From the listing of the contents of the file, and the information provided in Pa
 # read a raster slice
 h2 <- h5read(hdf_file, "/burned_area/07/burned_fraction")
 class(h2); str(h2)
-BF <- t(raster(h2))
+BF <- raster(h2)
 BF
 ```
 
 Take a quick look:
 
-```{r image2}
+```{r image2, fig.height=4, fig.width=4, out.width = "50%", out.height = "50%"}
 # image plot
 image(log10(BF))
 ```
