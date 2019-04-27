@@ -19,7 +19,10 @@ navbar:
       href: raster_intro.html
     - text: "HDF in R"
       href: hdf5_intro.html
-    - text: "Geospatial analyses and mapping"
+    - text: "Geospatial analyses"
+      href: geospatial.html
+    - text: "Maps in R"
+      href: RMaps.html
     - text: "Visualization"
     - text: "Multivariate analysis"
     - text: "Prediction"
