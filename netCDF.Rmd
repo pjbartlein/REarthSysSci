@@ -157,7 +157,7 @@ Check what's in the current workspace:
 ls()
 ```
 
-```{r save3, echo=FALSE, eval=TRUE, message=FALSE}
+```{r save3, echo=FALSE, eval=FALSE, message=FALSE}
 outworkspace="netCDF01.RData"
 save.image(file=outworkspace)
 ```
@@ -367,7 +367,7 @@ ls()
 
 [[Back to top]](netCDF.html)
 
-```{r save2, message=FALSE, echo=FALSE}
+```{r save2, eval=FALSE, message=FALSE, echo=FALSE}
 outworkspace="netCDF02.RData"
 save.image(file=outworkspace)
 ```
@@ -619,7 +619,7 @@ ls()
 
 [[Back to top]](netCDF.html)
 
-```{r save4, echo=FALSE, message=FALSE}
+```{r save4, eval=FALSE, echo=FALSE, message=FALSE}
 outworkspace="netCDF03.RData"
 save.image(file=outworkspace)
 ```

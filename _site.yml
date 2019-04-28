@@ -23,7 +23,8 @@ navbar:
       href: geospatial.html
     - text: "Maps in R"
       href: RMaps.html
-    - text: "Visualization"
+    - text: "Visualization:  raster and rasterVis"
+      href: raster.html
     - text: "Multivariate analysis"
     - text: "Prediction"
     - text: "Clustering"

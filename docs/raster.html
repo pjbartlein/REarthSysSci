@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>raster and rasterVis</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Earth-System Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="intro.html">Introduction: R, RStudio, and other infrastructure</a>
+    </li>
+    <li>
+      <a href="usingR.html">Using R</a>
+    </li>
+    <li>
+      <a href="ESSdata.html">Earth-system science data</a>
+    </li>
+    <li>
+      <a href="netCDF.html">netCDF in R</a>
+    </li>
+    <li>
+      <a href="raster_intro.html">raster and netCDF in R</a>
+    </li>
+    <li>
+      <a href="hdf5_intro.html">HDF in R</a>
+    </li>
+    <li>
+      <a href="geospatial.html">Geospatial analyses</a>
+    </li>
+    <li>
+      <a href="RMaps.html">Maps in R</a>
+    </li>
+    <li>
+      <a href="raster.html">Visualization:  raster and rasterVis</a>
+    </li>
+    <li class="dropdown-header">Multivariate analysis</li>
+    <li class="dropdown-header">Prediction</li>
+    <li class="dropdown-header">Clustering</li>
+    <li class="dropdown-header">Other R packages</li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tasks
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="geog495_ex01.html">Install R and RStudio</a>
+    </li>
+    <li>
+      <a href="packages-and-data.html">Install packages and data</a>
+    </li>
+    <li>
+      <a href="GitHub.html">Git and GitHub</a>
+    </li>
+    <li>
+      <a href="Ex_UsingR.html">Using R exercise</a>
+    </li>
+    <li>
+      <a href="markdown.html">Markdown and RMarkdown</a>
+    </li>
+    <li>
+      <a href="install_netCDF.html">Install netCDF</a>
+    </li>
+    <li>
+      <a href="install_Panoply.html">Install Panoply</a>
+    </li>
+    <li>
+      <a href="transfer.html">File transfer</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Resources
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="websites.html">Old course web pages</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">raster and rasterVis</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#examples-of-the-use-of-the-raster-package-to-read-and-analyze-raster-data-sets"><span class="toc-section-number">1</span> Examples of the use of the raster package to read and analyze raster data sets</a><ul>
+<li><a href="#preliminaries"><span class="toc-section-number">1.1</span> Preliminaries</a></li>
+<li><a href="#reading-a-netcdf-file-using-the-raster-package"><span class="toc-section-number">1.2</span> Reading a netCDF file using the raster package</a></li>
+</ul></li>
+<li><a href="#hovmoller-and-horizon-plots"><span class="toc-section-number">2</span> Hovmöller and horizon plots</a><ul>
+<li><a href="#hovmoller-plots-a-second-example"><span class="toc-section-number">2.1</span> Hovmöller plots – a second example</a></li>
+</ul></li>
+<li><a href="#example-controls-of-global-fire"><span class="toc-section-number">3</span> Example – controls of global fire</a><ul>
+<li><a href="#read-and-map-the-data"><span class="toc-section-number">3.1</span> Read and map the data</a></li>
+<li><a href="#create-a-dataframe-fromt-the-three-files"><span class="toc-section-number">3.2</span> Create a dataframe fromt the three files</a></li>
+<li><a href="#a-simple-analysis"><span class="toc-section-number">3.3</span> A simple analysis</a></li>
+</ul></li>
+<li><a href="#other-rastervis-plots"><span class="toc-section-number">4</span> Other rasterVis plots</a></li>
+</ul>
+</div>
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<div id="examples-of-the-use-of-the-raster-package-to-read-and-analyze-raster-data-sets" class="section level1">
+<h1><span class="header-section-number">1</span> Examples of the use of the raster package to read and analyze raster data sets</h1>
+<div id="preliminaries" class="section level2">
+<h2><span class="header-section-number">1.1</span> Preliminaries</h2>
+<p>The following files will be used here, and area available on the SFTP server, in the folder <code>/nc_files</code>:</p>
+<p><code>cru10min30_tmp.nc</code>, <code>cru10min30_bio.nc1</code>, <code>[SSTexample.nc</code>, , <code>air.mon.anom.nc</code>, <code>GFEDv3.1_ltm.nc</code>, <code>sage_veg30.nc</code>, <code>treecov.nc</code>.</p>
+<p>Download or copy the files to a “data folder” like <code>&quot;/Users/bartlein/Projects/ESSD/data/nc_files&quot;</code>. The examples also make use of the world-outline shape file (<code>ne_110m_admin_0_countries.shp</code>), <code>/shp_files</code>.</p>
+<p>The following examples use functions from the <code>raster</code> and <code>rasterVis</code> packages to read and display a few data sets. The datasets used here happen to be stored as <code>netCDF</code> files, but the <code>raster</code> package can also read and write other formats that raster data are commonly stored in. The <code>raster</code> package implements three basic objects or classes: 1) a <code>rasterLayer</code>, which is a single 2-D, x-y array of values (e.g. a DEM), 2) a <code>rasterStack</code>, a set of individual co-registered (i.e. on the same grid) rasterLayer objects (usually different variables), and 3) a <code>rasterBrick</code>, representing a set of layers that make up 3-D data set of a particular variable, such as a climate variable observed over time, or a set of bands in a multi- or hyperspectral image. Individual layers can be assembled into a stack, and can also be formed by extracting a 2-D slice from a raster brick.</p>
+<p>Load the appropriate packages (installing them first if they’re not present, i.e. <code>install.packages(&quot;maptools&quot;)</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(maptools) <span class="co"># also loads sp package</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(ncdf4)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(raster)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(rasterVis)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">library</span>(RColorBrewer)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">library</span>(zoo)</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="kw">library</span>(sf)</a></code></pre></div>
+<p>For subsequent use, read the world country-outlines shape file:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># set path and shape file name</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">shp_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/&quot;</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">shp_name &lt;-<span class="st"> &quot;ne_110m_admin_0_countries.shp&quot;</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">shp_file &lt;-<span class="st"> </span><span class="kw">paste</span>(shp_path, shp_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co"># read the shapefile</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">world_shp &lt;-<span class="st"> </span><span class="kw">read_sf</span>(shp_file)</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">world_outline &lt;-<span class="st"> </span><span class="kw">as</span>(<span class="kw">st_geometry</span>(world_shp), <span class="dt">Class=</span><span class="st">&quot;Spatial&quot;</span>)</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co"># plot the outline</span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="kw">plot</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;gray80&quot;</span>, <span class="dt">lwd=</span><span class="dv">1</span>)</a></code></pre></div>
+<p><img src="raster_files/figure-html/readWorldFake-1.png" width="75%" height="75%" /></p>
+</div>
+<div id="reading-a-netcdf-file-using-the-raster-package" class="section level2">
+<h2><span class="header-section-number">1.2</span> Reading a netCDF file using the raster package</h2>
+<p>Read a single-variable netCDF dataset describing global tree cover using the <code>raster()</code> function, which operates on a filename. Individual characteristics of the data can be displayed using some utility functions.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># read a single-variable netCDF dataset using raster()</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">tree_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">tree_name &lt;-<span class="st"> &quot;treecov.nc&quot;</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">tree_file &lt;-<span class="st"> </span><span class="kw">paste</span>(tree_path, tree_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">tree &lt;-<span class="st"> </span><span class="kw">raster</span>(tree_file) <span class="co"># open treecov.nc</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">print</span>(tree) <span class="co"># netCDF info</span></a></code></pre></div>
+<pre><code>## File /Users/bartlein/Projects/ESSD/data/nc_files/treecov.nc (NC_FORMAT_CLASSIC):
+## 
+##      1 variables (excluding dimension variables):
+##         float treecov[lon,lat]   
+##             name: treecov
+##             long_name: treecov
+##             units: 1
+##             _FillValue: -9
+## 
+##      2 dimensions:
+##         lon  Size:720
+##             standard_name: longitude
+##             long_name: longitude
+##             units: degrees_east
+##             axis: X
+##         lat  Size:360
+##             standard_name: latitude
+##             long_name: latitude
+##             units: degrees_north
+##             axis: Y
+## 
+##     3 global attributes:
+##         source: UMD Tree Cover Data resampled to 0.5-degrees
+##         data: gl-latlong-8km-landcover.bsq.gz
+##         history: P.J. Bartlein, 20 Feb 2008</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">tree <span class="co"># raster info</span></a></code></pre></div>
+<pre><code>## class       : RasterLayer 
+## dimensions  : 360, 720, 259200  (nrow, ncol, ncell)
+## resolution  : 0.5, 0.5  (x, y)
+## extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## data source : /Users/bartlein/Projects/ESSD/data/nc_files/treecov.nc 
+## names       : treecov 
+## zvar        : treecov</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">print</span>(<span class="kw">c</span>(<span class="kw">filename</span>(tree), <span class="kw">hasValues</span>(tree), <span class="kw">inMemory</span>(tree)))</a></code></pre></div>
+<pre><code>## [1] &quot;/Users/bartlein/Projects/ESSD/data/nc_files/treecov.nc&quot;
+## [2] &quot;TRUE&quot;                                                  
+## [3] &quot;FALSE&quot;</code></pre>
+<p>In the above example, the <code>raster()</code> function opens the netCDF file, and creates a raster object (<code>tree</code>). Printing this object using the <code>print()</code> function displays the netCDF metadata (or “attributes”), while simply “typing” the object name displays the attributes of the <code>raster</code> object. The functions <code>filename()</code>, <code>hasValues()</code> and <code>inMemory()</code> display the filename of the object, whether it currently contains values, and whether it is stored in memory, or still resides on disk. In this case, the data in the file <code>/Users/bartlein/Projects/ESSD/data/nc_files/treecov.nc</code> still resides on disk (<code>inMemory(tree) = FALSE</code>).</p>
+<p>The range of <code>tree</code> (tree cover) can be gotten with the <code>cellStats()</code> function. Values less than 0.0 indicate barren land-surfac cover, and these values can be recoded to be equal to 0.0.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">print</span>(<span class="kw">c</span>(<span class="kw">cellStats</span>(tree,<span class="dt">stat=</span><span class="st">&#39;min&#39;</span>), <span class="kw">cellStats</span>(tree,<span class="dt">stat=</span><span class="st">&#39;max&#39;</span>)))</a></code></pre></div>
+<pre><code>## [1] -2 80</code></pre>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">tree[tree<span class="op">&lt;</span><span class="dv">0</span>] &lt;-<span class="st"> </span><span class="dv">0</span></a></code></pre></div>
+<p>Next, a basic plot of the data can be generated using the <code>levelplot()</code> function. (The <code>rasterVis</code> package implements a number of Lattice-type plots for raster data sets.)</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># basic plot</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">levelplot</span>(tree)</a></code></pre></div>
+<p><img src="raster_files/figure-html/rstr06-1.png" width="75%" height="75%" /></p>
+<p>A better map can be genrated by setting a <code>rasterTheme</code> (in this case a progressive color scale of green from the <code>RColorBrewer</code> palette), generating the <code>levelplot()</code> object, and then adding a layer to the plot consisting of the countru outlines (<code>world.shp</code>).</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># plot with outlines, a better color scale, no marginal plots</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;Greens&quot;</span>))</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(tree, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme)</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;gray30&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.5</span>))</a></code></pre></div>
+<p><img src="raster_files/figure-html/rstr07-1.png" width="75%" height="75%" /></p>
+<p>Here is another version, with outlines, a better color scale, and “marginal plots”.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># plot with outlines, a better color scale, marginal plots</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;Greens&quot;</span>))</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(tree, <span class="dt">margin=</span>T, <span class="dt">par.settings=</span>mapTheme)</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;gray30&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.5</span>))</a></code></pre></div>
+<p><img src="raster_files/figure-html/rstr08-1.png" width="75%" height="75%" /></p>
+<p><a href="raster.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="hovmoller-and-horizon-plots" class="section level1">
+<h1><span class="header-section-number">2</span> Hovmöller and horizon plots</h1>
+<p>The <code>rasterVis</code> package provides a couple of interesting <code>Lattice</code>-type plots that can be used to visualize 3-D data (usually a function of latitude, longitude and time). The Hovmöller plot is a 2-D time/space diagram, where, for example, zonal (E-W) or meridional (N-S) averages are plotted relative to time. The horizon plot plots multiple time series (here average values for individual latitudinal zones) in a way that allows common trends to be visualized. Read an example data set (SST: Sea-surface temperature)</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># read a single-variable netCDF dataset using raster()</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">SST_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3">SST_name &lt;-<span class="st"> &quot;SSTexample.nc&quot;</span></a>
+<a class="sourceLine" id="cb16-4" data-line-number="4">SST_file &lt;-<span class="st"> </span><span class="kw">paste</span>(SST_path, SST_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb16-5" data-line-number="5">SST &lt;-<span class="st"> </span><span class="kw">brick</span>(SST_file) <span class="co"># open SSTexample.nc, but do not read yet</span></a></code></pre></div>
+<p>Print some summary info, and note that <code>hasValues(SST) = &quot;TRUE&quot;</code>, meaning that the raster file (<code>SSTexample.nc</code>) alread contains values, and <code>inMemory(SST) = &quot;FALSE&quot;</code>, meaning that while the data are on disk, they are not yet in memory:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># open a 3-D netCDF dataset (example SST data)</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">SST <span class="co"># raster info</span></a></code></pre></div>
+<pre><code>## class       : RasterBrick 
+## dimensions  : 30, 84, 2520, 399  (nrow, ncol, ncell, nlayers)
+## resolution  : 2, 2  (x, y)
+## extent      : 123, 291, -30, 30  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## data source : /Users/bartlein/Projects/ESSD/data/nc_files/SSTexample.nc 
+## names       : X1, X2, X3, X4, X5, X6, X7, X8, X9, X10, X11, X12, X13, X14, X15, ... 
+## unknown     : 1, 399 (min, max)
+## varname     : variable</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">print</span>(<span class="kw">c</span>(<span class="kw">filename</span>(SST), <span class="kw">hasValues</span>(SST), <span class="kw">inMemory</span>(SST)))</a></code></pre></div>
+<pre><code>## [1] &quot;/Users/bartlein/Projects/ESSD/data/nc_files/SSTexample.nc&quot;
+## [2] &quot;TRUE&quot;                                                     
+## [3] &quot;FALSE&quot;</code></pre>
+<p>The following code does a little setup for the Hovmöller plot, generating a sequence of dates using the <code>zoo</code> package, then sets the variable to be plotted.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># setup add date information</span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">idx &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">as.Date</span>(<span class="st">&#39;1970-01-01&#39;</span>), <span class="kw">as.Date</span>(<span class="st">&#39;2003-03-01&#39;</span>), <span class="dt">by=</span><span class="st">&#39;month&#39;</span>)</a>
+<a class="sourceLine" id="cb21-3" data-line-number="3">idx &lt;-<span class="st"> </span><span class="kw">as.yearmon</span>(idx)</a>
+<a class="sourceLine" id="cb21-4" data-line-number="4">SST &lt;-<span class="st"> </span><span class="kw">setZ</span>(SST, idx, <span class="dt">name=</span><span class="st">&quot;time&quot;</span>)</a>
+<a class="sourceLine" id="cb21-5" data-line-number="5"><span class="kw">names</span>(SST) &lt;-<span class="st"> </span><span class="kw">as.character</span>(idx)</a></code></pre></div>
+<p>Generate the Hovmöller plot…</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">hovmoller</span>(SST,</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">      <span class="dt">at =</span> <span class="kw">do.breaks</span>(<span class="kw">c</span>(<span class="op">-</span><span class="fl">2.5</span>,<span class="fl">2.5</span>),<span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">      <span class="dt">contour=</span>F, <span class="dt">interpolate=</span>F,</a>
+<a class="sourceLine" id="cb22-4" data-line-number="4">      <span class="dt">par.settings=</span><span class="kw">RdBuTheme</span>(<span class="dt">region=</span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&#39;RdBu&#39;</span>))),</a>
+<a class="sourceLine" id="cb22-5" data-line-number="5">      <span class="dt">main=</span><span class="st">&quot;Pacific SST Anomalies&quot;</span> )</a></code></pre></div>
+<p><img src="raster_files/figure-html/rstr11-1.png" width="75%" height="75%" /></p>
+<p>… and the horizon plot:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co"># horizonplot -- rasterVis example</span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="kw">horizonplot</span>(SST, <span class="dt">ylab=</span><span class="st">&quot;Latitude&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Time&quot;</span>,<span class="dt">col.regions=</span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dt">n=</span><span class="dv">6</span>, <span class="st">&#39;RdBu&#39;</span>)) )</a></code></pre></div>
+<p><img src="raster_files/figure-html/rstr12-1.png" width="75%" height="75%" /></p>
+<div id="hovmoller-plots-a-second-example" class="section level2">
+<h2><span class="header-section-number">2.1</span> Hovmöller plots – a second example</h2>
+<p>This second example shows how a Hovmöller plot can be written directly to a .pdf file, which may be useful when it takes a while to generate. The data here are a combined set of land and ocean temperature anomalies from 1850 through the beginning of 2012.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co"># HADCRUT3 Combined Air Temperature/SST Anomalies</span></a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="co"># read a 3-D netCDF dataset</span></a>
+<a class="sourceLine" id="cb24-3" data-line-number="3">hadcrut3_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb24-4" data-line-number="4">hadcrut3_name &lt;-<span class="st"> &quot;air.mon.anom.nc&quot;</span></a>
+<a class="sourceLine" id="cb24-5" data-line-number="5">hadcrut3_file &lt;-<span class="st"> </span><span class="kw">paste</span>(hadcrut3_path, hadcrut3_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb24-6" data-line-number="6">hadcrut3 &lt;-<span class="st"> </span><span class="kw">brick</span>(hadcrut3_file) <span class="co"># open air.mon.anom.nc</span></a></code></pre></div>
+<p>Summary of the file contents:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">hadcrut3</a></code></pre></div>
+<pre><code>## class       : RasterBrick 
+## dimensions  : 36, 72, 2592, 1947  (nrow, ncol, ncell, nlayers)
+## resolution  : 5, 5  (x, y)
+## extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## data source : /Users/bartlein/Projects/ESSD/data/nc_files/air.mon.anom.nc 
+## names       : X1850.01.01, X1850.02.01, X1850.03.01, X1850.04.01, X1850.05.01, X1850.06.01, X1850.07.01, X1850.08.01, X1850.09.01, X1850.10.01, X1850.11.01, X1850.12.01, X1851.01.01, X1851.02.01, X1851.03.01, ... 
+## Date        : 1850-01-01, 2012-03-01 (min, max)
+## varname     : air</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">print</span>(<span class="kw">c</span>(<span class="kw">filename</span>(hadcrut3), <span class="kw">hasValues</span>(hadcrut3), <span class="kw">inMemory</span>(hadcrut3)))</a></code></pre></div>
+<pre><code>## [1] &quot;/Users/bartlein/Projects/ESSD/data/nc_files/air.mon.anom.nc&quot;
+## [2] &quot;TRUE&quot;                                                       
+## [3] &quot;FALSE&quot;</code></pre>
+<p>Setup and produce the Hovmöller plot:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="co"># setup</span></a>
+<a class="sourceLine" id="cb29-2" data-line-number="2">idx &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">as.Date</span>(<span class="st">&#39;1850-01-01&#39;</span>), <span class="kw">as.Date</span>(<span class="st">&#39;2012-03-01&#39;</span>), <span class="st">&#39;month&#39;</span>)</a>
+<a class="sourceLine" id="cb29-3" data-line-number="3">idx &lt;-<span class="st"> </span><span class="kw">as.yearmon</span>(idx)</a>
+<a class="sourceLine" id="cb29-4" data-line-number="4">tmpplt &lt;-<span class="st"> </span><span class="kw">setZ</span>(hadcrut3, idx)</a>
+<a class="sourceLine" id="cb29-5" data-line-number="5"><span class="kw">names</span>(tmpplt) &lt;-<span class="st"> </span><span class="kw">as.character</span>(idx)</a>
+<a class="sourceLine" id="cb29-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb29-7" data-line-number="7"><span class="co"># plot</span></a>
+<a class="sourceLine" id="cb29-8" data-line-number="8"><span class="kw">trellis.device</span>(<span class="st">&#39;pdf&#39;</span>, <span class="dt">file=</span><span class="st">&#39;hov02.pdf&#39;</span>)</a>
+<a class="sourceLine" id="cb29-9" data-line-number="9"><span class="kw">hovmoller</span>(tmpplt, <span class="dt">dirXY=</span>y,</a>
+<a class="sourceLine" id="cb29-10" data-line-number="10">      <span class="dt">at =</span> <span class="kw">do.breaks</span>(<span class="kw">c</span>(<span class="op">-</span><span class="fl">2.5</span>,<span class="fl">2.5</span>),<span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb29-11" data-line-number="11">      <span class="dt">contour=</span>F, <span class="dt">interpolate=</span>F,</a>
+<a class="sourceLine" id="cb29-12" data-line-number="12">      <span class="dt">par.settings=</span><span class="kw">RdBuTheme</span>(<span class="dt">region=</span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&#39;RdBu&#39;</span>))),</a>
+<a class="sourceLine" id="cb29-13" data-line-number="13">      <span class="dt">main=</span><span class="st">&quot;HadCRUT3 Anomalies, (1961-1990 base period)&quot;</span> )</a>
+<a class="sourceLine" id="cb29-14" data-line-number="14"><span class="kw">dev.off</span>()</a></code></pre></div>
+<p>When the above code is executed, a file named <code>hov02.pdf</code> will be created in the current working directory. Here’s the resulting plot should look like:</p>
+<p><img src="images/hov02.png" /></p>
+<p><a href="raster.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="example-controls-of-global-fire" class="section level1">
+<h1><span class="header-section-number">3</span> Example – controls of global fire</h1>
+<p>This example shows how the raster package can be used to support a typical data analysis, in this case focusing on explaining the global pattern of biomass burning. Here, the raster package is used to extract, combine and analyze data from multiple sources</p>
+<p>The data consist of</p>
+<ul>
+<li>satellite remote sensing data of fire from the GFED3 data set</li>
+<li>calculated values of the ratio of actual to potential equilibrium evapotranspiration</li>
+<li>a data set showing the distribution of potential natural vegetation.</li>
+</ul>
+<div id="read-and-map-the-data" class="section level2">
+<h2><span class="header-section-number">3.1</span> Read and map the data</h2>
+<p>First, the three data sets are read in, and the individual variables mapped using an appropriate <code>mapTheme</code> for each variable:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># read burned fraction ltm (long-term mean)# read GFEDv3.1_ltm.nc:</span></a>
+<a class="sourceLine" id="cb30-2" data-line-number="2">GFED_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb30-3" data-line-number="3">GFED_name &lt;-<span class="st"> &quot;GFEDv3.1_ltm.nc&quot;</span></a>
+<a class="sourceLine" id="cb30-4" data-line-number="4">GFED_file &lt;-<span class="st"> </span><span class="kw">paste</span>(GFED_path, GFED_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb30-5" data-line-number="5">burnf &lt;-<span class="st"> </span><span class="kw">raster</span>(GFED_file, <span class="dt">varname=</span><span class="st">&quot;bf_ann_ave&quot;</span>)</a>
+<a class="sourceLine" id="cb30-6" data-line-number="6">burnf</a></code></pre></div>
+<pre><code>## class       : RasterLayer 
+## dimensions  : 360, 720, 259200  (nrow, ncol, ncell)
+## resolution  : 0.5, 0.5  (x, y)
+## extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## data source : /Users/bartlein/Projects/ESSD/data/nc_files/GFEDv3.1_ltm.nc 
+## names       : annual_average_total_burned_fraction 
+## zvar        : bf_ann_ave</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;YlOrRd&quot;</span>))</a>
+<a class="sourceLine" id="cb32-2" data-line-number="2">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(burnf, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme,</a>
+<a class="sourceLine" id="cb32-3" data-line-number="3">      <span class="dt">at =</span> <span class="kw">do.breaks</span>(<span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>),<span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb32-4" data-line-number="4">      <span class="dt">main=</span><span class="st">&quot;Burned Fraction&quot;</span>)</a>
+<a class="sourceLine" id="cb32-5" data-line-number="5">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;gray&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.5</span>))</a></code></pre></div>
+<p><img src="raster_files/figure-html/mapGFED-1.png" width="75%" height="75%" /></p>
+<p>The distribution of <code>burnf</code> has an extremely long right tail</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">burnf[burnf<span class="op">==</span><span class="fl">10e32</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="kw">hist</span>(burnf)</a></code></pre></div>
+<p><img src="raster_files/figure-html/rstr15-1.png" width="75%" height="75%" /></p>
+<p>and so it make sense to (log10) transform the data, adding a small constant.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="co"># log of burnf</span></a>
+<a class="sourceLine" id="cb34-2" data-line-number="2">logtrans &lt;-<span class="st"> </span><span class="cf">function</span>(x) {<span class="kw">log10</span>(x<span class="fl">+0.00001</span>)}</a>
+<a class="sourceLine" id="cb34-3" data-line-number="3">logburnf &lt;-<span class="st"> </span><span class="kw">calc</span>(burnf, logtrans)</a>
+<a class="sourceLine" id="cb34-4" data-line-number="4">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;YlOrRd&quot;</span>))</a>
+<a class="sourceLine" id="cb34-5" data-line-number="5">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(logburnf, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme,</a>
+<a class="sourceLine" id="cb34-6" data-line-number="6">      <span class="dt">at =</span> <span class="kw">do.breaks</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>,<span class="dv">0</span>),<span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb34-7" data-line-number="7">      <span class="dt">main=</span><span class="st">&quot;log10 Burned Fraction&quot;</span>)</a>
+<a class="sourceLine" id="cb34-8" data-line-number="8">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;gray&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.5</span>))</a></code></pre></div>
+<p><img src="raster_files/figure-html/rstr16-1.png" width="75%" height="75%" /></p>
+<p>Now read a bioclimatic variable, alpha, the ratio of actual to potential equilibrium evapotranspiration.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co"># read alpha (AE/PE)</span></a>
+<a class="sourceLine" id="cb35-2" data-line-number="2">alpha_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb35-3" data-line-number="3">alpha_name &lt;-<span class="st"> &quot;cru10min30_bio.nc&quot;</span></a>
+<a class="sourceLine" id="cb35-4" data-line-number="4">alpha_file &lt;-<span class="st"> </span><span class="kw">paste</span>(alpha_path, alpha_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb35-5" data-line-number="5">alpha=<span class="kw">raster</span>(alpha_file, <span class="dt">varname=</span><span class="st">&quot;mipt&quot;</span>)</a>
+<a class="sourceLine" id="cb35-6" data-line-number="6">alpha</a></code></pre></div>
+<pre><code>## class       : RasterLayer 
+## dimensions  : 360, 720, 259200  (nrow, ncol, ncell)
+## resolution  : 0.5, 0.5  (x, y)
+## extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## data source : /Users/bartlein/Projects/ESSD/data/nc_files/cru10min30_bio.nc 
+## names       : Priestley.Taylor..alpha..parameter..AE.PE. 
+## zvar        : mipt</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;BrBG&quot;</span>))</a>
+<a class="sourceLine" id="cb37-2" data-line-number="2">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(alpha, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme, <span class="dt">main=</span><span class="st">&quot;AE/PE&quot;</span>)</a>
+<a class="sourceLine" id="cb37-3" data-line-number="3">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;gray30&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.5</span>))</a></code></pre></div>
+<p><img src="raster_files/figure-html/map%20alpha-1.png" width="75%" height="75%" /></p>
+<p>Finally, read some potential natural vegetation data</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="co"># read potential natural vegetation data sage_veg30.nc:</span></a>
+<a class="sourceLine" id="cb38-2" data-line-number="2">vegtype_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb38-3" data-line-number="3">vegtype_name &lt;-<span class="st"> &quot;sage_veg30.nc&quot;</span></a>
+<a class="sourceLine" id="cb38-4" data-line-number="4">vegtype_file &lt;-<span class="st"> </span><span class="kw">paste</span>(vegtype_path, vegtype_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb38-5" data-line-number="5">vegtype=<span class="kw">raster</span>(vegtype_file, <span class="dt">varname=</span><span class="st">&quot;vegtype&quot;</span>)</a>
+<a class="sourceLine" id="cb38-6" data-line-number="6">vegtype</a></code></pre></div>
+<pre><code>## class       : RasterLayer 
+## dimensions  : 360, 720, 259200  (nrow, ncol, ncell)
+## resolution  : 0.5, 0.5  (x, y)
+## extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## data source : /Users/bartlein/Projects/ESSD/data/nc_files/sage_veg30.nc 
+## names       : vegetation.type 
+## zvar        : vegtype</code></pre>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;Greens&quot;</span>)))</a>
+<a class="sourceLine" id="cb40-2" data-line-number="2">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(vegtype, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme,</a>
+<a class="sourceLine" id="cb40-3" data-line-number="3">      <span class="dt">main=</span><span class="st">&quot;Potential Natural Vegetation&quot;</span>)</a>
+<a class="sourceLine" id="cb40-4" data-line-number="4">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;gray30&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.5</span>))</a></code></pre></div>
+<p><img src="raster_files/figure-html/map%20vegtype-1.png" width="75%" height="75%" /> The names of the individual vegetation types can be gotten by rereading the file using functions from the <code>ncdf</code> package, and getting the names from the “global attribute” <code>key</code>.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">veg.nc &lt;-<span class="st"> </span><span class="kw">nc_open</span>(vegtype_file) </a>
+<a class="sourceLine" id="cb41-2" data-line-number="2">vegkey &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(veg.nc,<span class="dv">0</span>,<span class="st">&quot;key&quot;</span>)</a>
+<a class="sourceLine" id="cb41-3" data-line-number="3"><span class="kw">nc_close</span>(veg.nc)</a>
+<a class="sourceLine" id="cb41-4" data-line-number="4">vtype &lt;-<span class="st"> </span><span class="kw">strsplit</span>(vegkey<span class="op">$</span>value,<span class="st">&quot;,&quot;</span>)</a>
+<a class="sourceLine" id="cb41-5" data-line-number="5">vtype &lt;-<span class="st"> </span><span class="kw">unlist</span>(vtype)</a>
+<a class="sourceLine" id="cb41-6" data-line-number="6">vtype</a></code></pre></div>
+<pre><code>##  [1] &quot;1=TrpEV/W&quot;    &quot; 2=TrpDF/W&quot;   &quot; 3=TmpBEF/W&quot;  &quot; 4=TmpNEF/W&quot;  &quot; 5=TmpDF/W&quot;   &quot; 6=BorEF/W&quot;  
+##  [7] &quot; 7=BorDF/W&quot;   &quot; 8=E/DMixF/W&quot; &quot; 9=Sav&quot;       &quot; 10=G/S&quot;      &quot; 11=DnsSh&quot;    &quot; 12=OpnSh&quot;   
+## [13] &quot; 13=Tun&quot;      &quot; 14=Dsrt&quot;     &quot; 15=PolD/R/I&quot;</code></pre>
+</div>
+<div id="create-a-dataframe-fromt-the-three-files" class="section level2">
+<h2><span class="header-section-number">3.2</span> Create a dataframe fromt the three files</h2>
+<p>Next, the individual data sets are stacked, and a dataframe is created. Ocean points (NAs) are removed, and the vegetation-type data are converted to a factor</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="co"># convert and merge rasters into a data frame</span></a>
+<a class="sourceLine" id="cb43-2" data-line-number="2">gfire2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">as.data.frame</span>(alpha, <span class="dt">xy=</span><span class="ot">TRUE</span>),<span class="kw">as.data.frame</span>(logburnf), <span class="kw">as.data.frame</span>(vegtype))</a>
+<a class="sourceLine" id="cb43-3" data-line-number="3"><span class="kw">names</span>(gfire2) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;alpha&quot;</span>,<span class="st">&quot;logburnf&quot;</span>,<span class="st">&quot;vegtype&quot;</span>)</a>
+<a class="sourceLine" id="cb43-4" data-line-number="4"><span class="kw">head</span>(gfire2)</a></code></pre></div>
+<pre><code>##       lon   lat alpha logburnf vegtype
+## 1 -179.75 89.75    NA       NA      NA
+## 2 -179.25 89.75    NA       NA      NA
+## 3 -178.75 89.75    NA       NA      NA
+## 4 -178.25 89.75    NA       NA      NA
+## 5 -177.75 89.75    NA       NA      NA
+## 6 -177.25 89.75    NA       NA      NA</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="co"># remove NAs</span></a>
+<a class="sourceLine" id="cb45-2" data-line-number="2">gfire2 &lt;-<span class="st"> </span><span class="kw">na.omit</span>(gfire2)</a>
+<a class="sourceLine" id="cb45-3" data-line-number="3"><span class="kw">dim</span>(gfire2)</a></code></pre></div>
+<pre><code>## [1] 58532     5</code></pre>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="kw">head</span>(gfire2)</a></code></pre></div>
+<pre><code>##          lon   lat  alpha logburnf vegtype
+## 10277 -81.75 82.75 0.3074       -5      15
+## 10278 -81.25 82.75 0.3176       -5      15
+## 10279 -80.75 82.75 0.4641       -5      15
+## 10987 -86.75 82.25 0.2703       -5      15
+## 10988 -86.25 82.25 0.3529       -5      15
+## 10989 -85.75 82.25 0.3002       -5      15</code></pre>
+<p>An alternative approach, using the <code>stack()</code> function from <code>raster</code> is:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="co"># alternative approach:</span></a>
+<a class="sourceLine" id="cb49-2" data-line-number="2"><span class="co"># raster to rectangular data set using stack() and getValues()</span></a>
+<a class="sourceLine" id="cb49-3" data-line-number="3">gfire &lt;-<span class="st"> </span><span class="kw">stack</span>(alpha, logburnf, vegtype)</a>
+<a class="sourceLine" id="cb49-4" data-line-number="4"><span class="kw">names</span>(gfire) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;alpha&quot;</span>,<span class="st">&quot;logburnf&quot;</span>,<span class="st">&quot;vegtype&quot;</span>)</a>
+<a class="sourceLine" id="cb49-5" data-line-number="5"><span class="kw">dim</span>(gfire)</a>
+<a class="sourceLine" id="cb49-6" data-line-number="6">gfire2 &lt;-<span class="st"> </span><span class="kw">getValues</span>(gfire)</a>
+<a class="sourceLine" id="cb49-7" data-line-number="7"><span class="kw">dim</span>(gfire2)</a>
+<a class="sourceLine" id="cb49-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb49-9" data-line-number="9"><span class="co"># remove NAs and convert to a data frame</span></a>
+<a class="sourceLine" id="cb49-10" data-line-number="10">gfire2&lt;-<span class="st"> </span><span class="kw">na.omit</span>(gfire2)</a>
+<a class="sourceLine" id="cb49-11" data-line-number="11"><span class="kw">dim</span>(gfire2)</a>
+<a class="sourceLine" id="cb49-12" data-line-number="12">gfire2 &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(gfire2, <span class="dt">xy=</span><span class="ot">TRUE</span>, <span class="dt">centroids=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb49-13" data-line-number="13"><span class="kw">head</span>(gfire2)</a></code></pre></div>
+</div>
+<div id="a-simple-analysis" class="section level2">
+<h2><span class="header-section-number">3.3</span> A simple analysis</h2>
+<p>At this point, the data can be analyzed using the standard visualization and model-fitting approaches implemented by R. Here is a loess curve fit to the GFED data, showing the nonlinear relationship between burned fraction and alpha.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="co"># a standard plot, with an added loess curve</span></a>
+<a class="sourceLine" id="cb50-2" data-line-number="2"><span class="co"># This takes a while...</span></a>
+<a class="sourceLine" id="cb50-3" data-line-number="3"><span class="co"># plot data using transparent symbols</span></a>
+<a class="sourceLine" id="cb50-4" data-line-number="4">transp_black &lt;-<span class="st"> </span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="fl">0.2</span>)</a>
+<a class="sourceLine" id="cb50-5" data-line-number="5"><span class="kw">plot</span>(logburnf <span class="op">~</span><span class="st"> </span>alpha, <span class="dt">data=</span>gfire2, <span class="dt">col=</span>transp_black, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>)</a>
+<a class="sourceLine" id="cb50-6" data-line-number="6"><span class="co"># fit a loess curve</span></a>
+<a class="sourceLine" id="cb50-7" data-line-number="7">loess.model &lt;-<span class="st"> </span><span class="kw">loess</span>(logburnf <span class="op">~</span><span class="st"> </span>alpha, <span class="dt">data=</span>gfire2, <span class="dt">span=</span><span class="fl">0.50</span>, <span class="dt">degree=</span><span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb50-8" data-line-number="8">loess.model</a></code></pre></div>
+<pre><code>## Call:
+## loess(formula = logburnf ~ alpha, data = gfire2, span = 0.5, 
+##     degree = 1)
+## 
+## Number of Observations: 58532 
+## Equivalent Number of Parameters: 4.14 
+## Residual Standard Error: 1.392</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1">hat &lt;-<span class="st"> </span><span class="kw">predict</span>(loess.model)</a>
+<a class="sourceLine" id="cb52-2" data-line-number="2"><span class="kw">lines</span>(gfire2<span class="op">$</span>alpha[<span class="kw">order</span>(gfire2<span class="op">$</span>alpha)], hat[<span class="kw">order</span>(gfire2<span class="op">$</span>alpha)],</a>
+<a class="sourceLine" id="cb52-3" data-line-number="3">    <span class="dt">lwd=</span><span class="dv">3</span>, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="raster_files/figure-html/rstr22-1.png" width="75%" height="75%" /></p>
+<p><a href="raster.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="other-rastervis-plots" class="section level1">
+<h1><span class="header-section-number">4</span> Other rasterVis plots</h1>
+<p>Here are a few lattice-type plots that might aid in the interpretation of these data</p>
+<p>Before generating the plots, recode the vegetation type (<code>vtype</code>) to a factor.</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co"># recode vegtype to a factor</span></a>
+<a class="sourceLine" id="cb53-2" data-line-number="2">vtypechar &lt;-<span class="st"> </span>vtype[<span class="kw">as.integer</span>(gfire2<span class="op">$</span>vegtype)]</a>
+<a class="sourceLine" id="cb53-3" data-line-number="3">gfire2<span class="op">$</span>vfact &lt;-<span class="st"> </span><span class="kw">factor</span>(vtypechar, <span class="dt">levels=</span>vtype)</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="co"># various lattice-type plots</span></a>
+<a class="sourceLine" id="cb54-2" data-line-number="2"><span class="co"># (which also take a little while...)</span></a>
+<a class="sourceLine" id="cb54-3" data-line-number="3"><span class="kw">xyplot</span>(logburnf <span class="op">~</span><span class="st"> </span>alpha <span class="op">|</span><span class="st"> </span>vfact, <span class="dt">data=</span>gfire2, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>, <span class="dt">col=</span>transp_black)</a></code></pre></div>
+<p><img src="raster_files/figure-html/rstr24-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="kw">histogram</span>(<span class="op">~</span><span class="st"> </span>logburnf <span class="op">|</span><span class="st"> </span>vfact, <span class="dt">data=</span>gfire2)</a></code></pre></div>
+<p><img src="raster_files/figure-html/rstr24-2.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="kw">densityplot</span>(<span class="op">~</span><span class="st"> </span>logburnf <span class="op">|</span><span class="st"> </span>vfact, <span class="dt">data=</span>gfire2, <span class="dt">plot.points=</span>F, <span class="dt">ref=</span>T)</a></code></pre></div>
+<p><img src="raster_files/figure-html/rstr24-3.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="kw">densityplot</span>(<span class="op">~</span><span class="st"> </span>logburnf[logburnf <span class="op">&gt;</span><span class="st"> </span><span class="dv">-5</span>] <span class="op">|</span><span class="st"> </span>vfact[logburnf <span class="op">&gt;</span><span class="st"> </span><span class="dv">-5</span>],</a>
+<a class="sourceLine" id="cb57-2" data-line-number="2">      <span class="dt">data=</span>gfire2, <span class="dt">plot.points=</span>F, <span class="dt">ref=</span>T)</a></code></pre></div>
+<p><img src="raster_files/figure-html/rstr24-4.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1"><span class="kw">stripplot</span>(<span class="op">~</span><span class="st"> </span>logburnf <span class="op">|</span><span class="st"> </span>vfact, <span class="dt">data=</span>gfire2,</a>
+<a class="sourceLine" id="cb58-2" data-line-number="2">      <span class="dt">jitter.data=</span>T, <span class="dt">factor=</span><span class="fl">10.0</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>, <span class="dt">col=</span>transp_black)</a></code></pre></div>
+<p><img src="raster_files/figure-html/rstr24-5.png" width="75%" height="75%" /></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
