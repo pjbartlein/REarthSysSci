@@ -401,7 +401,7 @@ $(document).ready(function () {
 <p>On Windows, this approach requires that the “personal library” described above has been set up, and on both Windows and Mac OS X/MacOS, and that the “binary” or pre-built packages are actually available in a repository like CRAN.</p>
 <p>NOTE: The base packages of R are updated every few months or so, and sometimes there may be a delay of a few days or even a month before the individual packages “catch up”. More about that below.</p>
 <p><em>Windows (R GUI)</em></p>
-<p>In the R for Windows GUI, packages can be installed at the Console command line, or through the Packages &gt; Install package(s) menu. That latter choice produces a long list of packages that must be scrolled through, which is why the direct Console command-line approach works better. If the “personal library” file has been set up correctly, then typing or copying <code>install.packages(&quot;sp&quot;)</code> to the Console command line should work without a problem. If the library was not correctly created, R will respond with the following:</p>
+<p>In the R for Windows GUI, packages can be installed at the Console command line, or through the Packages &gt; Install package(s) menu. That latter choice produces a long list of packages that must be scrolled through, which is why the direct Console command-line approach works better. If the “personal library” file has been set up correctly, then typing or copying <code>install.packages("sp")</code> to the Console command line should work without a problem. If the library was not correctly created, R will respond with the following:</p>
 <pre><code>## install.packages(&quot;sp&quot;)  
 ## Warning in install.packages(&quot;sp&quot;) :  
 ##   &#39;lib = &quot;C:/Program Files/R/R-3.5.2/library&quot;&#39; is not writable</code></pre>
@@ -480,7 +480,7 @@ $(document).ready(function () {
 <p><strong>4. Updating packages</strong></p>
 <p>R packages are continuously being updated or revised, and from time to time it’s a good idea to refresh the currently installed packages. There are various ways of doing this, but the simplest is to type or copy the following to the Console:</p>
 <pre><code>update.packages()</code></pre>
-<p>Note that here as elsewhere, the <code>update.packages</code> function needs be accompanied by the parentheses, i.e. <code>update.packages()</code>, even though the “argument” of the function is null.</p>
+<p>Note that here as elsewhere, the <code>update.packages</code> function needs be accompanied by the parentheses, i.e. <code>update.packages()</code>, even though the “argument” of the function is null.</p>
 <p><strong>5. Installation of multiple packages at a time</strong></p>
 <p>It’s possible to use the various GUIs to install more than one package at time, but this most conveniently done via the Console command line. The following packages will be used in the exercises:</p>
 <p><code>sp, maptools, rgeos, gpclib, rgdal, maps, mapproj, mapdata, classInt,</code><br />
@@ -516,9 +516,9 @@ close(con)</code></pre>
 <p>Note that this workspace will overwrite the existing one. You can check its contents using <code>ls()</code>. This workspace contains the shape files that are used in the exercises, so if you load it, you won’t have to download and read in the individual shape file components.</p>
 <p>The first exercises use the <code>RColorBrewer</code>, <code>classInt</code>, <code>rgeos</code>, <code>maptools</code>, <code>gstat</code>, and <code>spdep</code> packages. On the Mac, remember to check the “Install dependencies” box on the R Package Installer dialog box to make sure all of the necessary packages are installed.</p>
 <p><strong>7. RStudio Projects</strong></p>
-<p>RStudio “Projects” are collections of workspaces, history files, and source documents (e.g. <code>.R</code> and <code>.Rmd</code> files) along with a specific working directory that make it easy to separate individual projects (in the sense of different tasks, e.g. exercises for GEOG 4/595, thesis project work, individual field study data sets, etc.). The RStudio Support documentation on creating and using projects is very clear on how to do these tasks:</p>
+<p>RStudio “Projects” are collections of workspaces, history files, and source documents (e.g. <code>.R</code> and <code>.Rmd</code> files) along with a specific working directory that make it easy to separate individual projects (in the sense of different tasks, e.g. exercises for GEOG 4/595, thesis project work, individual field study data sets, etc.). The RStudio Support documentation on creating and using projects is very clear on how to do these tasks:</p>
 <ul>
-<li><a href="https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects" class="uri">https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects</a></li>
+<li><a href="https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects">https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects</a></li>
 </ul>
 </div>
 

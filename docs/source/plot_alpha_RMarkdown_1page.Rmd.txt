@@ -1,14 +1,6 @@
 ---
-output:
-  html_document:
-    css: html-md-01.css
-    fig_caption: yes
-    highlight: haddock
-    number_sections: yes
-    theme: cerulean
-    toc: yes
-    toc_float: true
-    collapsed: no
+title: "Plot Alpha"
+output: html_document
 ---
 
 # Introduction #
@@ -19,16 +11,19 @@ This RMarkdown document describes reading  a netCDF file consisting of several b
 
 ```{r load_packages, message=FALSE}
 # load packages
-library(sf) 
-library(ncdf4)
+library(sf)
 library(raster)
 library(rasterVis)
 library(RColorBrewer)
 ```
 
-## Read data ##
+# Read data #
 
-### Shapefile ###
+## Shapefile ##
+
+### Read a shapefile ###
+
+Read a shapefile of world coastlines and countries.
 
 ```{r read_shp}
 # read a world shapefile
@@ -39,13 +34,14 @@ world_shp <- read_sf(shp_file)
 world_outline <- as(st_geometry(world_shp), Class="Spatial")
 ```
 
-# plot the shape file
+### plot the shape file ###
 
 ```{r plot_shapefile}
+# plot the world outlines
 plot(world_outline, col="blue", lwd=1)
 ```
 
-### Data ###
+## Read alpha ##
 
 Now read in alpha.
 
@@ -58,7 +54,7 @@ alpha <- raster(alpha_file, varname="mipt")
 alpha
 ```
 
-## Plot the data ##
+# Plot the data #
 
 Finally, plot alpha using the `levelplot()` function from `rasterVis`:
 

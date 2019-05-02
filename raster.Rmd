@@ -22,9 +22,9 @@ klippy::klippy(position = c('top', 'right'))
 
 The following files will be used here, and area available on the SFTP server, in the folder `/nc_files`:
 
-`cru10min30_tmp.nc`, `cru10min30_bio.nc1`, `[SSTexample.nc`, , `air.mon.anom.nc`, `GFEDv3.1_ltm.nc`,  `sage_veg30.nc`, `treecov.nc`.
+`cru10min30_tmp.nc`, `cru10min30_bio.nc1`, `SSTexample.nc`, `air.mon.anom.nc`, `GFEDv3.1_ltm.nc`,  `sage_veg30.nc`, and `treecov.nc`.
 
-Download or copy the files to a "data folder" like `"/Users/bartlein/Projects/ESSD/data/nc_files"`.  The examples also make use of the world-outline shape file (`ne_110m_admin_0_countries.shp`), `/shp_files`.
+Download or copy the files to a "data folder" like `"/Users/bartlein/Projects/ESSD/data/nc_files"`.  The examples also make use of the world-outline shape file (`ne_110m_admin_0_countries.shp`), in the folder `/shp_files`.
 
 The following examples use functions from the `raster` and `rasterVis` packages to read and display a few data sets.  The datasets used here happen to be stored as `netCDF` files, but the `raster` package can also read and write other formats that raster data are commonly stored in.  The `raster` package implements three basic objects or classes:  1) a `rasterLayer`, which is a single 2-D, x-y array of values (e.g. a DEM), 2) a `rasterStack`, a set of individual co-registered (i.e. on the same grid) rasterLayer objects (usually different variables), and 3) a `rasterBrick`, representing a set of layers that make up 3-D data set of a particular variable, such as a climate variable observed over time, or a set of bands in a multi- or hyperspectral image.  Individual layers can be assembled into a stack, and can also be formed by extracting a 2-D slice from a raster brick.
 

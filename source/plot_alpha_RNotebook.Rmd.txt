@@ -3,7 +3,7 @@ title: "R Notebook"
 output: html_notebook
 ---
 
-This RNotebook script reads a netCDF file consisting of several bioclimatic variables, and plots one of them `alpha`
+This R Notebook script reads a netCDF file consisting of several bioclimatic variables, and plots one of them `alpha`
 
 ```{r}
 # load packages 
@@ -13,7 +13,9 @@ library(rasterVis)
 library(RColorBrewer)
 ```
 
-Read a shapefile, for plotting maps later.
+Read data 
+
+Read a shapefile of world coastlines and countries.
 
 ```{r}
 # read a world shapefile
