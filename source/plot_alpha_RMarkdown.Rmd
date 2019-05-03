@@ -19,14 +19,15 @@ This RMarkdown document describes reading  a netCDF file consisting of several b
 
 ```{r load_packages, message=FALSE}
 # load packages
-library(sf) 
-library(ncdf4)
+library(sf)
 library(raster)
 library(rasterVis)
 library(RColorBrewer)
 ```
 
 # Read data #
+
+## Shapefile ##
 
 ### Read a shapefile ###
 
@@ -41,9 +42,10 @@ world_shp <- read_sf(shp_file)
 world_outline <- as(st_geometry(world_shp), Class="Spatial")
 ```
 
-### plot the shape file ###
+### Plot the shape file ###
 
 ```{r plot_shapefile}
+# plot the world outlines
 plot(world_outline, col="blue", lwd=1)
 ```
 

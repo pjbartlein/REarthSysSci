@@ -34,7 +34,7 @@ world_shp <- read_sf(shp_file)
 world_outline <- as(st_geometry(world_shp), Class="Spatial")
 ```
 
-### plot the shape file ###
+### Plot the shape file ###
 
 ```{r plot_shapefile}
 # plot the world outlines
