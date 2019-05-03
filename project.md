@@ -1,8 +1,11 @@
-A repository is a collection of files, including code, data, and documents, that can be used to store multiple versions of files as the development of a project proceeds.  Repositories can be local (i.e. file on the machine being used for development), but they are most effective if that are *remote* or offsite.  Offsite repositories provide two important advantages:  1) they backup files that could be lost for any number of reasons (hard-drive failures, machine loss or meltdown), and 2) they are accessible from other machines, and by collaborators.
+# Introduction #
 
-"Git" is one version-control system that creates and manages repositories (and note "Git" is purported not to mean anything), and "GitHub" is a website that hosts remote repositories, web pages, and some (smallish) data sets.
+There is a hierarchy of output formats that could be used for completing the data analysis project, ranging from a simple R script, to a multi-page web site.  These formats include 
 
-The use of Git and GitHub in R and RStudio is excellently described in the Bookdown document [[*Happy Git and GitHub for the useR (HappyGitWithR)*]](https://happygitwithr.com/index.html) by Jenny Bryan at the Univ. British Columbia.  This is the primary source for guidance and use of Git and GitHub from within RStudio.
+- an R script file (`*.R`), where the output would be produced by downloading the script file, and executing it locally;
+- an R Markdown "Notebook" file (`*.Rmd`) that combines code and output in a single file;
+- a single-page `.html` or single-file Word (`*.docx`) or PDF (`*.pdf`) file that could be posted on a web page
+
 
 ## Getting going ##
 
@@ -41,3 +44,32 @@ Then, on the local machine:
 1. Click on `Tools > Version Control > Commit`  
 1. Click on checkboxes to "stage" files
 2. Click on the `Push` button to synchronize the local repository with the remote GitHub repository.
+
+RMarkdown is implemented by two packages (and their dependencies), `rmarkdown` and `knitr`.  The packages can be installed as follows
+
+	install.packages("rmarkdown')
+	install.packages("knitr")
+
+The following examples can be reproduced using this data set:  `cru10min30_bio.nc`, and the following shapefile components:  
+
+- `ne_110m_admin_0_countries.cpg` 
+- `ne_110m_admin_0_countries.dbf` 
+- `ne_110m_admin_0_countries.prj` 
+- `ne_110m_admin_0_countries.shp` 
+- `ne_110m_admin_0_countries.shx` 
+
+(Transfer the files to a convenient working folder(s), and modify the paths in the scripts below.)
+
+
+- `*.R` scripts:  input is a plain script, and output appears in the `Console` or `Plots` pane.  
+[[plot\_alpha\_RScript.R]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RScript.R)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RScript.R.txt)
+- `*.Rmd` RNotebook files:  input is an RMarkdown file (with a special header), output appears "inline" in RStudio and code, comments and output are saved in a `*.nb.html` file that is portable.  
+[[plot\_alpha\_RNotebook.Rmd]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RNotebook.Rmd)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RNotebook.Rmd.txt)
+- `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a special header), output appears as an `.html` file, viewable in a browser or internally in RStudio  
+[[plot\_alpha\_RMarkdown\_1page.Rmd]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown\_1page.Rmd)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown.Rmd.txt)
+- `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a different special header) and a `*.css` file, output appears as an `.html` file, viewable in a browser or internally in RStudio  
+[[plot\_alpha\_RMarkdown.Rmd]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown.Rmd)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown.Rmd.txt)
+- multiple `*.Rmd` and `.md` files, along with a "site YAML" file, as input, a multipage website or book with internal navigation as output.  (This is how the course web pages are constructed.) 
+[[https://github.com/pjbartlein/REarthSysSci]](https://github.com/pjbartlein/REarthSysSci)
+
+

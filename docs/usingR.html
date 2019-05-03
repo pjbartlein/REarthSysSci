@@ -30,7 +30,7 @@
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -43,11 +43,13 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
 pre.numberSource a.sourceLine::before
-  { content: attr(title);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -522,13 +524,13 @@ $(document).ready(function () {
 <p>Although it is possible to browse to a particular file in order to open it (i.e. using the <code>file.choose()</code> function), for reproducibility, it’s better to explicitly specify the source (i.e. path) of the data. The following code reads a .csv file <code>IPCC-RF.csv</code> that contains radiative forcing values for various controls of global climate since 1750 CE, expressed in terms of Wm<sup>-2</sup> contributions to the Earth’s preindustrial energy balance. The data can be downloaded from <a href="https://pjbartlein.github.io/REarthSysSci/data/csv/IPCC-RF.csv">[https://pjbartlein.github.io/REarthSysSci/data/csv/IPCC-RF.csv]</a> by right-clicking on the link, and saving to a suitable directory.</p>
 <p>Here, the file is assumed to have been dowloaded to the folder <code>/Users/bartlein/projects/geog490/data/csv_files/</code>. (Note that this folder is not necessarly the default working directory of R, which can found using the function <code>getwd()</code>)</p>
 <p>Read the radiative forcing .csv file:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># read a .csv file</span></a>
-<a class="sourceLine" id="cb1-2" title="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/projects/ESSD/data/csv_files/&quot;</span></a>
-<a class="sourceLine" id="cb1-3" title="3">csv_name &lt;-<span class="st"> &quot;IPCC-RF.csv&quot;</span></a>
-<a class="sourceLine" id="cb1-4" title="4">csv_file &lt;-<span class="st"> </span><span class="kw">paste</span>(csv_path, csv_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb1-5" title="5">IPCC_RF &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_file)</a></code></pre></div>
-<p>A quick look at the data can be gotten using the <code>str()</code> (“structure”) function, and a five number" (plus the mean) summary of the data can be gotten using the <code>summary()</code> function;</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">str</span>(IPCC_RF)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># read a .csv file</span></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/projects/ESSD/data/csv_files/&quot;</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">csv_name &lt;-<span class="st"> &quot;IPCC-RF.csv&quot;</span></a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">csv_file &lt;-<span class="st"> </span><span class="kw">paste</span>(csv_path, csv_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">IPCC_RF &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_file)</a></code></pre></div>
+<p>A quick look at the data can be gotten using the <code>str()</code> (“structure”) function, and a five number&quot; (plus the mean) summary of the data can be gotten using the <code>summary()</code> function;</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">str</span>(IPCC_RF)</a></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    262 obs. of  12 variables:
 ##  $ Year     : int  1750 1751 1752 1753 1754 1755 1756 1757 1758 1759 ...
 ##  $ CO2      : num  0 -0.023 -0.024 -0.024 -0.025 -0.026 -0.026 -0.027 -0.028 -0.028 ...
@@ -542,7 +544,7 @@ $(document).ready(function () {
 ##  $ Contrails: num  0 0 0 0 0 0 0 0 0 0 ...
 ##  $ Solar    : num  0 -0.014 -0.029 -0.033 -0.043 -0.054 -0.055 -0.048 -0.05 -0.102 ...
 ##  $ Volcano  : num  -0.001 0 0 0 0 -0.664 0 0 0 0 ...</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">summary</span>(IPCC_RF)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">summary</span>(IPCC_RF)</a></code></pre></div>
 <pre><code>##       Year           CO2             OtherGHG          O3Tropos        O3Stratos        
 ##  Min.   :1750   Min.   :-0.0290   Min.   :0.00000   Min.   :0.0000   Min.   :-0.057000  
 ##  1st Qu.:1815   1st Qu.: 0.1062   1st Qu.:0.03025   1st Qu.:0.0280   1st Qu.:-0.004750  
@@ -565,13 +567,13 @@ $(document).ready(function () {
 ##  3rd Qu.: 0.03225   3rd Qu.: -0.0250  
 ##  Max.   : 0.19400   Max.   :  0.0000</code></pre>
 <p>There are other ways of getting a quick look at the data set:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># other summaries</span></a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="kw">class</span>(IPCC_RF)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># other summaries</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">class</span>(IPCC_RF)</a></code></pre></div>
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">names</span>(IPCC_RF)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">names</span>(IPCC_RF)</a></code></pre></div>
 <pre><code>##  [1] &quot;Year&quot;      &quot;CO2&quot;       &quot;OtherGHG&quot;  &quot;O3Tropos&quot;  &quot;O3Stratos&quot; &quot;Aerosol&quot;   &quot;LUC&quot;       &quot;H2OStrat&quot; 
 ##  [9] &quot;BCSnow&quot;    &quot;Contrails&quot; &quot;Solar&quot;     &quot;Volcano&quot;</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">head</span>(IPCC_RF)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">head</span>(IPCC_RF)</a></code></pre></div>
 <pre><code>##   Year    CO2 OtherGHG O3Tropos O3Stratos Aerosol    LUC H2OStrat BCSnow Contrails  Solar Volcano
 ## 1 1750  0.000    0.000    0.000         0   0.000  0.000        0  0.000         0  0.000  -0.001
 ## 2 1751 -0.023    0.004    0.000         0  -0.002  0.000        0  0.000         0 -0.014   0.000
@@ -579,7 +581,7 @@ $(document).ready(function () {
 ## 4 1753 -0.024    0.007    0.001         0  -0.005 -0.001        0  0.000         0 -0.033   0.000
 ## 5 1754 -0.025    0.008    0.002         0  -0.007 -0.002        0  0.001         0 -0.043   0.000
 ## 6 1755 -0.026    0.010    0.002         0  -0.009 -0.002        0  0.001         0 -0.054  -0.664</code></pre>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="kw">tail</span>(IPCC_RF)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">tail</span>(IPCC_RF)</a></code></pre></div>
 <pre><code>##     Year   CO2 OtherGHG O3Tropos O3Stratos Aerosol   LUC H2OStrat BCSnow Contrails  Solar Volcano
 ## 257 2006 1.684    0.981    0.395    -0.052  -0.909 -0.15    0.071   0.04     0.042 -0.016  -0.075
 ## 258 2007 1.711    0.986    0.396    -0.052  -0.907 -0.15    0.071   0.04     0.044 -0.017  -0.125
@@ -592,10 +594,10 @@ $(document).ready(function () {
 <div id="load-a-saved-.rdata-file-from-the-web" class="section level2">
 <h2><span class="header-section-number">2.2</span> Load a saved .RData file (from the web)</h2>
 <p>An alternative way of reading data is to read in an entire workspace (<code>*.RData</code>) at once. The following code reads those data from the web, by opening a “connection” to a URL, and then using the <code>load()</code> function (which also can be used to load a workspace file from a local folder).</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="co"># load data from a saved .RData file</span></a>
-<a class="sourceLine" id="cb14-2" title="2">con &lt;-<span class="st"> </span><span class="kw">url</span>(<span class="st">&quot;https://pjbartlein.github.io/REarthSysSci/data/RData/geog490.RData&quot;</span>)</a>
-<a class="sourceLine" id="cb14-3" title="3"><span class="kw">load</span>(<span class="dt">file=</span>con) </a>
-<a class="sourceLine" id="cb14-4" title="4"><span class="kw">close</span>(con) </a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># load data from a saved .RData file</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">con &lt;-<span class="st"> </span><span class="kw">url</span>(<span class="st">&quot;https://pjbartlein.github.io/REarthSysSci/data/RData/geog490.RData&quot;</span>)</a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">load</span>(<span class="dt">file=</span>con) </a>
+<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="kw">close</span>(con) </a></code></pre></div>
 <p>Note how the “Environment” tab in RStudio has become populated with individual objects.</p>
 </div>
 </div>
@@ -608,28 +610,28 @@ $(document).ready(function () {
 <div id="index-plots" class="section level3">
 <h3><span class="header-section-number">3.1.1</span> Index plots</h3>
 <p>Index plots are simple plots that display individual observations of a particular variable, in the order the values appear in the dataframe. In this example, the data are oxygen-isotope values for the past approximately 800 kyr (<code>O18</code>), that provide an index of the amount of ice on the land (with, as it happens, negative values indicating little ice, and positive values indicating lots of ice). Another variable in the data set is <code>Insol</code> (insolation), or the amount of incoming solar radiation at 65<sup>o</sup>N. The “full” names of these variables are <code>specmap$O18</code> and <code>specmap$Insol</code>, but they can be referred to by their simple column names using the <code>attach()</code> function. Plot the <code>O18</code> values:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="co"># attach SPECMAP data, index plot</span></a>
-<a class="sourceLine" id="cb15-2" title="2"><span class="kw">attach</span>(specmap)</a>
-<a class="sourceLine" id="cb15-3" title="3"><span class="kw">plot</span>(O18)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># attach SPECMAP data, index plot</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">attach</span>(specmap)</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="kw">plot</span>(O18)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/index_plot-1.png" width="75%" height="75%" /></p>
 </div>
 <div id="time-series-plots" class="section level3">
 <h3><span class="header-section-number">3.1.2</span> Time-series plots</h3>
 <p>The specmap data values happen to be spaced at 1 kyr intervals. A second plot can be generated that makes the x-axis scale explicity <code>Age</code> in the data set. The <code>ylim</code> “argument” in the function call flips the y-axis (so that “warm” is at the top), and the <code>pch</code> argument speifies thea we want small filled dots (as opposed to the default open circles):</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="co"># time-series plot</span></a>
-<a class="sourceLine" id="cb16-2" title="2"><span class="kw">plot</span>(Age, O18, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">-2</span>), <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># time-series plot</span></a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw">plot</span>(Age, O18, <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">-2</span>), <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/index_plot2-1.png" width="75%" height="75%" /></p>
 <p>Although these plots could be used to get a sense of those properties listed above, they’re not very efficient in doing so.</p>
 </div>
 <div id="stripcharts" class="section level3">
 <h3><span class="header-section-number">3.1.3</span> Stripcharts</h3>
 <p>Stripcharts plot the individual values of a variable along a (number) line.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="co"># stripchart of O18 data</span></a>
-<a class="sourceLine" id="cb17-2" title="2"><span class="kw">stripchart</span>(O18)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># stripchart of O18 data</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw">stripchart</span>(O18)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/stripchart1-1.png" width="75%" height="75%" /></p>
 <p>As can be easily seen, there is a lot of “overplotting”, which obscures one’s ability to see the distribution of values. A second stripchar can be generated that “stacks” duplicate (or nearly so) values on top of one another:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="co"># stacked stripchart</span></a>
-<a class="sourceLine" id="cb18-2" title="2"><span class="kw">stripchart</span>(O18, <span class="dt">method=</span><span class="st">&quot;stack&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>)   <span class="co"># stack points to reduce overlap</span></a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># stacked stripchart</span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">stripchart</span>(O18, <span class="dt">method=</span><span class="st">&quot;stack&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>)   <span class="co"># stack points to reduce overlap</span></a></code></pre></div>
 <p><img src="usingR_files/figure-html/stripchart2-1.png" width="75%" height="75%" /></p>
 <p>Note the use of the <code>method</code>, <code>pch</code> (plotting character), and <code>cex</code> (character-size exaggeration) arguments that modify the basic stripchart. The stacked stripchart gives the impression that the <code>O18</code> values are not uniformly distributed along the number line.</p>
 <p>Note that the index and time-series plots could be used to reproduce the data with a little ruler work (including the order of the values in the dataframe), while the stripchart could reprouce the values, but the order is lost.</p>
@@ -641,21 +643,21 @@ $(document).ready(function () {
 <div id="histograms" class="section level3">
 <h3><span class="header-section-number">3.2.1</span> Histograms</h3>
 <p>The histogram is basically a graphical representation of a frequency table, that itself displays the counts of values sorted into size-category bins. Here is the default histogram for <code>O18</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="co"># default histogram of O18</span></a>
-<a class="sourceLine" id="cb19-2" title="2"><span class="kw">hist</span>(O18)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># default histogram of O18</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw">hist</span>(O18)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/histogram1-1.png" width="75%" height="75%" /></p>
 <p>Note that the bin-widths are pretty big, and the default histogram gives only a large-scale overview of the distribution of the the data. The <code>breaks</code> argument can be used to control the number of bins, and hence the “details” of the distribution (as will as the location and scale of the data):</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="co"># histogram, more bars</span></a>
-<a class="sourceLine" id="cb20-2" title="2"><span class="kw">hist</span>(O18, <span class="dt">breaks =</span> <span class="dv">40</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># histogram, more bars</span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2"><span class="kw">hist</span>(O18, <span class="dt">breaks =</span> <span class="dv">40</span>)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/histogram2-1.png" width="75%" height="75%" /></p>
 <p>In this eample, the histogram with smaller bin-widths suggests that the oxygen-isotope values might have mulltiple modes or peaks in the distribution.</p>
 </div>
 <div id="density-plots" class="section level3">
 <h3><span class="header-section-number">3.2.2</span> Density plots</h3>
 <p>Density plots are can be thought of a “smoothed” histograms, and while sometimes regarded as an “automatic” method for not having to make decisions about the width of the histogram bins, still requires a choice of “bandwidth”. Here’s the default density plot. Note that the <code>density()</code> function is used to creat an object called <code>O18_density</code> (which stores the values generated by <code>density()</code>, where the compound symbol <code>&lt;-</code> is read as “gets”). The bandwidth used in creating the density plot is listed (along with some summary information) by simply “typing” the <code>O18_density</code> object at the command line. Then, the <code>O18_density</code> object is plotted using the <code>plot()</code> function:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="co"># density plot</span></a>
-<a class="sourceLine" id="cb21-2" title="2">O18_density &lt;-<span class="st"> </span><span class="kw">density</span>(specmap<span class="op">$</span>O18)</a>
-<a class="sourceLine" id="cb21-3" title="3">O18_density</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># density plot</span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">O18_density &lt;-<span class="st"> </span><span class="kw">density</span>(specmap<span class="op">$</span>O18)</a>
+<a class="sourceLine" id="cb21-3" data-line-number="3">O18_density</a></code></pre></div>
 <pre><code>## 
 ## Call:
 ##  density.default(x = specmap$O18)
@@ -669,35 +671,35 @@ $(document).ready(function () {
 ##  Mean   :-0.100   Mean   :0.1888379  
 ##  3rd Qu.: 1.223   3rd Qu.:0.3469175  
 ##  Max.   : 2.545   Max.   :0.3803128</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw">plot</span>(O18_density)</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">plot</span>(O18_density)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/density1-1.png" width="75%" height="75%" /></p>
 <p>Here’s an alternative density plot with a smaller bandwidth:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1"><span class="co"># density plot, different bandwidth</span></a>
-<a class="sourceLine" id="cb24-2" title="2">O18_density &lt;-<span class="st"> </span><span class="kw">density</span>(specmap<span class="op">$</span>O18, <span class="dt">bw =</span> <span class="fl">0.10</span>)</a>
-<a class="sourceLine" id="cb24-3" title="3"><span class="kw">plot</span>(O18_density)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co"># density plot, different bandwidth</span></a>
+<a class="sourceLine" id="cb24-2" data-line-number="2">O18_density &lt;-<span class="st"> </span><span class="kw">density</span>(specmap<span class="op">$</span>O18, <span class="dt">bw =</span> <span class="fl">0.10</span>)</a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="kw">plot</span>(O18_density)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/density2-1.png" width="75%" height="75%" /></p>
 <p>Before going on, it’s good practice to “detach” the data frame:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">detach</span>(specmap)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw">detach</span>(specmap)</a></code></pre></div>
 </div>
 <div id="boxplots" class="section level3">
 <h3><span class="header-section-number">3.2.3</span> Boxplots</h3>
 <p>Boxplot (or box-and-whisker) plots provide a graphical representation of the “five-number” statistics for a variable (i.e. minimum, 25th percentile, median, 75th percentile, and maximum), with the interquartile range (the 75th percentile minue the 25th percentile) indicated by the height of the box (or width, depending on the orientation of the boxplot). The data set here is a dataframe of the locations of cirque basins in Oregon, with two indictor variables or factors: the region, and a binary variable <code>Glacier</code> indicating whether or not a cirque basin is currently (early 2000’s CE) occupied by a glacier. First, attach the dataframe and get the names of the variables.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="co"># attach cirques dataframe and getnames</span></a>
-<a class="sourceLine" id="cb26-2" title="2"><span class="kw">attach</span>(cirques)</a>
-<a class="sourceLine" id="cb26-3" title="3"><span class="kw">names</span>(cirques)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># attach cirques dataframe and getnames</span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="kw">attach</span>(cirques)</a>
+<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="kw">names</span>(cirques)</a></code></pre></div>
 <pre><code>## [1] &quot;Cirque&quot;  &quot;Lat&quot;     &quot;Lon&quot;     &quot;Elev&quot;    &quot;Region&quot;  &quot;Glacier&quot;</code></pre>
 <p>Get the boxplot of cirque elevations:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="co"># boxplot of OR cirque elevations</span></a>
-<a class="sourceLine" id="cb28-2" title="2"><span class="kw">boxplot</span>(Elev)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># boxplot of OR cirque elevations</span></a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">boxplot</span>(Elev)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/boxplot1-1.png" width="75%" height="75%" /></p>
 <p>Now get side-by-side boxplots of not-glaciated and glaciated cirques:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="co"># boxplot of elevations of not-glaciated and glaciated cirques</span></a>
-<a class="sourceLine" id="cb29-2" title="2"><span class="kw">boxplot</span>(Elev <span class="op">~</span><span class="st"> </span>Glacier)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="co"># boxplot of elevations of not-glaciated and glaciated cirques</span></a>
+<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw">boxplot</span>(Elev <span class="op">~</span><span class="st"> </span>Glacier)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/boxplot2-1.png" width="75%" height="75%" /></p>
 <p>Glaciated cirques evidently occur at higher elevations than not-glaciated ones.</p>
 <p>Get a simple map of the cirque locations by plotting longitude and latitude, labeling the points to indicate whether a particular cirque is occupied or not:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="kw">plot</span>(Lon, Lat, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb30-2" title="2"><span class="kw">points</span>(Lon, Lat, <span class="dt">col=</span><span class="kw">as.factor</span>(Glacier))</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">plot</span>(Lon, Lat, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
+<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="kw">points</span>(Lon, Lat, <span class="dt">col=</span><span class="kw">as.factor</span>(Glacier))</a></code></pre></div>
 <p><img src="usingR_files/figure-html/cirquemap1-1.png" width="75%" height="75%" /></p>
 </div>
 </div>
@@ -707,40 +709,40 @@ $(document).ready(function () {
 <div id="scatter-diagrams" class="section level3">
 <h3><span class="header-section-number">3.3.1</span> Scatter diagrams</h3>
 <p>Plot cirque longitude along the x-axis, and latitude along the y-axis:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="co"># cirques:  Elev vs. Lon</span></a>
-<a class="sourceLine" id="cb31-2" title="2"><span class="kw">plot</span>(Lon, Elev)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="co"># cirques:  Elev vs. Lon</span></a>
+<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="kw">plot</span>(Lon, Elev)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/scat1-1.png" width="75%" height="75%" /></p>
 <p>Note the convention above in the <code>plot()</code> function: the x-variable is listed first, than the y-variable. Replot the data, this time labeling the points. Note the different way of specifying the variables: The y-variable first, then a tilde (read as “varies with”), then the x-variable. Note also the plotting character (<code>pch</code>), and the nested <code>as.factor()</code> variable-type conversion function:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="co"># cirques:  Elev vs. Lon</span></a>
-<a class="sourceLine" id="cb32-2" title="2"><span class="kw">plot</span>(Elev <span class="op">~</span><span class="st"> </span>Lon, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb32-3" title="3"><span class="kw">points</span>(Elev <span class="op">~</span><span class="st"> </span>Lon, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">as.factor</span>(Glacier))</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co"># cirques:  Elev vs. Lon</span></a>
+<a class="sourceLine" id="cb32-2" data-line-number="2"><span class="kw">plot</span>(Elev <span class="op">~</span><span class="st"> </span>Lon, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
+<a class="sourceLine" id="cb32-3" data-line-number="3"><span class="kw">points</span>(Elev <span class="op">~</span><span class="st"> </span>Lon, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">as.factor</span>(Glacier))</a></code></pre></div>
 <p><img src="usingR_files/figure-html/scat2-1.png" width="75%" height="75%" /></p>
 <p>It’s easy to see that glaciated cirques are clustered in two areas: the high Cascades and the Wallows (in eastern Oregon).</p>
 </div>
 <div id="scatterplot-matrices" class="section level3">
 <h3><span class="header-section-number">3.3.2</span> Scatterplot matrices</h3>
 <p>Relationships between several variables can be visualized using scatterplot matrices. The data here consist of several variables observed at Oregon climate stations. (Note that the second panel in the first row provides a map.)</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="co"># matrix scatterplot of Oregon climate-station data</span></a>
-<a class="sourceLine" id="cb33-2" title="2"><span class="kw">names</span>(orstationc)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co"># matrix scatterplot of Oregon climate-station data</span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="kw">names</span>(orstationc)</a></code></pre></div>
 <pre><code>##  [1] &quot;station&quot; &quot;lat&quot;     &quot;lon&quot;     &quot;elev&quot;    &quot;tjan&quot;    &quot;tjul&quot;    &quot;tann&quot;    &quot;pjan&quot;    &quot;pjul&quot;    &quot;pann&quot;   
 ## [11] &quot;idnum&quot;   &quot;Name&quot;    &quot;y&quot;       &quot;x&quot;</code></pre>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="kw">plot</span>(orstationc[<span class="dv">2</span><span class="op">:</span><span class="dv">10</span>], <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="kw">plot</span>(orstationc[<span class="dv">2</span><span class="op">:</span><span class="dv">10</span>], <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/matrix_scatterplot-1.png" width="75%" height="75%" /></p>
 </div>
 </div>
 </div>
 <div id="enhanced-graphics" class="section level1">
 <h1><span class="header-section-number">4</span> Enhanced graphics</h1>
-<p>The base graphics in R can be quickly produced, but are kind of crude and not “camera-ready” (an archaic term, like “dialing”" a telephone, from the days when illustrations were drawn on paper). The R package <code>ggplot2</code> by Hadley Wickham provides an alternative approach to the “base” graphics in <strong>R</strong> for constructing plots and maps, and is inspired by Lee Wilkinson’s <em>The Grammar of Graphics</em> book (Springer, 2nd Ed. 2005). The basic premise of the <em>Grammar of Graphics</em> book, and of the underlying design of the package, is that data graphics, like a language, are built upon some basic components that are assembled or layered on top of one another. In the case of English (e.g Garner, B., 2016, <em>The Chicago Guide to Grammar, Usage and Punctuation</em>, Univ. Chicago Press), there are eight “parts of speech” from which sentences are assembled:</p>
+<p>The base graphics in R can be quickly produced, but are kind of crude and not “camera-ready” (an archaic term, like “dialing”&quot; a telephone, from the days when illustrations were drawn on paper). The R package <code>ggplot2</code> by Hadley Wickham provides an alternative approach to the “base” graphics in <strong>R</strong> for constructing plots and maps, and is inspired by Lee Wilkinson’s <em>The Grammar of Graphics</em> book (Springer, 2nd Ed. 2005). The basic premise of the <em>Grammar of Graphics</em> book, and of the underlying design of the package, is that data graphics, like a language, are built upon some basic components that are assembled or layered on top of one another. In the case of English (e.g Garner, B., 2016, <em>The Chicago Guide to Grammar, Usage and Punctuation</em>, Univ. Chicago Press), there are eight “parts of speech” from which sentences are assembled:</p>
 <ul>
-<li><em>Nouns</em> (e.g. <em>computer</em>, <em>classroom</em>, <em>data</em>, …)</li>
-<li><em>Pronouns</em> (e.g. <em>he</em>, <em>she</em>, <em>they</em>, …)</li>
-<li><em>Adjectives</em> (e.g. <em>good</em>, <em>green</em>, <em>my</em>, <em>year-to-year</em>, …, including articles, e.g. <em>a</em>, <em>the</em>)</li>
-<li><em>Verbs</em> (e.g. <em>analyze</em>, <em>write</em>, <em>discuss</em>, <em>computing</em>, …)</li>
-<li><em>Adverbs</em> (e.g. “-ly” words, <em>very</em>, <em>loudly</em>, <em>bigly</em>, <em>near</em>, <em>far</em>, …)</li>
-<li><em>Prepositions</em> (e.g. <em>on</em>, <em>in</em>, <em>to</em>, …)</li>
-<li><em>Conjunctives</em> (e.g. <em>and</em>, <em>but</em>, …)</li>
-<li><em>Interjections</em> (e.g. <em>damn</em>)</li>
+<li><em>Nouns</em> (e.g. <em>computer</em>, <em>classroom</em>, <em>data</em>, …)</li>
+<li><em>Pronouns</em> (e.g. <em>he</em>, <em>she</em>, <em>they</em>, …)</li>
+<li><em>Adjectives</em> (e.g. <em>good</em>, <em>green</em>, <em>my</em>, <em>year-to-year</em>, …, including articles, e.g. <em>a</em>, <em>the</em>)</li>
+<li><em>Verbs</em> (e.g. <em>analyze</em>, <em>write</em>, <em>discuss</em>, <em>computing</em>, …)</li>
+<li><em>Adverbs</em> (e.g. “-ly” words, <em>very</em>, <em>loudly</em>, <em>bigly</em>, <em>near</em>, <em>far</em>, …)</li>
+<li><em>Prepositions</em> (e.g. <em>on</em>, <em>in</em>, <em>to</em>, …)</li>
+<li><em>Conjunctives</em> (e.g. <em>and</em>, <em>but</em>, …)</li>
+<li><em>Interjections</em> (e.g. <em>damn</em>)</li>
 </ul>
 <p>(but as Garner notes, those categories “aren’t fully settled…” p. 18).</p>
 <p>In the case of graphics (e.g. Wickham, H., 2016, <em>ggplot2 – Elegant Graphics for Data Analysis, 2nd. Ed.</em>, Springer, available online from <a href="http://library.uoregon.edu">[http://library.uoregon.edu]</a>) the components are:</p>
@@ -758,26 +760,26 @@ $(document).ready(function () {
 <li><em>Themes</em> (that control things like background colors, fonts, etc.) plus a few other things.</li>
 </ul>
 <p>Begin by loading the <code>ggplot2</code> library.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="co"># load the `ggplot2` package</span></a>
-<a class="sourceLine" id="cb36-2" title="2"><span class="kw">library</span>(ggplot2)</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="co"># load the `ggplot2` package</span></a>
+<a class="sourceLine" id="cb36-2" data-line-number="2"><span class="kw">library</span>(ggplot2)</a></code></pre></div>
 <pre><code>## 
 ## Attaching package: &#39;ggplot2&#39;</code></pre>
 <pre><code>## The following object is masked from &#39;package:latticeExtra&#39;:
 ## 
 ##     layer</code></pre>
 <p>The following code chunks reproduce using <code>ggplot2</code> some of the plots described earlier. (Note that while the package is called <code>ggplot2</code> the function is still <code>ggplot()</code>.)</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1"><span class="co"># ggplot2 histogram</span></a>
-<a class="sourceLine" id="cb39-2" title="2"><span class="kw">ggplot</span>(specmap, <span class="kw">aes</span>(<span class="dt">x=</span>O18)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="co"># ggplot2 histogram</span></a>
+<a class="sourceLine" id="cb39-2" data-line-number="2"><span class="kw">ggplot</span>(specmap, <span class="kw">aes</span>(<span class="dt">x=</span>O18)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">0.1</span>)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/gg01-1.png" width="75%" height="75%" /></p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1"><span class="co"># ggplot2 boxplots</span></a>
-<a class="sourceLine" id="cb40-2" title="2"><span class="kw">ggplot</span>(cirques, <span class="kw">aes</span>(<span class="dt">x =</span> Glacier, <span class="dt">y=</span>Elev, <span class="dt">group =</span> Glacier)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb40-3" title="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">colour =</span> <span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="co"># ggplot2 boxplots</span></a>
+<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="kw">ggplot</span>(cirques, <span class="kw">aes</span>(<span class="dt">x =</span> Glacier, <span class="dt">y=</span>Elev, <span class="dt">group =</span> Glacier)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb40-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">colour =</span> <span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/gg02-1.png" width="75%" height="75%" /></p>
 <p>The following plot is a plot of the relationship between elevation and annual temperature in the Oregon climate-station data set, with a “loess” curve added to summarize the relationship.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"><span class="co">## ggplot2 scatter diagram of Oregon climate-station data</span></a>
-<a class="sourceLine" id="cb41-2" title="2"><span class="kw">ggplot</span>(orstationc, <span class="kw">aes</span>(elev, tann)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb41-3" title="3"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Elevation (m)&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Annual Mean Temperature (C)&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb41-4" title="4"><span class="st">          </span><span class="kw">ggtitle</span>(<span class="st">&quot;Oregon Climate Station Data&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">## ggplot2 scatter diagram of Oregon climate-station data</a>
+<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="kw">ggplot</span>(orstationc, <span class="kw">aes</span>(elev, tann)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb41-3" data-line-number="3"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Elevation (m)&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Annual Mean Temperature (C)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb41-4" data-line-number="4"><span class="st">          </span><span class="kw">ggtitle</span>(<span class="st">&quot;Oregon Climate Station Data&quot;</span>)</a></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
 <p><img src="usingR_files/figure-html/gg03-1.png" width="75%" height="75%" /></p>
 </div>
@@ -788,39 +790,39 @@ $(document).ready(function () {
 <div id="simple-maps" class="section level2">
 <h2><span class="header-section-number">5.1</span> Simple maps</h2>
 <p>Here’s a simple map of the station locations. The following code produces a standard map with the stations represented by dots. (There is a lot of symbol overplotting – one technique to avoid overplotting would be to simply reduce the character size using the <code>cex</code> argument, but then the points may disappear. A better approach is described later.)</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="co"># load packages</span></a>
-<a class="sourceLine" id="cb43-2" title="2"><span class="kw">library</span>(maptools) <span class="co"># loads sp library too</span></a>
-<a class="sourceLine" id="cb43-3" title="3"><span class="kw">library</span>(rgeos)</a>
-<a class="sourceLine" id="cb43-4" title="4"><span class="kw">library</span>(RColorBrewer) <span class="co"># creates nice color schemes</span></a>
-<a class="sourceLine" id="cb43-5" title="5"><span class="kw">library</span>(classInt) <span class="co"># finds class intervals for continuous variables</span></a>
-<a class="sourceLine" id="cb43-6" title="6"></a>
-<a class="sourceLine" id="cb43-7" title="7"><span class="co"># map of precipitation stations</span></a>
-<a class="sourceLine" id="cb43-8" title="8"><span class="kw">plot</span>(wus_shp, <span class="dt">lwd=</span><span class="dv">3</span>, <span class="dt">col=</span><span class="st">&quot;gray&quot;</span>)</a>
-<a class="sourceLine" id="cb43-9" title="9"><span class="kw">points</span>(wus_pratio<span class="op">$</span>lon, wus_pratio<span class="op">$</span>lat, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="co"># load packages</span></a>
+<a class="sourceLine" id="cb43-2" data-line-number="2"><span class="kw">library</span>(maptools) <span class="co"># loads sp library too</span></a>
+<a class="sourceLine" id="cb43-3" data-line-number="3"><span class="kw">library</span>(rgeos)</a>
+<a class="sourceLine" id="cb43-4" data-line-number="4"><span class="kw">library</span>(RColorBrewer) <span class="co"># creates nice color schemes</span></a>
+<a class="sourceLine" id="cb43-5" data-line-number="5"><span class="kw">library</span>(classInt) <span class="co"># finds class intervals for continuous variables</span></a>
+<a class="sourceLine" id="cb43-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb43-7" data-line-number="7"><span class="co"># map of precipitation stations</span></a>
+<a class="sourceLine" id="cb43-8" data-line-number="8"><span class="kw">plot</span>(wus_shp, <span class="dt">lwd=</span><span class="dv">3</span>, <span class="dt">col=</span><span class="st">&quot;gray&quot;</span>)</a>
+<a class="sourceLine" id="cb43-9" data-line-number="9"><span class="kw">points</span>(wus_pratio<span class="op">$</span>lon, wus_pratio<span class="op">$</span>lat, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.8</span>)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/maps01-1.png" width="75%" height="75%" /></p>
 <p>In what follows, we’ll want to examine the large-scale patterns of the seasonality (summer-wet vs. winter-wet) of precipitation. The data consist of monthly precipitation ratios, or the average precipitation for a particular month and station divided by the average annual total precipitation. This has the effect of removing the very large imprint of elevation on precipitation totals. The ratio of July to January precipitation provides a single overall description of precipitation seasonality.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1"><span class="co"># a second map with some colors</span></a>
-<a class="sourceLine" id="cb44-2" title="2">wus_pratio<span class="op">$</span>pjulpjan &lt;-<span class="st"> </span>wus_pratio<span class="op">$</span>pjulpann<span class="op">/</span>wus_pratio<span class="op">$</span>pjanpann  <span class="co"># pann values cancel out</span></a>
-<a class="sourceLine" id="cb44-3" title="3">nclr &lt;-<span class="st"> </span><span class="dv">10</span></a>
-<a class="sourceLine" id="cb44-4" title="4">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(nclr,<span class="st">&quot;PRGn&quot;</span>) </a>
-<a class="sourceLine" id="cb44-5" title="5">class &lt;-<span class="st"> </span><span class="kw">classIntervals</span>(wus_pratio<span class="op">$</span>pjulpjan, nclr, <span class="dt">style=</span><span class="st">&quot;fixed&quot;</span>,</a>
-<a class="sourceLine" id="cb44-6" title="6">  <span class="dt">fixedBreaks=</span><span class="kw">c</span>(<span class="fl">9999.0</span>, <span class="fl">10.0</span>, <span class="fl">5.0</span>, <span class="fl">2.0</span>, <span class="fl">1.25</span>, <span class="fl">1.0</span>, <span class="fl">.800</span>, <span class="fl">.500</span>, <span class="fl">.200</span>, </a>
-<a class="sourceLine" id="cb44-7" title="7">    <span class="fl">.100</span>, <span class="fl">0.0</span>))</a>
-<a class="sourceLine" id="cb44-8" title="8">colcode &lt;-<span class="st"> </span><span class="kw">findColours</span>(class, plotclr)</a>
-<a class="sourceLine" id="cb44-9" title="9"><span class="kw">plot</span>(wus_shp)</a>
-<a class="sourceLine" id="cb44-10" title="10"><span class="kw">points</span>(wus_pratio<span class="op">$</span>lon, wus_pratio<span class="op">$</span>lat, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span>colcode, <span class="dt">main=</span><span class="st">&quot;Jan/Jul Precipitation&quot;</span>)</a>
-<a class="sourceLine" id="cb44-11" title="11"><span class="kw">legend</span>(<span class="op">-</span><span class="dv">125</span>,<span class="fl">33.5</span>, <span class="dt">legend=</span><span class="kw">names</span>(<span class="kw">attr</span>(colcode, <span class="st">&quot;table&quot;</span>)),</a>
-<a class="sourceLine" id="cb44-12" title="12">  <span class="dt">fill=</span><span class="kw">attr</span>(colcode, <span class="st">&quot;palette&quot;</span>), <span class="dt">cex=</span><span class="fl">0.5</span>, <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="co"># a second map with some colors</span></a>
+<a class="sourceLine" id="cb44-2" data-line-number="2">wus_pratio<span class="op">$</span>pjulpjan &lt;-<span class="st"> </span>wus_pratio<span class="op">$</span>pjulpann<span class="op">/</span>wus_pratio<span class="op">$</span>pjanpann  <span class="co"># pann values cancel out</span></a>
+<a class="sourceLine" id="cb44-3" data-line-number="3">nclr &lt;-<span class="st"> </span><span class="dv">10</span></a>
+<a class="sourceLine" id="cb44-4" data-line-number="4">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(nclr,<span class="st">&quot;PRGn&quot;</span>) </a>
+<a class="sourceLine" id="cb44-5" data-line-number="5">class &lt;-<span class="st"> </span><span class="kw">classIntervals</span>(wus_pratio<span class="op">$</span>pjulpjan, nclr, <span class="dt">style=</span><span class="st">&quot;fixed&quot;</span>,</a>
+<a class="sourceLine" id="cb44-6" data-line-number="6">  <span class="dt">fixedBreaks=</span><span class="kw">c</span>(<span class="fl">9999.0</span>, <span class="fl">10.0</span>, <span class="fl">5.0</span>, <span class="fl">2.0</span>, <span class="fl">1.25</span>, <span class="fl">1.0</span>, <span class="fl">.800</span>, <span class="fl">.500</span>, <span class="fl">.200</span>, </a>
+<a class="sourceLine" id="cb44-7" data-line-number="7">    <span class="fl">.100</span>, <span class="fl">0.0</span>))</a>
+<a class="sourceLine" id="cb44-8" data-line-number="8">colcode &lt;-<span class="st"> </span><span class="kw">findColours</span>(class, plotclr)</a>
+<a class="sourceLine" id="cb44-9" data-line-number="9"><span class="kw">plot</span>(wus_shp)</a>
+<a class="sourceLine" id="cb44-10" data-line-number="10"><span class="kw">points</span>(wus_pratio<span class="op">$</span>lon, wus_pratio<span class="op">$</span>lat, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span>colcode, <span class="dt">main=</span><span class="st">&quot;Jan/Jul Precipitation&quot;</span>)</a>
+<a class="sourceLine" id="cb44-11" data-line-number="11"><span class="kw">legend</span>(<span class="op">-</span><span class="dv">125</span>,<span class="fl">33.5</span>, <span class="dt">legend=</span><span class="kw">names</span>(<span class="kw">attr</span>(colcode, <span class="st">&quot;table&quot;</span>)),</a>
+<a class="sourceLine" id="cb44-12" data-line-number="12">  <span class="dt">fill=</span><span class="kw">attr</span>(colcode, <span class="st">&quot;palette&quot;</span>), <span class="dt">cex=</span><span class="fl">0.5</span>, <span class="dt">bty=</span><span class="st">&quot;n&quot;</span>)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/hd04-1.png" width="75%" height="75%" /></p>
 </div>
 <div id="ggplot2-maps" class="section level2">
 <h2><span class="header-section-number">5.2</span> ggplot2 maps</h2>
 <p>It’s possible to generate maps that are a little closer to “camera ready” using <code>ggplot2</code>. The package has the capability of extracting outlines from the <code>maps</code> package in R (and also to do some simple projection using the <code>mapproj</code> package). Here’s an example of a map of the western states, first extracting the outlines, and then plotting them:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="co"># get western state outlines from `maps` package</span></a>
-<a class="sourceLine" id="cb45-2" title="2">wus_states &lt;-<span class="st"> </span><span class="kw">map_data</span>(<span class="st">&quot;state&quot;</span>, <span class="dt">region =</span> <span class="kw">c</span>(<span class="st">&quot;washington&quot;</span>, <span class="st">&quot;oregon&quot;</span>, <span class="st">&quot;california&quot;</span>, <span class="st">&quot;idaho&quot;</span>, <span class="st">&quot;nevada&quot;</span>,</a>
-<a class="sourceLine" id="cb45-3" title="3">  <span class="st">&quot;montana&quot;</span>, <span class="st">&quot;utah&quot;</span>, <span class="st">&quot;arizona&quot;</span>, <span class="st">&quot;wyoming&quot;</span>, <span class="st">&quot;colorado&quot;</span>, <span class="st">&quot;new mexico&quot;</span>, <span class="st">&quot;north dakota&quot;</span>, <span class="st">&quot;south dakota&quot;</span>,</a>
-<a class="sourceLine" id="cb45-4" title="4">  <span class="st">&quot;nebraska&quot;</span>, <span class="st">&quot;kansas&quot;</span>, <span class="st">&quot;oklahoma&quot;</span>, <span class="st">&quot;texas&quot;</span>)) </a>
-<a class="sourceLine" id="cb45-5" title="5"><span class="kw">head</span>(wus_states)</a></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="co"># get western state outlines from `maps` package</span></a>
+<a class="sourceLine" id="cb45-2" data-line-number="2">wus_states &lt;-<span class="st"> </span><span class="kw">map_data</span>(<span class="st">&quot;state&quot;</span>, <span class="dt">region =</span> <span class="kw">c</span>(<span class="st">&quot;washington&quot;</span>, <span class="st">&quot;oregon&quot;</span>, <span class="st">&quot;california&quot;</span>, <span class="st">&quot;idaho&quot;</span>, <span class="st">&quot;nevada&quot;</span>,</a>
+<a class="sourceLine" id="cb45-3" data-line-number="3">  <span class="st">&quot;montana&quot;</span>, <span class="st">&quot;utah&quot;</span>, <span class="st">&quot;arizona&quot;</span>, <span class="st">&quot;wyoming&quot;</span>, <span class="st">&quot;colorado&quot;</span>, <span class="st">&quot;new mexico&quot;</span>, <span class="st">&quot;north dakota&quot;</span>, <span class="st">&quot;south dakota&quot;</span>,</a>
+<a class="sourceLine" id="cb45-4" data-line-number="4">  <span class="st">&quot;nebraska&quot;</span>, <span class="st">&quot;kansas&quot;</span>, <span class="st">&quot;oklahoma&quot;</span>, <span class="st">&quot;texas&quot;</span>)) </a>
+<a class="sourceLine" id="cb45-5" data-line-number="5"><span class="kw">head</span>(wus_states)</a></code></pre></div>
 <pre><code>##        long      lat group order  region subregion
 ## 1 -114.6374 35.01918     1     1 arizona      &lt;NA&gt;
 ## 2 -114.6431 35.10512     1     2 arizona      &lt;NA&gt;
@@ -828,16 +830,16 @@ $(document).ready(function () {
 ## 4 -114.5744 35.17961     1     4 arizona      &lt;NA&gt;
 ## 5 -114.5858 35.23690     1     5 arizona      &lt;NA&gt;
 ## 6 -114.5973 35.28274     1     6 arizona      &lt;NA&gt;</code></pre>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="co"># plot the western states outlines</span></a>
-<a class="sourceLine" id="cb47-2" title="2"><span class="kw">ggplot</span>(wus_states, <span class="kw">aes</span>(long, lat)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">group =</span> group), <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb47-3" title="3"><span class="st">  </span><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1"><span class="co"># plot the western states outlines</span></a>
+<a class="sourceLine" id="cb47-2" data-line-number="2"><span class="kw">ggplot</span>(wus_states, <span class="kw">aes</span>(long, lat)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">group =</span> group), <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb47-3" data-line-number="3"><span class="st">  </span><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</a></code></pre></div>
 <p><img src="usingR_files/figure-html/ggmap02-1.png" width="75%" height="75%" /></p>
 <p>Note the use of <code>theme_bw()</code> to get a traditional black-lines-on-white-background.</p>
 <p>Here’s a <code>ggplot2</code> map of the the July:January precipitation ratio. Note that the data are first tranformed from “continuous” to categorical or “factor” data, which facilitates making a map with a descrete color scale.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="co"># recode pjulpjan to a factor</span></a>
-<a class="sourceLine" id="cb48-2" title="2">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.0</span>, <span class="fl">.100</span>, <span class="fl">.200</span>, <span class="fl">.500</span>, <span class="fl">.800</span>, <span class="fl">1.0</span>, <span class="fl">1.25</span>, <span class="fl">2.0</span>, <span class="fl">5.0</span>, <span class="fl">10.0</span>, <span class="fl">9999.0</span>)</a>
-<a class="sourceLine" id="cb48-3" title="3">pjulpjan_factor &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">findInterval</span>(wus_pratio<span class="op">$</span>pjulpjan, cutpts))</a>
-<a class="sourceLine" id="cb48-4" title="4"><span class="kw">head</span>(<span class="kw">cbind</span>(wus_pratio<span class="op">$</span>pjulpjan, pjulpjan_factor, cutpts[pjulpjan_factor]))</a></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="co"># recode pjulpjan to a factor</span></a>
+<a class="sourceLine" id="cb48-2" data-line-number="2">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.0</span>, <span class="fl">.100</span>, <span class="fl">.200</span>, <span class="fl">.500</span>, <span class="fl">.800</span>, <span class="fl">1.0</span>, <span class="fl">1.25</span>, <span class="fl">2.0</span>, <span class="fl">5.0</span>, <span class="fl">10.0</span>, <span class="fl">9999.0</span>)</a>
+<a class="sourceLine" id="cb48-3" data-line-number="3">pjulpjan_factor &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">findInterval</span>(wus_pratio<span class="op">$</span>pjulpjan, cutpts))</a>
+<a class="sourceLine" id="cb48-4" data-line-number="4"><span class="kw">head</span>(<span class="kw">cbind</span>(wus_pratio<span class="op">$</span>pjulpjan, pjulpjan_factor, cutpts[pjulpjan_factor]))</a></code></pre></div>
 <pre><code>##                 pjulpjan_factor    
 ## [1,] 0.43465046               3 0.2
 ## [2,] 1.15409836               6 1.0
@@ -846,15 +848,15 @@ $(document).ready(function () {
 ## [5,] 0.05042017               1 0.0
 ## [6,] 0.14257556               2 0.1</code></pre>
 <p>Next, the map:</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1"><span class="co">## ggplot2 map of pjulpjan</span></a>
-<a class="sourceLine" id="cb50-2" title="2"><span class="kw">ggplot</span>(wus_pratio, <span class="kw">aes</span>(lon, lat))  <span class="op">+</span></a>
-<a class="sourceLine" id="cb50-3" title="3"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group), wus_states, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb50-4" title="4"><span class="st">  </span><span class="kw">scale_color_brewer</span>(<span class="dt">type =</span> <span class="st">&quot;div&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;PRGn&quot;</span>, <span class="dt">aesthetics =</span> <span class="st">&quot;color&quot;</span>, <span class="dt">direction =</span> <span class="dv">1</span>, </a>
-<a class="sourceLine" id="cb50-5" title="5">    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;0.0 - 0.1&quot;</span>, <span class="st">&quot;0.1 - 0.2&quot;</span>, <span class="st">&quot;0.2 - 0.5&quot;</span>, <span class="st">&quot;0.5 - 0.8&quot;</span>, <span class="st">&quot;0.8 - 1.0&quot;</span>, </a>
-<a class="sourceLine" id="cb50-6" title="6">               <span class="st">&quot;1.0 - 1.25&quot;</span>, <span class="st">&quot;1.25 - 2.0&quot;</span>, <span class="st">&quot;2.0 - 5.0&quot;</span>, <span class="st">&quot;5.0 - 10.0&quot;</span>, <span class="st">&quot;&gt; 10.0&quot;</span>),</a>
-<a class="sourceLine" id="cb50-7" title="7">    <span class="dt">name =</span> <span class="st">&quot;Jul:Jan Ppt. Ratio&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb50-8" title="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(lon, lat, <span class="dt">color =</span> pjulpjan_factor), <span class="dt">size =</span> <span class="fl">1.0</span> ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb50-9" title="9"><span class="st">  </span><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1">## ggplot2 map of pjulpjan</a>
+<a class="sourceLine" id="cb50-2" data-line-number="2"><span class="kw">ggplot</span>(wus_pratio, <span class="kw">aes</span>(lon, lat))  <span class="op">+</span></a>
+<a class="sourceLine" id="cb50-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group), wus_states, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb50-4" data-line-number="4"><span class="st">  </span><span class="kw">scale_color_brewer</span>(<span class="dt">type =</span> <span class="st">&quot;div&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;PRGn&quot;</span>, <span class="dt">aesthetics =</span> <span class="st">&quot;color&quot;</span>, <span class="dt">direction =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb50-5" data-line-number="5">    <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;0.0 - 0.1&quot;</span>, <span class="st">&quot;0.1 - 0.2&quot;</span>, <span class="st">&quot;0.2 - 0.5&quot;</span>, <span class="st">&quot;0.5 - 0.8&quot;</span>, <span class="st">&quot;0.8 - 1.0&quot;</span>, </a>
+<a class="sourceLine" id="cb50-6" data-line-number="6">               <span class="st">&quot;1.0 - 1.25&quot;</span>, <span class="st">&quot;1.25 - 2.0&quot;</span>, <span class="st">&quot;2.0 - 5.0&quot;</span>, <span class="st">&quot;5.0 - 10.0&quot;</span>, <span class="st">&quot;&gt; 10.0&quot;</span>),</a>
+<a class="sourceLine" id="cb50-7" data-line-number="7">    <span class="dt">name =</span> <span class="st">&quot;Jul:Jan Ppt. Ratio&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb50-8" data-line-number="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(lon, lat, <span class="dt">color =</span> pjulpjan_factor), <span class="dt">size =</span> <span class="fl">1.0</span> ) <span class="op">+</span></a>
+<a class="sourceLine" id="cb50-9" data-line-number="9"><span class="st">  </span><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</a></code></pre></div>
 <p><img src="usingR_files/figure-html/ggmap04-1.png" width="75%" height="75%" /></p>
 </div>
 </div>
@@ -864,8 +866,8 @@ $(document).ready(function () {
 <div id="univariate-statistics" class="section level2">
 <h2><span class="header-section-number">6.1</span> Univariate statistics</h2>
 <p>The <code>summary()</code> function provides that “five-number” (plus the mean) summary:</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="co"># univariate descriptive statistics</span></a>
-<a class="sourceLine" id="cb51-2" title="2"><span class="kw">summary</span>(wus_pratio)</a></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="co"># univariate descriptive statistics</span></a>
+<a class="sourceLine" id="cb51-2" data-line-number="2"><span class="kw">summary</span>(wus_pratio)</a></code></pre></div>
 <pre><code>##       lat             lon               elev           pjanpann          pfebpann      
 ##  Min.   :25.90   Min.   :-124.57   Min.   : -59.0   Min.   :0.01010   Min.   :0.00830  
 ##  1st Qu.:34.73   1st Qu.:-115.32   1st Qu.: 317.0   1st Qu.:0.02830   1st Qu.:0.02940  
@@ -895,8 +897,8 @@ $(document).ready(function () {
 ##  3rd Qu.: 4.5072  
 ##  Max.   :16.2167</code></pre>
 <p>The <code>tapply()</code> function can be used to get statistics by group, in this case for the July:January precipitation-ratio categories:</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="co"># elevation summary for differnt pjulpjan classes</span></a>
-<a class="sourceLine" id="cb53-2" title="2"><span class="kw">tapply</span>(wus_pratio<span class="op">$</span>elev, pjulpjan_factor, summary)</a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co"># elevation summary for differnt pjulpjan classes</span></a>
+<a class="sourceLine" id="cb53-2" data-line-number="2"><span class="kw">tapply</span>(wus_pratio<span class="op">$</span>elev, pjulpjan_factor, summary)</a></code></pre></div>
 <pre><code>## $`1`
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
 ##     2.0    61.5   204.0   408.3   638.5  2438.0 
@@ -938,18 +940,18 @@ $(document).ready(function () {
 ##     454     725     990    1089    1512    1874</code></pre>
 <p>There are a number of potential descriptive statistics than can be calculated this way (as well as individually for ungrouped data). Others statical funcions include <code>min()</code>, <code>max()</code>, <code>range()</code>, <code>sum()</code>, <code>mean()</code>, <code>median()</code>, <code>quantiles()</code>, <code>weighted.mean()</code>, <code>sd()</code>, etc.</p>
 <p>A graphical approach to the above is boxplots:</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1"><span class="kw">ggplot</span>(wus_pratio, <span class="kw">aes</span>(<span class="dt">x =</span> pjulpjan_factor, <span class="dt">y=</span>elev, <span class="dt">group =</span> pjulpjan_factor)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb55-2" title="2"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;0.0 - 0.1&quot;</span>, <span class="st">&quot;0.1 - 0.2&quot;</span>, <span class="st">&quot;0.2 - 0.5&quot;</span>, <span class="st">&quot;0.5 - 0.8&quot;</span>, <span class="st">&quot;0.8 - 1.0&quot;</span>, </a>
-<a class="sourceLine" id="cb55-3" title="3">                              <span class="st">&quot;1.0 - 1.25&quot;</span>, <span class="st">&quot;1.25 - 2.0&quot;</span>, <span class="st">&quot;2.0 - 5.0&quot;</span>, <span class="st">&quot;5.0 - 10.0&quot;</span>, <span class="st">&quot;&gt; 10.0&quot;</span>),</a>
-<a class="sourceLine" id="cb55-4" title="4">                   <span class="dt">name =</span> <span class="st">&quot;PJul:PJan Ppt. Ratio&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb55-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">colour =</span> <span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="kw">ggplot</span>(wus_pratio, <span class="kw">aes</span>(<span class="dt">x =</span> pjulpjan_factor, <span class="dt">y=</span>elev, <span class="dt">group =</span> pjulpjan_factor)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb55-2" data-line-number="2"><span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;0.0 - 0.1&quot;</span>, <span class="st">&quot;0.1 - 0.2&quot;</span>, <span class="st">&quot;0.2 - 0.5&quot;</span>, <span class="st">&quot;0.5 - 0.8&quot;</span>, <span class="st">&quot;0.8 - 1.0&quot;</span>, </a>
+<a class="sourceLine" id="cb55-3" data-line-number="3">                              <span class="st">&quot;1.0 - 1.25&quot;</span>, <span class="st">&quot;1.25 - 2.0&quot;</span>, <span class="st">&quot;2.0 - 5.0&quot;</span>, <span class="st">&quot;5.0 - 10.0&quot;</span>, <span class="st">&quot;&gt; 10.0&quot;</span>),</a>
+<a class="sourceLine" id="cb55-4" data-line-number="4">                   <span class="dt">name =</span> <span class="st">&quot;PJul:PJan Ppt. Ratio&quot;</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb55-5" data-line-number="5"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">colour =</span> <span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/desc03-1.png" width="75%" height="75%" /></p>
 </div>
 <div id="bivariate-descriptive-statistics-correlations" class="section level2">
 <h2><span class="header-section-number">6.2</span> Bivariate descriptive statistics (correlations)</h2>
 <p>The main statistic for characterizing the strength and sense of the relationship between two variables is the correlation coefficient, but beware that the statistic is a measure of the <em>liner</em> relationship between variables. Here is a correlation matric for the western U.S. precipitation ratio data set:</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1"><span class="co"># correlations among western US precip-ratio variables</span></a>
-<a class="sourceLine" id="cb56-2" title="2"><span class="kw">round</span>(<span class="kw">cor</span>(wus_pratio), <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="co"># correlations among western US precip-ratio variables</span></a>
+<a class="sourceLine" id="cb56-2" data-line-number="2"><span class="kw">round</span>(<span class="kw">cor</span>(wus_pratio), <span class="dv">3</span>)</a></code></pre></div>
 <pre><code>##             lat    lon   elev pjanpann pfebpann pmarpann paprpann pmaypann pjunpann pjulpann paugpann
 ## lat       1.000 -0.341  0.153   -0.039   -0.150   -0.113    0.352    0.233    0.257    0.080   -0.176
 ## lon      -0.341  1.000 -0.170   -0.802   -0.727   -0.612    0.321    0.640    0.693    0.589    0.513
@@ -985,9 +987,9 @@ $(document).ready(function () {
 ## pdecpann   -0.687   -0.240    0.897    1.000   -0.776
 ## pjulpjan    0.386   -0.101   -0.717   -0.776    1.000</code></pre>
 <p>A graphical depiction of a correlation matrix can be generated using the <code>corrplot()</code> function:</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1"><span class="kw">library</span>(corrplot)</a></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1"><span class="kw">library</span>(corrplot)</a></code></pre></div>
 <pre><code>## corrplot 0.84 loaded</code></pre>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="kw">corrplot</span>(<span class="kw">cor</span>(wus_pratio), <span class="dt">method =</span> <span class="st">&quot;color&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1"><span class="kw">corrplot</span>(<span class="kw">cor</span>(wus_pratio), <span class="dt">method =</span> <span class="st">&quot;color&quot;</span>)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/desc05-1.png" width="75%" height="75%" /></p>
 </div>
 </div>
@@ -997,98 +999,98 @@ $(document).ready(function () {
 <div id="transparency" class="section level2">
 <h2><span class="header-section-number">7.1</span> Transparency</h2>
 <p>A simple scatter plot (below, left) showing the relationship between January and July precipitation ratios illustrates how the crowding of points makes interpretation difficult. The crowding can be overcome by plotting transparent symbols specified using the “alpha channel” of the color for individual points (below, right).</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="co"># plot January vs. July precipitation ratios</span></a>
-<a class="sourceLine" id="cb61-2" title="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfcol=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)) <span class="co"># save graphics parameters</span></a>
-<a class="sourceLine" id="cb61-3" title="3"></a>
-<a class="sourceLine" id="cb61-4" title="4"><span class="co"># opaque symbols</span></a>
-<a class="sourceLine" id="cb61-5" title="5"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>pjanpann, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">1.25</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))</a>
-<a class="sourceLine" id="cb61-6" title="6"></a>
-<a class="sourceLine" id="cb61-7" title="7"><span class="co"># transparent symbols</span></a>
-<a class="sourceLine" id="cb61-8" title="8"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>pjanpann, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">1.25</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>, <span class="fl">.2</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1"><span class="co"># plot January vs. July precipitation ratios</span></a>
+<a class="sourceLine" id="cb61-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfcol=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)) <span class="co"># save graphics parameters</span></a>
+<a class="sourceLine" id="cb61-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb61-4" data-line-number="4"><span class="co"># opaque symbols</span></a>
+<a class="sourceLine" id="cb61-5" data-line-number="5"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>pjanpann, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">1.25</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb61-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb61-7" data-line-number="7"><span class="co"># transparent symbols</span></a>
+<a class="sourceLine" id="cb61-8" data-line-number="8"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>pjanpann, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">1.25</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>, <span class="fl">.2</span>))</a></code></pre></div>
 <p><img src="usingR_files/figure-html/hd05-1.png" width="100%" height="100%" /></p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1">par &lt;-<span class="st"> </span>opar <span class="co"># restore graphics parameters</span></a></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" data-line-number="1">par &lt;-<span class="st"> </span>opar <span class="co"># restore graphics parameters</span></a></code></pre></div>
 <p>When there are a lot of points, sometimes the graphics capability of the GUIs are taxed, and it is more efficient to make a .pdf image directly.</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="co"># transparent symbols using the pdf() device </span></a>
-<a class="sourceLine" id="cb63-2" title="2"><span class="kw">pdf</span>(<span class="dt">file=</span><span class="st">&quot;highres_enhanced_plot01.pdf&quot;</span>)</a>
-<a class="sourceLine" id="cb63-3" title="3"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>pjanpann, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">1.25</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>, <span class="fl">.2</span>))</a>
-<a class="sourceLine" id="cb63-4" title="4"><span class="kw">dev.off</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="co"># transparent symbols using the pdf() device </span></a>
+<a class="sourceLine" id="cb63-2" data-line-number="2"><span class="kw">pdf</span>(<span class="dt">file=</span><span class="st">&quot;highres_enhanced_plot01.pdf&quot;</span>)</a>
+<a class="sourceLine" id="cb63-3" data-line-number="3"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>pjanpann, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">1.25</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">0</span>, <span class="fl">.2</span>))</a>
+<a class="sourceLine" id="cb63-4" data-line-number="4"><span class="kw">dev.off</span>()</a></code></pre></div>
 <p>It’s easy to see how the transparency of the symbols provides a visual measure of the density of points in the various regions in the space represented by the scatter plot.</p>
 <p>Over the region as a whole, the interesting question is the roles location and elevation may play in the seasonality of precipitation. The following plots show that the dependence of precipitation seasonality on elevation is rather complicated.</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="co"># seasonal precipitation vs. elevation</span></a>
-<a class="sourceLine" id="cb64-2" title="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfcol=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)) <span class="co"># save graphics parameters</span></a>
-<a class="sourceLine" id="cb64-3" title="3"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>elev, wus_pratio<span class="op">$</span>pjanpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="fl">0.1</span>))</a>
-<a class="sourceLine" id="cb64-4" title="4"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>elev, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="fl">0.1</span>))</a>
-<a class="sourceLine" id="cb64-5" title="5"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>elev, wus_pratio<span class="op">$</span>pjulpjan, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="fl">0.1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" data-line-number="1"><span class="co"># seasonal precipitation vs. elevation</span></a>
+<a class="sourceLine" id="cb64-2" data-line-number="2">opar &lt;-<span class="st"> </span><span class="kw">par</span>(<span class="dt">mfcol=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>)) <span class="co"># save graphics parameters</span></a>
+<a class="sourceLine" id="cb64-3" data-line-number="3"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>elev, wus_pratio<span class="op">$</span>pjanpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="fl">0.1</span>))</a>
+<a class="sourceLine" id="cb64-4" data-line-number="4"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>elev, wus_pratio<span class="op">$</span>pjulpann, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="fl">0.1</span>))</a>
+<a class="sourceLine" id="cb64-5" data-line-number="5"><span class="kw">plot</span>(wus_pratio<span class="op">$</span>elev, wus_pratio<span class="op">$</span>pjulpjan, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">col=</span><span class="kw">rgb</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">1</span>, <span class="fl">0.1</span>))</a></code></pre></div>
 <p><img src="usingR_files/figure-html/hd10-1.png" width="100%" height="100%" /></p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1">par &lt;-<span class="st"> </span>opar <span class="co"># restore graphics parameter</span></a></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1">par &lt;-<span class="st"> </span>opar <span class="co"># restore graphics parameter</span></a></code></pre></div>
 </div>
 <div id="parallel-coordinate-plots" class="section level2">
 <h2><span class="header-section-number">7.2</span> Parallel-coordinate plots</h2>
 <p>Parallel coordiate plots in a sense present an individual axis for each variable in a dataframe along which the individual values of the variable are plotted (usually rescaled to lie between 0 and 1), with the points for a particular observation joined by straight-line segments. Usually the points themselves are <em>not</em> plotted to avoid clutter. Parallel coordinate plots can be generated using the <code>GGally</code> package. Here’s a parallel coordinate plot for the western U.S. precipitation-ratio data:</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1"><span class="co"># load library</span></a>
-<a class="sourceLine" id="cb66-2" title="2"><span class="kw">library</span>(GGally)</a>
-<a class="sourceLine" id="cb66-3" title="3"><span class="kw">library</span>(gridExtra)</a>
-<a class="sourceLine" id="cb66-4" title="4"></a>
-<a class="sourceLine" id="cb66-5" title="5"><span class="co"># parallel coordinate plot</span></a>
-<a class="sourceLine" id="cb66-6" title="6"><span class="kw">ggparcoord</span>(<span class="dt">data =</span> wus_pratio,</a>
-<a class="sourceLine" id="cb66-7" title="7">  <span class="dt">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="dt">alphaLines =</span> <span class="fl">0.05</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb66-8" title="8"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x  =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">315</span>, <span class="dt">vjust=</span><span class="fl">1.0</span>, <span class="dt">hjust=</span><span class="fl">0.0</span>, <span class="dt">size=</span><span class="dv">10</span>),</a>
-<a class="sourceLine" id="cb66-9" title="9">        <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(), </a>
-<a class="sourceLine" id="cb66-10" title="10">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>() )</a></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" data-line-number="1"><span class="co"># load library</span></a>
+<a class="sourceLine" id="cb66-2" data-line-number="2"><span class="kw">library</span>(GGally)</a>
+<a class="sourceLine" id="cb66-3" data-line-number="3"><span class="kw">library</span>(gridExtra)</a>
+<a class="sourceLine" id="cb66-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb66-5" data-line-number="5"><span class="co"># parallel coordinate plot</span></a>
+<a class="sourceLine" id="cb66-6" data-line-number="6"><span class="kw">ggparcoord</span>(<span class="dt">data =</span> wus_pratio,</a>
+<a class="sourceLine" id="cb66-7" data-line-number="7">  <span class="dt">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="dt">alphaLines =</span> <span class="fl">0.05</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb66-8" data-line-number="8"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x  =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">315</span>, <span class="dt">vjust=</span><span class="fl">1.0</span>, <span class="dt">hjust=</span><span class="fl">0.0</span>, <span class="dt">size=</span><span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb66-9" data-line-number="9">        <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb66-10" data-line-number="10">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>() )</a></code></pre></div>
 <p><img src="usingR_files/figure-html/pcp01-1.png" width="100%" height="80%" /></p>
 <p>Note the use of transparency, specified by the <code>alphaLines</code> argument. Individual observations (stations) that have similar values for each variable trace out dense bands of lines, and several distinct bands, corresponding to different “precipitation regimes” (typical seasonal variations) can be observed.</p>
 <p>Parallel coordinate plots are most effective when paired with another display with points highlighted in one display similarly highlighted in the other. In the case of the western U.S. data the logical other display is a map. There are (at least) two ways of doing the highlighting. Here, and “indicator variable” is defined using latitude and longitude limits, and the points within those limits appear in read on both plots.</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="co"># lon/lat window</span></a>
-<a class="sourceLine" id="cb67-2" title="2">lonmin &lt;-<span class="st"> </span><span class="fl">-125.0</span>; lonmax &lt;-<span class="st"> </span><span class="fl">-120.0</span>; latmin &lt;-<span class="st"> </span><span class="fl">42.0</span>; latmax &lt;-<span class="st"> </span><span class="fl">49.0</span> </a>
-<a class="sourceLine" id="cb67-3" title="3">lon &lt;-<span class="st"> </span>wus_pratio<span class="op">$</span>lon; lat &lt;-<span class="st"> </span>wus_pratio<span class="op">$</span>lat</a>
-<a class="sourceLine" id="cb67-4" title="4">wus_pratio<span class="op">$</span>select_pts &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">ifelse</span>(lat <span class="op">&gt;=</span><span class="st"> </span>latmin <span class="op">&amp;</span><span class="st"> </span>lat <span class="op">&lt;=</span><span class="st"> </span>latmax <span class="op">&amp;</span><span class="st"> </span>lon <span class="op">&gt;=</span><span class="st"> </span>lonmin <span class="op">&amp;</span><span class="st"> </span>lon <span class="op">&lt;=</span><span class="st"> </span>lonmax, <span class="dv">1</span>, <span class="dv">0</span>))</a>
-<a class="sourceLine" id="cb67-5" title="5"></a>
-<a class="sourceLine" id="cb67-6" title="6"><span class="co"># pcp</span></a>
-<a class="sourceLine" id="cb67-7" title="7">a &lt;-<span class="st"> </span><span class="kw">ggparcoord</span>(<span class="dt">data =</span> wus_pratio[<span class="kw">order</span>(wus_pratio<span class="op">$</span>select_pts),],</a>
-<a class="sourceLine" id="cb67-8" title="8">  <span class="dt">columns =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>), <span class="dt">groupColumn =</span> <span class="st">&quot;select_pts&quot;</span>,</a>
-<a class="sourceLine" id="cb67-9" title="9">  <span class="dt">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="dt">alphaLines=</span><span class="fl">0.1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb67-10" title="10"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x  =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">315</span>, <span class="dt">vjust=</span><span class="fl">1.0</span>, <span class="dt">hjust=</span><span class="fl">0.0</span>, <span class="dt">size=</span><span class="dv">8</span>),</a>
-<a class="sourceLine" id="cb67-11" title="11">        <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(), </a>
-<a class="sourceLine" id="cb67-12" title="12">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb67-13" title="13">        <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb67-14" title="14"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="kw">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.2</span>), <span class="st">&quot;red&quot;</span>))</a>
-<a class="sourceLine" id="cb67-15" title="15">  </a>
-<a class="sourceLine" id="cb67-16" title="16"><span class="co"># map</span></a>
-<a class="sourceLine" id="cb67-17" title="17">b &lt;-<span class="st"> </span><span class="kw">ggplot</span>(wus_pratio, <span class="kw">aes</span>(lon, lat))  <span class="op">+</span></a>
-<a class="sourceLine" id="cb67-18" title="18"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group), wus_states, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb67-19" title="19"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(lon, lat, <span class="dt">color =</span> select_pts), <span class="dt">size =</span> <span class="fl">0.8</span> ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb67-20" title="20"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb67-21" title="21"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb67-22" title="22"><span class="st">  </span><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>))</a>
-<a class="sourceLine" id="cb67-23" title="23"></a>
-<a class="sourceLine" id="cb67-24" title="24"><span class="kw">grid.arrange</span>(a, b, <span class="dt">nrow =</span> <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1"><span class="co"># lon/lat window</span></a>
+<a class="sourceLine" id="cb67-2" data-line-number="2">lonmin &lt;-<span class="st"> </span><span class="fl">-125.0</span>; lonmax &lt;-<span class="st"> </span><span class="fl">-120.0</span>; latmin &lt;-<span class="st"> </span><span class="fl">42.0</span>; latmax &lt;-<span class="st"> </span><span class="fl">49.0</span> </a>
+<a class="sourceLine" id="cb67-3" data-line-number="3">lon &lt;-<span class="st"> </span>wus_pratio<span class="op">$</span>lon; lat &lt;-<span class="st"> </span>wus_pratio<span class="op">$</span>lat</a>
+<a class="sourceLine" id="cb67-4" data-line-number="4">wus_pratio<span class="op">$</span>select_pts &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">ifelse</span>(lat <span class="op">&gt;=</span><span class="st"> </span>latmin <span class="op">&amp;</span><span class="st"> </span>lat <span class="op">&lt;=</span><span class="st"> </span>latmax <span class="op">&amp;</span><span class="st"> </span>lon <span class="op">&gt;=</span><span class="st"> </span>lonmin <span class="op">&amp;</span><span class="st"> </span>lon <span class="op">&lt;=</span><span class="st"> </span>lonmax, <span class="dv">1</span>, <span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb67-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb67-6" data-line-number="6"><span class="co"># pcp</span></a>
+<a class="sourceLine" id="cb67-7" data-line-number="7">a &lt;-<span class="st"> </span><span class="kw">ggparcoord</span>(<span class="dt">data =</span> wus_pratio[<span class="kw">order</span>(wus_pratio<span class="op">$</span>select_pts),],</a>
+<a class="sourceLine" id="cb67-8" data-line-number="8">  <span class="dt">columns =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>), <span class="dt">groupColumn =</span> <span class="st">&quot;select_pts&quot;</span>,</a>
+<a class="sourceLine" id="cb67-9" data-line-number="9">  <span class="dt">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="dt">alphaLines=</span><span class="fl">0.1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb67-10" data-line-number="10"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x  =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">315</span>, <span class="dt">vjust=</span><span class="fl">1.0</span>, <span class="dt">hjust=</span><span class="fl">0.0</span>, <span class="dt">size=</span><span class="dv">8</span>),</a>
+<a class="sourceLine" id="cb67-11" data-line-number="11">        <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb67-12" data-line-number="12">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>(),</a>
+<a class="sourceLine" id="cb67-13" data-line-number="13">        <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb67-14" data-line-number="14"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="kw">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.2</span>), <span class="st">&quot;red&quot;</span>))</a>
+<a class="sourceLine" id="cb67-15" data-line-number="15">  </a>
+<a class="sourceLine" id="cb67-16" data-line-number="16"><span class="co"># map</span></a>
+<a class="sourceLine" id="cb67-17" data-line-number="17">b &lt;-<span class="st"> </span><span class="kw">ggplot</span>(wus_pratio, <span class="kw">aes</span>(lon, lat))  <span class="op">+</span></a>
+<a class="sourceLine" id="cb67-18" data-line-number="18"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group), wus_states, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb67-19" data-line-number="19"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(lon, lat, <span class="dt">color =</span> select_pts), <span class="dt">size =</span> <span class="fl">0.8</span> ) <span class="op">+</span></a>
+<a class="sourceLine" id="cb67-20" data-line-number="20"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb67-21" data-line-number="21"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb67-22" data-line-number="22"><span class="st">  </span><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>))</a>
+<a class="sourceLine" id="cb67-23" data-line-number="23"></a>
+<a class="sourceLine" id="cb67-24" data-line-number="24"><span class="kw">grid.arrange</span>(a, b, <span class="dt">nrow =</span> <span class="dv">1</span>)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/pcp03-1.png" width="100%" height="100%" /></p>
 <p>The points in western Oregon and wesetern Washington clearly have a winter-wet precipitation regime. A second highlighting approach is to select observations according to a particular range of values for a variable. Here points with wet Augusts (e.g. points with an August:Annual precipition ratio greater than 0.5) are selected, and highlighted in the parallel coordinates plot and location map:</p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="co"># variable-value selection</span></a>
-<a class="sourceLine" id="cb68-2" title="2">cutpoint &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb68-3" title="3">v &lt;-<span class="st"> </span>wus_pratio<span class="op">$</span>paugpann</a>
-<a class="sourceLine" id="cb68-4" title="4">v &lt;-<span class="st"> </span>(v<span class="op">-</span><span class="kw">min</span>(v))<span class="op">/</span>(<span class="kw">max</span>(v)<span class="op">-</span><span class="kw">min</span>(v))</a>
-<a class="sourceLine" id="cb68-5" title="5">wus_pratio<span class="op">$</span>select_pts &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">ifelse</span>(v <span class="op">&gt;=</span><span class="st"> </span>cutpoint, <span class="dv">1</span>, <span class="dv">0</span>))</a>
-<a class="sourceLine" id="cb68-6" title="6"></a>
-<a class="sourceLine" id="cb68-7" title="7"><span class="co"># pcp</span></a>
-<a class="sourceLine" id="cb68-8" title="8">a &lt;-<span class="st"> </span><span class="kw">ggparcoord</span>(<span class="dt">data =</span> wus_pratio[<span class="kw">order</span>(wus_pratio<span class="op">$</span>select_pts),],</a>
-<a class="sourceLine" id="cb68-9" title="9">                <span class="dt">columns =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>), <span class="dt">groupColumn =</span> <span class="st">&quot;select_pts&quot;</span>,</a>
-<a class="sourceLine" id="cb68-10" title="10">                <span class="dt">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="dt">alphaLines=</span><span class="fl">0.1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-11" title="11"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x  =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">315</span>, <span class="dt">vjust=</span><span class="fl">1.0</span>, <span class="dt">hjust=</span><span class="fl">0.0</span>, <span class="dt">size=</span><span class="dv">8</span>),</a>
-<a class="sourceLine" id="cb68-12" title="12">        <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(), </a>
-<a class="sourceLine" id="cb68-13" title="13">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb68-14" title="14">        <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-15" title="15"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="kw">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.2</span>), <span class="st">&quot;red&quot;</span>))</a>
-<a class="sourceLine" id="cb68-16" title="16"></a>
-<a class="sourceLine" id="cb68-17" title="17"><span class="co"># map</span></a>
-<a class="sourceLine" id="cb68-18" title="18">b &lt;-<span class="st"> </span><span class="kw">ggplot</span>(wus_pratio, <span class="kw">aes</span>(lon, lat))  <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-19" title="19"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group), wus_states, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-20" title="20"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(lon, lat, <span class="dt">color =</span> select_pts), <span class="dt">size =</span> <span class="fl">0.8</span> ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-21" title="21"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb68-22" title="22"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb68-23" title="23"><span class="st">  </span><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>))</a>
-<a class="sourceLine" id="cb68-24" title="24"></a>
-<a class="sourceLine" id="cb68-25" title="25"><span class="kw">grid.arrange</span>(a, b, <span class="dt">nrow =</span> <span class="dv">1</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1"><span class="co"># variable-value selection</span></a>
+<a class="sourceLine" id="cb68-2" data-line-number="2">cutpoint &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb68-3" data-line-number="3">v &lt;-<span class="st"> </span>wus_pratio<span class="op">$</span>paugpann</a>
+<a class="sourceLine" id="cb68-4" data-line-number="4">v &lt;-<span class="st"> </span>(v<span class="op">-</span><span class="kw">min</span>(v))<span class="op">/</span>(<span class="kw">max</span>(v)<span class="op">-</span><span class="kw">min</span>(v))</a>
+<a class="sourceLine" id="cb68-5" data-line-number="5">wus_pratio<span class="op">$</span>select_pts &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">ifelse</span>(v <span class="op">&gt;=</span><span class="st"> </span>cutpoint, <span class="dv">1</span>, <span class="dv">0</span>))</a>
+<a class="sourceLine" id="cb68-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb68-7" data-line-number="7"><span class="co"># pcp</span></a>
+<a class="sourceLine" id="cb68-8" data-line-number="8">a &lt;-<span class="st"> </span><span class="kw">ggparcoord</span>(<span class="dt">data =</span> wus_pratio[<span class="kw">order</span>(wus_pratio<span class="op">$</span>select_pts),],</a>
+<a class="sourceLine" id="cb68-9" data-line-number="9">                <span class="dt">columns =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>), <span class="dt">groupColumn =</span> <span class="st">&quot;select_pts&quot;</span>,</a>
+<a class="sourceLine" id="cb68-10" data-line-number="10">                <span class="dt">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="dt">alphaLines=</span><span class="fl">0.1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb68-11" data-line-number="11"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x  =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">315</span>, <span class="dt">vjust=</span><span class="fl">1.0</span>, <span class="dt">hjust=</span><span class="fl">0.0</span>, <span class="dt">size=</span><span class="dv">8</span>),</a>
+<a class="sourceLine" id="cb68-12" data-line-number="12">        <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb68-13" data-line-number="13">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>(),</a>
+<a class="sourceLine" id="cb68-14" data-line-number="14">        <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb68-15" data-line-number="15"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="kw">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.2</span>), <span class="st">&quot;red&quot;</span>))</a>
+<a class="sourceLine" id="cb68-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb68-17" data-line-number="17"><span class="co"># map</span></a>
+<a class="sourceLine" id="cb68-18" data-line-number="18">b &lt;-<span class="st"> </span><span class="kw">ggplot</span>(wus_pratio, <span class="kw">aes</span>(lon, lat))  <span class="op">+</span></a>
+<a class="sourceLine" id="cb68-19" data-line-number="19"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group), wus_states, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb68-20" data-line-number="20"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(lon, lat, <span class="dt">color =</span> select_pts), <span class="dt">size =</span> <span class="fl">0.8</span> ) <span class="op">+</span></a>
+<a class="sourceLine" id="cb68-21" data-line-number="21"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb68-22" data-line-number="22"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb68-23" data-line-number="23"><span class="st">  </span><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>))</a>
+<a class="sourceLine" id="cb68-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb68-25" data-line-number="25"><span class="kw">grid.arrange</span>(a, b, <span class="dt">nrow =</span> <span class="dv">1</span>, <span class="dt">ncol =</span> <span class="dv">2</span>)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/pcp04-1.png" width="100%" height="100%" /></p>
 <p>The North American Monsoon region is clearly depicted.</p>
 </div>
