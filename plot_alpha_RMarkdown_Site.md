@@ -1,5 +1,4 @@
-
-	---
+	—
 	output:
 	  html_document:
 	    css: html-md-01.css
@@ -10,7 +9,7 @@
 	    toc: yes
 	    toc_float: true
 	    collapsed: no
-	---
+	—
 	
 	```{r set-options, echo=FALSE}
 	options(width = 105)
@@ -20,7 +19,7 @@
 	
 	# Introduction #
 	
-	This RMarkdown document describes reading  a netCDF file consisting of several bioclimatic variables, and plots one of them: `alpha`
+	This RMarkdown document describes reading  a netCDF file consisting of several bioclimatic variables, 	and plots one of them `alpha`
 	
 	## Load packages ## 
 	
