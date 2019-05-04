@@ -378,45 +378,65 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#getting-going"><span class="toc-section-number">0.1</span> Getting going</a></li>
+<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#creating-a-repository"><span class="toc-section-number">2</span> Creating a repository</a><ul>
+<li><a href="#set-up"><span class="toc-section-number">2.1</span> Set up</a></li>
+<li><a href="#web-site-setup"><span class="toc-section-number">2.2</span> Web site setup</a></li>
+</ul></li>
+<li><a href="#preliminary-tasks"><span class="toc-section-number">3</span> Preliminary tasks</a></li>
+<li><a href="#a-simple-script-file-based-web-page-example-1"><span class="toc-section-number">4</span> A simple script-file based web page (Example 1)</a></li>
+<li><a href="#an-r-markdown-notebook-based-web-page-example-2"><span class="toc-section-number">5</span> An R Markdown Notebook based web page (Example 2)</a></li>
+<li><a href="#single-page-r-markdown-based-web-page-example-3"><span class="toc-section-number">6</span> Single-page R Markdown-based web page (Example 3)</a></li>
 </ul>
 </div>
 
-<p>A repository is a collection of files, including code, data, and documents, that can be used to store multiple versions of files as the development of a project proceeds. Repositories can be local (i.e. file on the machine being used for development), but they are most effective if that are <em>remote</em> or offsite. Offsite repositories provide two important advantages: 1) they backup files that could be lost for any number of reasons (hard-drive failures, machine loss or meltdown), and 2) they are accessible from other machines, and by collaborators.</p>
-<p>“Git” is one version-control system that creates and manages repositories (and note “Git” is purported not to mean anything), and “GitHub” is a website that hosts remote repositories, web pages, and some (smallish) data sets.</p>
-<p>The use of Git and GitHub in R and RStudio is excellently described in the Bookdown document <a href="https://happygitwithr.com/index.html">[<em>Happy Git and GitHub for the useR (HappyGitWithR)</em>]</a> by Jenny Bryan at the Univ. British Columbia. This is the primary source for guidance and use of Git and GitHub from within RStudio.</p>
-<div id="getting-going" class="section level2">
-<h2><span class="header-section-number">0.1</span> Getting going</h2>
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>There is a hierarchy of output formats that could be used for completing the data analysis project, ranging from a simple R script, to a multi-page web site. These formats include</p>
+<ul>
+<li>an R script file (<code>*.R</code>), where the output would be produced by downloading the script file, and executing it locally;</li>
+<li>an R Markdown “Notebook” file (<code>*.Rmd</code>) that combines code and output in a single file, which can be saved as a self-contained <code>.html</code> file;</li>
+<li>an R Markdown file (<code>*.Rmd</code>) that creates a single-page <code>.html</code> file (or a single-file Word (<code>*.docx</code>) or PDF (<code>*.pdf</code>) file, with some additional installations required) that combines text, code, and output, and also contains internal navigation (i.e. a table of contents) which could be posted on a web page;</li>
+<li>a multiple-page <code>*.html</code> web site, that includes several <code>Rmd</code> files, a “site YAML” file (<code>_site.yml</code>), and possibly a style sheet (<code>*.css</code>).</li>
+</ul>
+<p>The single-page <code>*.Rmd</code> file that produces a stand-alone <code>*.html</code> file that is hosted on GitHub will probably be the ultimate choice for most people, but the multiple-page web site might also be worth attempting.</p>
+<p>Implementing these approaches will be described sequentially below. Various files and folders will be created in each example, and some of these will have to be deleted before moving on to the next example. See the “CLEAN UP” steps at the beginning of the second, third and fourth examples</p>
+</div>
+<div id="creating-a-repository" class="section level1">
+<h1><span class="header-section-number">2</span> Creating a repository</h1>
 <p>The key steps include:</p>
 <ol style="list-style-type: decimal">
-<li>registering a (free) GitHub account at <a href="github.com">[github.com]</a> (see Section 4 of <em>HappyGitWithR</em>) (See also the <a href="https://education.github.com">[GitHub Education]</a> page.)</li>
+<li>registering a (free) GitHub account at <a href="github.com">[github.com]</a> (see Section 4 of <a href="https://happygitwithr.com/index.html">[<em>Happy Git and GitHub for the useR (HappyGitWithR)</em>]</a>) (See also the <a href="https://education.github.com">[GitHub Education]</a> page.)</li>
 <li>installing Git (Section 6)</li>
 <li>installing a Git client (Sourcetree)</li>
 <li>configuring RStudio and GitHub (Sections 9-14)</li>
 <li>starting a new project (Section 15)</li>
 </ol>
+<div id="set-up" class="section level2">
+<h2><span class="header-section-number">2.1</span> Set up</h2>
 <p>The basic idea is to create a (mostly) empty new repository on GitHub, and then “clone” to a local machine. The steps include:</p>
 <p>At GitHub:</p>
 <ol start="6" style="list-style-type: decimal">
-<li>create a new repository (e.g. <code>REarthSysSci</code>)</li>
-<li>edit its <code>README.md</code> file</li>
+<li>create a new repository (e.g. <code>geog490</code> (or <code>geog590</code>);</li>
+<li>create and edit its <code>README.md</code> file.</li>
+<li>copy or write down its URL.</li>
 </ol>
 <p>On the local machine:</p>
 <ol start="8" style="list-style-type: decimal">
-<li>create a folder, e.g. <code>~/Projects/DataVis/working/REarthSysSci</code></li>
+<li>create a folder, e.g. <code>/Users/bartlein/Projects/geog490</code></li>
 </ol>
 <p>In RStudio:</p>
 <ol start="9" style="list-style-type: decimal">
 <li>create a project in an existing folder (File &gt; New Project… &gt; Version Control &gt; Git<br />
 </li>
-<li>Repository URL (e.g.): <code>https://github.com/pjbartlein/REarthSysSci</code><br />
+<li>Repository URL (e.g.): <code>https://github.com/pjbartlein/geog490</code><br />
 </li>
-<li>Project directory name: <code>REarthSysSci</code><br />
+<li>Project directory name: <code>geog490</code><br />
 </li>
-<li>Browse to folder: <code>~/Projects/DataVis/working/</code></li>
+<li>Browse to folder: <code>/Users/Projects/</code></li>
 <li>click on “Create Project”</li>
 </ol>
-<p>(note that <code>.gitignore</code>, <code>README.md</code> and <code>REarthSysSci</code> have turned up in working directory)</p>
+<p>(note that <code>.gitignore</code>, <code>README.md</code> and <code>REarthSysSci</code> will have turned up in the working directory)</p>
 <p>Then, on the local machine:</p>
 <ol start="14" style="list-style-type: decimal">
 <li>Edit <code>README.md</code> and save (perhaps using a Markdown editor, or in RStudio)</li>
@@ -425,6 +445,137 @@ $(document).ready(function () {
 <li>Click on checkboxes to “stage” files</li>
 <li>Click on the <code>Push</code> button to synchronize the local repository with the remote GitHub repository.</li>
 </ol>
+<p>At this point, the project folder should contain the following folders and files:</p>
+<pre><code>/.git
+/.Rproj.user
+.gitignore
+geog490.Rproj
+README.md</code></pre>
+</div>
+<div id="web-site-setup" class="section level2">
+<h2><span class="header-section-number">2.2</span> Web site setup</h2>
+<p>Go back to the repository (e.g. <code>https://github.com/pjbartlein/geog490</code>, if it’s not still open in your web browser). Check to see that you’re still logged in. Then:</p>
+<ol style="list-style-type: decimal">
+<li>Click on “Create new file”;</li>
+<li>In the “Name your file…” box, type (exactly): <code>docs/</code></li>
+<li>The path will expand to (e.g.) <code>geog490/docs/</code> and in the “Name your file…” box, enter <code>index.html</code>.</li>
+<li>In the <code>&lt;&gt; Edit new file</code> panel, type something like “GEOG490 temporary page”</li>
+<li>Scroll down and click on the “Commit new file” button.</li>
+</ol>
+<p>If you back up to the top-level <code>geog490</code> page, you’ll see a new folder. Then click on “Settings” and scroll down to “GitHub Pages”.</p>
+<ol style="list-style-type: decimal">
+<li>Click on the drop-down box below “Source”.</li>
+<li>Click on the “master branch/docs folder”</li>
+</ol>
+<p>Sometimes it takes a little while, but you should see a the message “Your site is ready to be published at <code>https://pjbartlein.github.io/geog490</code>” (but with your GitHub user name and repository name instead), just below the top of “GitHub Pages”. If you open a new tab or window on the browser and type or paste in that URL, you should see a new web page with the text “GEOG490 temporary page” (or whatever you typed in above). Notice that in the projects folder you’ll see a new folder <code>/docs</code>.</p>
+<p>Note that there are two web pages associated with the project now:</p>
+<ul>
+<li><a href="https://github.com/pjbartlein/geog490/"><code>https://github.com/pjbartlein/geog490/</code></a> (the GitHub repository page); and</li>
+<li><a href="https://pjbartlein.github.io/geog490/index.html"><code>https://pjbartlein.github.io/geog490/index.html</code></a> (the projects web page).</li>
+</ul>
+</div>
+</div>
+<div id="preliminary-tasks" class="section level1">
+<h1><span class="header-section-number">3</span> Preliminary tasks</h1>
+<p>R Markdown is implemented by two packages (and their dependencies), <code>rmarkdown</code> and <code>knitr</code>. The packages can be installed as follows</p>
+<pre><code>install.packages(&quot;rmarkdown&#39;)
+install.packages(&quot;knitr&quot;)</code></pre>
+<p>The following examples can be reproduced using this data set: <code>cru10min30_bio.nc</code>, and the shapefile components of <code>ne_110m_admin_0_countries.shp</code>. These can be found on the course <code>SFTP</code> site.</p>
+<p>Transfer the files to a convenient folder(s), and modify the paths in the scripts below. Remember to get all of the shapefile components, not just <code>ne_110m_admin_0_countries.shp</code>.</p>
+</div>
+<div id="a-simple-script-file-based-web-page-example-1" class="section level1">
+<h1><span class="header-section-number">4</span> A simple script-file based web page (Example 1)</h1>
+<p>To demonstrate how this approach works, a small script file that reads a shapefile and a dataset from a <code>netCDF</code> file and makes a map will be run, and the results combined in a Markdown file (using a Markdown editor) and then rendered as an <code>.html</code> file. This file will then be pushed to the GitHub repository.</p>
+<p>To begin, download the script file to the projects folder: <a href="https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RScript.R">[plot_alpha_RScript.R]</a> <a href="https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RScript.R.txt">[View file]</a> (Make sure the <code>netCDF</code> and shapefile listed above is available.) Then,</p>
+<ol style="list-style-type: decimal">
+<li>Open the script file in RStudio, and edit the paths as appropriate;</li>
+<li>Run the script file and save the map of alpha as a PNG file (e.g. <code>alpha.png</code>);</li>
+<li>Create a Markdown file named <code>index.md</code>’;</li>
+<li>Include some text, the summary listing of alpha, and a link to the image;</li>
+<li>Save the <code>index.md</code> file, and also export it as an <code>.html</code> file (e.g. <code>index.html</code>).</li>
+</ol>
+<p>The Markdown file might look something like this:</p>
+<pre><code># Alpha (AE/PE)  
+
+Alpha (AE/PE) was read from `cru10min30_bio.nc` and contains:
+
+class       : RasterLayer  
+dimensions  : 360, 720, 259200  (nrow, ncol, ncell)  
+resolution  : 0.5, 0.5  (x, y) 
+extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)  
+coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0  
+data source : /Users/bartlein/Dropbox/DataVis/working/geog490/data/nc_files/cru10min30_bio.nc  
+names       : Priestley.Taylor..alpha..parameter..AE.PE.  
+zvar        : mipt  
+
+![](alpha.png)</code></pre>
+<p>At this point, there should be three new files in the projects folder: <code>index.md</code>, <code>index.html</code>, and <code>alpha.png</code>. Move <code>index.html</code> and <code>alpha.png</code> into the <code>/docs</code> folder, overwriting <code>index.html</code>. Then</p>
+<ol style="list-style-type: decimal">
+<li>On the Git pane in RStudio, select all of the files, and click on “Commit”;</li>
+<li>In the Commit message pane, type something like “edited index.html”;</li>
+<li>Click on “Commit”; and</li>
+<li>Click on “Push”.</li>
+</ol>
+<p>If you check the projects page (e.g. <a href="https://github.com/pjbartlein/geog490"><code>https://github.com/pjbartlein/geog490</code></a>) you should see the recent commits, and if you check the projects <em>web</em> page (e.g. <a href="https://pjbartlein.github.io/geog490/"><code>https://pjbartlein.github.io/geog490/</code></a>) you should see the web page you rendered from the Markdown file created above.</p>
+</div>
+<div id="an-r-markdown-notebook-based-web-page-example-2" class="section level1">
+<h1><span class="header-section-number">5</span> An R Markdown Notebook based web page (Example 2)</h1>
+<p><strong>CLEAN UP FIRST:</strong> Delete (or move somewhere else) the <code>index.md</code> file created above, and also delete the files in the <code>/docs</code> folder (but leave that folder in place).</p>
+<p>Download the example R Markdown Notebook file to the projects folder: <a href="https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RNotebook.Rmd">[plot_alpha_RNotebook.Rmd]</a> <a href="https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RNotebook.Rmd.txt">[View file]</a>.</p>
+<p>Then,</p>
+<ol style="list-style-type: decimal">
+<li>Open the <code>.Rmd</code> file;</li>
+<li>“Knit” the file by clicking on the “Knit” tab at the top of the script-editing window.</li>
+</ol>
+<p>Knitting the <code>.Rmd</code> file will create the file <code>plot_alpha_RNotebook.html</code> that contains the text, code, and output that you would see in RStudio if you stepped through the R Markdown Notebook file, code chunk-by-code chunk (using the little green arrows).</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Move <code>plot_alpha_RNotebook.html</code> to the <code>/docs</code> folder, and ename The file as <code>index.html</code>, and</li>
+<li>Use RStudio to commit and push the files to GitHub.</li>
+</ol>
+</div>
+<div id="single-page-r-markdown-based-web-page-example-3" class="section level1">
+<h1><span class="header-section-number">6</span> Single-page R Markdown-based web page (Example 3)</h1>
+<p><strong>CLEAN UP FIRST:</strong> Delete or move the R Markdown Notebook file <code>plot_alpha_RNotebook.Rmd</code>, delete the folder <code>/plot_alpha_Notebook_files</code> (which is probably empty, and delete <code>index.html</code> in the <code>/docs</code> folder (but leave that folder in place).</p>
+<p>A single-page R Markdown <code>.html</code> page provides a more elegant approach for combining text, code, and output that an R Markdown Notebook page. It can include page-navigation tools (i.e. a fixed or “floating” table of contents) and it can also employ a <code>.css</code> style sheet to change the basic format of the page. With additional tools installed, target output formats also include Word documents (<code>*.docx</code>) and PDF files (<code>.pdf</code>).</p>
+<p>Download an R Markdown file that will produce a single-page <code>.html</code> file as output: <a href="https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown_1page.Rmd">[plot_alpha_RMarkdown_1page.Rmd]</a> <a href="https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown.Rmd.txt">[View file]</a>. Also download a <code>.css</code> file that implements the appearance of the course web pages: <a href="https://pjbartlein.github.io/REarthSysSci/html-md-01.css">[html-md-01.css]</a>. Put both in projects folder.</p>
+<p>The <code>.Rmd</code> file looks much like the R Markdown Notebook file, but has two additional blocks of code at the beginning of the file. The first block is a “YAML header” that governs how the file is rendered</p>
+<pre><code>---
+title:  Raster mapping
+output:
+  html_document:
+    css: html-md-01.css
+    fig_caption: yes
+    highlight: haddock
+    number_sections: yes
+    theme: spacelab
+    toc: yes
+    toc_float: true
+    collapsed: no
+---</code></pre>
+<p>Most of the entries are obvious: “<code>title</code>” is used at the top of the page, “<code>output</code>” species that an <code>.html</code> file is desired (as opposed to a Word document or PDF); “<code>highlight: haddock</code>” specifies a particular style of syntax highlighting (<code>haddock</code>); “<code>number_sections: yes</code>” numbers the headings, which are reflected in the table of contents; “<code>theme: spacelab</code>” specifies a particular “Bootswatch” theme (the course pages use “cosmos”; “<code>toc: yes</code>” turns on the table of contents, and “<code>toc_float: true</code>” keeps the table of contents visible on the left-hand side of the window; and “<code>collapsed: no</code>” specifies that the table of contents should be visible. See Chapter 3 of <a href="https://bookdown.org/yihui/rmarkdown/documents.html"><em>R Markdown — The Definitive Guide</em></a> for more discussion of the <code>_site.yml</code> file and its contents.</p>
+<p>The second block of code includes some “global” code-chunk options (that apply to all “code chunks”, or blocks of code set off by backtics (<strong>```</strong>)</p>
+<pre><code>```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+```</code></pre>
+<p>As before,</p>
+<ol style="list-style-type: decimal">
+<li>Open the <code>.Rmd</code> file;</li>
+<li>“Knit” the file by clicking on the “Knit” tab at the top of the script-editing window.</li>
+</ol>
+<p>Knitting the <code>.Rmd</code> file will create the file <code>plot_alpha_RMarkdown_1page.html</code> that contains the text, code.</p>
+<ul>
+<li>Move <code>plot_alpha_RMarkdown_1page.html</code> to the <code>/docs</code> folder and rename the file as <code>index.html</code>;</li>
+<li>Delete the folders <code>/plot_alpha_RMarkdown_1page_cache</code> and <code>/plot_alpha_RMarkdown_1page_files</code>;</li>
+<li>Use RStudio to commit and push the files to GitHub.</li>
+</ul>
+<hr>
+<ul>
+<li><code>*.Rmd</code> RMarkdown files: input is an RMarkdown file (with a different special header) and a <code>*.css</code> file, output appears as an <code>.html</code> file, viewable in a browser or internally in RStudio<br />
+<a href="https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown.Rmd">[plot_alpha_RMarkdown.Rmd]</a> <a href="https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown.Rmd.txt">[View file]</a></li>
+<li>multiple <code>*.Rmd</code> and <code>.md</code> files, along with a “site YAML” file, as input, a multipage website or book with internal navigation as output. (This is how the course web pages are constructed.) <a href="https://github.com/pjbartlein/REarthSysSci">[https://github.com/pjbartlein/REarthSysSci]</a></li>
+</ul>
 </div>
 
 
