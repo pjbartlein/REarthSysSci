@@ -1,6 +1,15 @@
 ---
-title: "Plot Alpha"
-output: html_document
+title:  Raster mapping
+output:
+  html_document:
+    css: html-md-01.css
+    fig_caption: yes
+    highlight: haddock
+    number_sections: yes
+    theme: spacelab
+    toc: yes
+    toc_float: true
+    collapsed: no
 ---
 
 # Introduction #
