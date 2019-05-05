@@ -80,7 +80,7 @@ Sometimes it takes a little while, but you should see a the message "Your site i
 Note that there are two web pages associated with the project now:
 
 - [`https://github.com/pjbartlein/geog490/`](https://github.com/pjbartlein/geog490/) (the GitHub repository page); and
-- [`https://pjbartlein.github.io/geog490/index.html`](https://pjbartlein.github.io/geog490/index.html) (the projects web page).
+- [`https://pjbartlein.github.io/geog490/index.html`](https://pjbartlein.github.io/geog490/index.html) (the project's web page).
 
 
 # Some examples of project web pages #
@@ -391,3 +391,5 @@ At this point, the project folder should contain:
 	intro.html
 	plot_alpha_RMarkdown_Site.html
 	README.html
+	
+The website should be viewable [`https://pjbartlein.github.io/geog490/index.html`](https://pjbartlein.github.io/geog490/index.html) (the project's web page)
