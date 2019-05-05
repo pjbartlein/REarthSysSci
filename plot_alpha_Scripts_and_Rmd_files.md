@@ -104,7 +104,7 @@ Single-page `.html` file as output.
 	    fig_caption: yes
 	    highlight: haddock
 	    number_sections: yes
-	    theme: cerulean
+	    theme: spacelab
 	    toc: yes
 	    toc_float: true
 	    collapsed: no
@@ -176,15 +176,16 @@ Single-page `.html` file as output.
 Output is one component of a multi-page `.html` site.
 
 	---
+	title: Raster mapping
 	output:
 	  html_document:
 	    css: html-md-01.css
 	    fig_caption: yes
 	    highlight: haddock
 	    number_sections: yes
-	    theme: cerulean
+	    theme: spacelab
 	    toc: yes
-	    toc_float: true
+	    toc_float: false
 	    collapsed: no
 	---
 	

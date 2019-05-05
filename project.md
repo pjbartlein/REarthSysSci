@@ -97,18 +97,23 @@ Transfer the files to a convenient folder(s), and modify the paths in the script
 
 ## A simple script-file based web page (Example 1) ##
 
-To demonstrate how this approach works, a small script file that reads a shapefile and a dataset from a `netCDF` file and makes a map will be run, and the results combined in a Markdown file (using a Markdown editor) and then rendered as an `.html` file.  This file will then be pushed to the GitHub repository.
+To demonstrate how this approach works, a small script file that reads a shapefile and a dataset from a `netCDF` file and makes a map will be run, and the results combined in a Markdown file (using a Markdown editor) and then rendered as an `.html` file.  This file will then be pushed to the GitHub repository.  (Make sure the `netCDF` and shapefile listed above are available first.)
 
-To begin, download the script file to the projects folder:
-[[plot\_alpha\_RScript.R]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RScript.R)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RScript.R.txt)  (Make sure the `netCDF` and shapefile listed above is available.)  Then,
+To begin, 
 
-1. Open the script file in RStudio, and edit the paths as appropriate;
+1. Create a new R Script file in the projects folder (File > New File > R Script);
+2. Copy the contents of [[plot\_alpha\_RScript.R]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rscript.r-example-1) into it;
+1. Edit the paths in the script file as appropriate;
+2. Save it as `plot_alpha_RScript.R` in the projects folder.
+
+Then,
+ 
 2. Run the script file and save the map of alpha as a PNG file (e.g. `alpha.png`);
-3. Create a Markdown file named `index.md`';
-4. Include some text, the summary listing of alpha, and a link to the image;
+3. Create a Markdown file named `index.md`;
+4. Include some text, (e.g. the summary listing of alpha, copies from the Console pane), and a link to the image (e.g. `![](alpha.png)`);
 5. Save the `index.md` file, and also export it as an `.html` file (e.g. `index.html`).
 
-The Markdown file might look something like this:
+The `index.md` Markdown file might look something like this:
 
 ```
 # Alpha (AE/PE)  
@@ -134,17 +139,19 @@ At this point, there should be three new files in the projects folder:  `index.m
 3. Click on "Commit"; and
 4. Click on "Push". 
 
-If you check the projects page (e.g. [`https://github.com/pjbartlein/geog490`](https://github.com/pjbartlein/geog490)) you should see the recent commits, and if you check the projects *web* page (e.g. [`https://pjbartlein.github.io/geog490/`](https://pjbartlein.github.io/geog490/)) you should see the web page you rendered from the Markdown file created above.
+If you check the project's repository page (e.g. [`https://github.com/pjbartlein/geog490`](https://github.com/pjbartlein/geog490)) you should see the recent commits, and if you check the project's *web* page (e.g. [`https://pjbartlein.github.io/geog490/`](https://pjbartlein.github.io/geog490/)) you should see the web page you rendered from the Markdown file created above.
 
 ## An R Markdown Notebook based web page (Example 2)##
 
 **CLEAN UP FIRST:**  Delete (or move somewhere else) the `index.md` file created above, and also delete the files in the `/docs` folder (but leave that folder in place).
 
-Download the example R Markdown Notebook file to the projects folder:  [[plot\_alpha\_RNotebook.Rmd]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RNotebook.Rmd)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RNotebook.Rmd.txt).  
-
 Then,
 
-1. Open the `.Rmd` file;
+1. Create a new R Markdown file in the projects folder (File > New File > R Notebook);
+2. Delete the sample code in the new page. (New `*.Rmd` files come populated with code that creates a demonstration page);
+2. Copy the contents of [[plot\_alpha\_RMarkdown\_Notebook.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_notebook.rmd-example-2) into it;
+1. Edit the paths in the script file as appropriate;
+2. Save it as `plot\_alpha\_RMarkdown\_Notebook.Rmd` in the projects folder; and
 2. "Knit" the file by clicking on the "Knit" tab at the top of the script-editing window.
 
 Knitting the `.Rmd` file will create the file `plot_alpha_RNotebook.html` that contains the text, code, and output that you would see in RStudio if you stepped through the R Markdown Notebook file, code chunk-by-code chunk (using the little green arrows).  
@@ -152,13 +159,23 @@ Knitting the `.Rmd` file will create the file `plot_alpha_RNotebook.html` that c
 3. Move `plot_alpha_RNotebook.html` to the `/docs` folder, and ename The file as `index.html`, and 
 5. Use RStudio to commit and push the files to GitHub.
 
+Check the project's repository page (e.g. [`https://github.com/pjbartlein/geog490`](https://github.com/pjbartlein/geog490)) to see the recent commits, and the project's *web* page (e.g. [`https://pjbartlein.github.io/geog490/`](https://pjbartlein.github.io/geog490/)) to see the Notebook file. 
+
 ## Single-page R Markdown-based web page (Example 3) ##
 
 **CLEAN UP FIRST:**  Delete or move the R Markdown Notebook file `plot_alpha_RNotebook.Rmd`, delete the folder `/plot_alpha_Notebook_files` (which is probably empty, and delete `index.html` in the `/docs` folder (but leave that folder in place).
 
 A single-page R Markdown `.html` page provides a more elegant approach for combining text, code, and output that an R Markdown Notebook page.  It can include page-navigation tools (i.e. a fixed or "floating" table of contents) and it can also employ a `.css` style sheet to change the basic format of the page.  With additional tools installed, target output formats also include Word documents (`*.docx`) and PDF files (`.pdf`).
 
-Download an R Markdown file that will produce a single-page `.html` file as output:  [[plot\_alpha\_RMarkdown\_1page.Rmd]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown\_1page.Rmd)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown.Rmd.txt).  Also download a `.css` file that implements the appearance of the course web pages:  [[html-md-01.css]](https://pjbartlein.github.io/REarthSysSci/html-md-01.css).  Put both in projects folder.  
+Create an R Markdown file that will produce a single-page `.html` file as output:  
+
+1. Create a new R Markdown file in the projects folder (File > New File > R Markdown);
+2. Delete the sample code in the new page; 
+2. Copy the contents of [[plot\_alpha\_RMarkdown\_1Page.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_1page.rmd-example-3) into it;
+1. Edit the paths in the script file as appropriate;
+2. Save it as `plot\_alpha\_RMarkdown\_1Page.Rmd` in the projects folder;
+
+Also download a `.css` file that implements the appearance of the course web pages:  [[html-md-01.css]](https://pjbartlein.github.io/REarthSysSci/html-md-01.css).  Save this in the projects folder.  
 
 The `.Rmd` file looks much like the R Markdown Notebook file, but has two additional blocks of code at the beginning of the file.  The first block is a "YAML header" that governs how the file is rendered   
 
@@ -175,11 +192,12 @@ The `.Rmd` file looks much like the R Markdown Notebook file, but has two additi
 	    toc_float: true
 	    collapsed: no
 	---
-Most of the entries are obvious:  "`title`" is used at the top of the page, "`output`" species that an `.html` file is desired (as opposed to a Word document or PDF); "`highlight: haddock`" specifies a particular style of syntax highlighting (`haddock`); "`number_sections: yes`" numbers the headings, which are reflected in the table of contents; "`theme: spacelab`" specifies a particular "Bootswatch" theme (the course pages use "cosmos"; "`toc: yes`" turns on the table of contents, and "`toc_float: true`" keeps the table of contents visible on the left-hand side of the window; and "`collapsed: no`" specifies that the table of contents should be visible.  See Chapter 3 of [*R Markdown — The Definitive Guide*](https://bookdown.org/yihui/rmarkdown/documents.html) for more discussion of the `_site.yml` file and its contents.
 
-The second block of code includes some "global" code-chunk options (that apply to all "code chunks", or blocks of code set off by backtics (**```**)
+Most of the entries are obvious:  "`title`" is used at the top of the page, "`output`" species that an `.html` file is desired (as opposed to a Word document or PDF); "`highlight: haddock`" specifies a particular style of syntax highlighting (`haddock`); "`number_sections: yes`" numbers the headings, which are reflected in the table of contents; "`theme: spacelab`" specifies a particular "Bootswatch" theme (the course pages use "cosmos"; "`toc: yes`" turns on the table of contents, and "`toc_float: true`" keeps the table of contents visible on the left-hand side of the window; and "`collapsed: no`" specifies that the table of contents should be visible.  See Chapter 3 of [*R Markdown — The Definitive Guide*](https://bookdown.org/yihui/rmarkdown/documents.html) for more discussion of the YAML headers.
 
-	```{r set-options, echo=FALSE}
+The second block of code includes some "global" code-chunk options (that apply to all "code chunks", or blocks of code set off by backtics (\`\`\`)
+	
+	```{r set-options1, echo=FALSE}
 	options(width = 105)
 	knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
 	pdf.options(useDingbats = TRUE)
@@ -187,25 +205,189 @@ The second block of code includes some "global" code-chunk options (that apply t
 
 As before,
 
-1. Open the `.Rmd` file;
+1. Open the `.Rmd` (`plot\_alpha\_RMarkdown\_1Page.Rmd`) file if it's not already open;
 2. "Knit" the file by clicking on the "Knit" tab at the top of the script-editing window.
 
-Knitting the `.Rmd` file will create the file `plot_alpha_RMarkdown_1page.html` that contains the text, code. 
+Knitting the `.Rmd` file will create the file `plot_alpha_RMarkdown_1page.html` that contains the text, code, and output (maps and text). 
 
 - Move `plot_alpha_RMarkdown_1page.html` to the `/docs` folder and rename the file as `index.html`; 
 - Delete the folders `/plot_alpha_RMarkdown_1page_cache` and `/plot_alpha_RMarkdown_1page_files`;
 - Use RStudio to commit and push the files to GitHub.
 
-
-
-[[https://pjbartlein.github.io/REarthSysSci/plot\_alpha\_Scripts\_and\_Rmd_files]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html)
 ## A multi-page R Markdown-generated website ##
 
-<hr>
+**CLEAN UP FIRST:**  Delete or move the R Markdown file `plot_alpha_RMarkdown_1Page.Rmd`, delete the folders `/plot_alpha_RMarkdown_1Page_files` and `/plot_alpha_RMarkdown_1Page_cache`, and delete the files in the `/docs` folder (but leave that folder in place)
 
-- `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a different special header) and a `*.css` file, output appears as an `.html` file, viewable in a browser or internally in RStudio  
-[[plot\_alpha\_RMarkdown.Rmd]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown.Rmd)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown.Rmd.txt)
-- multiple `*.Rmd` and `.md` files, along with a "site YAML" file, as input, a multipage website or book with internal navigation as output.  (This is how the course web pages are constructed.) 
-[[https://github.com/pjbartlein/REarthSysSci]](https://github.com/pjbartlein/REarthSysSci)
+A multi-page R Markdown website, as the name suggests, includes a collection of `*.Rmd` files (that are each knit to create `*.html` files, plus a support file (`_site.yml`) that controls the navigation bar layout.  The steps below will create a minimalist multi-page web site.  The site will include an `index.html` page with a brief overview, a "Topics" tab with two pages, one an introduction, and the other being the "Raster mapping" page, and an "About" tab, implemented by four `*.Rmd` files (plus the `_site.yml` file).  Although R Studio contains great script-editing features, it's a little clunky as a text editor compared to Markdown Pad or MacDown.  In practice, if there is a lot of text to compose, edit, and format (as is the case with this page), it may be more efficient to do that in a Markdown editor, and then include the contents of the `*.md` file created by the editor in a `*.Rmd` file using the Knitr "child document" chunk option (e.g. `{r child="index.md"}`).  That will be done here for the `index.Rmd`, `intro.Rmd`, and `about.Rmd` files, while a standard `*.Rmd` file will be used for the main results page.
+
+Start by creating an R Markdown file that will produce a single-page `.html` file as output, which will be incorporated into the web site later:  
+
+1. Create a new R Markdown file in the projects folder (File > New File > R Markdown);
+2. Delete the sample code in the new page; 
+2. Copy the contents of [[plot\_alpha\_RMarkdown\_Site.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_site.rmd-example-4) into it;
+1. Edit the paths in the script file as appropriate;
+2. Save it as `plot\_alpha\_RMarkdown\_Site.Rmd` in the projects folder; and
+3. Knit the file.
+
+Next, create a set of three `*.md` files as follows:
+
+`index.Rmd`: 
+
+```{r echo=TRUE, eval=FALSE}
+---
+title: "GEOG4/590: R for Earth-System Science"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: no
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+```
+
+## Project web page for GEOG 4/595 *R for Earth-System Science* ##
+	
+Topics covered here include:
+
+- An introduction to the project
+- A simple example of plotting a raster slice
+- (more to come…)
+```
+
+`intro.Rmd`:
+
+```{r echo=TRUE, eval=FALSE}
+---
+title: "Introduction to the project"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: no
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+```
+
+The visualization developed here uses the `raster` and `rasterVis` packages to map the global 
+pattern of alpha, calculated using the CRU CL2 climate data set.  The maps also include a 
+shapefile of world coastlines and countries.
+```
 
 
+`about.Rmd` 
+
+```{r echo=TRUE, eval=FALSE}
+---
+title: "GEOG 4/590:  R for Earth-System Science"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: no
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+```
+P.J. Bartlein  
+Dept. Geography  
+Univ. Oregon  
+bartlein@uoregon.edu
+
+The GitHub repository for this web site is at:  
+[https://github.com/pjbartlein/geog490](https://github.com/pjbartlein/geog490)
+```
+
+(The above files are just examples.)
+
+
+  Knit the three files.
+
+Finally, create a `_site.yml` file (File > New File > Text File in RStudio, or use a text editor):
+
+`_site.yml`
+
+	name: GEOG 4/590
+	navbar:
+	  title: "GEOG 4/590:  R for Earth-System Science"
+	  left:
+	  - text: Topics
+	    menu:
+	    - text: Introduction
+	      href: intro.html
+	    - text: Raster mapping example
+	      href: plot_alpha_RMarkdown_Site.html
+	  right:
+	  - text: About
+	    href: about.html
+	output:
+	  html_document:
+	    theme: spacelab
+	    highlight: haddock
+	    css: html-md-01.css
+	    fig_caption: no
+	    number_sections: yes
+	    toc: yes
+	    toc_float: no
+	    collapsed: no
+	    lib_dir: site_libs
+	    self_contained: no
+	output_dir: docs
+
+The `knitr()` package is quite fussy about formatting of the `_site.yml` file so check it first in the case of later errors.
+
+In RStudio, the "build tools" needed to create the web site will need to be configured.  On the RStudio menu, click on Build.  If there is a menu choice that says "Install Tools" do that first, otherwise click on 
+"Configure Build Tools…"  On the "Project build tools:" dropdown box, select "Website"  The initial choices are probably fine, with the "Site directory" set to "(Project Root)" and the "Preview" and "Re-knit" checkboxes checked.  Upon clicking OK, a "Build" tab should appear in the upper-right pane.  Select that tab, and click on "Build Website".
+
+At this point, the project folder should contain:	
+
+	/.git
+	/.Rproj.user
+	/docs
+	/plot_alpha_RMarkdown_Site_cache
+	/plot_alpha_RMarkdown_Site_files
+	
+	html-md-01.css
+	
+	.gitignore
+	.RData
+	.Rhistory
+	
+	about.Rmd
+	index.Rmd
+	intro.Rmd
+	plot_alpha_RMarkdown_Site.Rmd
+	
+	geog490project.Rproj
+	
+	README.md
+	_site.yml
+	
+… and the docs folder, 
+
+	/site_libs
+	/plot_alpha_RMarkdown_Site_files
+	
+	html-md-01.css
+	
+	about.html
+	index.html
+	intro.html
+	plot_alpha_RMarkdown_Site.html
+	README.html
