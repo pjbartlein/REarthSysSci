@@ -1,4 +1,4 @@
-## plot\_alpha\_RScript.R ##
+# plot\_alpha\_RScript.R #
 
 	# plot alpha (AE/PE)
 	

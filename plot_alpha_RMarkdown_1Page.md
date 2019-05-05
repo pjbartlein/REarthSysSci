@@ -1,4 +1,4 @@
-## plot\_alpha\_RMarkdown\_1Page.Rmd ##
+# plot\_alpha\_RMarkdown\_1Page.Rmd #
 
 	---
 	title: Raster Mapping
