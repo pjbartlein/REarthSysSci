@@ -805,38 +805,38 @@ zvar        : mipt
 <p>The <code>knitr()</code> package is quite fussy about formatting of the <code>_site.yml</code> file so check it first in the case of later errors.</p>
 <p>In RStudio, the “build tools” needed to create the web site will need to be configured. On the RStudio menu, click on Build. If there is a menu choice that says “Install Tools” do that first, otherwise click on “Configure Build Tools…” On the “Project build tools:” dropdown box, select “Website” The initial choices are probably fine, with the “Site directory” set to “(Project Root)” and the “Preview” and “Re-knit” checkboxes checked. Upon clicking OK, a “Build” tab should appear in the upper-right pane. Select that tab, and click on “Build Website”.</p>
 <p>At this point, the project folder should contain:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="op">/</span>.git</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="op">/</span>.Rproj.user</a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="op">/</span>docs</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="op">/</span>plot_alpha_RMarkdown_Site_cache</a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="op">/</span>plot_alpha_RMarkdown_Site_files</a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7">html<span class="op">-</span>md<span class="fl">-01.</span>css</a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9">.gitignore</a>
-<a class="sourceLine" id="cb10-10" data-line-number="10">.RData</a>
-<a class="sourceLine" id="cb10-11" data-line-number="11">.Rhistory</a>
-<a class="sourceLine" id="cb10-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb10-13" data-line-number="13">about.Rmd</a>
-<a class="sourceLine" id="cb10-14" data-line-number="14">index.Rmd</a>
-<a class="sourceLine" id="cb10-15" data-line-number="15">intro.Rmd</a>
-<a class="sourceLine" id="cb10-16" data-line-number="16">plot_alpha_RMarkdown_Site.Rmd</a>
-<a class="sourceLine" id="cb10-17" data-line-number="17"></a>
-<a class="sourceLine" id="cb10-18" data-line-number="18">geog490project.Rproj</a>
-<a class="sourceLine" id="cb10-19" data-line-number="19"></a>
-<a class="sourceLine" id="cb10-20" data-line-number="20">README.md</a>
-<a class="sourceLine" id="cb10-21" data-line-number="21">_site.yml</a></code></pre></div>
+<pre><code>/.git
+/.Rproj.user
+/docs
+/plot_alpha_RMarkdown_Site_cache
+/plot_alpha_RMarkdown_Site_files
+
+html-md-01.css
+
+.gitignore
+.RData
+.Rhistory
+
+about.Rmd
+index.Rmd
+intro.Rmd
+plot_alpha_RMarkdown_Site.Rmd
+
+geog490.Rproj
+
+README.md
+_site.yml</code></pre>
 <p>… and the docs folder,</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="op">/</span>site_libs</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="op">/</span>plot_alpha_RMarkdown_Site_files</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">html<span class="op">-</span>md<span class="fl">-01.</span>css</a>
-<a class="sourceLine" id="cb11-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb11-6" data-line-number="6">about.html</a>
-<a class="sourceLine" id="cb11-7" data-line-number="7">index.html</a>
-<a class="sourceLine" id="cb11-8" data-line-number="8">intro.html</a>
-<a class="sourceLine" id="cb11-9" data-line-number="9">plot_alpha_RMarkdown_Site.html</a>
-<a class="sourceLine" id="cb11-10" data-line-number="10">README.html</a></code></pre></div>
+<pre><code>/site_libs
+/plot_alpha_RMarkdown_Site_files
+
+html-md-01.css
+
+about.html
+index.html
+intro.html
+plot_alpha_RMarkdown_Site.html
+README.html</code></pre>
 <p>The website should be viewable at: <a href="https://pjbartlein.github.io/geog490/index.html"><code>https://pjbartlein.github.io/geog490/index.html</code></a> (the project’s web page)</p>
 </div>
 </div>

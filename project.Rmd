@@ -383,7 +383,7 @@ In RStudio, the "build tools" needed to create the web site will need to be conf
 
 At this point, the project folder should contain:	
 
-```{r echo=TRUE, eval=FALSE}
+```
 /.git
 /.Rproj.user
 /docs
@@ -401,7 +401,7 @@ index.Rmd
 intro.Rmd
 plot_alpha_RMarkdown_Site.Rmd
 
-geog490project.Rproj
+geog490.Rproj
 
 README.md
 _site.yml
@@ -409,7 +409,7 @@ _site.yml
 
 … and the docs folder, 
 
-```{r, echo=TRUE, eval=FALSE}
+```
 /site_libs
 /plot_alpha_RMarkdown_Site_files
 
