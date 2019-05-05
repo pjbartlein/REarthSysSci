@@ -65,7 +65,7 @@ The following examples can be reproduced using this data set:  `cru10min30_bio.n
 [[https://pjbartlein.github.io/REarthSysSci/plot\_alpha\_Scripts\_and\_Rmd_files]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html)
 
 
-- `*.R` scripts:  input is a plain script, and output appears in the `Console` or `Plots` pane: 
+- `*.R` Scripts:  input is a plain script, and output appears in the `Console` or `Plots` pane: 
 [[plot\_alpha\_RScript.R]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rscript.r-example-1)
 - `*.Rmd` RNotebook files:  input is an RMarkdown file (with a special header), output appears "inline" in RStudio and code, comments and output are saved in a `*.nb.html` file that is portable. 
 [[plot\_alpha\_RMarkdown\_Notebook.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_notebook.rmd-example-2)
