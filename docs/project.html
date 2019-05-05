@@ -580,8 +580,8 @@ README.md</code></pre>
 <div id="some-examples-of-project-web-pages" class="section level1">
 <h1><span class="header-section-number">3</span> Some examples of project web pages</h1>
 <p>R Markdown is implemented by two packages (and their dependencies), <code>rmarkdown</code> and <code>knitr</code>. The packages can be installed as follows</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">&quot;rmarkdown&#39;)</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="st">install.packages(&quot;</span>knitr<span class="st">&quot;)</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">&quot;rmarkdown&quot;</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">install.packages</span>(<span class="st">&quot;knitr&quot;</span>)</a></code></pre></div>
 <p>The following examples can be reproduced using this data set: <code>cru10min30_bio.nc</code>, and the shapefile components of <code>ne_110m_admin_0_countries.shp</code>. These can be found on the course <code>SFTP</code> site.</p>
 <p>Transfer the files to a convenient folder(s), and modify the paths in the scripts below. Remember to get all of the shapefile components, not just <code>ne_110m_admin_0_countries.shp</code>.</p>
 <div id="a-simple-script-file-based-web-page-example-1" class="section level2">
@@ -602,20 +602,20 @@ README.md</code></pre>
 <li>Save the <code>index.md</code> file, and also export it as an <code>.html</code> file (e.g. <code>index.html</code>).</li>
 </ol>
 <p>The <code>index.md</code> Markdown file might look something like this:</p>
-<pre><code># Alpha (AE/PE)  
-
-Alpha (AE/PE) was read from `cru10min30_bio.nc` and contains:
-
-class       : RasterLayer  
-dimensions  : 360, 720, 259200  (nrow, ncol, ncell)  
-resolution  : 0.5, 0.5  (x, y) 
-extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)  
-coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0  
-data source : /Users/bartlein/Dropbox/DataVis/working/geog490/data/nc_files/cru10min30_bio.nc  
-names       : Priestley.Taylor..alpha..parameter..AE.PE.  
-zvar        : mipt  
-
-![](alpha.png)</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># Alpha (AE/PE)  </span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw">Alpha</span> (AE<span class="op">/</span>PE) was read from <span class="st">`</span><span class="dt">cru10min30_bio.nc</span><span class="st">`</span> and contains<span class="op">:</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">class       <span class="op">:</span><span class="st"> </span>RasterLayer  </a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">dimensions  <span class="op">:</span><span class="st"> </span><span class="dv">360</span>, <span class="dv">720</span>, <span class="dv">259200</span>  (nrow, ncol, ncell)  </a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">resolution  <span class="op">:</span><span class="st"> </span><span class="fl">0.5</span>, <span class="fl">0.5</span>  (x, y) </a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">extent      <span class="op">:</span><span class="st"> </span><span class="dv">-180</span>, <span class="dv">180</span>, <span class="dv">-90</span>, <span class="dv">90</span>  (xmin, xmax, ymin, ymax)  </a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">coord. ref. <span class="op">:</span><span class="st"> </span><span class="op">+</span>proj=longlat <span class="op">+</span>datum=WGS84 <span class="op">+</span>ellps=WGS84 <span class="op">+</span>towgs84=<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>  </a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">data source <span class="op">:</span><span class="st"> </span><span class="er">/</span>Users<span class="op">/</span>bartlein<span class="op">/</span>Dropbox<span class="op">/</span>DataVis<span class="op">/</span>working<span class="op">/</span>geog490<span class="op">/</span>data<span class="op">/</span>nc_files<span class="op">/</span>cru10min30_bio.nc  </a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">names       <span class="op">:</span><span class="st"> </span>Priestley.Taylor..alpha..parameter..AE.PE.  </a>
+<a class="sourceLine" id="cb3-12" data-line-number="12">zvar        <span class="op">:</span><span class="st"> </span>mipt  </a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="op">!</span>[](alpha.png)</a></code></pre></div>
 <p>At this point, there should be three new files in the projects folder: <code>index.md</code>, <code>index.html</code>, and <code>alpha.png</code>. Move <code>index.html</code> and <code>alpha.png</code> into the <code>/docs</code> folder, overwriting <code>index.html</code>. Then</p>
 <ol style="list-style-type: decimal">
 <li>On the Git pane in RStudio, select all of the files, and click on “Commit”;</li>

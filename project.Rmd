@@ -107,7 +107,7 @@ Note that there are two web pages associated with the project now:
 R Markdown is implemented by two packages (and their dependencies), `rmarkdown` and `knitr`.  The packages can be installed as follows
 
 ```{r, echo=TRUE, eval=FALSE}
-install.packages("rmarkdown')
+install.packages("rmarkdown")
 install.packages("knitr")
 ```
 
@@ -135,7 +135,7 @@ Then,
 
 The `index.md` Markdown file might look something like this:
 
-```
+```{r, echo=TRUE, eval=FALSE}
 # Alpha (AE/PE)  
 
 Alpha (AE/PE) was read from `cru10min30_bio.nc` and contains:
