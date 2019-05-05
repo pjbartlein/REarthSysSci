@@ -13,6 +13,7 @@ output:
 options(width = 105)
 knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
 pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
 ```
 
 # Introduction #
@@ -105,8 +106,10 @@ Note that there are two web pages associated with the project now:
 
 R Markdown is implemented by two packages (and their dependencies), `rmarkdown` and `knitr`.  The packages can be installed as follows
 
-	install.packages("rmarkdown')
-	install.packages("knitr")
+```{r, echo=TRUE, eval=FALSE}
+install.packages("rmarkdown')
+install.packages("knitr")
+```
 
 The following examples can be reproduced using this data set:  `cru10min30_bio.nc`, and the shapefile components of `ne_110m_admin_0_countries.shp`.  These can be found on the course `SFTP` site.  
 
