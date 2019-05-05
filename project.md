@@ -197,6 +197,8 @@ Knitting the `.Rmd` file will create the file `plot_alpha_RMarkdown_1page.html` 
 - Use RStudio to commit and push the files to GitHub.
 
 
+
+[[https://pjbartlein.github.io/REarthSysSci/plot\_alpha\_Scripts\_and\_Rmd_files]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html)
 ## A multi-page R Markdown-generated website ##
 
 <hr>
