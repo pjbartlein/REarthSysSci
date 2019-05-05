@@ -167,7 +167,7 @@ Single-page `.html` file as output.
 	plt + layer(sp.lines(world_outline, col="black", lwd=1.0))
 	```
 	
-# plot\_alpha\_RMarkdown\_Site.Rmd #
+# plot\_alpha\_RMarkdown\_Site.Rmd (Example 4) #
 
 Output is one component of a multi-page `.html` site.
 

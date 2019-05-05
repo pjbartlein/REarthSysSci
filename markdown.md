@@ -66,12 +66,12 @@ The following examples can be reproduced using this data set:  `cru10min30_bio.n
 
 
 - `*.R` scripts:  input is a plain script, and output appears in the `Console` or `Plots` pane: 
-[[plot\_alpha\_RScript.R]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_RScript.html)
+[[plot\_alpha\_RScript.R]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rscript.r-example-1)
 - `*.Rmd` RNotebook files:  input is an RMarkdown file (with a special header), output appears "inline" in RStudio and code, comments and output are saved in a `*.nb.html` file that is portable. 
-[[plot\_alpha\_RMarkdown\_Notebook.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_RMarkdown_Notebook.html)
-- `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a special header), output appears as an `.html` file, viewable in a browser or internally in RStudio:  [[plot\_alpha\_RMarkdown\_1Page.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_RMarkdown_1Page.html)
+[[plot\_alpha\_RMarkdown\_Notebook.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_notebook.rmd-example-2)
+- `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a special header), output appears as an `.html` file, viewable in a browser or internally in RStudio:  [[plot\_alpha\_RMarkdown\_1Page.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_1page.rmd-example-3)
 - `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a different special header) and a `*.css` file, output appears as an `.html` file, viewable in a browser or internally in RStudio: 
-[[plot\_alpha\_RMarkdown\_Site.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_RMarkdown_Site.html)
+[[plot\_alpha\_RMarkdown\_Site.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_site.rmd)
 - multiple `*.Rmd` and `.md` files, along with a "site YAML" file, as input, a multipage website or book with internal navigation as output.  (This is how the course web pages are constructed.) 
 [[https://github.com/pjbartlein/REarthSysSci]](https://github.com/pjbartlein/REarthSysSci)
 
