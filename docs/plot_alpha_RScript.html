@@ -11,7 +11,7 @@
 
 
 
-<title>plot_alpha_RMarkdown_Site.utf8.md</title>
+<title>plot_alpha_RScript.utf8.md</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -381,91 +381,40 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#plot_alpha_rmarkdown.rmd"><span class="toc-section-number">0.1</span> plot_alpha_RMarkdown.Rmd</a></li>
+<li><a href="#plot_alpha_rscript.r"><span class="toc-section-number">0.1</span> plot_alpha_RScript.R</a></li>
 </ul>
 </div>
 
-<div id="plot_alpha_rmarkdown.rmd" class="section level2">
-<h2><span class="header-section-number">0.1</span> plot_alpha_RMarkdown.Rmd</h2>
-<pre><code>---
-output:
-  html_document:
-    css: html-md-01.css
-    fig_caption: yes
-    highlight: haddock
-    number_sections: yes
-    theme: cerulean
-    toc: yes
-    toc_float: true
-    collapsed: no
----
+<div id="plot_alpha_rscript.r" class="section level2">
+<h2><span class="header-section-number">0.1</span> plot_alpha_RScript.R</h2>
+<pre><code># plot alpha (AE/PE)
 
-```{r set-options, echo=FALSE}
-options(width = 105)
-knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)
-pdf.options(useDingbats = TRUE)
-```
-
-# Introduction #
-
-This RMarkdown document describes reading and plotting a netCDF file.   
-## Load packages ## 
-
-```{r load_packages, message=FALSE}
-# load packages
-library(sf)
+# load packages  
+library(sf) 
 library(raster)
 library(rasterVis)
 library(RColorBrewer)
-```
 
-# Read data #
-
-## Shapefile ##
-
-### Read a shapefile ###
-
-Read a shapefile of world coastlines and countries.
-
-```{r read_shp}
-# read a world shapefile
 shp_path &lt;- &quot;/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/&quot;
 shp_name &lt;- &quot;ne_110m_admin_0_countries.shp&quot;
 shp_file &lt;- paste(shp_path, shp_name, sep=&quot;&quot;)
 world_shp &lt;- read_sf(shp_file)
 world_outline &lt;- as(st_geometry(world_shp), Class=&quot;Spatial&quot;)
-```
 
-### Plot the shape file ###
-
-```{r plot_shapefile}
-# plot the world outlines
+# plot the outline
 plot(world_outline, col=&quot;blue&quot;, lwd=1)
-```
 
-## Read alpha ##
-
-Now read in alpha.
-
-```{r read_data}
 # read alpha (AE/PE)
 alpha_path &lt;- &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;
 alpha_name &lt;- &quot;cru10min30_bio.nc&quot;
 alpha_file &lt;- paste(alpha_path, alpha_name, sep=&quot;&quot;)
 alpha &lt;- raster(alpha_file, varname=&quot;mipt&quot;)
 alpha
-```
 
-# Plot the data #
-
-Finally, plot alpha using the `levelplot()` function from `rasterVis`:
-
-```{r plot_data}
 # rasterVis plot
 mapTheme &lt;- rasterTheme(region=brewer.pal(8,&quot;BrBG&quot;))
 plt &lt;- levelplot(alpha, margin=F, par.settings=mapTheme, main=&quot;AE/PE&quot;)
-plt + layer(sp.lines(world_outline, col=&quot;black&quot;, lwd=1.0))
-```</code></pre>
+plt + layer(sp.lines(world_outline, col=&quot;black&quot;, lwd=1.0))</code></pre>
 </div>
 
 

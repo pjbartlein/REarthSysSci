@@ -83,7 +83,7 @@ Note that there are two web pages associated with the project now:
 - [`https://pjbartlein.github.io/geog490/index.html`](https://pjbartlein.github.io/geog490/index.html) (the projects web page).
 
 
-# Preliminary tasks #
+# Some examples of project web pages #
 
 R Markdown is implemented by two packages (and their dependencies), `rmarkdown` and `knitr`.  The packages can be installed as follows
 
@@ -95,7 +95,7 @@ The following examples can be reproduced using this data set:  `cru10min30_bio.n
 Transfer the files to a convenient folder(s), and modify the paths in the scripts below.  Remember to get all of the shapefile components, not just `ne_110m_admin_0_countries.shp`.
 
 
-# A simple script-file based web page (Example 1)#
+## A simple script-file based web page (Example 1) ##
 
 To demonstrate how this approach works, a small script file that reads a shapefile and a dataset from a `netCDF` file and makes a map will be run, and the results combined in a Markdown file (using a Markdown editor) and then rendered as an `.html` file.  This file will then be pushed to the GitHub repository.
 
@@ -136,7 +136,7 @@ At this point, there should be three new files in the projects folder:  `index.m
 
 If you check the projects page (e.g. [`https://github.com/pjbartlein/geog490`](https://github.com/pjbartlein/geog490)) you should see the recent commits, and if you check the projects *web* page (e.g. [`https://pjbartlein.github.io/geog490/`](https://pjbartlein.github.io/geog490/)) you should see the web page you rendered from the Markdown file created above.
 
-# An R Markdown Notebook based web page (Example 2)#
+## An R Markdown Notebook based web page (Example 2)##
 
 **CLEAN UP FIRST:**  Delete (or move somewhere else) the `index.md` file created above, and also delete the files in the `/docs` folder (but leave that folder in place).
 
@@ -152,7 +152,7 @@ Knitting the `.Rmd` file will create the file `plot_alpha_RNotebook.html` that c
 3. Move `plot_alpha_RNotebook.html` to the `/docs` folder, and ename The file as `index.html`, and 
 5. Use RStudio to commit and push the files to GitHub.
 
-# Single-page R Markdown-based web page (Example 3)#
+## Single-page R Markdown-based web page (Example 3) ##
 
 **CLEAN UP FIRST:**  Delete or move the R Markdown Notebook file `plot_alpha_RNotebook.Rmd`, delete the folder `/plot_alpha_Notebook_files` (which is probably empty, and delete `index.html` in the `/docs` folder (but leave that folder in place).
 
@@ -197,7 +197,7 @@ Knitting the `.Rmd` file will create the file `plot_alpha_RMarkdown_1page.html` 
 - Use RStudio to commit and push the files to GitHub.
 
 
-
+## A multi-page R Markdown-generated website ##
 
 <hr>
 

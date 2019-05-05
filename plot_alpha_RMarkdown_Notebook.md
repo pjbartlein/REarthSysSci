@@ -1,46 +1,24 @@
-## plot\_alpha\_RMarkdown.Rmd ##
+## plot\_alpha\_RMarkdown\_Notebook.Rmd ##
 
 	---
-	output:
-	  html_document:
-	    css: html-md-01.css
-	    fig_caption: yes
-	    highlight: haddock
-	    number_sections: yes
-	    theme: cerulean
-	    toc: yes
-	    toc_float: true
-	    collapsed: no
+	title: "R Notebook"
+	output: html_notebook
 	---
 	
-	```{r set-options, echo=FALSE}
-	options(width = 105)
-	knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
-	pdf.options(useDingbats = TRUE)
-	```
-	
-	# Introduction #
-	
-	This RMarkdown document describes reading and plotting a netCDF file.	
-	## Load packages ## 
-	
-	```{r load_packages, message=FALSE}
-	# load packages
+	This R Notebook script describes reading and plotting a netCDf file.	
+	```{r}
+	# load packages 
 	library(sf)
 	library(raster)
 	library(rasterVis)
 	library(RColorBrewer)
 	```
 	
-	# Read data #
-	
-	## Shapefile ##
-	
-	### Read a shapefile ###
+	Read data 
 	
 	Read a shapefile of world coastlines and countries.
 	
-	```{r read_shp}
+	```{r}
 	# read a world shapefile
 	shp_path <- "/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/"
 	shp_name <- "ne_110m_admin_0_countries.shp"
@@ -49,18 +27,16 @@
 	world_outline <- as(st_geometry(world_shp), Class="Spatial")
 	```
 	
-	### Plot the shape file ###
+	Plot the outlines from the shape file.
 	
-	```{r plot_shapefile}
-	# plot the world outlines
+	```{r}
+	# plot the outline
 	plot(world_outline, col="blue", lwd=1)
-	```
-	
-	## Read alpha ##
+	``` 
 	
 	Now read in alpha.
 	
-	```{r read_data}
+	```{r}
 	# read alpha (AE/PE)
 	alpha_path <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
 	alpha_name <- "cru10min30_bio.nc"
@@ -69,14 +45,11 @@
 	alpha
 	```
 	
-	# Plot the data #
-	
 	Finally, plot alpha using the `levelplot()` function from `rasterVis`:
 	
-	```{r plot_data}
+	```{r}
 	# rasterVis plot
 	mapTheme <- rasterTheme(region=brewer.pal(8,"BrBG"))
 	plt <- levelplot(alpha, margin=F, par.settings=mapTheme, main="AE/PE")
 	plt + layer(sp.lines(world_outline, col="black", lwd=1.0))
 	```
-	

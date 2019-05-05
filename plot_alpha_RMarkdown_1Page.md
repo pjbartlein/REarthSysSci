@@ -1,6 +1,7 @@
-## plot\_alpha\_RMarkdown.Rmd ##
+## plot\_alpha\_RMarkdown\_1Page.Rmd ##
 
 	---
+	title: Raster Mapping
 	output:
 	  html_document:
 	    css: html-md-01.css
@@ -12,12 +13,6 @@
 	    toc_float: true
 	    collapsed: no
 	---
-	
-	```{r set-options, echo=FALSE}
-	options(width = 105)
-	knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
-	pdf.options(useDingbats = TRUE)
-	```
 	
 	# Introduction #
 	

@@ -63,13 +63,12 @@ The following examples can be reproduced using this data set:  `cru10min30_bio.n
 (Transfer the files to a convenient working folder(s), and modify the paths in the scripts below.)
 
 
-- `*.R` scripts:  input is a plain script, and output appears in the `Console` or `Plots` pane.  
-[[plot\_alpha\_RScript.R]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RScript.R)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RScript.R.txt)
-- `*.Rmd` RNotebook files:  input is an RMarkdown file (with a special header), output appears "inline" in RStudio and code, comments and output are saved in a `*.nb.html` file that is portable.  
-[[plot\_alpha\_RNotebook.Rmd]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RNotebook.Rmd)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RNotebook.Rmd.txt)
-- `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a special header), output appears as an `.html` file, viewable in a browser or internally in RStudio  
-[[plot\_alpha\_RMarkdown\_1page.Rmd]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown\_1page.Rmd)  [[View file]](https://pjbartlein.github.io/REarthSysSci/source/plot_alpha_RMarkdown\_1page.Rmd.txt)
-- `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a different special header) and a `*.css` file, output appears as an `.html` file, viewable in a browser or internally in RStudio 
+- `*.R` scripts:  input is a plain script, and output appears in the `Console` or `Plots` pane:  
+[[plot\_alpha\_RScript.R]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_RScript.html)
+- `*.Rmd` RNotebook files:  input is an RMarkdown file (with a special header), output appears "inline" in RStudio and code, comments and output are saved in a `*.nb.html` file that is portable. 
+[[plot\_alpha\_RMarkdown\_Notebook.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_RMarkdown_Notebook.html)
+- `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a special header), output appears as an `.html` file, viewable in a browser or internally in RStudio:  [[plot\_alpha\_RMarkdown\_1Page.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_RMarkdown_1Page.html)
+- `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a different special header) and a `*.css` file, output appears as an `.html` file, viewable in a browser or internally in RStudio: 
 [[plot\_alpha\_RMarkdown\_Site.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_RMarkdown_Site.html)
 - multiple `*.Rmd` and `.md` files, along with a "site YAML" file, as input, a multipage website or book with internal navigation as output.  (This is how the course web pages are constructed.) 
 [[https://github.com/pjbartlein/REarthSysSci]](https://github.com/pjbartlein/REarthSysSci)
