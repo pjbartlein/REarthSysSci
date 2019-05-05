@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>markdown</title>
+
+
+<style type="text/css">
+/* html-md-01.css */
+
+div#TOC li {
+  list-style-type: none;
+  list-style-position: outside;
+  list-style-image: none;
+  background-image: none;
+  background-position: 0px center;
+}
+
+.navbar-brand, .navbar-fixed-bottom .navbar-collapse, .navbar-fixed-top .navbar-collapse, .pre-scrollable {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  font-weight: normal;
+}
+
+/*exercise*/
+body, td {
+   font-family: Times, TimesNewRoman, serif;
+   background-color: white;
+   font-size: 16px;
+   width:  940px;
+   margin: 30px;
+   right:  860px;
+   text-align:justify;
+}
+
+/*/*web page*/
+body, td {
+  font-family: Times, TimesNewRoman, serif;
+  background-color: white;
+  font-size: 16px;
+  font-weight: normal;
+}*/
+
+/*exercise*/
+tt, code, pre {
+   font-family: Consolas, "Courier New", Monaco, monospace;
+   font-size: 13px;
+   font-weight: bolder;
+}
+
+/*web page*/
+tt, code, pre {
+  font-family: "Consolas", "Courier New", Monaco, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+h1 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 24px;
+  font-weight: normal;
+}
+
+h1.title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 26px;
+  font-weight: normal;
+}
+
+h2 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 20px;
+  font-weight: normal;
+}
+
+h3 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 20px;
+  font-weight: normal;
+  font-style: italic;
+}
+
+h4 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+h5 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 18px;
+  font-weight: bold;
+  font-style: italic;
+}
+
+h6 {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 16px;
+  font-weight: bolder;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+tt, code, pre {
+  font-family: "Consolas", "Courier New", Monaco, monospace;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+/*pre { 
+   margin-top: 0;
+   max-width: 100%;
+   border: 1px solid #999999;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; 
+/*   padding: 0.2em;*/
+/*   background-color:  #E0E0E0;*/
+}
+
+code.r, code.noeval, code.cpp {
+   background-color: #eeeeee;
+}*/
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#000000;
+   margin:0;
+   padding-left: 1em;
+   padding-right: 1em;
+   border-left: 0.5em #E0E0E0 solid;
+   border-right: 0.5em #E0E0E0 solid
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+  * {
+    background-color: transparent !important;
+    background-image: none !important;
+    background-repeat: repeat !important;
+    background-attachment: scroll !important;
+    background-position: 0% 0% !important;
+    color: black !important;
+    filter: none !important;
+  }
+  body, td {
+    font-family: Times, TimesNewRoman, serif;
+    background-color: white;
+    font-size: 12px;
+    font-weight: normal;
+    width:  940px;
+    margin: 30px;
+    right:  860px;
+    text-align:justify;
+  }
+  h1 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 18px;
+    font-weight: normal;
+  }
+  h1.title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18px;
+    font-weight: normal;
+  }
+  h2 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 16px;
+    font-weight: normal;
+  }
+  h3 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 16px;
+    font-weight: normal;
+    font-style: italic;
+  }
+  h4 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  h5 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 14px;
+    font-weight: bold;
+    font-style: italic;
+  }
+  h6 {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12px;
+    font-weight: bolder;
+  }
+  tt, code, pre {
+    font-family: "Consolas", "Courier New", Monaco, monospace;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+<style type="text/css">
+/**
+ * prism.js default theme for JavaScript, CSS and HTML
+ * Based on dabblet (http://dabblet.com)
+ * @author Lea Verou
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: black;
+	background: none;
+	text-shadow: 0 1px white;
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+	text-shadow: none;
+	background: #b3d4fc;
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+	text-shadow: none;
+	background: #b3d4fc;
+}
+
+@media print {
+	code[class*="language-"],
+	pre[class*="language-"] {
+		text-shadow: none;
+	}
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #f5f2f0;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: slategray;
+}
+
+.token.punctuation {
+	color: #999;
+}
+
+.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #905;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #690;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+	color: #a67f59;
+	background: hsla(0, 0%, 100%, .5);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+	color: #07a;
+}
+
+.token.function {
+	color: #DD4A68;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+	color: #e90;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<h1 id="toc_0">Markdown and RMarkdown</h1>
+
+<p>This document is written in Markdown, which is a &quot;lightweight&quot; markup language (like HTML), that uses a relatively simple syntax, and facilitates the transformation of human-readible text files into .html or .pdf documents.  RMarkdown is a an R package, and a set of tools that are deeply embedded in RStudio that facilitates the construction of documents that combine text, R code and the output from the execution of that code, and that range in complexity from a single .html or .pdf file, to multi-page web sites, to books.</p>
+
+<p>RMarkdown thereby facilitates the concepts of &quot;literate programming&quot; <a href="https://en.wikipedia.org/wiki/Literate_programming">link</a>, and &quot;reproducible research&quot; <a href="https://en.wikipedia.org/wiki/Reproducibility">link</a>, which, in addition to explaining or documenting itself, also allows others (including an original investigator after some time has passed) to reproduce a data analysis or other research result.</p>
+
+<h2 id="toc_1">Markdown</h2>
+
+<p>Here is a simple Markdown (<code>.md</code>) file:</p>
+
+<pre><code># Introduction #
+
+Some text, and little discussion, including a bulleted list
+- first list item
+- second list time
+
+## Some code ##
+
+Here is a little code (and note the different font):
+
+```
+plot(orstationc$elev, orstationc$tann)
+```
+and some more text, possibly *decorated* or **otherwise formatted**.
+</code></pre>
+
+<p>And here is what the file looks like when rendered:
+<hr>
+<h1>
+Introduction
+</h1>
+<p>Some text, and little discussion, including a bulleted list</p>
+<ul>
+<li>first list item</li>
+<li>second list time</li>
+</ul>
+<h2>
+Some code
+</h2>
+<p>Here is a little code (and note the different font):</p>
+<p><code>plot(orstationc$elev, orstationc$tann)</code></p>
+and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</strong>.
+<hr></p>
+
+<p>Although the syntax of Markdown is relatively simple, quite complex documents can be generated using conversion tools like Pandoc (see the Resources section below).</p>
+
+<h2 id="toc_2">RStudio/RMarkdown</h2>
+
+<p>RStudio allows the use of Markdown formatting styles within RMarkdown <code>.Rmd</code> files, allowing the resulting combinations of text, code and output to be nicely formatted.  RNotebook and RMarkdown files in RStudio can be viewed as elements in a hierarchy of increasingly well-documented and reproducible code, with ordinary R script files <code>*.R</code> as the lowest level, and complicated RMarkdown web sites or even books at the highest level.</p>
+
+<p>RMarkdown is implemented by two packages (and their dependencies), <code>rmarkdown</code> and <code>knitr</code>.  The packages can be installed as follows</p>
+
+<div><pre><code class="language-none">install.packages(&quot;rmarkdown&#39;)
+install.packages(&quot;knitr&quot;)</code></pre></div>
+
+<p>The following examples can be reproduced using this data set:  <code>cru10min30_bio.nc</code>, and the following shapefile components:  </p>
+
+<ul>
+<li><code>ne_110m_admin_0_countries.cpg</code> </li>
+<li><code>ne_110m_admin_0_countries.dbf</code> </li>
+<li><code>ne_110m_admin_0_countries.prj</code> </li>
+<li><code>ne_110m_admin_0_countries.shp</code> </li>
+<li><code>ne_110m_admin_0_countries.shx</code> </li>
+</ul>
+
+<p>(Transfer the files to a convenient working folder(s), and modify the paths in the scripts below.)</p>
+
+<p><a href="https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html">[https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files]</a></p>
+
+<ul>
+<li><code>*.R</code> scripts:  input is a plain script, and output appears in the <code>Console</code> or <code>Plots</code> pane: 
+<a href="https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rscript.r-example-1">[plot_alpha_RScript.R]</a></li>
+<li><code>*.Rmd</code> RNotebook files:  input is an RMarkdown file (with a special header), output appears &quot;inline&quot; in RStudio and code, comments and output are saved in a <code>*.nb.html</code> file that is portable. 
+<a href="https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_notebook.rmd-example-2">[plot_alpha_RMarkdown_Notebook.Rmd]</a></li>
+<li><code>*.Rmd</code> RMarkdown files:  input is an RMarkdown file (with a special header), output appears as an <code>.html</code> file, viewable in a browser or internally in RStudio:  <a href="https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_1page.rmd-example-3">[plot_alpha_RMarkdown_1Page.Rmd]</a></li>
+<li><code>*.Rmd</code> RMarkdown files:  input is an RMarkdown file (with a different special header) and a <code>*.css</code> file, output appears as an <code>.html</code> file, viewable in a browser or internally in RStudio: 
+<a href="https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_site.rmd-example-4">[plot_alpha_RMarkdown_Site.Rmd]</a></li>
+<li>multiple <code>*.Rmd</code> and <code>.md</code> files, along with a &quot;site YAML&quot; file, as input, a multipage website or book with internal navigation as output.  (This is how the course web pages are constructed.) 
+<a href="https://github.com/pjbartlein/REarthSysSci">[https://github.com/pjbartlein/REarthSysSci]</a></li>
+</ul>
+
+<h2 id="toc_3">Markdown resources</h2>
+
+<h3 id="toc_4">Markdown</h3>
+
+<ul>
+<li>  Markdown site <a href="http://daringfireball.net/projects/markdown/">http://daringfireball.net/projects/markdown/</a></li>
+<li>  Markdown (Wikipedia) <a href="https://en.wikipedia.org/wiki/Markdown">https://en.wikipedia.org/wiki/Markdown</a></li>
+<li>  Markdown Guide <a href="https://www.markdownguide.org">https://www.markdownguide.org</a></li>
+</ul>
+
+<h3 id="toc_5">Markdown editors</h3>
+
+<p>The easiest way to learn Markdown is to use a dual pane (editing and previewing) Markdown editor, where it&#39;s easy to instantly see the consequences of applying Markdown formatting.</p>
+
+<ul>
+<li>  Markdown Pad (Windows) <a href="http://markdownpad.com">http://markdownpad.com</a></li>
+<li>  Macdown (OS X) <a href="http://macdown.uranusjr.com">http://macdown.uranusjr.com</a></li>
+</ul>
+
+<p>To get the formatting style used in this document (and the course web page), download:  <code>html-d-01.css</code><br>
+ (<a href="https://pjbartlein.github.io/REarthSysSci/html-md-01.css">https://pjbartlein.github.io/REarthSysSci/html-md-01.css</a>):</p>
+
+<ul>
+<li>MarkdownPad:  Download the file and open it in a text editor.  Then in the MarkdownPad <code>Tools &gt; Options &gt; Stylesheets</code> dialog, click on add, and copy and paste the contents of <code>html-md-01.css</code>, and then save and close with that name.</li>
+<li>Macdown:<br>
+
+<ul>
+<li>Download the file to e.g. <code>/Users/bartlein/Library/Application Support/MacDown/Styles/</code>. (Note that the Library folder is usually hidden from Finder, and you may have to use a file manager that can reveal hidden files.)</li>
+<li>Restart Macdown, and use the Preferences &gt; Rendering tab to set <code>html-md-01.css</code> in the CSS field. </li>
+</ul></li>
+</ul>
+
+<h3 id="toc_6">Pandoc</h3>
+
+<p>Pandoc is the rendering engine that RMarkdown uses, and it can also be
+used by itself to convert a large array of document types.</p>
+
+<ul>
+<li>  Pandoc <a href="pandoc.org">pandoc.org</a></li>
+</ul>
+
+<h2 id="toc_7">RStudio resources</h2>
+
+<h3 id="toc_8">RMarkdown</h3>
+
+<ul>
+<li>  RMarkdown guide: <a href="http://rmarkdown.rstudio.com/index.html">http://rmarkdown.rstudio.com/index.html</a></li>
+<li>  RNotebooks: <a href="http://rmarkdown.rstudio.com/r_notebooks.html">http://rmarkdown.rstudio.com/r_notebooks.html</a></li>
+<li>  Websites: <a href="http://rmarkdown.rstudio.com/rmarkdown_websites.html">http://rmarkdown.rstudio.com/rmarkdown_websites.html</a></li>
+<li>  Bookdown: <a href="https://bookdown.org">https://bookdown.org</a></li>
+</ul>
+
+<h3 id="toc_9">Cheatsheets</h3>
+
+<ul>
+<li>  RMarkdown cheat sheet:<br>
+<a href="https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf">https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf</a></li>
+<li>  RMarkdown reference guide:<br>
+<a href="https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf">https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf</a></li>
+</ul>
+
+<h3 id="toc_10">Publishing</h3>
+
+<ul>
+<li>  RPubs <a href="http://rpubs.com/">http://rpubs.com/</a></li>
+<li>  RMarkdown websites:
+<a href="http://rmarkdown.rstudio.com/rmarkdown_websites.html#publishing_websites">http://rmarkdown.rstudio.com/rmarkdown_websites.html#publishing_websites</a></li>
+</ul>
+
+
+
+<script type="text/javascript">
+var _self="undefined"!=typeof window?window:"undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?self:{},Prism=function(){var e=/\blang(?:uage)?-(\w+)\b/i,t=0,n=_self.Prism={util:{encode:function(e){return e instanceof a?new a(e.type,n.util.encode(e.content),e.alias):"Array"===n.util.type(e)?e.map(n.util.encode):e.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/\u00a0/g," ")},type:function(e){return Object.prototype.toString.call(e).match(/\[object (\w+)\]/)[1]},objId:function(e){return e.__id||Object.defineProperty(e,"__id",{value:++t}),e.__id},clone:function(e){var t=n.util.type(e);switch(t){case"Object":var a={};for(var r in e)e.hasOwnProperty(r)&&(a[r]=n.util.clone(e[r]));return a;case"Array":return e.map&&e.map(function(e){return n.util.clone(e)})}return e}},languages:{extend:function(e,t){var a=n.util.clone(n.languages[e]);for(var r in t)a[r]=t[r];return a},insertBefore:function(e,t,a,r){r=r||n.languages;var l=r[e];if(2==arguments.length){a=arguments[1];for(var i in a)a.hasOwnProperty(i)&&(l[i]=a[i]);return l}var o={};for(var s in l)if(l.hasOwnProperty(s)){if(s==t)for(var i in a)a.hasOwnProperty(i)&&(o[i]=a[i]);o[s]=l[s]}return n.languages.DFS(n.languages,function(t,n){n===r[e]&&t!=e&&(this[t]=o)}),r[e]=o},DFS:function(e,t,a,r){r=r||{};for(var l in e)e.hasOwnProperty(l)&&(t.call(e,l,e[l],a||l),"Object"!==n.util.type(e[l])||r[n.util.objId(e[l])]?"Array"!==n.util.type(e[l])||r[n.util.objId(e[l])]||(r[n.util.objId(e[l])]=!0,n.languages.DFS(e[l],t,l,r)):(r[n.util.objId(e[l])]=!0,n.languages.DFS(e[l],t,null,r)))}},plugins:{},highlightAll:function(e,t){var a={callback:t,selector:'code[class*="language-"], [class*="language-"] code, code[class*="lang-"], [class*="lang-"] code'};n.hooks.run("before-highlightall",a);for(var r,l=a.elements||document.querySelectorAll(a.selector),i=0;r=l[i++];)n.highlightElement(r,e===!0,a.callback)},highlightElement:function(t,a,r){for(var l,i,o=t;o&&!e.test(o.className);)o=o.parentNode;o&&(l=(o.className.match(e)||[,""])[1],i=n.languages[l]),t.className=t.className.replace(e,"").replace(/\s+/g," ")+" language-"+l,o=t.parentNode,/pre/i.test(o.nodeName)&&(o.className=o.className.replace(e,"").replace(/\s+/g," ")+" language-"+l);var s=t.textContent,u={element:t,language:l,grammar:i,code:s};if(!s||!i)return n.hooks.run("complete",u),void 0;if(n.hooks.run("before-highlight",u),a&&_self.Worker){var c=new Worker(n.filename);c.onmessage=function(e){u.highlightedCode=e.data,n.hooks.run("before-insert",u),u.element.innerHTML=u.highlightedCode,r&&r.call(u.element),n.hooks.run("after-highlight",u),n.hooks.run("complete",u)},c.postMessage(JSON.stringify({language:u.language,code:u.code,immediateClose:!0}))}else u.highlightedCode=n.highlight(u.code,u.grammar,u.language),n.hooks.run("before-insert",u),u.element.innerHTML=u.highlightedCode,r&&r.call(t),n.hooks.run("after-highlight",u),n.hooks.run("complete",u)},highlight:function(e,t,r){var l=n.tokenize(e,t);return a.stringify(n.util.encode(l),r)},tokenize:function(e,t){var a=n.Token,r=[e],l=t.rest;if(l){for(var i in l)t[i]=l[i];delete t.rest}e:for(var i in t)if(t.hasOwnProperty(i)&&t[i]){var o=t[i];o="Array"===n.util.type(o)?o:[o];for(var s=0;s<o.length;++s){var u=o[s],c=u.inside,g=!!u.lookbehind,h=!!u.greedy,f=0,d=u.alias;u=u.pattern||u;for(var p=0;p<r.length;p++){var m=r[p];if(r.length>e.length)break e;if(!(m instanceof a)){u.lastIndex=0;var y=u.exec(m),v=1;if(!y&&h&&p!=r.length-1){var b=r[p+1].matchedStr||r[p+1],k=m+b;if(p<r.length-2&&(k+=r[p+2].matchedStr||r[p+2]),u.lastIndex=0,y=u.exec(k),!y)continue;var w=y.index+(g?y[1].length:0);if(w>=m.length)continue;var _=y.index+y[0].length,P=m.length+b.length;if(v=3,P>=_){if(r[p+1].greedy)continue;v=2,k=k.slice(0,P)}m=k}if(y){g&&(f=y[1].length);var w=y.index+f,y=y[0].slice(f),_=w+y.length,S=m.slice(0,w),O=m.slice(_),j=[p,v];S&&j.push(S);var A=new a(i,c?n.tokenize(y,c):y,d,y,h);j.push(A),O&&j.push(O),Array.prototype.splice.apply(r,j)}}}}}return r},hooks:{all:{},add:function(e,t){var a=n.hooks.all;a[e]=a[e]||[],a[e].push(t)},run:function(e,t){var a=n.hooks.all[e];if(a&&a.length)for(var r,l=0;r=a[l++];)r(t)}}},a=n.Token=function(e,t,n,a,r){this.type=e,this.content=t,this.alias=n,this.matchedStr=a||null,this.greedy=!!r};if(a.stringify=function(e,t,r){if("string"==typeof e)return e;if("Array"===n.util.type(e))return e.map(function(n){return a.stringify(n,t,e)}).join("");var l={type:e.type,content:a.stringify(e.content,t,r),tag:"span",classes:["token",e.type],attributes:{},language:t,parent:r};if("comment"==l.type&&(l.attributes.spellcheck="true"),e.alias){var i="Array"===n.util.type(e.alias)?e.alias:[e.alias];Array.prototype.push.apply(l.classes,i)}n.hooks.run("wrap",l);var o="";for(var s in l.attributes)o+=(o?" ":"")+s+'="'+(l.attributes[s]||"")+'"';return"<"+l.tag+' class="'+l.classes.join(" ")+'" '+o+">"+l.content+"</"+l.tag+">"},!_self.document)return _self.addEventListener?(_self.addEventListener("message",function(e){var t=JSON.parse(e.data),a=t.language,r=t.code,l=t.immediateClose;_self.postMessage(n.highlight(r,n.languages[a],a)),l&&_self.close()},!1),_self.Prism):_self.Prism;var r=document.currentScript||[].slice.call(document.getElementsByTagName("script")).pop();return r&&(n.filename=r.src,document.addEventListener&&!r.hasAttribute("data-manual")&&document.addEventListener("DOMContentLoaded",n.highlightAll)),_self.Prism}();"undefined"!=typeof module&&module.exports&&(module.exports=Prism),"undefined"!=typeof global&&(global.Prism=Prism);
+</script>
+
+<script type="text/x-mathjax-config">
+(function () {
+
+MathJax.Hub.Config({
+	'showProcessingMessages': false,
+	'messageStyle': 'none'
+});
+
+if (typeof MathJaxListener !== 'undefined') {
+	MathJax.Hub.Register.StartupHook('End', function () {
+		MathJaxListener.invokeCallbackForKey_('End');
+	});
+}
+
+})();
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+</body>
+
+</html>

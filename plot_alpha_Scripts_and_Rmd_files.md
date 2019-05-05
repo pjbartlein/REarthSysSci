@@ -1,3 +1,7 @@
+---
+title: "Example R Script and R Markdown files"
+---
+
 # plot\_alpha\_RScript.R (Example 1)#
 
 Output is text in Console pane and graphics in Plots pane.

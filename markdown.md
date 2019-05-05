@@ -71,7 +71,7 @@ The following examples can be reproduced using this data set:  `cru10min30_bio.n
 [[plot\_alpha\_RMarkdown\_Notebook.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_notebook.rmd-example-2)
 - `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a special header), output appears as an `.html` file, viewable in a browser or internally in RStudio:  [[plot\_alpha\_RMarkdown\_1Page.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_1page.rmd-example-3)
 - `*.Rmd` RMarkdown files:  input is an RMarkdown file (with a different special header) and a `*.css` file, output appears as an `.html` file, viewable in a browser or internally in RStudio: 
-[[plot\_alpha\_RMarkdown\_Site.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_site.rmd)
+[[plot\_alpha\_RMarkdown\_Site.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_site.rmd-example-4)
 - multiple `*.Rmd` and `.md` files, along with a "site YAML" file, as input, a multipage website or book with internal navigation as output.  (This is how the course web pages are constructed.) 
 [[https://github.com/pjbartlein/REarthSysSci]](https://github.com/pjbartlein/REarthSysSci)
 
