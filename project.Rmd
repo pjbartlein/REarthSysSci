@@ -34,10 +34,10 @@ Implementing these approaches will be described sequentially below.  Various fil
 The key steps include:
 
 1. registering a (free) GitHub account at [[github.com]](github.com) (see Section 4 of [[*Happy Git and GitHub for the useR (HappyGitWithR)*]](https://happygitwithr.com/index.html)) (See also the [[GitHub Education]](https://education.github.com) page.)
-1. installing Git (Section 6)
-1. installing a Git client (Sourcetree) 
-1. configuring RStudio and GitHub (Sections 9-14)
-2. starting a new project (Section 15)
+1. installing Git (Chapter 6)
+1. installing a Git client (Chapter 8) 
+1. configuring RStudio and GitHub (Chapters 9-14, and see Chapter 10 in particular about cacheing credentials)
+2. starting a new project (Chapter 15)
 
 ## Set up ##
 
@@ -122,7 +122,7 @@ To demonstrate how this approach works, a small script file that reads a shapefi
 To begin, 
 
 1. Create a new R Script file in the projects folder (File > New File > R Script);
-2. Copy the contents of [[plot\_alpha\_RScript.R]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rscript.r-example-1) into it;
+2. Copy the contents of [[plot\_alpha\_RScript.R]](https://pjbartlein.github.io/REarthSysSci/plot_alpha.html#plot_alpha_rscript.r-example-1) into it;
 1. Edit the paths in the script file as appropriate;
 2. Save it as `plot_alpha_RScript.R` in the projects folder.
 
@@ -169,7 +169,7 @@ Then,
 
 1. Create a new R Markdown file in the projects folder (File > New File > R Notebook);
 2. Delete the sample code in the new page. (New `*.Rmd` files come populated with code that creates a demonstration page);
-2. Copy the contents of [[plot\_alpha\_RMarkdown\_Notebook.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_notebook.rmd-example-2) into it;
+2. Copy the contents of [[plot\_alpha\_RMarkdown\_Notebook.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha.html#plot_alpha_rmarkdown_notebook.rmd-example-2) into it;
 1. Edit the paths in the script file as appropriate;
 2. Save it as `plot\_alpha\_RMarkdown\_Notebook.Rmd` in the projects folder; and
 2. "Knit" the file by clicking on the "Knit" tab at the top of the script-editing window.
@@ -191,7 +191,7 @@ Create an R Markdown file that will produce a single-page `.html` file as output
 
 1. Create a new R Markdown file in the projects folder (File > New File > R Markdown);
 2. Delete the sample code in the new page; 
-2. Copy the contents of [[plot\_alpha\_RMarkdown\_1Page.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_1page.rmd-example-3) into it;
+2. Copy the contents of [[plot\_alpha\_RMarkdown\_1Page.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha.html#plot_alpha_rmarkdown_1page.rmd-example-3) into it;
 1. Edit the paths in the script file as appropriate;
 2. Save it as `plot\_alpha\_RMarkdown\_1Page.Rmd` in the projects folder;
 
@@ -254,7 +254,7 @@ Start by creating an R Markdown file that will produce a single-page `.html` fil
 
 1. Create a new R Markdown file in the projects folder (File > New File > R Markdown);
 2. Delete the sample code in the new page; 
-2. Copy the contents of [[plot\_alpha\_RMarkdown\_Site.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_Scripts_and_Rmd_files.html#plot_alpha_rmarkdown_site.rmd-example-4) into it;
+2. Copy the contents of [[plot\_alpha\_RMarkdown\_Site.Rmd]](https://pjbartlein.github.io/REarthSysSci/plot_alpha.html#plot_alpha_rmarkdown_site.rmd-example-4) into it;
 1. Edit the paths in the script file as appropriate;
 2. Save it as `plot\_alpha\_RMarkdown\_Site.Rmd` in the projects folder; and
 3. Knit the file.
