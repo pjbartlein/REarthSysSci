@@ -672,12 +672,12 @@ README.md</code></pre>
 <a class="sourceLine" id="cb4-12" data-line-number="12">      collapsed<span class="op">:</span><span class="st"> </span>no</a>
 <a class="sourceLine" id="cb4-13" data-line-number="13">  <span class="op">---</span></a></code></pre></div>
 <p>Most of the entries are obvious: “<code>title</code>” is used at the top of the page, “<code>output</code>” species that an <code>.html</code> file is desired (as opposed to a Word document or PDF); “<code>highlight: haddock</code>” specifies a particular style of syntax highlighting (<code>haddock</code>); “<code>number_sections: yes</code>” numbers the headings, which are reflected in the table of contents; “<code>theme: spacelab</code>” specifies a particular “Bootswatch” theme (the course pages use “cosmos”; “<code>toc: yes</code>” turns on the table of contents, and “<code>toc_float: true</code>” keeps the table of contents visible on the left-hand side of the window; and “<code>collapsed: no</code>” specifies that the table of contents should be visible. See Chapter 3 of <a href="https://bookdown.org/yihui/rmarkdown/documents.html"><em>R Markdown — The Definitive Guide</em></a> for more discussion of the YAML headers.</p>
-<p>The second block of code includes some “global” code-chunk options (that apply to all “code chunks”, or blocks of code set off by backtics (```)</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="st">```</span><span class="dt">{r set-options, echo=FALSE}</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="dt">options(width = 105)</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="dt">knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="dt">pdf.options(useDingbats = TRUE)</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="dt"></span><span class="st">```</span></a></code></pre></div>
+<p>The second block of code includes some “global” code-chunk options (that apply to all “code chunks”, or blocks of code set off by backtics (```) (Remove ##’s before using this code fragment)</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">## ```{r set-options, echo=FALSE}</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">## options(width = 105)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">## knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">## pdf.options(useDingbats = TRUE)</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">## ```</a></code></pre></div>
 <p>As before,</p>
 <ol style="list-style-type: decimal">
 <li>Open the <code>.Rmd</code> (<code>plot\_alpha\_RMarkdown\_1Page.Rmd</code>) file if it’s not already open;</li>
@@ -710,76 +710,76 @@ README.md</code></pre>
 <li>Knit the file.</li>
 </ol>
 <p>Next, create a set of three <code>*.md</code> files as follows:</p>
-<p><code>index.Rmd</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="op">---</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">title<span class="op">:</span><span class="st"> &quot;GEOG4/590: R for Earth-System Science&quot;</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">output<span class="op">:</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">  html_document<span class="op">:</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">    fig_caption<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">    number_sections<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">    toc<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">    toc_float<span class="op">:</span><span class="st"> </span>false</a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">    collapsed<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="op">---</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="st">```</span><span class="dt">{r set-options, echo=FALSE}</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="dt">options(width = 105)</span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="dt">knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="dt">pdf.options(useDingbats = TRUE)</span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="dt"></span><span class="st">```</span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"></a>
-<a class="sourceLine" id="cb6-18" data-line-number="18">## Project web page for GEOG 4/595 *R for Earth-System Science* ##</a>
-<a class="sourceLine" id="cb6-19" data-line-number="19">   </a>
-<a class="sourceLine" id="cb6-20" data-line-number="20">Topics covered here include<span class="op">:</span></a>
-<a class="sourceLine" id="cb6-21" data-line-number="21"></a>
-<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="op">-</span><span class="st"> </span>An introduction to the project</a>
-<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="op">-</span><span class="st"> </span>A simple example of plotting a raster slice</a>
-<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="op">-</span><span class="st"> </span>(more to come…)</a></code></pre></div>
-<p><code>intro.Rmd</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="op">---</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">title<span class="op">:</span><span class="st"> &quot;Introduction to the project&quot;</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">output<span class="op">:</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">  html_document<span class="op">:</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">    fig_caption<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">    number_sections<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb7-7" data-line-number="7">    toc<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb7-8" data-line-number="8">    toc_float<span class="op">:</span><span class="st"> </span>false</a>
-<a class="sourceLine" id="cb7-9" data-line-number="9">    collapsed<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="op">---</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="st">```</span><span class="dt">{r set-options, echo=FALSE}</span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="dt">options(width = 105)</span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="dt">knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</span></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="dt">pdf.options(useDingbats = TRUE)</span></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="dt"></span><span class="st">```</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18">The visualization developed here uses the <span class="st">`</span><span class="dt">raster</span><span class="st">`</span> and <span class="st">`</span><span class="dt">rasterVis</span><span class="st">`</span> packages to map the global </a>
-<a class="sourceLine" id="cb7-19" data-line-number="19">pattern of alpha, calculated using the CRU CL2 climate data set.  The maps also include a </a>
-<a class="sourceLine" id="cb7-20" data-line-number="20">shapefile of world coastlines and countries.</a></code></pre></div>
-<p><code>about.Rmd</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="op">---</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">title<span class="op">:</span><span class="st"> &quot;GEOG 4/590:  R for Earth-System Science&quot;</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">output<span class="op">:</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">  html_document<span class="op">:</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">    fig_caption<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">    number_sections<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">    toc<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">    toc_float<span class="op">:</span><span class="st"> </span>false</a>
-<a class="sourceLine" id="cb8-9" data-line-number="9">    collapsed<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="op">---</span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11"></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="st">```</span><span class="dt">{r set-options, echo=FALSE}</span></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="dt">options(width = 105)</span></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="dt">knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</span></a>
-<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="dt">pdf.options(useDingbats = TRUE)</span></a>
-<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="dt"></span><span class="st">```</span></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17">P.J. Bartlein  </a>
-<a class="sourceLine" id="cb8-18" data-line-number="18">Dept. Geography  </a>
-<a class="sourceLine" id="cb8-19" data-line-number="19">Univ. Oregon  </a>
-<a class="sourceLine" id="cb8-20" data-line-number="20">bartlein<span class="op">@</span>uoregon.edu</a>
-<a class="sourceLine" id="cb8-21" data-line-number="21"></a>
-<a class="sourceLine" id="cb8-22" data-line-number="22">The GitHub repository <span class="cf">for</span> this web site is at<span class="op">:</span><span class="st">  </span></a>
-<a class="sourceLine" id="cb8-23" data-line-number="23">[https<span class="op">:</span><span class="er">//</span>github.com<span class="op">/</span>pjbartlein<span class="op">/</span>geog490](https<span class="op">:</span><span class="er">//</span>github.com<span class="op">/</span>pjbartlein<span class="op">/</span>geog490)</a></code></pre></div>
+<p><code>index.Rmd</code>: (Remove ##’s before attempting to run.)</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">## ---</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">## title: &quot;GEOG4/590: R for Earth-System Science&quot;</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">## output:</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">##   html_document:</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">##     fig_caption: no</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">##     number_sections: no</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">##     toc: no</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">##     toc_float: false</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">##     collapsed: no</a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">## ---</a>
+<a class="sourceLine" id="cb6-11" data-line-number="11">##</a>
+<a class="sourceLine" id="cb6-12" data-line-number="12">## ```{r set-options, echo=FALSE}</a>
+<a class="sourceLine" id="cb6-13" data-line-number="13">## options(width = 105)</a>
+<a class="sourceLine" id="cb6-14" data-line-number="14">## knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</a>
+<a class="sourceLine" id="cb6-15" data-line-number="15">## pdf.options(useDingbats = TRUE)</a>
+<a class="sourceLine" id="cb6-16" data-line-number="16">## ```</a>
+<a class="sourceLine" id="cb6-17" data-line-number="17">##</a>
+<a class="sourceLine" id="cb6-18" data-line-number="18">## ## Project web page for GEOG 4/595 *R for Earth-System Science* ##</a>
+<a class="sourceLine" id="cb6-19" data-line-number="19">##</a>
+<a class="sourceLine" id="cb6-20" data-line-number="20">## Topics covered here include:</a>
+<a class="sourceLine" id="cb6-21" data-line-number="21">##</a>
+<a class="sourceLine" id="cb6-22" data-line-number="22">## - An introduction to the project</a>
+<a class="sourceLine" id="cb6-23" data-line-number="23">## - A simple example of plotting a raster slice</a>
+<a class="sourceLine" id="cb6-24" data-line-number="24">## - (more to come…)</a></code></pre></div>
+<p><code>intro.Rmd</code>: (Remove ##’s before attempting to run.)</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">## ---</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">## title: &quot;Introduction to the project&quot;</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">## output:</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">##   html_document:</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">##     fig_caption: no</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">##     number_sections: no</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">##     toc: no</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">##     toc_float: false</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9">##     collapsed: no</a>
+<a class="sourceLine" id="cb7-10" data-line-number="10">## ---</a>
+<a class="sourceLine" id="cb7-11" data-line-number="11">##</a>
+<a class="sourceLine" id="cb7-12" data-line-number="12">## ```{r set-options, echo=FALSE}</a>
+<a class="sourceLine" id="cb7-13" data-line-number="13">## options(width = 105)</a>
+<a class="sourceLine" id="cb7-14" data-line-number="14">## knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</a>
+<a class="sourceLine" id="cb7-15" data-line-number="15">## pdf.options(useDingbats = TRUE)</a>
+<a class="sourceLine" id="cb7-16" data-line-number="16">## ```</a>
+<a class="sourceLine" id="cb7-17" data-line-number="17">##</a>
+<a class="sourceLine" id="cb7-18" data-line-number="18">## The visualization developed here uses the `raster` and `rasterVis` packages to map the global</a>
+<a class="sourceLine" id="cb7-19" data-line-number="19">## pattern of alpha, calculated using the CRU CL2 climate data set.  The maps also include a</a>
+<a class="sourceLine" id="cb7-20" data-line-number="20">## shapefile of world coastlines and countries.</a></code></pre></div>
+<p><code>about.Rmd</code>: (Remove ##’s before attempting to run.)</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">## ---</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">## title: &quot;GEOG 4/590:  R for Earth-System Science&quot;</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">## output:</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">##   html_document:</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">##     fig_caption: no</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">##     number_sections: no</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">##     toc: no</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">##     toc_float: false</a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">##     collapsed: no</a>
+<a class="sourceLine" id="cb8-10" data-line-number="10">## ---</a>
+<a class="sourceLine" id="cb8-11" data-line-number="11">##</a>
+<a class="sourceLine" id="cb8-12" data-line-number="12">## ```{r set-options, echo=FALSE}</a>
+<a class="sourceLine" id="cb8-13" data-line-number="13">## options(width = 105)</a>
+<a class="sourceLine" id="cb8-14" data-line-number="14">## knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</a>
+<a class="sourceLine" id="cb8-15" data-line-number="15">## pdf.options(useDingbats = TRUE)</a>
+<a class="sourceLine" id="cb8-16" data-line-number="16">## ```</a>
+<a class="sourceLine" id="cb8-17" data-line-number="17">## P.J. Bartlein</a>
+<a class="sourceLine" id="cb8-18" data-line-number="18">## Dept. Geography</a>
+<a class="sourceLine" id="cb8-19" data-line-number="19">## Univ. Oregon</a>
+<a class="sourceLine" id="cb8-20" data-line-number="20">## bartlein@uoregon.edu</a>
+<a class="sourceLine" id="cb8-21" data-line-number="21">##</a>
+<a class="sourceLine" id="cb8-22" data-line-number="22">## The GitHub repository for this web site is at:</a>
+<a class="sourceLine" id="cb8-23" data-line-number="23">## [https://github.com/pjbartlein/geog490](https://github.com/pjbartlein/geog490)</a></code></pre></div>
 <p>(The above files are just examples.)</p>
 <p>Knit the three files.</p>
 <p>Finally, create a <code>_site.yml</code> file (File &gt; New File &gt; Text File in RStudio, or use a text editor):</p>

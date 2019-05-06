@@ -217,14 +217,14 @@ The `.Rmd` file looks much like the R Markdown Notebook file, but has two additi
 
 Most of the entries are obvious:  "`title`" is used at the top of the page, "`output`" species that an `.html` file is desired (as opposed to a Word document or PDF); "`highlight: haddock`" specifies a particular style of syntax highlighting (`haddock`); "`number_sections: yes`" numbers the headings, which are reflected in the table of contents; "`theme: spacelab`" specifies a particular "Bootswatch" theme (the course pages use "cosmos"; "`toc: yes`" turns on the table of contents, and "`toc_float: true`" keeps the table of contents visible on the left-hand side of the window; and "`collapsed: no`" specifies that the table of contents should be visible.  See Chapter 3 of [*R Markdown — The Definitive Guide*](https://bookdown.org/yihui/rmarkdown/documents.html) for more discussion of the YAML headers.
 
-The second block of code includes some "global" code-chunk options (that apply to all "code chunks", or blocks of code set off by backtics (\`\`\`)
+The second block of code includes some "global" code-chunk options (that apply to all "code chunks", or blocks of code set off by backtics (\`\`\`) (Remove ##'s before using this code fragment)
 
 ```{r echo=TRUE, eval=FALSE}
-```{r set-options, echo=FALSE}
-options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
-pdf.options(useDingbats = TRUE)
-```
+## ```{r set-options, echo=FALSE}
+## options(width = 105)
+## knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+## pdf.options(useDingbats = TRUE)
+## ```
 ```
 
 As before,
@@ -261,86 +261,87 @@ Start by creating an R Markdown file that will produce a single-page `.html` fil
 
 Next, create a set of three `*.md` files as follows:
 
-`index.Rmd`: 
+`index.Rmd`: (Remove ##'s before attempting to run.)
 
 ```{r echo=TRUE, eval=FALSE}
----
-title: "GEOG4/590: R for Earth-System Science"
-output: 
-  html_document:
-    fig_caption: no
-    number_sections: no
-    toc: no
-    toc_float: false
-    collapsed: no
----
-
-```{r set-options, echo=FALSE}
-options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
-pdf.options(useDingbats = TRUE)
-```
-
-## Project web page for GEOG 4/595 *R for Earth-System Science* ##
-	
-Topics covered here include:
-
-- An introduction to the project
-- A simple example of plotting a raster slice
-- (more to come…)
+## ---
+## title: "GEOG4/590: R for Earth-System Science"
+## output:
+##   html_document:
+##     fig_caption: no
+##     number_sections: no
+##     toc: no
+##     toc_float: false
+##     collapsed: no
+## ---
+##
+## ```{r set-options, echo=FALSE}
+## options(width = 105)
+## knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+## pdf.options(useDingbats = TRUE)
+## ```
+##
+## ## Project web page for GEOG 4/595 *R for Earth-System Science* ##
+##
+## Topics covered here include:
+##
+## - An introduction to the project
+## - A simple example of plotting a raster slice
+## - (more to come…)
 ```
 
-`intro.Rmd`:
+
+`intro.Rmd`: (Remove ##'s before attempting to run.)
 
 ```{r echo=TRUE, eval=FALSE}
----
-title: "Introduction to the project"
-output: 
-  html_document:
-    fig_caption: no
-    number_sections: no
-    toc: no
-    toc_float: false
-    collapsed: no
----
-
-```{r set-options, echo=FALSE}
-options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
-pdf.options(useDingbats = TRUE)
-```
-
-The visualization developed here uses the `raster` and `rasterVis` packages to map the global 
-pattern of alpha, calculated using the CRU CL2 climate data set.  The maps also include a 
-shapefile of world coastlines and countries.
+## ---
+## title: "Introduction to the project"
+## output:
+##   html_document:
+##     fig_caption: no
+##     number_sections: no
+##     toc: no
+##     toc_float: false
+##     collapsed: no
+## ---
+##
+## ```{r set-options, echo=FALSE}
+## options(width = 105)
+## knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+## pdf.options(useDingbats = TRUE)
+## ```
+##
+## The visualization developed here uses the `raster` and `rasterVis` packages to map the global
+## pattern of alpha, calculated using the CRU CL2 climate data set.  The maps also include a
+## shapefile of world coastlines and countries.
 ```
 
-`about.Rmd`: 
+`about.Rmd`:  (Remove ##'s before attempting to run.)
 
 ```{r echo=TRUE, eval=FALSE}
----
-title: "GEOG 4/590:  R for Earth-System Science"
-output: 
-  html_document:
-    fig_caption: no
-    number_sections: no
-    toc: no
-    toc_float: false
-    collapsed: no
----
-
-```{r set-options, echo=FALSE}
-options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
-pdf.options(useDingbats = TRUE)
-```
-P.J. Bartlein  
-Dept. Geography  
-Univ. Oregon  
-bartlein@uoregon.edu
-
-The GitHub repository for this web site is at:  
-[https://github.com/pjbartlein/geog490](https://github.com/pjbartlein/geog490)
+## ---
+## title: "GEOG 4/590:  R for Earth-System Science"
+## output:
+##   html_document:
+##     fig_caption: no
+##     number_sections: no
+##     toc: no
+##     toc_float: false
+##     collapsed: no
+## ---
+##
+## ```{r set-options, echo=FALSE}
+## options(width = 105)
+## knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+## pdf.options(useDingbats = TRUE)
+## ```
+## P.J. Bartlein
+## Dept. Geography
+## Univ. Oregon
+## bartlein@uoregon.edu
+##
+## The GitHub repository for this web site is at:
+## [https://github.com/pjbartlein/geog490](https://github.com/pjbartlein/geog490)
 ```
 
 (The above files are just examples.)
