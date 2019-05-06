@@ -55,7 +55,7 @@ plt + layer(sp.lines(world_outline, col="black", lwd=1.0))
 # plot\_alpha\_RMarkdown\_Notebook.Rmd (Example 2)#
 
 Single-page R Notebook `.html` file as output.
-(Remove ##'s before attempting to run)
+(Remove `##`'s before attempting to run)
 
 ```{r, echo=TRUE, eval=FALSE}
 ## ---
@@ -115,7 +115,7 @@ Single-page R Notebook `.html` file as output.
 # plot\_alpha\_RMarkdown\_1Page.Rmd (Example 3) #
 
 Single-page `.html` file as output.
-(Remove ##'s before attempting to run)
+(Remove `##`'s before attempting to run)
 
 ```{r, echo=TRUE, eval=FALSE}
 ## ---
@@ -196,7 +196,7 @@ Single-page `.html` file as output.
 # plot\_alpha\_RMarkdown\_Site.Rmd (Example 4) #
 
 Output is one component of a multi-page `.html` site.
-(Remove ##'s before attempting to run)
+(Remove `##`'s before attempting to run)
 
 ```{r, echo=TRUE, eval=FALSE}
 ## ---

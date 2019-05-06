@@ -672,7 +672,7 @@ README.md</code></pre>
 <a class="sourceLine" id="cb4-12" data-line-number="12">      collapsed<span class="op">:</span><span class="st"> </span>no</a>
 <a class="sourceLine" id="cb4-13" data-line-number="13">  <span class="op">---</span></a></code></pre></div>
 <p>Most of the entries are obvious: “<code>title</code>” is used at the top of the page, “<code>output</code>” species that an <code>.html</code> file is desired (as opposed to a Word document or PDF); “<code>highlight: haddock</code>” specifies a particular style of syntax highlighting (<code>haddock</code>); “<code>number_sections: yes</code>” numbers the headings, which are reflected in the table of contents; “<code>theme: spacelab</code>” specifies a particular “Bootswatch” theme (the course pages use “cosmos”; “<code>toc: yes</code>” turns on the table of contents, and “<code>toc_float: true</code>” keeps the table of contents visible on the left-hand side of the window; and “<code>collapsed: no</code>” specifies that the table of contents should be visible. See Chapter 3 of <a href="https://bookdown.org/yihui/rmarkdown/documents.html"><em>R Markdown — The Definitive Guide</em></a> for more discussion of the YAML headers.</p>
-<p>The second block of code includes some “global” code-chunk options (that apply to all “code chunks”, or blocks of code set off by backtics (```) (Remove ##’s before using this code fragment)</p>
+<p>The second block of code includes some “global” code-chunk options (that apply to all “code chunks”, or blocks of code set off by backtics (```) (Remove <code>##</code>’s before using this code fragment)</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">## ```{r set-options, echo=FALSE}</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">## options(width = 105)</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3">## knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</a>
@@ -710,7 +710,7 @@ README.md</code></pre>
 <li>Knit the file.</li>
 </ol>
 <p>Next, create a set of three <code>*.md</code> files as follows:</p>
-<p><code>index.Rmd</code>: (Remove ##’s before attempting to run.)</p>
+<p><code>index.Rmd</code>: (Remove <code>##</code>’s before attempting to run.)</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">## ---</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">## title: &quot;GEOG4/590: R for Earth-System Science&quot;</a>
 <a class="sourceLine" id="cb6-3" data-line-number="3">## output:</a>
@@ -735,7 +735,7 @@ README.md</code></pre>
 <a class="sourceLine" id="cb6-22" data-line-number="22">## - An introduction to the project</a>
 <a class="sourceLine" id="cb6-23" data-line-number="23">## - A simple example of plotting a raster slice</a>
 <a class="sourceLine" id="cb6-24" data-line-number="24">## - (more to come…)</a></code></pre></div>
-<p><code>intro.Rmd</code>: (Remove ##’s before attempting to run.)</p>
+<p><code>intro.Rmd</code>: (Remove <code>##</code>’s before attempting to run.)</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">## ---</a>
 <a class="sourceLine" id="cb7-2" data-line-number="2">## title: &quot;Introduction to the project&quot;</a>
 <a class="sourceLine" id="cb7-3" data-line-number="3">## output:</a>
@@ -756,7 +756,7 @@ README.md</code></pre>
 <a class="sourceLine" id="cb7-18" data-line-number="18">## The visualization developed here uses the `raster` and `rasterVis` packages to map the global</a>
 <a class="sourceLine" id="cb7-19" data-line-number="19">## pattern of alpha, calculated using the CRU CL2 climate data set.  The maps also include a</a>
 <a class="sourceLine" id="cb7-20" data-line-number="20">## shapefile of world coastlines and countries.</a></code></pre></div>
-<p><code>about.Rmd</code>: (Remove ##’s before attempting to run.)</p>
+<p><code>about.Rmd</code>: (Remove <code>##</code>’s before attempting to run.)</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">## ---</a>
 <a class="sourceLine" id="cb8-2" data-line-number="2">## title: &quot;GEOG 4/590:  R for Earth-System Science&quot;</a>
 <a class="sourceLine" id="cb8-3" data-line-number="3">## output:</a>
