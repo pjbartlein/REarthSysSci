@@ -244,7 +244,7 @@ Knitting the `.Rmd` file will create the file `plot_alpha_RMarkdown_1page.html` 
 - Delete the folders `/plot_alpha_RMarkdown_1page_cache` and `/plot_alpha_RMarkdown_1page_files`;
 - Use RStudio to commit and push the files to GitHub.
 
-## A multi-page R Markdown-generated website ##
+## A multi-page R Markdown-generated website (Example 4) ##
 
 **CLEAN UP FIRST:**  Delete or move the R Markdown file `plot_alpha_RMarkdown_1Page.Rmd`, delete the folders `/plot_alpha_RMarkdown_1Page_files` and `/plot_alpha_RMarkdown_1Page_cache`, and delete the files in the `/docs` folder (but leave that folder in place)
 
@@ -268,6 +268,7 @@ Next, create a set of three `*.md` files as follows:
 ## title: "GEOG4/590: R for Earth-System Science"
 ## output:
 ##   html_document:
+##     css: html-md-01.css
 ##     fig_caption: no
 ##     number_sections: no
 ##     toc: no
@@ -298,6 +299,7 @@ Next, create a set of three `*.md` files as follows:
 ## title: "Introduction to the project"
 ## output:
 ##   html_document:
+##     css: html-md-01.css
 ##     fig_caption: no
 ##     number_sections: no
 ##     toc: no
@@ -323,6 +325,7 @@ Next, create a set of three `*.md` files as follows:
 ## title: "GEOG 4/590:  R for Earth-System Science"
 ## output:
 ##   html_document:
+##     css: html-md-01.css
 ##     fig_caption: no
 ##     number_sections: no
 ##     toc: no
@@ -383,7 +386,7 @@ output_dir: docs
 The `knitr()` package is quite fussy about formatting of the `_site.yml` file so check it first in the case of later errors.
 
 In RStudio, the "build tools" needed to create the web site will need to be configured.  On the RStudio menu, click on Build.  If there is a menu choice that says "Install Tools" do that first, otherwise click on 
-"Configure Build Tools…"  On the "Project build tools:" dropdown box, select "Website"  The initial choices are probably fine, with the "Site directory" set to "(Project Root)" and the "Preview" and "Re-knit" checkboxes checked.  Upon clicking OK, a "Build" tab should appear in the upper-right pane.  Select that tab, and click on "Build Website".
+"Configure Build Tools…"  A "Project Options" dialog will open.  On the "Project build tools:" dropdown box, select "Website"  The initial choices are probably fine, with the "Site directory" set to "(Project Root)" and the "Preview" and "Re-knit" checkboxes checked.  Upon clicking OK, a "Build" tab should appear in the upper-right pane.  If it doesn't, restart R Studio (Session > Restart R).  Select the build tab, and click on "Build Website".
 
 At this point, the project folder should contain:	
 

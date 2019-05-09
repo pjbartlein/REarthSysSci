@@ -37,10 +37,10 @@ Week Topic                                         Tasks
    3:  Earth-system science data                     Markdown authoring
    4:  Data input and output (ncdf4 and raster)      Project data-set selection
    5:  Geospatial analyses and mapping in R
-   6:  Visualization of high-dimensional data
-   7:  Multivariate analyses                         Project progress report      
-   8:  Prediction
-   9:  Clustering
+   6:  R Markdown and a project web site
+   7:  Visualization of high-dimensional data        Project progress report      
+   8:  Multivariate analyses - I
+   9:  Multivariate analyses - II
   10:  Other R packages and project discussion       Project presentation and discussion
 ```
 
