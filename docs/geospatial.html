@@ -30,7 +30,7 @@
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -43,13 +43,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
   { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -395,10 +393,10 @@ $(document).ready(function () {
       <a href="RMaps.html">Maps in R</a>
     </li>
     <li>
-      <a href="raster.html">Visualization:  raster and rasterVis</a>
+      <a href="rasterVis01.html">Visualization:  raster and rasterVis</a>
     </li>
-    <li class="dropdown-header">Multivariate analysis</li>
-    <li class="dropdown-header">Prediction</li>
+    <li class="dropdown-header">Visualization of high-dimensional data</li>
+    <li class="dropdown-header">Multivariate analyses</li>
     <li class="dropdown-header">Clustering</li>
     <li class="dropdown-header">Other R packages</li>
   </ul>
@@ -511,7 +509,7 @@ $(document).ready(function () {
 <h1><span class="header-section-number">1</span> Introduction</h1>
 <div id="spatial-data-and-geospatial-analyses-in-r" class="section level2">
 <h2><span class="header-section-number">1.1</span> Spatial data and geospatial analyses in R</h2>
-<p>CRAN Spatial taskview: <a href="https://cran.r-project.org/web/views/Spatial.html" class="uri">https://cran.r-project.org/web/views/Spatial.html</a></p>
+<p>CRAN Spatial taskview: <a href="https://cran.r-project.org/web/views/Spatial.html">https://cran.r-project.org/web/views/Spatial.html</a></p>
 <p>The bulk of the geospatial/GISci analysis tools are contained in the following packages:</p>
 <ul>
 <li><code>maptools</code> reading and writing spatial data, particularly shapefiles</li>
@@ -642,13 +640,13 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">plot</span>(orotl_shp)</a>
 <a class="sourceLine" id="cb15-3" data-line-number="3"><span class="kw">points</span>(orstations_shp, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.7</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/plot%20stations-1.png" width="75%" height="75%" /></p>
-<p>More examples of simple maps can be found in the materials for Lecture 5 in GEOG 4/595: <a href="http://geog.uoregon.edu/bartlein/courses/geog495/lectures/lec05.html" class="uri">http://geog.uoregon.edu/bartlein/courses/geog495/lectures/lec05.html</a></p>
+<p>More examples of simple maps can be found in the materials for Lecture 5 in GEOG 4/595: <a href="http://geog.uoregon.edu/bartlein/courses/geog495/lectures/lec05.html">http://geog.uoregon.edu/bartlein/courses/geog495/lectures/lec05.html</a></p>
 <p><a href="geospatial.html">[Back to top]</a></p>
 </div>
 </div>
 <div id="extract-data-from-a-raster" class="section level1">
 <h1><span class="header-section-number">3</span> Extract data from a raster</h1>
-<p>This example demonstrates how to extract data from a raster for a set of target points contained in a .csv file. In this case, the raster is the Ramankutty and Foley potential natural vegetation data set (<a href="Shttps://www.nelson.wisc.edu/sage/data-and-models/global-land-use/index.php">https://www.nelson.wisc.edu/sage/data-and-models/global-land-use/index.php</a>), and the target points are the Global Charcoal Database (GCDv3) site locations (<a href="http://www.gpwg.paleofire.org" class="uri">http://www.gpwg.paleofire.org</a>)</p>
+<p>This example demonstrates how to extract data from a raster for a set of target points contained in a .csv file. In this case, the raster is the Ramankutty and Foley potential natural vegetation data set (<a href="Shttps://www.nelson.wisc.edu/sage/data-and-models/global-land-use/index.php">https://www.nelson.wisc.edu/sage/data-and-models/global-land-use/index.php</a>), and the target points are the Global Charcoal Database (GCDv3) site locations (<a href="http://www.gpwg.paleofire.org">http://www.gpwg.paleofire.org</a>)</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># load packages</span></a>
 <a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw">library</span>(ncdf4)</a>
 <a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw">library</span>(raster)</a>
@@ -1057,7 +1055,7 @@ $(document).ready(function () {
 </div>
 <div id="gridding-or-rasterizing-point-data" class="section level1">
 <h1><span class="header-section-number">5</span> Gridding or rasterizing point data</h1>
-<p>Another common task is to grid or rasterize a set of point data, creating a gridded data set of counts, averages, minima, maxima, etc. This can be illustrated using the FPA-FOD daily fire-fire start data set: Spatial wildfire occurrence data for the United States, 1992-2013/Fire Program Analysis Fire-Occurrence Database [FPA_FOD_20150323] (3nd Edition) (Short, K.C., 2014, Earth Syst. Sci. Data, 6, 1-27) – <a href="http://www.fs.usda.gov/rds/archive/Product/RDS-2013-0009.3/" class="uri">http://www.fs.usda.gov/rds/archive/Product/RDS-2013-0009.3/</a>. The idea here is to calculate the number and average area of the fires that occured in 0.5-degree grid cells that cover the coterminous U.S.</p>
+<p>Another common task is to grid or rasterize a set of point data, creating a gridded data set of counts, averages, minima, maxima, etc. This can be illustrated using the FPA-FOD daily fire-fire start data set: Spatial wildfire occurrence data for the United States, 1992-2013/Fire Program Analysis Fire-Occurrence Database [FPA_FOD_20150323] (3nd Edition) (Short, K.C., 2014, Earth Syst. Sci. Data, 6, 1-27) – <a href="http://www.fs.usda.gov/rds/archive/Product/RDS-2013-0009.3/">http://www.fs.usda.gov/rds/archive/Product/RDS-2013-0009.3/</a>. The idea here is to calculate the number and average area of the fires that occured in 0.5-degree grid cells that cover the coterminous U.S.</p>
 <div id="read-the-data-sets-and-create-empty-rasters" class="section level2">
 <h2><span class="header-section-number">5.1</span> Read the data sets, and create empty rasters</h2>
 <div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" data-line-number="1"><span class="kw">library</span>(raster)</a>

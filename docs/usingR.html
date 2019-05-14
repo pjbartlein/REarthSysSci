@@ -30,7 +30,7 @@
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -43,13 +43,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
   { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -395,10 +393,10 @@ $(document).ready(function () {
       <a href="RMaps.html">Maps in R</a>
     </li>
     <li>
-      <a href="raster.html">Visualization:  raster and rasterVis</a>
+      <a href="rasterVis01.html">Visualization:  raster and rasterVis</a>
     </li>
-    <li class="dropdown-header">Multivariate analysis</li>
-    <li class="dropdown-header">Prediction</li>
+    <li class="dropdown-header">Visualization of high-dimensional data</li>
+    <li class="dropdown-header">Multivariate analyses</li>
     <li class="dropdown-header">Clustering</li>
     <li class="dropdown-header">Other R packages</li>
   </ul>
@@ -779,7 +777,7 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb40-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">colour =</span> <span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
 <p><img src="usingR_files/figure-html/gg02-1.png" width="75%" height="75%" /></p>
 <p>The following plot is a plot of the relationship between elevation and annual temperature in the Oregon climate-station data set, with a “loess” curve added to summarize the relationship.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">## ggplot2 scatter diagram of Oregon climate-station data</a>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="co">## ggplot2 scatter diagram of Oregon climate-station data</span></a>
 <a class="sourceLine" id="cb41-2" data-line-number="2"><span class="kw">ggplot</span>(orstationc, <span class="kw">aes</span>(elev, tann)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb41-3" data-line-number="3"><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Elevation (m)&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;Annual Mean Temperature (C)&quot;</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb41-4" data-line-number="4"><span class="st">          </span><span class="kw">ggtitle</span>(<span class="st">&quot;Oregon Climate Station Data&quot;</span>)</a></code></pre></div>
@@ -851,7 +849,7 @@ $(document).ready(function () {
 ## [5,] 0.05042017               1 0.0
 ## [6,] 0.14257556               2 0.1</code></pre>
 <p>Next, the map:</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1">## ggplot2 map of pjulpjan</a>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="co">## ggplot2 map of pjulpjan</span></a>
 <a class="sourceLine" id="cb50-2" data-line-number="2"><span class="kw">ggplot</span>(wus_pratio, <span class="kw">aes</span>(lon, lat))  <span class="op">+</span></a>
 <a class="sourceLine" id="cb50-3" data-line-number="3"><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group), wus_states, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb50-4" data-line-number="4"><span class="st">  </span><span class="kw">scale_color_brewer</span>(<span class="dt">type =</span> <span class="st">&quot;div&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;PRGn&quot;</span>, <span class="dt">aesthetics =</span> <span class="st">&quot;color&quot;</span>, <span class="dt">direction =</span> <span class="dv">1</span>, </a>

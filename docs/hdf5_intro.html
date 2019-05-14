@@ -30,7 +30,7 @@
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -43,13 +43,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
   { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -395,10 +393,10 @@ $(document).ready(function () {
       <a href="RMaps.html">Maps in R</a>
     </li>
     <li>
-      <a href="raster.html">Visualization:  raster and rasterVis</a>
+      <a href="rasterVis01.html">Visualization:  raster and rasterVis</a>
     </li>
-    <li class="dropdown-header">Multivariate analysis</li>
-    <li class="dropdown-header">Prediction</li>
+    <li class="dropdown-header">Visualization of high-dimensional data</li>
+    <li class="dropdown-header">Multivariate analyses</li>
     <li class="dropdown-header">Clustering</li>
     <li class="dropdown-header">Other R packages</li>
   </ul>
@@ -651,29 +649,29 @@ $(document).ready(function () {
 <p>List the file contents, DOUBLE WARNING: This really does produce a lot of output, only some is included here:</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="co"># list the file contents</span></a>
 <a class="sourceLine" id="cb32-2" data-line-number="2"><span class="kw">h5ls</span>(hdf_file) <span class="co"># may create a lot of output</span></a></code></pre></div>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">##                            group                name       otype  dclass        dim</a>
-<a class="sourceLine" id="cb33-2" data-line-number="2">## 0                              /              ancill   H5I_GROUP                   </a>
-<a class="sourceLine" id="cb33-3" data-line-number="3">## 1                        /ancill       basis_regions H5I_DATASET INTEGER 1440 x 720</a>
-<a class="sourceLine" id="cb33-4" data-line-number="4">## 2                        /ancill      grid_cell_area H5I_DATASET   FLOAT 1440 x 720</a>
-<a class="sourceLine" id="cb33-5" data-line-number="5">## 3                              /           biosphere   H5I_GROUP                   </a>
-<a class="sourceLine" id="cb33-6" data-line-number="6">## 4                     /biosphere                  01   H5I_GROUP                   </a>
-<a class="sourceLine" id="cb33-7" data-line-number="7">## 5                  /biosphere/01                  BB H5I_DATASET   FLOAT 1440 x 720</a>
-<a class="sourceLine" id="cb33-8" data-line-number="8">## 6                  /biosphere/01                 NPP H5I_DATASET   FLOAT 1440 x 720</a>
-<a class="sourceLine" id="cb33-9" data-line-number="9">## 7                  /biosphere/01                  Rh H5I_DATASET   FLOAT 1440 x 720</a>
-<a class="sourceLine" id="cb33-10" data-line-number="10">## 8                     /biosphere                  02   H5I_GROUP                   </a>
-<a class="sourceLine" id="cb33-11" data-line-number="11">## 9                  /biosphere/02                  BB H5I_DATASET   FLOAT 1440 x 720</a>
-<a class="sourceLine" id="cb33-12" data-line-number="12">## 10                 /biosphere/02                 NPP H5I_DATASET   FLOAT 1440 x 720</a>
-<a class="sourceLine" id="cb33-13" data-line-number="13">## 11                 /biosphere/02                  Rh H5I_DATASET   FLOAT 1440 x 720</a>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co">##                            group                name       otype  dclass        dim</span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="co">## 0                              /              ancill   H5I_GROUP                   </span></a>
+<a class="sourceLine" id="cb33-3" data-line-number="3"><span class="co">## 1                        /ancill       basis_regions H5I_DATASET INTEGER 1440 x 720</span></a>
+<a class="sourceLine" id="cb33-4" data-line-number="4"><span class="co">## 2                        /ancill      grid_cell_area H5I_DATASET   FLOAT 1440 x 720</span></a>
+<a class="sourceLine" id="cb33-5" data-line-number="5"><span class="co">## 3                              /           biosphere   H5I_GROUP                   </span></a>
+<a class="sourceLine" id="cb33-6" data-line-number="6"><span class="co">## 4                     /biosphere                  01   H5I_GROUP                   </span></a>
+<a class="sourceLine" id="cb33-7" data-line-number="7"><span class="co">## 5                  /biosphere/01                  BB H5I_DATASET   FLOAT 1440 x 720</span></a>
+<a class="sourceLine" id="cb33-8" data-line-number="8"><span class="co">## 6                  /biosphere/01                 NPP H5I_DATASET   FLOAT 1440 x 720</span></a>
+<a class="sourceLine" id="cb33-9" data-line-number="9"><span class="co">## 7                  /biosphere/01                  Rh H5I_DATASET   FLOAT 1440 x 720</span></a>
+<a class="sourceLine" id="cb33-10" data-line-number="10"><span class="co">## 8                     /biosphere                  02   H5I_GROUP                   </span></a>
+<a class="sourceLine" id="cb33-11" data-line-number="11"><span class="co">## 9                  /biosphere/02                  BB H5I_DATASET   FLOAT 1440 x 720</span></a>
+<a class="sourceLine" id="cb33-12" data-line-number="12"><span class="co">## 10                 /biosphere/02                 NPP H5I_DATASET   FLOAT 1440 x 720</span></a>
+<a class="sourceLine" id="cb33-13" data-line-number="13"><span class="co">## 11                 /biosphere/02                  Rh H5I_DATASET   FLOAT 1440 x 720</span></a>
 <a class="sourceLine" id="cb33-14" data-line-number="14">...</a>
 <a class="sourceLine" id="cb33-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb33-16" data-line-number="16">## 52                             /         burned_area   H5I_GROUP                   </a>
-<a class="sourceLine" id="cb33-17" data-line-number="17">## 53                  /burned_area                  01   H5I_GROUP                   </a>
-<a class="sourceLine" id="cb33-18" data-line-number="18">## 54               /burned_area/01     burned_fraction H5I_DATASET   FLOAT 1440 x 720</a>
-<a class="sourceLine" id="cb33-19" data-line-number="19">## 55               /burned_area/01              source H5I_DATASET INTEGER 1440 x 720</a>
-<a class="sourceLine" id="cb33-20" data-line-number="20">## 56                  /burned_area                  02   H5I_GROUP                   </a>
-<a class="sourceLine" id="cb33-21" data-line-number="21">## 57               /burned_area/02     burned_fraction H5I_DATASET   FLOAT 1440 x 720</a>
-<a class="sourceLine" id="cb33-22" data-line-number="22">## 58               /burned_area/02              source H5I_DATASET INTEGER 1440 x 720</a>
-<a class="sourceLine" id="cb33-23" data-line-number="23">## 59                  /burned_area                  03   H5I_GROUP                   </a>
+<a class="sourceLine" id="cb33-16" data-line-number="16"><span class="co">## 52                             /         burned_area   H5I_GROUP                   </span></a>
+<a class="sourceLine" id="cb33-17" data-line-number="17"><span class="co">## 53                  /burned_area                  01   H5I_GROUP                   </span></a>
+<a class="sourceLine" id="cb33-18" data-line-number="18"><span class="co">## 54               /burned_area/01     burned_fraction H5I_DATASET   FLOAT 1440 x 720</span></a>
+<a class="sourceLine" id="cb33-19" data-line-number="19"><span class="co">## 55               /burned_area/01              source H5I_DATASET INTEGER 1440 x 720</span></a>
+<a class="sourceLine" id="cb33-20" data-line-number="20"><span class="co">## 56                  /burned_area                  02   H5I_GROUP                   </span></a>
+<a class="sourceLine" id="cb33-21" data-line-number="21"><span class="co">## 57               /burned_area/02     burned_fraction H5I_DATASET   FLOAT 1440 x 720</span></a>
+<a class="sourceLine" id="cb33-22" data-line-number="22"><span class="co">## 58               /burned_area/02              source H5I_DATASET INTEGER 1440 x 720</span></a>
+<a class="sourceLine" id="cb33-23" data-line-number="23"><span class="co">## 59                  /burned_area                  03   H5I_GROUP                   </span></a>
 <a class="sourceLine" id="cb33-24" data-line-number="24">...</a></code></pre></div>
 <p>Read the longtidues and latiudes. A preliminary look at the file in Panoply revealed that longitudes and latitudes were stored as full matices, as opposed to vectors. Consequently, after reading, only the first row (for longitude) and first column (for latitude) were stored.</p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="co"># read lons and lats</span></a>

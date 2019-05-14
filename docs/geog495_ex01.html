@@ -30,7 +30,7 @@
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -43,13 +43,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
   { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -395,10 +393,10 @@ $(document).ready(function () {
       <a href="RMaps.html">Maps in R</a>
     </li>
     <li>
-      <a href="raster.html">Visualization:  raster and rasterVis</a>
+      <a href="rasterVis01.html">Visualization:  raster and rasterVis</a>
     </li>
-    <li class="dropdown-header">Multivariate analysis</li>
-    <li class="dropdown-header">Prediction</li>
+    <li class="dropdown-header">Visualization of high-dimensional data</li>
+    <li class="dropdown-header">Multivariate analyses</li>
     <li class="dropdown-header">Clustering</li>
     <li class="dropdown-header">Other R packages</li>
   </ul>
@@ -490,16 +488,16 @@ $(document).ready(function () {
 <li>it has the capability for mapping data, an asset not generally available in other statistical software; and</li>
 <li>it has multiple add-on “packages” specifically designed for the analysis of spatial data.</li>
 </ul>
-<p>R has a fairly steep learning curve, which these exercises are designed to diminish. The home page for the “R project” is at <a href="http://www.r-project.org" class="uri">http://www.r-project.org</a></p>
-<p>Both the Mac and Windows versions of R have their own built-in GUIs (Graphical User Interfaces), but they are a little idiosyncratic. RStudio (<a href="https://www.rstudio.com" class="uri">https://www.rstudio.com</a>) is a free and open-source environment for running R, and it looks and behaves virtually the same in both Windows and OS X or MacOS, and so it will be used throughout the course.</p>
+<p>R has a fairly steep learning curve, which these exercises are designed to diminish. The home page for the “R project” is at <a href="http://www.r-project.org">http://www.r-project.org</a></p>
+<p>Both the Mac and Windows versions of R have their own built-in GUIs (Graphical User Interfaces), but they are a little idiosyncratic. RStudio (<a href="https://www.rstudio.com">https://www.rstudio.com</a>) is a free and open-source environment for running R, and it looks and behaves virtually the same in both Windows and OS X or MacOS, and so it will be used throughout the course.</p>
 <div id="read-through-the-following-before-beginning" class="section level4">
 <h4><strong>Read through the following before beginning…</strong></h4>
 <p><strong>2. Getting R</strong></p>
-<p>R can be downloaded from one of the “CRAN” (Comprehensive R Archive Network) sites. In the US, the main site is at <a href="http://cran.us.r-project.org/" class="uri">http://cran.us.r-project.org/</a> To download R, go to a CRAN website, and look in the “Download and Install R” area. Click on the appropriate link.</p>
+<p>R can be downloaded from one of the “CRAN” (Comprehensive R Archive Network) sites. In the US, the main site is at <a href="http://cran.us.r-project.org/">http://cran.us.r-project.org/</a> To download R, go to a CRAN website, and look in the “Download and Install R” area. Click on the appropriate link.</p>
 <p><em>Windows 10 (and 7 &amp; 8)</em></p>
 <p>Note: Depending on the age of your computer and version of Windows, you may be running either a “32-bit” or “64-bit” version of the Windows operating system. If you have the 64-bit version (most likely), R will install the appropriate version (R x64 3.5.2) and will also (for backwards compatibility) install the 32-bit version (R i386 3.5.2). You can run either, but you will probably just want to run the 64-bit version.</p>
 <ol style="list-style-type: decimal">
-<li>On the “R for Windows” page, for example, click on the “base” link (which should take you to the “Download R-3.5.2 for Windows” page, or you can click directly on this link: <a href="http://cran.us.r-project.org/bin/windows/" class="uri">http://cran.us.r-project.org/bin/windows/</a>).<br />
+<li>On the “R for Windows” page, for example, click on the “base” link (which should take you to the “Download R-3.5.2 for Windows” page, or you can click directly on this link: <a href="http://cran.us.r-project.org/bin/windows/">http://cran.us.r-project.org/bin/windows/</a>).<br />
 </li>
 <li>On this page, click either on the “base” or “install R for the first time links”.<br />
 </li>
@@ -511,7 +509,7 @@ $(document).ready(function () {
 </ol>
 <p><em>Mac OS X (and MacOS Sierra)</em></p>
 <ol style="list-style-type: decimal">
-<li>On the “R for Mac OS X” page (<a href="http://cran.us.r-project.org/bin/macosx/" class="uri">http://cran.us.r-project.org/bin/macosx/</a>), there are multiple packages that could be downloaded, but the one you want is one of two topmost ones. If you are running Mavericks, Yosemite, El Capitan, or MacOS Sierra or High Sierra, download the R-3.5.2.pkg in the next step; if you are running an earlier version of OS X, download the R-3.2.1-snowleopard.pkg in the next step</li>
+<li>On the “R for Mac OS X” page (<a href="http://cran.us.r-project.org/bin/macosx/">http://cran.us.r-project.org/bin/macosx/</a>), there are multiple packages that could be downloaded, but the one you want is one of two topmost ones. If you are running Mavericks, Yosemite, El Capitan, or MacOS Sierra or High Sierra, download the R-3.5.2.pkg in the next step; if you are running an earlier version of OS X, download the R-3.2.1-snowleopard.pkg in the next step</li>
 <li>To download the package click on the (e.g.) “R-3.5.2.pkg (Latest release)” link.</li>
 <li>After the package finishes downloading, right-click in the downloads window of your browser, and click on “Show in Finder” (or just look in the Downloads folder). This will open a new Finder window with the installer package.</li>
 <li>Then double-click on the installer package, and after a few screens, select a destination for the installation of the R framework (the program) and the R.app GUI. Note that you will have supply the Administator’s password. Close the window when the installation is done.</li>
@@ -519,9 +517,9 @@ $(document).ready(function () {
 </ol>
 <p>There are three sort of technical “FAQ” pages that contain additional information that may be useful for working out the kinks. These include</p>
 <ul>
-<li>R Windows FAQ: <a href="http://cran.us.r-project.org/bin/windows/base/rw-FAQ.html" class="uri">http://cran.us.r-project.org/bin/windows/base/rw-FAQ.html</a></li>
-<li>R for Mac OS X FAQ: <a href="http://cran.us.r-project.org/bin/macosx/RMacOSX-FAQ.html" class="uri">http://cran.us.r-project.org/bin/macosx/RMacOSX-FAQ.html</a>, and</li>
-<li>R FAQ (general): <a href="http://cran.r-project.org/doc/FAQ/R-FAQ.html" class="uri">http://cran.r-project.org/doc/FAQ/R-FAQ.html</a>.</li>
+<li>R Windows FAQ: <a href="http://cran.us.r-project.org/bin/windows/base/rw-FAQ.html">http://cran.us.r-project.org/bin/windows/base/rw-FAQ.html</a></li>
+<li>R for Mac OS X FAQ: <a href="http://cran.us.r-project.org/bin/macosx/RMacOSX-FAQ.html">http://cran.us.r-project.org/bin/macosx/RMacOSX-FAQ.html</a>, and</li>
+<li>R FAQ (general): <a href="http://cran.r-project.org/doc/FAQ/R-FAQ.html">http://cran.r-project.org/doc/FAQ/R-FAQ.html</a>.</li>
 </ul>
 <p><strong>3. Set Up</strong></p>
 <p>Both the Windows and OS X/MacOS versions of R come with built-in GUI’s (graphical user interfaces) that are broadly similar, but there are slight differences in how each works, and what a “best practices” workflow and set of working folders looks like. Thee differences are obviated by using RStudio (see below).</p>
@@ -576,8 +574,8 @@ $(document).ready(function () {
 <p>On the Mac, the Help menu has a search window as well as a link the Html help (Help &gt; R Help).</p>
 <p>One of the issues with R is that error messages can be rather obscure. The most frequent sources of errors are simple typos, followed by those generate by copying and editing code. With time, you’ll develop a feel for what the error messages mean.</p>
 <p><strong>7. Installing and Using RStudio</strong></p>
-<p>RStudio (<a href="http://www.rstudio.com" class="uri">http://www.rstudio.com</a>) is an IDE (integrated development environment) that provides a consistent environment for running R across different platforms (i.e. Windows, OS X or MacOS, Linux). The “environment” contains four “panes” two of which include the standard command-line “console” interface of R, and a code or script editor that is generally more useful that those built into the standard R applications for Windows or the Mac, plus two other panes that provide a graphics window, help window, workspace summary and so on. The panes are tiled, and remain in the foreground, making it a little easier to navigate around the different windows that appear in the Windows and Mac applications. The IDE also provides other nice features that assist coding in general (like autocompletion) and in doing the report writing and documentation required to do “reproducible research” and also developing R packages. RStudio is still under development (the current version is Version 1.1.383), and so there are occasional problems that arise, but most are minor.</p>
-<p>Installing RStudio is not too complicated. The download page is at: <a href="https://www.rstudio.com/products/rstudio/download/" class="uri">https://www.rstudio.com/products/rstudio/download/</a>, and after a few clicks you can choose the version for the particular operating system (Windows, OS X, several flavors of Linux) that you’re using Here’s a direct link to the downloads page: <a href="https://www.rstudio.com/products/rstudio/download/" class="uri">https://www.rstudio.com/products/rstudio/download/</a></p>
+<p>RStudio (<a href="http://www.rstudio.com">http://www.rstudio.com</a>) is an IDE (integrated development environment) that provides a consistent environment for running R across different platforms (i.e. Windows, OS X or MacOS, Linux). The “environment” contains four “panes” two of which include the standard command-line “console” interface of R, and a code or script editor that is generally more useful that those built into the standard R applications for Windows or the Mac, plus two other panes that provide a graphics window, help window, workspace summary and so on. The panes are tiled, and remain in the foreground, making it a little easier to navigate around the different windows that appear in the Windows and Mac applications. The IDE also provides other nice features that assist coding in general (like autocompletion) and in doing the report writing and documentation required to do “reproducible research” and also developing R packages. RStudio is still under development (the current version is Version 1.1.383), and so there are occasional problems that arise, but most are minor.</p>
+<p>Installing RStudio is not too complicated. The download page is at: <a href="https://www.rstudio.com/products/rstudio/download/" class="uri">https://www.rstudio.com/products/rstudio/download/</a>, and after a few clicks you can choose the version for the particular operating system (Windows, OS X, several flavors of Linux) that you’re using Here’s a direct link to the downloads page: <a href="https://www.rstudio.com/products/rstudio/download/">https://www.rstudio.com/products/rstudio/download/</a></p>
 <p><em>Windows</em></p>
 <ol style="list-style-type: decimal">
 <li>Clicking on the Windows installation package (e.g. <code>RStudio 1.1.463 - Windows Vista/7/8/10</code> ) will bring up a standard Windows download dialog box. Save the file to an appropriate place.</li>

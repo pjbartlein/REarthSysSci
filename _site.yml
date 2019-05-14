@@ -24,9 +24,9 @@ navbar:
     - text: "Maps in R"
       href: RMaps.html
     - text: "Visualization:  raster and rasterVis"
-      href: raster.html
-    - text: "Multivariate analysis"
-    - text: "Prediction"
+      href: rasterVis01.html
+    - text: "Visualization of high-dimensional data"
+    - text: "Multivariate analyses"
     - text: "Clustering"
     - text: "Other R packages"
 

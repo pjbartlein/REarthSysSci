@@ -38,9 +38,9 @@ Week Topic                                         Tasks
    4:  Data input and output (ncdf4 and raster)      Project data-set selection
    5:  Geospatial analyses and mapping in R
    6:  R Markdown and a project web site
-   7:  Visualization of high-dimensional data        Project progress report      
-   8:  Multivariate analyses - I
-   9:  Multivariate analyses - II
+   7:  Visualization                                 Project progress report      
+   8:  Visualization of high-dimensional data
+   9:  Multivariate analyses
   10:  Other R packages and project discussion       Project presentation and discussion
 ```
 

@@ -30,7 +30,7 @@
 <style type="text/css" data-origin="pandoc">
 a.sourceLine { display: inline-block; line-height: 1.25; }
 a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -43,13 +43,11 @@ code.sourceCode { white-space: pre-wrap; }
 a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
 pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
+  { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
   { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -395,10 +393,10 @@ $(document).ready(function () {
       <a href="RMaps.html">Maps in R</a>
     </li>
     <li>
-      <a href="raster.html">Visualization:  raster and rasterVis</a>
+      <a href="rasterVis01.html">Visualization:  raster and rasterVis</a>
     </li>
-    <li class="dropdown-header">Multivariate analysis</li>
-    <li class="dropdown-header">Prediction</li>
+    <li class="dropdown-header">Visualization of high-dimensional data</li>
+    <li class="dropdown-header">Multivariate analyses</li>
     <li class="dropdown-header">Clustering</li>
     <li class="dropdown-header">Other R packages</li>
   </ul>
@@ -520,221 +518,221 @@ $(document).ready(function () {
 <div id="plot_alpha_rmarkdown_notebook.rmd-example-2" class="section level1">
 <h1><span class="header-section-number">2</span> plot_alpha_RMarkdown_Notebook.Rmd (Example 2)</h1>
 <p>Single-page R Notebook <code>.html</code> file as output. (Remove <code>##</code>’s before attempting to run)</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">## ---</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">## title: &quot;R Notebook&quot;</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">## output: html_notebook</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">## ---</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">## </a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">## This R Notebook script describes reading and plotting a netCDf file.</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7">## ```{r}</a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">## # load packages</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">## library(sf)</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">## library(raster)</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">## library(rasterVis)</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12">## library(RColorBrewer)</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">## ```</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">## </a>
-<a class="sourceLine" id="cb2-15" data-line-number="15">## Read data</a>
-<a class="sourceLine" id="cb2-16" data-line-number="16">## </a>
-<a class="sourceLine" id="cb2-17" data-line-number="17">## Read a shapefile of world coastlines and countries.</a>
-<a class="sourceLine" id="cb2-18" data-line-number="18">## </a>
-<a class="sourceLine" id="cb2-19" data-line-number="19">## ```{r}</a>
-<a class="sourceLine" id="cb2-20" data-line-number="20">## # read a world shapefile</a>
-<a class="sourceLine" id="cb2-21" data-line-number="21">## shp_path &lt;- &quot;/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/&quot;</a>
-<a class="sourceLine" id="cb2-22" data-line-number="22">## shp_name &lt;- &quot;ne_110m_admin_0_countries.shp&quot;</a>
-<a class="sourceLine" id="cb2-23" data-line-number="23">## shp_file &lt;- paste(shp_path, shp_name, sep=&quot;&quot;)</a>
-<a class="sourceLine" id="cb2-24" data-line-number="24">## world_shp &lt;- read_sf(shp_file)</a>
-<a class="sourceLine" id="cb2-25" data-line-number="25">## world_outline &lt;- as(st_geometry(world_shp), Class=&quot;Spatial&quot;)</a>
-<a class="sourceLine" id="cb2-26" data-line-number="26">## ```</a>
-<a class="sourceLine" id="cb2-27" data-line-number="27">## </a>
-<a class="sourceLine" id="cb2-28" data-line-number="28">## Plot the outlines from the shape file.</a>
-<a class="sourceLine" id="cb2-29" data-line-number="29">## </a>
-<a class="sourceLine" id="cb2-30" data-line-number="30">## ```{r}</a>
-<a class="sourceLine" id="cb2-31" data-line-number="31">## # plot the outline</a>
-<a class="sourceLine" id="cb2-32" data-line-number="32">## plot(world_outline, col=&quot;blue&quot;, lwd=1)</a>
-<a class="sourceLine" id="cb2-33" data-line-number="33">## ```</a>
-<a class="sourceLine" id="cb2-34" data-line-number="34">## </a>
-<a class="sourceLine" id="cb2-35" data-line-number="35">## Now read in alpha.</a>
-<a class="sourceLine" id="cb2-36" data-line-number="36">## </a>
-<a class="sourceLine" id="cb2-37" data-line-number="37">## ```{r}</a>
-<a class="sourceLine" id="cb2-38" data-line-number="38">## # read alpha (AE/PE)</a>
-<a class="sourceLine" id="cb2-39" data-line-number="39">## alpha_path &lt;- &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</a>
-<a class="sourceLine" id="cb2-40" data-line-number="40">## alpha_name &lt;- &quot;cru10min30_bio.nc&quot;</a>
-<a class="sourceLine" id="cb2-41" data-line-number="41">## alpha_file &lt;- paste(alpha_path, alpha_name, sep=&quot;&quot;)</a>
-<a class="sourceLine" id="cb2-42" data-line-number="42">## alpha &lt;- raster(alpha_file, varname=&quot;mipt&quot;)</a>
-<a class="sourceLine" id="cb2-43" data-line-number="43">## alpha</a>
-<a class="sourceLine" id="cb2-44" data-line-number="44">## ```</a>
-<a class="sourceLine" id="cb2-45" data-line-number="45">## </a>
-<a class="sourceLine" id="cb2-46" data-line-number="46">## Finally, plot alpha using the `levelplot()` function from `rasterVis`:</a>
-<a class="sourceLine" id="cb2-47" data-line-number="47">## </a>
-<a class="sourceLine" id="cb2-48" data-line-number="48">## ```{r}</a>
-<a class="sourceLine" id="cb2-49" data-line-number="49">## # rasterVis plot</a>
-<a class="sourceLine" id="cb2-50" data-line-number="50">## mapTheme &lt;- rasterTheme(region=brewer.pal(8,&quot;BrBG&quot;))</a>
-<a class="sourceLine" id="cb2-51" data-line-number="51">## plt &lt;- levelplot(alpha, margin=F, par.settings=mapTheme, main=&quot;AE/PE&quot;)</a>
-<a class="sourceLine" id="cb2-52" data-line-number="52">## plt + layer(sp.lines(world_outline, col=&quot;black&quot;, lwd=1.0))</a>
-<a class="sourceLine" id="cb2-53" data-line-number="53">## ```</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">## ---</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">## title: &quot;R Notebook&quot;</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">## output: html_notebook</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">## ---</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">## </span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">## This R Notebook script describes reading and plotting a netCDf file.</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">## ```{r}</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">## # load packages</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">## library(sf)</span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">## library(raster)</span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">## library(rasterVis)</span></a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">## library(RColorBrewer)</span></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">## </span></a>
+<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">## Read data</span></a>
+<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">## </span></a>
+<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co">## Read a shapefile of world coastlines and countries.</span></a>
+<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="co">## </span></a>
+<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="co">## ```{r}</span></a>
+<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co">## # read a world shapefile</span></a>
+<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="co">## shp_path &lt;- &quot;/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/&quot;</span></a>
+<a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co">## shp_name &lt;- &quot;ne_110m_admin_0_countries.shp&quot;</span></a>
+<a class="sourceLine" id="cb2-23" data-line-number="23"><span class="co">## shp_file &lt;- paste(shp_path, shp_name, sep=&quot;&quot;)</span></a>
+<a class="sourceLine" id="cb2-24" data-line-number="24"><span class="co">## world_shp &lt;- read_sf(shp_file)</span></a>
+<a class="sourceLine" id="cb2-25" data-line-number="25"><span class="co">## world_outline &lt;- as(st_geometry(world_shp), Class=&quot;Spatial&quot;)</span></a>
+<a class="sourceLine" id="cb2-26" data-line-number="26"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb2-27" data-line-number="27"><span class="co">## </span></a>
+<a class="sourceLine" id="cb2-28" data-line-number="28"><span class="co">## Plot the outlines from the shape file.</span></a>
+<a class="sourceLine" id="cb2-29" data-line-number="29"><span class="co">## </span></a>
+<a class="sourceLine" id="cb2-30" data-line-number="30"><span class="co">## ```{r}</span></a>
+<a class="sourceLine" id="cb2-31" data-line-number="31"><span class="co">## # plot the outline</span></a>
+<a class="sourceLine" id="cb2-32" data-line-number="32"><span class="co">## plot(world_outline, col=&quot;blue&quot;, lwd=1)</span></a>
+<a class="sourceLine" id="cb2-33" data-line-number="33"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb2-34" data-line-number="34"><span class="co">## </span></a>
+<a class="sourceLine" id="cb2-35" data-line-number="35"><span class="co">## Now read in alpha.</span></a>
+<a class="sourceLine" id="cb2-36" data-line-number="36"><span class="co">## </span></a>
+<a class="sourceLine" id="cb2-37" data-line-number="37"><span class="co">## ```{r}</span></a>
+<a class="sourceLine" id="cb2-38" data-line-number="38"><span class="co">## # read alpha (AE/PE)</span></a>
+<a class="sourceLine" id="cb2-39" data-line-number="39"><span class="co">## alpha_path &lt;- &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb2-40" data-line-number="40"><span class="co">## alpha_name &lt;- &quot;cru10min30_bio.nc&quot;</span></a>
+<a class="sourceLine" id="cb2-41" data-line-number="41"><span class="co">## alpha_file &lt;- paste(alpha_path, alpha_name, sep=&quot;&quot;)</span></a>
+<a class="sourceLine" id="cb2-42" data-line-number="42"><span class="co">## alpha &lt;- raster(alpha_file, varname=&quot;mipt&quot;)</span></a>
+<a class="sourceLine" id="cb2-43" data-line-number="43"><span class="co">## alpha</span></a>
+<a class="sourceLine" id="cb2-44" data-line-number="44"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb2-45" data-line-number="45"><span class="co">## </span></a>
+<a class="sourceLine" id="cb2-46" data-line-number="46"><span class="co">## Finally, plot alpha using the `levelplot()` function from `rasterVis`:</span></a>
+<a class="sourceLine" id="cb2-47" data-line-number="47"><span class="co">## </span></a>
+<a class="sourceLine" id="cb2-48" data-line-number="48"><span class="co">## ```{r}</span></a>
+<a class="sourceLine" id="cb2-49" data-line-number="49"><span class="co">## # rasterVis plot</span></a>
+<a class="sourceLine" id="cb2-50" data-line-number="50"><span class="co">## mapTheme &lt;- rasterTheme(region=brewer.pal(8,&quot;BrBG&quot;))</span></a>
+<a class="sourceLine" id="cb2-51" data-line-number="51"><span class="co">## plt &lt;- levelplot(alpha, margin=F, par.settings=mapTheme, main=&quot;AE/PE&quot;)</span></a>
+<a class="sourceLine" id="cb2-52" data-line-number="52"><span class="co">## plt + layer(sp.lines(world_outline, col=&quot;black&quot;, lwd=1.0))</span></a>
+<a class="sourceLine" id="cb2-53" data-line-number="53"><span class="co">## ```</span></a></code></pre></div>
 </div>
 <div id="plot_alpha_rmarkdown_1page.rmd-example-3" class="section level1">
 <h1><span class="header-section-number">3</span> plot_alpha_RMarkdown_1Page.Rmd (Example 3)</h1>
 <p>Single-page <code>.html</code> file as output. (Remove <code>##</code>’s before attempting to run)</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">## ---</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">## title: Raster Mapping</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">## output:</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">##   html_document:</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">##     css: html-md-01.css</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">##     fig_caption: yes</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">##     highlight: haddock</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">##     number_sections: yes</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">##     theme: spacelab</a>
-<a class="sourceLine" id="cb3-10" data-line-number="10">##     toc: yes</a>
-<a class="sourceLine" id="cb3-11" data-line-number="11">##     toc_float: true</a>
-<a class="sourceLine" id="cb3-12" data-line-number="12">##     collapsed: no</a>
-<a class="sourceLine" id="cb3-13" data-line-number="13">## ---</a>
-<a class="sourceLine" id="cb3-14" data-line-number="14">##</a>
-<a class="sourceLine" id="cb3-15" data-line-number="15">## # Introduction #</a>
-<a class="sourceLine" id="cb3-16" data-line-number="16">##</a>
-<a class="sourceLine" id="cb3-17" data-line-number="17">## This RMarkdown document describes reading and plotting a netCDF file.</a>
-<a class="sourceLine" id="cb3-18" data-line-number="18">## ## Load packages ##</a>
-<a class="sourceLine" id="cb3-19" data-line-number="19">##</a>
-<a class="sourceLine" id="cb3-20" data-line-number="20">## ```{r load_packages, message=FALSE}</a>
-<a class="sourceLine" id="cb3-21" data-line-number="21">## # load packages</a>
-<a class="sourceLine" id="cb3-22" data-line-number="22">## library(sf)</a>
-<a class="sourceLine" id="cb3-23" data-line-number="23">## library(raster)</a>
-<a class="sourceLine" id="cb3-24" data-line-number="24">## library(rasterVis)</a>
-<a class="sourceLine" id="cb3-25" data-line-number="25">## library(RColorBrewer)</a>
-<a class="sourceLine" id="cb3-26" data-line-number="26">## ```</a>
-<a class="sourceLine" id="cb3-27" data-line-number="27">##</a>
-<a class="sourceLine" id="cb3-28" data-line-number="28">## # Read data #</a>
-<a class="sourceLine" id="cb3-29" data-line-number="29">##</a>
-<a class="sourceLine" id="cb3-30" data-line-number="30">## ## Shapefile ##</a>
-<a class="sourceLine" id="cb3-31" data-line-number="31">##</a>
-<a class="sourceLine" id="cb3-32" data-line-number="32">## <span class="al">###</span> Read a shapefile <span class="al">###</span></a>
-<a class="sourceLine" id="cb3-33" data-line-number="33">##</a>
-<a class="sourceLine" id="cb3-34" data-line-number="34">## Read a shapefile of world coastlines and countries.</a>
-<a class="sourceLine" id="cb3-35" data-line-number="35">##</a>
-<a class="sourceLine" id="cb3-36" data-line-number="36">## ```{r read_shp}</a>
-<a class="sourceLine" id="cb3-37" data-line-number="37">## # read a world shapefile</a>
-<a class="sourceLine" id="cb3-38" data-line-number="38">## shp_path &lt;- &quot;/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/&quot;</a>
-<a class="sourceLine" id="cb3-39" data-line-number="39">## shp_name &lt;- &quot;ne_110m_admin_0_countries.shp&quot;</a>
-<a class="sourceLine" id="cb3-40" data-line-number="40">## shp_file &lt;- paste(shp_path, shp_name, sep=&quot;&quot;)</a>
-<a class="sourceLine" id="cb3-41" data-line-number="41">## world_shp &lt;- read_sf(shp_file)</a>
-<a class="sourceLine" id="cb3-42" data-line-number="42">## world_outline &lt;- as(st_geometry(world_shp), Class=&quot;Spatial&quot;)</a>
-<a class="sourceLine" id="cb3-43" data-line-number="43">## ```</a>
-<a class="sourceLine" id="cb3-44" data-line-number="44">##</a>
-<a class="sourceLine" id="cb3-45" data-line-number="45">## <span class="al">###</span> Plot the shape file <span class="al">###</span></a>
-<a class="sourceLine" id="cb3-46" data-line-number="46">##</a>
-<a class="sourceLine" id="cb3-47" data-line-number="47">## ```{r plot_shapefile}</a>
-<a class="sourceLine" id="cb3-48" data-line-number="48">## # plot the world outlines</a>
-<a class="sourceLine" id="cb3-49" data-line-number="49">## plot(world_outline, col=&quot;blue&quot;, lwd=1)</a>
-<a class="sourceLine" id="cb3-50" data-line-number="50">## ```</a>
-<a class="sourceLine" id="cb3-51" data-line-number="51">##</a>
-<a class="sourceLine" id="cb3-52" data-line-number="52">## ## Read alpha ##</a>
-<a class="sourceLine" id="cb3-53" data-line-number="53">##</a>
-<a class="sourceLine" id="cb3-54" data-line-number="54">## Now read in alpha.</a>
-<a class="sourceLine" id="cb3-55" data-line-number="55">##</a>
-<a class="sourceLine" id="cb3-56" data-line-number="56">## ```{r read_data}</a>
-<a class="sourceLine" id="cb3-57" data-line-number="57">## # read alpha (AE/PE)</a>
-<a class="sourceLine" id="cb3-58" data-line-number="58">## alpha_path &lt;- &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</a>
-<a class="sourceLine" id="cb3-59" data-line-number="59">## alpha_name &lt;- &quot;cru10min30_bio.nc&quot;</a>
-<a class="sourceLine" id="cb3-60" data-line-number="60">## alpha_file &lt;- paste(alpha_path, alpha_name, sep=&quot;&quot;)</a>
-<a class="sourceLine" id="cb3-61" data-line-number="61">## alpha &lt;- raster(alpha_file, varname=&quot;mipt&quot;)</a>
-<a class="sourceLine" id="cb3-62" data-line-number="62">## alpha</a>
-<a class="sourceLine" id="cb3-63" data-line-number="63">## ```</a>
-<a class="sourceLine" id="cb3-64" data-line-number="64">##</a>
-<a class="sourceLine" id="cb3-65" data-line-number="65">## # Plot the data #</a>
-<a class="sourceLine" id="cb3-66" data-line-number="66">##</a>
-<a class="sourceLine" id="cb3-67" data-line-number="67">## Finally, plot alpha using the `levelplot()` function from `rasterVis`:</a>
-<a class="sourceLine" id="cb3-68" data-line-number="68">##</a>
-<a class="sourceLine" id="cb3-69" data-line-number="69">## ```{r plot_data}</a>
-<a class="sourceLine" id="cb3-70" data-line-number="70">## # rasterVis plot</a>
-<a class="sourceLine" id="cb3-71" data-line-number="71">## mapTheme &lt;- rasterTheme(region=brewer.pal(8,&quot;BrBG&quot;))</a>
-<a class="sourceLine" id="cb3-72" data-line-number="72">## plt &lt;- levelplot(alpha, margin=F, par.settings=mapTheme, main=&quot;AE/PE&quot;)</a>
-<a class="sourceLine" id="cb3-73" data-line-number="73">## plt + layer(sp.lines(world_outline, col=&quot;black&quot;, lwd=1.0))</a>
-<a class="sourceLine" id="cb3-74" data-line-number="74">## ```</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co">## ---</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">## title: Raster Mapping</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">## output:</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">##   html_document:</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">##     css: html-md-01.css</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">##     fig_caption: yes</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">##     highlight: haddock</span></a>
+<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">##     number_sections: yes</span></a>
+<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">##     theme: spacelab</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">##     toc: yes</span></a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">##     toc_float: true</span></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co">##     collapsed: no</span></a>
+<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co">## ---</span></a>
+<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="co">## # Introduction #</span></a>
+<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">## This RMarkdown document describes reading and plotting a netCDF file.</span></a>
+<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">## ## Load packages ##</span></a>
+<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">## ```{r load_packages, message=FALSE}</span></a>
+<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">## # load packages</span></a>
+<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">## library(sf)</span></a>
+<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">## library(raster)</span></a>
+<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">## library(rasterVis)</span></a>
+<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">## library(RColorBrewer)</span></a>
+<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-28" data-line-number="28"><span class="co">## # Read data #</span></a>
+<a class="sourceLine" id="cb3-29" data-line-number="29"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-30" data-line-number="30"><span class="co">## ## Shapefile ##</span></a>
+<a class="sourceLine" id="cb3-31" data-line-number="31"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-32" data-line-number="32"><span class="co">## </span><span class="al">###</span><span class="co"> Read a shapefile </span><span class="al">###</span></a>
+<a class="sourceLine" id="cb3-33" data-line-number="33"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-34" data-line-number="34"><span class="co">## Read a shapefile of world coastlines and countries.</span></a>
+<a class="sourceLine" id="cb3-35" data-line-number="35"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-36" data-line-number="36"><span class="co">## ```{r read_shp}</span></a>
+<a class="sourceLine" id="cb3-37" data-line-number="37"><span class="co">## # read a world shapefile</span></a>
+<a class="sourceLine" id="cb3-38" data-line-number="38"><span class="co">## shp_path &lt;- &quot;/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/&quot;</span></a>
+<a class="sourceLine" id="cb3-39" data-line-number="39"><span class="co">## shp_name &lt;- &quot;ne_110m_admin_0_countries.shp&quot;</span></a>
+<a class="sourceLine" id="cb3-40" data-line-number="40"><span class="co">## shp_file &lt;- paste(shp_path, shp_name, sep=&quot;&quot;)</span></a>
+<a class="sourceLine" id="cb3-41" data-line-number="41"><span class="co">## world_shp &lt;- read_sf(shp_file)</span></a>
+<a class="sourceLine" id="cb3-42" data-line-number="42"><span class="co">## world_outline &lt;- as(st_geometry(world_shp), Class=&quot;Spatial&quot;)</span></a>
+<a class="sourceLine" id="cb3-43" data-line-number="43"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb3-44" data-line-number="44"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-45" data-line-number="45"><span class="co">## </span><span class="al">###</span><span class="co"> Plot the shape file </span><span class="al">###</span></a>
+<a class="sourceLine" id="cb3-46" data-line-number="46"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-47" data-line-number="47"><span class="co">## ```{r plot_shapefile}</span></a>
+<a class="sourceLine" id="cb3-48" data-line-number="48"><span class="co">## # plot the world outlines</span></a>
+<a class="sourceLine" id="cb3-49" data-line-number="49"><span class="co">## plot(world_outline, col=&quot;blue&quot;, lwd=1)</span></a>
+<a class="sourceLine" id="cb3-50" data-line-number="50"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb3-51" data-line-number="51"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-52" data-line-number="52"><span class="co">## ## Read alpha ##</span></a>
+<a class="sourceLine" id="cb3-53" data-line-number="53"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-54" data-line-number="54"><span class="co">## Now read in alpha.</span></a>
+<a class="sourceLine" id="cb3-55" data-line-number="55"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-56" data-line-number="56"><span class="co">## ```{r read_data}</span></a>
+<a class="sourceLine" id="cb3-57" data-line-number="57"><span class="co">## # read alpha (AE/PE)</span></a>
+<a class="sourceLine" id="cb3-58" data-line-number="58"><span class="co">## alpha_path &lt;- &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb3-59" data-line-number="59"><span class="co">## alpha_name &lt;- &quot;cru10min30_bio.nc&quot;</span></a>
+<a class="sourceLine" id="cb3-60" data-line-number="60"><span class="co">## alpha_file &lt;- paste(alpha_path, alpha_name, sep=&quot;&quot;)</span></a>
+<a class="sourceLine" id="cb3-61" data-line-number="61"><span class="co">## alpha &lt;- raster(alpha_file, varname=&quot;mipt&quot;)</span></a>
+<a class="sourceLine" id="cb3-62" data-line-number="62"><span class="co">## alpha</span></a>
+<a class="sourceLine" id="cb3-63" data-line-number="63"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb3-64" data-line-number="64"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-65" data-line-number="65"><span class="co">## # Plot the data #</span></a>
+<a class="sourceLine" id="cb3-66" data-line-number="66"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-67" data-line-number="67"><span class="co">## Finally, plot alpha using the `levelplot()` function from `rasterVis`:</span></a>
+<a class="sourceLine" id="cb3-68" data-line-number="68"><span class="co">##</span></a>
+<a class="sourceLine" id="cb3-69" data-line-number="69"><span class="co">## ```{r plot_data}</span></a>
+<a class="sourceLine" id="cb3-70" data-line-number="70"><span class="co">## # rasterVis plot</span></a>
+<a class="sourceLine" id="cb3-71" data-line-number="71"><span class="co">## mapTheme &lt;- rasterTheme(region=brewer.pal(8,&quot;BrBG&quot;))</span></a>
+<a class="sourceLine" id="cb3-72" data-line-number="72"><span class="co">## plt &lt;- levelplot(alpha, margin=F, par.settings=mapTheme, main=&quot;AE/PE&quot;)</span></a>
+<a class="sourceLine" id="cb3-73" data-line-number="73"><span class="co">## plt + layer(sp.lines(world_outline, col=&quot;black&quot;, lwd=1.0))</span></a>
+<a class="sourceLine" id="cb3-74" data-line-number="74"><span class="co">## ```</span></a></code></pre></div>
 </div>
 <div id="plot_alpha_rmarkdown_site.rmd-example-4" class="section level1">
 <h1><span class="header-section-number">4</span> plot_alpha_RMarkdown_Site.Rmd (Example 4)</h1>
 <p>Output is one component of a multi-page <code>.html</code> site. (Remove <code>##</code>’s before attempting to run)</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">## ---</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">## title: Raster mapping</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">## output:</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4">##   html_document:</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5">##     css: html-md-01.css</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">##     fig_caption: yes</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">##     highlight: haddock</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">##     number_sections: yes</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9">##     theme: spacelab</a>
-<a class="sourceLine" id="cb4-10" data-line-number="10">##     toc: yes</a>
-<a class="sourceLine" id="cb4-11" data-line-number="11">##     toc_float: false</a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">##     collapsed: no</a>
-<a class="sourceLine" id="cb4-13" data-line-number="13">## ---</a>
-<a class="sourceLine" id="cb4-14" data-line-number="14">##</a>
-<a class="sourceLine" id="cb4-15" data-line-number="15">## ```{r set-options, echo=FALSE}</a>
-<a class="sourceLine" id="cb4-16" data-line-number="16">## options(width = 105)</a>
-<a class="sourceLine" id="cb4-17" data-line-number="17">## knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</a>
-<a class="sourceLine" id="cb4-18" data-line-number="18">## pdf.options(useDingbats = TRUE)</a>
-<a class="sourceLine" id="cb4-19" data-line-number="19">## ```</a>
-<a class="sourceLine" id="cb4-20" data-line-number="20">##</a>
-<a class="sourceLine" id="cb4-21" data-line-number="21">## # Introduction #</a>
-<a class="sourceLine" id="cb4-22" data-line-number="22">##</a>
-<a class="sourceLine" id="cb4-23" data-line-number="23">## This RMarkdown document describes reading and plotting a netCDF file.</a>
-<a class="sourceLine" id="cb4-24" data-line-number="24">## ## Load packages ##</a>
-<a class="sourceLine" id="cb4-25" data-line-number="25">##</a>
-<a class="sourceLine" id="cb4-26" data-line-number="26">## ```{r load_packages, message=FALSE}</a>
-<a class="sourceLine" id="cb4-27" data-line-number="27">## # load packages</a>
-<a class="sourceLine" id="cb4-28" data-line-number="28">## library(sf)</a>
-<a class="sourceLine" id="cb4-29" data-line-number="29">## library(raster)</a>
-<a class="sourceLine" id="cb4-30" data-line-number="30">## library(rasterVis)</a>
-<a class="sourceLine" id="cb4-31" data-line-number="31">## library(RColorBrewer)</a>
-<a class="sourceLine" id="cb4-32" data-line-number="32">## ```</a>
-<a class="sourceLine" id="cb4-33" data-line-number="33">##</a>
-<a class="sourceLine" id="cb4-34" data-line-number="34">## # Read data #</a>
-<a class="sourceLine" id="cb4-35" data-line-number="35">##</a>
-<a class="sourceLine" id="cb4-36" data-line-number="36">## ## Shapefile ##</a>
-<a class="sourceLine" id="cb4-37" data-line-number="37">##</a>
-<a class="sourceLine" id="cb4-38" data-line-number="38">## <span class="al">###</span> Read a shapefile <span class="al">###</span></a>
-<a class="sourceLine" id="cb4-39" data-line-number="39">##</a>
-<a class="sourceLine" id="cb4-40" data-line-number="40">## Read a shapefile of world coastlines and countries.</a>
-<a class="sourceLine" id="cb4-41" data-line-number="41">##</a>
-<a class="sourceLine" id="cb4-42" data-line-number="42">## ```{r read_shp}</a>
-<a class="sourceLine" id="cb4-43" data-line-number="43">## # read a world shapefile</a>
-<a class="sourceLine" id="cb4-44" data-line-number="44">## shp_path &lt;- &quot;/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/&quot;</a>
-<a class="sourceLine" id="cb4-45" data-line-number="45">## shp_name &lt;- &quot;ne_110m_admin_0_countries.shp&quot;</a>
-<a class="sourceLine" id="cb4-46" data-line-number="46">## shp_file &lt;- paste(shp_path, shp_name, sep=&quot;&quot;)</a>
-<a class="sourceLine" id="cb4-47" data-line-number="47">## world_shp &lt;- read_sf(shp_file)</a>
-<a class="sourceLine" id="cb4-48" data-line-number="48">## world_outline &lt;- as(st_geometry(world_shp), Class=&quot;Spatial&quot;)</a>
-<a class="sourceLine" id="cb4-49" data-line-number="49">## ```</a>
-<a class="sourceLine" id="cb4-50" data-line-number="50">##</a>
-<a class="sourceLine" id="cb4-51" data-line-number="51">## <span class="al">###</span> Plot the shape file <span class="al">###</span></a>
-<a class="sourceLine" id="cb4-52" data-line-number="52">##</a>
-<a class="sourceLine" id="cb4-53" data-line-number="53">## ```{r plot_shapefile}</a>
-<a class="sourceLine" id="cb4-54" data-line-number="54">## # plot the world outlines</a>
-<a class="sourceLine" id="cb4-55" data-line-number="55">## plot(world_outline, col=&quot;blue&quot;, lwd=1)</a>
-<a class="sourceLine" id="cb4-56" data-line-number="56">## ```</a>
-<a class="sourceLine" id="cb4-57" data-line-number="57">##</a>
-<a class="sourceLine" id="cb4-58" data-line-number="58">## ## Read alpha ##</a>
-<a class="sourceLine" id="cb4-59" data-line-number="59">##</a>
-<a class="sourceLine" id="cb4-60" data-line-number="60">## Now read in alpha.</a>
-<a class="sourceLine" id="cb4-61" data-line-number="61">##</a>
-<a class="sourceLine" id="cb4-62" data-line-number="62">## ```{r read_data}</a>
-<a class="sourceLine" id="cb4-63" data-line-number="63">## # read alpha (AE/PE)</a>
-<a class="sourceLine" id="cb4-64" data-line-number="64">## alpha_path &lt;- &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</a>
-<a class="sourceLine" id="cb4-65" data-line-number="65">## alpha_name &lt;- &quot;cru10min30_bio.nc&quot;</a>
-<a class="sourceLine" id="cb4-66" data-line-number="66">## alpha_file &lt;- paste(alpha_path, alpha_name, sep=&quot;&quot;)</a>
-<a class="sourceLine" id="cb4-67" data-line-number="67">## alpha &lt;- raster(alpha_file, varname=&quot;mipt&quot;)</a>
-<a class="sourceLine" id="cb4-68" data-line-number="68">## alpha</a>
-<a class="sourceLine" id="cb4-69" data-line-number="69">## ```</a>
-<a class="sourceLine" id="cb4-70" data-line-number="70">##</a>
-<a class="sourceLine" id="cb4-71" data-line-number="71">## # Plot the data #</a>
-<a class="sourceLine" id="cb4-72" data-line-number="72">##</a>
-<a class="sourceLine" id="cb4-73" data-line-number="73">## Finally, plot alpha using the `levelplot()` function from `rasterVis`:</a>
-<a class="sourceLine" id="cb4-74" data-line-number="74">##</a>
-<a class="sourceLine" id="cb4-75" data-line-number="75">## ```{r plot_data}</a>
-<a class="sourceLine" id="cb4-76" data-line-number="76">## # rasterVis plot</a>
-<a class="sourceLine" id="cb4-77" data-line-number="77">## mapTheme &lt;- rasterTheme(region=brewer.pal(8,&quot;BrBG&quot;))</a>
-<a class="sourceLine" id="cb4-78" data-line-number="78">## plt &lt;- levelplot(alpha, margin=F, par.settings=mapTheme, main=&quot;AE/PE&quot;)</a>
-<a class="sourceLine" id="cb4-79" data-line-number="79">## plt + layer(sp.lines(world_outline, col=&quot;black&quot;, lwd=1.0))</a>
-<a class="sourceLine" id="cb4-80" data-line-number="80">## ```</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co">## ---</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">## title: Raster mapping</span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">## output:</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">##   html_document:</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">##     css: html-md-01.css</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">##     fig_caption: yes</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">##     highlight: haddock</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">##     number_sections: yes</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">##     theme: spacelab</span></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co">##     toc: yes</span></a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">##     toc_float: false</span></a>
+<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">##     collapsed: no</span></a>
+<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">## ---</span></a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="co">## ```{r set-options, echo=FALSE}</span></a>
+<a class="sourceLine" id="cb4-16" data-line-number="16"><span class="co">## options(width = 105)</span></a>
+<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="co">## knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</span></a>
+<a class="sourceLine" id="cb4-18" data-line-number="18"><span class="co">## pdf.options(useDingbats = TRUE)</span></a>
+<a class="sourceLine" id="cb4-19" data-line-number="19"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb4-20" data-line-number="20"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-21" data-line-number="21"><span class="co">## # Introduction #</span></a>
+<a class="sourceLine" id="cb4-22" data-line-number="22"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-23" data-line-number="23"><span class="co">## This RMarkdown document describes reading and plotting a netCDF file.</span></a>
+<a class="sourceLine" id="cb4-24" data-line-number="24"><span class="co">## ## Load packages ##</span></a>
+<a class="sourceLine" id="cb4-25" data-line-number="25"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-26" data-line-number="26"><span class="co">## ```{r load_packages, message=FALSE}</span></a>
+<a class="sourceLine" id="cb4-27" data-line-number="27"><span class="co">## # load packages</span></a>
+<a class="sourceLine" id="cb4-28" data-line-number="28"><span class="co">## library(sf)</span></a>
+<a class="sourceLine" id="cb4-29" data-line-number="29"><span class="co">## library(raster)</span></a>
+<a class="sourceLine" id="cb4-30" data-line-number="30"><span class="co">## library(rasterVis)</span></a>
+<a class="sourceLine" id="cb4-31" data-line-number="31"><span class="co">## library(RColorBrewer)</span></a>
+<a class="sourceLine" id="cb4-32" data-line-number="32"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb4-33" data-line-number="33"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-34" data-line-number="34"><span class="co">## # Read data #</span></a>
+<a class="sourceLine" id="cb4-35" data-line-number="35"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-36" data-line-number="36"><span class="co">## ## Shapefile ##</span></a>
+<a class="sourceLine" id="cb4-37" data-line-number="37"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-38" data-line-number="38"><span class="co">## </span><span class="al">###</span><span class="co"> Read a shapefile </span><span class="al">###</span></a>
+<a class="sourceLine" id="cb4-39" data-line-number="39"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-40" data-line-number="40"><span class="co">## Read a shapefile of world coastlines and countries.</span></a>
+<a class="sourceLine" id="cb4-41" data-line-number="41"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-42" data-line-number="42"><span class="co">## ```{r read_shp}</span></a>
+<a class="sourceLine" id="cb4-43" data-line-number="43"><span class="co">## # read a world shapefile</span></a>
+<a class="sourceLine" id="cb4-44" data-line-number="44"><span class="co">## shp_path &lt;- &quot;/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/&quot;</span></a>
+<a class="sourceLine" id="cb4-45" data-line-number="45"><span class="co">## shp_name &lt;- &quot;ne_110m_admin_0_countries.shp&quot;</span></a>
+<a class="sourceLine" id="cb4-46" data-line-number="46"><span class="co">## shp_file &lt;- paste(shp_path, shp_name, sep=&quot;&quot;)</span></a>
+<a class="sourceLine" id="cb4-47" data-line-number="47"><span class="co">## world_shp &lt;- read_sf(shp_file)</span></a>
+<a class="sourceLine" id="cb4-48" data-line-number="48"><span class="co">## world_outline &lt;- as(st_geometry(world_shp), Class=&quot;Spatial&quot;)</span></a>
+<a class="sourceLine" id="cb4-49" data-line-number="49"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb4-50" data-line-number="50"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-51" data-line-number="51"><span class="co">## </span><span class="al">###</span><span class="co"> Plot the shape file </span><span class="al">###</span></a>
+<a class="sourceLine" id="cb4-52" data-line-number="52"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-53" data-line-number="53"><span class="co">## ```{r plot_shapefile}</span></a>
+<a class="sourceLine" id="cb4-54" data-line-number="54"><span class="co">## # plot the world outlines</span></a>
+<a class="sourceLine" id="cb4-55" data-line-number="55"><span class="co">## plot(world_outline, col=&quot;blue&quot;, lwd=1)</span></a>
+<a class="sourceLine" id="cb4-56" data-line-number="56"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb4-57" data-line-number="57"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-58" data-line-number="58"><span class="co">## ## Read alpha ##</span></a>
+<a class="sourceLine" id="cb4-59" data-line-number="59"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-60" data-line-number="60"><span class="co">## Now read in alpha.</span></a>
+<a class="sourceLine" id="cb4-61" data-line-number="61"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-62" data-line-number="62"><span class="co">## ```{r read_data}</span></a>
+<a class="sourceLine" id="cb4-63" data-line-number="63"><span class="co">## # read alpha (AE/PE)</span></a>
+<a class="sourceLine" id="cb4-64" data-line-number="64"><span class="co">## alpha_path &lt;- &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb4-65" data-line-number="65"><span class="co">## alpha_name &lt;- &quot;cru10min30_bio.nc&quot;</span></a>
+<a class="sourceLine" id="cb4-66" data-line-number="66"><span class="co">## alpha_file &lt;- paste(alpha_path, alpha_name, sep=&quot;&quot;)</span></a>
+<a class="sourceLine" id="cb4-67" data-line-number="67"><span class="co">## alpha &lt;- raster(alpha_file, varname=&quot;mipt&quot;)</span></a>
+<a class="sourceLine" id="cb4-68" data-line-number="68"><span class="co">## alpha</span></a>
+<a class="sourceLine" id="cb4-69" data-line-number="69"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb4-70" data-line-number="70"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-71" data-line-number="71"><span class="co">## # Plot the data #</span></a>
+<a class="sourceLine" id="cb4-72" data-line-number="72"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-73" data-line-number="73"><span class="co">## Finally, plot alpha using the `levelplot()` function from `rasterVis`:</span></a>
+<a class="sourceLine" id="cb4-74" data-line-number="74"><span class="co">##</span></a>
+<a class="sourceLine" id="cb4-75" data-line-number="75"><span class="co">## ```{r plot_data}</span></a>
+<a class="sourceLine" id="cb4-76" data-line-number="76"><span class="co">## # rasterVis plot</span></a>
+<a class="sourceLine" id="cb4-77" data-line-number="77"><span class="co">## mapTheme &lt;- rasterTheme(region=brewer.pal(8,&quot;BrBG&quot;))</span></a>
+<a class="sourceLine" id="cb4-78" data-line-number="78"><span class="co">## plt &lt;- levelplot(alpha, margin=F, par.settings=mapTheme, main=&quot;AE/PE&quot;)</span></a>
+<a class="sourceLine" id="cb4-79" data-line-number="79"><span class="co">## plt + layer(sp.lines(world_outline, col=&quot;black&quot;, lwd=1.0))</span></a>
+<a class="sourceLine" id="cb4-80" data-line-number="80"><span class="co">## ```</span></a></code></pre></div>
 </div>
 
 
