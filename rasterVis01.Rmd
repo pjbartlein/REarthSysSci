@@ -216,14 +216,14 @@ head(lon)
 lat <- ncvar_get(ncin,"lat")
 nlat <- dim(lat)
 head(lat)
-print(c(nlon,nlat))
 
 # get time
 time <- ncvar_get(ncin,"time")
 # time # uncomment to see individual times
 tunits <- ncatt_get(ncin,"time","units")
 nt <- dim(time)
-nt; tunits
+print(c(nlon, nlat, nt))
+tunits
 ```
 
 Get the array of time series data:
@@ -255,13 +255,11 @@ Get the beginning and ending year of the time series:
 # get beginning year and ending year, number of years, and set nm
 beg_date <- strsplit(as.character(ptime[1]), " ")
 beg_yr <- as.numeric(unlist(strsplit(as.character(beg_date), "-"))[1])
-beg_yr
 end_date <- strsplit(as.character(ptime[nt]), " ")
 end_yr <- as.numeric(unlist(strsplit(as.character(end_date), "-"))[1])
-end_yr
 nyrs <- end_yr - beg_yr + 1
-nyrs
 nm <- 12
+print(c(beg_yr, end_yr, nyrs, nm))
 ```
 
 Generate a decimal year value for plotting consecutive values:
@@ -269,7 +267,6 @@ Generate a decimal year value for plotting consecutive values:
 ```{r tsyrmn}
 # generate a decimal year ("YrMn") time coordinate
 YrMn <- seq(beg_yr, end_yr+1-(1/12), by=(1/12))
-length(YrMn)
 head(YrMn); tail(YrMn)
 ```
 
@@ -289,7 +286,8 @@ month <- factor(month, levels=month_names)
 class(month)
 ```
 
-Note that `month` is a factor, and without intervention, the monthly panels will plot in the default order for a factor:  alphabetical.  This would be a little counterintuitive to interpret, but the factor order can be reset using the code fragment `month <- factor(month, levels=month_names)`, as was done above.
+Note that `month` is a factor, and without intervention, the monthly panels will plot in the default order for a factor:  alphabetical.  This would be a little counterintuitive to interpret, but the factor order can be reset using the code fragment:  
+`month <- factor(month, levels=month_names)`, as was done above.
 
 Now find the grid cell closest to Eugene (approximatly 123.1167 W and 44.08333 N).  This is done by using the `which.min()` function:
 
@@ -297,10 +295,8 @@ Now find the grid cell closest to Eugene (approximatly 123.1167 W and 44.08333 N
 # get indices of the grid cell closest to Eugene
 tlon <- -123.1167; tlat <- 44.0833
 j <- which.min(abs(lon-tlon))
-j; lon[j] 
-
 k <- which.min(abs(lat-tlat))
-k; lat[k] 
+print(c(j, lon[j], k, lat[k]))
 ```
 
 ## Time-series plot of consecutive values ##
@@ -386,13 +382,13 @@ head(lon)
 lat <- ncvar_get(ncin,"lat")
 nlat <- dim(lat)
 head(lat)
-print(c(nlon,nlat))
 
 # get time
 time <- ncvar_get(ncin,"time")
 tunits <- ncatt_get(ncin,"time","units")
 nt <- dim(time)
-nt; tunits
+print (c(nlon, nlat, nt))
+tunits
 ```
 Note that longitudes run from 0 to 360 degrees E, while latitudes run from 90 N to 90 S.  The the N to S layout of latitudes (and of the data) will require various flipping of data arrays later.
 
@@ -520,17 +516,17 @@ SST_ltm <- temp_array
 Again, the data could also be rotated, but that's not done here:
 
 ```{r h1rotatehtms, echo=TRUE, eval=FALSE}
-# # rotate 0 to 360 to -180 to +180
-# temp_lon <- rep(NA, nlon)
-# temp_lon[1:(nlon/2)] <-  lon[((nlon/2)+1):nlon] - 360.0
-# temp_lon[((nlon/2)+1):nlon] <-  lon[1:(nlon/2)]
-# temp_lon
-# lon <- temp_lon
-# 
-# temp_array <- array(NA, dim = c(nlon, nlat, nt))
-# temp_array[1:(nlon/2), 1:nlat, 1:nt] <-  SST_ltm[((nlon/2)+1):nlon, nlat:1, 1:nt] 
-# temp_array[((nlon/2)+1):nlon, 1:nlat, 1:nt] <-  SST_ltm[1:(nlon/2), nlat:1, 1:nt]
-# SST_ltm <- temp_array
+# rotate 0 to 360 to -180 to +180
+temp_lon <- rep(NA, nlon)
+temp_lon[1:(nlon/2)] <-  lon[((nlon/2)+1):nlon] - 360.0
+temp_lon[((nlon/2)+1):nlon] <-  lon[1:(nlon/2)]
+temp_lon
+lon <- temp_lon
+
+temp_array <- array(NA, dim = c(nlon, nlat, nt))
+temp_array[1:(nlon/2), 1:nlat, 1:nt] <-  SST_ltm[((nlon/2)+1):nlon, nlat:1, 1:nt]
+temp_array[((nlon/2)+1):nlon, 1:nlat, 1:nt] <-  SST_ltm[1:(nlon/2), nlat:1, 1:nt]
+SST_ltm <- temp_array
 ```
 
 Map the data to check that it's been read in ok:
@@ -551,21 +547,10 @@ Get the beginning and ending years
 # get beginning year and ending year
 beg_date <- strsplit(as.character(ptime[1]), " ")
 beg_yr <- as.numeric(unlist(strsplit(as.character(beg_date), "-"))[1])
-beg_yr
 end_date <- strsplit(as.character(ptime[nt]), " ")
 end_yr <- as.numeric(unlist(strsplit(as.character(end_date), "-"))[1])
-end_yr
 nyrs <- end_yr - beg_yr + 1
-nyrs
-
-# # generate a decimal year ("YrMn") time coordinate
-# YrMn <- seq(beg_yr, end_yr+1-(1/12), by=(1/12))
-# length(YrMn)
-# head(YrMn); tail(YrMn)
-# 
-# # year
-# year <- as.integer(YrMn)
-# head(year); tail(year)
+print(c(beg_yr, end_yr, nyrs, nm))
 ```
 
 Now get the anomalies:
@@ -587,6 +572,8 @@ plt <- levelplot(SST_anm[,, n] ~ lon * lat, data=grid, at=cutpts, cuts=11, prett
 plt + latticeExtra::layer(sp.lines(coast_outline, col="black", lwd=0.5))
 ```
 
+## Hovmöller ## 
+
 The first Hovmöller plot attempts to reproduce the NOAA ESRL PSD Hovmöller plot of tropical Pacific temperatures between 3.5 S and 3.5 N along a transect from the Indian ocean to the eastern Pacific [[View Plot]](https://www.esrl.noaa.gov/psd/map/images/sst/sst.month.anom.hov.io.gif).  Set up for selecting those data by getting the longitude `j` and latitude `k` indices of the bounding box:
 
 ```{r h1tropPac1}
@@ -594,10 +581,9 @@ The first Hovmöller plot attempts to reproduce the NOAA ESRL PSD Hovmöller plo
 tlon_min <- 40; tlon_max <- 280; tlat_min <- -4; tlat_max <- 4
 jmin <- which.min(abs(tlon_min - lon))
 jmax <- which.min(abs(tlon_max - lon))
-jmin; lon[jmin]; jmax; lon[jmax]
 kmin <- which.min(abs(tlat_min - lat))
 kmax <- which.min(abs(tlat_max - lat))
-kmin; lat[kmin]; kmax; lat[kmax]
+print(c(jmin, lon[jmin], jmax, lon[jmax], kmin, lat[kmin], kmax, lat[kmax]))
 ```
  
 Now create a raster brick from the 3-D array of anomalies, selecting data from the Pacific region just defined.  Also just get data from 1989 onwards:
@@ -613,6 +599,7 @@ SST_raster
 Replace the layer names with appropriate date labels:
 
 ```{r h1datelabels}
+# replace layer names
 idx <- seq(as.Date(ptime[1621]), as.Date(ptime[nt]), by='month')
 idx <- as.yearmon(idx)
 SST_raster <- setZ(SST_raster, idx, name="time")
@@ -633,7 +620,7 @@ hovmoller(SST_raster,
 
 Note that data for the globe could have been selected as follows
 
-```{r h1selectglobe}
+```{r h1selectglobe, echo=TRUE, eval=FALSE}
 # globe
 SST_raster <- brick(SST_anm[1:nlon, nlat:1, 1:nt],
                     xmn=lon[1], xmx=lon[nlon], ymn=lat[1], ymx=lat[nlat],
@@ -641,6 +628,7 @@ SST_raster <- brick(SST_anm[1:nlon, nlat:1, 1:nt],
                     crs="+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0")
 SST_raster
 
+# replace layer names
 idx <- seq(as.Date(ptime[1]), as.Date(ptime[nt]), by='month')
 idx <- as.yearmon(idx)
 SST_raster <- setZ(SST_raster, idx, name="time")
@@ -658,10 +646,9 @@ The horizon plot plots multiple time series (here average values for individual 
 tlon_min <- 178; tlon_max <- 290; tlat_min <- -30; tlat_max <- 30
 jmin <- which.min(abs(tlon_min - lon))
 jmax <- which.min(abs(tlon_max - lon))
-jmin; lon[jmin]; jmax; lon[jmax]
 kmin <- which.min(abs(tlat_min - lat))
 kmax <- which.min(abs(tlat_max - lat))
-kmin; lat[kmin]; kmax; lat[kmax]
+print(c(jmin, lon[jmin], jmax, lon[jmax], kmin, lat[kmin], kmax, lat[kmax]))
 ```
 
 ```{r h1raster2}
@@ -674,6 +661,7 @@ SST_raster
 ```
 
 ```{r h1dates2}
+# replace layer names
 idx <- seq(as.Date(ptime[1621]), as.Date(ptime[nt]), by='month')
 idx <- as.yearmon(idx)
 SST_raster <- setZ(SST_raster, idx, name="time")
