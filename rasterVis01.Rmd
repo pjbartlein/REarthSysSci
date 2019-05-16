@@ -279,11 +279,11 @@ head(year); tail(year)
 
 # month
 # month <- rep(seq(1, 12, by=1), nyrs)
-month_names <- c("Dec","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov")
+month_names <- c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov", "Dec")
 month <- rep(month_names, nyrs)
 head(month); tail(month)
-month <- factor(month, levels=month_names)
-class(month)
+month <- factor(month, levels=c( "Dec", "Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov"))
+str(month)
 ```
 
 Note that `month` is a factor, and without intervention, the monthly panels will plot in the default order for a factor:  alphabetical.  This would be a little counterintuitive to interpret, but the factor order can be reset using the code fragment:  

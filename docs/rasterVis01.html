@@ -764,14 +764,14 @@ $(document).ready(function () {
 <pre><code>## [1] 2017 2017 2017 2017 2017 2017</code></pre>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="co"># month</span></a>
 <a class="sourceLine" id="cb49-2" title="2"><span class="co"># month &lt;- rep(seq(1, 12, by=1), nyrs)</span></a>
-<a class="sourceLine" id="cb49-3" title="3">month_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Dec&quot;</span>,<span class="st">&quot;Jan&quot;</span>,<span class="st">&quot;Feb&quot;</span>,<span class="st">&quot;Mar&quot;</span>,<span class="st">&quot;Apr&quot;</span>,<span class="st">&quot;May&quot;</span>,<span class="st">&quot;Jun&quot;</span>,<span class="st">&quot;Jul&quot;</span>,<span class="st">&quot;Aug&quot;</span>,<span class="st">&quot;Sep&quot;</span>,<span class="st">&quot;Oct&quot;</span>,<span class="st">&quot;Nov&quot;</span>)</a>
+<a class="sourceLine" id="cb49-3" title="3">month_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Jan&quot;</span>,<span class="st">&quot;Feb&quot;</span>,<span class="st">&quot;Mar&quot;</span>,<span class="st">&quot;Apr&quot;</span>,<span class="st">&quot;May&quot;</span>,<span class="st">&quot;Jun&quot;</span>,<span class="st">&quot;Jul&quot;</span>,<span class="st">&quot;Aug&quot;</span>,<span class="st">&quot;Sep&quot;</span>,<span class="st">&quot;Oct&quot;</span>,<span class="st">&quot;Nov&quot;</span>, <span class="st">&quot;Dec&quot;</span>)</a>
 <a class="sourceLine" id="cb49-4" title="4">month &lt;-<span class="st"> </span><span class="kw">rep</span>(month_names, nyrs)</a>
 <a class="sourceLine" id="cb49-5" title="5"><span class="kw">head</span>(month); <span class="kw">tail</span>(month)</a></code></pre></div>
-<pre><code>## [1] &quot;Dec&quot; &quot;Jan&quot; &quot;Feb&quot; &quot;Mar&quot; &quot;Apr&quot; &quot;May&quot;</code></pre>
-<pre><code>## [1] &quot;Jun&quot; &quot;Jul&quot; &quot;Aug&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Nov&quot;</code></pre>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1">month &lt;-<span class="st"> </span><span class="kw">factor</span>(month, <span class="dt">levels=</span>month_names)</a>
-<a class="sourceLine" id="cb52-2" title="2"><span class="kw">class</span>(month)</a></code></pre></div>
-<pre><code>## [1] &quot;factor&quot;</code></pre>
+<pre><code>## [1] &quot;Jan&quot; &quot;Feb&quot; &quot;Mar&quot; &quot;Apr&quot; &quot;May&quot; &quot;Jun&quot;</code></pre>
+<pre><code>## [1] &quot;Jul&quot; &quot;Aug&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Nov&quot; &quot;Dec&quot;</code></pre>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1">month &lt;-<span class="st"> </span><span class="kw">factor</span>(month, <span class="dt">levels=</span><span class="kw">c</span>( <span class="st">&quot;Dec&quot;</span>, <span class="st">&quot;Jan&quot;</span>,<span class="st">&quot;Feb&quot;</span>,<span class="st">&quot;Mar&quot;</span>,<span class="st">&quot;Apr&quot;</span>,<span class="st">&quot;May&quot;</span>,<span class="st">&quot;Jun&quot;</span>,<span class="st">&quot;Jul&quot;</span>,<span class="st">&quot;Aug&quot;</span>,<span class="st">&quot;Sep&quot;</span>,<span class="st">&quot;Oct&quot;</span>,<span class="st">&quot;Nov&quot;</span>))</a>
+<a class="sourceLine" id="cb52-2" title="2"><span class="kw">str</span>(month)</a></code></pre></div>
+<pre><code>##  Factor w/ 12 levels &quot;Dec&quot;,&quot;Jan&quot;,&quot;Feb&quot;,..: 2 3 4 5 6 7 8 9 10 11 ...</code></pre>
 <p>Note that <code>month</code> is a factor, and without intervention, the monthly panels will plot in the default order for a factor: alphabetical. This would be a little counterintuitive to interpret, but the factor order can be reset using the code fragment:<br />
 <code>month &lt;- factor(month, levels=month_names)</code>, as was done above.</p>
 <p>Now find the grid cell closest to Eugene (approximatly 123.1167 W and 44.08333 N). This is done by using the <code>which.min()</code> function:</p>
@@ -800,23 +800,23 @@ $(document).ready(function () {
 <pre><code>## &#39;data.frame&#39;:    1404 obs. of  4 variables:
 ##  $ YrMn  : num  1901 1901 1901 1901 1901 ...
 ##  $ year  : int  1901 1901 1901 1901 1901 1901 1901 1901 1901 1901 ...
-##  $ month : Factor w/ 12 levels &quot;Dec&quot;,&quot;Jan&quot;,&quot;Feb&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
+##  $ month : Factor w/ 12 levels &quot;Dec&quot;,&quot;Jan&quot;,&quot;Feb&quot;,..: 2 3 4 5 6 7 8 9 10 11 ...
 ##  $ tmp_ts: num  -0.713 -0.903 -0.637 -1.267 -0.293 ...</code></pre>
 <div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="kw">head</span>(tmp_df); <span class="kw">tail</span>(tmp_df)</a></code></pre></div>
 <pre><code>##       YrMn year month     tmp_ts
-## 1 1901.000 1901   Dec -0.7133333
-## 2 1901.083 1901   Jan -0.9033332
-## 3 1901.167 1901   Feb -0.6366666
-## 4 1901.250 1901   Mar -1.2666662
-## 5 1901.333 1901   Apr -0.2933328
-## 6 1901.417 1901   May -2.3033333</code></pre>
+## 1 1901.000 1901   Jan -0.7133333
+## 2 1901.083 1901   Feb -0.9033332
+## 3 1901.167 1901   Mar -0.6366666
+## 4 1901.250 1901   Apr -1.2666662
+## 5 1901.333 1901   May -0.2933328
+## 6 1901.417 1901   Jun -2.3033333</code></pre>
 <pre><code>##          YrMn year month     tmp_ts
-## 1399 2017.500 2017   Jun  1.6066670
-## 1400 2017.583 2017   Jul  2.5000007
-## 1401 2017.667 2017   Aug  1.6066672
-## 1402 2017.750 2017   Sep -0.2266665
-## 1403 2017.833 2017   Oct  0.7766663
-## 1404 2017.917 2017   Nov -0.4133331</code></pre>
+## 1399 2017.500 2017   Jul  1.6066670
+## 1400 2017.583 2017   Aug  2.5000007
+## 1401 2017.667 2017   Sep  1.6066672
+## 1402 2017.750 2017   Oct -0.2266665
+## 1403 2017.833 2017   Nov  0.7766663
+## 1404 2017.917 2017   Dec -0.4133331</code></pre>
 <p>Now, construct a <code>ggplot2</code> multi-panel (e.g. “faceted”) plot. The plot will be constructed with a lowess-smoother line in the background, overplotted by the annual values of each month in a separate panel.</p>
 <div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> tmp_df, <span class="kw">aes</span>(<span class="dt">x=</span>year, <span class="dt">y=</span>tmp_ts)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb62-2" title="2"><span class="st">  </span><span class="co"># geom_smooth(method = &quot;lm&quot;, size=2, color=&quot;pink&quot;) +</span></a>
@@ -826,7 +826,7 @@ $(document).ready(function () {
 <p><img src="rasterVis01_files/figure-html/tsggplot1-1.png" width="75%" height="75%" /></p>
 <p>The plot seems quite wide relative to the vertical space occupied by each monthly time series, which makes it difficult to notice any trends in the daa. The aspect of the ratio can be adjusted, guided by the Bill Cleveland’s notion of “banking to 45 (degrees)”. The function <code>bank_slopes()</code> in the package <code>ggthemes</code> can find the aspect ratio that optimizes that notion for a single time series (here, the values for December):</p>
 <div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="kw">bank_slopes</span>(tmp_df<span class="op">$</span>year[tmp_df<span class="op">$</span>month <span class="op">==</span><span class="st"> &quot;Dec&quot;</span>], tmp_df<span class="op">$</span>tmp_ts[tmp_df<span class="op">$</span>month <span class="op">==</span><span class="st"> &quot;Dec&quot;</span>])</a></code></pre></div>
-<pre><code>## [1] 0.04174229</code></pre>
+<pre><code>## [1] 0.04973474</code></pre>
 <p>A good first-guess aspect ratio can then be found by multiplying this value by the number of panels. However, experience shows that multiplying by the half the number of panels provides a more pleasing result:</p>
 <div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1"><span class="kw">ggplot</span>(<span class="dt">data =</span> tmp_df, <span class="kw">aes</span>(<span class="dt">x=</span>year, <span class="dt">y=</span>tmp_ts)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb65-2" title="2"><span class="st">  </span><span class="co"># geom_smooth(method = &quot;lm&quot;, size=2, color=&quot;pink&quot;) +</span></a>
