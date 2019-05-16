@@ -40,6 +40,7 @@ dname <- "tmp"  # note: tmp means temperature (not temporary)
 ```
 
 ## Read dimensions and attributes of the data set ##
+
 Open the netCDF file (and list its contents), and read longitudes, latitudes and times:
 
 ```{r}
@@ -86,7 +87,7 @@ head(month); tail(month)
 head(ptime); tail(ptime)
 ```
 
-## Read the data ##
+## Read the array ##
 
 Read the data, and get variable and global attributes:
 

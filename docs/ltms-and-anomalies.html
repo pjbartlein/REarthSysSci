@@ -476,7 +476,7 @@ $(document).ready(function () {
 <li><a href="#calculate-long-term-means-and-anomalies"><span class="toc-section-number">1</span> Calculate long-term means and anomalies</a></li>
 <li><a href="#read-the-data"><span class="toc-section-number">2</span> Read the data</a><ul>
 <li><a href="#read-dimensions-and-attributes-of-the-data-set"><span class="toc-section-number">2.1</span> Read dimensions and attributes of the data set</a></li>
-<li><a href="#read-the-data-1"><span class="toc-section-number">2.2</span> Read the data</a></li>
+<li><a href="#read-the-array"><span class="toc-section-number">2.2</span> Read the array</a></li>
 </ul></li>
 <li><a href="#long-term-means"><span class="toc-section-number">3</span> Long-term means</a><ul>
 <li><a href="#set-up-for-long-term-mean-calculation"><span class="toc-section-number">3.1</span> Set up for long-term mean calculation</a></li>
@@ -598,8 +598,8 @@ $(document).ready(function () {
 <pre><code>## [1] &quot;1901-01-16 UTC&quot; &quot;1901-02-15 UTC&quot; &quot;1901-03-16 UTC&quot; &quot;1901-04-16 UTC&quot; &quot;1901-05-16 UTC&quot; &quot;1901-06-16 UTC&quot;</code></pre>
 <pre><code>## [1] &quot;2017-07-16 UTC&quot; &quot;2017-08-16 UTC&quot; &quot;2017-09-16 UTC&quot; &quot;2017-10-16 UTC&quot; &quot;2017-11-16 UTC&quot; &quot;2017-12-16 UTC&quot;</code></pre>
 </div>
-<div id="read-the-data-1" class="section level2">
-<h2><span class="header-section-number">2.2</span> Read the data</h2>
+<div id="read-the-array" class="section level2">
+<h2><span class="header-section-number">2.2</span> Read the array</h2>
 <p>Read the data, and get variable and global attributes:</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="co"># get temperature</span></a>
 <a class="sourceLine" id="cb27-2" title="2">tmp_array &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,dname)</a>
