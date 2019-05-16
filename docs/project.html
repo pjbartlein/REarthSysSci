@@ -45,7 +45,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -433,6 +433,9 @@ $(document).ready(function () {
     <li>
       <a href="project.html">GitHub project repository and web page</a>
     </li>
+    <li>
+      <a href="ltms-and-anomalies.html">Long-term means and anomalies</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -515,13 +518,13 @@ $(document).ready(function () {
 <p>The basic idea is to create a (mostly) empty new repository on GitHub, and then “clone” to a local machine. The steps include:</p>
 <p>At GitHub:</p>
 <ol start="6" style="list-style-type: decimal">
-<li>create a new repository (e.g. <code>geog490</code> (or <code>geog590</code>);</li>
+<li>create a new repository (e.g. <code>geog490</code> (or <code>geog590</code>);</li>
 <li>create and edit its <code>README.md</code> file.</li>
 <li>copy or write down its URL.</li>
 </ol>
 <p>On the local machine:</p>
 <ol start="8" style="list-style-type: decimal">
-<li>create a folder, e.g. <code>/Users/bartlein/Projects/geog490</code></li>
+<li>create a folder, e.g. <code>/Users/bartlein/Projects/geog490</code></li>
 </ol>
 <p>In RStudio:</p>
 <ol start="9" style="list-style-type: decimal">
@@ -552,7 +555,7 @@ README.md</code></pre>
 </div>
 <div id="web-site-setup" class="section level2">
 <h2><span class="header-section-number">2.2</span> Web site setup</h2>
-<p>Go back to the repository (e.g. <code>https://github.com/pjbartlein/geog490</code>, if it’s not still open in your web browser). Check to see that you’re still logged in. Then:</p>
+<p>Go back to the repository (e.g. <code>https://github.com/pjbartlein/geog490</code>, if it’s not still open in your web browser). Check to see that you’re still logged in. Then:</p>
 <ol style="list-style-type: decimal">
 <li>Click on “Create new file”;</li>
 <li>In the “Name your file…” box, type (exactly): <code>docs/</code></li>
@@ -576,8 +579,8 @@ README.md</code></pre>
 <div id="some-examples-of-project-web-pages" class="section level1">
 <h1><span class="header-section-number">3</span> Some examples of project web pages</h1>
 <p>R Markdown is implemented by two packages (and their dependencies), <code>rmarkdown</code> and <code>knitr</code>. The packages can be installed as follows</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">&quot;rmarkdown&quot;</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">install.packages</span>(<span class="st">&quot;knitr&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">install.packages</span>(<span class="st">&quot;rmarkdown&quot;</span>)</a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw">install.packages</span>(<span class="st">&quot;knitr&quot;</span>)</a></code></pre></div>
 <p>The following examples can be reproduced using this data set: <code>cru10min30_bio.nc</code>, and the shapefile components of <code>ne_110m_admin_0_countries.shp</code>. These can be found on the course <code>SFTP</code> site.</p>
 <p>Transfer the files to a convenient folder(s), and modify the paths in the scripts below. Remember to get all of the shapefile components, not just <code>ne_110m_admin_0_countries.shp</code>.</p>
 <div id="a-simple-script-file-based-web-page-example-1" class="section level2">
@@ -592,26 +595,26 @@ README.md</code></pre>
 </ol>
 <p>Then,</p>
 <ol start="2" style="list-style-type: decimal">
-<li>Run the script file and save the map of alpha as a PNG file (e.g. <code>alpha.png</code>);</li>
+<li>Run the script file and save the map of alpha as a PNG file (e.g. <code>alpha.png</code>);</li>
 <li>Create a Markdown file named <code>index.md</code>;</li>
-<li>Include some text, (e.g. the summary listing of alpha, copies from the Console pane), and a link to the image (e.g. <code>![](alpha.png)</code>);</li>
-<li>Save the <code>index.md</code> file, and also export it as an <code>.html</code> file (e.g. <code>index.html</code>).</li>
+<li>Include some text, (e.g. the summary listing of alpha, copies from the Console pane), and a link to the image (e.g. <code>![](alpha.png)</code>);</li>
+<li>Save the <code>index.md</code> file, and also export it as an <code>.html</code> file (e.g. <code>index.html</code>).</li>
 </ol>
 <p>The <code>index.md</code> Markdown file might look something like this:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># Alpha (AE/PE)  </span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw">Alpha</span> (AE<span class="op">/</span>PE) was read from <span class="st">`</span><span class="dt">cru10min30_bio.nc</span><span class="st">`</span> and contains<span class="op">:</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">class       <span class="op">:</span><span class="st"> </span>RasterLayer  </a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">dimensions  <span class="op">:</span><span class="st"> </span><span class="dv">360</span>, <span class="dv">720</span>, <span class="dv">259200</span>  (nrow, ncol, ncell)  </a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">resolution  <span class="op">:</span><span class="st"> </span><span class="fl">0.5</span>, <span class="fl">0.5</span>  (x, y) </a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">extent      <span class="op">:</span><span class="st"> </span><span class="dv">-180</span>, <span class="dv">180</span>, <span class="dv">-90</span>, <span class="dv">90</span>  (xmin, xmax, ymin, ymax)  </a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">coord. ref. <span class="op">:</span><span class="st"> </span><span class="op">+</span>proj=longlat <span class="op">+</span>datum=WGS84 <span class="op">+</span>ellps=WGS84 <span class="op">+</span>towgs84=<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>  </a>
-<a class="sourceLine" id="cb3-10" data-line-number="10">data source <span class="op">:</span><span class="st"> </span><span class="er">/</span>Users<span class="op">/</span>bartlein<span class="op">/</span>Dropbox<span class="op">/</span>DataVis<span class="op">/</span>working<span class="op">/</span>geog490<span class="op">/</span>data<span class="op">/</span>nc_files<span class="op">/</span>cru10min30_bio.nc  </a>
-<a class="sourceLine" id="cb3-11" data-line-number="11">names       <span class="op">:</span><span class="st"> </span>Priestley.Taylor..alpha..parameter..AE.PE.  </a>
-<a class="sourceLine" id="cb3-12" data-line-number="12">zvar        <span class="op">:</span><span class="st"> </span>mipt  </a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14"><span class="op">!</span>[](alpha.png)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># Alpha (AE/PE)  </span></a>
+<a class="sourceLine" id="cb3-2" title="2"></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="kw">Alpha</span> (AE<span class="op">/</span>PE) was read from <span class="st">`</span><span class="dt">cru10min30_bio.nc</span><span class="st">`</span> and contains<span class="op">:</span></a>
+<a class="sourceLine" id="cb3-4" title="4"></a>
+<a class="sourceLine" id="cb3-5" title="5">class       <span class="op">:</span><span class="st"> </span>RasterLayer  </a>
+<a class="sourceLine" id="cb3-6" title="6">dimensions  <span class="op">:</span><span class="st"> </span><span class="dv">360</span>, <span class="dv">720</span>, <span class="dv">259200</span>  (nrow, ncol, ncell)  </a>
+<a class="sourceLine" id="cb3-7" title="7">resolution  <span class="op">:</span><span class="st"> </span><span class="fl">0.5</span>, <span class="fl">0.5</span>  (x, y) </a>
+<a class="sourceLine" id="cb3-8" title="8">extent      <span class="op">:</span><span class="st"> </span><span class="dv">-180</span>, <span class="dv">180</span>, <span class="dv">-90</span>, <span class="dv">90</span>  (xmin, xmax, ymin, ymax)  </a>
+<a class="sourceLine" id="cb3-9" title="9">coord. ref. <span class="op">:</span><span class="st"> </span><span class="op">+</span>proj=longlat <span class="op">+</span>datum=WGS84 <span class="op">+</span>ellps=WGS84 <span class="op">+</span>towgs84=<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>  </a>
+<a class="sourceLine" id="cb3-10" title="10">data source <span class="op">:</span><span class="st"> </span><span class="er">/</span>Users<span class="op">/</span>bartlein<span class="op">/</span>Dropbox<span class="op">/</span>DataVis<span class="op">/</span>working<span class="op">/</span>geog490<span class="op">/</span>data<span class="op">/</span>nc_files<span class="op">/</span>cru10min30_bio.nc  </a>
+<a class="sourceLine" id="cb3-11" title="11">names       <span class="op">:</span><span class="st"> </span>Priestley.Taylor..alpha..parameter..AE.PE.  </a>
+<a class="sourceLine" id="cb3-12" title="12">zvar        <span class="op">:</span><span class="st"> </span>mipt  </a>
+<a class="sourceLine" id="cb3-13" title="13"></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="op">!</span>[](alpha.png)</a></code></pre></div>
 <p>At this point, there should be three new files in the projects folder: <code>index.md</code>, <code>index.html</code>, and <code>alpha.png</code>. Move <code>index.html</code> and <code>alpha.png</code> into the <code>/docs</code> folder, overwriting <code>index.html</code>. Then</p>
 <ol style="list-style-type: decimal">
 <li>On the Git pane in RStudio, select all of the files, and click on “Commit”;</li>
@@ -619,7 +622,7 @@ README.md</code></pre>
 <li>Click on “Commit”; and</li>
 <li>Click on “Push”.</li>
 </ol>
-<p>If you check the project’s repository page (e.g. <a href="https://github.com/pjbartlein/geog490"><code>https://github.com/pjbartlein/geog490</code></a>) you should see the recent commits, and if you check the project’s <em>web</em> page (e.g. <a href="https://pjbartlein.github.io/geog490/"><code>https://pjbartlein.github.io/geog490/</code></a>) you should see the web page you rendered from the Markdown file created above.</p>
+<p>If you check the project’s repository page (e.g. <a href="https://github.com/pjbartlein/geog490"><code>https://github.com/pjbartlein/geog490</code></a>) you should see the recent commits, and if you check the project’s <em>web</em> page (e.g. <a href="https://pjbartlein.github.io/geog490/"><code>https://pjbartlein.github.io/geog490/</code></a>) you should see the web page you rendered from the Markdown file created above.</p>
 </div>
 <div id="an-r-markdown-notebook-based-web-page-example-2" class="section level2">
 <h2><span class="header-section-number">3.2</span> An R Markdown Notebook based web page (Example 2)</h2>
@@ -638,7 +641,7 @@ README.md</code></pre>
 <li>Move <code>plot_alpha_RNotebook.html</code> to the <code>/docs</code> folder, and ename The file as <code>index.html</code>, and</li>
 <li>Use RStudio to commit and push the files to GitHub.</li>
 </ol>
-<p>Check the project’s repository page (e.g. <a href="https://github.com/pjbartlein/geog490"><code>https://github.com/pjbartlein/geog490</code></a>) to see the recent commits, and the project’s <em>web</em> page (e.g. <a href="https://pjbartlein.github.io/geog490/"><code>https://pjbartlein.github.io/geog490/</code></a>) to see the Notebook file.</p>
+<p>Check the project’s repository page (e.g. <a href="https://github.com/pjbartlein/geog490"><code>https://github.com/pjbartlein/geog490</code></a>) to see the recent commits, and the project’s <em>web</em> page (e.g. <a href="https://pjbartlein.github.io/geog490/"><code>https://pjbartlein.github.io/geog490/</code></a>) to see the Notebook file.</p>
 </div>
 <div id="single-page-r-markdown-based-web-page-example-3" class="section level2">
 <h2><span class="header-section-number">3.3</span> Single-page R Markdown-based web page (Example 3)</h2>
@@ -654,26 +657,26 @@ README.md</code></pre>
 </ol>
 <p>Also download a <code>.css</code> file that implements the appearance of the course web pages: <a href="https://pjbartlein.github.io/REarthSysSci/html-md-01.css">[html-md-01.css]</a>. Save this in the projects folder.</p>
 <p>The <code>.Rmd</code> file looks much like the R Markdown Notebook file, but has two additional blocks of code at the beginning of the file. The first block is a “YAML header” that governs how the file is rendered</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">  <span class="op">---</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="st">  </span>title<span class="op">:</span><span class="st">  </span>Raster mapping</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">  output<span class="op">:</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">    </span>html_document<span class="op">:</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">      </span>css<span class="op">:</span><span class="st"> </span>html<span class="op">-</span>md<span class="fl">-01.</span>css</a>
-<a class="sourceLine" id="cb4-6" data-line-number="6">      fig_caption<span class="op">:</span><span class="st"> </span>yes</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7">      highlight<span class="op">:</span><span class="st"> </span>haddock</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">      number_sections<span class="op">:</span><span class="st"> </span>yes</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9">      theme<span class="op">:</span><span class="st"> </span>spacelab</a>
-<a class="sourceLine" id="cb4-10" data-line-number="10">      toc<span class="op">:</span><span class="st"> </span>yes</a>
-<a class="sourceLine" id="cb4-11" data-line-number="11">      toc_float<span class="op">:</span><span class="st"> </span>true</a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">      collapsed<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb4-13" data-line-number="13">  <span class="op">---</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">  <span class="op">---</span></a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="st">  </span>title<span class="op">:</span><span class="st">  </span>Raster mapping</a>
+<a class="sourceLine" id="cb4-3" title="3">  output<span class="op">:</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="st">    </span>html_document<span class="op">:</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="st">      </span>css<span class="op">:</span><span class="st"> </span>html<span class="op">-</span>md<span class="fl">-01.</span>css</a>
+<a class="sourceLine" id="cb4-6" title="6">      fig_caption<span class="op">:</span><span class="st"> </span>yes</a>
+<a class="sourceLine" id="cb4-7" title="7">      highlight<span class="op">:</span><span class="st"> </span>haddock</a>
+<a class="sourceLine" id="cb4-8" title="8">      number_sections<span class="op">:</span><span class="st"> </span>yes</a>
+<a class="sourceLine" id="cb4-9" title="9">      theme<span class="op">:</span><span class="st"> </span>spacelab</a>
+<a class="sourceLine" id="cb4-10" title="10">      toc<span class="op">:</span><span class="st"> </span>yes</a>
+<a class="sourceLine" id="cb4-11" title="11">      toc_float<span class="op">:</span><span class="st"> </span>true</a>
+<a class="sourceLine" id="cb4-12" title="12">      collapsed<span class="op">:</span><span class="st"> </span>no</a>
+<a class="sourceLine" id="cb4-13" title="13">  <span class="op">---</span></a></code></pre></div>
 <p>Most of the entries are obvious: “<code>title</code>” is used at the top of the page, “<code>output</code>” species that an <code>.html</code> file is desired (as opposed to a Word document or PDF); “<code>highlight: haddock</code>” specifies a particular style of syntax highlighting (<code>haddock</code>); “<code>number_sections: yes</code>” numbers the headings, which are reflected in the table of contents; “<code>theme: spacelab</code>” specifies a particular “Bootswatch” theme (the course pages use “cosmos”; “<code>toc: yes</code>” turns on the table of contents, and “<code>toc_float: true</code>” keeps the table of contents visible on the left-hand side of the window; and “<code>collapsed: no</code>” specifies that the table of contents should be visible. See Chapter 3 of <a href="https://bookdown.org/yihui/rmarkdown/documents.html"><em>R Markdown — The Definitive Guide</em></a> for more discussion of the YAML headers.</p>
 <p>The second block of code includes some “global” code-chunk options (that apply to all “code chunks”, or blocks of code set off by backtics (```) (Remove <code>##</code>’s before using this code fragment)</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co">## ```{r set-options, echo=FALSE}</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">## options(width = 105)</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">## knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">## pdf.options(useDingbats = TRUE)</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">## ```</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co">## ```{r set-options, echo=FALSE}</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="co">## options(width = 105)</span></a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="co">## knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</span></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="co">## pdf.options(useDingbats = TRUE)</span></a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="co">## ```</span></a></code></pre></div>
 <p>As before,</p>
 <ol style="list-style-type: decimal">
 <li>Open the <code>.Rmd</code> (<code>plot\_alpha\_RMarkdown\_1Page.Rmd</code>) file if it’s not already open;</li>
@@ -695,7 +698,7 @@ README.md</code></pre>
 <div id="a-multi-page-r-markdown-generated-website-example-4" class="section level2">
 <h2><span class="header-section-number">3.4</span> A multi-page R Markdown-generated website (Example 4)</h2>
 <p><strong>CLEAN UP FIRST:</strong> Delete or move the R Markdown file <code>plot_alpha_RMarkdown_1Page.Rmd</code>, delete the folders <code>/plot_alpha_RMarkdown_1Page_files</code> and <code>/plot_alpha_RMarkdown_1Page_cache</code>, and delete the files in the <code>/docs</code> folder (but leave that folder in place)</p>
-<p>A multi-page R Markdown website, as the name suggests, includes a collection of <code>*.Rmd</code> files (that are each knit to create <code>*.html</code> files, plus a support file (<code>_site.yml</code>) that controls the navigation bar layout. The steps below will create a minimalist multi-page web site. The site will include an <code>index.html</code> page with a brief overview, a “Topics” tab with two pages, one an introduction, and the other being the “Raster mapping” page, and an “About” tab, implemented by four <code>*.Rmd</code> files (plus the <code>_site.yml</code> file). Although R Studio contains great script-editing features, it’s a little clunky as a text editor compared to Markdown Pad or MacDown. In practice, if there is a lot of text to compose, edit, and format (as is the case with this page), it may be more efficient to do that in a Markdown editor, and then include the contents of the <code>*.md</code> file created by the editor in a <code>*.Rmd</code> file using the Knitr “child document” chunk option (e.g. <code>{r child=&quot;index.md&quot;}</code>). That will be done here for the <code>index.Rmd</code>, <code>intro.Rmd</code>, and <code>about.Rmd</code> files, while a standard <code>*.Rmd</code> file will be used for the main results page.</p>
+<p>A multi-page R Markdown website, as the name suggests, includes a collection of <code>*.Rmd</code> files (that are each knit to create <code>*.html</code> files, plus a support file (<code>_site.yml</code>) that controls the navigation bar layout. The steps below will create a minimalist multi-page web site. The site will include an <code>index.html</code> page with a brief overview, a “Topics” tab with two pages, one an introduction, and the other being the “Raster mapping” page, and an “About” tab, implemented by four <code>*.Rmd</code> files (plus the <code>_site.yml</code> file). Although R Studio contains great script-editing features, it’s a little clunky as a text editor compared to Markdown Pad or MacDown. In practice, if there is a lot of text to compose, edit, and format (as is the case with this page), it may be more efficient to do that in a Markdown editor, and then include the contents of the <code>*.md</code> file created by the editor in a <code>*.Rmd</code> file using the Knitr “child document” chunk option (e.g. <code>{r child="index.md"}</code>). That will be done here for the <code>index.Rmd</code>, <code>intro.Rmd</code>, and <code>about.Rmd</code> files, while a standard <code>*.Rmd</code> file will be used for the main results page.</p>
 <p>Start by creating an R Markdown file that will produce a single-page <code>.html</code> file as output, which will be incorporated into the web site later:</p>
 <ol style="list-style-type: decimal">
 <li>Create a new R Markdown file in the projects folder (File &gt; New File &gt; R Markdown);</li>
@@ -707,108 +710,108 @@ README.md</code></pre>
 </ol>
 <p>Next, create a set of three <code>*.md</code> files as follows:</p>
 <p><code>index.Rmd</code>: (Remove <code>##</code>’s before attempting to run.)</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co">## ---</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="co">## title: &quot;GEOG4/590: R for Earth-System Science&quot;</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">## output:</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">##   html_document:</span></a>
-<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">##     css: html-md-01.css</span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">##     fig_caption: no</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">##     number_sections: no</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">##     toc: no</span></a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">##     toc_float: false</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">##     collapsed: no</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">## ---</span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">##</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">## ```{r set-options, echo=FALSE}</span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">## options(width = 105)</span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">## knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">## pdf.options(useDingbats = TRUE)</span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">## ```</span></a>
-<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">##</span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">## ## Project web page for GEOG 4/595 *R for Earth-System Science* ##</span></a>
-<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="co">##</span></a>
-<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">## Topics covered here include:</span></a>
-<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">##</span></a>
-<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">## - An introduction to the project</span></a>
-<a class="sourceLine" id="cb6-24" data-line-number="24"><span class="co">## - A simple example of plotting a raster slice</span></a>
-<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co">## - (more to come…)</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co">## ---</span></a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="co">## title: &quot;GEOG4/590: R for Earth-System Science&quot;</span></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="co">## output:</span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="co">##   html_document:</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="co">##     css: html-md-01.css</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="co">##     fig_caption: no</span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="co">##     number_sections: no</span></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="co">##     toc: no</span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co">##     toc_float: false</span></a>
+<a class="sourceLine" id="cb6-10" title="10"><span class="co">##     collapsed: no</span></a>
+<a class="sourceLine" id="cb6-11" title="11"><span class="co">## ---</span></a>
+<a class="sourceLine" id="cb6-12" title="12"><span class="co">##</span></a>
+<a class="sourceLine" id="cb6-13" title="13"><span class="co">## ```{r set-options, echo=FALSE}</span></a>
+<a class="sourceLine" id="cb6-14" title="14"><span class="co">## options(width = 105)</span></a>
+<a class="sourceLine" id="cb6-15" title="15"><span class="co">## knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</span></a>
+<a class="sourceLine" id="cb6-16" title="16"><span class="co">## pdf.options(useDingbats = TRUE)</span></a>
+<a class="sourceLine" id="cb6-17" title="17"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb6-18" title="18"><span class="co">##</span></a>
+<a class="sourceLine" id="cb6-19" title="19"><span class="co">## ## Project web page for GEOG 4/595 *R for Earth-System Science* ##</span></a>
+<a class="sourceLine" id="cb6-20" title="20"><span class="co">##</span></a>
+<a class="sourceLine" id="cb6-21" title="21"><span class="co">## Topics covered here include:</span></a>
+<a class="sourceLine" id="cb6-22" title="22"><span class="co">##</span></a>
+<a class="sourceLine" id="cb6-23" title="23"><span class="co">## - An introduction to the project</span></a>
+<a class="sourceLine" id="cb6-24" title="24"><span class="co">## - A simple example of plotting a raster slice</span></a>
+<a class="sourceLine" id="cb6-25" title="25"><span class="co">## - (more to come…)</span></a></code></pre></div>
 <p><code>intro.Rmd</code>: (Remove <code>##</code>’s before attempting to run.)</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co">## ---</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">## title: &quot;Introduction to the project&quot;</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">## output:</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">##   html_document:</span></a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">##     css: html-md-01.css</span></a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">##     fig_caption: no</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">##     number_sections: no</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">##     toc: no</span></a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">##     toc_float: false</span></a>
-<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">##     collapsed: no</span></a>
-<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">## ---</span></a>
-<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">##</span></a>
-<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">## ```{r set-options, echo=FALSE}</span></a>
-<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">## options(width = 105)</span></a>
-<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">## knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</span></a>
-<a class="sourceLine" id="cb7-16" data-line-number="16"><span class="co">## pdf.options(useDingbats = TRUE)</span></a>
-<a class="sourceLine" id="cb7-17" data-line-number="17"><span class="co">## ```</span></a>
-<a class="sourceLine" id="cb7-18" data-line-number="18"><span class="co">##</span></a>
-<a class="sourceLine" id="cb7-19" data-line-number="19"><span class="co">## The visualization developed here uses the `raster` and `rasterVis` packages to map the global</span></a>
-<a class="sourceLine" id="cb7-20" data-line-number="20"><span class="co">## pattern of alpha, calculated using the CRU CL2 climate data set.  The maps also include a</span></a>
-<a class="sourceLine" id="cb7-21" data-line-number="21"><span class="co">## shapefile of world coastlines and countries.</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co">## ---</span></a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="co">## title: &quot;Introduction to the project&quot;</span></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="co">## output:</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="co">##   html_document:</span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="co">##     css: html-md-01.css</span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co">##     fig_caption: no</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">##     number_sections: no</span></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="co">##     toc: no</span></a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="co">##     toc_float: false</span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">##     collapsed: no</span></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co">## ---</span></a>
+<a class="sourceLine" id="cb7-12" title="12"><span class="co">##</span></a>
+<a class="sourceLine" id="cb7-13" title="13"><span class="co">## ```{r set-options, echo=FALSE}</span></a>
+<a class="sourceLine" id="cb7-14" title="14"><span class="co">## options(width = 105)</span></a>
+<a class="sourceLine" id="cb7-15" title="15"><span class="co">## knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</span></a>
+<a class="sourceLine" id="cb7-16" title="16"><span class="co">## pdf.options(useDingbats = TRUE)</span></a>
+<a class="sourceLine" id="cb7-17" title="17"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb7-18" title="18"><span class="co">##</span></a>
+<a class="sourceLine" id="cb7-19" title="19"><span class="co">## The visualization developed here uses the `raster` and `rasterVis` packages to map the global</span></a>
+<a class="sourceLine" id="cb7-20" title="20"><span class="co">## pattern of alpha, calculated using the CRU CL2 climate data set.  The maps also include a</span></a>
+<a class="sourceLine" id="cb7-21" title="21"><span class="co">## shapefile of world coastlines and countries.</span></a></code></pre></div>
 <p><code>about.Rmd</code>: (Remove <code>##</code>’s before attempting to run.)</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co">## ---</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="co">## title: &quot;GEOG 4/590:  R for Earth-System Science&quot;</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">## output:</span></a>
-<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="co">##   html_document:</span></a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="co">##     css: html-md-01.css</span></a>
-<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="co">##     fig_caption: no</span></a>
-<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="co">##     number_sections: no</span></a>
-<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="co">##     toc: no</span></a>
-<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="co">##     toc_float: false</span></a>
-<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="co">##     collapsed: no</span></a>
-<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">## ---</span></a>
-<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="co">##</span></a>
-<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="co">## ```{r set-options, echo=FALSE}</span></a>
-<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="co">## options(width = 105)</span></a>
-<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="co">## knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</span></a>
-<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="co">## pdf.options(useDingbats = TRUE)</span></a>
-<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="co">## ```</span></a>
-<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="co">## P.J. Bartlein</span></a>
-<a class="sourceLine" id="cb8-19" data-line-number="19"><span class="co">## Dept. Geography</span></a>
-<a class="sourceLine" id="cb8-20" data-line-number="20"><span class="co">## Univ. Oregon</span></a>
-<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="co">## bartlein@uoregon.edu</span></a>
-<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="co">##</span></a>
-<a class="sourceLine" id="cb8-23" data-line-number="23"><span class="co">## The GitHub repository for this web site is at:</span></a>
-<a class="sourceLine" id="cb8-24" data-line-number="24"><span class="co">## [https://github.com/pjbartlein/geog490](https://github.com/pjbartlein/geog490)</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co">## ---</span></a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="co">## title: &quot;GEOG 4/590:  R for Earth-System Science&quot;</span></a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="co">## output:</span></a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="co">##   html_document:</span></a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="co">##     css: html-md-01.css</span></a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="co">##     fig_caption: no</span></a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="co">##     number_sections: no</span></a>
+<a class="sourceLine" id="cb8-8" title="8"><span class="co">##     toc: no</span></a>
+<a class="sourceLine" id="cb8-9" title="9"><span class="co">##     toc_float: false</span></a>
+<a class="sourceLine" id="cb8-10" title="10"><span class="co">##     collapsed: no</span></a>
+<a class="sourceLine" id="cb8-11" title="11"><span class="co">## ---</span></a>
+<a class="sourceLine" id="cb8-12" title="12"><span class="co">##</span></a>
+<a class="sourceLine" id="cb8-13" title="13"><span class="co">## ```{r set-options, echo=FALSE}</span></a>
+<a class="sourceLine" id="cb8-14" title="14"><span class="co">## options(width = 105)</span></a>
+<a class="sourceLine" id="cb8-15" title="15"><span class="co">## knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)</span></a>
+<a class="sourceLine" id="cb8-16" title="16"><span class="co">## pdf.options(useDingbats = TRUE)</span></a>
+<a class="sourceLine" id="cb8-17" title="17"><span class="co">## ```</span></a>
+<a class="sourceLine" id="cb8-18" title="18"><span class="co">## P.J. Bartlein</span></a>
+<a class="sourceLine" id="cb8-19" title="19"><span class="co">## Dept. Geography</span></a>
+<a class="sourceLine" id="cb8-20" title="20"><span class="co">## Univ. Oregon</span></a>
+<a class="sourceLine" id="cb8-21" title="21"><span class="co">## bartlein@uoregon.edu</span></a>
+<a class="sourceLine" id="cb8-22" title="22"><span class="co">##</span></a>
+<a class="sourceLine" id="cb8-23" title="23"><span class="co">## The GitHub repository for this web site is at:</span></a>
+<a class="sourceLine" id="cb8-24" title="24"><span class="co">## [https://github.com/pjbartlein/geog490](https://github.com/pjbartlein/geog490)</span></a></code></pre></div>
 <p>(The above files are just examples.)</p>
 <p>Knit the three files.</p>
 <p>Finally, create a <code>_site.yml</code> file (File &gt; New File &gt; Text File in RStudio, or use a text editor):</p>
 <p><code>_site.yml</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">name<span class="op">:</span><span class="st"> </span>GEOG <span class="dv">4</span><span class="op">/</span><span class="dv">590</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">navbar<span class="op">:</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="st">  </span>title<span class="op">:</span><span class="st"> &quot;GEOG 4/590:  R for Earth-System Science&quot;</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">  left<span class="op">:</span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="st">  </span><span class="op">-</span><span class="st"> </span>text<span class="op">:</span><span class="st"> </span>Topics</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6">    menu<span class="op">:</span></a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="st">    </span><span class="op">-</span><span class="st"> </span>text<span class="op">:</span><span class="st"> </span>Introduction</a>
-<a class="sourceLine" id="cb9-8" data-line-number="8">      href<span class="op">:</span><span class="st"> </span>intro.html</a>
-<a class="sourceLine" id="cb9-9" data-line-number="9">    <span class="op">-</span><span class="st"> </span>text<span class="op">:</span><span class="st"> </span>Raster mapping example</a>
-<a class="sourceLine" id="cb9-10" data-line-number="10">      href<span class="op">:</span><span class="st"> </span>plot_alpha_RMarkdown_Site.html</a>
-<a class="sourceLine" id="cb9-11" data-line-number="11">  right<span class="op">:</span></a>
-<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="st">  </span><span class="op">-</span><span class="st"> </span>text<span class="op">:</span><span class="st"> </span>About</a>
-<a class="sourceLine" id="cb9-13" data-line-number="13">    href<span class="op">:</span><span class="st"> </span>about.html</a>
-<a class="sourceLine" id="cb9-14" data-line-number="14">output<span class="op">:</span></a>
-<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="st">  </span>html_document<span class="op">:</span></a>
-<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="st">    </span>theme<span class="op">:</span><span class="st"> </span>spacelab</a>
-<a class="sourceLine" id="cb9-17" data-line-number="17">    highlight<span class="op">:</span><span class="st"> </span>haddock</a>
-<a class="sourceLine" id="cb9-18" data-line-number="18">    css<span class="op">:</span><span class="st"> </span>html<span class="op">-</span>md<span class="fl">-01.</span>css</a>
-<a class="sourceLine" id="cb9-19" data-line-number="19">    fig_caption<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb9-20" data-line-number="20">    number_sections<span class="op">:</span><span class="st"> </span>yes</a>
-<a class="sourceLine" id="cb9-21" data-line-number="21">    toc<span class="op">:</span><span class="st"> </span>yes</a>
-<a class="sourceLine" id="cb9-22" data-line-number="22">    toc_float<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb9-23" data-line-number="23">    collapsed<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb9-24" data-line-number="24">    lib_dir<span class="op">:</span><span class="st"> </span>site_libs</a>
-<a class="sourceLine" id="cb9-25" data-line-number="25">    self_contained<span class="op">:</span><span class="st"> </span>no</a>
-<a class="sourceLine" id="cb9-26" data-line-number="26">output_dir<span class="op">:</span><span class="st"> </span>docs</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">name<span class="op">:</span><span class="st"> </span>GEOG <span class="dv">4</span><span class="op">/</span><span class="dv">590</span></a>
+<a class="sourceLine" id="cb9-2" title="2">navbar<span class="op">:</span></a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="st">  </span>title<span class="op">:</span><span class="st"> &quot;GEOG 4/590:  R for Earth-System Science&quot;</span></a>
+<a class="sourceLine" id="cb9-4" title="4">  left<span class="op">:</span></a>
+<a class="sourceLine" id="cb9-5" title="5"><span class="st">  </span><span class="op">-</span><span class="st"> </span>text<span class="op">:</span><span class="st"> </span>Topics</a>
+<a class="sourceLine" id="cb9-6" title="6">    menu<span class="op">:</span></a>
+<a class="sourceLine" id="cb9-7" title="7"><span class="st">    </span><span class="op">-</span><span class="st"> </span>text<span class="op">:</span><span class="st"> </span>Introduction</a>
+<a class="sourceLine" id="cb9-8" title="8">      href<span class="op">:</span><span class="st"> </span>intro.html</a>
+<a class="sourceLine" id="cb9-9" title="9">    <span class="op">-</span><span class="st"> </span>text<span class="op">:</span><span class="st"> </span>Raster mapping example</a>
+<a class="sourceLine" id="cb9-10" title="10">      href<span class="op">:</span><span class="st"> </span>plot_alpha_RMarkdown_Site.html</a>
+<a class="sourceLine" id="cb9-11" title="11">  right<span class="op">:</span></a>
+<a class="sourceLine" id="cb9-12" title="12"><span class="st">  </span><span class="op">-</span><span class="st"> </span>text<span class="op">:</span><span class="st"> </span>About</a>
+<a class="sourceLine" id="cb9-13" title="13">    href<span class="op">:</span><span class="st"> </span>about.html</a>
+<a class="sourceLine" id="cb9-14" title="14">output<span class="op">:</span></a>
+<a class="sourceLine" id="cb9-15" title="15"><span class="st">  </span>html_document<span class="op">:</span></a>
+<a class="sourceLine" id="cb9-16" title="16"><span class="st">    </span>theme<span class="op">:</span><span class="st"> </span>spacelab</a>
+<a class="sourceLine" id="cb9-17" title="17">    highlight<span class="op">:</span><span class="st"> </span>haddock</a>
+<a class="sourceLine" id="cb9-18" title="18">    css<span class="op">:</span><span class="st"> </span>html<span class="op">-</span>md<span class="fl">-01.</span>css</a>
+<a class="sourceLine" id="cb9-19" title="19">    fig_caption<span class="op">:</span><span class="st"> </span>no</a>
+<a class="sourceLine" id="cb9-20" title="20">    number_sections<span class="op">:</span><span class="st"> </span>yes</a>
+<a class="sourceLine" id="cb9-21" title="21">    toc<span class="op">:</span><span class="st"> </span>yes</a>
+<a class="sourceLine" id="cb9-22" title="22">    toc_float<span class="op">:</span><span class="st"> </span>no</a>
+<a class="sourceLine" id="cb9-23" title="23">    collapsed<span class="op">:</span><span class="st"> </span>no</a>
+<a class="sourceLine" id="cb9-24" title="24">    lib_dir<span class="op">:</span><span class="st"> </span>site_libs</a>
+<a class="sourceLine" id="cb9-25" title="25">    self_contained<span class="op">:</span><span class="st"> </span>no</a>
+<a class="sourceLine" id="cb9-26" title="26">output_dir<span class="op">:</span><span class="st"> </span>docs</a></code></pre></div>
 <p>The <code>knitr()</code> package is quite fussy about formatting of the <code>_site.yml</code> file so check it first in the case of later errors.</p>
 <p>In RStudio, the “build tools” needed to create the web site will need to be configured. On the RStudio menu, click on Build. If there is a menu choice that says “Install Tools” do that first, otherwise click on “Configure Build Tools…” A “Project Options” dialog will open. On the “Project build tools:” dropdown box, select “Website” The initial choices are probably fine, with the “Site directory” set to “(Project Root)” and the “Preview” and “Re-knit” checkboxes checked. Upon clicking OK, a “Build” tab should appear in the upper-right pane. If it doesn’t, restart R Studio (Session &gt; Restart R). Select the build tab, and click on “Build Website”.</p>
 <p>At this point, the project folder should contain:</p>

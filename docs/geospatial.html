@@ -45,7 +45,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -433,6 +433,9 @@ $(document).ready(function () {
     <li>
       <a href="project.html">GitHub project repository and web page</a>
     </li>
+    <li>
+      <a href="ltms-and-anomalies.html">Long-term means and anomalies</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -540,25 +543,25 @@ $(document).ready(function () {
 <div id="load-libraries-and-read-the-shape-files" class="section level2">
 <h2><span class="header-section-number">2.1</span> Load libraries and read the shape files</h2>
 <p>Load the <code>sp</code> and <code>rgdal</code> package:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(sp)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(rgdal)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(sp)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(rgdal)</a></code></pre></div>
 <p>When <code>maptools</code> or <code>sp</code> is loaded, they also check for the presence of the <code>rgeos</code> package.</p>
 <p>Read two shape files, one of Oreogon county outlines, the other of climate-station locations:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># read county outlines</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">otl_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/shp_files/OR/&quot;</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">otl_name &lt;-<span class="st"> &quot;orotl.shp&quot;</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">otl_file &lt;-<span class="st"> </span><span class="kw">paste</span>(otl_path, otl_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">orotl_shp &lt;-<span class="st"> </span><span class="kw">readOGR</span>(otl_file)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># read county outlines</span></a>
+<a class="sourceLine" id="cb2-2" title="2">otl_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/shp_files/OR/&quot;</span></a>
+<a class="sourceLine" id="cb2-3" title="3">otl_name &lt;-<span class="st"> &quot;orotl.shp&quot;</span></a>
+<a class="sourceLine" id="cb2-4" title="4">otl_file &lt;-<span class="st"> </span><span class="kw">paste</span>(otl_path, otl_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb2-5" title="5">orotl_shp &lt;-<span class="st"> </span><span class="kw">readOGR</span>(otl_file)</a></code></pre></div>
 <pre><code>## OGR data source with driver: ESRI Shapefile 
 ## Source: &quot;/Users/bartlein/Projects/ESSD/data/shp_files/OR/orotl.shp&quot;, layer: &quot;orotl&quot;
 ## with 36 features
 ## It has 1 fields</code></pre>
 <p>Check what kind of spatial data class this shapefile is</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">class</span>(orotl_shp)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">class</span>(orotl_shp)</a></code></pre></div>
 <pre><code>## [1] &quot;SpatialPolygonsDataFrame&quot;
 ## attr(,&quot;package&quot;)
 ## [1] &quot;sp&quot;</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">summary</span>(orotl_shp)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">summary</span>(orotl_shp)</a></code></pre></div>
 <pre><code>## Object of class SpatialPolygonsDataFrame
 ## Coordinates:
 ##          min        max
@@ -576,25 +579,25 @@ $(document).ready(function () {
 ##  Coos     : 1  
 ##  (Other)  :30</code></pre>
 <p>Note that the shapefile is a <code>SpatialLinesDataFrame</code> that in addition to the geometry of the counties (the outlines) also contains data (the names). Plot the county outline shapefile:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">plot</span>(orotl_shp)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">plot</span>(orotl_shp)</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/plotsoutlines-1.png" width="75%" height="75%" /></p>
 <p>Now get the climate-station data</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># read stations</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">orstations_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/shp_files/OR/&quot;</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">orstations_name &lt;-<span class="st"> &quot;orstations.shp&quot;</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">orstations_file &lt;-<span class="st"> </span><span class="kw">paste</span>(orstations_path, orstations_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5">orstations_shp &lt;-<span class="st"> </span><span class="kw">readOGR</span>(orstations_file)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="co"># read stations</span></a>
+<a class="sourceLine" id="cb9-2" title="2">orstations_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/shp_files/OR/&quot;</span></a>
+<a class="sourceLine" id="cb9-3" title="3">orstations_name &lt;-<span class="st"> &quot;orstations.shp&quot;</span></a>
+<a class="sourceLine" id="cb9-4" title="4">orstations_file &lt;-<span class="st"> </span><span class="kw">paste</span>(orstations_path, orstations_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb9-5" title="5">orstations_shp &lt;-<span class="st"> </span><span class="kw">readOGR</span>(orstations_file)</a></code></pre></div>
 <pre><code>## OGR data source with driver: ESRI Shapefile 
 ## Source: &quot;/Users/bartlein/Projects/ESSD/data/shp_files/OR/orstations.shp&quot;, layer: &quot;orstations&quot;
 ## with 92 features
 ## It has 12 fields
 ## Integer64 fields read as strings:  station elevation pjan pjul pann</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># check stations shapefile</span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw">class</span>(orstations_shp)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="co"># check stations shapefile</span></a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="kw">class</span>(orstations_shp)</a></code></pre></div>
 <pre><code>## [1] &quot;SpatialPointsDataFrame&quot;
 ## attr(,&quot;package&quot;)
 ## [1] &quot;sp&quot;</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">summary</span>(orstations_shp)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">summary</span>(orstations_shp)</a></code></pre></div>
 <pre><code>## Object of class SpatialPointsDataFrame
 ## Coordinates:
 ##                min      max
@@ -634,9 +637,9 @@ $(document).ready(function () {
 <div id="plot-both-shapefiles" class="section level2">
 <h2><span class="header-section-number">2.2</span> Plot both shapefiles</h2>
 <p>Plot the station data:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># plot the station data on top of the outline map</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">plot</span>(orotl_shp)</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="kw">points</span>(orstations_shp, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.7</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="co"># plot the station data on top of the outline map</span></a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="kw">plot</span>(orotl_shp)</a>
+<a class="sourceLine" id="cb15-3" title="3"><span class="kw">points</span>(orstations_shp, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.7</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/plot%20stations-1.png" width="75%" height="75%" /></p>
 <p>More examples of simple maps can be found in the materials for Lecture 5 in GEOG 4/595: <a href="http://geog.uoregon.edu/bartlein/courses/geog495/lectures/lec05.html">http://geog.uoregon.edu/bartlein/courses/geog495/lectures/lec05.html</a></p>
 <p><a href="geospatial.html">[Back to top]</a></p>
@@ -645,22 +648,22 @@ $(document).ready(function () {
 <div id="extract-data-from-a-raster" class="section level1">
 <h1><span class="header-section-number">3</span> Extract data from a raster</h1>
 <p>This example demonstrates how to extract data from a raster for a set of target points contained in a .csv file. In this case, the raster is the Ramankutty and Foley potential natural vegetation data set (<a href="Shttps://www.nelson.wisc.edu/sage/data-and-models/global-land-use/index.php">https://www.nelson.wisc.edu/sage/data-and-models/global-land-use/index.php</a>), and the target points are the Global Charcoal Database (GCDv3) site locations (<a href="http://www.gpwg.paleofire.org">http://www.gpwg.paleofire.org</a>)</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># load packages</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw">library</span>(ncdf4)</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw">library</span>(raster)</a>
-<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="kw">library</span>(rasterVis)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="co"># load packages</span></a>
+<a class="sourceLine" id="cb16-2" title="2"><span class="kw">library</span>(ncdf4)</a>
+<a class="sourceLine" id="cb16-3" title="3"><span class="kw">library</span>(raster)</a>
+<a class="sourceLine" id="cb16-4" title="4"><span class="kw">library</span>(rasterVis)</a></code></pre></div>
 <pre><code>## Loading required package: lattice</code></pre>
 <pre><code>## Loading required package: latticeExtra</code></pre>
 <pre><code>## Loading required package: RColorBrewer</code></pre>
 <div id="read-the-data-sets-source-and-target" class="section level2">
 <h2><span class="header-section-number">3.1</span> Read the data sets – source and target</h2>
 <p>User the <code>raster</code> package to read the vegetation data</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># read potential natural vegetation data sage_veg30.nc:</span></a>
-<a class="sourceLine" id="cb20-2" data-line-number="2">vegtype_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
-<a class="sourceLine" id="cb20-3" data-line-number="3">vegtype_name &lt;-<span class="st"> &quot;sage_veg30.nc&quot;</span></a>
-<a class="sourceLine" id="cb20-4" data-line-number="4">vegtype_file &lt;-<span class="st"> </span><span class="kw">paste</span>(vegtype_path, vegtype_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb20-5" data-line-number="5">vegtype &lt;-<span class="st"> </span><span class="kw">raster</span>(vegtype_file, <span class="dt">varname=</span><span class="st">&quot;vegtype&quot;</span>)</a>
-<a class="sourceLine" id="cb20-6" data-line-number="6">vegtype</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="co"># read potential natural vegetation data sage_veg30.nc:</span></a>
+<a class="sourceLine" id="cb20-2" title="2">vegtype_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb20-3" title="3">vegtype_name &lt;-<span class="st"> &quot;sage_veg30.nc&quot;</span></a>
+<a class="sourceLine" id="cb20-4" title="4">vegtype_file &lt;-<span class="st"> </span><span class="kw">paste</span>(vegtype_path, vegtype_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb20-5" title="5">vegtype &lt;-<span class="st"> </span><span class="kw">raster</span>(vegtype_file, <span class="dt">varname=</span><span class="st">&quot;vegtype&quot;</span>)</a>
+<a class="sourceLine" id="cb20-6" title="6">vegtype</a></code></pre></div>
 <pre><code>## class       : RasterLayer 
 ## dimensions  : 360, 720, 259200  (nrow, ncol, ncell)
 ## resolution  : 0.5, 0.5  (x, y)
@@ -670,17 +673,17 @@ $(document).ready(function () {
 ## names       : vegetation.type 
 ## zvar        : vegtype</code></pre>
 <p>Plot the vegetation data using a <code>rasterVis</code> levelplot:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;Greens&quot;</span>)))</a>
-<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="kw">levelplot</span>(vegtype, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme,</a>
-<a class="sourceLine" id="cb22-3" data-line-number="3">                 <span class="dt">main=</span><span class="st">&quot;Potential Natural Vegetation&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;Greens&quot;</span>)))</a>
+<a class="sourceLine" id="cb22-2" title="2"><span class="kw">levelplot</span>(vegtype, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme,</a>
+<a class="sourceLine" id="cb22-3" title="3">                 <span class="dt">main=</span><span class="st">&quot;Potential Natural Vegetation&quot;</span>)</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/plot%20veg-1.png" width="75%" height="75%" /></p>
 <p>Read the charcoal data locations:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co"># read GCDv3 sites</span></a>
-<a class="sourceLine" id="cb23-2" data-line-number="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
-<a class="sourceLine" id="cb23-3" data-line-number="3">csv_name &lt;-<span class="st"> &quot;v3i_nsa_globe.csv&quot;</span></a>
-<a class="sourceLine" id="cb23-4" data-line-number="4">csv_file &lt;-<span class="st"> </span><span class="kw">paste</span>(csv_path, csv_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb23-5" data-line-number="5">gcdv3 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_file) </a>
-<a class="sourceLine" id="cb23-6" data-line-number="6"><span class="kw">str</span>(gcdv3)</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="co"># read GCDv3 sites</span></a>
+<a class="sourceLine" id="cb23-2" title="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
+<a class="sourceLine" id="cb23-3" title="3">csv_name &lt;-<span class="st"> &quot;v3i_nsa_globe.csv&quot;</span></a>
+<a class="sourceLine" id="cb23-4" title="4">csv_file &lt;-<span class="st"> </span><span class="kw">paste</span>(csv_path, csv_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb23-5" title="5">gcdv3 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_file) </a>
+<a class="sourceLine" id="cb23-6" title="6"><span class="kw">str</span>(gcdv3)</a></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    703 obs. of  6 variables:
 ##  $ Site_ID     : int  1 2 3 4 5 6 7 8 9 10 ...
 ##  $ Lat         : num  44.7 44.9 45.7 45.9 46.3 ...
@@ -688,36 +691,36 @@ $(document).ready(function () {
 ##  $ Elev        : num  2530 1884 2250 2300 1770 ...
 ##  $ depo_context: Factor w/ 12 levels &quot;BOSE&quot;,&quot;BUOR&quot;,..: 7 7 7 7 7 7 7 7 7 7 ...
 ##  $ Site_Name   : Factor w/ 703 levels &quot;17940 core&quot;,&quot;7-M&quot;,..: 130 605 75 33 219 530 179 62 55 97 ...</code></pre>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw">plot</span>(gcdv3<span class="op">$</span>Lon, gcdv3<span class="op">$</span>Lat, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">plot</span>(gcdv3<span class="op">$</span>Lon, gcdv3<span class="op">$</span>Lat, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/read%20charcoal-1.png" width="75%" height="75%" /></p>
 <p>In order to use the <code>extract()</code> function from <code>raster</code>, the target points must be turned into a <code>SpatialPoints</code> data set.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># turn into SpatialPoints</span></a>
-<a class="sourceLine" id="cb26-2" data-line-number="2">gcdv3_coords &lt;-<span class="st"> </span><span class="kw">cbind</span>(gcdv3<span class="op">$</span>Lon, gcdv3<span class="op">$</span>Lat)</a>
-<a class="sourceLine" id="cb26-3" data-line-number="3">gcdv3_pts &lt;-<span class="st"> </span><span class="kw">SpatialPoints</span>(<span class="dt">coords=</span>gcdv3_coords, <span class="dt">proj4string =</span> <span class="kw">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>))</a>
-<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="kw">class</span>(gcdv3_pts)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="co"># turn into SpatialPoints</span></a>
+<a class="sourceLine" id="cb26-2" title="2">gcdv3_coords &lt;-<span class="st"> </span><span class="kw">cbind</span>(gcdv3<span class="op">$</span>Lon, gcdv3<span class="op">$</span>Lat)</a>
+<a class="sourceLine" id="cb26-3" title="3">gcdv3_pts &lt;-<span class="st"> </span><span class="kw">SpatialPoints</span>(<span class="dt">coords=</span>gcdv3_coords, <span class="dt">proj4string =</span> <span class="kw">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>))</a>
+<a class="sourceLine" id="cb26-4" title="4"><span class="kw">class</span>(gcdv3_pts)</a></code></pre></div>
 <pre><code>## [1] &quot;SpatialPoints&quot;
 ## attr(,&quot;package&quot;)
 ## [1] &quot;sp&quot;</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="co"># plot(gcdv3_pts, pch=16, cex=0.5)</span></a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="co"># plot(gcdv3_pts, pch=16, cex=0.5)</span></a></code></pre></div>
 <p>Plot the target points on top of ths source map:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(vegtype, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme,</a>
-<a class="sourceLine" id="cb29-2" data-line-number="2">                 <span class="dt">main=</span><span class="st">&quot;Potential Natural Vegetation&quot;</span>)</a>
-<a class="sourceLine" id="cb29-3" data-line-number="3">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.points</span>(gcdv3_pts, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(vegtype, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme,</a>
+<a class="sourceLine" id="cb29-2" title="2">                 <span class="dt">main=</span><span class="st">&quot;Potential Natural Vegetation&quot;</span>)</a>
+<a class="sourceLine" id="cb29-3" title="3">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.points</span>(gcdv3_pts, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>))</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/plot%20both-1.png" width="75%" height="75%" /></p>
 </div>
 <div id="extract-data-at-target-points" class="section level2">
 <h2><span class="header-section-number">3.2</span> Extract data at target points</h2>
 <p>Now extract the data for the target points:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="co"># extract data from the raster at the target points</span></a>
-<a class="sourceLine" id="cb30-2" data-line-number="2">gcdv3_vegtype &lt;-<span class="st"> </span><span class="kw">extract</span>(vegtype, gcdv3_pts, <span class="dt">method=</span><span class="st">&quot;simple&quot;</span>)</a>
-<a class="sourceLine" id="cb30-3" data-line-number="3"><span class="kw">class</span>(gcdv3_vegtype)</a></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="co"># extract data from the raster at the target points</span></a>
+<a class="sourceLine" id="cb30-2" title="2">gcdv3_vegtype &lt;-<span class="st"> </span><span class="kw">extract</span>(vegtype, gcdv3_pts, <span class="dt">method=</span><span class="st">&quot;simple&quot;</span>)</a>
+<a class="sourceLine" id="cb30-3" title="3"><span class="kw">class</span>(gcdv3_vegtype)</a></code></pre></div>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">head</span>(gcdv3_vegtype)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="kw">head</span>(gcdv3_vegtype)</a></code></pre></div>
 <pre><code>## [1] 6 6 6 6 6 6</code></pre>
 <p>Make a dataframe of the extracted data that could be saved as a .csv file, and plot it:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">pts &lt;-<span class="st"> </span><span class="kw">data.frame</span>(gcdv3<span class="op">$</span>Lon, gcdv3<span class="op">$</span>Lat, gcdv3_vegtype)</a>
-<a class="sourceLine" id="cb34-2" data-line-number="2"><span class="kw">names</span>(pts) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Lon&quot;</span>, <span class="st">&quot;Lat&quot;</span>, <span class="st">&quot;vegtype&quot;</span>)</a>
-<a class="sourceLine" id="cb34-3" data-line-number="3"><span class="kw">head</span>(pts, <span class="dv">10</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1">pts &lt;-<span class="st"> </span><span class="kw">data.frame</span>(gcdv3<span class="op">$</span>Lon, gcdv3<span class="op">$</span>Lat, gcdv3_vegtype)</a>
+<a class="sourceLine" id="cb34-2" title="2"><span class="kw">names</span>(pts) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Lon&quot;</span>, <span class="st">&quot;Lat&quot;</span>, <span class="st">&quot;vegtype&quot;</span>)</a>
+<a class="sourceLine" id="cb34-3" title="3"><span class="kw">head</span>(pts, <span class="dv">10</span>)</a></code></pre></div>
 <pre><code>##          Lon     Lat vegtype
 ## 1  -110.6161 44.6628       6
 ## 2  -110.3467 44.9183       6
@@ -729,37 +732,37 @@ $(document).ready(function () {
 ## 8  -123.4600 42.0200       4
 ## 9  -122.5575 41.3467       6
 ## 10 -122.4954 41.2075       4</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1">plotclr &lt;-<span class="st"> </span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;Greens&quot;</span>))</a>
-<a class="sourceLine" id="cb36-2" data-line-number="2">plotclr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#AAAAAA&quot;</span>, plotclr)</a>
-<a class="sourceLine" id="cb36-3" data-line-number="3">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">16</span>)</a>
-<a class="sourceLine" id="cb36-4" data-line-number="4">color_class &lt;-<span class="st"> </span><span class="kw">findInterval</span>(gcdv3_vegtype, cutpts)</a>
-<a class="sourceLine" id="cb36-5" data-line-number="5"><span class="kw">plot</span>(pts<span class="op">$</span>Lon, pts<span class="op">$</span>Lat, <span class="dt">col=</span>plotclr[color_class<span class="op">+</span><span class="dv">1</span>], <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1">plotclr &lt;-<span class="st"> </span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;Greens&quot;</span>))</a>
+<a class="sourceLine" id="cb36-2" title="2">plotclr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#AAAAAA&quot;</span>, plotclr)</a>
+<a class="sourceLine" id="cb36-3" title="3">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">16</span>)</a>
+<a class="sourceLine" id="cb36-4" title="4">color_class &lt;-<span class="st"> </span><span class="kw">findInterval</span>(gcdv3_vegtype, cutpts)</a>
+<a class="sourceLine" id="cb36-5" title="5"><span class="kw">plot</span>(pts<span class="op">$</span>Lon, pts<span class="op">$</span>Lat, <span class="dt">col=</span>plotclr[color_class<span class="op">+</span><span class="dv">1</span>], <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/make%20dataframe-1.png" width="75%" height="75%" /></p>
 <p>Plot the extracted data at the target points on top of the source points. If the extraction is successful, the target-point colors should dissappear against the background.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(vegtype, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme,</a>
-<a class="sourceLine" id="cb37-2" data-line-number="2">                 <span class="dt">main=</span><span class="st">&quot;Potential Natural Vegetation&quot;</span>)</a>
-<a class="sourceLine" id="cb37-3" data-line-number="3">plotclr &lt;-<span class="st"> </span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;Greens&quot;</span>))</a>
-<a class="sourceLine" id="cb37-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb37-5" data-line-number="5">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">16</span>)</a>
-<a class="sourceLine" id="cb37-6" data-line-number="6">color_class &lt;-<span class="st"> </span><span class="kw">findInterval</span>(gcdv3_vegtype, cutpts)</a>
-<a class="sourceLine" id="cb37-7" data-line-number="7">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.points</span>(gcdv3_pts, <span class="dt">col=</span>plotclr[color_class], <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.6</span>)) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb37-8" data-line-number="8"><span class="st">  </span><span class="kw">layer</span>(<span class="kw">sp.points</span>(gcdv3_pts, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">pch=</span><span class="dv">1</span>, <span class="dt">cex=</span><span class="fl">0.6</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(vegtype, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme,</a>
+<a class="sourceLine" id="cb37-2" title="2">                 <span class="dt">main=</span><span class="st">&quot;Potential Natural Vegetation&quot;</span>)</a>
+<a class="sourceLine" id="cb37-3" title="3">plotclr &lt;-<span class="st"> </span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;Greens&quot;</span>))</a>
+<a class="sourceLine" id="cb37-4" title="4"></a>
+<a class="sourceLine" id="cb37-5" title="5">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">12</span>, <span class="dv">14</span>, <span class="dv">16</span>)</a>
+<a class="sourceLine" id="cb37-6" title="6">color_class &lt;-<span class="st"> </span><span class="kw">findInterval</span>(gcdv3_vegtype, cutpts)</a>
+<a class="sourceLine" id="cb37-7" title="7">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.points</span>(gcdv3_pts, <span class="dt">col=</span>plotclr[color_class], <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.6</span>)) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb37-8" title="8"><span class="st">  </span><span class="kw">layer</span>(<span class="kw">sp.points</span>(gcdv3_pts, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">pch=</span><span class="dv">1</span>, <span class="dt">cex=</span><span class="fl">0.6</span>))</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/plot%20over-1.png" width="75%" height="75%" /></p>
 <p><a href="geospatial.html">[Back to top]</a></p>
 </div>
 <div id="a-second-example-explicit-cell-selection" class="section level2">
 <h2><span class="header-section-number">3.3</span> A second example – explicit cell selection</h2>
 <p>Here’s a second example of extracting values from an array, by referencing the specific cell or array element that a target point falls in. In this example, a netCDF file of bioclimatic variables is read using <code>ncdf4</code> and the values of <code>mtco</code> (mean temperature of the coldest month) are extracted.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">library</span>(ncdf4)</a>
-<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="kw">library</span>(classInt)</a>
-<a class="sourceLine" id="cb38-3" data-line-number="3"><span class="kw">library</span>(RColorBrewer)</a></code></pre></div>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="co"># set path and filename</span></a>
-<a class="sourceLine" id="cb39-2" data-line-number="2">ncpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
-<a class="sourceLine" id="cb39-3" data-line-number="3">ncname &lt;-<span class="st"> &quot;cru10min30_bio.nc&quot;</span>  </a>
-<a class="sourceLine" id="cb39-4" data-line-number="4">ncfname &lt;-<span class="st"> </span><span class="kw">paste</span>(ncpath, ncname, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="co"># open a netCDF file</span></a>
-<a class="sourceLine" id="cb40-2" data-line-number="2">ncin &lt;-<span class="st"> </span><span class="kw">nc_open</span>(ncfname)</a>
-<a class="sourceLine" id="cb40-3" data-line-number="3"><span class="kw">print</span>(ncin)</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="kw">library</span>(ncdf4)</a>
+<a class="sourceLine" id="cb38-2" title="2"><span class="kw">library</span>(classInt)</a>
+<a class="sourceLine" id="cb38-3" title="3"><span class="kw">library</span>(RColorBrewer)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1"><span class="co"># set path and filename</span></a>
+<a class="sourceLine" id="cb39-2" title="2">ncpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb39-3" title="3">ncname &lt;-<span class="st"> &quot;cru10min30_bio.nc&quot;</span>  </a>
+<a class="sourceLine" id="cb39-4" title="4">ncfname &lt;-<span class="st"> </span><span class="kw">paste</span>(ncpath, ncname, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1"><span class="co"># open a netCDF file</span></a>
+<a class="sourceLine" id="cb40-2" title="2">ncin &lt;-<span class="st"> </span><span class="kw">nc_open</span>(ncfname)</a>
+<a class="sourceLine" id="cb40-3" title="3"><span class="kw">print</span>(ncin)</a></code></pre></div>
 <pre><code>## File /Users/bartlein/Projects/ESSD/data/nc_files/cru10min30_bio.nc (NC_FORMAT_CLASSIC):
 ## 
 ##      19 variables (excluding dimension variables):
@@ -879,40 +882,40 @@ $(document).ready(function () {
 ##         source: calculated using Sarah Shafer&#39;s version of bioclim.f
 ##         data: e:\Projects\cru\work\cl_2.0_regrid\regions\cru10min30\cru10min30_bio.dat
 ##         history: P.J. Bartlein, 6 Dec 2007 from 2 Dec 2006 data</code></pre>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="co"># get longitude and latitude</span></a>
-<a class="sourceLine" id="cb42-2" data-line-number="2">lon &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,<span class="st">&quot;lon&quot;</span>)</a>
-<a class="sourceLine" id="cb42-3" data-line-number="3">nlon &lt;-<span class="st"> </span><span class="kw">dim</span>(lon)</a>
-<a class="sourceLine" id="cb42-4" data-line-number="4"><span class="kw">head</span>(lon)</a></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1"><span class="co"># get longitude and latitude</span></a>
+<a class="sourceLine" id="cb42-2" title="2">lon &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,<span class="st">&quot;lon&quot;</span>)</a>
+<a class="sourceLine" id="cb42-3" title="3">nlon &lt;-<span class="st"> </span><span class="kw">dim</span>(lon)</a>
+<a class="sourceLine" id="cb42-4" title="4"><span class="kw">head</span>(lon)</a></code></pre></div>
 <pre><code>## [1] -179.75 -179.25 -178.75 -178.25 -177.75 -177.25</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1">lat &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,<span class="st">&quot;lat&quot;</span>)</a>
-<a class="sourceLine" id="cb44-2" data-line-number="2">nlat &lt;-<span class="st"> </span><span class="kw">dim</span>(lat)</a>
-<a class="sourceLine" id="cb44-3" data-line-number="3"><span class="kw">head</span>(lat)</a></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1">lat &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,<span class="st">&quot;lat&quot;</span>)</a>
+<a class="sourceLine" id="cb44-2" title="2">nlat &lt;-<span class="st"> </span><span class="kw">dim</span>(lat)</a>
+<a class="sourceLine" id="cb44-3" title="3"><span class="kw">head</span>(lat)</a></code></pre></div>
 <pre><code>## [1] -89.75 -89.25 -88.75 -88.25 -87.75 -87.25</code></pre>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="kw">print</span>(<span class="kw">c</span>(nlon,nlat))</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1"><span class="kw">print</span>(<span class="kw">c</span>(nlon,nlat))</a></code></pre></div>
 <pre><code>## [1] 720 360</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="co"># get the mtco data</span></a>
-<a class="sourceLine" id="cb48-2" data-line-number="2">mtco &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,<span class="st">&quot;mtco&quot;</span>)</a>
-<a class="sourceLine" id="cb48-3" data-line-number="3">dlname &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="st">&quot;mtco&quot;</span>,<span class="st">&quot;long_name&quot;</span>)</a>
-<a class="sourceLine" id="cb48-4" data-line-number="4">dunits &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="st">&quot;mtco&quot;</span>,<span class="st">&quot;units&quot;</span>)</a>
-<a class="sourceLine" id="cb48-5" data-line-number="5">fillvalue &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="st">&quot;mtco&quot;</span>,<span class="st">&quot;_FillValue&quot;</span>)</a>
-<a class="sourceLine" id="cb48-6" data-line-number="6"><span class="kw">dim</span>(mtco)</a></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="co"># get the mtco data</span></a>
+<a class="sourceLine" id="cb48-2" title="2">mtco &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,<span class="st">&quot;mtco&quot;</span>)</a>
+<a class="sourceLine" id="cb48-3" title="3">dlname &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="st">&quot;mtco&quot;</span>,<span class="st">&quot;long_name&quot;</span>)</a>
+<a class="sourceLine" id="cb48-4" title="4">dunits &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="st">&quot;mtco&quot;</span>,<span class="st">&quot;units&quot;</span>)</a>
+<a class="sourceLine" id="cb48-5" title="5">fillvalue &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="st">&quot;mtco&quot;</span>,<span class="st">&quot;_FillValue&quot;</span>)</a>
+<a class="sourceLine" id="cb48-6" title="6"><span class="kw">dim</span>(mtco)</a></code></pre></div>
 <pre><code>## [1] 720 360</code></pre>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1">mtco[mtco<span class="op">==</span>fillvalue<span class="op">$</span>value] &lt;-<span class="st"> </span><span class="ot">NA</span></a></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1">mtco[mtco<span class="op">==</span>fillvalue<span class="op">$</span>value] &lt;-<span class="st"> </span><span class="ot">NA</span></a></code></pre></div>
 <p>Close the netCDF file using the <code>nc_close()</code> function.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="co"># close the netCDF file</span></a>
-<a class="sourceLine" id="cb51-2" data-line-number="2"><span class="kw">nc_close</span>(ncin)</a></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="co"># close the netCDF file</span></a>
+<a class="sourceLine" id="cb51-2" title="2"><span class="kw">nc_close</span>(ncin)</a></code></pre></div>
 <p>Plot the control data.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1"><span class="co"># levelplot of the slice</span></a>
-<a class="sourceLine" id="cb52-2" data-line-number="2">grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">lon=</span>lon, <span class="dt">lat=</span>lat)</a>
-<a class="sourceLine" id="cb52-3" data-line-number="3">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">50</span>,<span class="op">-</span><span class="dv">40</span>,<span class="op">-</span><span class="dv">30</span>,<span class="op">-</span><span class="dv">20</span>,<span class="op">-</span><span class="dv">10</span>,<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>)</a>
-<a class="sourceLine" id="cb52-4" data-line-number="4"><span class="kw">levelplot</span>(mtco <span class="op">~</span><span class="st"> </span>lon <span class="op">*</span><span class="st"> </span>lat, <span class="dt">data=</span>grid, <span class="dt">at=</span>cutpts, <span class="dt">cuts=</span><span class="dv">11</span>, <span class="dt">pretty=</span>T, </a>
-<a class="sourceLine" id="cb52-5" data-line-number="5">  <span class="dt">col.regions=</span>(<span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))))</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1"><span class="co"># levelplot of the slice</span></a>
+<a class="sourceLine" id="cb52-2" title="2">grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">lon=</span>lon, <span class="dt">lat=</span>lat)</a>
+<a class="sourceLine" id="cb52-3" title="3">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">50</span>,<span class="op">-</span><span class="dv">40</span>,<span class="op">-</span><span class="dv">30</span>,<span class="op">-</span><span class="dv">20</span>,<span class="op">-</span><span class="dv">10</span>,<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>)</a>
+<a class="sourceLine" id="cb52-4" title="4"><span class="kw">levelplot</span>(mtco <span class="op">~</span><span class="st"> </span>lon <span class="op">*</span><span class="st"> </span>lat, <span class="dt">data=</span>grid, <span class="dt">at=</span>cutpts, <span class="dt">cuts=</span><span class="dv">11</span>, <span class="dt">pretty=</span>T, </a>
+<a class="sourceLine" id="cb52-5" title="5">  <span class="dt">col.regions=</span>(<span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))))</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/levelplot1-1.png" width="75%" height="75%" /></p>
 <p>Now extract the data for the target points:</p>
 <p>Get the indices (j’s and k’s) of the grid cell that each target point lies in. For each target point, figure out which column (<code>j</code>) and row (<code>k</code>) a target point falls in. This code is basically the same as that used in reshaping a “short” data frame into an array. The function that is defined and executed within the <code>sapply()</code> function figures out which column (<code>j</code>) and row (‘k’) in the control-data array a target point falls in. The <code>j</code>’s and <code>k</code>’s together describe the control-data grid cells the individual target points fall in.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1">j &lt;-<span class="st"> </span><span class="kw">sapply</span>(gcdv3<span class="op">$</span>Lon, <span class="cf">function</span>(x) <span class="kw">which.min</span>(<span class="kw">abs</span>(lon<span class="op">-</span>x)))</a>
-<a class="sourceLine" id="cb53-2" data-line-number="2">k &lt;-<span class="st"> </span><span class="kw">sapply</span>(gcdv3<span class="op">$</span>Lat, <span class="cf">function</span>(x) <span class="kw">which.min</span>(<span class="kw">abs</span>(lat<span class="op">-</span>x)))</a>
-<a class="sourceLine" id="cb53-3" data-line-number="3"><span class="kw">head</span>(<span class="kw">cbind</span>(j,k)); <span class="kw">tail</span>(<span class="kw">cbind</span>(j,k))</a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1">j &lt;-<span class="st"> </span><span class="kw">sapply</span>(gcdv3<span class="op">$</span>Lon, <span class="cf">function</span>(x) <span class="kw">which.min</span>(<span class="kw">abs</span>(lon<span class="op">-</span>x)))</a>
+<a class="sourceLine" id="cb53-2" title="2">k &lt;-<span class="st"> </span><span class="kw">sapply</span>(gcdv3<span class="op">$</span>Lat, <span class="cf">function</span>(x) <span class="kw">which.min</span>(<span class="kw">abs</span>(lat<span class="op">-</span>x)))</a>
+<a class="sourceLine" id="cb53-3" title="3"><span class="kw">head</span>(<span class="kw">cbind</span>(j,k)); <span class="kw">tail</span>(<span class="kw">cbind</span>(j,k))</a></code></pre></div>
 <pre><code>##        j   k
 ## [1,] 139 270
 ## [2,] 140 270
@@ -928,10 +931,10 @@ $(document).ready(function () {
 ## [702,] 115 269
 ## [703,] 123 277</code></pre>
 <p>Get the data for each j, k combination. The way to do this is the convert the <code>mtco</code> array to a vector, and then calculate an index <code>jk</code> for each target value:</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1">mtco_vec &lt;-<span class="st"> </span><span class="kw">as.vector</span>(mtco)</a>
-<a class="sourceLine" id="cb56-2" data-line-number="2">jk &lt;-<span class="st"> </span>(k<span class="dv">-1</span>)<span class="op">*</span>nlon <span class="op">+</span><span class="st"> </span>j</a>
-<a class="sourceLine" id="cb56-3" data-line-number="3">gcdv3_mtco &lt;-<span class="st"> </span>mtco_vec[jk]</a>
-<a class="sourceLine" id="cb56-4" data-line-number="4"><span class="kw">head</span>(<span class="kw">cbind</span>(j,k,jk,gcdv3_mtco,lon[j],lat[k]))</a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1">mtco_vec &lt;-<span class="st"> </span><span class="kw">as.vector</span>(mtco)</a>
+<a class="sourceLine" id="cb56-2" title="2">jk &lt;-<span class="st"> </span>(k<span class="dv">-1</span>)<span class="op">*</span>nlon <span class="op">+</span><span class="st"> </span>j</a>
+<a class="sourceLine" id="cb56-3" title="3">gcdv3_mtco &lt;-<span class="st"> </span>mtco_vec[jk]</a>
+<a class="sourceLine" id="cb56-4" title="4"><span class="kw">head</span>(<span class="kw">cbind</span>(j,k,jk,gcdv3_mtco,lon[j],lat[k]))</a></code></pre></div>
 <pre><code>##        j   k     jk gcdv3_mtco              
 ## [1,] 139 270 193819      -11.4 -110.75 44.75
 ## [2,] 140 270 193820      -10.7 -110.25 44.75
@@ -939,10 +942,10 @@ $(document).ready(function () {
 ## [4,] 132 272 195252       -6.4 -114.25 45.75
 ## [5,] 131 273 195971       -5.8 -114.75 46.25
 ## [6,] 134 272 195254       -6.6 -113.25 45.75</code></pre>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" data-line-number="1">gcdv3_mtco[<span class="kw">is.na</span>(gcdv3_mtco)] &lt;-<span class="st"> </span><span class="dv">-99</span></a>
-<a class="sourceLine" id="cb58-2" data-line-number="2">pts &lt;-<span class="st"> </span><span class="kw">data.frame</span>(gcdv3<span class="op">$</span>Lon, gcdv3<span class="op">$</span>Lat, gcdv3_mtco)</a>
-<a class="sourceLine" id="cb58-3" data-line-number="3"><span class="kw">names</span>(pts) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Lon&quot;</span>, <span class="st">&quot;Lat&quot;</span>, <span class="st">&quot;mtco&quot;</span>)</a>
-<a class="sourceLine" id="cb58-4" data-line-number="4"><span class="kw">head</span>(pts, <span class="dv">20</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1">gcdv3_mtco[<span class="kw">is.na</span>(gcdv3_mtco)] &lt;-<span class="st"> </span><span class="dv">-99</span></a>
+<a class="sourceLine" id="cb58-2" title="2">pts &lt;-<span class="st"> </span><span class="kw">data.frame</span>(gcdv3<span class="op">$</span>Lon, gcdv3<span class="op">$</span>Lat, gcdv3_mtco)</a>
+<a class="sourceLine" id="cb58-3" title="3"><span class="kw">names</span>(pts) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Lon&quot;</span>, <span class="st">&quot;Lat&quot;</span>, <span class="st">&quot;mtco&quot;</span>)</a>
+<a class="sourceLine" id="cb58-4" title="4"><span class="kw">head</span>(pts, <span class="dv">20</span>)</a></code></pre></div>
 <pre><code>##          Lon      Lat  mtco
 ## 1  -110.6161 44.66280 -11.4
 ## 2  -110.3467 44.91830 -10.7
@@ -964,12 +967,12 @@ $(document).ready(function () {
 ## 18 -108.1500 37.41667  -4.6
 ## 19 -105.5000 37.55000  -6.9
 ## 20 -112.2167 36.71667  -2.7</code></pre>
-<p>Plot the extracted values of <code>mtco</code>. To do this, the colors for plotting the different levels of <code>mtco</code> are generated from and <code>RColorBrewer</code> palette, and augmented by gray (<code>&quot;#AAAAAA&quot;</code>) to handle missing values (i.e. from marine charcoal records, or those from sites “off” the cru10min30 grid).</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" data-line-number="1">plotclr &lt;-<span class="st"> </span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))</a>
-<a class="sourceLine" id="cb60-2" data-line-number="2">plotclr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#AAAAAA&quot;</span>, plotclr)</a>
-<a class="sourceLine" id="cb60-3" data-line-number="3">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">50</span>,<span class="op">-</span><span class="dv">40</span>,<span class="op">-</span><span class="dv">30</span>,<span class="op">-</span><span class="dv">20</span>,<span class="op">-</span><span class="dv">10</span>,<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>)</a>
-<a class="sourceLine" id="cb60-4" data-line-number="4">color_class &lt;-<span class="st"> </span><span class="kw">findInterval</span>(gcdv3_mtco, cutpts)</a>
-<a class="sourceLine" id="cb60-5" data-line-number="5"><span class="kw">plot</span>(gcdv3<span class="op">$</span>Lon, gcdv3<span class="op">$</span>Lat, <span class="dt">col=</span>plotclr[color_class<span class="op">+</span><span class="dv">1</span>], <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
+<p>Plot the extracted values of <code>mtco</code>. To do this, the colors for plotting the different levels of <code>mtco</code> are generated from and <code>RColorBrewer</code> palette, and augmented by gray (<code>"#AAAAAA"</code>) to handle missing values (i.e. from marine charcoal records, or those from sites “off” the cru10min30 grid).</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1">plotclr &lt;-<span class="st"> </span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))</a>
+<a class="sourceLine" id="cb60-2" title="2">plotclr &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#AAAAAA&quot;</span>, plotclr)</a>
+<a class="sourceLine" id="cb60-3" title="3">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">50</span>,<span class="op">-</span><span class="dv">40</span>,<span class="op">-</span><span class="dv">30</span>,<span class="op">-</span><span class="dv">20</span>,<span class="op">-</span><span class="dv">10</span>,<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>)</a>
+<a class="sourceLine" id="cb60-4" title="4">color_class &lt;-<span class="st"> </span><span class="kw">findInterval</span>(gcdv3_mtco, cutpts)</a>
+<a class="sourceLine" id="cb60-5" title="5"><span class="kw">plot</span>(gcdv3<span class="op">$</span>Lon, gcdv3<span class="op">$</span>Lat, <span class="dt">col=</span>plotclr[color_class<span class="op">+</span><span class="dv">1</span>], <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/plot%20mtco-1.png" width="75%" height="75%" /></p>
 <p><a href="geospatial.html">[Back to top]</a></p>
 </div>
@@ -979,37 +982,37 @@ $(document).ready(function () {
 <p>A common problem arises in dealing with spatial data is the “clipping” or “trimming” problem, in which one wants to know whether one or more points lie within the outlines of a particular polygon, or in the case of multiple polygons, which polygon an individual point lies in. More formally, this is known as the “point in polygon” problem. Here the process of clipping the na_10km_v2 climate grid to a tree-species shape file, in particular, that for <em>Picea mariana</em> (black spruce) is demonstrated. What we want is a list of climate data set points that lie withing the range of <em>P. mariana</em>.</p>
 <div id="read-the-polygon-and-target-point-files" class="section level2">
 <h2><span class="header-section-number">4.1</span> Read the polygon and target-point files</h2>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1"><span class="kw">library</span>(rgeos)</a></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="kw">library</span>(rgeos)</a></code></pre></div>
 <pre><code>## rgeos version: 0.4-2, (SVN revision 581)
 ##  GEOS runtime version: 3.6.1-CAPI-1.10.1 
 ##  Linking to sp version: 1.3-1 
 ##  Polygon checking: TRUE</code></pre>
 <p>Read the shapefile for <em>Picea mariana</em></p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="co"># read the shape file for Picea Mariana</span></a>
-<a class="sourceLine" id="cb63-2" data-line-number="2">shp_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/shp_files/USGS_pp1650/&quot;</span></a>
-<a class="sourceLine" id="cb63-3" data-line-number="3">shp_name &lt;-<span class="st"> &quot;picemari.shp&quot;</span></a>
-<a class="sourceLine" id="cb63-4" data-line-number="4">shp_file &lt;-<span class="st"> </span><span class="kw">paste</span>(shp_path, shp_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb63-5" data-line-number="5">picea_shp &lt;-<span class="st"> </span><span class="kw">readOGR</span>(shp_file)</a></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="co"># read the shape file for Picea Mariana</span></a>
+<a class="sourceLine" id="cb63-2" title="2">shp_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/shp_files/USGS_pp1650/&quot;</span></a>
+<a class="sourceLine" id="cb63-3" title="3">shp_name &lt;-<span class="st"> &quot;picemari.shp&quot;</span></a>
+<a class="sourceLine" id="cb63-4" title="4">shp_file &lt;-<span class="st"> </span><span class="kw">paste</span>(shp_path, shp_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb63-5" title="5">picea_shp &lt;-<span class="st"> </span><span class="kw">readOGR</span>(shp_file)</a></code></pre></div>
 <pre><code>## OGR data source with driver: ESRI Shapefile 
 ## Source: &quot;/Users/bartlein/Projects/ESSD/data/shp_files/USGS_pp1650/picemari.shp&quot;, layer: &quot;picemari&quot;
 ## with 1585 features
 ## It has 5 fields
 ## Integer64 fields read as strings:  PICEMARI_ PICEMARI_I</code></pre>
 <p>Add a coordinate refernce system to the shapefile, and plot it:</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="kw">proj4string</span>(picea_shp) =<span class="st"> </span><span class="kw">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>)</a>
-<a class="sourceLine" id="cb65-2" data-line-number="2"><span class="kw">class</span>(picea_shp)</a></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1"><span class="kw">proj4string</span>(picea_shp) =<span class="st"> </span><span class="kw">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>)</a>
+<a class="sourceLine" id="cb65-2" title="2"><span class="kw">class</span>(picea_shp)</a></code></pre></div>
 <pre><code>## [1] &quot;SpatialPolygonsDataFrame&quot;
 ## attr(,&quot;package&quot;)
 ## [1] &quot;sp&quot;</code></pre>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1"><span class="kw">plot</span>(picea_shp)</a></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="kw">plot</span>(picea_shp)</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/add%20proj4string-1.png" width="75%" height="75%" /></p>
 <p>Read the na10km_v2 points as a .csv file (for illustration, in practice it would be more efficient to read it as a netCDF file).</p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1"><span class="co"># read the na10km_v2 points (as a .csv file)</span></a>
-<a class="sourceLine" id="cb68-2" data-line-number="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
-<a class="sourceLine" id="cb68-3" data-line-number="3">csv_name &lt;-<span class="st"> &quot;na10km_v2.csv&quot;</span></a>
-<a class="sourceLine" id="cb68-4" data-line-number="4">csv_file &lt;-<span class="st"> </span><span class="kw">paste</span>(csv_path, csv_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb68-5" data-line-number="5">na10km_v2 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_file)</a>
-<a class="sourceLine" id="cb68-6" data-line-number="6"><span class="kw">str</span>(na10km_v2)</a></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="co"># read the na10km_v2 points (as a .csv file)</span></a>
+<a class="sourceLine" id="cb68-2" title="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
+<a class="sourceLine" id="cb68-3" title="3">csv_name &lt;-<span class="st"> &quot;na10km_v2.csv&quot;</span></a>
+<a class="sourceLine" id="cb68-4" title="4">csv_file &lt;-<span class="st"> </span><span class="kw">paste</span>(csv_path, csv_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb68-5" title="5">na10km_v2 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_file)</a>
+<a class="sourceLine" id="cb68-6" title="6"><span class="kw">str</span>(na10km_v2)</a></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    277910 obs. of  7 variables:
 ##  $ x     : num  2690000 2700000 2710000 2720000 2730000 2740000 2750000 2760000 2770000 2780000 ...
 ##  $ y     : num  -4510000 -4510000 -4510000 -4510000 -4510000 -4510000 -4510000 -4510000 -4510000 -4510000 ...
@@ -1019,34 +1022,34 @@ $(document).ready(function () {
 ##  $ etopo1: int  67 61 67 26 43 56 30 57 134 652 ...
 ##  $ srtm30: int  78 39 52 22 79 49 32 50 110 318 ...</code></pre>
 <p>For convenience in display (because the na10km_v2 grid includes Europe and wraps around the dateline), reduce it to only the points west of 45W:</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1">na10km_v2 &lt;-<span class="st"> </span>na10km_v2[na10km_v2<span class="op">$</span>lon <span class="op">&lt;=</span><span class="st"> </span><span class="fl">-45.0</span>, ]</a></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1">na10km_v2 &lt;-<span class="st"> </span>na10km_v2[na10km_v2<span class="op">$</span>lon <span class="op">&lt;=</span><span class="st"> </span><span class="fl">-45.0</span>, ]</a></code></pre></div>
 <p>Make a <code>SpatialPointsDataFrame</code> of the na10km_v2 data-point locations, and plot it:</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1"><span class="co"># make a SpatialPointsDataFrame</span></a>
-<a class="sourceLine" id="cb71-2" data-line-number="2">na10km_v2_coords &lt;-<span class="st"> </span><span class="kw">cbind</span>(na10km_v2<span class="op">$</span>lon, na10km_v2<span class="op">$</span>lat)</a>
-<a class="sourceLine" id="cb71-3" data-line-number="3">na10km_v2_pts &lt;-<span class="st"> </span><span class="kw">SpatialPoints</span>(<span class="dt">coords=</span>na10km_v2_coords, <span class="dt">proj4string =</span> <span class="kw">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>))</a>
-<a class="sourceLine" id="cb71-4" data-line-number="4"><span class="kw">class</span>(na10km_v2_pts)</a></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1"><span class="co"># make a SpatialPointsDataFrame</span></a>
+<a class="sourceLine" id="cb71-2" title="2">na10km_v2_coords &lt;-<span class="st"> </span><span class="kw">cbind</span>(na10km_v2<span class="op">$</span>lon, na10km_v2<span class="op">$</span>lat)</a>
+<a class="sourceLine" id="cb71-3" title="3">na10km_v2_pts &lt;-<span class="st"> </span><span class="kw">SpatialPoints</span>(<span class="dt">coords=</span>na10km_v2_coords, <span class="dt">proj4string =</span> <span class="kw">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>))</a>
+<a class="sourceLine" id="cb71-4" title="4"><span class="kw">class</span>(na10km_v2_pts)</a></code></pre></div>
 <pre><code>## [1] &quot;SpatialPoints&quot;
 ## attr(,&quot;package&quot;)
 ## [1] &quot;sp&quot;</code></pre>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" data-line-number="1"><span class="kw">plot</span>(na10km_v2_pts, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.4</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="kw">plot</span>(na10km_v2_pts, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.4</span>)</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/na10km%20dataframe-1.png" width="75%" height="75%" /></p>
 </div>
 <div id="overlay-the-points-onto-the-polygons" class="section level2">
 <h2><span class="header-section-number">4.2</span> Overlay the points onto the polygons</h2>
 <p>Now overlay the points onto the polygons. Note that the input shape file was a <code>SpatialPolygonsDataFrame</code> object, so convert it to a simpler “SpatialPolygons” file first. The <code>over()</code> function from <code>rgeos</code> takes a little while to run.</p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1"><span class="co"># overlay the two shape files</span></a>
-<a class="sourceLine" id="cb74-2" data-line-number="2">picea_poly &lt;-<span class="st"> </span><span class="kw">as</span>(picea_shp, <span class="st">&quot;SpatialPolygons&quot;</span>)</a>
-<a class="sourceLine" id="cb74-3" data-line-number="3"><span class="kw">class</span>(picea_poly)</a></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1"><span class="co"># overlay the two shape files</span></a>
+<a class="sourceLine" id="cb74-2" title="2">picea_poly &lt;-<span class="st"> </span><span class="kw">as</span>(picea_shp, <span class="st">&quot;SpatialPolygons&quot;</span>)</a>
+<a class="sourceLine" id="cb74-3" title="3"><span class="kw">class</span>(picea_poly)</a></code></pre></div>
 <pre><code>## [1] &quot;SpatialPolygons&quot;
 ## attr(,&quot;package&quot;)
 ## [1] &quot;sp&quot;</code></pre>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" data-line-number="1">picea_pts &lt;-<span class="st"> </span><span class="kw">over</span>(na10km_v2_pts, picea_poly)</a>
-<a class="sourceLine" id="cb76-2" data-line-number="2"><span class="kw">class</span>(picea_pts)</a></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1">picea_pts &lt;-<span class="st"> </span><span class="kw">over</span>(na10km_v2_pts, picea_poly)</a>
+<a class="sourceLine" id="cb76-2" title="2"><span class="kw">class</span>(picea_pts)</a></code></pre></div>
 <pre><code>## [1] &quot;integer&quot;</code></pre>
 <p>Make a dataframe from the “trimmed” points and plot it on top of the na10km_v2 points:</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" data-line-number="1">picea_pts2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(na10km_v2_coords[<span class="op">!</span><span class="kw">is.na</span>(picea_pts), ] )</a>
-<a class="sourceLine" id="cb78-2" data-line-number="2"><span class="kw">plot</span>(na10km_v2_pts, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.4</span>)</a>
-<a class="sourceLine" id="cb78-3" data-line-number="3"><span class="kw">points</span>(picea_pts2, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.1</span>, <span class="dt">col=</span><span class="st">&quot;green&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1">picea_pts2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(na10km_v2_coords[<span class="op">!</span><span class="kw">is.na</span>(picea_pts), ] )</a>
+<a class="sourceLine" id="cb78-2" title="2"><span class="kw">plot</span>(na10km_v2_pts, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.4</span>)</a>
+<a class="sourceLine" id="cb78-3" title="3"><span class="kw">points</span>(picea_pts2, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.1</span>, <span class="dt">col=</span><span class="st">&quot;green&quot;</span>)</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/plot%20trimmed-1.png" width="75%" height="75%" /></p>
 <p><a href="geospatial.html">[Back to top]</a></p>
 </div>
@@ -1056,15 +1059,15 @@ $(document).ready(function () {
 <p>Another common task is to grid or rasterize a set of point data, creating a gridded data set of counts, averages, minima, maxima, etc. This can be illustrated using the FPA-FOD daily fire-fire start data set: Spatial wildfire occurrence data for the United States, 1992-2013/Fire Program Analysis Fire-Occurrence Database [FPA_FOD_20150323] (3nd Edition) (Short, K.C., 2014, Earth Syst. Sci. Data, 6, 1-27) – <a href="http://www.fs.usda.gov/rds/archive/Product/RDS-2013-0009.3/">http://www.fs.usda.gov/rds/archive/Product/RDS-2013-0009.3/</a>. The idea here is to calculate the number and average area of the fires that occured in 0.5-degree grid cells that cover the coterminous U.S.</p>
 <div id="read-the-data-sets-and-create-empty-rasters" class="section level2">
 <h2><span class="header-section-number">5.1</span> Read the data sets, and create empty rasters</h2>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" data-line-number="1"><span class="kw">library</span>(raster)</a>
-<a class="sourceLine" id="cb79-2" data-line-number="2"><span class="kw">library</span>(rasterVis)</a></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" title="1"><span class="kw">library</span>(raster)</a>
+<a class="sourceLine" id="cb79-2" title="2"><span class="kw">library</span>(rasterVis)</a></code></pre></div>
 <p>Read the fire-start data:</p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" data-line-number="1"><span class="co"># read the FPA-FOD fire-start data</span></a>
-<a class="sourceLine" id="cb80-2" data-line-number="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
-<a class="sourceLine" id="cb80-3" data-line-number="3">csv_name &lt;-<span class="st"> &quot;fpafod_1992-2013.csv&quot;</span></a>
-<a class="sourceLine" id="cb80-4" data-line-number="4">csv_file &lt;-<span class="st"> </span><span class="kw">paste</span>(csv_path, csv_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb80-5" data-line-number="5">fpafod &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_file) <span class="co"># takes a while</span></a>
-<a class="sourceLine" id="cb80-6" data-line-number="6"><span class="kw">str</span>(fpafod)</a></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1"><span class="co"># read the FPA-FOD fire-start data</span></a>
+<a class="sourceLine" id="cb80-2" title="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
+<a class="sourceLine" id="cb80-3" title="3">csv_name &lt;-<span class="st"> &quot;fpafod_1992-2013.csv&quot;</span></a>
+<a class="sourceLine" id="cb80-4" title="4">csv_file &lt;-<span class="st"> </span><span class="kw">paste</span>(csv_path, csv_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb80-5" title="5">fpafod &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_file) <span class="co"># takes a while</span></a>
+<a class="sourceLine" id="cb80-6" title="6"><span class="kw">str</span>(fpafod)</a></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    1727476 obs. of  14 variables:
 ##  $ datasource    : Factor w/ 1 level &quot;fpafod&quot;: 1 1 1 1 1 1 1 1 1 1 ...
 ##  $ sourceid      : int  1 2 3 4 5 6 7 8 9 10 ...
@@ -1081,23 +1084,23 @@ $(document).ready(function () {
 ##  $ stateprov     : Factor w/ 52 levels &quot;AK&quot;,&quot;AL&quot;,&quot;AR&quot;,..: 5 5 5 5 5 5 5 5 5 5 ...
 ##  $ agency        : Factor w/ 11 levels &quot;BIA&quot;,&quot;BLM&quot;,&quot;BOR&quot;,..: 6 6 6 6 6 6 6 6 6 6 ...</code></pre>
 <p>Convert the fire-start data to a <code>SpatialPointsDataFrame</code></p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" data-line-number="1">fpafod_coords &lt;-<span class="st"> </span><span class="kw">cbind</span>(fpafod<span class="op">$</span>longitude, fpafod<span class="op">$</span>latitude)</a>
-<a class="sourceLine" id="cb82-2" data-line-number="2">fpafod_pts &lt;-<span class="st"> </span><span class="kw">SpatialPointsDataFrame</span>(<span class="dt">coords=</span>fpafod_coords, <span class="dt">data=</span><span class="kw">data.frame</span>(fpafod<span class="op">$</span>area_ha))</a>
-<a class="sourceLine" id="cb82-3" data-line-number="3"><span class="kw">names</span>(fpafod_pts) &lt;-<span class="st"> &quot;area_ha&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1">fpafod_coords &lt;-<span class="st"> </span><span class="kw">cbind</span>(fpafod<span class="op">$</span>longitude, fpafod<span class="op">$</span>latitude)</a>
+<a class="sourceLine" id="cb82-2" title="2">fpafod_pts &lt;-<span class="st"> </span><span class="kw">SpatialPointsDataFrame</span>(<span class="dt">coords=</span>fpafod_coords, <span class="dt">data=</span><span class="kw">data.frame</span>(fpafod<span class="op">$</span>area_ha))</a>
+<a class="sourceLine" id="cb82-3" title="3"><span class="kw">names</span>(fpafod_pts) &lt;-<span class="st"> &quot;area_ha&quot;</span></a></code></pre></div>
 <p>Create a couple of empty rasters to hold the rasterized data:</p>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" data-line-number="1"><span class="co"># create (empty) rasters</span></a>
-<a class="sourceLine" id="cb83-2" data-line-number="2">cell_size &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
-<a class="sourceLine" id="cb83-3" data-line-number="3">lon_min &lt;-<span class="st"> </span><span class="fl">-128.0</span>; lon_max &lt;-<span class="st"> </span><span class="fl">-65.0</span>; lat_min &lt;-<span class="st"> </span><span class="fl">25.5</span>; lat_max &lt;-<span class="st"> </span><span class="fl">50.5</span></a>
-<a class="sourceLine" id="cb83-4" data-line-number="4">ncols &lt;-<span class="st"> </span>((lon_max <span class="op">-</span><span class="st"> </span>lon_min)<span class="op">/</span>cell_size)<span class="op">+</span><span class="dv">1</span>; nrows &lt;-<span class="st"> </span>((lat_max <span class="op">-</span><span class="st"> </span>lat_min)<span class="op">/</span>cell_size)<span class="op">+</span><span class="dv">1</span> </a>
-<a class="sourceLine" id="cb83-5" data-line-number="5">us_fire_counts &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="dt">nrows=</span>nrows, <span class="dt">ncols=</span>ncols, <span class="dt">xmn=</span>lon_min, <span class="dt">xmx=</span>lon_max, <span class="dt">ymn=</span>lat_min, <span class="dt">ymx=</span>lat_max, <span class="dt">res=</span><span class="fl">0.5</span>, <span class="dt">crs=</span><span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>)</a>
-<a class="sourceLine" id="cb83-6" data-line-number="6">us_fire_counts</a></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" title="1"><span class="co"># create (empty) rasters</span></a>
+<a class="sourceLine" id="cb83-2" title="2">cell_size &lt;-<span class="st"> </span><span class="fl">0.5</span></a>
+<a class="sourceLine" id="cb83-3" title="3">lon_min &lt;-<span class="st"> </span><span class="fl">-128.0</span>; lon_max &lt;-<span class="st"> </span><span class="fl">-65.0</span>; lat_min &lt;-<span class="st"> </span><span class="fl">25.5</span>; lat_max &lt;-<span class="st"> </span><span class="fl">50.5</span></a>
+<a class="sourceLine" id="cb83-4" title="4">ncols &lt;-<span class="st"> </span>((lon_max <span class="op">-</span><span class="st"> </span>lon_min)<span class="op">/</span>cell_size)<span class="op">+</span><span class="dv">1</span>; nrows &lt;-<span class="st"> </span>((lat_max <span class="op">-</span><span class="st"> </span>lat_min)<span class="op">/</span>cell_size)<span class="op">+</span><span class="dv">1</span> </a>
+<a class="sourceLine" id="cb83-5" title="5">us_fire_counts &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="dt">nrows=</span>nrows, <span class="dt">ncols=</span>ncols, <span class="dt">xmn=</span>lon_min, <span class="dt">xmx=</span>lon_max, <span class="dt">ymn=</span>lat_min, <span class="dt">ymx=</span>lat_max, <span class="dt">res=</span><span class="fl">0.5</span>, <span class="dt">crs=</span><span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>)</a>
+<a class="sourceLine" id="cb83-6" title="6">us_fire_counts</a></code></pre></div>
 <pre><code>## class       : RasterLayer 
 ## dimensions  : 50, 126, 6300  (nrow, ncol, ncell)
 ## resolution  : 0.5, 0.5  (x, y)
 ## extent      : -128, -65, 25.5, 50.5  (xmin, xmax, ymin, ymax)
 ## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0</code></pre>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" data-line-number="1">us_fire_area &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="dt">nrows=</span>nrows, <span class="dt">ncols=</span>ncols, <span class="dt">xmn=</span>lon_min, <span class="dt">xmx=</span>lon_max, <span class="dt">ymn=</span>lat_min, <span class="dt">ymx=</span>lat_max, <span class="dt">res=</span><span class="fl">0.5</span>, <span class="dt">crs=</span><span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>)</a>
-<a class="sourceLine" id="cb85-2" data-line-number="2">us_fire_area</a></code></pre></div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" title="1">us_fire_area &lt;-<span class="st"> </span><span class="kw">raster</span>(<span class="dt">nrows=</span>nrows, <span class="dt">ncols=</span>ncols, <span class="dt">xmn=</span>lon_min, <span class="dt">xmx=</span>lon_max, <span class="dt">ymn=</span>lat_min, <span class="dt">ymx=</span>lat_max, <span class="dt">res=</span><span class="fl">0.5</span>, <span class="dt">crs=</span><span class="st">&quot;+proj=longlat +datum=WGS84&quot;</span>)</a>
+<a class="sourceLine" id="cb85-2" title="2">us_fire_area</a></code></pre></div>
 <pre><code>## class       : RasterLayer 
 ## dimensions  : 50, 126, 6300  (nrow, ncol, ncell)
 ## resolution  : 0.5, 0.5  (x, y)
@@ -1107,9 +1110,9 @@ $(document).ready(function () {
 <div id="rasterize-the-data" class="section level2">
 <h2><span class="header-section-number">5.2</span> Rasterize the data</h2>
 <p>Now rasterize the data, first as counts (number of fires in each grid cell), and then as the average size of the fires in each grid cell. Also plot the data (both on a log10 scale:</p>
-<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb87-1" data-line-number="1"><span class="co"># rasterize</span></a>
-<a class="sourceLine" id="cb87-2" data-line-number="2">us_fire_counts &lt;-<span class="st"> </span><span class="kw">rasterize</span>(fpafod_coords, us_fire_counts, <span class="dt">fun=</span><span class="st">&quot;count&quot;</span>)</a>
-<a class="sourceLine" id="cb87-3" data-line-number="3">us_fire_counts</a></code></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb87-1" title="1"><span class="co"># rasterize</span></a>
+<a class="sourceLine" id="cb87-2" title="2">us_fire_counts &lt;-<span class="st"> </span><span class="kw">rasterize</span>(fpafod_coords, us_fire_counts, <span class="dt">fun=</span><span class="st">&quot;count&quot;</span>)</a>
+<a class="sourceLine" id="cb87-3" title="3">us_fire_counts</a></code></pre></div>
 <pre><code>## class       : RasterLayer 
 ## dimensions  : 50, 126, 6300  (nrow, ncol, ncell)
 ## resolution  : 0.5, 0.5  (x, y)
@@ -1118,10 +1121,10 @@ $(document).ready(function () {
 ## data source : in memory
 ## names       : layer 
 ## values      : 1, 8755  (min, max)</code></pre>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" data-line-number="1"><span class="kw">plot</span>(<span class="kw">log10</span>(us_fire_counts), <span class="dt">col=</span><span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;BuPu&quot;</span>), <span class="dt">sub=</span><span class="st">&quot;log10 Number of Fires&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" title="1"><span class="kw">plot</span>(<span class="kw">log10</span>(us_fire_counts), <span class="dt">col=</span><span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;BuPu&quot;</span>), <span class="dt">sub=</span><span class="st">&quot;log10 Number of Fires&quot;</span>)</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/rasterize-1.png" width="75%" height="75%" /></p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" data-line-number="1">us_fire_area &lt;-<span class="st"> </span><span class="kw">rasterize</span>(fpafod_pts, us_fire_area, <span class="dt">fun=</span>mean)</a>
-<a class="sourceLine" id="cb90-2" data-line-number="2">us_fire_area</a></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" title="1">us_fire_area &lt;-<span class="st"> </span><span class="kw">rasterize</span>(fpafod_pts, us_fire_area, <span class="dt">fun=</span>mean)</a>
+<a class="sourceLine" id="cb90-2" title="2">us_fire_area</a></code></pre></div>
 <pre><code>## class       : RasterBrick 
 ## dimensions  : 50, 126, 6300, 2  (nrow, ncol, ncell, nlayers)
 ## resolution  : 0.5, 0.5  (x, y)
@@ -1131,72 +1134,72 @@ $(document).ready(function () {
 ## names       :          ID,     area_ha 
 ## min values  : 1.29922e+05, 4.04686e-03 
 ## max values  :  1677519.00,    18210.87</code></pre>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" data-line-number="1"><span class="kw">plot</span>(<span class="kw">log10</span>(us_fire_area<span class="op">$</span>area_ha), <span class="dt">col=</span><span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;YlOrRd&quot;</span>), <span class="dt">sub=</span><span class="st">&quot;log10 Mean Area&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1"><span class="kw">plot</span>(<span class="kw">log10</span>(us_fire_area<span class="op">$</span>area_ha), <span class="dt">col=</span><span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;YlOrRd&quot;</span>), <span class="dt">sub=</span><span class="st">&quot;log10 Mean Area&quot;</span>)</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/rasterize-2.png" width="75%" height="75%" /></p>
 </div>
 <div id="write-the-rasterized-data-out-as-a-netcdf-file" class="section level2">
 <h2><span class="header-section-number">5.3</span> Write the rasterized data out as a netCDF file</h2>
 <p>Write the two rasterized data sets out as variables in a netCDF data set. Create some variables, and replace the R <code>NAs</code> with netCDF fillvalues:</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" data-line-number="1"><span class="co"># make necessary vectors and arrays</span></a>
-<a class="sourceLine" id="cb93-2" data-line-number="2">lon &lt;-<span class="st"> </span><span class="kw">seq</span>(lon_min<span class="fl">+0.25</span>, lon_max<span class="fl">-0.25</span>, <span class="dt">by=</span>cell_size)</a>
-<a class="sourceLine" id="cb93-3" data-line-number="3">lat &lt;-<span class="st"> </span><span class="kw">seq</span>(lat_max<span class="fl">-0.25</span>, lat_min<span class="fl">+0.25</span>, <span class="dt">by=</span><span class="op">-</span><span class="dv">1</span><span class="op">*</span>cell_size)</a>
-<a class="sourceLine" id="cb93-4" data-line-number="4"><span class="kw">print</span>(<span class="kw">c</span>(<span class="kw">length</span>(lon), <span class="kw">length</span>(lat)))</a></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" title="1"><span class="co"># make necessary vectors and arrays</span></a>
+<a class="sourceLine" id="cb93-2" title="2">lon &lt;-<span class="st"> </span><span class="kw">seq</span>(lon_min<span class="fl">+0.25</span>, lon_max<span class="fl">-0.25</span>, <span class="dt">by=</span>cell_size)</a>
+<a class="sourceLine" id="cb93-3" title="3">lat &lt;-<span class="st"> </span><span class="kw">seq</span>(lat_max<span class="fl">-0.25</span>, lat_min<span class="fl">+0.25</span>, <span class="dt">by=</span><span class="op">-</span><span class="dv">1</span><span class="op">*</span>cell_size)</a>
+<a class="sourceLine" id="cb93-4" title="4"><span class="kw">print</span>(<span class="kw">c</span>(<span class="kw">length</span>(lon), <span class="kw">length</span>(lat)))</a></code></pre></div>
 <pre><code>## [1] 126  50</code></pre>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" data-line-number="1">fillvalue &lt;-<span class="st"> </span><span class="fl">1e32</span></a>
-<a class="sourceLine" id="cb95-2" data-line-number="2">us_fire_counts2 &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">as.matrix</span>(us_fire_counts<span class="op">$</span>layer, <span class="dt">nrows=</span>ncols, <span class="dt">ncols=</span>nrows))</a>
-<a class="sourceLine" id="cb95-3" data-line-number="3"><span class="kw">dim</span>(us_fire_counts2)</a></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb95-1" title="1">fillvalue &lt;-<span class="st"> </span><span class="fl">1e32</span></a>
+<a class="sourceLine" id="cb95-2" title="2">us_fire_counts2 &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">as.matrix</span>(us_fire_counts<span class="op">$</span>layer, <span class="dt">nrows=</span>ncols, <span class="dt">ncols=</span>nrows))</a>
+<a class="sourceLine" id="cb95-3" title="3"><span class="kw">dim</span>(us_fire_counts2)</a></code></pre></div>
 <pre><code>## [1] 126  50</code></pre>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb97-1" data-line-number="1">us_fire_counts2[<span class="kw">is.na</span>(us_fire_counts2)] &lt;-<span class="st"> </span>fillvalue</a>
-<a class="sourceLine" id="cb97-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb97-3" data-line-number="3">us_fire_area2 &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">as.matrix</span>(us_fire_area<span class="op">$</span>area_ha, <span class="dt">nrows=</span>ncols, <span class="dt">ncols=</span>nrows))</a>
-<a class="sourceLine" id="cb97-4" data-line-number="4"><span class="kw">dim</span>(us_fire_area2)</a></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb97-1" title="1">us_fire_counts2[<span class="kw">is.na</span>(us_fire_counts2)] &lt;-<span class="st"> </span>fillvalue</a>
+<a class="sourceLine" id="cb97-2" title="2"></a>
+<a class="sourceLine" id="cb97-3" title="3">us_fire_area2 &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">as.matrix</span>(us_fire_area<span class="op">$</span>area_ha, <span class="dt">nrows=</span>ncols, <span class="dt">ncols=</span>nrows))</a>
+<a class="sourceLine" id="cb97-4" title="4"><span class="kw">dim</span>(us_fire_area2)</a></code></pre></div>
 <pre><code>## [1] 126  50</code></pre>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" data-line-number="1">us_fire_area2[<span class="kw">is.na</span>(us_fire_area2)] &lt;-<span class="st"> </span>fillvalue</a></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb99-1" title="1">us_fire_area2[<span class="kw">is.na</span>(us_fire_area2)] &lt;-<span class="st"> </span>fillvalue</a></code></pre></div>
 <p>Write out a netCDF file:</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" data-line-number="1"><span class="co"># write out a netCDF file</span></a>
-<a class="sourceLine" id="cb100-2" data-line-number="2"><span class="kw">library</span>(ncdf4)</a>
-<a class="sourceLine" id="cb100-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb100-4" data-line-number="4"><span class="co"># path and file name, set dname</span></a>
-<a class="sourceLine" id="cb100-5" data-line-number="5">ncpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
-<a class="sourceLine" id="cb100-6" data-line-number="6">ncname &lt;-<span class="st"> &quot;us_fires.nc&quot;</span>  </a>
-<a class="sourceLine" id="cb100-7" data-line-number="7">ncfname &lt;-<span class="st"> </span><span class="kw">paste</span>(ncpath, ncname, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb100-8" data-line-number="8"></a>
-<a class="sourceLine" id="cb100-9" data-line-number="9"><span class="co"># create and write the netCDF file -- ncdf4 version</span></a>
-<a class="sourceLine" id="cb100-10" data-line-number="10"><span class="co"># define dimensions</span></a>
-<a class="sourceLine" id="cb100-11" data-line-number="11">londim &lt;-<span class="st"> </span><span class="kw">ncdim_def</span>(<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;degrees_east&quot;</span>,<span class="kw">as.double</span>(lon)) </a>
-<a class="sourceLine" id="cb100-12" data-line-number="12">latdim &lt;-<span class="st"> </span><span class="kw">ncdim_def</span>(<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;degrees_north&quot;</span>,<span class="kw">as.double</span>(lat)) </a>
-<a class="sourceLine" id="cb100-13" data-line-number="13"></a>
-<a class="sourceLine" id="cb100-14" data-line-number="14"><span class="co"># define variables</span></a>
-<a class="sourceLine" id="cb100-15" data-line-number="15"></a>
-<a class="sourceLine" id="cb100-16" data-line-number="16">dname &lt;-<span class="st"> &quot;fpafod_counts&quot;</span> </a>
-<a class="sourceLine" id="cb100-17" data-line-number="17">dlname &lt;-<span class="st"> &quot;Number of fires, 1992-2013&quot;</span></a>
-<a class="sourceLine" id="cb100-18" data-line-number="18">v1_def &lt;-<span class="st"> </span><span class="kw">ncvar_def</span>(dname,<span class="st">&quot;1&quot;</span>,<span class="kw">list</span>(londim,latdim),fillvalue,dlname,<span class="dt">prec=</span><span class="st">&quot;single&quot;</span>)</a>
-<a class="sourceLine" id="cb100-19" data-line-number="19">dname &lt;-<span class="st"> &quot;fpafod_mean_area&quot;</span> </a>
-<a class="sourceLine" id="cb100-20" data-line-number="20">dlname &lt;-<span class="st"> &quot;Average Fire Size, 1992-2013&quot;</span></a>
-<a class="sourceLine" id="cb100-21" data-line-number="21">v2_def &lt;-<span class="st"> </span><span class="kw">ncvar_def</span>(dname,<span class="st">&quot;ha&quot;</span>,<span class="kw">list</span>(londim,latdim),fillvalue,dlname,<span class="dt">prec=</span><span class="st">&quot;single&quot;</span>)</a>
-<a class="sourceLine" id="cb100-22" data-line-number="22"></a>
-<a class="sourceLine" id="cb100-23" data-line-number="23"><span class="co"># create netCDF file and put arrays</span></a>
-<a class="sourceLine" id="cb100-24" data-line-number="24">ncout &lt;-<span class="st"> </span><span class="kw">nc_create</span>(ncfname,<span class="kw">list</span>(v1_def, v2_def),<span class="dt">force_v4=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb100-25" data-line-number="25"></a>
-<a class="sourceLine" id="cb100-26" data-line-number="26"><span class="co"># put variables</span></a>
-<a class="sourceLine" id="cb100-27" data-line-number="27"><span class="kw">ncvar_put</span>(ncout,v1_def,us_fire_counts2)</a>
-<a class="sourceLine" id="cb100-28" data-line-number="28"><span class="kw">ncvar_put</span>(ncout,v2_def,us_fire_area2)</a>
-<a class="sourceLine" id="cb100-29" data-line-number="29"></a>
-<a class="sourceLine" id="cb100-30" data-line-number="30"><span class="co"># put additional attributes into dimension and data variables</span></a>
-<a class="sourceLine" id="cb100-31" data-line-number="31"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;X&quot;</span>) </a>
-<a class="sourceLine" id="cb100-32" data-line-number="32"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;Y&quot;</span>)</a>
-<a class="sourceLine" id="cb100-33" data-line-number="33"></a>
-<a class="sourceLine" id="cb100-34" data-line-number="34"><span class="co"># add global attributes</span></a>
-<a class="sourceLine" id="cb100-35" data-line-number="35"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;title&quot;</span>,<span class="st">&quot;FPA-FOD Fires&quot;</span>)</a>
-<a class="sourceLine" id="cb100-36" data-line-number="36"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;institution&quot;</span>,<span class="st">&quot;USFS&quot;</span>)</a>
-<a class="sourceLine" id="cb100-37" data-line-number="37"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;source&quot;</span>,<span class="st">&quot;http://www.fs.usda.gov/rds/archive/Product/RDS-2013-0009.3/&quot;</span>)</a>
-<a class="sourceLine" id="cb100-38" data-line-number="38"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;references&quot;</span>, <span class="st">&quot;Short, K.C., 2014, Earth Syst. Sci. Data, 6, 1-27&quot;</span>)</a>
-<a class="sourceLine" id="cb100-39" data-line-number="39">history &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;P.J. Bartlein&quot;</span>, <span class="kw">date</span>(), <span class="dt">sep=</span><span class="st">&quot;, &quot;</span>)</a>
-<a class="sourceLine" id="cb100-40" data-line-number="40"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;history&quot;</span>,history)</a>
-<a class="sourceLine" id="cb100-41" data-line-number="41"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;Conventions&quot;</span>,<span class="st">&quot;CF-1.6&quot;</span>)</a>
-<a class="sourceLine" id="cb100-42" data-line-number="42"></a>
-<a class="sourceLine" id="cb100-43" data-line-number="43"><span class="co"># Get a summary of the created file:</span></a>
-<a class="sourceLine" id="cb100-44" data-line-number="44">ncout</a></code></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" title="1"><span class="co"># write out a netCDF file</span></a>
+<a class="sourceLine" id="cb100-2" title="2"><span class="kw">library</span>(ncdf4)</a>
+<a class="sourceLine" id="cb100-3" title="3"></a>
+<a class="sourceLine" id="cb100-4" title="4"><span class="co"># path and file name, set dname</span></a>
+<a class="sourceLine" id="cb100-5" title="5">ncpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb100-6" title="6">ncname &lt;-<span class="st"> &quot;us_fires.nc&quot;</span>  </a>
+<a class="sourceLine" id="cb100-7" title="7">ncfname &lt;-<span class="st"> </span><span class="kw">paste</span>(ncpath, ncname, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb100-8" title="8"></a>
+<a class="sourceLine" id="cb100-9" title="9"><span class="co"># create and write the netCDF file -- ncdf4 version</span></a>
+<a class="sourceLine" id="cb100-10" title="10"><span class="co"># define dimensions</span></a>
+<a class="sourceLine" id="cb100-11" title="11">londim &lt;-<span class="st"> </span><span class="kw">ncdim_def</span>(<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;degrees_east&quot;</span>,<span class="kw">as.double</span>(lon)) </a>
+<a class="sourceLine" id="cb100-12" title="12">latdim &lt;-<span class="st"> </span><span class="kw">ncdim_def</span>(<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;degrees_north&quot;</span>,<span class="kw">as.double</span>(lat)) </a>
+<a class="sourceLine" id="cb100-13" title="13"></a>
+<a class="sourceLine" id="cb100-14" title="14"><span class="co"># define variables</span></a>
+<a class="sourceLine" id="cb100-15" title="15"></a>
+<a class="sourceLine" id="cb100-16" title="16">dname &lt;-<span class="st"> &quot;fpafod_counts&quot;</span> </a>
+<a class="sourceLine" id="cb100-17" title="17">dlname &lt;-<span class="st"> &quot;Number of fires, 1992-2013&quot;</span></a>
+<a class="sourceLine" id="cb100-18" title="18">v1_def &lt;-<span class="st"> </span><span class="kw">ncvar_def</span>(dname,<span class="st">&quot;1&quot;</span>,<span class="kw">list</span>(londim,latdim),fillvalue,dlname,<span class="dt">prec=</span><span class="st">&quot;single&quot;</span>)</a>
+<a class="sourceLine" id="cb100-19" title="19">dname &lt;-<span class="st"> &quot;fpafod_mean_area&quot;</span> </a>
+<a class="sourceLine" id="cb100-20" title="20">dlname &lt;-<span class="st"> &quot;Average Fire Size, 1992-2013&quot;</span></a>
+<a class="sourceLine" id="cb100-21" title="21">v2_def &lt;-<span class="st"> </span><span class="kw">ncvar_def</span>(dname,<span class="st">&quot;ha&quot;</span>,<span class="kw">list</span>(londim,latdim),fillvalue,dlname,<span class="dt">prec=</span><span class="st">&quot;single&quot;</span>)</a>
+<a class="sourceLine" id="cb100-22" title="22"></a>
+<a class="sourceLine" id="cb100-23" title="23"><span class="co"># create netCDF file and put arrays</span></a>
+<a class="sourceLine" id="cb100-24" title="24">ncout &lt;-<span class="st"> </span><span class="kw">nc_create</span>(ncfname,<span class="kw">list</span>(v1_def, v2_def),<span class="dt">force_v4=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb100-25" title="25"></a>
+<a class="sourceLine" id="cb100-26" title="26"><span class="co"># put variables</span></a>
+<a class="sourceLine" id="cb100-27" title="27"><span class="kw">ncvar_put</span>(ncout,v1_def,us_fire_counts2)</a>
+<a class="sourceLine" id="cb100-28" title="28"><span class="kw">ncvar_put</span>(ncout,v2_def,us_fire_area2)</a>
+<a class="sourceLine" id="cb100-29" title="29"></a>
+<a class="sourceLine" id="cb100-30" title="30"><span class="co"># put additional attributes into dimension and data variables</span></a>
+<a class="sourceLine" id="cb100-31" title="31"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;X&quot;</span>) </a>
+<a class="sourceLine" id="cb100-32" title="32"><span class="kw">ncatt_put</span>(ncout,<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;Y&quot;</span>)</a>
+<a class="sourceLine" id="cb100-33" title="33"></a>
+<a class="sourceLine" id="cb100-34" title="34"><span class="co"># add global attributes</span></a>
+<a class="sourceLine" id="cb100-35" title="35"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;title&quot;</span>,<span class="st">&quot;FPA-FOD Fires&quot;</span>)</a>
+<a class="sourceLine" id="cb100-36" title="36"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;institution&quot;</span>,<span class="st">&quot;USFS&quot;</span>)</a>
+<a class="sourceLine" id="cb100-37" title="37"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;source&quot;</span>,<span class="st">&quot;http://www.fs.usda.gov/rds/archive/Product/RDS-2013-0009.3/&quot;</span>)</a>
+<a class="sourceLine" id="cb100-38" title="38"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;references&quot;</span>, <span class="st">&quot;Short, K.C., 2014, Earth Syst. Sci. Data, 6, 1-27&quot;</span>)</a>
+<a class="sourceLine" id="cb100-39" title="39">history &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;P.J. Bartlein&quot;</span>, <span class="kw">date</span>(), <span class="dt">sep=</span><span class="st">&quot;, &quot;</span>)</a>
+<a class="sourceLine" id="cb100-40" title="40"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;history&quot;</span>,history)</a>
+<a class="sourceLine" id="cb100-41" title="41"><span class="kw">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;Conventions&quot;</span>,<span class="st">&quot;CF-1.6&quot;</span>)</a>
+<a class="sourceLine" id="cb100-42" title="42"></a>
+<a class="sourceLine" id="cb100-43" title="43"><span class="co"># Get a summary of the created file:</span></a>
+<a class="sourceLine" id="cb100-44" title="44">ncout</a></code></pre></div>
 <pre><code>## File /Users/bartlein/Projects/ESSD/data/nc_files/us_fires.nc (NC_FORMAT_NETCDF4):
 ## 
 ##      2 variables (excluding dimension variables):
@@ -1226,8 +1229,8 @@ $(document).ready(function () {
 ##         references: Short, K.C., 2014, Earth Syst. Sci. Data, 6, 1-27
 ##         history: P.J. Bartlein, Sat May  4 16:31:03 2019
 ##         Conventions: CF-1.6</code></pre>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb102-1" data-line-number="1"><span class="co"># close the file, writing data to disk</span></a>
-<a class="sourceLine" id="cb102-2" data-line-number="2"><span class="kw">nc_close</span>(ncout)</a></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb102-1" title="1"><span class="co"># close the file, writing data to disk</span></a>
+<a class="sourceLine" id="cb102-2" title="2"><span class="kw">nc_close</span>(ncout)</a></code></pre></div>
 <p><a href="geospatial.html">[Back to top]</a></p>
 </div>
 </div>
@@ -1238,19 +1241,19 @@ $(document).ready(function () {
 <div id="open-the-control-netcdf-and-target-.csv-files" class="section level2">
 <h2><span class="header-section-number">6.1</span> Open the “control” netCDF and target .csv files</h2>
 <p>Load the appropriate packages.</p>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" data-line-number="1"><span class="co"># load the ncdf4 package</span></a>
-<a class="sourceLine" id="cb103-2" data-line-number="2"><span class="kw">library</span>(ncdf4)</a>
-<a class="sourceLine" id="cb103-3" data-line-number="3"><span class="kw">library</span>(lattice)</a>
-<a class="sourceLine" id="cb103-4" data-line-number="4"><span class="kw">library</span>(fields)</a></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb103-1" title="1"><span class="co"># load the ncdf4 package</span></a>
+<a class="sourceLine" id="cb103-2" title="2"><span class="kw">library</span>(ncdf4)</a>
+<a class="sourceLine" id="cb103-3" title="3"><span class="kw">library</span>(lattice)</a>
+<a class="sourceLine" id="cb103-4" title="4"><span class="kw">library</span>(fields)</a></code></pre></div>
 <p>Read the etopo1 netCDF file. This particular file is one in which the original 30-sec data have been aggregated (by averaging) to six minutes or one-tenth of a degree (to speed up the execution of the examples). In practice, one would work with the original higher resolution data. Do some setup an open the file, and list its contents.</p>
-<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb104-1" data-line-number="1"><span class="co"># set path and filename</span></a>
-<a class="sourceLine" id="cb104-2" data-line-number="2">ncpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
-<a class="sourceLine" id="cb104-3" data-line-number="3">ncname &lt;-<span class="st"> &quot;etopo1_ig_06min.nc&quot;</span>  </a>
-<a class="sourceLine" id="cb104-4" data-line-number="4">ncfname &lt;-<span class="st"> </span><span class="kw">paste</span>(ncpath, ncname,  <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb104-5" data-line-number="5">dname &lt;-<span class="st"> &quot;elev&quot;</span>  </a></code></pre></div>
-<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" data-line-number="1"><span class="co"># open a netCDF file</span></a>
-<a class="sourceLine" id="cb105-2" data-line-number="2">ncin &lt;-<span class="st"> </span><span class="kw">nc_open</span>(ncfname)</a>
-<a class="sourceLine" id="cb105-3" data-line-number="3"><span class="kw">print</span>(ncin)</a></code></pre></div>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb104-1" title="1"><span class="co"># set path and filename</span></a>
+<a class="sourceLine" id="cb104-2" title="2">ncpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb104-3" title="3">ncname &lt;-<span class="st"> &quot;etopo1_ig_06min.nc&quot;</span>  </a>
+<a class="sourceLine" id="cb104-4" title="4">ncfname &lt;-<span class="st"> </span><span class="kw">paste</span>(ncpath, ncname,  <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb104-5" title="5">dname &lt;-<span class="st"> &quot;elev&quot;</span>  </a></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb105-1" title="1"><span class="co"># open a netCDF file</span></a>
+<a class="sourceLine" id="cb105-2" title="2">ncin &lt;-<span class="st"> </span><span class="kw">nc_open</span>(ncfname)</a>
+<a class="sourceLine" id="cb105-3" title="3"><span class="kw">print</span>(ncin)</a></code></pre></div>
 <pre><code>## File /Users/bartlein/Projects/ESSD/data/nc_files/etopo1_ig_06min.nc (NC_FORMAT_CLASSIC):
 ## 
 ##      1 variables (excluding dimension variables):
@@ -1285,49 +1288,49 @@ $(document).ready(function () {
 ##         comment: average over 7x7 1-min cells
 ##         Conventions: CF-1.0</code></pre>
 <p>Get the “control” longitudes and latitudes.</p>
-<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb107-1" data-line-number="1"><span class="co"># get longitude and latitude</span></a>
-<a class="sourceLine" id="cb107-2" data-line-number="2">lon &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,<span class="st">&quot;lon&quot;</span>)</a>
-<a class="sourceLine" id="cb107-3" data-line-number="3">nlon &lt;-<span class="st"> </span><span class="kw">dim</span>(lon)</a>
-<a class="sourceLine" id="cb107-4" data-line-number="4"><span class="kw">head</span>(lon)</a></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb107-1" title="1"><span class="co"># get longitude and latitude</span></a>
+<a class="sourceLine" id="cb107-2" title="2">lon &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,<span class="st">&quot;lon&quot;</span>)</a>
+<a class="sourceLine" id="cb107-3" title="3">nlon &lt;-<span class="st"> </span><span class="kw">dim</span>(lon)</a>
+<a class="sourceLine" id="cb107-4" title="4"><span class="kw">head</span>(lon)</a></code></pre></div>
 <pre><code>## [1] -179.95 -179.85 -179.75 -179.65 -179.55 -179.45</code></pre>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" data-line-number="1">lat &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,<span class="st">&quot;lat&quot;</span>)</a>
-<a class="sourceLine" id="cb109-2" data-line-number="2">nlat &lt;-<span class="st"> </span><span class="kw">dim</span>(lat)</a>
-<a class="sourceLine" id="cb109-3" data-line-number="3"><span class="kw">head</span>(lat)</a></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" title="1">lat &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,<span class="st">&quot;lat&quot;</span>)</a>
+<a class="sourceLine" id="cb109-2" title="2">nlat &lt;-<span class="st"> </span><span class="kw">dim</span>(lat)</a>
+<a class="sourceLine" id="cb109-3" title="3"><span class="kw">head</span>(lat)</a></code></pre></div>
 <pre><code>## [1] -89.95 -89.85 -89.75 -89.65 -89.55 -89.45</code></pre>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" data-line-number="1"><span class="kw">print</span>(<span class="kw">c</span>(nlon,nlat))</a></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" title="1"><span class="kw">print</span>(<span class="kw">c</span>(nlon,nlat))</a></code></pre></div>
 <pre><code>## [1] 3600 1800</code></pre>
 <p>Now read the elevations, and various attributes:</p>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" data-line-number="1"><span class="co"># get elevations</span></a>
-<a class="sourceLine" id="cb113-2" data-line-number="2">etopo1_array &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,dname)</a>
-<a class="sourceLine" id="cb113-3" data-line-number="3">dlname &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,dname,<span class="st">&quot;long_name&quot;</span>)</a>
-<a class="sourceLine" id="cb113-4" data-line-number="4">dunits &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,dname,<span class="st">&quot;units&quot;</span>)</a>
-<a class="sourceLine" id="cb113-5" data-line-number="5">fillvalue &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,dname,<span class="st">&quot;_FillValue&quot;</span>)</a>
-<a class="sourceLine" id="cb113-6" data-line-number="6">dsource &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="st">&quot;elev&quot;</span>, <span class="st">&quot;source&quot;</span>)</a>
-<a class="sourceLine" id="cb113-7" data-line-number="7"><span class="kw">dim</span>(etopo1_array)</a></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" title="1"><span class="co"># get elevations</span></a>
+<a class="sourceLine" id="cb113-2" title="2">etopo1_array &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin,dname)</a>
+<a class="sourceLine" id="cb113-3" title="3">dlname &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,dname,<span class="st">&quot;long_name&quot;</span>)</a>
+<a class="sourceLine" id="cb113-4" title="4">dunits &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,dname,<span class="st">&quot;units&quot;</span>)</a>
+<a class="sourceLine" id="cb113-5" title="5">fillvalue &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,dname,<span class="st">&quot;_FillValue&quot;</span>)</a>
+<a class="sourceLine" id="cb113-6" title="6">dsource &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="st">&quot;elev&quot;</span>, <span class="st">&quot;source&quot;</span>)</a>
+<a class="sourceLine" id="cb113-7" title="7"><span class="kw">dim</span>(etopo1_array)</a></code></pre></div>
 <pre><code>## [1] 3600 1800</code></pre>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" data-line-number="1"><span class="co"># get global attributes</span></a>
-<a class="sourceLine" id="cb115-2" data-line-number="2">title &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;title&quot;</span>)</a>
-<a class="sourceLine" id="cb115-3" data-line-number="3">institution &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;institution&quot;</span>)</a>
-<a class="sourceLine" id="cb115-4" data-line-number="4">datasource &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;source&quot;</span>)</a>
-<a class="sourceLine" id="cb115-5" data-line-number="5">history &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;history&quot;</span>)</a>
-<a class="sourceLine" id="cb115-6" data-line-number="6">Conventions &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;Conventions&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" title="1"><span class="co"># get global attributes</span></a>
+<a class="sourceLine" id="cb115-2" title="2">title &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;title&quot;</span>)</a>
+<a class="sourceLine" id="cb115-3" title="3">institution &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;institution&quot;</span>)</a>
+<a class="sourceLine" id="cb115-4" title="4">datasource &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;source&quot;</span>)</a>
+<a class="sourceLine" id="cb115-5" title="5">history &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;history&quot;</span>)</a>
+<a class="sourceLine" id="cb115-6" title="6">Conventions &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;Conventions&quot;</span>)</a></code></pre></div>
 <p>Close the netCDF file using the <code>nc_close()</code> function.</p>
-<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" data-line-number="1"><span class="co"># close the netCDF file</span></a>
-<a class="sourceLine" id="cb116-2" data-line-number="2"><span class="kw">nc_close</span>(ncin)</a></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" title="1"><span class="co"># close the netCDF file</span></a>
+<a class="sourceLine" id="cb116-2" title="2"><span class="kw">nc_close</span>(ncin)</a></code></pre></div>
 <p>Produce a quick map to check that the data make sense. (<em>Always do this!</em>)</p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" data-line-number="1"><span class="co"># levelplot of elevations</span></a>
-<a class="sourceLine" id="cb117-2" data-line-number="2">grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">lon=</span>lon, <span class="dt">lat=</span>lat)</a>
-<a class="sourceLine" id="cb117-3" data-line-number="3">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">7000</span>, <span class="dv">-6000</span>, <span class="dv">-4000</span>, <span class="dv">-2000</span>, <span class="dv">0</span>, <span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">1500</span>, <span class="dv">2000</span>, <span class="dv">3000</span>, <span class="dv">4000</span>, <span class="dv">5000</span>)</a>
-<a class="sourceLine" id="cb117-4" data-line-number="4"><span class="kw">levelplot</span>(etopo1_array <span class="op">~</span><span class="st"> </span>lon <span class="op">*</span><span class="st"> </span>lat, <span class="dt">data=</span>grid, <span class="dt">at=</span>cutpts, <span class="dt">cuts=</span><span class="dv">11</span>, <span class="dt">pretty=</span>T, </a>
-<a class="sourceLine" id="cb117-5" data-line-number="5">  <span class="dt">col.regions=</span><span class="kw">topo.colors</span>(<span class="dv">12</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" title="1"><span class="co"># levelplot of elevations</span></a>
+<a class="sourceLine" id="cb117-2" title="2">grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">lon=</span>lon, <span class="dt">lat=</span>lat)</a>
+<a class="sourceLine" id="cb117-3" title="3">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">7000</span>, <span class="dv">-6000</span>, <span class="dv">-4000</span>, <span class="dv">-2000</span>, <span class="dv">0</span>, <span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">1500</span>, <span class="dv">2000</span>, <span class="dv">3000</span>, <span class="dv">4000</span>, <span class="dv">5000</span>)</a>
+<a class="sourceLine" id="cb117-4" title="4"><span class="kw">levelplot</span>(etopo1_array <span class="op">~</span><span class="st"> </span>lon <span class="op">*</span><span class="st"> </span>lat, <span class="dt">data=</span>grid, <span class="dt">at=</span>cutpts, <span class="dt">cuts=</span><span class="dv">11</span>, <span class="dt">pretty=</span>T, </a>
+<a class="sourceLine" id="cb117-5" title="5">  <span class="dt">col.regions=</span><span class="kw">topo.colors</span>(<span class="dv">12</span>))</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/levelplot%20elev-1.png" width="75%" height="75%" /></p>
-<p>Open and read the .csv file containing the “target”&quot; points.</p>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" data-line-number="1"><span class="co"># read na10km_v2 grid-point locations -- land-points only</span></a>
-<a class="sourceLine" id="cb118-2" data-line-number="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
-<a class="sourceLine" id="cb118-3" data-line-number="3">csv_name &lt;-<span class="st"> &quot;na10km_v2_pts.csv&quot;</span></a>
-<a class="sourceLine" id="cb118-4" data-line-number="4">csv_file &lt;-<span class="st"> </span><span class="kw">paste</span>(csv_path, csv_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb118-5" data-line-number="5">na10km_v2 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_file) </a>
-<a class="sourceLine" id="cb118-6" data-line-number="6"><span class="kw">str</span>(na10km_v2)</a></code></pre></div>
+<p>Open and read the .csv file containing the “target”" points.</p>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" title="1"><span class="co"># read na10km_v2 grid-point locations -- land-points only</span></a>
+<a class="sourceLine" id="cb118-2" title="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
+<a class="sourceLine" id="cb118-3" title="3">csv_name &lt;-<span class="st"> &quot;na10km_v2_pts.csv&quot;</span></a>
+<a class="sourceLine" id="cb118-4" title="4">csv_file &lt;-<span class="st"> </span><span class="kw">paste</span>(csv_path, csv_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb118-5" title="5">na10km_v2 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_file) </a>
+<a class="sourceLine" id="cb118-6" title="6"><span class="kw">str</span>(na10km_v2)</a></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    277910 obs. of  5 variables:
 ##  $ x   : num  2690000 2700000 2710000 2720000 2730000 2740000 2750000 2760000 2770000 2780000 ...
 ##  $ y   : num  -4510000 -4510000 -4510000 -4510000 -4510000 -4510000 -4510000 -4510000 -4510000 -4510000 ...
@@ -1335,27 +1338,27 @@ $(document).ready(function () {
 ##  $ lat : num  5.12 5.1 5.08 5.05 5.03 ...
 ##  $ mask: int  1 1 1 1 1 1 1 1 1 1 ...</code></pre>
 <p>Get the number of target points:</p>
-<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" data-line-number="1"><span class="co"># get number of target points</span></a>
-<a class="sourceLine" id="cb120-2" data-line-number="2">ntarg &lt;-<span class="st"> </span><span class="kw">dim</span>(na10km_v2)[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb120-3" data-line-number="3">ntarg</a></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" title="1"><span class="co"># get number of target points</span></a>
+<a class="sourceLine" id="cb120-2" title="2">ntarg &lt;-<span class="st"> </span><span class="kw">dim</span>(na10km_v2)[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb120-3" title="3">ntarg</a></code></pre></div>
 <pre><code>## [1] 277910</code></pre>
 </div>
 <div id="interpolation" class="section level2">
 <h2><span class="header-section-number">6.2</span> Interpolation</h2>
 <p>Set up to do the interpolation. Generate x’s and y’s for the target grid. In practice, these might be read in from a netCDF file. Here we need them to define an array that will hold the interpolated values.</p>
-<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" data-line-number="1"><span class="co"># set dimesions of output array, and define &quot;marginal&quot; x- and y-values</span></a>
-<a class="sourceLine" id="cb122-2" data-line-number="2">nx &lt;-<span class="st"> </span><span class="dv">1078</span>; ny &lt;-<span class="st"> </span><span class="dv">900</span></a>
-<a class="sourceLine" id="cb122-3" data-line-number="3">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">5770000</span>, <span class="dv">5000000</span>, <span class="dt">by=</span><span class="dv">10000</span>)</a>
-<a class="sourceLine" id="cb122-4" data-line-number="4">y &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">4510000</span>, <span class="dv">4480000</span>, <span class="dt">by=</span><span class="dv">10000</span>)</a>
-<a class="sourceLine" id="cb122-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb122-6" data-line-number="6"><span class="co"># define a vector and array that will contiain the interpolated values</span></a>
-<a class="sourceLine" id="cb122-7" data-line-number="7">interp_var &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, ntarg)</a>
-<a class="sourceLine" id="cb122-8" data-line-number="8">interp_mat &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="ot">NA</span>, <span class="dt">dim=</span><span class="kw">c</span>(nx, ny))</a></code></pre></div>
+<div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" title="1"><span class="co"># set dimesions of output array, and define &quot;marginal&quot; x- and y-values</span></a>
+<a class="sourceLine" id="cb122-2" title="2">nx &lt;-<span class="st"> </span><span class="dv">1078</span>; ny &lt;-<span class="st"> </span><span class="dv">900</span></a>
+<a class="sourceLine" id="cb122-3" title="3">x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">5770000</span>, <span class="dv">5000000</span>, <span class="dt">by=</span><span class="dv">10000</span>)</a>
+<a class="sourceLine" id="cb122-4" title="4">y &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="op">-</span><span class="dv">4510000</span>, <span class="dv">4480000</span>, <span class="dt">by=</span><span class="dv">10000</span>)</a>
+<a class="sourceLine" id="cb122-5" title="5"></a>
+<a class="sourceLine" id="cb122-6" title="6"><span class="co"># define a vector and array that will contiain the interpolated values</span></a>
+<a class="sourceLine" id="cb122-7" title="7">interp_var &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="ot">NA</span>, ntarg)</a>
+<a class="sourceLine" id="cb122-8" title="8">interp_mat &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="ot">NA</span>, <span class="dt">dim=</span><span class="kw">c</span>(nx, ny))</a></code></pre></div>
 <p>Get the array subscripts for each point. This is similar to the work done in reshaping a “short” data frame to an array, as in Week 4</p>
-<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" data-line-number="1"><span class="co"># get array subscripts for each target point</span></a>
-<a class="sourceLine" id="cb123-2" data-line-number="2">j &lt;-<span class="st"> </span><span class="kw">sapply</span>(na10km_v2<span class="op">$</span>x, <span class="cf">function</span>(c) <span class="kw">which.min</span>(<span class="kw">abs</span>(x<span class="op">-</span>c)))</a>
-<a class="sourceLine" id="cb123-3" data-line-number="3">k &lt;-<span class="st"> </span><span class="kw">sapply</span>(na10km_v2<span class="op">$</span>y, <span class="cf">function</span>(c) <span class="kw">which.min</span>(<span class="kw">abs</span>(y<span class="op">-</span>c)))</a>
-<a class="sourceLine" id="cb123-4" data-line-number="4"><span class="kw">head</span>(<span class="kw">cbind</span>(j,k,na10km_v2<span class="op">$</span>lon,na10km_v2<span class="op">$</span>lat))</a></code></pre></div>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" title="1"><span class="co"># get array subscripts for each target point</span></a>
+<a class="sourceLine" id="cb123-2" title="2">j &lt;-<span class="st"> </span><span class="kw">sapply</span>(na10km_v2<span class="op">$</span>x, <span class="cf">function</span>(c) <span class="kw">which.min</span>(<span class="kw">abs</span>(x<span class="op">-</span>c)))</a>
+<a class="sourceLine" id="cb123-3" title="3">k &lt;-<span class="st"> </span><span class="kw">sapply</span>(na10km_v2<span class="op">$</span>y, <span class="cf">function</span>(c) <span class="kw">which.min</span>(<span class="kw">abs</span>(y<span class="op">-</span>c)))</a>
+<a class="sourceLine" id="cb123-4" title="4"><span class="kw">head</span>(<span class="kw">cbind</span>(j,k,na10km_v2<span class="op">$</span>lon,na10km_v2<span class="op">$</span>lat))</a></code></pre></div>
 <pre><code>##        j k                   
 ## [1,] 847 1 -77.29202 5.124395
 ## [2,] 848 1 -77.20858 5.099891
@@ -1363,7 +1366,7 @@ $(document).ready(function () {
 ## [4,] 850 1 -77.04173 5.050615
 ## [5,] 851 1 -76.95832 5.025843
 ## [6,] 852 1 -76.87492 5.000983</code></pre>
-<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" data-line-number="1"><span class="kw">tail</span>(<span class="kw">cbind</span>(j,k,na10km_v2<span class="op">$</span>lon,na10km_v2<span class="op">$</span>lat))</a></code></pre></div>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" title="1"><span class="kw">tail</span>(<span class="kw">cbind</span>(j,k,na10km_v2<span class="op">$</span>lon,na10km_v2<span class="op">$</span>lat))</a></code></pre></div>
 <pre><code>##              j   k                  
 ## [277905,] 1073 900 4.212445 47.09974
 ## [277906,] 1074 900 4.238897 47.00791
@@ -1372,23 +1375,23 @@ $(document).ready(function () {
 ## [277909,] 1077 900 4.318477 46.73222
 ## [277910,] 1078 900 4.345078 46.64025</code></pre>
 <p>Now do bilinear interpolation using the <code>fields</code> package:</p>
-<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" data-line-number="1"><span class="co"># bilinear interpolation from fields package</span></a>
-<a class="sourceLine" id="cb127-2" data-line-number="2">control_dat &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">x=</span>lon, <span class="dt">y=</span>lat, <span class="dt">z=</span>etopo1_array)</a>
-<a class="sourceLine" id="cb127-3" data-line-number="3">interp_var &lt;-<span class="st"> </span><span class="kw">interp.surface</span>(control_dat, <span class="kw">cbind</span>(na10km_v2<span class="op">$</span>lon,na10km_v2<span class="op">$</span>lat))</a>
-<a class="sourceLine" id="cb127-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb127-5" data-line-number="5"><span class="co"># put interpolated values into a 2-d array</span></a>
-<a class="sourceLine" id="cb127-6" data-line-number="6">interp_mat[<span class="kw">cbind</span>(j,k)] &lt;-<span class="st"> </span>interp_var[<span class="dv">1</span><span class="op">:</span>ntarg]</a></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" title="1"><span class="co"># bilinear interpolation from fields package</span></a>
+<a class="sourceLine" id="cb127-2" title="2">control_dat &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">x=</span>lon, <span class="dt">y=</span>lat, <span class="dt">z=</span>etopo1_array)</a>
+<a class="sourceLine" id="cb127-3" title="3">interp_var &lt;-<span class="st"> </span><span class="kw">interp.surface</span>(control_dat, <span class="kw">cbind</span>(na10km_v2<span class="op">$</span>lon,na10km_v2<span class="op">$</span>lat))</a>
+<a class="sourceLine" id="cb127-4" title="4"></a>
+<a class="sourceLine" id="cb127-5" title="5"><span class="co"># put interpolated values into a 2-d array</span></a>
+<a class="sourceLine" id="cb127-6" title="6">interp_mat[<span class="kw">cbind</span>(j,k)] &lt;-<span class="st"> </span>interp_var[<span class="dv">1</span><span class="op">:</span>ntarg]</a></code></pre></div>
 <p>Get a quick map:</p>
-<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb128-1" data-line-number="1">grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>y)</a>
-<a class="sourceLine" id="cb128-2" data-line-number="2">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">7000</span>, <span class="dv">-6000</span>, <span class="dv">-4000</span>, <span class="dv">-2000</span>, <span class="dv">0</span>, <span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">1500</span>, <span class="dv">2000</span>, <span class="dv">3000</span>, <span class="dv">4000</span>, <span class="dv">5000</span>)</a>
-<a class="sourceLine" id="cb128-3" data-line-number="3"><span class="kw">levelplot</span>(interp_mat <span class="op">~</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>y, <span class="dt">data=</span>grid, <span class="dt">at=</span>cutpts, <span class="dt">cuts=</span><span class="dv">11</span>, <span class="dt">pretty=</span>T, </a>
-<a class="sourceLine" id="cb128-4" data-line-number="4">  <span class="dt">col.regions=</span><span class="kw">topo.colors</span>(<span class="dv">12</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb128-1" title="1">grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">x=</span>x, <span class="dt">y=</span>y)</a>
+<a class="sourceLine" id="cb128-2" title="2">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">7000</span>, <span class="dv">-6000</span>, <span class="dv">-4000</span>, <span class="dv">-2000</span>, <span class="dv">0</span>, <span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">1500</span>, <span class="dv">2000</span>, <span class="dv">3000</span>, <span class="dv">4000</span>, <span class="dv">5000</span>)</a>
+<a class="sourceLine" id="cb128-3" title="3"><span class="kw">levelplot</span>(interp_mat <span class="op">~</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>y, <span class="dt">data=</span>grid, <span class="dt">at=</span>cutpts, <span class="dt">cuts=</span><span class="dv">11</span>, <span class="dt">pretty=</span>T, </a>
+<a class="sourceLine" id="cb128-4" title="4">  <span class="dt">col.regions=</span><span class="kw">topo.colors</span>(<span class="dv">12</span>))</a></code></pre></div>
 <p><img src="geospatial_files/figure-html/interp%20map-1.png" width="75%" height="75%" /></p>
 <p>At this point, <code>interp_mat</code> could be written out as a variable in a netCDF file (along with dimension and attribute data). Also make a data frame of the interpolated data, which could be written out as a .csv file:</p>
-<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" data-line-number="1"><span class="co"># make a dataframe of the interpolated elevations</span></a>
-<a class="sourceLine" id="cb129-2" data-line-number="2">out_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">cbind</span>(na10km_v2<span class="op">$</span>x, na10km_v2<span class="op">$</span>y, na10km_v2<span class="op">$</span>lon, na10km_v2<span class="op">$</span>lat, interp_var))</a>
-<a class="sourceLine" id="cb129-3" data-line-number="3"><span class="kw">names</span>(out_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;elev&quot;</span>)</a>
-<a class="sourceLine" id="cb129-4" data-line-number="4"><span class="kw">head</span>(out_df); <span class="kw">tail</span>(out_df)</a></code></pre></div>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" title="1"><span class="co"># make a dataframe of the interpolated elevations</span></a>
+<a class="sourceLine" id="cb129-2" title="2">out_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">cbind</span>(na10km_v2<span class="op">$</span>x, na10km_v2<span class="op">$</span>y, na10km_v2<span class="op">$</span>lon, na10km_v2<span class="op">$</span>lat, interp_var))</a>
+<a class="sourceLine" id="cb129-3" title="3"><span class="kw">names</span>(out_df) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>, <span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;elev&quot;</span>)</a>
+<a class="sourceLine" id="cb129-4" title="4"><span class="kw">head</span>(out_df); <span class="kw">tail</span>(out_df)</a></code></pre></div>
 <pre><code>##         x        y       lon      lat     elev
 ## 1 2690000 -4510000 -77.29202 5.124395 64.91837
 ## 2 2700000 -4510000 -77.20858 5.099891 87.74857

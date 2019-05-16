@@ -1,0 +1,338 @@
+---
+title: "Long-term means and anomalies"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options_all, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE, out.width = "75%", out.height = "75%")
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+
+# Calculate long-term means and anomalies #
+
+A common task in analyzing Earth-system science data is the calculation of "anomalies" or differences between individual months or years and some long-term average.  This produces two new data sets:  1) the long-term means ("ltm's") and 2) the anomalies ("anm's").  The example here gets the long-term means and anomlies for the CRU TS 4.02 near-surface air temperature data set `cru_ts4.02.1901.2017.tmp.dat.nc`.  The data include monthly values for the interval 1901 - 2017, and the long-term means will be calculated for one of the commonly used base periods, 1961 - 1990.
+
+# Read the data #
+
+Load the necessary packages, and set paths and filenames:
+
+```{r}
+# load the ncdf4 package
+library(ncdf4)
+library(ncdf.tools)
+library(lattice)
+library(RColorBrewer)
+#library(chron)
+
+# set path and filename
+ncpath <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
+ncname <- "cru_ts4.02.1901.2017.tmp.dat.nc"  
+ncfname <- paste(ncpath, ncname, sep="")
+dname <- "tmp"  # note: tmp means temperature (not temporary)
+```
+
+## Read dimensions and attributes of the data set ##
+Open the netCDF file (and list its contents), and read longitudes, latitudes and times:
+
+```{r}
+# open a netCDF file
+ncin <- nc_open(ncfname)
+print(ncin)
+```
+
+```{r}
+# get longitude and latitude
+lon <- ncvar_get(ncin,"lon")
+nlon <- dim(lon)
+head(lon)
+lat <- ncvar_get(ncin,"lat")
+nlat <- dim(lat)
+head(lat)
+print(c(nlon,nlat))
+
+# get time
+time <- ncvar_get(ncin,"time")
+tunits <- ncatt_get(ncin,"time","units")
+nt <- dim(time)
+
+nm <- 12
+ny <- nt/nm
+
+# convert time -- split the time units string into fields
+print(tunits)
+tustr <- strsplit(tunits$value, " ")
+ptime <- convertDateNcdf2R(time, unlist(tustr)[1], origin = as.POSIXct(unlist(tustr)[3], 
+            tz = "UTC"), time.format = "%Y-%m-%d")
+head(time); tail(time)
+head(ptime); tail(ptime)
+```
+
+Get the years from `ptime` and also generate a sequence of index values for months.
+
+```{r}
+# get years from ptime & generate months
+year <- as.numeric(unlist(strsplit(as.character(ptime),"-"))[seq(1, nt*3, by=3)])
+head(year); tail(year)
+month <- rep(seq(1:12), ny)
+head(month); tail(month)
+head(ptime); tail(ptime)
+```
+
+## Read the data ##
+
+Read the data, and get variable and global attributes:
+
+```{r}
+# get temperature
+tmp_array <- ncvar_get(ncin,dname)
+dlname <- ncatt_get(ncin,dname,"long_name")
+dunits <- ncatt_get(ncin,dname,"units")
+fillvalue <- ncatt_get(ncin,dname,"_FillValue")
+dim(tmp_array)
+
+# get global attributes
+title <- ncatt_get(ncin,0,"title")
+institution <- ncatt_get(ncin,0,"institution")
+datasource <- ncatt_get(ncin,0,"source")
+references <- ncatt_get(ncin,0,"references")
+history <- ncatt_get(ncin,0,"history")
+Conventions <- ncatt_get(ncin,0,"Conventions")
+head(ptime); tail(ptime)
+```
+
+Close the netCDF data set.
+
+```{r}
+# close the netCDF file
+nc_close(ncin)
+```
+
+# Long-term means #
+
+## Set up for long-term mean calculation ##
+
+Replace netCDF fill values with R NA's
+
+```{r}
+# replace netCDF fill values with NA's
+tmp_array[tmp_array==fillvalue$value] <- NA
+length(na.omit(as.vector(tmp_array[,,1])))
+```
+
+Get a levelplot of a slice of the array to check.
+
+```{r}
+# levelplot of the slice
+n <- 1
+grid <- expand.grid(lon=lon, lat=lat)
+cutpts <- c(-50,-40,-30,-20,-10,0,10,20,30,40,50)
+levelplot(tmp_array[,, n] ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T, 
+  col.regions=(rev(brewer.pal(10,"RdBu"))))
+```
+
+Get the indices for the beginning and end of the base period, and save them as a string.
+```{r}
+# get beginning obs of base period
+begyr <- 1961; endyr <- 1990; nyrs <- endyr - begyr + 1
+begobs <- ((begyr - year[1]) * nm) + 1
+endobs <- ((endyr - year[1] + 1) * nm)
+base_period <- paste(as.character(begyr)," - ", as.character(endyr), sep="")
+print(c(begyr, endyr, begobs, endobs, base_period))
+```
+
+Get a levelplot of the first observation in the base period.
+
+```{r}
+# levelplot of begobs
+tmp_slice <- tmp_array[,, begobs]
+grid <- expand.grid(lon=lon, lat=lat)
+cutpts <- c(-50,-40,-30,-20,-10,0,10,20,30,40,50)
+levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T, 
+          col.regions=(rev(brewer.pal(10,"RdBu"))))
+```
+
+Create a new array with just the base period data in it.
+```{r}
+# base-period array
+tmp_array_base <- array(dim = c(nlon, nlat, nyrs * nm))
+dim(tmp_array_base)
+tmp_array_base <- tmp_array[,, begobs:endobs]
+```
+
+Get a levelplot of that, which should match the previous plot
+
+```{r}
+# levelplot of tmp_array_base
+tmp_slice <- tmp_array_base[,, 1]
+grid <- expand.grid(lon=lon, lat=lat)
+cutpts <- c(-50,-40,-30,-20,-10,0,10,20,30,40,50)
+levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T, 
+          col.regions=(rev(brewer.pal(10,"RdBu"))))
+```
+
+## Get long-term means ##
+
+The long-term means are calculated by looping over the grid cells and months.
+
+```{r}
+# long-term means
+tmp_ltm <- array(NA, dim = c(nlon, nlat, nm))
+dim(tmp_ltm)
+for (j in 1:nlon) {
+  for (k in 1:nlat) {
+    if (!is.na(tmp_array_base[j, k, 1])) {
+      for (m in 1:nm)
+        tmp_ltm[j, k, m] <- mean(tmp_array_base[j, k, seq(m, (m + nm*nyrs - 1), by=nm)])
+    }
+  }
+}
+```
+
+Levelplot of the long-term means:
+
+```{r}
+# levelplot of tmp_ltm
+tmp_slice <- tmp_ltm[,, 1]
+grid <- expand.grid(lon=lon, lat=lat)
+cutpts <- c(-50,-40,-30,-20,-10,0,10,20,30,40,50)
+levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T, 
+          col.regions=(rev(brewer.pal(10,"RdBu"))))
+```
+
+
+# Get anomalies #
+
+The anomalies are gotten for each grid point by simply expanding the twelve ltm values (one for each month of the year) over the `ny` year of the record, and differencing.  In this way, the anomaly for each January in the record is the difference between the "absolute" (but not "absolute value" (`abs()`)) or observed value, and the January long-term mean.
+
+```{r}
+# anomalies
+tmp_anm <- array(NA, dim = c(nlon, nlat, nt))
+tmp_anm <- tmp_array - rep(tmp_ltm, ny)
+```
+
+Get a levelplot of an anomoly.  Note the different cutpoints.
+
+```{r}
+# levelplot of tmp_ltm
+tmp_slice <- tmp_anm[,, 1]
+grid <- expand.grid(lon=lon, lat=lat)
+cutpts <- c(-10,-5,-2,-1,-0.5,0,0.5,1,2,5,10)
+levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T, 
+          col.regions=(rev(brewer.pal(10,"RdBu"))))
+```
+
+# Write netCDF files of the ltm's and anomalies ##
+
+Write out netCDF files of the long-term means and anomalies in the usual way.
+
+```{r, echo=TRUE, eval=FALSE}
+# netCDF file of ltm's
+
+# path and file name, set dname
+ncpath <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
+ncname <- "cru_ts4.02.1961.1990.tmp.ltm.nc"   
+ncfname <- paste(ncpath, ncname, sep="")
+dname <- "tmp_ltm"  # note: tmp means temperature (not temporary)
+
+# get time values for output
+time_out <- time[(begobs + (nyrs/2)*nm):(begobs + (nyrs/2)*nm + nm - 1)]
+
+# recode NA's to fill_values
+tmp_ltm[is.na(tmp_ltm)] <- fillvalue$value
+
+# create and write the netCDF file -- ncdf4 version
+# define dimensions
+londim <- ncdim_def("lon","degrees_east",as.double(lon)) 
+latdim <- ncdim_def("lat","degrees_north",as.double(lat)) 
+timedim <- ncdim_def("time",tunits$value,as.double(time_out))
+
+# define variables
+dlname <- "near-surface air temperature long-term mean"
+tmp_def <- ncvar_def("tmp_ltm","degrees Celsius",list(londim,latdim,timedim),fillvalue$value,dlname,prec="single")
+
+# create netCDF file and put arrays
+ncout <- nc_create(ncfname,tmp_def,force_v4=TRUE)
+
+# put variables
+ncvar_put(ncout,tmp_def,tmp_ltm)
+
+# put additional attributes into dimension and data variables
+ncatt_put(ncout,"lon","axis","X") #,verbose=FALSE) #,definemode=FALSE)
+ncatt_put(ncout,"lat","axis","Y")
+ncatt_put(ncout,"time","axis","T")
+ncatt_put(ncout,"tmp_ltm","base_period", base_period)
+
+# add global attributes
+ncatt_put(ncout,0,"title",title$value)
+ncatt_put(ncout,0,"institution",institution$value)
+ncatt_put(ncout,0,"source",datasource$value)
+ncatt_put(ncout,0,"references",references$value)
+history <- paste("P.J. Bartlein", date(), sep=", ")
+ncatt_put(ncout,0,"history",history)
+ncatt_put(ncout,0,"Conventions",Conventions$value)
+
+# Get a summary of the created file:
+ncout
+
+# close the file, writing data to disk
+nc_close(ncout)
+```
+
+```{r, echo=TRUE, eval=FALSE}
+
+# netCDF file of anomalies
+
+# path and file name, set dname
+ncpath <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
+ncname <- "cru_ts4.02.1901.2017.tmp.anm.nc"   
+ncfname <- paste(ncpath, ncname, sep="")
+dname <- "tmp_anm"  # note: tmp means temperature (not temporary)
+
+# recode NA's to fill_values
+tmp_anm[is.na(tmp_anm)] <- fillvalue$value
+
+# create and write the netCDF file -- ncdf4 version
+# define dimensions
+londim <- ncdim_def("lon","degrees_east",as.double(lon)) 
+latdim <- ncdim_def("lat","degrees_north",as.double(lat)) 
+timedim <- ncdim_def("time",tunits$value,as.double(time))
+
+# define variables
+dlname <- "near-surface air temperature anomalies"
+tmp_def <- ncvar_def("tmp_anm","degrees Celsius",list(londim,latdim,timedim),fillvalue$value,dlname,prec="single")
+
+# create netCDF file and put arrays
+ncout <- nc_create(ncfname,tmp_def,force_v4=TRUE)
+
+# put variables
+ncvar_put(ncout,tmp_def,tmp_anm)
+
+# put additional attributes into dimension and data variables
+ncatt_put(ncout,"lon","axis","X") #,verbose=FALSE) #,definemode=FALSE)
+ncatt_put(ncout,"lat","axis","Y")
+ncatt_put(ncout,"time","axis","T")
+ncatt_put(ncout,"tmp_anm","base_period", base_period)
+
+# add global attributes
+ncatt_put(ncout,0,"title",title$value)
+ncatt_put(ncout,0,"institution",institution$value)
+ncatt_put(ncout,0,"source",datasource$value)
+ncatt_put(ncout,0,"references",references$value)
+history <- paste("P.J. Bartlein", date(), sep=", ")
+ncatt_put(ncout,0,"history",history)
+ncatt_put(ncout,0,"Conventions",Conventions$value)
+
+# Get a summary of the created file:
+ncout
+
+# close the file, writing data to disk
+nc_close(ncout)
+```
