@@ -23,10 +23,17 @@ navbar:
       href: geospatial.html
     - text: "Maps in R"
       href: RMaps.html
+    - text: "Maps in R (2)"
+      href: RMaps2.html
     - text: "Visualization:  raster and rasterVis"
       href: rasterVis01.html
+    - text: "Visualization for explanation"
+      href: vis_ggplot01.html
     - text: "Visualization of high-dimensional data"
+      href: highdim.html
     - text: "Multivariate analyses"
+      href: multivariate.html
+    
   - text: Tasks 
     menu:
     - text: Install R and RStudio

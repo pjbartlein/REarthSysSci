@@ -393,10 +393,20 @@ $(document).ready(function () {
       <a href="RMaps.html">Maps in R</a>
     </li>
     <li>
+      <a href="RMaps2.html">Maps in R (2)</a>
+    </li>
+    <li>
       <a href="rasterVis01.html">Visualization:  raster and rasterVis</a>
     </li>
-    <li class="dropdown-header">Visualization of high-dimensional data</li>
-    <li class="dropdown-header">Multivariate analyses</li>
+    <li>
+      <a href="vis_ggplot01.html">Visualization for explanation</a>
+    </li>
+    <li>
+      <a href="highdim.html">Visualization of high-dimensional data</a>
+    </li>
+    <li>
+      <a href="multivariate.html">Multivariate analyses</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -572,14 +582,14 @@ $(document).ready(function () {
 ##         data: gl-latlong-8km-landcover.bsq.gz
 ##         history: P.J. Bartlein, 20 Feb 2008</code></pre>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">tree <span class="co"># raster info</span></a></code></pre></div>
-<pre><code>## class       : RasterLayer 
-## dimensions  : 360, 720, 259200  (nrow, ncol, ncell)
-## resolution  : 0.5, 0.5  (x, y)
-## extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
-## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
-## data source : /Users/bartlein/Projects/ESSD/data/nc_files/treecov.nc 
-## names       : treecov 
-## zvar        : treecov</code></pre>
+<pre><code>## class      : RasterLayer 
+## dimensions : 360, 720, 259200  (nrow, ncol, ncell)
+## resolution : 0.5, 0.5  (x, y)
+## extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## source     : /Users/bartlein/Projects/ESSD/data/nc_files/treecov.nc 
+## names      : treecov 
+## zvar       : treecov</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">print</span>(<span class="kw">c</span>(<span class="kw">filename</span>(tree), <span class="kw">hasValues</span>(tree), <span class="kw">inMemory</span>(tree)))</a></code></pre></div>
 <pre><code>## [1] &quot;/Users/bartlein/Projects/ESSD/data/nc_files/treecov.nc&quot;
 ## [2] &quot;TRUE&quot;                                                  
@@ -634,12 +644,12 @@ $(document).ready(function () {
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="co"># read a raster stack</span></a>
 <a class="sourceLine" id="cb18-2" title="2">CRU_tmp_ltm &lt;-<span class="st"> </span><span class="kw">stack</span>(ncfname)</a>
 <a class="sourceLine" id="cb18-3" title="3">CRU_tmp_ltm</a></code></pre></div>
-<pre><code>## class       : RasterStack 
-## dimensions  : 360, 720, 259200, 12  (nrow, ncol, ncell, nlayers)
-## resolution  : 0.5, 0.5  (x, y)
-## extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
-## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
-## names       : X1976.01.16, X1976.02.15, X1976.03.16, X1976.04.16, X1976.05.16, X1976.06.16, X1976.07.16, X1976.08.16, X1976.09.16, X1976.10.16, X1976.11.16, X1976.12.16</code></pre>
+<pre><code>## class      : RasterStack 
+## dimensions : 360, 720, 259200, 12  (nrow, ncol, ncell, nlayers)
+## resolution : 0.5, 0.5  (x, y)
+## extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## names      : X1976.01.16, X1976.02.15, X1976.03.16, X1976.04.16, X1976.05.16, X1976.06.16, X1976.07.16, X1976.08.16, X1976.09.16, X1976.10.16, X1976.11.16, X1976.12.16</code></pre>
 <p>Replace the cryptic names in the raster stack with the names of months:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="co"># replace layer names</span></a>
 <a class="sourceLine" id="cb20-2" title="2"><span class="kw">names</span>(CRU_tmp_ltm) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Jan&quot;</span>,<span class="st">&quot;Feb&quot;</span>,<span class="st">&quot;Mar&quot;</span>,<span class="st">&quot;Apr&quot;</span>,<span class="st">&quot;May&quot;</span>,<span class="st">&quot;Jun&quot;</span>,<span class="st">&quot;Jul&quot;</span>,<span class="st">&quot;Aug&quot;</span>,<span class="st">&quot;Sep&quot;</span>,<span class="st">&quot;Oct&quot;</span>,<span class="st">&quot;Nov&quot;</span>,<span class="st">&quot;Dec&quot;</span>)</a></code></pre></div>
@@ -1039,15 +1049,15 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb110-4" title="4">                    <span class="dt">transpose=</span><span class="ot">TRUE</span>,</a>
 <a class="sourceLine" id="cb110-5" title="5">                    <span class="dt">crs=</span><span class="st">&quot;+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0&quot;</span>)</a>
 <a class="sourceLine" id="cb110-6" title="6">SST_raster</a></code></pre></div>
-<pre><code>## class       : RasterBrick 
-## dimensions  : 5, 121, 605, 360  (nrow, ncol, ncell, nlayers)
-## resolution  : 1.983471, 1.6  (x, y)
-## extent      : 40, 280, -4, 4  (xmin, xmax, ymin, ymax)
-## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
-## data source : in memory
-## names       :      layer.1,      layer.2,      layer.3,      layer.4,      layer.5,      layer.6,      layer.7,      layer.8,      layer.9,     layer.10,     layer.11,     layer.12,     layer.13,     layer.14,     layer.15, ... 
-## min values  : -2.369419098, -2.215007782, -1.634376526, -1.275438309, -1.187150955, -1.170444489, -1.187540054, -0.972883224, -0.894659042, -0.723871231, -0.934144974, -0.985055923, -0.846725464, -0.291933060, -0.687570572, ... 
-## max values  :   0.40519524,   0.28303909,   0.34576988,   0.30479622,   0.36996269,   0.72554016,   0.79590607,   0.76388931,   0.67235374,   0.84916687,   0.34784508,   0.56470108,   0.53544807,   0.82624435,   0.86936188, ...</code></pre>
+<pre><code>## class      : RasterBrick 
+## dimensions : 5, 121, 605, 360  (nrow, ncol, ncell, nlayers)
+## resolution : 1.983471, 1.6  (x, y)
+## extent     : 40, 280, -4, 4  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## source     : memory
+## names      :      layer.1,      layer.2,      layer.3,      layer.4,      layer.5,      layer.6,      layer.7,      layer.8,      layer.9,     layer.10,     layer.11,     layer.12,     layer.13,     layer.14,     layer.15, ... 
+## min values : -2.369419098, -2.215007782, -1.634376526, -1.275438309, -1.187150955, -1.170444489, -1.187540054, -0.972883224, -0.894659042, -0.723871231, -0.934144974, -0.985055923, -0.846725464, -0.291933060, -0.687570572, ... 
+## max values :   0.40519524,   0.28303909,   0.34576988,   0.30479622,   0.36996269,   0.72554016,   0.79590607,   0.76388931,   0.67235374,   0.84916687,   0.34784508,   0.56470108,   0.53544807,   0.82624435,   0.86936188, ...</code></pre>
 <p>Replace the layer names with appropriate date labels:</p>
 <div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb112-1" title="1"><span class="co"># replace layer names</span></a>
 <a class="sourceLine" id="cb112-2" title="2">idx &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">as.Date</span>(ptime[<span class="dv">1621</span>]), <span class="kw">as.Date</span>(ptime[nt]), <span class="dt">by=</span><span class="st">&#39;month&#39;</span>)</a>
@@ -1055,16 +1065,16 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb112-4" title="4">SST_raster &lt;-<span class="st"> </span><span class="kw">setZ</span>(SST_raster, idx, <span class="dt">name=</span><span class="st">&quot;time&quot;</span>)</a>
 <a class="sourceLine" id="cb112-5" title="5"><span class="kw">names</span>(SST_raster) &lt;-<span class="st"> </span><span class="kw">as.character</span>(idx)</a>
 <a class="sourceLine" id="cb112-6" title="6">SST_raster</a></code></pre></div>
-<pre><code>## class       : RasterBrick 
-## dimensions  : 5, 121, 605, 360  (nrow, ncol, ncell, nlayers)
-## resolution  : 1.983471, 1.6  (x, y)
-## extent      : 40, 280, -4, 4  (xmin, xmax, ymin, ymax)
-## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
-## data source : in memory
-## names       :     Jan.1989,     Feb.1989,     Mar.1989,     Apr.1989,     May.1989,     Jun.1989,     Jul.1989,     Aug.1989,     Sep.1989,     Oct.1989,     Nov.1989,     Dec.1989,     Jan.1990,     Feb.1990,     Mar.1990, ... 
-## min values  : -2.369419098, -2.215007782, -1.634376526, -1.275438309, -1.187150955, -1.170444489, -1.187540054, -0.972883224, -0.894659042, -0.723871231, -0.934144974, -0.985055923, -0.846725464, -0.291933060, -0.687570572, ... 
-## max values  :   0.40519524,   0.28303909,   0.34576988,   0.30479622,   0.36996269,   0.72554016,   0.79590607,   0.76388931,   0.67235374,   0.84916687,   0.34784508,   0.56470108,   0.53544807,   0.82624435,   0.86936188, ... 
-## time        : Jan 1989, Dec 2018 (min, max)</code></pre>
+<pre><code>## class      : RasterBrick 
+## dimensions : 5, 121, 605, 360  (nrow, ncol, ncell, nlayers)
+## resolution : 1.983471, 1.6  (x, y)
+## extent     : 40, 280, -4, 4  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## source     : memory
+## names      :     Jan.1989,     Feb.1989,     Mar.1989,     Apr.1989,     May.1989,     Jun.1989,     Jul.1989,     Aug.1989,     Sep.1989,     Oct.1989,     Nov.1989,     Dec.1989,     Jan.1990,     Feb.1990,     Mar.1990, ... 
+## min values : -2.369419098, -2.215007782, -1.634376526, -1.275438309, -1.187150955, -1.170444489, -1.187540054, -0.972883224, -0.894659042, -0.723871231, -0.934144974, -0.985055923, -0.846725464, -0.291933060, -0.687570572, ... 
+## max values :   0.40519524,   0.28303909,   0.34576988,   0.30479622,   0.36996269,   0.72554016,   0.79590607,   0.76388931,   0.67235374,   0.84916687,   0.34784508,   0.56470108,   0.53544807,   0.82624435,   0.86936188, ... 
+## time       : Jan 1989, Dec 2018 (min, max)</code></pre>
 <p>Here’s the Hovmöller plot:</p>
 <div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb114-1" title="1"><span class="kw">hovmoller</span>(SST_raster,</a>
 <a class="sourceLine" id="cb114-2" title="2">      <span class="dt">dirXY =</span> x,</a>
@@ -1106,31 +1116,31 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb118-4" title="4">                    <span class="dt">transpose=</span><span class="ot">TRUE</span>,</a>
 <a class="sourceLine" id="cb118-5" title="5">                    <span class="dt">crs=</span><span class="st">&quot;+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0&quot;</span>)</a>
 <a class="sourceLine" id="cb118-6" title="6">SST_raster</a></code></pre></div>
-<pre><code>## class       : RasterBrick 
-## dimensions  : 31, 57, 1767, 360  (nrow, ncol, ncell, nlayers)
-## resolution  : 1.964912, 1.935484  (x, y)
-## extent      : 178, 290, -30, 30  (xmin, xmax, ymin, ymax)
-## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
-## data source : in memory
-## names       :    layer.1,    layer.2,    layer.3,    layer.4,    layer.5,    layer.6,    layer.7,    layer.8,    layer.9,   layer.10,   layer.11,   layer.12,   layer.13,   layer.14,   layer.15, ... 
-## min values  : -2.4305210, -2.2150078, -1.6343765, -1.2754383, -1.3796940, -1.4751682, -1.1875401, -0.9724255, -0.9224682, -0.9408112, -0.9465122, -1.0817566, -1.1374607, -2.2438545, -1.4876442, ... 
-## max values  :  1.7494316,  1.8365631,  1.4213772,  1.4168472,  1.2032204,  0.8245010,  1.2394390,  1.0155792,  0.7823792,  0.4477158,  0.5992851,  0.8868752,  0.7261028,  0.8262444,  0.9126644, ...</code></pre>
+<pre><code>## class      : RasterBrick 
+## dimensions : 31, 57, 1767, 360  (nrow, ncol, ncell, nlayers)
+## resolution : 1.964912, 1.935484  (x, y)
+## extent     : 178, 290, -30, 30  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## source     : memory
+## names      :    layer.1,    layer.2,    layer.3,    layer.4,    layer.5,    layer.6,    layer.7,    layer.8,    layer.9,   layer.10,   layer.11,   layer.12,   layer.13,   layer.14,   layer.15, ... 
+## min values : -2.4305210, -2.2150078, -1.6343765, -1.2754383, -1.3796940, -1.4751682, -1.1875401, -0.9724255, -0.9224682, -0.9408112, -0.9465122, -1.0817566, -1.1374607, -2.2438545, -1.4876442, ... 
+## max values :  1.7494316,  1.8365631,  1.4213772,  1.4168472,  1.2032204,  0.8245010,  1.2394390,  1.0155792,  0.7823792,  0.4477158,  0.5992851,  0.8868752,  0.7261028,  0.8262444,  0.9126644, ...</code></pre>
 <div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" title="1"><span class="co"># replace layer names</span></a>
 <a class="sourceLine" id="cb120-2" title="2">idx &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">as.Date</span>(ptime[<span class="dv">1621</span>]), <span class="kw">as.Date</span>(ptime[nt]), <span class="dt">by=</span><span class="st">&#39;month&#39;</span>)</a>
 <a class="sourceLine" id="cb120-3" title="3">idx &lt;-<span class="st"> </span><span class="kw">as.yearmon</span>(idx)</a>
 <a class="sourceLine" id="cb120-4" title="4">SST_raster &lt;-<span class="st"> </span><span class="kw">setZ</span>(SST_raster, idx, <span class="dt">name=</span><span class="st">&quot;time&quot;</span>)</a>
 <a class="sourceLine" id="cb120-5" title="5"><span class="kw">names</span>(SST_raster) &lt;-<span class="st"> </span><span class="kw">as.character</span>(idx)</a>
 <a class="sourceLine" id="cb120-6" title="6">SST_raster</a></code></pre></div>
-<pre><code>## class       : RasterBrick 
-## dimensions  : 31, 57, 1767, 360  (nrow, ncol, ncell, nlayers)
-## resolution  : 1.964912, 1.935484  (x, y)
-## extent      : 178, 290, -30, 30  (xmin, xmax, ymin, ymax)
-## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
-## data source : in memory
-## names       :   Jan.1989,   Feb.1989,   Mar.1989,   Apr.1989,   May.1989,   Jun.1989,   Jul.1989,   Aug.1989,   Sep.1989,   Oct.1989,   Nov.1989,   Dec.1989,   Jan.1990,   Feb.1990,   Mar.1990, ... 
-## min values  : -2.4305210, -2.2150078, -1.6343765, -1.2754383, -1.3796940, -1.4751682, -1.1875401, -0.9724255, -0.9224682, -0.9408112, -0.9465122, -1.0817566, -1.1374607, -2.2438545, -1.4876442, ... 
-## max values  :  1.7494316,  1.8365631,  1.4213772,  1.4168472,  1.2032204,  0.8245010,  1.2394390,  1.0155792,  0.7823792,  0.4477158,  0.5992851,  0.8868752,  0.7261028,  0.8262444,  0.9126644, ... 
-## time        : Jan 1989, Dec 2018 (min, max)</code></pre>
+<pre><code>## class      : RasterBrick 
+## dimensions : 31, 57, 1767, 360  (nrow, ncol, ncell, nlayers)
+## resolution : 1.964912, 1.935484  (x, y)
+## extent     : 178, 290, -30, 30  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## source     : memory
+## names      :   Jan.1989,   Feb.1989,   Mar.1989,   Apr.1989,   May.1989,   Jun.1989,   Jul.1989,   Aug.1989,   Sep.1989,   Oct.1989,   Nov.1989,   Dec.1989,   Jan.1990,   Feb.1990,   Mar.1990, ... 
+## min values : -2.4305210, -2.2150078, -1.6343765, -1.2754383, -1.3796940, -1.4751682, -1.1875401, -0.9724255, -0.9224682, -0.9408112, -0.9465122, -1.0817566, -1.1374607, -2.2438545, -1.4876442, ... 
+## max values :  1.7494316,  1.8365631,  1.4213772,  1.4168472,  1.2032204,  0.8245010,  1.2394390,  1.0155792,  0.7823792,  0.4477158,  0.5992851,  0.8868752,  0.7261028,  0.8262444,  0.9126644, ... 
+## time       : Jan 1989, Dec 2018 (min, max)</code></pre>
 <p>Here’s the horizon plot:</p>
 <div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" title="1"><span class="co"># horizonplot -- rasterVis example</span></a>
 <a class="sourceLine" id="cb122-2" title="2"><span class="kw">horizonplot</span>(SST_raster, <span class="dt">ylab=</span><span class="st">&quot;Latitude&quot;</span>, <span class="dt">xlab=</span><span class="st">&quot;Year&quot;</span>,<span class="dt">col.regions=</span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dt">n=</span><span class="dv">8</span>, <span class="st">&#39;RdBu&#39;</span>)) )</a></code></pre></div>
@@ -1148,15 +1158,15 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb123-6" title="6">hadcrut &lt;-<span class="st"> </span><span class="kw">brick</span>(hadcrut_file) <span class="co"># open air.mon.anom.nc</span></a>
 <a class="sourceLine" id="cb123-7" title="7"></a>
 <a class="sourceLine" id="cb123-8" title="8">hadcrut</a></code></pre></div>
-<pre><code>## class       : RasterBrick 
-## dimensions  : 36, 72, 2592, 2030  (nrow, ncol, ncell, nlayers)
-## resolution  : 5, 5  (x, y)
-## extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
-## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
-## data source : /Users/bartlein/Projects/ESSD/data/nc_files/HadCRUT.4.6.0.0.median.nc 
-## names       : X1850.01.16, X1850.02.15, X1850.03.16, X1850.04.16, X1850.05.16, X1850.06.16, X1850.07.16, X1850.08.16, X1850.09.16, X1850.10.16, X1850.11.16, X1850.12.16, X1851.01.16, X1851.02.15, X1851.03.16, ... 
-## Date        : 1850-01-16, 2019-02-15 (min, max)
-## varname     : temperature_anomaly</code></pre>
+<pre><code>## class      : RasterBrick 
+## dimensions : 36, 72, 2592, 2030  (nrow, ncol, ncell, nlayers)
+## resolution : 5, 5  (x, y)
+## extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## source     : /Users/bartlein/Projects/ESSD/data/nc_files/HadCRUT.4.6.0.0.median.nc 
+## names      : X1850.01.16, X1850.02.15, X1850.03.16, X1850.04.16, X1850.05.16, X1850.06.16, X1850.07.16, X1850.08.16, X1850.09.16, X1850.10.16, X1850.11.16, X1850.12.16, X1851.01.16, X1851.02.15, X1851.03.16, ... 
+## Date       : 1850-01-16, 2019-02-15 (min, max)
+## varname    : temperature_anomaly</code></pre>
 <div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" title="1"><span class="kw">print</span>(<span class="kw">c</span>(<span class="kw">filename</span>(hadcrut), <span class="kw">hasValues</span>(hadcrut), <span class="kw">inMemory</span>(hadcrut)))</a></code></pre></div>
 <pre><code>## [1] &quot;/Users/bartlein/Projects/ESSD/data/nc_files/HadCRUT.4.6.0.0.median.nc&quot;
 ## [2] &quot;TRUE&quot;                                                                 

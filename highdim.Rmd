@@ -1,0 +1,18 @@
+---
+title: "High-dimensional data sets"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "75%", out.height = "75%")
+pdf.options(useDingbats = TRUE)
+```
+
+This is a stub:  more coming later.

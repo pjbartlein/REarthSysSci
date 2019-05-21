@@ -389,10 +389,20 @@ $(document).ready(function () {
       <a href="RMaps.html">Maps in R</a>
     </li>
     <li>
+      <a href="RMaps2.html">Maps in R (2)</a>
+    </li>
+    <li>
       <a href="rasterVis01.html">Visualization:  raster and rasterVis</a>
     </li>
-    <li class="dropdown-header">Visualization of high-dimensional data</li>
-    <li class="dropdown-header">Multivariate analyses</li>
+    <li>
+      <a href="vis_ggplot01.html">Visualization for explanation</a>
+    </li>
+    <li>
+      <a href="highdim.html">Visualization of high-dimensional data</a>
+    </li>
+    <li>
+      <a href="multivariate.html">Multivariate analyses</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -525,14 +535,14 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb4-4" title="4">alpha_file &lt;-<span class="st"> </span><span class="kw">paste</span>(alpha_path, alpha_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb4-5" title="5">alpha &lt;-<span class="st"> </span><span class="kw">raster</span>(alpha_file, <span class="dt">varname=</span><span class="st">&quot;mipt&quot;</span>)</a>
 <a class="sourceLine" id="cb4-6" title="6">alpha</a></code></pre></div>
-<pre><code>## class       : RasterLayer 
-## dimensions  : 360, 720, 259200  (nrow, ncol, ncell)
-## resolution  : 0.5, 0.5  (x, y)
-## extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
-## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
-## data source : /Users/bartlein/Dropbox/DataVis/working/geog490/data/nc_files/cru10min30_bio.nc 
-## names       : Priestley.Taylor..alpha..parameter..AE.PE. 
-## zvar        : mipt</code></pre>
+<pre><code>## class      : RasterLayer 
+## dimensions : 360, 720, 259200  (nrow, ncol, ncell)
+## resolution : 0.5, 0.5  (x, y)
+## extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
+## source     : /Users/bartlein/Dropbox/DataVis/working/geog490/data/nc_files/cru10min30_bio.nc 
+## names      : Priestley.Taylor..alpha..parameter..AE.PE. 
+## zvar       : mipt</code></pre>
 </div>
 </div>
 <div id="plot-the-data" class="section level1">

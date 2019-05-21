@@ -2,7 +2,6 @@
 title: "Markdown and RMarkdown"
 output: 
   html_document:
-    fig_caption: no
     number_sections: yes
     toc: yes
     toc_float: false
@@ -11,7 +10,7 @@ output:
 
 ```{r set-options, echo=FALSE}
 options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "75%", out.height = "75%")
 pdf.options(useDingbats = TRUE)
 ```
 
