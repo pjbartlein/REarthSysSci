@@ -34,11 +34,7 @@ col <- rev(brewer.pal(10,"RdBu"))
 ```
 
 ```{r tr21 cube, echo=FALSE}
-cubeView(tas2, at=cutpts, col.regions=col)
+cubeView(tas2, at=cutpts, col.regions=col, legend=FALSE)
 ```
 
-## TraCE-21ka Temperature Anomalies ## 
 
-```{r}
-print(" ")
-```
