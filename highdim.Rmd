@@ -396,6 +396,8 @@ mvtsplot(stcarp[, 3:25], xtime=carp$Age, smooth.df=2, norm="internal", levels=9,
 
 R has a long history of attempts to develop interactive plots, usually consisting of the basic plots developed from low-dimensional data. RStudio's *Shiny* package [https://shiny.rstudio.com](https://shiny.rstudio.com) and the *Plotly R Open Source Graphics Library* [https://plot.ly/r/](https://plot.ly/r/) are examples that are rapidly developing.  An interesting plot for displaying high-dimensional data is the *cubeplot*, which is easiest to explain by looking at one.  The data here come from the *TraCE-21k* transient climate simulation from 21,000 years ago to present (at monthly resolution) (Liu, Z., et al. 2009, Science 325(5938): 310-314).  A data set of of decadal-average "anomaly" values (the difference between past and present) is examined here.
 
+## Data ##
+
 The data are read and plotted using the `raster` and `rasterVis` framework.  First, load the packages:
 
 ```{r cube, echo=FALSE, eval=TRUE, include=FALSE, results="hide", messages=FALSE, cache=FALSE}
@@ -411,7 +413,7 @@ library(cubeview)
 
 Read the data:
 
-```{r read tr21, echo=FALSE, eval=TRUE, results="hide", warning=FALSE, cache=FALSE}
+```{r read tr21, echo=TRUE, eval=TRUE, results="hide", warning=FALSE, cache=FALSE}
 # read TraCE21-ka transient climate-model simulation decadal data
 tr21dec_path <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
 tr21dec_name <- "Trace21_TREFHT_anm2.nc"
@@ -423,7 +425,7 @@ tas_anm_ann
 
 Even though the data is decadal resolution, it's still a lot of data, and so for this example, the data are (actually) decimated to produce century time-step decadal average values.
 
-```{r tr21 subset, echo=FALSE, cache=FALSE}
+```{r tr21 subset, echo=TRUE, cache=FALSE}
 tas2 <- subset(tas_anm_ann, subset=seq(1,2201, by=10))
 ```
 
@@ -436,6 +438,8 @@ col <- rev(brewer.pal(10,"RdBu"))
 plt <- levelplot(subset(tas2,1), at=cutpts, margin=FALSE, par.settings=mapTheme)
 plt + latticeExtra::layer(sp.lines(world_outline, col="black", lwd=1))
 ```
+
+## Cube plot ## 
 
 Then, the cubeplot can be produced using the `cubeview()` function from the `cubeview` package.  The plot is interactively controlled as follows (from the `cubeview()` help file:
 

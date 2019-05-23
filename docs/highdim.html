@@ -498,7 +498,10 @@ $(document).ready(function () {
 <li><a href="#carp-l.-pollen-data"><span class="toc-section-number">4.1</span> Carp L. pollen data</a></li>
 <li><a href="#plots-3"><span class="toc-section-number">4.2</span> Plots</a></li>
 </ul></li>
-<li><a href="#interactive-plots"><span class="toc-section-number">5</span> Interactive plots</a></li>
+<li><a href="#interactive-plots"><span class="toc-section-number">5</span> Interactive plots</a><ul>
+<li><a href="#data"><span class="toc-section-number">5.1</span> Data</a></li>
+<li><a href="#cube-plot"><span class="toc-section-number">5.2</span> Cube plot</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -842,16 +845,29 @@ $(document).ready(function () {
 <div id="interactive-plots" class="section level1">
 <h1><span class="header-section-number">5</span> Interactive plots</h1>
 <p>R has a long history of attempts to develop interactive plots, usually consisting of the basic plots developed from low-dimensional data. RStudio’s <em>Shiny</em> package <a href="https://shiny.rstudio.com">https://shiny.rstudio.com</a> and the <em>Plotly R Open Source Graphics Library</em> <a href="https://plot.ly/r/">https://plot.ly/r/</a> are examples that are rapidly developing. An interesting plot for displaying high-dimensional data is the <em>cubeplot</em>, which is easiest to explain by looking at one. The data here come from the <em>TraCE-21k</em> transient climate simulation from 21,000 years ago to present (at monthly resolution) (Liu, Z., et al. 2009, Science 325(5938): 310-314). A data set of of decadal-average “anomaly” values (the difference between past and present) is examined here.</p>
+<div id="data" class="section level2">
+<h2><span class="header-section-number">5.1</span> Data</h2>
 <p>The data are read and plotted using the <code>raster</code> and <code>rasterVis</code> framework. First, load the packages:</p>
 <p>Read the data:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="co"># read TraCE21-ka transient climate-model simulation decadal data</span></a>
+<a class="sourceLine" id="cb43-2" title="2">tr21dec_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb43-3" title="3">tr21dec_name &lt;-<span class="st"> &quot;Trace21_TREFHT_anm2.nc&quot;</span></a>
+<a class="sourceLine" id="cb43-4" title="4">tr21dec_file &lt;-<span class="st"> </span><span class="kw">paste</span>(tr21dec_path, tr21dec_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb43-5" title="5">tas_anm_ann &lt;-<span class="st"> </span><span class="kw">brick</span>(tr21dec_file, <span class="dt">varname=</span><span class="st">&quot;tas_anm_ann&quot;</span>, <span class="dt">band=</span><span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2204</span>))</a>
+<a class="sourceLine" id="cb43-6" title="6">tas_anm_ann &lt;-<span class="st"> </span><span class="kw">rotate</span>(tas_anm_ann)</a>
+<a class="sourceLine" id="cb43-7" title="7">tas_anm_ann</a></code></pre></div>
 <p>Even though the data is decadal resolution, it’s still a lot of data, and so for this example, the data are (actually) decimated to produce century time-step decadal average values.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1">tas2 &lt;-<span class="st"> </span><span class="kw">subset</span>(tas_anm_ann, <span class="dt">subset=</span><span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">2201</span>, <span class="dt">by=</span><span class="dv">10</span>))</a></code></pre></div>
 <p>A levelplot of one slice of the the data can be used to become oriented to the geographic layout of the data:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span>(<span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))))</a>
-<a class="sourceLine" id="cb43-2" title="2">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">40</span>,<span class="op">-</span><span class="dv">10</span>,<span class="op">-</span><span class="dv">5</span>,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb43-3" title="3">col &lt;-<span class="st"> </span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))</a>
-<a class="sourceLine" id="cb43-4" title="4">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(<span class="kw">subset</span>(tas2,<span class="dv">1</span>), <span class="dt">at=</span>cutpts, <span class="dt">margin=</span><span class="ot">FALSE</span>, <span class="dt">par.settings=</span>mapTheme)</a>
-<a class="sourceLine" id="cb43-5" title="5">plt <span class="op">+</span><span class="st"> </span>latticeExtra<span class="op">::</span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="dv">1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span>(<span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))))</a>
+<a class="sourceLine" id="cb45-2" title="2">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">40</span>,<span class="op">-</span><span class="dv">10</span>,<span class="op">-</span><span class="dv">5</span>,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>)</a>
+<a class="sourceLine" id="cb45-3" title="3">col &lt;-<span class="st"> </span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))</a>
+<a class="sourceLine" id="cb45-4" title="4">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(<span class="kw">subset</span>(tas2,<span class="dv">1</span>), <span class="dt">at=</span>cutpts, <span class="dt">margin=</span><span class="ot">FALSE</span>, <span class="dt">par.settings=</span>mapTheme)</a>
+<a class="sourceLine" id="cb45-5" title="5">plt <span class="op">+</span><span class="st"> </span>latticeExtra<span class="op">::</span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="dv">1</span>))</a></code></pre></div>
 <p><img src="highdim_files/figure-html/plot%20setup-1.png" width="75%" height="75%" /></p>
+</div>
+<div id="cube-plot" class="section level2">
+<h2><span class="header-section-number">5.2</span> Cube plot</h2>
 <p>Then, the cubeplot can be produced using the <code>cubeview()</code> function from the <code>cubeview</code> package. The plot is interactively controlled as follows (from the <code>cubeview()</code> help file:</p>
 <p>The location of the slices can be controlled by keys:</p>
 <ul>
@@ -867,10 +883,11 @@ $(document).ready(function () {
 <li>Press space bar to show/hide slice position guides</li>
 </ul>
 <p>The cubeplot, as rendered here, displays a map on the “front (or rear) face” of the brick, and Hovmöller plots on the top (or bottom) and sides.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1"><span class="kw">cubeView</span>(tas2, <span class="dt">at=</span>cutpts, <span class="dt">col.regions=</span>col)</a></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" title="1"><span class="kw">cubeView</span>(tas2, <span class="dt">at=</span>cutpts, <span class="dt">col.regions=</span>col)</a></code></pre></div>
 <p><img src="tr21cube.png" /></p>
 <p>Here is a link to the plot on the server: <a href="https://pjbartlein.github.io/REarthSysSci/tr21cube.html">https://pjbartlein.github.io/REarthSysSci/tr21cube.html</a></p>
 <p><a href="highdim.html">[Back to top]</a></p>
+</div>
 </div>
 
 
