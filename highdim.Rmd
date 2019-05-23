@@ -445,7 +445,7 @@ Other controls:
 The cubeplot, as rendered here, displays a map on the "front (or rear) face" of the brick, and Hovmöller plots on the top (or bottom) and sides.
 
 ```{r tr21 cube, echo=FALSE, cache=FALSE}
-cubeView(tas2, at=cutpts, col.regions=col, legend = FALSE)
+cubeView(tas2, at=cutpts, col.regions=col)
 ```
 
 Here is a link to the plot on the server, if it fails to display on this page:  [https://pjbartlein.github.io/REarthSysSci/tr21cube.html](https://pjbartlein.github.io/REarthSysSci/tr21cube.html)
