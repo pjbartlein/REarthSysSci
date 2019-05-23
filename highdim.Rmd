@@ -81,6 +81,15 @@ gf$vegtype <- factor(gf$vegtype, levels=vegtype_name)
 str(gf[16:17])
 ```
 
+Drop the last two categories
+
+```{r}
+# drop last two categories
+mb2 <- c("TropF", "WarmF", "SavDWd", "GrsShrb", "Dsrt", "TempF", "BorF", "Tund")
+gf <- gf[gf$megabiome %in% mb2, ]
+table(gf$megabiome)
+```
+
 Do the usual transformations:
 
 ```{r, eval=TRUE, echo=FALSE, results='hide'}

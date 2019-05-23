@@ -550,94 +550,102 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb3-9" data-line-number="9"></a>
 <a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co"># check the new ordering of factor levels</span></a>
 <a class="sourceLine" id="cb3-11" data-line-number="11"><span class="kw">str</span>(gf[<span class="dv">16</span><span class="op">:</span><span class="dv">17</span>])</a></code></pre></div>
+<p>Drop the last two categories</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># drop last two categories</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">mb2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;TropF&quot;</span>, <span class="st">&quot;WarmF&quot;</span>, <span class="st">&quot;SavDWd&quot;</span>, <span class="st">&quot;GrsShrb&quot;</span>, <span class="st">&quot;Dsrt&quot;</span>, <span class="st">&quot;TempF&quot;</span>, <span class="st">&quot;BorF&quot;</span>, <span class="st">&quot;Tund&quot;</span>)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">gf &lt;-<span class="st"> </span>gf[gf<span class="op">$</span>megabiome <span class="op">%in%</span><span class="st"> </span>mb2, ]</a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw">table</span>(gf<span class="op">$</span>megabiome)</a></code></pre></div>
+<pre><code>## 
+##   TropF   WarmF  SavDWd GrsShrb    Dsrt   TempF    BorF    Tund    None     Ice 
+##    6678    2331    4719    9372    6728    7874   11356    4896       0       0</code></pre>
 <p>Do the usual transformations:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># transformations (output suppressed)</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">hist</span>(gf<span class="op">$</span>hrmc)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">gf<span class="op">$</span>hrmc &lt;-<span class="st"> </span><span class="kw">sqrt</span>(gf<span class="op">$</span>hrmc)</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw">hist</span>(gf<span class="op">$</span>hrmc)</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="kw">hist</span>(<span class="kw">log10</span>(gf<span class="op">$</span>gpw[gf<span class="op">$</span>gpw <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]))</a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="kw">min</span>(<span class="kw">log10</span>(gf<span class="op">$</span>gpw[gf<span class="op">$</span>gpw <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]))</a>
-<a class="sourceLine" id="cb4-8" data-line-number="8">gf<span class="op">$</span>gpw &lt;-<span class="st"> </span><span class="kw">log10</span>(gf<span class="op">$</span>gpw <span class="op">+</span><span class="st"> </span><span class="fl">1e-10</span>)</a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="kw">hist</span>(gf<span class="op">$</span>gpw)</a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="kw">hist</span>(gf<span class="op">$</span>map)</a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">gf<span class="op">$</span>map &lt;-<span class="st"> </span><span class="kw">sqrt</span>(gf<span class="op">$</span>map)</a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="kw">hist</span>(gf<span class="op">$</span>map)</a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb4-15" data-line-number="15"><span class="kw">hist</span>(gf<span class="op">$</span>pme)</a>
-<a class="sourceLine" id="cb4-16" data-line-number="16">gf<span class="op">$</span>pme &lt;-<span class="st"> </span><span class="kw">sqrt</span>(gf<span class="op">$</span>pme <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(gf<span class="op">$</span>pme))</a>
-<a class="sourceLine" id="cb4-17" data-line-number="17"><span class="kw">hist</span>(gf<span class="op">$</span>pme)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># transformations (output suppressed)</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">hist</span>(gf<span class="op">$</span>hrmc)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">gf<span class="op">$</span>hrmc &lt;-<span class="st"> </span><span class="kw">sqrt</span>(gf<span class="op">$</span>hrmc)</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw">hist</span>(gf<span class="op">$</span>hrmc)</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="kw">hist</span>(<span class="kw">log10</span>(gf<span class="op">$</span>gpw[gf<span class="op">$</span>gpw <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]))</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="kw">min</span>(<span class="kw">log10</span>(gf<span class="op">$</span>gpw[gf<span class="op">$</span>gpw <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>]))</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">gf<span class="op">$</span>gpw &lt;-<span class="st"> </span><span class="kw">log10</span>(gf<span class="op">$</span>gpw <span class="op">+</span><span class="st"> </span><span class="fl">1e-10</span>)</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="kw">hist</span>(gf<span class="op">$</span>gpw)</a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="kw">hist</span>(gf<span class="op">$</span>map)</a>
+<a class="sourceLine" id="cb6-12" data-line-number="12">gf<span class="op">$</span>map &lt;-<span class="st"> </span><span class="kw">sqrt</span>(gf<span class="op">$</span>map)</a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="kw">hist</span>(gf<span class="op">$</span>map)</a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="kw">hist</span>(gf<span class="op">$</span>pme)</a>
+<a class="sourceLine" id="cb6-16" data-line-number="16">gf<span class="op">$</span>pme &lt;-<span class="st"> </span><span class="kw">sqrt</span>(gf<span class="op">$</span>pme <span class="op">-</span><span class="st"> </span><span class="kw">min</span>(gf<span class="op">$</span>pme))</a>
+<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="kw">hist</span>(gf<span class="op">$</span>pme)</a></code></pre></div>
 <p>Get a shapefile too:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># read a world outlines shape file</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">shp_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/&quot;</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">shp_name &lt;-<span class="st"> &quot;ne_110m_admin_0_countries.shp&quot;</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">shp_file &lt;-<span class="st"> </span><span class="kw">paste</span>(shp_path, shp_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co"># read the shapefile</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7">world_shp &lt;-<span class="st"> </span><span class="kw">read_sf</span>(shp_file)</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8">world_outline &lt;-<span class="st"> </span><span class="kw">as</span>(<span class="kw">st_geometry</span>(world_shp), <span class="dt">Class=</span><span class="st">&quot;Spatial&quot;</span>)</a>
-<a class="sourceLine" id="cb5-9" data-line-number="9">world_outline_gg &lt;-<span class="st"> </span><span class="kw">fortify</span>(world_outline)</a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co"># ggplot map of world_outline</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="kw">ggplot</span>(world_outline_gg, <span class="kw">aes</span>(long, lat)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">group =</span> group), <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="st">  </span><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</a></code></pre></div>
-<p><img src="highdim_files/figure-html/unnamed-chunk-6-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># read a world outlines shape file</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">shp_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/&quot;</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">shp_name &lt;-<span class="st"> &quot;ne_110m_admin_0_countries.shp&quot;</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">shp_file &lt;-<span class="st"> </span><span class="kw">paste</span>(shp_path, shp_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co"># read the shapefile</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">world_shp &lt;-<span class="st"> </span><span class="kw">read_sf</span>(shp_file)</a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">world_outline &lt;-<span class="st"> </span><span class="kw">as</span>(<span class="kw">st_geometry</span>(world_shp), <span class="dt">Class=</span><span class="st">&quot;Spatial&quot;</span>)</a>
+<a class="sourceLine" id="cb7-9" data-line-number="9">world_outline_gg &lt;-<span class="st"> </span><span class="kw">fortify</span>(world_outline)</a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co"># ggplot map of world_outline</span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="kw">ggplot</span>(world_outline_gg, <span class="kw">aes</span>(long, lat)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(<span class="dt">group =</span> group), <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="st">  </span><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<p><img src="highdim_files/figure-html/unnamed-chunk-7-1.png" width="75%" height="75%" /></p>
 </div>
 <div id="plots" class="section level2">
 <h2><span class="header-section-number">2.2</span> Plots</h2>
 <p>Parallel coordinate plots can be made using the <code>ggparcoord()</code> function from the <code>GGally</code> package:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># parallel coordinate plot</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">pngfile &lt;-<span class="st"> &quot;pcp01.png&quot;</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="kw">png</span>(pngfile, <span class="dt">width=</span><span class="dv">600</span>, <span class="dt">height=</span><span class="dv">600</span>) <span class="co"># open the file</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw">ggparcoord</span>(<span class="dt">data =</span> gf[<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>],</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">  <span class="dt">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="dt">alphaLines =</span> <span class="fl">0.01</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;PCP of Global Fire Data&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x  =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">315</span>, <span class="dt">vjust=</span><span class="fl">1.0</span>, <span class="dt">hjust=</span><span class="fl">0.0</span>, <span class="dt">size=</span><span class="dv">14</span>),</a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">        <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(), </a>
-<a class="sourceLine" id="cb6-10" data-line-number="10">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>() )</a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#dev.off()</span></a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="co"># parallel coordinate plot</span></a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">pngfile &lt;-<span class="st"> &quot;pcp01.png&quot;</span></a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">png</span>(pngfile, <span class="dt">width=</span><span class="dv">600</span>, <span class="dt">height=</span><span class="dv">600</span>) <span class="co"># open the file</span></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4"><span class="kw">ggparcoord</span>(<span class="dt">data =</span> gf[<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>],</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">  <span class="dt">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="dt">alphaLines =</span> <span class="fl">0.01</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;PCP of Global Fire Data&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x  =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">315</span>, <span class="dt">vjust=</span><span class="fl">1.0</span>, <span class="dt">hjust=</span><span class="fl">0.0</span>, <span class="dt">size=</span><span class="dv">14</span>),</a>
+<a class="sourceLine" id="cb8-9" data-line-number="9">        <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(), </a>
+<a class="sourceLine" id="cb8-10" data-line-number="10">        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>() )</a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="co">#dev.off()</span></a></code></pre></div>
 <p><img src="pcp01.png" /></p>
 <p>Note the use of transparency, specified by the <code>alphaLines</code> argument. Individual observations (gridpoints) that have similar values for each variable trace out dense bands of lines, and several distinct bands, corresponding to different “pyromes” (like biomes) can be observed.</p>
 <p>Parallel coordinate plots are most effective when paired with another display with points highlighted in one display similarly highlighted in the other. In the case of the global fire data set the logical other display is a map. There are (at least) two ways of doing the highlighting. Here, a particular megabiome (“BorF” – Boreal forest/Taiga) is used. First create a new variable that will be set to zero, except where <code>gf$megabiome == &quot;BorF&quot;</code>. Then, the data are sorted so that the non-“BorF” observations get plotted first.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># select those points with megabiome = &quot;BorF&quot;</span></a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">gf<span class="op">$</span>select_points &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">dim</span>(gf)[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">gf<span class="op">$</span>select_points[gf<span class="op">$</span>megabiome <span class="op">==</span><span class="st"> &quot;BorF&quot;</span>] &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">gf<span class="op">$</span>select_points &lt;-<span class="st"> </span><span class="kw">as.factor</span>(gf<span class="op">$</span>select_points)</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="kw">table</span>(gf<span class="op">$</span>select_points)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># select those points with megabiome = &quot;BorF&quot;</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">gf<span class="op">$</span>select_points &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">dim</span>(gf)[<span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">gf<span class="op">$</span>select_points[gf<span class="op">$</span>megabiome <span class="op">==</span><span class="st"> &quot;BorF&quot;</span>] &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">gf<span class="op">$</span>select_points &lt;-<span class="st"> </span><span class="kw">as.factor</span>(gf<span class="op">$</span>select_points)</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="kw">table</span>(gf<span class="op">$</span>select_points)</a></code></pre></div>
 <pre><code>## 
 ##     0     1 
-## 43286 11356</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># pcp</span></a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">pngfile &lt;-<span class="st"> &quot;pcp02.png&quot;</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw">png</span>(pngfile, <span class="dt">width=</span><span class="dv">600</span>, <span class="dt">height=</span><span class="dv">600</span>) <span class="co"># open the file</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw">ggparcoord</span>(<span class="dt">data =</span> gf[<span class="kw">order</span>(gf<span class="op">$</span>select_points),],</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="dt">columns =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>), <span class="dt">groupColumn =</span> <span class="st">&quot;select_points&quot;</span>,</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="dt">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="dt">alphaLines=</span><span class="fl">0.01</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>)  <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="kw">theme</span>(<span class="dt">axis.text.x  =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">315</span>, <span class="dt">vjust=</span><span class="fl">1.0</span>, <span class="dt">hjust=</span><span class="fl">0.0</span>, <span class="dt">size=</span><span class="dv">14</span>),</a>
-<a class="sourceLine" id="cb9-9" data-line-number="9">      <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb9-10" data-line-number="10">      <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>(),</a>
-<a class="sourceLine" id="cb9-11" data-line-number="11">      <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="kw">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.2</span>), <span class="st">&quot;red&quot;</span>))</a>
-<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#dev.off()</span></a></code></pre></div>
+## 42598 11356</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># pcp</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">pngfile &lt;-<span class="st"> &quot;pcp02.png&quot;</span></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="kw">png</span>(pngfile, <span class="dt">width=</span><span class="dv">600</span>, <span class="dt">height=</span><span class="dv">600</span>) <span class="co"># open the file</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="kw">ggparcoord</span>(<span class="dt">data =</span> gf[<span class="kw">order</span>(gf<span class="op">$</span>select_points),],</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="dt">columns =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">16</span>), <span class="dt">groupColumn =</span> <span class="st">&quot;select_points&quot;</span>,</a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="dt">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="dt">alphaLines=</span><span class="fl">0.01</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&quot;&quot;</span>)  <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="kw">theme</span>(<span class="dt">axis.text.x  =</span> <span class="kw">element_text</span>(<span class="dt">angle=</span><span class="dv">315</span>, <span class="dt">vjust=</span><span class="fl">1.0</span>, <span class="dt">hjust=</span><span class="fl">0.0</span>, <span class="dt">size=</span><span class="dv">14</span>),</a>
+<a class="sourceLine" id="cb11-9" data-line-number="9">      <span class="dt">axis.title.x =</span> <span class="kw">element_blank</span>(),</a>
+<a class="sourceLine" id="cb11-10" data-line-number="10">      <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(), <span class="dt">axis.ticks.y =</span> <span class="kw">element_blank</span>(),</a>
+<a class="sourceLine" id="cb11-11" data-line-number="11">      <span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="kw">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.2</span>), <span class="st">&quot;red&quot;</span>))</a>
+<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="co">#dev.off()</span></a></code></pre></div>
 <p><img src="pcp02.png" /></p>
 <p>Plot the points.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="co"># map</span></a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">pngfile &lt;-<span class="st"> &quot;map02.png&quot;</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="kw">png</span>(pngfile, <span class="dt">width=</span><span class="dv">600</span>, <span class="dt">height=</span><span class="dv">300</span>) <span class="co"># oppen the file</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="kw">ggplot</span>(gf, <span class="kw">aes</span>(lon, lat))  <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-6" data-line-number="6"><span class="kw">geom_point</span>(<span class="kw">aes</span>(lon, lat, <span class="dt">color =</span> select_points), <span class="dt">size =</span> <span class="fl">0.8</span> ) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-7" data-line-number="7"><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group), world_outline_gg, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-8" data-line-number="8"><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray80&quot;</span>, <span class="st">&quot;red&quot;</span>))</a>
-<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="co">#dev.off()</span></a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># map</span></a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">pngfile &lt;-<span class="st"> &quot;map02.png&quot;</span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw">png</span>(pngfile, <span class="dt">width=</span><span class="dv">600</span>, <span class="dt">height=</span><span class="dv">300</span>) <span class="co"># oppen the file</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="kw">ggplot</span>(gf, <span class="kw">aes</span>(lon, lat))  <span class="op">+</span></a>
+<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="kw">geom_point</span>(<span class="kw">aes</span>(lon, lat, <span class="dt">color =</span> select_points), <span class="dt">size =</span> <span class="fl">0.8</span> ) <span class="op">+</span></a>
+<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="kw">geom_polygon</span>(<span class="kw">aes</span>(long, lat, <span class="dt">group =</span> group), world_outline_gg, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="ot">NA</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9"><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb12-10" data-line-number="10"><span class="kw">coord_quickmap</span>() <span class="op">+</span><span class="st"> </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray80&quot;</span>, <span class="st">&quot;red&quot;</span>))</a>
+<a class="sourceLine" id="cb12-11" data-line-number="11"><span class="co">#dev.off()</span></a></code></pre></div>
 <p><img src="map02.png" /></p>
 <p>Before moving on, delete the variable <code>select_points</code> from the <code>gf</code> dataframe:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">gf<span class="op">$</span>select_points &lt;-<span class="st"> </span><span class="ot">NULL</span></a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">gf<span class="op">$</span>select_points &lt;-<span class="st"> </span><span class="ot">NULL</span></a></code></pre></div>
 <hr>
 </div>
 </div>
@@ -647,12 +655,12 @@ $(document).ready(function () {
 <div id="north-american-modern-pollen-data" class="section level2">
 <h2><span class="header-section-number">3.1</span> North American modern pollen data</h2>
 <p>This example makes use of a data set of 4360 modern pollen samples for North America, from Whitmore et al. (2005, <em>Quaternary Science Reviews</em> <a href="https://doi.org/10.1016/j.quascirev.2005.03.005">https://doi.org/10.1016/j.quascirev.2005.03.005</a>. The variables include the location and elevation of each sample, the relative abundances of the 12 most-abundant pollen types (transformed by taking square roots), and two categorical variables, Federova et al. (1994) vegetation types and USGS land-cover types from satellite remote-sensing data (see Whitmore et al. 2005 for details). This data set provides an interesting example, inasmuch as the resulting tableplots are reminiscent of “downcore”-plotted pollen diagrams.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="co"># read the North American modern pollen data</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">csv_name &lt;-<span class="st"> &quot;NAmodpol.csv&quot;</span></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4">csv_file &lt;-<span class="st"> </span><span class="kw">paste</span>(csv_path, csv_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb12-5" data-line-number="5">napol &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_file) <span class="co"># takes a while</span></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="kw">str</span>(napol)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># read the North American modern pollen data</span></a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">csv_name &lt;-<span class="st"> &quot;NAmodpol.csv&quot;</span></a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">csv_file &lt;-<span class="st"> </span><span class="kw">paste</span>(csv_path, csv_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">napol &lt;-<span class="st"> </span><span class="kw">read.csv</span>(csv_file) <span class="co"># takes a while</span></a>
+<a class="sourceLine" id="cb14-6" data-line-number="6"><span class="kw">str</span>(napol)</a></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    4630 obs. of  17 variables:
 ##  $ Lon    : num  -70 -79.2 -57 -85.5 -73.3 ...
 ##  $ Lat    : num  61 46 52.5 36 45.5 ...
@@ -672,29 +680,29 @@ $(document).ready(function () {
 ##  $ Fed    : Factor w/ 11 levels &quot;99&quot;,&quot;Arctic&quot;,..: 8 5 3 6 5 5 6 5 6 5 ...
 ##  $ USGS21 : Factor w/ 17 levels &quot;lc1&quot;,&quot;lc10&quot;,&quot;lc11&quot;,..: 10 5 5 14 13 5 3 4 3 3 ...</code></pre>
 <p>Map the pollen site locations:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">library</span>(maps)</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">plot</span>(napol<span class="op">$</span>Lat <span class="op">~</span><span class="st"> </span>napol<span class="op">$</span>Lon, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">map</span>(<span class="st">&quot;world&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;gray&quot;</span>)</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="kw">points</span>(napol<span class="op">$</span>Lat <span class="op">~</span><span class="st"> </span>napol<span class="op">$</span>Lon, <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">library</span>(maps)</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw">plot</span>(napol<span class="op">$</span>Lat <span class="op">~</span><span class="st"> </span>napol<span class="op">$</span>Lon, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw">map</span>(<span class="st">&quot;world&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>, <span class="dt">lwd=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;gray&quot;</span>)</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="kw">points</span>(napol<span class="op">$</span>Lat <span class="op">~</span><span class="st"> </span>napol<span class="op">$</span>Lon, <span class="dt">pch=</span><span class="dv">16</span>)</a></code></pre></div>
 <p><img src="highdim_files/figure-html/hd31-1.png" width="75%" height="75%" /></p>
 </div>
 <div id="plots-1" class="section level2">
 <h2><span class="header-section-number">3.2</span> Plots</h2>
 <p>Load the <code>tabplot</code> package. Note that <code>tabplot</code> loads some other packages (<code>ffbase</code>, <code>ff</code>, <code>bit</code>, etc.) that allow for efficient processing of large data sets and replace some of the functions in the <code>base</code> package. It might be good to restart R after using the <code>tabplot</code> package.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">library</span>(tabplot)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">library</span>(tabplot)</a></code></pre></div>
 <p>Here’s a simple tableplot, with the observations arranged by latitude (<code>sortCol=&quot;Lat&quot;</code>) and linear scales specified for all continuous variables (<code>scales=&quot;lin&quot;</code>, the <code>tabplot()</code> function attempts to find a suitable scale for each variable, but here the pollen variables were all transformed prior to the analysis, and so we want to suppress further transformation here).</p>
 <p>(Note that it just happens that the resulting plot looks like a standard pollen diagram–this isn’t designed in any way.)</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">tableplot</span>(napol, <span class="dt">sortCol=</span><span class="st">&quot;Lat&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">tableplot</span>(napol, <span class="dt">sortCol=</span><span class="st">&quot;Lat&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>)</a></code></pre></div>
 <p><img src="highdim_files/figure-html/hd34-1.png" width="90%" height="90%" /></p>
 <p>It’s possible to see broad trends in all of the pollen types, as well as in the frequency of different vegetationtypes as a function of latitude.</p>
 <p>Each bin the above plot represents a bin that, in this case, holds 46 observations, and what is plotted as bars in each column is the bin-average or frequency for those observations. Here’s a second plot like the first, using more bins:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">tableplot</span>(napol, <span class="dt">sortCol=</span><span class="st">&quot;Lat&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">nBins=</span><span class="dv">200</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">tableplot</span>(napol, <span class="dt">sortCol=</span><span class="st">&quot;Lat&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">nBins=</span><span class="dv">200</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>)</a></code></pre></div>
 <p><img src="highdim_files/figure-html/hd36-1.png" width="90%" height="90%" /></p>
 <p>The same broad-scale patterns are evident in this plot, suggesting that the approach is robust with respect to the number of bins. The next plot using the abundance of <em>Picea</em> (spruce to organize the data):</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">tableplot</span>(napol, <span class="dt">sortCol=</span><span class="st">&quot;Picea&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">nBins=</span><span class="dv">100</span>, , <span class="dt">fontsize =</span> <span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">tableplot</span>(napol, <span class="dt">sortCol=</span><span class="st">&quot;Picea&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">nBins=</span><span class="dv">100</span>, , <span class="dt">fontsize =</span> <span class="dv">8</span>)</a></code></pre></div>
 <p><img src="highdim_files/figure-html/hd38-1.png" width="90%" height="90%" /></p>
 <p>The plot shows that <em>Aremisia</em> (sagebrush) pollen has a similar profile to <em>Picea</em> and both tend to be high at high elevation and low (western) longitudes. The next plot using one of the categorical variables to organize the data.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">tableplot</span>(napol, <span class="dt">sortCol=</span><span class="st">&quot;Fed&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">nBins=</span><span class="dv">100</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">tableplot</span>(napol, <span class="dt">sortCol=</span><span class="st">&quot;Fed&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">nBins=</span><span class="dv">100</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>)</a></code></pre></div>
 <p><img src="highdim_files/figure-html/hd40-1.png" width="90%" height="90%" /></p>
 <p>The blockiness of the different profiles shows that the individual vegetation types have distinctive mixtures of the different pollen types.</p>
 </div>
@@ -705,16 +713,16 @@ $(document).ready(function () {
 <div id="plots-2" class="section level2">
 <h2><span class="header-section-number">3.4</span> Plots</h2>
 <p>To start, produce a tableplot, arranged by mean-annual temperature (<code>mat</code>), an obvious first-order preditor of biomass burning, as well as overall climate (through the dependence of the water balance on temperature via the Clausius-Clapyron relationship):</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">tableplot</span>(gf, <span class="dt">sortCol=</span><span class="st">&quot;mat&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>, <span class="dt">pals=</span><span class="kw">list</span>(<span class="dt">megabiome=</span><span class="st">&quot;Set8&quot;</span>, <span class="dt">vegtype=</span><span class="st">&quot;Set8&quot;</span>))</a></code></pre></div>
-<p><img src="highdim_files/figure-html/unnamed-chunk-10-1.png" width="90%" height="90%" /></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">tableplot</span>(gf, <span class="dt">sortCol=</span><span class="st">&quot;mat&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>, <span class="dt">pals=</span><span class="kw">list</span>(<span class="dt">megabiome=</span><span class="st">&quot;Set8&quot;</span>, <span class="dt">vegtype=</span><span class="st">&quot;Set8&quot;</span>))</a></code></pre></div>
+<p><img src="highdim_files/figure-html/unnamed-chunk-11-1.png" width="90%" height="90%" /></p>
 <p>Overall, the trends of individual variables are relatively smooth, and it’s easy to see distiguish the temperature and moisture variables (as well as the population variable <code>gpw</code>). The vegetation-type variables <code>megabiome</code> and <code>vegtype</code> are also well sorted out along a mean annual temperature gradient. Burned fraction (<code>gfed</code>) obviously displays a threshold-type relationshion, where values are small at low temperatures, and higher at high values of <code>mat</code>.</p>
 <p>Next, the tableplot is sorted by precipitation minus evapotranspiration (<code>pme</code>, or P-E):</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">tableplot</span>(gf, <span class="dt">sortCol=</span><span class="st">&quot;pme&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>, <span class="dt">pals=</span><span class="kw">list</span>(<span class="dt">megabiome=</span><span class="st">&quot;Set8&quot;</span>, <span class="dt">vegtype=</span><span class="st">&quot;Set8&quot;</span>))</a></code></pre></div>
-<p><img src="highdim_files/figure-html/unnamed-chunk-11-1.png" width="90%" height="90%" /></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">tableplot</span>(gf, <span class="dt">sortCol=</span><span class="st">&quot;pme&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>, <span class="dt">pals=</span><span class="kw">list</span>(<span class="dt">megabiome=</span><span class="st">&quot;Set8&quot;</span>, <span class="dt">vegtype=</span><span class="st">&quot;Set8&quot;</span>))</a></code></pre></div>
+<p><img src="highdim_files/figure-html/unnamed-chunk-12-1.png" width="90%" height="90%" /></p>
 <p>The relationship between burned fraction and P-E evident in univariate plots–the arch-shaped pattern, where burned fraction is highest at intermediate values of effective moisture–is also evident here: as P-E monotonically incrases, burned fraction (<code>gfed</code>) rises, then falls.</p>
 <p>Finally, the tableplot can be sorted by burned fraction (<code>gfed</code>):</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">tableplot</span>(gf, <span class="dt">sortCol=</span><span class="st">&quot;gfed&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>, <span class="dt">pals=</span><span class="kw">list</span>(<span class="dt">megabiome=</span><span class="st">&quot;Set8&quot;</span>, <span class="dt">vegtype=</span><span class="st">&quot;Set8&quot;</span>))</a></code></pre></div>
-<p><img src="highdim_files/figure-html/unnamed-chunk-12-1.png" width="90%" height="90%" /></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">tableplot</span>(gf, <span class="dt">sortCol=</span><span class="st">&quot;gfed&quot;</span>, <span class="dt">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="dt">fontsize =</span> <span class="dv">8</span>, <span class="dt">pals=</span><span class="kw">list</span>(<span class="dt">megabiome=</span><span class="st">&quot;Set8&quot;</span>, <span class="dt">vegtype=</span><span class="st">&quot;Set8&quot;</span>))</a></code></pre></div>
+<p><img src="highdim_files/figure-html/unnamed-chunk-13-1.png" width="90%" height="90%" /></p>
 <p>This plot confirms the existing relationships, where burned fraction broadly tracks temperature and P-E. However the plots also reveal a distinct threshold that is apparently related to a distinct discontinuity in vegetation: the transition beteen desert and tundra vegetation types, and grassland, shubland and forested ones.</p>
 <p><a href="highdim.html">[Back to top]</a></p>
 </div>
@@ -725,11 +733,11 @@ $(document).ready(function () {
 <div id="carp-l.-pollen-data" class="section level2">
 <h2><span class="header-section-number">4.1</span> Carp L. pollen data</h2>
 <p>The data here come from a long pollen record from Carp L., in Washinton State. (Whitlock, C.L. et al., 2000, <em>Palaeogeography Palaeoclimatology Palaeoecology</em> 155(1-2):7-29 [<a href="https://doi.org/10.1016/S0031-0182(99)00092-9" class="uri">https://doi.org/10.1016/S0031-0182(99)00092-9</a>] (<a href="https://doi.org/10.1016/S0031-0182\(99\)00092-9" class="uri">https://doi.org/10.1016/S0031-0182\(99\)00092-9</a>) and Whitlock, C. and P.J. Bartlein, 1997, <em>Nature</em> 388:57-61 <a href="https://doi.org/10.1038/40380">https://doi.org/10.1038/40380</a>. Pollen data are “long-tailed” and so the data were transformed earlier by taking the square root of the pollen percentages.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co"># read Carp L. pollen data (transformed to square-roots)</span></a>
-<a class="sourceLine" id="cb23-2" data-line-number="2">csvpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
-<a class="sourceLine" id="cb23-3" data-line-number="3">csvname &lt;-<span class="st"> &quot;carp96t.csv&quot;</span> <span class="co"># square-root transformed data</span></a>
-<a class="sourceLine" id="cb23-4" data-line-number="4">carp &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">paste</span>(csvpath, csvname, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb23-5" data-line-number="5"><span class="kw">summary</span>(carp)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># read Carp L. pollen data (transformed to square-roots)</span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2">csvpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
+<a class="sourceLine" id="cb25-3" data-line-number="3">csvname &lt;-<span class="st"> &quot;carp96t.csv&quot;</span> <span class="co"># square-root transformed data</span></a>
+<a class="sourceLine" id="cb25-4" data-line-number="4">carp &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">paste</span>(csvpath, csvname, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
+<a class="sourceLine" id="cb25-5" data-line-number="5"><span class="kw">summary</span>(carp)</a></code></pre></div>
 <pre><code>##      Depth            Age                 IS        Dippine         Happine          undpine     
 ##  Min.   : 1.30   Min.   :  0.3983   3      :47   Min.   :0.000   Min.   :0.0000   Min.   :1.629  
 ##  1st Qu.: 7.15   1st Qu.: 25.1045   1      :31   1st Qu.:1.220   1st Qu.:0.5585   1st Qu.:4.351  
@@ -771,35 +779,35 @@ $(document).ready(function () {
 ##  Max.   :3.9650  
 ## </code></pre>
 <p>Pollen data (expressed as proportions or percentages of individual pollen types) vary over an order of magnitude in value, and also have long-tailed distributions. Consequently they should be tranformed, and a useful transformation is to simply take the square root of the proportions.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># transform </span></a>
-<a class="sourceLine" id="cb25-2" data-line-number="2">tcarp &lt;-<span class="st"> </span>carp</a>
-<a class="sourceLine" id="cb25-3" data-line-number="3">tcarp[<span class="dv">4</span><span class="op">:</span><span class="dv">25</span>] &lt;-<span class="st"> </span><span class="kw">sqrt</span>(tcarp[<span class="dv">4</span><span class="op">:</span><span class="dv">25</span>])</a>
-<a class="sourceLine" id="cb25-4" data-line-number="4"><span class="kw">names</span>(tcarp)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="co"># transform </span></a>
+<a class="sourceLine" id="cb27-2" data-line-number="2">tcarp &lt;-<span class="st"> </span>carp</a>
+<a class="sourceLine" id="cb27-3" data-line-number="3">tcarp[<span class="dv">4</span><span class="op">:</span><span class="dv">25</span>] &lt;-<span class="st"> </span><span class="kw">sqrt</span>(tcarp[<span class="dv">4</span><span class="op">:</span><span class="dv">25</span>])</a>
+<a class="sourceLine" id="cb27-4" data-line-number="4"><span class="kw">names</span>(tcarp)</a></code></pre></div>
 <pre><code>##  [1] &quot;Depth&quot;      &quot;Age&quot;        &quot;IS&quot;         &quot;Dippine&quot;    &quot;Happine&quot;    &quot;undpine&quot;    &quot;Picea&quot;     
 ##  [8] &quot;Abies&quot;      &quot;Pseudotsug&quot; &quot;Juniperus&quot;  &quot;Thet&quot;       &quot;Tmert&quot;      &quot;Taxusbrev&quot;  &quot;Alnus&quot;     
 ## [15] &quot;Arubra&quot;     &quot;Corylus&quot;    &quot;Betula&quot;     &quot;Salix&quot;      &quot;Fraxinus&quot;   &quot;Quercus&quot;    &quot;Poaceae&quot;   
 ## [22] &quot;Artemisia&quot;  &quot;Ambrosia&quot;   &quot;Ivaciliat&quot;  &quot;Chenopodii&quot;</code></pre>
 <p>As it appears in the spreadsheet, the data are not particularly well organized, but instead the columns are arranged according to the traditional style of pollen diagrams. An alternative approach is to arrange the indiviual variables (pollen types) according to their affinities as they vary over the core, which can be accomplished by doing a cluster analysis on a dissimilary matrix among pollen types: taxa that vary in a similar (or inverse) fashion downcore appear adjacent to one another.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="co"># cluster rearrangement</span></a>
-<a class="sourceLine" id="cb27-2" data-line-number="2">carp_heat &lt;-<span class="st"> </span><span class="kw">heatmap</span>(<span class="kw">as.matrix</span>(tcarp[<span class="dv">4</span><span class="op">:</span><span class="dv">25</span>]), <span class="dt">Rowv =</span> <span class="ot">NA</span>, <span class="dt">scale=</span><span class="st">&quot;none&quot;</span>)</a></code></pre></div>
-<p><img src="highdim_files/figure-html/unnamed-chunk-14-1.png" width="75%" height="75%" /></p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1"><span class="kw">attributes</span>(carp_heat)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="co"># cluster rearrangement</span></a>
+<a class="sourceLine" id="cb29-2" data-line-number="2">carp_heat &lt;-<span class="st"> </span><span class="kw">heatmap</span>(<span class="kw">as.matrix</span>(tcarp[<span class="dv">4</span><span class="op">:</span><span class="dv">25</span>]), <span class="dt">Rowv =</span> <span class="ot">NA</span>, <span class="dt">scale=</span><span class="st">&quot;none&quot;</span>)</a></code></pre></div>
+<p><img src="highdim_files/figure-html/unnamed-chunk-15-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">attributes</span>(carp_heat)</a></code></pre></div>
 <pre><code>## $names
 ## [1] &quot;rowInd&quot; &quot;colInd&quot; &quot;Rowv&quot;   &quot;Colv&quot;</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">carp_heat<span class="op">$</span>colInd</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">carp_heat<span class="op">$</span>colInd</a></code></pre></div>
 <pre><code>##  [1]  3 18 19  4  2  1 13 20 21 10 16 11 15 14  9  6 12 17  8  5 22  7</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">sort_cols &lt;-<span class="st"> </span>carp_heat<span class="op">$</span>colInd <span class="op">+</span><span class="st"> </span><span class="dv">3</span></a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">sort_cols &lt;-<span class="st"> </span>carp_heat<span class="op">$</span>colInd <span class="op">+</span><span class="st"> </span><span class="dv">3</span></a></code></pre></div>
 <p>The “heatmap” (which in itself provides an interesting way to look at the data), can be used to rearrange the columns of the dataframe to put similar (or inversely similar, when one type is high the other is low) next to one another:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co"># rearrange matrix</span></a>
-<a class="sourceLine" id="cb33-2" data-line-number="2">stcarp &lt;-<span class="st"> </span>tcarp</a>
-<a class="sourceLine" id="cb33-3" data-line-number="3"><span class="kw">names</span>(stcarp)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co"># rearrange matrix</span></a>
+<a class="sourceLine" id="cb35-2" data-line-number="2">stcarp &lt;-<span class="st"> </span>tcarp</a>
+<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="kw">names</span>(stcarp)</a></code></pre></div>
 <pre><code>##  [1] &quot;Depth&quot;      &quot;Age&quot;        &quot;IS&quot;         &quot;Dippine&quot;    &quot;Happine&quot;    &quot;undpine&quot;    &quot;Picea&quot;     
 ##  [8] &quot;Abies&quot;      &quot;Pseudotsug&quot; &quot;Juniperus&quot;  &quot;Thet&quot;       &quot;Tmert&quot;      &quot;Taxusbrev&quot;  &quot;Alnus&quot;     
 ## [15] &quot;Arubra&quot;     &quot;Corylus&quot;    &quot;Betula&quot;     &quot;Salix&quot;      &quot;Fraxinus&quot;   &quot;Quercus&quot;    &quot;Poaceae&quot;   
 ## [22] &quot;Artemisia&quot;  &quot;Ambrosia&quot;   &quot;Ivaciliat&quot;  &quot;Chenopodii&quot;</code></pre>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1">stcarp[<span class="dv">4</span><span class="op">:</span><span class="dv">25</span>] &lt;-<span class="st"> </span>tcarp[sort_cols]</a>
-<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="kw">names</span>(stcarp) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Depth&quot;</span>, <span class="st">&quot;Age&quot;</span>, <span class="st">&quot;IS&quot;</span>, <span class="kw">names</span>(tcarp)[sort_cols])</a>
-<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="kw">names</span>(stcarp)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">stcarp[<span class="dv">4</span><span class="op">:</span><span class="dv">25</span>] &lt;-<span class="st"> </span>tcarp[sort_cols]</a>
+<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="kw">names</span>(stcarp) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Depth&quot;</span>, <span class="st">&quot;Age&quot;</span>, <span class="st">&quot;IS&quot;</span>, <span class="kw">names</span>(tcarp)[sort_cols])</a>
+<a class="sourceLine" id="cb37-3" data-line-number="3"><span class="kw">names</span>(stcarp)</a></code></pre></div>
 <pre><code>##  [1] &quot;Depth&quot;      &quot;Age&quot;        &quot;IS&quot;         &quot;undpine&quot;    &quot;Poaceae&quot;    &quot;Artemisia&quot;  &quot;Picea&quot;     
 ##  [8] &quot;Happine&quot;    &quot;Dippine&quot;    &quot;Corylus&quot;    &quot;Ambrosia&quot;   &quot;Ivaciliat&quot;  &quot;Taxusbrev&quot;  &quot;Fraxinus&quot;  
 ## [15] &quot;Alnus&quot;      &quot;Salix&quot;      &quot;Betula&quot;     &quot;Tmert&quot;      &quot;Pseudotsug&quot; &quot;Arubra&quot;     &quot;Quercus&quot;   
@@ -808,17 +816,17 @@ $(document).ready(function () {
 <div id="plots-3" class="section level2">
 <h2><span class="header-section-number">4.2</span> Plots</h2>
 <p>The idea behind the <code>mvtsplots()</code> package (and function) is to use color to reveal underlying patterns in the data. The first plot shows the “raw” data, simply coded for each pollen taxon independently from low (magenta) to high (green). The plots on the margins are of boxplots for the individual series (right), and a time series of the median values across all series (bottom), which attempt to summarize the overall level of the series.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">library</span>(mvtsplot)</a>
-<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="kw">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">library</span>(mvtsplot)</a>
+<a class="sourceLine" id="cb39-2" data-line-number="2"><span class="kw">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
 <p><img src="highdim_files/figure-html/mvtsplots01-1.png" width="75%" height="75%" /></p>
 <p>PLotted this way, one begins to get an idea of some organization to the data along the time axis. The plot is a little noisy, and can be simplified by smoothing the individual series.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">smooth.df=</span><span class="dv">25</span>, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">smooth.df=</span><span class="dv">25</span>, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
 <p><img src="highdim_files/figure-html/mtvsplot02-1.png" width="75%" height="75%" /></p>
 <p>Further simplification can be gotten by “normalizing” the data, transforming and assigning colors based on the range of values in each series individually.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">smooth.df=</span><span class="dv">2</span>, <span class="dt">norm=</span><span class="st">&quot;internal&quot;</span>, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="kw">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">smooth.df=</span><span class="dv">2</span>, <span class="dt">norm=</span><span class="st">&quot;internal&quot;</span>, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
 <p><img src="highdim_files/figure-html/mtvsplot03-1.png" width="75%" height="75%" /></p>
 <p>The color field now shows that the data are well organized in time, which can be verified by adding a plot of the variable <code>IS</code> i.e. the MIS (Marine Isotopic Stage) to the plot (on the last row). The progression of plots can also be seen to have proceeded from a fairly chaotic pattern to one with coherent patches:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw">mvtsplot</span>(stcarp[, <span class="dv">3</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">smooth.df=</span><span class="dv">2</span>, <span class="dt">norm=</span><span class="st">&quot;internal&quot;</span>, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="kw">mvtsplot</span>(stcarp[, <span class="dv">3</span><span class="op">:</span><span class="dv">25</span>], <span class="dt">xtime=</span>carp<span class="op">$</span>Age, <span class="dt">smooth.df=</span><span class="dv">2</span>, <span class="dt">norm=</span><span class="st">&quot;internal&quot;</span>, <span class="dt">levels=</span><span class="dv">9</span>, <span class="dt">margin=</span><span class="ot">TRUE</span>)</a></code></pre></div>
 <p><img src="highdim_files/figure-html/mvtsplot04-1.png" width="75%" height="75%" /></p>
 <p><a href="highdim.html">[Back to top]</a></p>
 </div>
@@ -830,11 +838,11 @@ $(document).ready(function () {
 <p>Read the data:</p>
 <p>Even though the data is decadal resolution, it’s still a lot of data, and so for this example, the data are (actually) decimated to produce century time-step decadal average values.</p>
 <p>A levelplot of one slice of the the data can be used to become oriented to the geographic layout of the data:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span>(<span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))))</a>
-<a class="sourceLine" id="cb41-2" data-line-number="2">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">40</span>,<span class="op">-</span><span class="dv">10</span>,<span class="op">-</span><span class="dv">5</span>,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb41-3" data-line-number="3">col &lt;-<span class="st"> </span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))</a>
-<a class="sourceLine" id="cb41-4" data-line-number="4">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(<span class="kw">subset</span>(tas2,<span class="dv">1</span>), <span class="dt">at=</span>cutpts, <span class="dt">margin=</span><span class="ot">FALSE</span>, <span class="dt">par.settings=</span>mapTheme)</a>
-<a class="sourceLine" id="cb41-5" data-line-number="5">plt <span class="op">+</span><span class="st"> </span>latticeExtra<span class="op">::</span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="dv">1</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span>(<span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))))</a>
+<a class="sourceLine" id="cb43-2" data-line-number="2">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">40</span>,<span class="op">-</span><span class="dv">10</span>,<span class="op">-</span><span class="dv">5</span>,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>)</a>
+<a class="sourceLine" id="cb43-3" data-line-number="3">col &lt;-<span class="st"> </span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))</a>
+<a class="sourceLine" id="cb43-4" data-line-number="4">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(<span class="kw">subset</span>(tas2,<span class="dv">1</span>), <span class="dt">at=</span>cutpts, <span class="dt">margin=</span><span class="ot">FALSE</span>, <span class="dt">par.settings=</span>mapTheme)</a>
+<a class="sourceLine" id="cb43-5" data-line-number="5">plt <span class="op">+</span><span class="st"> </span>latticeExtra<span class="op">::</span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="dv">1</span>))</a></code></pre></div>
 <p><img src="highdim_files/figure-html/plot%20setup-1.png" width="75%" height="75%" /></p>
 <p>Then, the cubeplot can be produced using the <code>cubeview()</code> function from the <code>cubeview</code> package. The plot is interactively controlled as follows (from the <code>cubeview()</code> help file:</p>
 <p>The location of the slices can be controlled by keys:</p>
@@ -851,7 +859,7 @@ $(document).ready(function () {
 <li>Press space bar to show/hide slice position guides</li>
 </ul>
 <p>The cubeplot, as rendered here, displays a map on the “front (or rear) face” of the brick, and Hovmöller plots on the top (or bottom) and sides.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="kw">cubeView</span>(tas2, <span class="dt">at=</span>cutpts, <span class="dt">col.regions=</span>col)</a></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="kw">cubeView</span>(tas2, <span class="dt">at=</span>cutpts, <span class="dt">col.regions=</span>col)</a></code></pre></div>
 <p><img src="tr21cube.png" /></p>
 <p>Here is a link to the plot on the server: <a href="https://pjbartlein.github.io/REarthSysSci/tr21cube.html">https://pjbartlein.github.io/REarthSysSci/tr21cube.html</a></p>
 <p><a href="highdim.html">[Back to top]</a></p>
