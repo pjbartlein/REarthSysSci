@@ -116,8 +116,8 @@ This plot illustrates the idea of the first (or "principal" component) providing
 
 The formal derivation of principal components analysis requires the use of matix algebra.
 
-- [[Matrix algebra]](https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.html) 
-- - [Derivation of principal components](https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html) 
+- [[Matrix algebra]](https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.pdf) 
+- [Derivation of principal components](https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html) 
 
 Because the components are derived by solving a particular optimization problem, they naturally have some "built-in" properties that are desirable in practice (e.g. maximum variability).  In addition, there are a number of other properties of the components that can be derived:
 
@@ -135,34 +135,35 @@ Because the components are derived by solving a particular optimization problem,
 The data set here is a "stacked" data set of output from thirteen "PMIP3" simulations of mid-Holocene climate (in particular, the long-term mean differences between the mid-Holocene simulations and those for the pre-industrial period) for a region in northern Eurasia.  The objective of the analysis was to examine the systematic relationship among a number of different climate variables as part of understanding the mismatch between the simulations and paleoenvironmental observations (reconstructions), where the simulations were in general drier and warmer than the climate reconstructed from the data.  (See Bartlein, P.J., S.P. Harrison and K. Izumi, 2017, Underlying causes of Eurasian mid-continental aridity in simulations of mid-Holocene climate, *Geophysical Research Letters* 44:1-9, [http://dx.doi.org/10.1002/2017GL074476](http://dx.doi.org/10.1002/2017GL074476))
 
 The variable include: 
+
 - `Kext`: Insolation at the top of the atmosphere 
 - `Kn`: Net shortwave radiation 
-- `Ln`: Net longwave ratiation   
-- `Qn`: Net radiation
-- `Qe`: Latent heating
-- `Qh`: Sensible heating  
-- `Qg`: Substrate heating
+- `Ln`: Net longwave ratiation  
+- `Qn`: Net radiation 
+- `Qe`: Latent heating 
+- `Qh`: Sensible heating 
+- `Qg`: Substrate heating 
 - `bowen`: Bowen ratio (`Qh/Qn`) 
 - `alb`: Albedo 
 - `ta`: 850 mb temperature 
 - `tas`: Near-surface (2 m) air temperature 
 - `ts`: Surface (skin) temperature 
-- `ua`: Eastward wind component, 500 hpa level 
+- `ua`: Eastward wind component, 500 hPa level 
 - `va`: Northward wind component, 500 hPa level 
 - `omg`: 500 hPa vertical velocity 
 - `uas`: Eastward wind component, surface 
 - `vas`: Northward  wind component, surface 
-- `slp`: Mean sea-level pressure
+- `slp`: Mean sea-level pressure 
 - `Qdv`: Moisture divergence 
 - `shm`: Specific humidity 
 - `clt`: Cloudiness 
 - `pre`: Precipitation rate 
 - `evap`: Evaporation rate 
 - `pme`: P-E rate 
-- `sm`: Soil moisture
+- `sm`: Soil moisture 
 - `ro`: Runoff 
 - `dS`: Change in moisture storage 
-- `snd`: Snow depth
+- `snd`: Snow depth 
 
 The data set was assebled by stacking the monthly long-term mean differneces from each model on top of one another, creating a 13 x 12 row by 24 column array.  This arrangement of the data will reveal the common variations in the seasonal cycles of the long-term mean differences.
 
