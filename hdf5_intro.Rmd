@@ -92,7 +92,7 @@ Begin by setting paths and filenames:
 
 ```{r, file1paths}
 # set path and filename
-hdf_path <- "/Users/bartlein/Dropbox/DataVis/working/geog490/data/hdf_files/"
+hdf_path <- "/Users/bartlein/Projects/ESSD//data/hdf_files/"
 hdf_name <- "uvief20190423.h5"
 hdf_file <- paste(hdf_path, hdf_name, sep="")
 ```
@@ -175,7 +175,7 @@ A much more stuctured file that exploits the ability of HDF5 to store data in "g
 
 ```{r}
 # set path 
-hdf_path <- "/Users/bartlein/Dropbox/DataVis/working/geog490/data/hdf_files/"
+hdf_path <- "/Users/bartlein/Projects/ESSD//data/hdf_files/"
 hdf_name <- "GFED4.1s_2016.hdf5"
 hdf_file <- paste(hdf_path, hdf_name, sep="")
 ```

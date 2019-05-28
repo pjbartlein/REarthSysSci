@@ -12,6 +12,7 @@ output:
 ```{r set-options, echo=FALSE}
 options(width = 105)
 knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE, out.width = "75%", out.height = "75%")
+knitr::opts_knit$set(progress = TRUE, verbose = TRUE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
@@ -72,7 +73,7 @@ Read a single-variable netCDF dataset describing global tree cover using the `ra
 
 ```{r read treeWin, eval=FALSE, echo=FALSE}
 # read a single-variable netCDF dataset using raster()
-tree_path <- "e:/Dropbox/DataVis/working/geog490/data/nc_files/"
+tree_path <- "e:/Projects/ESSD//data/nc_files/"
 tree_name <- "treecov.nc"
 tree_file <- paste(tree_path, tree_name, sep="")
 tree <- raster(tree_file) # open treecov.nc

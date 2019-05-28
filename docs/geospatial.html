@@ -405,7 +405,7 @@ $(document).ready(function () {
       <a href="highdim.html">Visualization of high-dimensional data</a>
     </li>
     <li>
-      <a href="multivariate.html">Multivariate analyses</a>
+      <a href="PCA.html">Principal components analyses</a>
     </li>
   </ul>
 </li>
@@ -1015,7 +1015,7 @@ $(document).ready(function () {
 ## attr(,&quot;package&quot;)
 ## [1] &quot;sp&quot;</code></pre>
 <div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="kw">plot</span>(picea_shp)</a></code></pre></div>
-<p><img src="geospatial_files/figure-html/add proj4string-1.png" width="75%" height="75%" /></p>
+<p><img src="geospatial_files/figure-html/add%20proj4string-1.png" width="75%" height="75%" /></p>
 <p>Read the na10km_v2 points as a .csv file (for illustration, in practice it would be more efficient to read it as a netCDF file).</p>
 <div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="co"># read the na10km_v2 points (as a .csv file)</span></a>
 <a class="sourceLine" id="cb68-2" title="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
@@ -1042,7 +1042,7 @@ $(document).ready(function () {
 ## attr(,&quot;package&quot;)
 ## [1] &quot;sp&quot;</code></pre>
 <div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="kw">plot</span>(na10km_v2_pts, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.4</span>)</a></code></pre></div>
-<p><img src="geospatial_files/figure-html/na10km dataframe-1.png" width="75%" height="75%" /></p>
+<p><img src="geospatial_files/figure-html/na10km%20dataframe-1.png" width="75%" height="75%" /></p>
 </div>
 <div id="overlay-the-points-onto-the-polygons" class="section level2">
 <h2><span class="header-section-number">4.2</span> Overlay the points onto the polygons</h2>
@@ -1060,7 +1060,7 @@ $(document).ready(function () {
 <div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1">picea_pts2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(na10km_v2_coords[<span class="op">!</span><span class="kw">is.na</span>(picea_pts), ] )</a>
 <a class="sourceLine" id="cb78-2" title="2"><span class="kw">plot</span>(na10km_v2_pts, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.4</span>)</a>
 <a class="sourceLine" id="cb78-3" title="3"><span class="kw">points</span>(picea_pts2, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.1</span>, <span class="dt">col=</span><span class="st">&quot;green&quot;</span>)</a></code></pre></div>
-<p><img src="geospatial_files/figure-html/plot trimmed-1.png" width="75%" height="75%" /></p>
+<p><img src="geospatial_files/figure-html/plot%20trimmed-1.png" width="75%" height="75%" /></p>
 <p><a href="geospatial.html">[Back to top]</a></p>
 </div>
 </div>
@@ -1333,7 +1333,7 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb117-3" title="3">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">7000</span>, <span class="dv">-6000</span>, <span class="dv">-4000</span>, <span class="dv">-2000</span>, <span class="dv">0</span>, <span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">1500</span>, <span class="dv">2000</span>, <span class="dv">3000</span>, <span class="dv">4000</span>, <span class="dv">5000</span>)</a>
 <a class="sourceLine" id="cb117-4" title="4"><span class="kw">levelplot</span>(etopo1_array <span class="op">~</span><span class="st"> </span>lon <span class="op">*</span><span class="st"> </span>lat, <span class="dt">data=</span>grid, <span class="dt">at=</span>cutpts, <span class="dt">cuts=</span><span class="dv">11</span>, <span class="dt">pretty=</span>T, </a>
 <a class="sourceLine" id="cb117-5" title="5">  <span class="dt">col.regions=</span><span class="kw">topo.colors</span>(<span class="dv">12</span>))</a></code></pre></div>
-<p><img src="geospatial_files/figure-html/levelplot elev-1.png" width="75%" height="75%" /></p>
+<p><img src="geospatial_files/figure-html/levelplot%20elev-1.png" width="75%" height="75%" /></p>
 <p>Open and read the .csv file containing the “target”" points.</p>
 <div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" title="1"><span class="co"># read na10km_v2 grid-point locations -- land-points only</span></a>
 <a class="sourceLine" id="cb118-2" title="2">csv_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
@@ -1396,7 +1396,7 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb128-2" title="2">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">7000</span>, <span class="dv">-6000</span>, <span class="dv">-4000</span>, <span class="dv">-2000</span>, <span class="dv">0</span>, <span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">1500</span>, <span class="dv">2000</span>, <span class="dv">3000</span>, <span class="dv">4000</span>, <span class="dv">5000</span>)</a>
 <a class="sourceLine" id="cb128-3" title="3"><span class="kw">levelplot</span>(interp_mat <span class="op">~</span><span class="st"> </span>x <span class="op">*</span><span class="st"> </span>y, <span class="dt">data=</span>grid, <span class="dt">at=</span>cutpts, <span class="dt">cuts=</span><span class="dv">11</span>, <span class="dt">pretty=</span>T, </a>
 <a class="sourceLine" id="cb128-4" title="4">  <span class="dt">col.regions=</span><span class="kw">topo.colors</span>(<span class="dv">12</span>))</a></code></pre></div>
-<p><img src="geospatial_files/figure-html/interp map-1.png" width="75%" height="75%" /></p>
+<p><img src="geospatial_files/figure-html/interp%20map-1.png" width="75%" height="75%" /></p>
 <p>At this point, <code>interp_mat</code> could be written out as a variable in a netCDF file (along with dimension and attribute data). Also make a data frame of the interpolated data, which could be written out as a .csv file:</p>
 <div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" title="1"><span class="co"># make a dataframe of the interpolated elevations</span></a>
 <a class="sourceLine" id="cb129-2" title="2">out_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">cbind</span>(na10km_v2<span class="op">$</span>x, na10km_v2<span class="op">$</span>y, na10km_v2<span class="op">$</span>lon, na10km_v2<span class="op">$</span>lat, interp_var))</a>

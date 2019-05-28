@@ -405,7 +405,7 @@ $(document).ready(function () {
       <a href="highdim.html">Visualization of high-dimensional data</a>
     </li>
     <li>
-      <a href="multivariate.html">Multivariate analyses</a>
+      <a href="PCA.html">Principal components analyses</a>
     </li>
   </ul>
 </li>
@@ -556,7 +556,7 @@ $(document).ready(function () {
 <h1><span class="header-section-number">3</span> Read a simple HDF5 file</h1>
 <p>Begin by setting paths and filenames:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># set path and filename</span></a>
-<a class="sourceLine" id="cb5-2" title="2">hdf_path &lt;-<span class="st"> &quot;/Users/bartlein/Dropbox/DataVis/working/geog490/data/hdf_files/&quot;</span></a>
+<a class="sourceLine" id="cb5-2" title="2">hdf_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD//data/hdf_files/&quot;</span></a>
 <a class="sourceLine" id="cb5-3" title="3">hdf_name &lt;-<span class="st"> &quot;uvief20190423.h5&quot;</span></a>
 <a class="sourceLine" id="cb5-4" title="4">hdf_file &lt;-<span class="st"> </span><span class="kw">paste</span>(hdf_path, hdf_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a></code></pre></div>
 <p>List the contents of the file. (WARNING: This can produce a lot of output)</p>
@@ -654,7 +654,7 @@ $(document).ready(function () {
 <h1><span class="header-section-number">4</span> Read a more complicated HDF5 file</h1>
 <p>A much more stuctured file that exploits the ability of HDF5 to store data in “groups” that mimics in some ways the directory or folder structure on a local computer is represented by the GFED4.1 fire data set. As usual, begin by setting paths and file names.</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="co"># set path </span></a>
-<a class="sourceLine" id="cb31-2" title="2">hdf_path &lt;-<span class="st"> &quot;/Users/bartlein/Dropbox/DataVis/working/geog490/data/hdf_files/&quot;</span></a>
+<a class="sourceLine" id="cb31-2" title="2">hdf_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD//data/hdf_files/&quot;</span></a>
 <a class="sourceLine" id="cb31-3" title="3">hdf_name &lt;-<span class="st"> &quot;GFED4.1s_2016.hdf5&quot;</span></a>
 <a class="sourceLine" id="cb31-4" title="4">hdf_file &lt;-<span class="st"> </span><span class="kw">paste</span>(hdf_path, hdf_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a></code></pre></div>
 <p>List the file contents, DOUBLE WARNING: This really does produce a lot of output, only some is included here:</p>
