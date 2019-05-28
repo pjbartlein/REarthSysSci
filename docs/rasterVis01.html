@@ -405,7 +405,10 @@ $(document).ready(function () {
       <a href="highdim.html">Visualization of high-dimensional data</a>
     </li>
     <li>
-      <a href="PCA.html">Principal components analyses</a>
+      <a href="PCA.html">Principal components analysis</a>
+    </li>
+    <li>
+      <a href="multivariate.html">Other multivariate analyses</a>
     </li>
   </ul>
 </li>
@@ -556,7 +559,7 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb3-4" title="4">tree_file &lt;-<span class="st"> </span><span class="kw">paste</span>(tree_path, tree_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
 <a class="sourceLine" id="cb3-5" title="5">tree &lt;-<span class="st"> </span><span class="kw">raster</span>(tree_file) <span class="co"># open treecov.nc</span></a></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">print</span>(tree) <span class="co"># netCDF info</span></a></code></pre></div>
-<pre><code>## File C:\Users\bartlein\Projects\ESSD\data\nc_files\treecov.nc (NC_FORMAT_CLASSIC):
+<pre><code>## File /Users/bartlein/Projects/ESSD/data/nc_files/treecov.nc (NC_FORMAT_CLASSIC):
 ## 
 ##      1 variables (excluding dimension variables):
 ##         float treecov[lon,lat]   
@@ -587,14 +590,14 @@ $(document).ready(function () {
 ## resolution : 0.5, 0.5  (x, y)
 ## extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
 ## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
-## source     : C:/Users/bartlein/Projects/ESSD/data/nc_files/treecov.nc 
+## source     : /Users/bartlein/Projects/ESSD/data/nc_files/treecov.nc 
 ## names      : treecov 
 ## zvar       : treecov</code></pre>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">print</span>(<span class="kw">c</span>(<span class="kw">filename</span>(tree), <span class="kw">hasValues</span>(tree), <span class="kw">inMemory</span>(tree)))</a></code></pre></div>
-<pre><code>## [1] &quot;C:\\Users\\bartlein\\Projects\\ESSD\\data\\nc_files\\treecov.nc&quot;
-## [2] &quot;TRUE&quot;                                                           
+<pre><code>## [1] &quot;/Users/bartlein/Projects/ESSD/data/nc_files/treecov.nc&quot;
+## [2] &quot;TRUE&quot;                                                  
 ## [3] &quot;FALSE&quot;</code></pre>
-<p>In the above example, the <code>raster()</code> function opens the netCDF file, and creates a raster object (<code>tree</code>). Printing this object using the <code>print()</code> function displays the netCDF metadata (or “attributes”), while simply “typing” the object name displays the attributes of the <code>raster</code> object. The functions <code>filename()</code>, <code>hasValues()</code> and <code>inMemory()</code> display the filename of the object, whether it currently contains values, and whether it is stored in memory, or still resides on disk. In this case, the data in the file <code>C:\Users\bartlein\Projects\ESSD\data\nc_files\treecov.nc</code> still resides on disk (<code>inMemory(tree) = FALSE</code>).</p>
+<p>In the above example, the <code>raster()</code> function opens the netCDF file, and creates a raster object (<code>tree</code>). Printing this object using the <code>print()</code> function displays the netCDF metadata (or “attributes”), while simply “typing” the object name displays the attributes of the <code>raster</code> object. The functions <code>filename()</code>, <code>hasValues()</code> and <code>inMemory()</code> display the filename of the object, whether it currently contains values, and whether it is stored in memory, or still resides on disk. In this case, the data in the file <code>/Users/bartlein/Projects/ESSD/data/nc_files/treecov.nc</code> still resides on disk (<code>inMemory(tree) = FALSE</code>).</p>
 <p>The range of <code>tree</code> (tree cover) can be gotten with the <code>cellStats()</code> function. Values less than 0.0 indicate barren land-surfac cover, and these values can be recoded to be equal to 0.0.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw">print</span>(<span class="kw">c</span>(<span class="kw">cellStats</span>(tree,<span class="dt">stat=</span><span class="st">&#39;min&#39;</span>), <span class="kw">cellStats</span>(tree,<span class="dt">stat=</span><span class="st">&#39;max&#39;</span>)))</a></code></pre></div>
 <pre><code>## [1] -2 80</code></pre>
@@ -700,8 +703,7 @@ $(document).ready(function () {
 ##             long_name: time
 ##             axis: T
 ## 
-##     7 global attributes:
-##         _NCProperties: version=1|netcdflibversion=4.4.1.1|hdf5libversion=1.10.0
+##     6 global attributes:
 ##         title: CRU TS4.02 Mean Temperature
 ##         institution: Data held at British Atmospheric Data Centre, RAL, UK.
 ##         source: Run ID = 1811131722. Data generated from:tmp.1804231108.dtb
@@ -1164,13 +1166,13 @@ $(document).ready(function () {
 ## resolution : 5, 5  (x, y)
 ## extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
 ## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
-## source     : C:/Users/bartlein/Projects/ESSD/data/nc_files/HadCRUT.4.6.0.0.median.nc 
+## source     : /Users/bartlein/Projects/ESSD/data/nc_files/HadCRUT.4.6.0.0.median.nc 
 ## names      : X1850.01.16, X1850.02.15, X1850.03.16, X1850.04.16, X1850.05.16, X1850.06.16, X1850.07.16, X1850.08.16, X1850.09.16, X1850.10.16, X1850.11.16, X1850.12.16, X1851.01.16, X1851.02.15, X1851.03.16, ... 
 ## Date       : 1850-01-16, 2019-02-15 (min, max)
 ## varname    : temperature_anomaly</code></pre>
 <div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" title="1"><span class="kw">print</span>(<span class="kw">c</span>(<span class="kw">filename</span>(hadcrut), <span class="kw">hasValues</span>(hadcrut), <span class="kw">inMemory</span>(hadcrut)))</a></code></pre></div>
-<pre><code>## [1] &quot;C:\\Users\\bartlein\\Projects\\ESSD\\data\\nc_files\\HadCRUT.4.6.0.0.median.nc&quot;
-## [2] &quot;TRUE&quot;                                                                          
+<pre><code>## [1] &quot;/Users/bartlein/Projects/ESSD/data/nc_files/HadCRUT.4.6.0.0.median.nc&quot;
+## [2] &quot;TRUE&quot;                                                                 
 ## [3] &quot;FALSE&quot;</code></pre>
 <p>As before, replace the layer names (dates) with something more appropriate:</p>
 <div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" title="1"><span class="co"># replace layer names</span></a>

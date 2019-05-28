@@ -405,7 +405,10 @@ $(document).ready(function () {
       <a href="highdim.html">Visualization of high-dimensional data</a>
     </li>
     <li>
-      <a href="PCA.html">Principal components analyses</a>
+      <a href="PCA.html">Principal components analysis</a>
+    </li>
+    <li>
+      <a href="multivariate.html">Other multivariate analyses</a>
     </li>
   </ul>
 </li>
@@ -988,7 +991,7 @@ $(document).ready(function () {
 <pre><code>## [1] 720 360</code></pre>
 <div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1"><span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm <span class="co"># how long?</span></a></code></pre></div>
 <pre><code>##    user  system elapsed 
-##    0.43    0.19    0.62</code></pre>
+##   0.066   0.012   0.082</code></pre>
 </div>
 <div id="check-the-conversion" class="section level3">
 <h3><span class="header-section-number">4.1.3</span> Check the conversion</h3>
@@ -1087,7 +1090,7 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb81-4" title="4">mat_array3[<span class="kw">cbind</span>(j2,k2)] &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(tmp_df03<span class="op">$</span>mat) </a>
 <a class="sourceLine" id="cb81-5" title="5"><span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</a></code></pre></div>
 <pre><code>##    user  system elapsed 
-##    1.32    0.17    1.50</code></pre>
+##   0.938   0.174   1.140</code></pre>
 </div>
 <div id="complete-loop-avoidance-approach" class="section level3">
 <h3><span class="header-section-number">4.2.4</span> Complete loop-avoidance approach</h3>
@@ -1102,7 +1105,7 @@ $(document).ready(function () {
 <a class="sourceLine" id="cb83-8" title="8">mat_array3[<span class="kw">cbind</span>(j2,k2)] &lt;-<span class="st"> </span><span class="kw">array</span>(tmp_df03<span class="op">$</span>mat) </a>
 <a class="sourceLine" id="cb83-9" title="9"><span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm</a></code></pre></div>
 <pre><code>##    user  system elapsed 
-##    0.05    0.00    0.05</code></pre>
+##   0.071   0.013   0.087</code></pre>
 <div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" title="1"><span class="co"># some plots to check creation of arrays</span></a>
 <a class="sourceLine" id="cb85-2" title="2"><span class="kw">library</span>(lattice)</a>
 <a class="sourceLine" id="cb85-3" title="3"><span class="kw">library</span>(RColorBrewer)</a>
@@ -1251,7 +1254,7 @@ $(document).ready(function () {
 ##         institution: http://www.cru.uea.ac.uk/
 ##         source: http://www.cru.uea.ac.uk/~markn/cru05/cru05_intro.html
 ##         references: New et al. (2002) Climate Res 21:1-25
-##         history: P.J. Bartlein, Mon May 27 22:04:51 2019
+##         history: P.J. Bartlein, Tue May 28 08:25:28 2019
 ##         Conventions: CF-1.0</code></pre>
 <p>Finally, close the file, which writes the data to disk.</p>
 <div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1"><span class="co"># close the file, writing data to disk</span></a>
@@ -1571,7 +1574,7 @@ $(document).ready(function () {
 ##         title: test output of projected data
 ##         institution: NOAA ESRL PSD
 ##         source: soilm.mon.ltm.nc
-##         history: P.J. Bartlein, Mon May 27 22:04:58 2019
+##         history: P.J. Bartlein, Tue May 28 08:25:31 2019
 ##         Conventions: CF=1.6</code></pre>
 <p>Finally, close the file, which writes the data to disk.</p>
 <div class="sourceCode" id="cb122"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb122-1" title="1"><span class="co"># close the file, writing data to disk</span></a>

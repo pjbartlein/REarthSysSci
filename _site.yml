@@ -31,8 +31,10 @@ navbar:
       href: vis_ggplot01.html
     - text: "Visualization of high-dimensional data"
       href: highdim.html
-    - text: "Principal components analyses"
+    - text: "Principal components analysis"
       href: PCA.html
+    - text: "Other multivariate analyses"
+      href: multivariate.html
     
   - text: Tasks 
     menu:

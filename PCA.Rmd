@@ -434,7 +434,7 @@ Note that this appraoch will only work if the netCDF file is configured in the s
 
 [[Back to top]](PCA.html)
 
-# PCA using the `pcaMethods` package #
+# PCA using the *pcaMethods* package #
 
 The `pcaMethods` package from the Bioconductor repository is a very flexible set of routines for doing PCA. Here the "singular value decomposition" (SVD) approach will be used, because it can handle cases where there are more variables than observations. The `pcaMethods` package is described at: 
 

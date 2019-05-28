@@ -45,7 +45,7 @@ a.sourceLine { text-indent: -1em; padding-left: 1em; }
 pre.numberSource a.sourceLine
   { position: relative; left: -4em; }
 pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+  { content: attr(title);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
     border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
@@ -405,7 +405,10 @@ $(document).ready(function () {
       <a href="highdim.html">Visualization of high-dimensional data</a>
     </li>
     <li>
-      <a href="PCA.html">Principal components analyses</a>
+      <a href="PCA.html">Principal components analysis</a>
+    </li>
+    <li>
+      <a href="multivariate.html">Other multivariate analyses</a>
     </li>
   </ul>
 </li>
@@ -502,7 +505,7 @@ $(document).ready(function () {
 <li><a href="#reshape-the-array"><span class="toc-section-number">4.2.1</span> Reshape the array</a></li>
 </ul></li>
 </ul></li>
-<li><a href="#pca-using-the-pcamethods-package"><span class="toc-section-number">5</span> PCA using the <code>pcaMethods</code> package</a><ul>
+<li><a href="#pca-using-the-pcamethods-package"><span class="toc-section-number">5</span> PCA using the <em>pcaMethods</em> package</a><ul>
 <li><a href="#results"><span class="toc-section-number">5.1</span> Results</a></li>
 </ul></li>
 <li><a href="#write-out-the-results"><span class="toc-section-number">6</span> Write out the results</a><ul>
@@ -531,12 +534,12 @@ $(document).ready(function () {
 <div id="read-and-subset-the-data" class="section level2">
 <h2><span class="header-section-number">1.2</span> Read and subset the data</h2>
 <p>First, only two variables will be analyzed, in order to be able to visualize how the components are defined. Read the data:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="co"># read a .csv file of Davis&#39;s data</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">boxes_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">boxes_name &lt;-<span class="st"> &quot;boxes.csv&quot;</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">boxes_file &lt;-<span class="st"> </span><span class="kw">paste</span>(boxes_path, boxes_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">boxes &lt;-<span class="st"> </span><span class="kw">read.csv</span>(boxes_file) </a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">str</span>(boxes)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># read a .csv file of Davis&#39;s data</span></a>
+<a class="sourceLine" id="cb1-2" title="2">boxes_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
+<a class="sourceLine" id="cb1-3" title="3">boxes_name &lt;-<span class="st"> &quot;boxes.csv&quot;</span></a>
+<a class="sourceLine" id="cb1-4" title="4">boxes_file &lt;-<span class="st"> </span><span class="kw">paste</span>(boxes_path, boxes_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb1-5" title="5">boxes &lt;-<span class="st"> </span><span class="kw">read.csv</span>(boxes_file) </a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="kw">str</span>(boxes)</a></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    25 obs. of  7 variables:
 ##  $ long   : num  3.76 8.59 6.22 7.57 9.03 5.51 3.27 8.74 9.64 9.73 ...
 ##  $ inter  : num  3.66 4.99 6.14 7.28 7.08 3.98 0.62 7 9.49 1.33 ...
@@ -546,13 +549,13 @@ $(document).ready(function () {
 ##  $ axis   : num  13.74 10.16 2.73 2.1 6.22 ...
 ##  $ areavol: num  4.782 2.13 1.089 0.822 1.276 ...</code></pre>
 <p>Make a matrix of two variables <code>long</code> (long axis of each box), and <code>diag</code> (longest diagonal that fits in a box).</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">boxes_matrix &lt;-<span class="st"> </span><span class="kw">data.matrix</span>(<span class="kw">cbind</span>(boxes[,<span class="dv">1</span>],boxes[,<span class="dv">4</span>]))</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">dimnames</span>(boxes_matrix) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="ot">NULL</span>, <span class="kw">cbind</span>(<span class="st">&quot;long&quot;</span>,<span class="st">&quot;diag&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">boxes_matrix &lt;-<span class="st"> </span><span class="kw">data.matrix</span>(<span class="kw">cbind</span>(boxes[,<span class="dv">1</span>],boxes[,<span class="dv">4</span>]))</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">dimnames</span>(boxes_matrix) &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="ot">NULL</span>, <span class="kw">cbind</span>(<span class="st">&quot;long&quot;</span>,<span class="st">&quot;diag&quot;</span>))</a></code></pre></div>
 <p>Examine a scatter plot, and get the correlations between the variables:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">par</span>(<span class="dt">pty=</span><span class="st">&quot;s&quot;</span>) <span class="co"># square plotting frame</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">plot</span>(boxes_matrix)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">par</span>(<span class="dt">pty=</span><span class="st">&quot;s&quot;</span>) <span class="co"># square plotting frame</span></a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="kw">plot</span>(boxes_matrix)</a></code></pre></div>
 <p><img src="PCA_files/figure-html/corr%20boxes-1.png" width="75%" height="75%" /></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">cor</span>(boxes_matrix)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">cor</span>(boxes_matrix)</a></code></pre></div>
 <pre><code>##           long      diag
 ## long 1.0000000 0.9112586
 ## diag 0.9112586 1.0000000</code></pre>
@@ -561,8 +564,8 @@ $(document).ready(function () {
 <div id="pca-of-the-two-variable-example" class="section level2">
 <h2><span class="header-section-number">1.3</span> PCA of the two-variable example</h2>
 <p>Do a PCA using the <code>princomp()</code> function from the <code>stats</code> package. The <code>loadings()</code> function extracts the <em>loadings</em> or the correlations between the input variables and the new components, and the the <code>biplot()</code> function creates a biplot – a single figure that plots the loadings as vectors and the component <em>scores</em> (or the value of each component) as points represented by the observation numbers.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">boxes_pca &lt;-<span class="st"> </span><span class="kw">princomp</span>(boxes_matrix, <span class="dt">cor=</span>T)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">boxes_pca</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">boxes_pca &lt;-<span class="st"> </span><span class="kw">princomp</span>(boxes_matrix, <span class="dt">cor=</span>T)</a>
+<a class="sourceLine" id="cb7-2" title="2">boxes_pca</a></code></pre></div>
 <pre><code>## Call:
 ## princomp(x = boxes_matrix, cor = T)
 ## 
@@ -571,13 +574,13 @@ $(document).ready(function () {
 ## 1.382483 0.297895 
 ## 
 ##  2  variables and  25 observations.</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">summary</span>(boxes_pca)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">summary</span>(boxes_pca)</a></code></pre></div>
 <pre><code>## Importance of components:
 ##                           Comp.1    Comp.2
 ## Standard deviation     1.3824828 0.2978950
 ## Proportion of Variance 0.9556293 0.0443707
 ## Cumulative Proportion  0.9556293 1.0000000</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">print</span>(<span class="kw">loadings</span>(boxes_pca),<span class="dt">cutoff=</span><span class="fl">0.0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">print</span>(<span class="kw">loadings</span>(boxes_pca),<span class="dt">cutoff=</span><span class="fl">0.0</span>)</a></code></pre></div>
 <pre><code>## 
 ## Loadings:
 ##      Comp.1 Comp.2
@@ -588,30 +591,30 @@ $(document).ready(function () {
 ## SS loadings       1.0    1.0
 ## Proportion Var    0.5    0.5
 ## Cumulative Var    0.5    1.0</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">biplot</span>(boxes_pca)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw">biplot</span>(boxes_pca)</a></code></pre></div>
 <p><img src="PCA_files/figure-html/pca04-1.png" width="75%" height="75%" /> The component standard deviation values describe the importance of each component, and the proportion of the total variance of all variables being analyzed accounted for by each component.</p>
 <p>Note the angle between the vectors on the bipolt–the correlation between two variables is equal to the cosine of the angle between the vectors (<em>θ</em>), or <em>r = cos(θ)</em>. Here the angle is 24.3201359, which is found by the following R code: <code>acos(cor(boxes_matrix[,1],boxes_matrix[,2]))/((2*pi)/360)</code>.</p>
 <p>The components can be drawn on the scatter plot as follows:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="co"># get parameters of component lines (after Everitt &amp; Rabe-Hesketh)</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">load &lt;-<span class="st"> </span>boxes_pca<span class="op">$</span>loadings</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3">slope &lt;-<span class="st"> </span>load[<span class="dv">2</span>,]<span class="op">/</span>load[<span class="dv">1</span>,]</a>
-<a class="sourceLine" id="cb14-4" data-line-number="4">mn &lt;-<span class="st"> </span><span class="kw">apply</span>(boxes_matrix,<span class="dv">2</span>,mean)</a>
-<a class="sourceLine" id="cb14-5" data-line-number="5">intcpt &lt;-<span class="st"> </span>mn[<span class="dv">2</span>]<span class="op">-</span>(slope<span class="op">*</span>mn[<span class="dv">1</span>])</a>
-<a class="sourceLine" id="cb14-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb14-7" data-line-number="7"><span class="co"># scatter plot with the two new axes added</span></a>
-<a class="sourceLine" id="cb14-8" data-line-number="8"><span class="kw">par</span>(<span class="dt">pty=</span><span class="st">&quot;s&quot;</span>) <span class="co"># square plotting frame</span></a>
-<a class="sourceLine" id="cb14-9" data-line-number="9">xlim &lt;-<span class="st"> </span><span class="kw">range</span>(boxes_matrix) <span class="co"># overall min, max</span></a>
-<a class="sourceLine" id="cb14-10" data-line-number="10"><span class="kw">plot</span>(boxes_matrix, <span class="dt">xlim=</span>xlim, <span class="dt">ylim=</span>xlim, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>) <span class="co"># both axes same length</span></a>
-<a class="sourceLine" id="cb14-11" data-line-number="11"><span class="kw">abline</span>(intcpt[<span class="dv">1</span>],slope[<span class="dv">1</span>],<span class="dt">lwd=</span><span class="dv">2</span>) <span class="co"># first component solid line</span></a>
-<a class="sourceLine" id="cb14-12" data-line-number="12"><span class="kw">abline</span>(intcpt[<span class="dv">2</span>],slope[<span class="dv">2</span>],<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">lty=</span><span class="dv">2</span>) <span class="co"># second component dashed</span></a>
-<a class="sourceLine" id="cb14-13" data-line-number="13"><span class="kw">legend</span>(<span class="st">&quot;right&quot;</span>, <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&quot;PC 1&quot;</span>, <span class="st">&quot;PC 2&quot;</span>), <span class="dt">lty =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb14-14" data-line-number="14"></a>
-<a class="sourceLine" id="cb14-15" data-line-number="15"><span class="co"># projections of points onto PCA 1</span></a>
-<a class="sourceLine" id="cb14-16" data-line-number="16">y1 &lt;-<span class="st"> </span>intcpt[<span class="dv">1</span>]<span class="op">+</span>slope[<span class="dv">1</span>]<span class="op">*</span>boxes_matrix[,<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb14-17" data-line-number="17">x1 &lt;-<span class="st"> </span>(boxes_matrix[,<span class="dv">2</span>]<span class="op">-</span>intcpt[<span class="dv">1</span>])<span class="op">/</span>slope[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb14-18" data-line-number="18">y2 &lt;-<span class="st"> </span>(y1<span class="op">+</span>boxes_matrix[,<span class="dv">2</span>])<span class="op">/</span><span class="fl">2.0</span></a>
-<a class="sourceLine" id="cb14-19" data-line-number="19">x2 &lt;-<span class="st"> </span>(x1<span class="op">+</span>boxes_matrix[,<span class="dv">1</span>])<span class="op">/</span><span class="fl">2.0</span></a>
-<a class="sourceLine" id="cb14-20" data-line-number="20"><span class="kw">segments</span>(boxes_matrix[,<span class="dv">1</span>],boxes_matrix[,<span class="dv">2</span>], x2, y2, <span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">col=</span><span class="st">&quot;purple&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="co"># get parameters of component lines (after Everitt &amp; Rabe-Hesketh)</span></a>
+<a class="sourceLine" id="cb14-2" title="2">load &lt;-<span class="st"> </span>boxes_pca<span class="op">$</span>loadings</a>
+<a class="sourceLine" id="cb14-3" title="3">slope &lt;-<span class="st"> </span>load[<span class="dv">2</span>,]<span class="op">/</span>load[<span class="dv">1</span>,]</a>
+<a class="sourceLine" id="cb14-4" title="4">mn &lt;-<span class="st"> </span><span class="kw">apply</span>(boxes_matrix,<span class="dv">2</span>,mean)</a>
+<a class="sourceLine" id="cb14-5" title="5">intcpt &lt;-<span class="st"> </span>mn[<span class="dv">2</span>]<span class="op">-</span>(slope<span class="op">*</span>mn[<span class="dv">1</span>])</a>
+<a class="sourceLine" id="cb14-6" title="6"></a>
+<a class="sourceLine" id="cb14-7" title="7"><span class="co"># scatter plot with the two new axes added</span></a>
+<a class="sourceLine" id="cb14-8" title="8"><span class="kw">par</span>(<span class="dt">pty=</span><span class="st">&quot;s&quot;</span>) <span class="co"># square plotting frame</span></a>
+<a class="sourceLine" id="cb14-9" title="9">xlim &lt;-<span class="st"> </span><span class="kw">range</span>(boxes_matrix) <span class="co"># overall min, max</span></a>
+<a class="sourceLine" id="cb14-10" title="10"><span class="kw">plot</span>(boxes_matrix, <span class="dt">xlim=</span>xlim, <span class="dt">ylim=</span>xlim, <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.5</span>, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>) <span class="co"># both axes same length</span></a>
+<a class="sourceLine" id="cb14-11" title="11"><span class="kw">abline</span>(intcpt[<span class="dv">1</span>],slope[<span class="dv">1</span>],<span class="dt">lwd=</span><span class="dv">2</span>) <span class="co"># first component solid line</span></a>
+<a class="sourceLine" id="cb14-12" title="12"><span class="kw">abline</span>(intcpt[<span class="dv">2</span>],slope[<span class="dv">2</span>],<span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">lty=</span><span class="dv">2</span>) <span class="co"># second component dashed</span></a>
+<a class="sourceLine" id="cb14-13" title="13"><span class="kw">legend</span>(<span class="st">&quot;right&quot;</span>, <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&quot;PC 1&quot;</span>, <span class="st">&quot;PC 2&quot;</span>), <span class="dt">lty =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">cex =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb14-14" title="14"></a>
+<a class="sourceLine" id="cb14-15" title="15"><span class="co"># projections of points onto PCA 1</span></a>
+<a class="sourceLine" id="cb14-16" title="16">y1 &lt;-<span class="st"> </span>intcpt[<span class="dv">1</span>]<span class="op">+</span>slope[<span class="dv">1</span>]<span class="op">*</span>boxes_matrix[,<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb14-17" title="17">x1 &lt;-<span class="st"> </span>(boxes_matrix[,<span class="dv">2</span>]<span class="op">-</span>intcpt[<span class="dv">1</span>])<span class="op">/</span>slope[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb14-18" title="18">y2 &lt;-<span class="st"> </span>(y1<span class="op">+</span>boxes_matrix[,<span class="dv">2</span>])<span class="op">/</span><span class="fl">2.0</span></a>
+<a class="sourceLine" id="cb14-19" title="19">x2 &lt;-<span class="st"> </span>(x1<span class="op">+</span>boxes_matrix[,<span class="dv">1</span>])<span class="op">/</span><span class="fl">2.0</span></a>
+<a class="sourceLine" id="cb14-20" title="20"><span class="kw">segments</span>(boxes_matrix[,<span class="dv">1</span>],boxes_matrix[,<span class="dv">2</span>], x2, y2, <span class="dt">lwd=</span><span class="dv">2</span>,<span class="dt">col=</span><span class="st">&quot;purple&quot;</span>)</a></code></pre></div>
 <p><img src="PCA_files/figure-html/pca05-1.png" width="75%" height="75%" /></p>
 <p>This plot illustrates the idea of the first (or “principal” component) providing an optimal summary of the data–no other line drawn on this scatter plot would produce a set of projected values of the data points onto the line with greater variance. The line also appears similar to a regression line, and in fact and PCA of two variables (as here) is equivalent to a “reduced major-axis” regression analysis.</p>
 <p><a href="PCA.html">[Back to top]</a></p>
@@ -674,10 +677,10 @@ $(document).ready(function () {
 <div id="read-and-transform-the-data" class="section level2">
 <h2><span class="header-section-number">3.1</span> Read and transform the data</h2>
 <p>Load necessary packages.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># pca of multimodel means</span></a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">library</span>(corrplot)</a>
-<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="kw">library</span>(qgraph)</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4"><span class="kw">library</span>(psych)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="co"># pca of multimodel means</span></a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="kw">library</span>(corrplot)</a>
+<a class="sourceLine" id="cb15-3" title="3"><span class="kw">library</span>(qgraph)</a>
+<a class="sourceLine" id="cb15-4" title="4"><span class="kw">library</span>(psych)</a></code></pre></div>
 <p>Read the data:</p>
 <pre><code>##  [1] &quot;Kext&quot;  &quot;Kn&quot;    &quot;Ln&quot;    &quot;Qn&quot;    &quot;Qe&quot;    &quot;Qh&quot;    &quot;Qg&quot;    &quot;bowen&quot; &quot;alb&quot;   &quot;ta&quot;    &quot;tas&quot;   &quot;ts&quot;   
 ## [13] &quot;ua&quot;    &quot;va&quot;    &quot;omg&quot;   &quot;uas&quot;   &quot;vas&quot;   &quot;slp&quot;   &quot;Qdv&quot;   &quot;shm&quot;   &quot;clt&quot;   &quot;pre&quot;   &quot;evap&quot;  &quot;pme&quot;  
@@ -730,52 +733,52 @@ $(document).ready(function () {
 ##  3rd Qu.: 0.000247   3rd Qu.: 0.044000   3rd Qu.: 0.0156750  
 ##  Max.   : 0.439200   Max.   : 0.262900   Max.   : 0.0593000  
 ##                                          NA&#39;s   :2</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="co"># read data</span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2">datapath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
-<a class="sourceLine" id="cb18-3" data-line-number="3">csvfile &lt;-<span class="st"> &quot;aavesModels_ltmdiff_all_models_NEurAsia.csv&quot;</span></a>
-<a class="sourceLine" id="cb18-4" data-line-number="4">input_data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">paste</span>(datapath, csvfile, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb18-5" data-line-number="5">mm_data_in &lt;-<span class="st"> </span>input_data[,<span class="dv">3</span><span class="op">:</span><span class="dv">30</span>]</a>
-<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="kw">names</span>(mm_data_in)</a>
-<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="kw">summary</span>(mm_data_in)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="co"># read data</span></a>
+<a class="sourceLine" id="cb18-2" title="2">datapath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
+<a class="sourceLine" id="cb18-3" title="3">csvfile &lt;-<span class="st"> &quot;aavesModels_ltmdiff_all_models_NEurAsia.csv&quot;</span></a>
+<a class="sourceLine" id="cb18-4" title="4">input_data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">paste</span>(datapath, csvfile, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
+<a class="sourceLine" id="cb18-5" title="5">mm_data_in &lt;-<span class="st"> </span>input_data[,<span class="dv">3</span><span class="op">:</span><span class="dv">30</span>]</a>
+<a class="sourceLine" id="cb18-6" title="6"><span class="kw">names</span>(mm_data_in)</a>
+<a class="sourceLine" id="cb18-7" title="7"><span class="kw">summary</span>(mm_data_in)</a></code></pre></div>
 <p>There are a few fix-ups to do. Recode a few missing (NA) values of snow depth to 0.0:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># recode a few NA&#39;s to zero</span></a>
-<a class="sourceLine" id="cb19-2" data-line-number="2">mm_data_in<span class="op">$</span>snd[<span class="kw">is.na</span>(mm_data_in<span class="op">$</span>snd)] &lt;-<span class="st"> </span><span class="fl">0.0</span></a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="co"># recode a few NA&#39;s to zero</span></a>
+<a class="sourceLine" id="cb19-2" title="2">mm_data_in<span class="op">$</span>snd[<span class="kw">is.na</span>(mm_data_in<span class="op">$</span>snd)] &lt;-<span class="st"> </span><span class="fl">0.0</span></a></code></pre></div>
 <p>Remove some uncessary or redundant variable:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># remove uneccesary variables</span></a>
-<a class="sourceLine" id="cb20-2" data-line-number="2">dropvars &lt;-<span class="st"> </span><span class="kw">names</span>(mm_data_in) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Kext&quot;</span>,<span class="st">&quot;bowen&quot;</span>,<span class="st">&quot;sm&quot;</span>,<span class="st">&quot;evap&quot;</span>)</a>
-<a class="sourceLine" id="cb20-3" data-line-number="3">mm_data &lt;-<span class="st"> </span>mm_data_in[<span class="op">!</span>dropvars]</a>
-<a class="sourceLine" id="cb20-4" data-line-number="4"><span class="kw">names</span>(mm_data)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="co"># remove uneccesary variables</span></a>
+<a class="sourceLine" id="cb20-2" title="2">dropvars &lt;-<span class="st"> </span><span class="kw">names</span>(mm_data_in) <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Kext&quot;</span>,<span class="st">&quot;bowen&quot;</span>,<span class="st">&quot;sm&quot;</span>,<span class="st">&quot;evap&quot;</span>)</a>
+<a class="sourceLine" id="cb20-3" title="3">mm_data &lt;-<span class="st"> </span>mm_data_in[<span class="op">!</span>dropvars]</a>
+<a class="sourceLine" id="cb20-4" title="4"><span class="kw">names</span>(mm_data)</a></code></pre></div>
 <pre><code>##  [1] &quot;Kn&quot;  &quot;Ln&quot;  &quot;Qn&quot;  &quot;Qe&quot;  &quot;Qh&quot;  &quot;Qg&quot;  &quot;alb&quot; &quot;ta&quot;  &quot;tas&quot; &quot;ts&quot;  &quot;ua&quot;  &quot;va&quot;  &quot;omg&quot; &quot;uas&quot; &quot;vas&quot; &quot;slp&quot;
 ## [17] &quot;Qdv&quot; &quot;shm&quot; &quot;clt&quot; &quot;pre&quot; &quot;pme&quot; &quot;ro&quot;  &quot;dS&quot;  &quot;snd&quot;</code></pre>
 </div>
 <div id="correlations-among-variables" class="section level2">
 <h2><span class="header-section-number">3.2</span> Correlations among variables</h2>
 <p>It’s useful to look at the correlations among the long-term mean differences among the variables. This could be done using a matrix scatterplot (<code>plot(mm_data, pch=16, cex=0.5</code>), but there are enough variables (24) to make that difficult to interpret. Another approach is to look at a <code>corrplot()</code> image:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">cor_mm_data &lt;-<span class="st"> </span><span class="kw">cor</span>(mm_data)</a>
-<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="kw">corrplot</span>(cor_mm_data, <span class="dt">method=</span><span class="st">&quot;color&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">cor_mm_data &lt;-<span class="st"> </span><span class="kw">cor</span>(mm_data)</a>
+<a class="sourceLine" id="cb22-2" title="2"><span class="kw">corrplot</span>(cor_mm_data, <span class="dt">method=</span><span class="st">&quot;color&quot;</span>)</a></code></pre></div>
 <p><img src="PCA_files/figure-html/unnamed-chunk-5-1.png" width="75%" height="75%" /></p>
 <p>The plaid-like appearance of the plot suggests that there are several groups of variables whose variations of long-term mean differences throughout the year are similar.</p>
 <p>The correlations can also be illustrated by plotting the correlations as a network graph using the <code>qgraph()</code> function, with the strength of the correlations indicated by the width of the lines (or “edges”), and the sign by the color (green = positive and magenta = negative).</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="kw">qgraph</span>(cor_mm_data, <span class="dt">title=</span><span class="st">&quot;Correlations, multi-model ltm differences over months&quot;</span>,</a>
-<a class="sourceLine" id="cb23-2" data-line-number="2">  <span class="co"># layout = &quot;spring&quot;, </span></a>
-<a class="sourceLine" id="cb23-3" data-line-number="3">  <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb23-4" data-line-number="4">  <span class="dt">node.height=</span><span class="fl">0.5</span>, <span class="dt">node.width=</span><span class="fl">0.5</span>, <span class="dt">vTrans=</span><span class="dv">128</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span>, <span class="dt">label.cex=</span><span class="fl">1.0</span>,</a>
-<a class="sourceLine" id="cb23-5" data-line-number="5">  <span class="dt">width=</span><span class="dv">7</span>, <span class="dt">height=</span><span class="dv">5</span>, <span class="dt">normalize=</span><span class="ot">TRUE</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span> ) </a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw">qgraph</span>(cor_mm_data, <span class="dt">title=</span><span class="st">&quot;Correlations, multi-model ltm differences over months&quot;</span>,</a>
+<a class="sourceLine" id="cb23-2" title="2">  <span class="co"># layout = &quot;spring&quot;, </span></a>
+<a class="sourceLine" id="cb23-3" title="3">  <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb23-4" title="4">  <span class="dt">node.height=</span><span class="fl">0.5</span>, <span class="dt">node.width=</span><span class="fl">0.5</span>, <span class="dt">vTrans=</span><span class="dv">128</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span>, <span class="dt">label.cex=</span><span class="fl">1.0</span>,</a>
+<a class="sourceLine" id="cb23-5" title="5">  <span class="dt">width=</span><span class="dv">7</span>, <span class="dt">height=</span><span class="dv">5</span>, <span class="dt">normalize=</span><span class="ot">TRUE</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span> ) </a></code></pre></div>
 <p><img src="PCA_files/figure-html/unnamed-chunk-6-1.png" width="75%" height="75%" /></p>
 <p>A useful variant of this plot is provided by using the strength of the correlations to arrange the nodes (i.e. the variables). This is done by using the “Fruchterman-Reingold” algorithm that invokes the concept of spring tension pulling the nodes of the more highly correlated variables toward one another.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">qgraph</span>(cor_mm_data, <span class="dt">title=</span><span class="st">&quot;Correlations, multi-model ltm differences over months&quot;</span>,</a>
-<a class="sourceLine" id="cb24-2" data-line-number="2">  <span class="dt">layout =</span> <span class="st">&quot;spring&quot;</span>, <span class="dt">repulsion =</span> <span class="fl">0.75</span>,</a>
-<a class="sourceLine" id="cb24-3" data-line-number="3">  <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb24-4" data-line-number="4">  <span class="dt">node.height=</span><span class="fl">0.5</span>, <span class="dt">node.width=</span><span class="fl">0.5</span>, <span class="dt">vTrans=</span><span class="dv">128</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span>, <span class="dt">label.cex=</span><span class="fl">1.0</span>,</a>
-<a class="sourceLine" id="cb24-5" data-line-number="5">  <span class="dt">width=</span><span class="dv">7</span>, <span class="dt">height=</span><span class="dv">5</span>, <span class="dt">normalize=</span><span class="ot">TRUE</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span> ) </a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1"><span class="kw">qgraph</span>(cor_mm_data, <span class="dt">title=</span><span class="st">&quot;Correlations, multi-model ltm differences over months&quot;</span>,</a>
+<a class="sourceLine" id="cb24-2" title="2">  <span class="dt">layout =</span> <span class="st">&quot;spring&quot;</span>, <span class="dt">repulsion =</span> <span class="fl">0.75</span>,</a>
+<a class="sourceLine" id="cb24-3" title="3">  <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb24-4" title="4">  <span class="dt">node.height=</span><span class="fl">0.5</span>, <span class="dt">node.width=</span><span class="fl">0.5</span>, <span class="dt">vTrans=</span><span class="dv">128</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span>, <span class="dt">label.cex=</span><span class="fl">1.0</span>,</a>
+<a class="sourceLine" id="cb24-5" title="5">  <span class="dt">width=</span><span class="dv">7</span>, <span class="dt">height=</span><span class="dv">5</span>, <span class="dt">normalize=</span><span class="ot">TRUE</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span> ) </a></code></pre></div>
 <p><img src="PCA_files/figure-html/unnamed-chunk-7-1.png" width="75%" height="75%" /></p>
 </div>
 <div id="pca-of-the-pmip-3-data" class="section level2">
 <h2><span class="header-section-number">3.3</span> PCA of the PMIP 3 data</h2>
 <p>Do a principal components analysis of the long-term mean differneces using the <code>principal()</code> function from the <code>psych</code> package. Initiall, extract eight components:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">nfactors &lt;-<span class="st"> </span><span class="dv">8</span></a>
-<a class="sourceLine" id="cb25-2" data-line-number="2">mm_pca_unrot &lt;-<span class="st"> </span><span class="kw">principal</span>(mm_data, <span class="dt">nfactors =</span> nfactors, <span class="dt">rotate =</span> <span class="st">&quot;none&quot;</span>)</a>
-<a class="sourceLine" id="cb25-3" data-line-number="3">mm_pca_unrot</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">nfactors &lt;-<span class="st"> </span><span class="dv">8</span></a>
+<a class="sourceLine" id="cb25-2" title="2">mm_pca_unrot &lt;-<span class="st"> </span><span class="kw">principal</span>(mm_data, <span class="dt">nfactors =</span> nfactors, <span class="dt">rotate =</span> <span class="st">&quot;none&quot;</span>)</a>
+<a class="sourceLine" id="cb25-3" title="3">mm_pca_unrot</a></code></pre></div>
 <pre><code>## Principal Components Analysis
 ## Call: principal(r = mm_data, nfactors = nfactors, rotate = &quot;none&quot;)
 ## Standardized loadings (pattern matrix) based upon correlation matrix
@@ -820,9 +823,9 @@ $(document).ready(function () {
 ## 
 ## Fit based upon off diagonal values = 1</code></pre>
 <p>The analysis suggests that only five components are as “important” as any of the original (standardized) variables, so repeate the analysis extracting just five components:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">nfactors &lt;-<span class="st"> </span><span class="dv">5</span></a>
-<a class="sourceLine" id="cb27-2" data-line-number="2">mm_pca_unrot &lt;-<span class="st"> </span><span class="kw">principal</span>(mm_data, <span class="dt">nfactors =</span> nfactors, <span class="dt">rotate =</span> <span class="st">&quot;none&quot;</span>)</a>
-<a class="sourceLine" id="cb27-3" data-line-number="3">mm_pca_unrot</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">nfactors &lt;-<span class="st"> </span><span class="dv">5</span></a>
+<a class="sourceLine" id="cb27-2" title="2">mm_pca_unrot &lt;-<span class="st"> </span><span class="kw">principal</span>(mm_data, <span class="dt">nfactors =</span> nfactors, <span class="dt">rotate =</span> <span class="st">&quot;none&quot;</span>)</a>
+<a class="sourceLine" id="cb27-3" title="3">mm_pca_unrot</a></code></pre></div>
 <pre><code>## Principal Components Analysis
 ## Call: principal(r = mm_data, nfactors = nfactors, rotate = &quot;none&quot;)
 ## Standardized loadings (pattern matrix) based upon correlation matrix
@@ -870,25 +873,25 @@ $(document).ready(function () {
 <div id="qgraph-plot-of-the-principal-components" class="section level2">
 <h2><span class="header-section-number">3.4</span> qgraph plot of the principal components</h2>
 <p>The first plot below shows the components as square nodes, and the orignal variables as circular nodes. The second modifies that first plot by applying the “spring” layout.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">qg_pca &lt;-<span class="st"> </span><span class="kw">qgraph</span>(<span class="kw">loadings</span>(mm_pca_unrot), </a>
-<a class="sourceLine" id="cb29-2" data-line-number="2">  <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>, </a>
-<a class="sourceLine" id="cb29-3" data-line-number="3">  <span class="dt">labels=</span><span class="kw">c</span>(<span class="kw">names</span>(mm_data),<span class="kw">as.character</span>(<span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span>nfactors))), <span class="dt">vTrans=</span><span class="dv">128</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1">qg_pca &lt;-<span class="st"> </span><span class="kw">qgraph</span>(<span class="kw">loadings</span>(mm_pca_unrot), </a>
+<a class="sourceLine" id="cb29-2" title="2">  <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>, </a>
+<a class="sourceLine" id="cb29-3" title="3">  <span class="dt">labels=</span><span class="kw">c</span>(<span class="kw">names</span>(mm_data),<span class="kw">as.character</span>(<span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span>nfactors))), <span class="dt">vTrans=</span><span class="dv">128</span>)</a></code></pre></div>
 <pre><code>## Warning in Glabels[1:n] &lt;- labels: number of items to replace is not a multiple of replacement length</code></pre>
 <p><img src="PCA_files/figure-html/unnamed-chunk-10-1.png" width="75%" height="75%" /></p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw">qgraph</span>(qg_pca, <span class="dt">title=</span><span class="st">&quot;Component loadings, all models over all months&quot;</span>,</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">  <span class="dt">layout =</span> <span class="st">&quot;spring&quot;</span>, </a>
-<a class="sourceLine" id="cb31-3" data-line-number="3">  <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb31-4" data-line-number="4">  <span class="dt">node.height=</span><span class="fl">0.5</span>, <span class="dt">node.width=</span><span class="fl">0.5</span>, <span class="dt">vTrans=</span><span class="dv">128</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span>, <span class="dt">label.cex=</span><span class="fl">1.0</span>,</a>
-<a class="sourceLine" id="cb31-5" data-line-number="5">  <span class="dt">width=</span><span class="dv">7</span>, <span class="dt">height=</span><span class="dv">5</span>, <span class="dt">normalize=</span><span class="ot">TRUE</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span> )</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw">qgraph</span>(qg_pca, <span class="dt">title=</span><span class="st">&quot;Component loadings, all models over all months&quot;</span>,</a>
+<a class="sourceLine" id="cb31-2" title="2">  <span class="dt">layout =</span> <span class="st">&quot;spring&quot;</span>, </a>
+<a class="sourceLine" id="cb31-3" title="3">  <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb31-4" title="4">  <span class="dt">node.height=</span><span class="fl">0.5</span>, <span class="dt">node.width=</span><span class="fl">0.5</span>, <span class="dt">vTrans=</span><span class="dv">128</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span>, <span class="dt">label.cex=</span><span class="fl">1.0</span>,</a>
+<a class="sourceLine" id="cb31-5" title="5">  <span class="dt">width=</span><span class="dv">7</span>, <span class="dt">height=</span><span class="dv">5</span>, <span class="dt">normalize=</span><span class="ot">TRUE</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span> )</a></code></pre></div>
 <p><img src="PCA_files/figure-html/unnamed-chunk-10-2.png" width="75%" height="75%" /></p>
 </div>
 <div id="rotated-components" class="section level2">
 <h2><span class="header-section-number">3.5</span> Rotated components</h2>
 <p>The interpretability of the componets can often be improved by “rotation” of the components, which amounts to slightly moving the PCA axes relative to the original variable axes, while still maintaining the orthogonality (or “uncorrelatedness”) of the components. This has the effect of reducing the importance of the first component(s) (because the adjusted axes are no longer optimal), but this trade-off is usually worth it.</p>
 <p>Here are the results:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">nfactors &lt;-<span class="st"> </span><span class="dv">4</span></a>
-<a class="sourceLine" id="cb32-2" data-line-number="2">mm_pca_rot &lt;-<span class="st"> </span><span class="kw">principal</span>(mm_data, <span class="dt">nfactors =</span> nfactors, <span class="dt">rotate =</span> <span class="st">&quot;varimax&quot;</span>)</a>
-<a class="sourceLine" id="cb32-3" data-line-number="3">mm_pca_rot</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">nfactors &lt;-<span class="st"> </span><span class="dv">4</span></a>
+<a class="sourceLine" id="cb32-2" title="2">mm_pca_rot &lt;-<span class="st"> </span><span class="kw">principal</span>(mm_data, <span class="dt">nfactors =</span> nfactors, <span class="dt">rotate =</span> <span class="st">&quot;varimax&quot;</span>)</a>
+<a class="sourceLine" id="cb32-3" title="3">mm_pca_rot</a></code></pre></div>
 <pre><code>## Principal Components Analysis
 ## Call: principal(r = mm_data, nfactors = nfactors, rotate = &quot;varimax&quot;)
 ## Standardized loadings (pattern matrix) based upon correlation matrix
@@ -932,15 +935,15 @@ $(document).ready(function () {
 ##  with the empirical chi square  290.26  with prob &lt;  1.5e-06 
 ## 
 ## Fit based upon off diagonal values = 0.99</code></pre>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">qg_pca &lt;-<span class="st"> </span><span class="kw">qgraph</span>(<span class="kw">loadings</span>(mm_pca_rot), </a>
-<a class="sourceLine" id="cb34-2" data-line-number="2">  <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>, </a>
-<a class="sourceLine" id="cb34-3" data-line-number="3">  <span class="dt">labels=</span><span class="kw">c</span>(<span class="kw">names</span>(mm_data),<span class="kw">as.character</span>(<span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span>nfactors))), <span class="dt">vTrans=</span><span class="dv">128</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1">qg_pca &lt;-<span class="st"> </span><span class="kw">qgraph</span>(<span class="kw">loadings</span>(mm_pca_rot), </a>
+<a class="sourceLine" id="cb34-2" title="2">  <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>, </a>
+<a class="sourceLine" id="cb34-3" title="3">  <span class="dt">labels=</span><span class="kw">c</span>(<span class="kw">names</span>(mm_data),<span class="kw">as.character</span>(<span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span>nfactors))), <span class="dt">vTrans=</span><span class="dv">128</span>) </a></code></pre></div>
 <pre><code>## Warning in Glabels[1:n] &lt;- labels: number of items to replace is not a multiple of replacement length</code></pre>
 <p><img src="PCA_files/figure-html/unnamed-chunk-11-1.png" width="75%" height="75%" /></p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="kw">qgraph</span>(qg_pca, <span class="dt">title=</span><span class="st">&quot;Rotated component loadings, all models over all months&quot;</span>,</a>
-<a class="sourceLine" id="cb36-2" data-line-number="2">  <span class="dt">layout =</span> <span class="st">&quot;spring&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>, </a>
-<a class="sourceLine" id="cb36-3" data-line-number="3">  <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, </a>
-<a class="sourceLine" id="cb36-4" data-line-number="4">  <span class="dt">width=</span><span class="dv">7</span>, <span class="dt">height=</span><span class="dv">5</span>, <span class="dt">normalize=</span><span class="ot">TRUE</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="kw">qgraph</span>(qg_pca, <span class="dt">title=</span><span class="st">&quot;Rotated component loadings, all models over all months&quot;</span>,</a>
+<a class="sourceLine" id="cb36-2" title="2">  <span class="dt">layout =</span> <span class="st">&quot;spring&quot;</span>, <span class="dt">arrows =</span> <span class="ot">FALSE</span>, </a>
+<a class="sourceLine" id="cb36-3" title="3">  <span class="dt">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="dt">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, </a>
+<a class="sourceLine" id="cb36-4" title="4">  <span class="dt">width=</span><span class="dv">7</span>, <span class="dt">height=</span><span class="dv">5</span>, <span class="dt">normalize=</span><span class="ot">TRUE</span>, <span class="dt">edge.width=</span><span class="fl">0.75</span>) </a></code></pre></div>
 <p><img src="PCA_files/figure-html/unnamed-chunk-11-2.png" width="75%" height="75%" /></p>
 <p><a href="PCA.html">[Back to top]</a></p>
 </div>
@@ -952,16 +955,16 @@ $(document).ready(function () {
 <div id="read-the-netcdf-file-of-20th-century-reanalysis-data" class="section level2">
 <h2><span class="header-section-number">4.1</span> Read the netCDF file of 20th Century Reanalysis Data</h2>
 <p>Load the <code>ncdf</code> library, and set some path and file names, and the name of the variable to read in (<code>hgt_anm</code>).</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="co"># load ncdf4 package and set paths</span></a>
-<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="kw">library</span>(ncdf4)</a>
-<a class="sourceLine" id="cb37-3" data-line-number="3">ncpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
-<a class="sourceLine" id="cb37-4" data-line-number="4">ncname &lt;-<span class="st"> &quot;R20C2_anm19812010_1871-2010_gcm_hgt500.nc&quot;</span> </a>
-<a class="sourceLine" id="cb37-5" data-line-number="5">ncfname &lt;-<span class="st"> </span><span class="kw">paste</span>(ncpath, ncname, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb37-6" data-line-number="6">dname &lt;-<span class="st"> &quot;hgt_anm&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="co"># load ncdf4 package and set paths</span></a>
+<a class="sourceLine" id="cb37-2" title="2"><span class="kw">library</span>(ncdf4)</a>
+<a class="sourceLine" id="cb37-3" title="3">ncpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
+<a class="sourceLine" id="cb37-4" title="4">ncname &lt;-<span class="st"> &quot;R20C2_anm19812010_1871-2010_gcm_hgt500.nc&quot;</span> </a>
+<a class="sourceLine" id="cb37-5" title="5">ncfname &lt;-<span class="st"> </span><span class="kw">paste</span>(ncpath, ncname, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb37-6" title="6">dname &lt;-<span class="st"> &quot;hgt_anm&quot;</span></a></code></pre></div>
 <p>Open the netCDF file. Printing the file object (<code>ncin</code>) produces output similar to that of <code>ncdump</code>:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="co"># open a netCDF file</span></a>
-<a class="sourceLine" id="cb38-2" data-line-number="2">ncin &lt;-<span class="st"> </span><span class="kw">nc_open</span>(ncfname)</a>
-<a class="sourceLine" id="cb38-3" data-line-number="3"><span class="kw">print</span>(ncin)</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="co"># open a netCDF file</span></a>
+<a class="sourceLine" id="cb38-2" title="2">ncin &lt;-<span class="st"> </span><span class="kw">nc_open</span>(ncfname)</a>
+<a class="sourceLine" id="cb38-3" title="3"><span class="kw">print</span>(ncin)</a></code></pre></div>
 <pre><code>## File /Users/bartlein.AD/Projects/ESSD/data/nc_files/R20C2_anm19812010_1871-2010_gcm_hgt500.nc (NC_FORMAT_CLASSIC):
 ## 
 ##      1 variables (excluding dimension variables):
@@ -1003,73 +1006,73 @@ $(document).ready(function () {
 ##         references: http://www.esrl.noaa.gov/psd/data/gridded/data.20thCentReanalysis.html
 ##         comment: 1871-2010 anomalies relative to 1981-2010 ltm on native GCM grid</code></pre>
 <p>Get the latitudes and longitudes (dimensions):</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="co"># lons and lats</span></a>
-<a class="sourceLine" id="cb40-2" data-line-number="2">lon &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin, <span class="st">&quot;lon&quot;</span>)</a>
-<a class="sourceLine" id="cb40-3" data-line-number="3">nlon &lt;-<span class="st"> </span><span class="kw">dim</span>(lon)</a>
-<a class="sourceLine" id="cb40-4" data-line-number="4"><span class="kw">head</span>(lon)</a></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1"><span class="co"># lons and lats</span></a>
+<a class="sourceLine" id="cb40-2" title="2">lon &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin, <span class="st">&quot;lon&quot;</span>)</a>
+<a class="sourceLine" id="cb40-3" title="3">nlon &lt;-<span class="st"> </span><span class="kw">dim</span>(lon)</a>
+<a class="sourceLine" id="cb40-4" title="4"><span class="kw">head</span>(lon)</a></code></pre></div>
 <pre><code>## [1] -180 -178 -176 -174 -172 -170</code></pre>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1">lat &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin, <span class="st">&quot;lat&quot;</span>, <span class="dt">verbose =</span> F)</a>
-<a class="sourceLine" id="cb42-2" data-line-number="2">nlat &lt;-<span class="st"> </span><span class="kw">dim</span>(lat)</a>
-<a class="sourceLine" id="cb42-3" data-line-number="3"><span class="kw">head</span>(lat)</a></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1">lat &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin, <span class="st">&quot;lat&quot;</span>, <span class="dt">verbose =</span> F)</a>
+<a class="sourceLine" id="cb42-2" title="2">nlat &lt;-<span class="st"> </span><span class="kw">dim</span>(lat)</a>
+<a class="sourceLine" id="cb42-3" title="3"><span class="kw">head</span>(lat)</a></code></pre></div>
 <pre><code>## [1] -90 -88 -86 -84 -82 -80</code></pre>
 <p>Get the time variable, and the “CF” “time since” units attribute:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="co"># time variable</span></a>
-<a class="sourceLine" id="cb44-2" data-line-number="2">t &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin, <span class="st">&quot;time&quot;</span>)</a>
-<a class="sourceLine" id="cb44-3" data-line-number="3"><span class="kw">head</span>(t); <span class="kw">tail</span>(t)</a></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1"><span class="co"># time variable</span></a>
+<a class="sourceLine" id="cb44-2" title="2">t &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin, <span class="st">&quot;time&quot;</span>)</a>
+<a class="sourceLine" id="cb44-3" title="3"><span class="kw">head</span>(t); <span class="kw">tail</span>(t)</a></code></pre></div>
 <pre><code>## [1] 622368 623112 623784 624528 625248 625992</code></pre>
 <pre><code>## [1] 1845168 1845912 1846656 1847376 1848120 1848840</code></pre>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">tunits &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="st">&quot;time&quot;</span>, <span class="st">&quot;units&quot;</span>)</a>
-<a class="sourceLine" id="cb47-2" data-line-number="2">tunits<span class="op">$</span>value</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1">tunits &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="st">&quot;time&quot;</span>, <span class="st">&quot;units&quot;</span>)</a>
+<a class="sourceLine" id="cb47-2" title="2">tunits<span class="op">$</span>value</a></code></pre></div>
 <pre><code>## [1] &quot;hours since 1800-01-01 00:00:00&quot;</code></pre>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1">nt &lt;-<span class="st"> </span><span class="kw">dim</span>(t)</a>
-<a class="sourceLine" id="cb49-2" data-line-number="2">nt</a></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1">nt &lt;-<span class="st"> </span><span class="kw">dim</span>(t)</a>
+<a class="sourceLine" id="cb49-2" title="2">nt</a></code></pre></div>
 <pre><code>## [1] 1680</code></pre>
 <p>Next, get the data (<code>hgt500_anm</code>), and the attributes like the “long name”, units and fill values (missing data codes):</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="co"># get the data array</span></a>
-<a class="sourceLine" id="cb51-2" data-line-number="2">var_array &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin, dname)</a>
-<a class="sourceLine" id="cb51-3" data-line-number="3">dlname &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, dname, <span class="st">&quot;long_name&quot;</span>)</a>
-<a class="sourceLine" id="cb51-4" data-line-number="4">dunits &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, dname, <span class="st">&quot;units&quot;</span>)</a>
-<a class="sourceLine" id="cb51-5" data-line-number="5">fillvalue &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, dname, <span class="st">&quot;_FillValue&quot;</span>)</a>
-<a class="sourceLine" id="cb51-6" data-line-number="6"><span class="kw">dim</span>(var_array)</a></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="co"># get the data array</span></a>
+<a class="sourceLine" id="cb51-2" title="2">var_array &lt;-<span class="st"> </span><span class="kw">ncvar_get</span>(ncin, dname)</a>
+<a class="sourceLine" id="cb51-3" title="3">dlname &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, dname, <span class="st">&quot;long_name&quot;</span>)</a>
+<a class="sourceLine" id="cb51-4" title="4">dunits &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, dname, <span class="st">&quot;units&quot;</span>)</a>
+<a class="sourceLine" id="cb51-5" title="5">fillvalue &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, dname, <span class="st">&quot;_FillValue&quot;</span>)</a>
+<a class="sourceLine" id="cb51-6" title="6"><span class="kw">dim</span>(var_array)</a></code></pre></div>
 <pre><code>## [1]  180   91 1680</code></pre>
 <p>Then get the global attributes:</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co"># global attributes</span></a>
-<a class="sourceLine" id="cb53-2" data-line-number="2">title &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="dv">0</span>, <span class="st">&quot;title&quot;</span>)</a>
-<a class="sourceLine" id="cb53-3" data-line-number="3">institution &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="dv">0</span>, <span class="st">&quot;institution&quot;</span>)</a>
-<a class="sourceLine" id="cb53-4" data-line-number="4">datasource &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="dv">0</span>, <span class="st">&quot;source&quot;</span>)</a>
-<a class="sourceLine" id="cb53-5" data-line-number="5">references &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="dv">0</span>, <span class="st">&quot;references&quot;</span>)</a>
-<a class="sourceLine" id="cb53-6" data-line-number="6">history &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="dv">0</span>, <span class="st">&quot;history&quot;</span>)</a>
-<a class="sourceLine" id="cb53-7" data-line-number="7">Conventions &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="dv">0</span>, <span class="st">&quot;Conventions&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1"><span class="co"># global attributes</span></a>
+<a class="sourceLine" id="cb53-2" title="2">title &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="dv">0</span>, <span class="st">&quot;title&quot;</span>)</a>
+<a class="sourceLine" id="cb53-3" title="3">institution &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="dv">0</span>, <span class="st">&quot;institution&quot;</span>)</a>
+<a class="sourceLine" id="cb53-4" title="4">datasource &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="dv">0</span>, <span class="st">&quot;source&quot;</span>)</a>
+<a class="sourceLine" id="cb53-5" title="5">references &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="dv">0</span>, <span class="st">&quot;references&quot;</span>)</a>
+<a class="sourceLine" id="cb53-6" title="6">history &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="dv">0</span>, <span class="st">&quot;history&quot;</span>)</a>
+<a class="sourceLine" id="cb53-7" title="7">Conventions &lt;-<span class="st"> </span><span class="kw">ncatt_get</span>(ncin, <span class="dv">0</span>, <span class="st">&quot;Conventions&quot;</span>)</a></code></pre></div>
 <p>Finally, close the netCDF file:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1"><span class="kw">nc_close</span>(ncin)</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="kw">nc_close</span>(ncin)</a></code></pre></div>
 </div>
 <div id="set-up-for-the-analysis" class="section level2">
 <h2><span class="header-section-number">4.2</span> Set-up for the analysis</h2>
 <p>Check that the data have been read correctly by displaying a crude map of the first month of data. Grab a slice of the data, and plot it as an <code>image()</code> plot.</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="co"># plot a slice of data</span></a>
-<a class="sourceLine" id="cb55-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb55-3" data-line-number="3">var_slice &lt;-<span class="st"> </span>var_array[, , n]</a>
-<a class="sourceLine" id="cb55-4" data-line-number="4"><span class="kw">image</span>(lon, lat, var_slice, <span class="dt">col =</span> <span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>, <span class="st">&quot;RdBu&quot;</span>)))</a></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1"><span class="co"># plot a slice of data</span></a>
+<a class="sourceLine" id="cb55-2" title="2">n &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb55-3" title="3">var_slice &lt;-<span class="st"> </span>var_array[, , n]</a>
+<a class="sourceLine" id="cb55-4" title="4"><span class="kw">image</span>(lon, lat, var_slice, <span class="dt">col =</span> <span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>, <span class="st">&quot;RdBu&quot;</span>)))</a></code></pre></div>
 <p><img src="PCA_files/figure-html/first%20month-1.png" width="75%" height="75%" /></p>
 <p>The map looks similar to a map of the first month’s data using Panoply.</p>
 <p>If desired, the analysis could be confined to the Northern Hemispere by executing the following code (although this is not done here).</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1"><span class="co"># (not run) trim data to N.H.</span></a>
-<a class="sourceLine" id="cb56-2" data-line-number="2">lat &lt;-<span class="st"> </span>lat[<span class="dv">47</span><span class="op">:</span><span class="dv">91</span>]</a>
-<a class="sourceLine" id="cb56-3" data-line-number="3">nlat &lt;-<span class="st"> </span><span class="kw">dim</span>(lat)</a>
-<a class="sourceLine" id="cb56-4" data-line-number="4"><span class="kw">min</span>(lat); <span class="kw">max</span>(lat)</a>
-<a class="sourceLine" id="cb56-5" data-line-number="5">var_array &lt;-<span class="st"> </span>var_array[,<span class="dv">47</span><span class="op">:</span><span class="dv">91</span>,]</a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1"><span class="co"># (not run) trim data to N.H.</span></a>
+<a class="sourceLine" id="cb56-2" title="2">lat &lt;-<span class="st"> </span>lat[<span class="dv">47</span><span class="op">:</span><span class="dv">91</span>]</a>
+<a class="sourceLine" id="cb56-3" title="3">nlat &lt;-<span class="st"> </span><span class="kw">dim</span>(lat)</a>
+<a class="sourceLine" id="cb56-4" title="4"><span class="kw">min</span>(lat); <span class="kw">max</span>(lat)</a>
+<a class="sourceLine" id="cb56-5" title="5">var_array &lt;-<span class="st"> </span>var_array[,<span class="dv">47</span><span class="op">:</span><span class="dv">91</span>,]</a></code></pre></div>
 <div id="reshape-the-array" class="section level3">
 <h3><span class="header-section-number">4.2.1</span> Reshape the array</h3>
 <p>The netCDF variable <code>hgt500_anm</code> is read in as a 3-dimensional array (<code>nlon</code> x <code>nlat</code> x <code>nt</code>), but for the PCA, it needs to be in the standard form of a data frame, with each column representing a variable (or grid point in this case) and each row representing an observation (or time). The reshaping can be done by first flatting the 3-d array into a long vector of values, and then converting that to a 2-d array with <code>nlon</code> x <code>nlat</code> columns, and `nt’ rows.</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="co"># reshape the 3-d array</span></a>
-<a class="sourceLine" id="cb57-2" data-line-number="2">var_vec_long &lt;-<span class="st"> </span><span class="kw">as.vector</span>(var_array)</a>
-<a class="sourceLine" id="cb57-3" data-line-number="3"><span class="kw">length</span>(var_vec_long)</a></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1"><span class="co"># reshape the 3-d array</span></a>
+<a class="sourceLine" id="cb57-2" title="2">var_vec_long &lt;-<span class="st"> </span><span class="kw">as.vector</span>(var_array)</a>
+<a class="sourceLine" id="cb57-3" title="3"><span class="kw">length</span>(var_vec_long)</a></code></pre></div>
 <pre><code>## [1] 27518400</code></pre>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1">var_matrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(var_vec_long, <span class="dt">nrow =</span> nlon <span class="op">*</span><span class="st"> </span>nlat, <span class="dt">ncol =</span> nt)</a>
-<a class="sourceLine" id="cb59-2" data-line-number="2"><span class="kw">dim</span>(var_matrix)</a></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1">var_matrix &lt;-<span class="st"> </span><span class="kw">matrix</span>(var_vec_long, <span class="dt">nrow =</span> nlon <span class="op">*</span><span class="st"> </span>nlat, <span class="dt">ncol =</span> nt)</a>
+<a class="sourceLine" id="cb59-2" title="2"><span class="kw">dim</span>(var_matrix)</a></code></pre></div>
 <pre><code>## [1] 16380  1680</code></pre>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1">var_matrix &lt;-<span class="st"> </span><span class="kw">t</span>(var_matrix)</a>
-<a class="sourceLine" id="cb61-2" data-line-number="2"><span class="kw">dim</span>(var_matrix)</a></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1">var_matrix &lt;-<span class="st"> </span><span class="kw">t</span>(var_matrix)</a>
+<a class="sourceLine" id="cb61-2" title="2"><span class="kw">dim</span>(var_matrix)</a></code></pre></div>
 <pre><code>## [1]  1680 16380</code></pre>
 <p>Note that this appraoch will only work if the netCDF file is configured in the standard “CF Conventions” way, i.e. as a <code>nlon</code> x <code>nlat</code> x <code>nt</code> array.</p>
 <p><a href="PCA.html">[Back to top]</a></p>
@@ -1077,7 +1080,7 @@ $(document).ready(function () {
 </div>
 </div>
 <div id="pca-using-the-pcamethods-package" class="section level1">
-<h1><span class="header-section-number">5</span> PCA using the <code>pcaMethods</code> package</h1>
+<h1><span class="header-section-number">5</span> PCA using the <em>pcaMethods</em> package</h1>
 <p>The <code>pcaMethods</code> package from the Bioconductor repository is a very flexible set of routines for doing PCA. Here the “singular value decomposition” (SVD) approach will be used, because it can handle cases where there are more variables than observations. The <code>pcaMethods</code> package is described at:</p>
 <ul>
 <li><a href="http://bioconductor.org/packages/release/bioc/html/pcaMethods.html">[http://bioconductor.org/packages/release/bioc/html/pcaMethods.html]</a></li>
@@ -1087,22 +1090,22 @@ $(document).ready(function () {
 <li><a href="http://bioconductor.org/install/#install-bioconductor-packages">[http://bioconductor.org/install/#install-bioconductor-packages]</a></li>
 </ul>
 <p>In this example, the first eight components are extracted from the correlation matrix. Note that the analysis will take a few minutes.</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1"><span class="co"># PCA using pcaMethods</span></a>
-<a class="sourceLine" id="cb63-2" data-line-number="2"><span class="kw">library</span>(pcaMethods)</a>
-<a class="sourceLine" id="cb63-3" data-line-number="3">pcamethod=<span class="st">&quot;svd&quot;</span></a>
-<a class="sourceLine" id="cb63-4" data-line-number="4">ncomp &lt;-<span class="st"> </span><span class="dv">8</span></a>
-<a class="sourceLine" id="cb63-5" data-line-number="5">zd &lt;-<span class="st"> </span><span class="kw">prep</span>(var_matrix, <span class="dt">scale=</span><span class="st">&quot;uv&quot;</span>, <span class="dt">center=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb63-6" data-line-number="6"><span class="kw">set.seed</span>(<span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb63-7" data-line-number="7">ptm &lt;-<span class="st"> </span><span class="kw">proc.time</span>() <span class="co"># time the analysis</span></a>
-<a class="sourceLine" id="cb63-8" data-line-number="8">resPCA &lt;-<span class="st"> </span><span class="kw">pca</span>(zd, <span class="dt">method=</span>pcamethod, <span class="dt">scale=</span><span class="st">&quot;uv&quot;</span>, <span class="dt">center=</span><span class="ot">TRUE</span>, <span class="dt">nPcs=</span>ncomp)</a>
-<a class="sourceLine" id="cb63-9" data-line-number="9"><span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm <span class="co"># how long?</span></a></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" title="1"><span class="co"># PCA using pcaMethods</span></a>
+<a class="sourceLine" id="cb63-2" title="2"><span class="kw">library</span>(pcaMethods)</a>
+<a class="sourceLine" id="cb63-3" title="3">pcamethod=<span class="st">&quot;svd&quot;</span></a>
+<a class="sourceLine" id="cb63-4" title="4">ncomp &lt;-<span class="st"> </span><span class="dv">8</span></a>
+<a class="sourceLine" id="cb63-5" title="5">zd &lt;-<span class="st"> </span><span class="kw">prep</span>(var_matrix, <span class="dt">scale=</span><span class="st">&quot;uv&quot;</span>, <span class="dt">center=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb63-6" title="6"><span class="kw">set.seed</span>(<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb63-7" title="7">ptm &lt;-<span class="st"> </span><span class="kw">proc.time</span>() <span class="co"># time the analysis</span></a>
+<a class="sourceLine" id="cb63-8" title="8">resPCA &lt;-<span class="st"> </span><span class="kw">pca</span>(zd, <span class="dt">method=</span>pcamethod, <span class="dt">scale=</span><span class="st">&quot;uv&quot;</span>, <span class="dt">center=</span><span class="ot">TRUE</span>, <span class="dt">nPcs=</span>ncomp)</a>
+<a class="sourceLine" id="cb63-9" title="9"><span class="kw">proc.time</span>() <span class="op">-</span><span class="st"> </span>ptm <span class="co"># how long?</span></a></code></pre></div>
 <pre><code>##    user  system elapsed 
 ##  203.91    0.91  204.83</code></pre>
 <div id="results" class="section level2">
 <h2><span class="header-section-number">5.1</span> Results</h2>
 <p>Printing out the “results” object (<code>resPCA</code>) provides a summary of the analysis, and the loadings and scores are extracted from the results object.</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="co"># print a summary of the results</span></a>
-<a class="sourceLine" id="cb65-2" data-line-number="2">resPCA</a></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1"><span class="co"># print a summary of the results</span></a>
+<a class="sourceLine" id="cb65-2" title="2">resPCA</a></code></pre></div>
 <pre><code>## svd calculated PCA
 ## Importance of component(s):
 ##                  PC1    PC2     PC3     PC4     PC5     PC6     PC7     PC8
@@ -1118,19 +1121,19 @@ $(document).ready(function () {
 ## [1] 1680    8
 ## Loadings structure:
 ## [1] 16380     8</code></pre>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1"><span class="co"># extract loadings and scores</span></a>
-<a class="sourceLine" id="cb67-2" data-line-number="2">loadpca &lt;-<span class="st"> </span><span class="kw">loadings</span>(resPCA)</a>
-<a class="sourceLine" id="cb67-3" data-line-number="3">scores &lt;-<span class="st"> </span><span class="kw">scores</span>(resPCA)<span class="op">/</span><span class="kw">rep</span>(resPCA<span class="op">@</span>sDev, <span class="dt">each=</span><span class="kw">nrow</span>(<span class="kw">scores</span>(resPCA)))</a></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="co"># extract loadings and scores</span></a>
+<a class="sourceLine" id="cb67-2" title="2">loadpca &lt;-<span class="st"> </span><span class="kw">loadings</span>(resPCA)</a>
+<a class="sourceLine" id="cb67-3" title="3">scores &lt;-<span class="st"> </span><span class="kw">scores</span>(resPCA)<span class="op">/</span><span class="kw">rep</span>(resPCA<span class="op">@</span>sDev, <span class="dt">each=</span><span class="kw">nrow</span>(<span class="kw">scores</span>(resPCA)))</a></code></pre></div>
 <p>A quick look at the results can be gotten by mapping the loadings of the first component and plotting the time series of the component scores</p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" data-line-number="1"><span class="co"># quick map of component loadings</span></a>
-<a class="sourceLine" id="cb68-2" data-line-number="2">p &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb68-3" data-line-number="3">var_slice &lt;-<span class="st"> </span><span class="kw">matrix</span>(loadpca[, p], <span class="dt">nrow=</span>nlat, <span class="dt">ncol=</span>nlon, <span class="dt">byrow=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb68-4" data-line-number="4"><span class="kw">image</span>(lon, lat, <span class="kw">t</span>(var_slice), <span class="dt">col =</span> <span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>, <span class="st">&quot;RdBu&quot;</span>)))</a></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1"><span class="co"># quick map of component loadings</span></a>
+<a class="sourceLine" id="cb68-2" title="2">p &lt;-<span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb68-3" title="3">var_slice &lt;-<span class="st"> </span><span class="kw">matrix</span>(loadpca[, p], <span class="dt">nrow=</span>nlat, <span class="dt">ncol=</span>nlon, <span class="dt">byrow=</span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb68-4" title="4"><span class="kw">image</span>(lon, lat, <span class="kw">t</span>(var_slice), <span class="dt">col =</span> <span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>, <span class="st">&quot;RdBu&quot;</span>)))</a></code></pre></div>
 <p><img src="PCA_files/figure-html/mapLoadings-1.png" width="75%" height="75%" /></p>
 <p>Recall that the loadings are the correlations between the time series of 500mb heights at each grid point and the time series of the (first, in this case) component and they describe the map pattern of the first component, and the scores illustrate the importance of the anomaly map pattern represented by the first component as it varies over time:</p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" data-line-number="1"><span class="co"># timeseries plot of scores</span></a>
-<a class="sourceLine" id="cb69-2" data-line-number="2">yrmn &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">1871.0</span>, <span class="fl">2011.0</span><span class="op">-</span>(<span class="fl">1.0</span><span class="op">/</span><span class="fl">12.0</span>), <span class="dt">by=</span><span class="fl">1.0</span><span class="op">/</span><span class="fl">12.0</span>)</a>
-<a class="sourceLine" id="cb69-3" data-line-number="3"><span class="kw">plot</span>(yrmn, scores[,<span class="dv">1</span>], <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1"><span class="co"># timeseries plot of scores</span></a>
+<a class="sourceLine" id="cb69-2" title="2">yrmn &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">1871.0</span>, <span class="fl">2011.0</span><span class="op">-</span>(<span class="fl">1.0</span><span class="op">/</span><span class="fl">12.0</span>), <span class="dt">by=</span><span class="fl">1.0</span><span class="op">/</span><span class="fl">12.0</span>)</a>
+<a class="sourceLine" id="cb69-3" title="3"><span class="kw">plot</span>(yrmn, scores[,<span class="dv">1</span>], <span class="dt">type=</span><span class="st">&quot;l&quot;</span>)</a></code></pre></div>
 <p><img src="PCA_files/figure-html/plotScores-1.png" width="75%" height="75%" /></p>
 <p>The first six components account for half of the variance of the original 16,380 variables, which is a pretty efficient reduction in dimensionality. The map pattern of the first component is positive in the tropics (and is more-or-less positive everywhere), and the time series of scores shows that it is increasing over time. This pattern and time series is consitent with global warming over the last century.</p>
 </div>
@@ -1140,60 +1143,60 @@ $(document).ready(function () {
 <div id="component-scores" class="section level2">
 <h2><span class="header-section-number">6.1</span> Component scores</h2>
 <p>Write out the component scores and statistics (to the working directory):</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" data-line-number="1"><span class="co"># write scores</span></a>
-<a class="sourceLine" id="cb70-2" data-line-number="2">scoresout &lt;-<span class="st"> </span><span class="kw">cbind</span>(yrmn,scores)</a>
-<a class="sourceLine" id="cb70-3" data-line-number="3">scoresfile &lt;-<span class="st"> &quot;hgt500_scores.csv&quot;</span></a>
-<a class="sourceLine" id="cb70-4" data-line-number="4"><span class="kw">write.table</span>(scoresout, <span class="dt">file=</span>scoresfile, <span class="dt">row.names=</span><span class="ot">FALSE</span>, <span class="dt">col.names=</span><span class="ot">TRUE</span>, <span class="dt">sep=</span><span class="st">&quot;,&quot;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" data-line-number="1"><span class="co"># write statistics</span></a>
-<a class="sourceLine" id="cb71-2" data-line-number="2">ncompchar &lt;-<span class="st"> </span><span class="kw">paste</span> (<span class="st">&quot;0&quot;</span>, <span class="kw">as.character</span>(ncomp), <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb71-3" data-line-number="3"><span class="cf">if</span> (ncomp <span class="op">&gt;=</span><span class="st"> </span><span class="dv">10</span>) ncompchar &lt;-<span class="st"> </span><span class="kw">as.character</span>(ncomp)</a>
-<a class="sourceLine" id="cb71-4" data-line-number="4">statsout &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span><span class="op">:</span>resPCA<span class="op">@</span>nPcs,resPCA<span class="op">@</span>sDev,resPCA<span class="op">@</span>R2,resPCA<span class="op">@</span>R2cum)</a>
-<a class="sourceLine" id="cb71-5" data-line-number="5"><span class="kw">colnames</span>(statsout) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;PC&quot;</span>, <span class="st">&quot;sDev&quot;</span>, <span class="st">&quot;R2&quot;</span>, <span class="st">&quot;R2cum&quot;</span>)</a>
-<a class="sourceLine" id="cb71-6" data-line-number="6">statsfile &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;hgt500&quot;</span>,pcamethod,<span class="st">&quot;_&quot;</span>,ncompchar,<span class="st">&quot;_stats.csv&quot;</span>,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb71-7" data-line-number="7"><span class="kw">write.table</span>(statsout, <span class="dt">file=</span>statsfile, <span class="dt">row.names=</span><span class="ot">FALSE</span>, <span class="dt">col.names=</span><span class="ot">TRUE</span>, <span class="dt">sep=</span><span class="st">&quot;,&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="co"># write scores</span></a>
+<a class="sourceLine" id="cb70-2" title="2">scoresout &lt;-<span class="st"> </span><span class="kw">cbind</span>(yrmn,scores)</a>
+<a class="sourceLine" id="cb70-3" title="3">scoresfile &lt;-<span class="st"> &quot;hgt500_scores.csv&quot;</span></a>
+<a class="sourceLine" id="cb70-4" title="4"><span class="kw">write.table</span>(scoresout, <span class="dt">file=</span>scoresfile, <span class="dt">row.names=</span><span class="ot">FALSE</span>, <span class="dt">col.names=</span><span class="ot">TRUE</span>, <span class="dt">sep=</span><span class="st">&quot;,&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1"><span class="co"># write statistics</span></a>
+<a class="sourceLine" id="cb71-2" title="2">ncompchar &lt;-<span class="st"> </span><span class="kw">paste</span> (<span class="st">&quot;0&quot;</span>, <span class="kw">as.character</span>(ncomp), <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb71-3" title="3"><span class="cf">if</span> (ncomp <span class="op">&gt;=</span><span class="st"> </span><span class="dv">10</span>) ncompchar &lt;-<span class="st"> </span><span class="kw">as.character</span>(ncomp)</a>
+<a class="sourceLine" id="cb71-4" title="4">statsout &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dv">1</span><span class="op">:</span>resPCA<span class="op">@</span>nPcs,resPCA<span class="op">@</span>sDev,resPCA<span class="op">@</span>R2,resPCA<span class="op">@</span>R2cum)</a>
+<a class="sourceLine" id="cb71-5" title="5"><span class="kw">colnames</span>(statsout) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;PC&quot;</span>, <span class="st">&quot;sDev&quot;</span>, <span class="st">&quot;R2&quot;</span>, <span class="st">&quot;R2cum&quot;</span>)</a>
+<a class="sourceLine" id="cb71-6" title="6">statsfile &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;hgt500&quot;</span>,pcamethod,<span class="st">&quot;_&quot;</span>,ncompchar,<span class="st">&quot;_stats.csv&quot;</span>,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
+<a class="sourceLine" id="cb71-7" title="7"><span class="kw">write.table</span>(statsout, <span class="dt">file=</span>statsfile, <span class="dt">row.names=</span><span class="ot">FALSE</span>, <span class="dt">col.names=</span><span class="ot">TRUE</span>, <span class="dt">sep=</span><span class="st">&quot;,&quot;</span>)</a></code></pre></div>
 </div>
 <div id="write-out-a-netcdf-file-of-component-loadings" class="section level2">
 <h2><span class="header-section-number">6.2</span> Write out a netCDF file of component loadings</h2>
 <p>The loading matrix has <code>nlon</code> x <code>nlat</code> rows and <code>ncomp</code> (eight in this case) columns, and needs to be reshaped into an <code>nlon</code> x <code>nlat</code> x <code>ncomp</code> array. Note that the reshaping is not automatic–it happens that this works because the original data (from the input netCDF file) was properly defined (as a <code>nlon</code> x <code>nlat</code> x <code>nt</code> array).</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" data-line-number="1"><span class="co"># reshape loadings</span></a>
-<a class="sourceLine" id="cb72-2" data-line-number="2">dim.array &lt;-<span class="st"> </span><span class="kw">c</span>(nlon,nlat,ncomp)</a>
-<a class="sourceLine" id="cb72-3" data-line-number="3">var_array &lt;-<span class="st"> </span><span class="kw">array</span>(loadpca, dim.array)</a></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="co"># reshape loadings</span></a>
+<a class="sourceLine" id="cb72-2" title="2">dim.array &lt;-<span class="st"> </span><span class="kw">c</span>(nlon,nlat,ncomp)</a>
+<a class="sourceLine" id="cb72-3" title="3">var_array &lt;-<span class="st"> </span><span class="kw">array</span>(loadpca, dim.array)</a></code></pre></div>
 <p>Next, the dimension (or coordinate) variables are defined, including one <code>ncomp</code> long:</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" data-line-number="1"><span class="co"># define dimensions</span></a>
-<a class="sourceLine" id="cb73-2" data-line-number="2">londim &lt;-<span class="st"> </span><span class="kw">ncdim_def</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;degrees_east&quot;</span>, <span class="kw">as.double</span>(lon))</a>
-<a class="sourceLine" id="cb73-3" data-line-number="3">latdim &lt;-<span class="st"> </span><span class="kw">ncdim_def</span>(<span class="st">&quot;lat&quot;</span>, <span class="st">&quot;degrees_north&quot;</span>, <span class="kw">as.double</span>(lat))</a>
-<a class="sourceLine" id="cb73-4" data-line-number="4">comp &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span>ncomp)</a>
-<a class="sourceLine" id="cb73-5" data-line-number="5">ncompdim &lt;-<span class="st"> </span><span class="kw">ncdim_def</span>(<span class="st">&quot;comp&quot;</span>, <span class="st">&quot;SVD component&quot;</span>, <span class="kw">as.integer</span>(comp))</a></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb73-1" title="1"><span class="co"># define dimensions</span></a>
+<a class="sourceLine" id="cb73-2" title="2">londim &lt;-<span class="st"> </span><span class="kw">ncdim_def</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;degrees_east&quot;</span>, <span class="kw">as.double</span>(lon))</a>
+<a class="sourceLine" id="cb73-3" title="3">latdim &lt;-<span class="st"> </span><span class="kw">ncdim_def</span>(<span class="st">&quot;lat&quot;</span>, <span class="st">&quot;degrees_north&quot;</span>, <span class="kw">as.double</span>(lat))</a>
+<a class="sourceLine" id="cb73-4" title="4">comp &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span>ncomp)</a>
+<a class="sourceLine" id="cb73-5" title="5">ncompdim &lt;-<span class="st"> </span><span class="kw">ncdim_def</span>(<span class="st">&quot;comp&quot;</span>, <span class="st">&quot;SVD component&quot;</span>, <span class="kw">as.integer</span>(comp))</a></code></pre></div>
 <p>Then the 3-d (lon x lat x ncomp) variable (the loadings) is defined:</p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1"><span class="co"># define variable</span></a>
-<a class="sourceLine" id="cb74-2" data-line-number="2">fillvalue &lt;-<span class="st"> </span><span class="fl">1e+32</span></a>
-<a class="sourceLine" id="cb74-3" data-line-number="3">dlname &lt;-<span class="st"> &quot;hgt500 anomalies loadings&quot;</span></a>
-<a class="sourceLine" id="cb74-4" data-line-number="4">var_def &lt;-<span class="st"> </span><span class="kw">ncvar_def</span>(<span class="st">&quot;hgt500_loadings&quot;</span>, <span class="st">&quot;1&quot;</span>, <span class="kw">list</span>(londim, latdim, ncompdim), fillvalue, </a>
-<a class="sourceLine" id="cb74-5" data-line-number="5">  dlname, <span class="dt">prec =</span> <span class="st">&quot;single&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1"><span class="co"># define variable</span></a>
+<a class="sourceLine" id="cb74-2" title="2">fillvalue &lt;-<span class="st"> </span><span class="fl">1e+32</span></a>
+<a class="sourceLine" id="cb74-3" title="3">dlname &lt;-<span class="st"> &quot;hgt500 anomalies loadings&quot;</span></a>
+<a class="sourceLine" id="cb74-4" title="4">var_def &lt;-<span class="st"> </span><span class="kw">ncvar_def</span>(<span class="st">&quot;hgt500_loadings&quot;</span>, <span class="st">&quot;1&quot;</span>, <span class="kw">list</span>(londim, latdim, ncompdim), fillvalue, </a>
+<a class="sourceLine" id="cb74-5" title="5">  dlname, <span class="dt">prec =</span> <span class="st">&quot;single&quot;</span>)</a></code></pre></div>
 <p>Then the netCDF file is created, and the loadings and additional attributes are added:</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" data-line-number="1"><span class="co"># create netCDF file and put arrays</span></a>
-<a class="sourceLine" id="cb75-2" data-line-number="2">ncfname &lt;-<span class="st"> &quot;hgt500_loadings.nc&quot;</span></a>
-<a class="sourceLine" id="cb75-3" data-line-number="3">ncout &lt;-<span class="st"> </span><span class="kw">nc_create</span>(ncfname, <span class="kw">list</span>(var_def), <span class="dt">force_v4 =</span> T)</a>
-<a class="sourceLine" id="cb75-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb75-5" data-line-number="5"><span class="co"># put loadings</span></a>
-<a class="sourceLine" id="cb75-6" data-line-number="6"><span class="kw">ncvar_put</span>(ncout, var_def, var_array)</a>
-<a class="sourceLine" id="cb75-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb75-8" data-line-number="8"><span class="co"># put additional attributes into dimension and data variables</span></a>
-<a class="sourceLine" id="cb75-9" data-line-number="9"><span class="kw">ncatt_put</span>(ncout, <span class="st">&quot;lon&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;X&quot;</span>)  <span class="co">#,verbose=FALSE) #,definemode=FALSE)</span></a>
-<a class="sourceLine" id="cb75-10" data-line-number="10"><span class="kw">ncatt_put</span>(ncout, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;Y&quot;</span>)</a>
-<a class="sourceLine" id="cb75-11" data-line-number="11"><span class="kw">ncatt_put</span>(ncout, <span class="st">&quot;comp&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;PC&quot;</span>)</a>
-<a class="sourceLine" id="cb75-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb75-13" data-line-number="13"><span class="co"># add global attributes</span></a>
-<a class="sourceLine" id="cb75-14" data-line-number="14">title2 &lt;-<span class="st"> </span><span class="kw">paste</span>(title<span class="op">$</span>value, <span class="st">&quot;SVD component analysis using pcaMethods&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;--&quot;</span>)</a>
-<a class="sourceLine" id="cb75-15" data-line-number="15"><span class="kw">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;title&quot;</span>, title2)</a>
-<a class="sourceLine" id="cb75-16" data-line-number="16"><span class="kw">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;institution&quot;</span>, institution<span class="op">$</span>value)</a>
-<a class="sourceLine" id="cb75-17" data-line-number="17"><span class="kw">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;source&quot;</span>, datasource<span class="op">$</span>value)</a>
-<a class="sourceLine" id="cb75-18" data-line-number="18"><span class="kw">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;references&quot;</span>, references<span class="op">$</span>value)</a>
-<a class="sourceLine" id="cb75-19" data-line-number="19">history &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;P.J. Bartlein&quot;</span>, <span class="kw">date</span>(), <span class="dt">sep =</span> <span class="st">&quot;, &quot;</span>)</a>
-<a class="sourceLine" id="cb75-20" data-line-number="20"><span class="kw">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;history&quot;</span>, history)</a>
-<a class="sourceLine" id="cb75-21" data-line-number="21"><span class="kw">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;Conventions&quot;</span>, Conventions<span class="op">$</span>value)</a></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1"><span class="co"># create netCDF file and put arrays</span></a>
+<a class="sourceLine" id="cb75-2" title="2">ncfname &lt;-<span class="st"> &quot;hgt500_loadings.nc&quot;</span></a>
+<a class="sourceLine" id="cb75-3" title="3">ncout &lt;-<span class="st"> </span><span class="kw">nc_create</span>(ncfname, <span class="kw">list</span>(var_def), <span class="dt">force_v4 =</span> T)</a>
+<a class="sourceLine" id="cb75-4" title="4"></a>
+<a class="sourceLine" id="cb75-5" title="5"><span class="co"># put loadings</span></a>
+<a class="sourceLine" id="cb75-6" title="6"><span class="kw">ncvar_put</span>(ncout, var_def, var_array)</a>
+<a class="sourceLine" id="cb75-7" title="7"></a>
+<a class="sourceLine" id="cb75-8" title="8"><span class="co"># put additional attributes into dimension and data variables</span></a>
+<a class="sourceLine" id="cb75-9" title="9"><span class="kw">ncatt_put</span>(ncout, <span class="st">&quot;lon&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;X&quot;</span>)  <span class="co">#,verbose=FALSE) #,definemode=FALSE)</span></a>
+<a class="sourceLine" id="cb75-10" title="10"><span class="kw">ncatt_put</span>(ncout, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;Y&quot;</span>)</a>
+<a class="sourceLine" id="cb75-11" title="11"><span class="kw">ncatt_put</span>(ncout, <span class="st">&quot;comp&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;PC&quot;</span>)</a>
+<a class="sourceLine" id="cb75-12" title="12"></a>
+<a class="sourceLine" id="cb75-13" title="13"><span class="co"># add global attributes</span></a>
+<a class="sourceLine" id="cb75-14" title="14">title2 &lt;-<span class="st"> </span><span class="kw">paste</span>(title<span class="op">$</span>value, <span class="st">&quot;SVD component analysis using pcaMethods&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;--&quot;</span>)</a>
+<a class="sourceLine" id="cb75-15" title="15"><span class="kw">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;title&quot;</span>, title2)</a>
+<a class="sourceLine" id="cb75-16" title="16"><span class="kw">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;institution&quot;</span>, institution<span class="op">$</span>value)</a>
+<a class="sourceLine" id="cb75-17" title="17"><span class="kw">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;source&quot;</span>, datasource<span class="op">$</span>value)</a>
+<a class="sourceLine" id="cb75-18" title="18"><span class="kw">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;references&quot;</span>, references<span class="op">$</span>value)</a>
+<a class="sourceLine" id="cb75-19" title="19">history &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;P.J. Bartlein&quot;</span>, <span class="kw">date</span>(), <span class="dt">sep =</span> <span class="st">&quot;, &quot;</span>)</a>
+<a class="sourceLine" id="cb75-20" title="20"><span class="kw">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;history&quot;</span>, history)</a>
+<a class="sourceLine" id="cb75-21" title="21"><span class="kw">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;Conventions&quot;</span>, Conventions<span class="op">$</span>value)</a></code></pre></div>
 <p>Finally, the netCDF file is closed, writing the data to disk.</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" data-line-number="1"><span class="kw">nc_close</span>(ncout)</a></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb76-1" title="1"><span class="kw">nc_close</span>(ncout)</a></code></pre></div>
 <p><a href="PCA.html">[Back to top]</a></p>
 </div>
 </div>
