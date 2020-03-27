@@ -94,7 +94,7 @@ The class and diminsions of `tmp_array` describe the result of the reshaping.
 
 # NetCDF and the raster package #
 
-The `raster` package has the capability of reading and writing netCDF files.  There are several issues that could arise in such transformations (i.e. from the netCDF format to the `raster` format) related to such things as the indexing of grid-cell locations:  netCDF coordinates refer to the center of grid cells, while `raster` coordinates refer to cell corners.
+The `raster` package has the capability of reading and writing netCDF files. There are several things that could go wrong in interpreting netCDF files, related to such things as the indexing of grid-cell locations (do they refer to the center of grid cells, or to cell corners?).
 
 In practice, the `raster` package seems to "do the right thing" in reading and writing netCDF, as can be demonstrated using a "toy" data set.  In the examples below, a simple netCDF data set will be generated and written out using the `ncdf4` package.  Then that netCDF data set will be read in as a raster "layer" and plotted, and finally the raster layer will be written again as a netCDF file.  As can be seen, the coordiate systems are appropriately adjusted going back and forth between netCDF and the `raster` "native" format.
 
