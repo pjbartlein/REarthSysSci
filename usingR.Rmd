@@ -304,12 +304,13 @@ Begin by loading the appropriate packages.  The data and shapefiles are in the `
 
 Here's a simple map of the station locations.  The following code produces a standard map with the stations represented by dots.  (There is a lot of symbol overplotting -- one technique to avoid overplotting would be to simply reduce the character size using the `cex` argument, but then the points may disappear.  A better approach is described later.)
 
-```{r maps01, message=FALSE, fig.height=6, fig.width=6}
+```{r maps01, message=FALSE, fig.height=6, fig.width=6, eval=FALSE}
 # load packages
 library(maptools) # loads sp library too
-library(rgeos)
+# library(rgeos)
 library(RColorBrewer) # creates nice color schemes
 library(classInt) # finds class intervals for continuous variables
+library(sf)
 
 # map of precipitation stations
 plot(wus_shp, lwd=3, col="gray")
@@ -318,7 +319,7 @@ points(wus_pratio$lon, wus_pratio$lat, pch=16, cex=0.8)
 
 In what follows, we'll want to examine the large-scale patterns of the seasonality (summer-wet vs. winter-wet) of precipitation.  The data consist of monthly precipitation ratios, or the average precipitation for a particular month and station divided by the average annual total precipitation.  This has the effect of removing the very large imprint of elevation on precipitation totals.  The ratio of July to January precipitation provides a single overall description of precipitation seasonality.
 
-```{r hd04, fig.height=6, fig.width=6}
+```{r hd04, fig.height=6, fig.width=6, eval=FALSE}
 # a second map with some colors
 wus_pratio$pjulpjan <- wus_pratio$pjulpann/wus_pratio$pjanpann  # pann values cancel out
 nclr <- 10
@@ -357,23 +358,28 @@ Here's a `ggplot2` map of the the July:January precipitation ratio.  Note that t
 
 ```{r ggmap03}
 # recode pjulpjan to a factor
+library(sf)
+wus_pratio_sf <- st_as_sf(wus_pratio, coords = c("lon", "lat"))
 cutpts <- c(0.0, .100, .200, .500, .800, 1.0, 1.25, 2.0, 5.0, 10.0, 9999.0)
-pjulpjan_factor <- factor(findInterval(wus_pratio$pjulpjan, cutpts))
+pjulpjan_factor <- factor(findInterval(wus_pratio_sf$pjulpann/wus_pratio_sf$pjulpann, cutpts))
 head(cbind(wus_pratio$pjulpjan, pjulpjan_factor, cutpts[pjulpjan_factor]))
 ```
 
 Next, the map:  
 
-```{r ggmap04}
+```{r ggmap04, eval=FALSE}
 ## ggplot2 map of pjulpjan
-ggplot(wus_pratio, aes(lon, lat))  +
-  geom_polygon(aes(long, lat, group = group), wus_states, color = "gray50", fill = NA) +
-  scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1, 
-    labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0", 
-               "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
-    name = "Jul:Jan Ppt. Ratio") +
-  geom_point(aes(lon, lat, color = pjulpjan_factor), size = 1.0 ) +
-  coord_quickmap() + theme_bw()
+# ggplot(wus_pratio_sf, aes(lon, lat))  +
+#   geom_polygon(aes(long, lat, group = group), wus_states, color = "gray50", fill = NA) +
+#   scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1, 
+#     labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0", 
+#                "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
+#     name = "Jul:Jan Ppt. Ratio") +
+#   geom_point(aes(wus_pratio_sf, color = wus_pratio_sf$pjulpjan_factor), size = 1.0 ) +
+#   coord_quickmap() + theme_bw()
+
+# ggplot2 map of pjulpman projected
+
 ```
 
 # Descriptive statistics

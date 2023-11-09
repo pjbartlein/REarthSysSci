@@ -1,55 +1,50 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Earth-system science data</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 
-
-
-
 <style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
 
 <link rel="stylesheet" href="html-md-01.css" type="text/css" />
 
@@ -61,13 +56,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -81,40 +71,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -142,7 +108,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -154,7 +120,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -164,11 +130,28 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -180,13 +163,12 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -194,16 +176,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -216,6 +191,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -227,18 +203,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -258,7 +222,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -271,7 +235,7 @@ $(document).ready(function () {
   <a href="overview.html">Overview</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Topics
      
     <span class="caret"></span>
@@ -323,7 +287,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tasks
      
     <span class="caret"></span>
@@ -362,7 +326,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Resources
      
     <span class="caret"></span>
@@ -386,7 +350,7 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -396,185 +360,358 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#ess-data-formats"><span class="toc-section-number">1</span> ESS Data Formats</a><ul>
-<li><a href="#netcdf"><span class="toc-section-number">1.1</span> netCDF</a></li>
-<li><a href="#hdf"><span class="toc-section-number">1.2</span> HDF</a></li>
-<li><a href="#grib"><span class="toc-section-number">1.3</span> GRIB</a></li>
-<li><a href="#relational-data-bases"><span class="toc-section-number">1.4</span> Relational Data Bases</a></li>
+<li><a href="#ess-data-formats" id="toc-ess-data-formats"><span
+class="toc-section-number">1</span> ESS Data Formats</a>
+<ul>
+<li><a href="#netcdf" id="toc-netcdf"><span
+class="toc-section-number">1.1</span> netCDF</a></li>
+<li><a href="#hdf" id="toc-hdf"><span
+class="toc-section-number">1.2</span> HDF</a></li>
+<li><a href="#grib" id="toc-grib"><span
+class="toc-section-number">1.3</span> GRIB</a></li>
+<li><a href="#relational-data-bases"
+id="toc-relational-data-bases"><span
+class="toc-section-number">1.4</span> Relational Data Bases</a></li>
 </ul></li>
-<li><a href="#getting-and-displaying-ess-datasets"><span class="toc-section-number">2</span> Getting and Displaying ESS Datasets</a><ul>
-<li><a href="#sftp-and-globus"><span class="toc-section-number">2.1</span> SFTP and Globus</a></li>
-<li><a href="#thredds-and-opendap"><span class="toc-section-number">2.2</span> THREDDS and OPeNDAP</a></li>
-<li><a href="#panoply"><span class="toc-section-number">2.3</span> Panoply</a></li>
+<li><a href="#getting-and-displaying-ess-datasets"
+id="toc-getting-and-displaying-ess-datasets"><span
+class="toc-section-number">2</span> Getting and Displaying ESS
+Datasets</a>
+<ul>
+<li><a href="#sftp-and-globus" id="toc-sftp-and-globus"><span
+class="toc-section-number">2.1</span> SFTP and Globus</a></li>
+<li><a href="#thredds-and-opendap" id="toc-thredds-and-opendap"><span
+class="toc-section-number">2.2</span> THREDDS and OPeNDAP</a></li>
+<li><a href="#panoply" id="toc-panoply"><span
+class="toc-section-number">2.3</span> Panoply</a></li>
 </ul></li>
-<li><a href="#some-ess-data-sources"><span class="toc-section-number">3</span> Some ESS Data Sources</a><ul>
-<li><a href="#climate-model-output"><span class="toc-section-number">3.1</span> Climate-model output</a></li>
-<li><a href="#noaa-esrl-psd"><span class="toc-section-number">3.2</span> NOAA ESRL PSD</a></li>
-<li><a href="#unidata-meteorological-case-studies"><span class="toc-section-number">3.3</span> UNIDATA Meteorological case studies</a></li>
-<li><a href="#paleoclimatic-datasets"><span class="toc-section-number">3.4</span> Paleoclimatic datasets</a></li>
-<li><a href="#general-global-change-data"><span class="toc-section-number">3.5</span> General global-change data</a></li>
-<li><a href="#data.gov"><span class="toc-section-number">3.6</span> Data.gov</a></li>
-<li><a href="#oregon-lidar"><span class="toc-section-number">3.7</span> Oregon lidar</a></li>
-<li><a href="#some-big-data-initiatives"><span class="toc-section-number">3.8</span> Some “Big Data” initiatives</a></li>
+<li><a href="#some-ess-data-sources"
+id="toc-some-ess-data-sources"><span class="toc-section-number">3</span>
+Some ESS Data Sources</a>
+<ul>
+<li><a href="#climate-model-output" id="toc-climate-model-output"><span
+class="toc-section-number">3.1</span> Climate-model output</a></li>
+<li><a href="#noaa-esrl-psd" id="toc-noaa-esrl-psd"><span
+class="toc-section-number">3.2</span> NOAA ESRL PSD</a></li>
+<li><a href="#unidata-meteorological-case-studies"
+id="toc-unidata-meteorological-case-studies"><span
+class="toc-section-number">3.3</span> UNIDATA Meteorological case
+studies</a></li>
+<li><a href="#paleoclimatic-datasets"
+id="toc-paleoclimatic-datasets"><span
+class="toc-section-number">3.4</span> Paleoclimatic datasets</a></li>
+<li><a href="#general-global-change-data"
+id="toc-general-global-change-data"><span
+class="toc-section-number">3.5</span> General global-change
+data</a></li>
+<li><a href="#data.gov" id="toc-data.gov"><span
+class="toc-section-number">3.6</span> Data.gov</a></li>
+<li><a href="#oregon-lidar" id="toc-oregon-lidar"><span
+class="toc-section-number">3.7</span> Oregon lidar</a></li>
+<li><a href="#some-big-data-initiatives"
+id="toc-some-big-data-initiatives"><span
+class="toc-section-number">3.8</span> Some “Big Data”
+initiatives</a></li>
 </ul></li>
 </ul>
 </div>
 
-<div id="ess-data-formats" class="section level1">
+<div id="ess-data-formats" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> ESS Data Formats</h1>
-<p>Twenty years ago, there were a large number of disparate formats for storing large data sets, and the transfer of data from one computing system to another was a big deal, often relying on frequent playing of the “find-the-continents” game. Now, however, there are two general styles of dataset storage: 1) machine-independent self-documenting gridded datasets, and 2) relational data bases (e.g. MS Access, mySQL) (with common Excel formats (.csv, .xlsx) as special cases of database tables). Gridded data sets are chiefly represented by the netCDF and HDF5 formats, which include self-documenting “attribute” data, with an older “binary” data format (GRIB2) still in widespread use for exachanging real-time weather forecasting data, and there is growing “interoperatability” among these formats. Databases are in widespread use for storing data that may be heterogeneous in the sense of not being gridded, and possibly having multiple tables.</p>
-<div id="netcdf" class="section level2">
+<p>Twenty years ago, there were a large number of disparate formats for
+storing large data sets, and the transfer of data from one computing
+system to another was a big deal, often relying on frequent playing of
+the “find-the-continents” game. Now, however, there are two general
+styles of dataset storage: 1) machine-independent self-documenting
+gridded datasets, and 2) relational data bases (e.g. MS Access, mySQL)
+(with common Excel formats (.csv, .xlsx) as special cases of database
+tables). Gridded data sets are chiefly represented by the netCDF and
+HDF5 formats, which include self-documenting “attribute” data, with an
+older “binary” data format (GRIB2) still in widespread use for
+exachanging real-time weather forecasting data, and there is growing
+“interoperatability” among these formats. Databases are in widespread
+use for storing data that may be heterogeneous in the sense of not being
+gridded, and possibly having multiple tables.</p>
+<div id="netcdf" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> netCDF</h2>
-<p>netCDF (or Network Common Data Format) is the format most frequently used for storing climate-model output as well as some observational data. There is a well-documented convention (CF, for Climate-and-Forecast) for arranging and internally documenting netCDF datasets, which further contributes to simple transfer of data from one system to another.</p>
+<p>netCDF (or Network Common Data Format) is the format most frequently
+used for storing climate-model output as well as some observational
+data. There is a well-documented convention (CF, for
+Climate-and-Forecast) for arranging and internally documenting netCDF
+datasets, which further contributes to simple transfer of data from one
+system to another.</p>
 <ul>
-<li>netCDF: <a href="http://www.unidata.ucar.edu/software/netcdf/docs/index.html">[http://www.unidata.ucar.edu/software/netcdf/docs/]</a></li>
-<li>CF Conventions (“best practice” format for netCDF files: <a href="http://cfconventions.org/">[http://cfconventions.org/]</a></li>
+<li>netCDF: <a
+href="http://www.unidata.ucar.edu/software/netcdf/docs/index.html">[http://www.unidata.ucar.edu/software/netcdf/docs/]</a></li>
+<li>CF Conventions (“best practice” format for netCDF files: <a
+href="http://cfconventions.org/">[http://cfconventions.org/]</a></li>
 </ul>
-<p>There are several R packages for handling netCDF data. Of these, the <code>ncdf4</code> and the related <code>ncdf.helpers</code> packages are the most useful in practice.</p>
-<p>Several other packages exist for working with netCDF data sets (this is not an exhaustive list):</p>
+<p>There are several R packages for handling netCDF data. Of these, the
+<code>ncdf4</code> and the related <code>ncdf.helpers</code> packages
+are the most useful in practice.</p>
+<p>Several other packages exist for working with netCDF data sets (this
+is not an exhaustive list):</p>
 <ul>
-<li><code>RCMIP5</code>: tools for reading and summarizing “CMIP5” data <a href="https://cran.r-project.org/web/packages/RCMIP5/vignettes/atmospheric_co2.html">link</a></li>
-<li><code>easyNCDF</code>: a set of functions for reading and writing netCDF data sets from and to R arrays</li>
-<li><code>cmsaf</code>: tools for reading EUMETSAT energy- and water-balance variables <a href="https://www.cmsaf.eu/EN/Products/Tools/Tools_node.html">link</a></li>
-<li><code>efts</code>: functions for reading ensemble forecast data;</li>
-<li><code>RNetCDF</code> and <code>ncdf.tools</code>: functions for working with older netCDF 3 files.</li>
-<li><code>ncdump</code>: reads netCDF attribute data, and organizes it into dataframes</li>
+<li><code>RCMIP5</code>: tools for reading and summarizing “CMIP5” data
+<a
+href="https://cran.r-project.org/web/packages/RCMIP5/vignettes/atmospheric_co2.html">link</a></li>
+<li><code>easyNCDF</code>: a set of functions for reading and writing
+netCDF data sets from and to R arrays</li>
+<li><code>cmsaf</code>: tools for reading EUMETSAT energy- and
+water-balance variables <a
+href="https://www.cmsaf.eu/EN/Products/Tools/Tools_node.html">link</a></li>
+<li><code>efts</code>: functions for reading ensemble forecast
+data;</li>
+<li><code>RNetCDF</code> and <code>ncdf.tools</code>: functions for
+working with older netCDF 3 files.</li>
+<li><code>ncdump</code>: reads netCDF attribute data, and organizes it
+into dataframes</li>
 </ul>
-<p>In addition, the <code>rgdal</code> and <code>raster</code> packages support the reading and writing of netCDF files.</p>
+<p>In addition, the <code>rgdal</code> and <code>raster</code> packages
+support the reading and writing of netCDF files.</p>
 </div>
-<div id="hdf" class="section level2">
+<div id="hdf" class="section level2" number="1.2">
 <h2><span class="header-section-number">1.2</span> HDF</h2>
-<p>HDF (or Hierarchical Data Format), like netCDF is a machine-independent self-documenting gridded dataset format, that is in common use for storing satellite and remote-sensing imagery data. It currently exists in several formats (HDF4, HDF5, HDF-EOS) which can generally converted to one another. (netCDF4 in fact uses the HDF5 format for storing data.)</p>
+<p>HDF (or Hierarchical Data Format), like netCDF is a
+machine-independent self-documenting gridded dataset format, that is in
+common use for storing satellite and remote-sensing imagery data. It
+currently exists in several formats (HDF4, HDF5, HDF-EOS) which can
+generally converted to one another. (netCDF4 in fact uses the HDF5
+format for storing data.)</p>
 <ul>
-<li>HDF: <a href="https://www.hdfgroup.org/">[https://www.hdfgroup.org/]</a></li>
-<li>HDF Tools: <a href="https://support.hdfgroup.org/tools/">[https://support.hdfgroup.org/tools/]</a> (including conversion tools)</li>
-<li>HDFView: <a href="https://support.hdfgroup.org/products/java/hdfview/">[https://support.hdfgroup.org/products/java/hdfview/]</a> (an HDF viewer, but not as powerful as Panoply)</li>
-<li>HDF5 R tutorials: <a href="http://neondataskills.org/HDF5/">[http://neondataskills.org/HDF5/]</a></li>
+<li>HDF: <a
+href="https://www.hdfgroup.org/">[https://www.hdfgroup.org/]</a></li>
+<li>HDF Tools: <a
+href="https://support.hdfgroup.org/tools/">[https://support.hdfgroup.org/tools/]</a>
+(including conversion tools)</li>
+<li>HDFView: <a
+href="https://support.hdfgroup.org/products/java/hdfview/">[https://support.hdfgroup.org/products/java/hdfview/]</a>
+(an HDF viewer, but not as powerful as Panoply)</li>
+<li>HDF5 R tutorials: <a
+href="http://neondataskills.org/HDF5/">[http://neondataskills.org/HDF5/]</a></li>
 </ul>
-<p>Reading and writing HDF5 files in R is supported by the <code>rhdf5</code> package in the Bioconductor collection:</p>
+<p>Reading and writing HDF5 files in R is supported by the
+<code>rhdf5</code> package in the Bioconductor collection:</p>
 <ul>
-<li><code>rhdf5</code>: a Bioconductor package for reading and writing HDF5 files <a href="http://bioconductor.org/packages/release/bioc/html/rhdf5.html">[link]</a></li>
+<li><code>rhdf5</code>: a Bioconductor package for reading and writing
+HDF5 files <a
+href="http://bioconductor.org/packages/release/bioc/html/rhdf5.html">[link]</a></li>
 </ul>
-<p>The National Snow and Ice Data Center (NSIDC) as a nice tutorial on HDF-EOS: <a href="https://nsidc.org/data/hdfeos/intro.html">https://nsidc.org/data/hdfeos/intro.html</a></p>
-<p>NOAA’s Coral Reef Watch <a href="http://www.coralreefwatch.noaa.gov/satellite/hdf/index.php">http://www.coralreefwatch.noaa.gov/satellite/hdf/index.php</a> serves up a variety of HDF (and netCDF) files for coral-bleaching monitoring.</p>
+<p>The National Snow and Ice Data Center (NSIDC) as a nice tutorial on
+HDF-EOS: <a
+href="https://nsidc.org/data/hdfeos/intro.html">https://nsidc.org/data/hdfeos/intro.html</a></p>
+<p>NOAA’s Coral Reef Watch <a
+href="http://www.coralreefwatch.noaa.gov/satellite/hdf/index.php">http://www.coralreefwatch.noaa.gov/satellite/hdf/index.php</a>
+serves up a variety of HDF (and netCDF) files for coral-bleaching
+monitoring.</p>
 </div>
-<div id="grib" class="section level2">
+<div id="grib" class="section level2" number="1.3">
 <h2><span class="header-section-number">1.3</span> GRIB</h2>
-<p>GRIB (or GRIdded Binary / General Regularly-distributed Information in Binary form, <a href="https://en.wikipedia.org/wiki/GRIB" class="uri">https://en.wikipedia.org/wiki/GRIB</a>)</p>
+<p>GRIB (or GRIdded Binary / General Regularly-distributed Information
+in Binary form, <a href="https://en.wikipedia.org/wiki/GRIB"
+class="uri">https://en.wikipedia.org/wiki/GRIB</a>)</p>
 <ul>
-<li>GRIB: <a href="https://www.nco.ncep.noaa.gov/pmb/docs/grib2/">[https://www.nco.ncep.noaa.gov/pmb/docs/grib2/]</a></li>
+<li>GRIB: <a
+href="https://www.nco.ncep.noaa.gov/pmb/docs/grib2/">[https://www.nco.ncep.noaa.gov/pmb/docs/grib2/]</a></li>
 </ul>
 </div>
-<div id="relational-data-bases" class="section level2">
-<h2><span class="header-section-number">1.4</span> Relational Data Bases</h2>
-<p>Relational databases can be thought of as a set of linked tables that efficiently store data that, if stored as a single rectangular table would be inefficiently large and difficult to extract data from. Nevertheless, there are multiple ESS data sets, usually collections of site-specific data (where the sites are irregularly distributed) that can be efficiently stored and queried</p>
+<div id="relational-data-bases" class="section level2" number="1.4">
+<h2><span class="header-section-number">1.4</span> Relational Data
+Bases</h2>
+<p>Relational databases can be thought of as a set of linked tables that
+efficiently store data that, if stored as a single rectangular table
+would be inefficiently large and difficult to extract data from.
+Nevertheless, there are multiple ESS data sets, usually collections of
+site-specific data (where the sites are irregularly distributed) that
+can be efficiently stored and queried</p>
 <p>An example ESS dataset stored as a relational database:</p>
 <ul>
-<li>Global Charcoal Database: <a href="http://paleofire.org/">[http://paleofire.org/]</a></li>
-<li>Analyzing the GCDv3: <a href="https://pjbartlein.github.io/GCDv3Analysis/">[https://pjbartlein.github.io/GCDv3Analysis/]</a></li>
+<li>Global Charcoal Database: <a
+href="http://paleofire.org/">[http://paleofire.org/]</a></li>
+<li>Analyzing the GCDv3: <a
+href="https://pjbartlein.github.io/GCDv3Analysis/">[https://pjbartlein.github.io/GCDv3Analysis/]</a></li>
 </ul>
-<p>The gridded dataset formats described above are sometimes referred to as nonSQL databases, for the simple reason that they are not SQL databases (where SQL (pronounced “sequel”) stands for Structured Query Language). The distinction between the two is described here:</p>
+<p>The gridded dataset formats described above are sometimes referred to
+as nonSQL databases, for the simple reason that they are not SQL
+databases (where SQL (pronounced “sequel”) stands for Structured Query
+Language). The distinction between the two is described here:</p>
 <ul>
-<li>SQL: <a href="https://en.wikipedia.org/wiki/SQL">[https://en.wikipedia.org/wiki/SQL]</a></li>
-<li>nonSQL: <a href="https://en.wikipedia.org/wiki/NoSQL">[https://en.wikipedia.org/wiki/NoSQL]</a></li>
+<li>SQL: <a
+href="https://en.wikipedia.org/wiki/SQL">[https://en.wikipedia.org/wiki/SQL]</a></li>
+<li>nonSQL: <a
+href="https://en.wikipedia.org/wiki/NoSQL">[https://en.wikipedia.org/wiki/NoSQL]</a></li>
 </ul>
 </div>
 </div>
-<div id="getting-and-displaying-ess-datasets" class="section level1">
-<h1><span class="header-section-number">2</span> Getting and Displaying ESS Datasets</h1>
-<p>There are several approaches for getting or transferring the usually large data sets that are employed in doing Earth-system science.</p>
-<div id="sftp-and-globus" class="section level2">
+<div id="getting-and-displaying-ess-datasets" class="section level1"
+number="2">
+<h1><span class="header-section-number">2</span> Getting and Displaying
+ESS Datasets</h1>
+<p>There are several approaches for getting or transferring the usually
+large data sets that are employed in doing Earth-system science.</p>
+<div id="sftp-and-globus" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> SFTP and Globus</h2>
-<p>FTP (for File Transfer Protocol) is a now pretty-old traditional way of moving data around. In its standard form, it’s not very secure (and hence IT services hate it), but it’s still quite functional. A more secure variant is SFTP (SSH File Transfer Protocol, also known as “Secure FTP”). The most widely used “client” for interacting with ftp sites is likely Filezilla <a href="https://filezilla-project.org/">https://filezilla-project.org/</a>. An SFTP “site” has been created for this course, for directions on its use, see File Transfer the Tasks tab, as well for instructions on using Filezilla. Another newer approach for transferring files is Globus, which provides a browser-based application for transferring files among “endpoints”.</p>
+<p>FTP (for File Transfer Protocol) is a now pretty-old traditional way
+of moving data around. In its standard form, it’s not very secure (and
+hence IT services hate it), but it’s still quite functional. A more
+secure variant is SFTP (SSH File Transfer Protocol, also known as
+“Secure FTP”). The most widely used “client” for interacting with ftp
+sites is likely Filezilla <a
+href="https://filezilla-project.org/">https://filezilla-project.org/</a>.
+An SFTP “site” has been created for this course, for directions on its
+use, see File Transfer the Tasks tab, as well for instructions on using
+Filezilla. Another newer approach for transferring files is Globus,
+which provides a browser-based application for transferring files among
+“endpoints”.</p>
 </div>
-<div id="thredds-and-opendap" class="section level2">
-<h2><span class="header-section-number">2.2</span> THREDDS and OPeNDAP</h2>
-<p>THREDDS (Thematic Real-time Environmental Distributed Data Services) Data Servers (TDS) provide a mechanism for making remote datasets (generally netCDF datasets) “visible” to local applications (like Panoply). TDS display “catalogs” of multiple files that can, for example, be browsed by Panoply, and individual data sets can then be opened. OPeNDAP provides a further mechanism for subsetting data sets, i.e. selecting an individual slice from a 3d or 4d data set. Both THREDDS and OPeNDAP thus provide a way of avoiding downloading and storing data locally. (Once data are downloaded to a local machine, they are in a sense “frozen”. By not storing datasets locally, and instead accessing them remotely, any updates are automatically included.</p>
+<div id="thredds-and-opendap" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> THREDDS and
+OPeNDAP</h2>
+<p>THREDDS (Thematic Real-time Environmental Distributed Data Services)
+Data Servers (TDS) provide a mechanism for making remote datasets
+(generally netCDF datasets) “visible” to local applications (like
+Panoply). TDS display “catalogs” of multiple files that can, for
+example, be browsed by Panoply, and individual data sets can then be
+opened. OPeNDAP provides a further mechanism for subsetting data sets,
+i.e. selecting an individual slice from a 3d or 4d data set. Both
+THREDDS and OPeNDAP thus provide a way of avoiding downloading and
+storing data locally. (Once data are downloaded to a local machine, they
+are in a sense “frozen”. By not storing datasets locally, and instead
+accessing them remotely, any updates are automatically included.</p>
 <ul>
-<li>THREDDS: <a href="https://www.unidata.ucar.edu/software/thredds/current/tds/">[https://www.unidata.ucar.edu/software/thredds/current/tds/]</a><br />
+<li>THREDDS: <a
+href="https://www.unidata.ucar.edu/software/thredds/current/tds/">[https://www.unidata.ucar.edu/software/thredds/current/tds/]</a><br />
 </li>
-<li>OPeNDAP: <a href="https://www.opendap.org/">[https://www.opendap.org/]</a></li>
+<li>OPeNDAP: <a
+href="https://www.opendap.org/">[https://www.opendap.org/]</a></li>
 </ul>
 <p>Here is a local example of THREDDS-served data:</p>
 <ul>
-<li>USGS at OSU Regclim THREDDS catalog: <a href="http://regclim.coas.oregonstate.edu:8080/thredds/catalog.html">[http://regclim.coas.oregonstate.edu:8080/thredds/catalog.html]</a></li>
+<li>USGS at OSU Regclim THREDDS catalog: <a
+href="http://regclim.coas.oregonstate.edu:8080/thredds/catalog.html">[http://regclim.coas.oregonstate.edu:8080/thredds/catalog.html]</a></li>
 </ul>
 <p>Here is the THREDDS data server at Unidata (aka “motherlode”)</p>
 <ul>
-<li><a href="http://thredds.ucar.edu/thredds/catalog.html">[http://thredds.ucar.edu/thredds/catalog.html]</a></li>
+<li><a
+href="http://thredds.ucar.edu/thredds/catalog.html">[http://thredds.ucar.edu/thredds/catalog.html]</a></li>
 </ul>
 </div>
-<div id="panoply" class="section level2">
+<div id="panoply" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> Panoply</h2>
-<p>Panoply <a href="https://www.giss.nasa.gov/tools/panoply/">[link]</a> is cross-platform application that can read and display netCDF, HDF and GRIB datasets. See the Tasks tab on this page for directions for installing Panoply. In addition to being able to read and display files on the local file system. Panoply can also open catalogues and individual data sets. UNIDATA’s Integrated Data Viewer <a href="https://www.unidata.ucar.edu/software/idv/">[IDV]</a> provides some additional viewing options.</p>
+<p>Panoply <a href="https://www.giss.nasa.gov/tools/panoply/">[link]</a>
+is cross-platform application that can read and display netCDF, HDF and
+GRIB datasets. See the Tasks tab on this page for directions for
+installing Panoply. In addition to being able to read and display files
+on the local file system. Panoply can also open catalogues and
+individual data sets. UNIDATA’s Integrated Data Viewer <a
+href="https://www.unidata.ucar.edu/software/idv/">[IDV]</a> provides
+some additional viewing options.</p>
 </div>
 </div>
-<div id="some-ess-data-sources" class="section level1">
-<h1><span class="header-section-number">3</span> Some ESS Data Sources</h1>
-<div id="climate-model-output" class="section level2">
-<h2><span class="header-section-number">3.1</span> Climate-model output</h2>
-<p>CMIP5 is the climate-modeling component of the IPCC AR5 assessment, and nearly all of the data are available online through the ESG (Earth System Grid). Additional climate-simulation data are available from the National Center for Atmospheric Research (NCAR).</p>
+<div id="some-ess-data-sources" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Some ESS Data
+Sources</h1>
+<div id="climate-model-output" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Climate-model
+output</h2>
+<p>CMIP5 is the climate-modeling component of the IPCC AR5 assessment,
+and nearly all of the data are available online through the ESG (Earth
+System Grid). Additional climate-simulation data are available from the
+National Center for Atmospheric Research (NCAR).</p>
 <ul>
-<li>CMIP 5 &amp; 6: <a href="https://esgf-node.llnl.gov/projects/esgf-llnl/">[https://esgf-node.llnl.gov/projects/esgf-llnl/]</a></li>
-<li>NCAR: <a href="https://www.earthsystemgrid.org/home.html">[https://www.earthsystemgrid.org/home.html]</a></li>
+<li>CMIP 5 &amp; 6: <a
+href="https://esgf-node.llnl.gov/projects/esgf-llnl/">[https://esgf-node.llnl.gov/projects/esgf-llnl/]</a></li>
+<li>NCAR: <a
+href="https://www.earthsystemgrid.org/home.html">[https://www.earthsystemgrid.org/home.html]</a></li>
 </ul>
 </div>
-<div id="noaa-esrl-psd" class="section level2">
+<div id="noaa-esrl-psd" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> NOAA ESRL PSD</h2>
-<p>The NOAA Earth System Research Laboratory (formerly the Climate Diagnostics Center, CDC) provides an array of gridded data sets, both historical and observational, including the historical “reanalysis” data sets.</p>
+<p>The NOAA Earth System Research Laboratory (formerly the Climate
+Diagnostics Center, CDC) provides an array of gridded data sets, both
+historical and observational, including the historical “reanalysis” data
+sets.</p>
 <ul>
-<li>NOAA ESRL PSD: <a href="http://www.esrl.noaa.gov/psd/">[http://www.esrl.noaa.gov/psd/]</a>
+<li>NOAA ESRL PSD: <a
+href="http://www.esrl.noaa.gov/psd/">[http://www.esrl.noaa.gov/psd/]</a>
 <ul>
-<li>Gridded climate data <a href="https://www.esrl.noaa.gov/psd/data/gridded/index.html">[https://www.esrl.noaa.gov/psd/data/gridded/index.html]</a></li>
-<li>THREDDS catalog: <a href="http://www.esrl.noaa.gov/psd/thredds/catalog.html">[http://www.esrl.noaa.gov/psd/thredds/catalog.html]</a></li>
-<li>OPenDAP: <a href="http://www.esrl.noaa.gov/psd/data/gridded/using_dods.html">[http://www.esrl.noaa.gov/psd/data/gridded/using_dods.html]</a></li>
+<li>Gridded climate data <a
+href="https://www.esrl.noaa.gov/psd/data/gridded/index.html">[https://www.esrl.noaa.gov/psd/data/gridded/index.html]</a></li>
+<li>THREDDS catalog: <a
+href="http://www.esrl.noaa.gov/psd/thredds/catalog.html">[http://www.esrl.noaa.gov/psd/thredds/catalog.html]</a></li>
+<li>OPenDAP: <a
+href="http://www.esrl.noaa.gov/psd/data/gridded/using_dods.html">[http://www.esrl.noaa.gov/psd/data/gridded/using_dods.html]</a></li>
 </ul></li>
 </ul>
 </div>
-<div id="unidata-meteorological-case-studies" class="section level2">
-<h2><span class="header-section-number">3.3</span> UNIDATA Meteorological case studies</h2>
-<p>UNIDATA provides a number of case-study data sets of “unique atmospheric phenomena” that can be accessed via their THREDDS server. Here is a <a href="https://www.unidata.ucar.edu/projects/#casestudies">[link]</a> to the information page, and to the <a href="http://atm.ucar.edu/repository/entry/show/RAMADDA/Case+Studies">[Case Studies Library]</a></p>
+<div id="unidata-meteorological-case-studies" class="section level2"
+number="3.3">
+<h2><span class="header-section-number">3.3</span> UNIDATA
+Meteorological case studies</h2>
+<p>UNIDATA provides a number of case-study data sets of “unique
+atmospheric phenomena” that can be accessed via their THREDDS server.
+Here is a <a
+href="https://www.unidata.ucar.edu/projects/#casestudies">[link]</a> to
+the information page, and to the <a
+href="http://atm.ucar.edu/repository/entry/show/RAMADDA/Case+Studies">[Case
+Studies Library]</a></p>
 </div>
-<div id="paleoclimatic-datasets" class="section level2">
-<h2><span class="header-section-number">3.4</span> Paleoclimatic datasets</h2>
-<p>There are two main repositories of paleoclimatic data, Pangaea (European) and NOAA Paleoclimatology:</p>
+<div id="paleoclimatic-datasets" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Paleoclimatic
+datasets</h2>
+<p>There are two main repositories of paleoclimatic data, Pangaea
+(European) and NOAA Paleoclimatology:</p>
 <ul>
-<li>Pangaea: <a href="https://www.pangaea.de/">[https://www.pangaea.de/]</a></li>
-<li>NOAA WDS Paleoclimatology: <a href="https://www.ncdc.noaa.gov/data-access/paleoclimatology-data">[https://www.ncdc.noaa.gov/data-access/paleoclimatology-data]</a></li>
+<li>Pangaea: <a
+href="https://www.pangaea.de/">[https://www.pangaea.de/]</a></li>
+<li>NOAA WDS Paleoclimatology: <a
+href="https://www.ncdc.noaa.gov/data-access/paleoclimatology-data">[https://www.ncdc.noaa.gov/data-access/paleoclimatology-data]</a></li>
 </ul>
 <p>Other sources of paleoclimatic data include:</p>
 <ul>
-<li>Neotoma: <a href="http://www.neotomadb.org/">[http://www.neotomadb.org/]</a></li>
+<li>Neotoma: <a
+href="http://www.neotomadb.org/">[http://www.neotomadb.org/]</a></li>
 </ul>
 </div>
-<div id="general-global-change-data" class="section level2">
-<h2><span class="header-section-number">3.5</span> General global-change data</h2>
+<div id="general-global-change-data" class="section level2"
+number="3.5">
+<h2><span class="header-section-number">3.5</span> General global-change
+data</h2>
 <ul>
-<li>NASA Global Change Master Directory <a href="http://gcmd.nasa.gov/">http://gcmd.nasa.gov/</a></li>
+<li>NASA Global Change Master Directory <a
+href="http://gcmd.nasa.gov/">http://gcmd.nasa.gov/</a></li>
 </ul>
 </div>
-<div id="data.gov" class="section level2">
+<div id="data.gov" class="section level2" number="3.6">
 <h2><span class="header-section-number">3.6</span> Data.gov</h2>
 <ul>
-<li>Search for <code>climate</code> or <code>earth science</code> and <code>netCDF</code> <a href="https://www.data.gov">[https://www.data.gov]</a></li>
+<li>Search for <code>climate</code> or <code>earth science</code> and
+<code>netCDF</code> <a
+href="https://www.data.gov">[https://www.data.gov]</a></li>
 </ul>
 </div>
-<div id="oregon-lidar" class="section level2">
+<div id="oregon-lidar" class="section level2" number="3.7">
 <h2><span class="header-section-number">3.7</span> Oregon lidar</h2>
 <ul>
-<li>DOGAMI <a href="https://www.oregongeology.org/lidar/">[https://www.oregongeology.org/lidar/]</a></li>
+<li>DOGAMI <a
+href="https://www.oregongeology.org/lidar/">[https://www.oregongeology.org/lidar/]</a></li>
 </ul>
 </div>
-<div id="some-big-data-initiatives" class="section level2">
-<h2><span class="header-section-number">3.8</span> Some “Big Data” initiatives</h2>
+<div id="some-big-data-initiatives" class="section level2" number="3.8">
+<h2><span class="header-section-number">3.8</span> Some “Big Data”
+initiatives</h2>
 <ul>
-<li>ICSU World Data System: <a href="https://www.icsu-wds.org/">[https://www.icsu-wds.org/]</a>
+<li>ICSU World Data System: <a
+href="https://www.icsu-wds.org/">[https://www.icsu-wds.org/]</a>
 <ul>
-<li>SciDataCon: <a href="http://www.scidatacon.org/">[http://www.scidatacon.org/]</a></li>
+<li>SciDataCon: <a
+href="http://www.scidatacon.org/">[http://www.scidatacon.org/]</a></li>
 </ul></li>
-<li>EarthCube: <a href="https://www.earthcube.org/">[https://www.earthcube.org/]</a>
+<li>EarthCube: <a
+href="https://www.earthcube.org/">[https://www.earthcube.org/]</a>
 <ul>
-<li>EarthCube netCDF: <a href="https://www.earthcube.org/group/advancing-netcdf-cf">[https://www.earthcube.org/group/advancing-netcdf-cf]</a></li>
+<li>EarthCube netCDF: <a
+href="https://www.earthcube.org/group/advancing-netcdf-cf">[https://www.earthcube.org/group/advancing-netcdf-cf]</a></li>
 </ul></li>
 </ul>
 </div>
@@ -589,7 +726,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -597,6 +734,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

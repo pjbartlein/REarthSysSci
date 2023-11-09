@@ -27,6 +27,7 @@ A classic data set for illustrating PCA is one that appears in John C. Davis's 2
 
 Here's the data: [[boxes.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/boxes.csv) 
 
+
 - Example:  Davis' boxes ([data](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_data.png), [plot](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_boxes.png), [scatter](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scatter.png), [components](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scores.png)), (Davis, J.C., 2001, *Statistics and Data Analysis in Geology*, Wiley)
 - [Derivation of principal components](https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html) 
 
@@ -34,23 +35,24 @@ Here's the data: [[boxes.csv]](https://pjbartlein.github.io/GeogDataAnalysis/dat
 
 First, only two variables will be analyzed, in order to be able to visualize how the components are defined.  Read the data:
 
-```{r read boxes1, eval=FALSE, echo=TRUE}
+```{r read boxes1, eval=TRUE, echo=TRUE}
 # read a .csv file of Davis's data
 boxes_path <- "/Users/bartlein/Projects/ESSD/data/csv_files/"
 boxes_name <- "boxes.csv"
+
 boxes_file <- paste(boxes_path, boxes_name, sep="")
 boxes <- read.csv(boxes_file) 
 str(boxes)
 ```
 
-```{r read boxes, eval=TRUE, echo=FALSE}
-# read a .csv file of Davis's data
-boxes_path <- "/Users/bartlein.AD/Projects/ESSD/data/csv_files/"
-boxes_name <- "boxes.csv"
-boxes_file <- paste(boxes_path, boxes_name, sep="")
-boxes <- read.csv(boxes_file) 
-str(boxes)
-```
+# ```{r read boxes, eval=TRUE, echo=FALSE}
+# # read a .csv file of Davis's data
+# boxes_path <- "/Users/bartlein.AD/Projects/ESSD/data/csv_files/"
+# boxes_name <- "boxes.csv"
+# boxes_file <- paste(boxes_path, boxes_name, sep="")
+# boxes <- read.csv(boxes_file) 
+# str(boxes)
+# ```
 
 Make a matrix of two variables `long` (long axis of each box), and `diag` (longest diagonal that fits in a box).
 
@@ -182,8 +184,8 @@ Read the data:
 
 ```{r eval=TRUE, echo=FALSE}
 # read data
-datapath <- "/Users/bartlein.AD/Projects/ESSD/data/csv_files/"
-csvfile <- "aavesModels_ltmdiff_all_models_NEurAsia.csv"
+datapath <- "/Users/bartlein/Projects/ESSD/data/csv_files/"
+csvfile <- "aavesModels_ltmdiff_NEurAsia.csv" # aavesModels_ltmdiff_all_models_NEurAsia.csv"
 input_data <- read.csv(paste(datapath, csvfile, sep=""))
 mm_data_in <- input_data[,3:30]
 names(mm_data_in)
@@ -192,7 +194,7 @@ summary(mm_data_in)
 ```{r read RF, eval=FALSE, echo=TRUE}
 # read data
 datapath <- "/Users/bartlein/Projects/ESSD/data/csv_files/"
-csvfile <- "aavesModels_ltmdiff_all_models_NEurAsia.csv"
+csvfile <- "aavesModels_ltmdiff_NEurAsia.csv" # aavesModels_ltmdiff_all_models_NEurAsia.csv"
 input_data <- read.csv(paste(datapath, csvfile, sep=""))
 mm_data_in <- input_data[,3:30]
 names(mm_data_in)
@@ -314,7 +316,7 @@ The paticular data set used here consists of anomalies (difference from the long
 
 Load the `ncdf` library, and set some path and file names, and the name of the variable to read in (`hgt_anm`).
 
-```{r paths, eval=FALSE, echo=TRUE}
+```{r paths, eval=TRUE, echo=TRUE}
 # load ncdf4 package and set paths
 library(ncdf4)
 ncpath <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
@@ -322,14 +324,14 @@ ncname <- "R20C2_anm19812010_1871-2010_gcm_hgt500.nc"
 ncfname <- paste(ncpath, ncname, sep="")
 dname <- "hgt_anm"
 ```
-```{r paths1, eval=TRUE, echo=FALSE}
-# load ncdf4 package and set paths
-library(ncdf4)
-ncpath <- "/Users/bartlein.AD/Projects/ESSD/data/nc_files/"
-ncname <- "R20C2_anm19812010_1871-2010_gcm_hgt500.nc" 
-ncfname <- paste(ncpath, ncname, sep="")
-dname <- "hgt_anm"
-```
+# ```{r paths1, eval=TRUE, echo=FALSE}
+# # load ncdf4 package and set paths
+# library(ncdf4)
+# ncpath <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
+# ncname <- "R20C2_anm19812010_1871-2010_gcm_hgt500.nc" 
+# ncfname <- paste(ncpath, ncname, sep="")
+# dname <- "hgt_anm"
+# ```
 Open the netCDF file.  Printing the file object (`ncin`) produces output similar to that of `ncdump`:
 
 ```{r open}

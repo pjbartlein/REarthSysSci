@@ -1,53 +1,82 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Other multivariate analyses: cluster analysis</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -56,9 +85,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -93,13 +122,20 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -107,39 +143,9 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
   }
 })();
 </script>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="html-md-01.css" type="text/css" />
 
@@ -151,13 +157,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -171,40 +172,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -232,7 +209,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -244,7 +221,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -254,11 +231,28 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -270,13 +264,12 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -284,16 +277,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -306,6 +292,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -317,18 +304,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -348,7 +323,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -361,7 +336,7 @@ $(document).ready(function () {
   <a href="overview.html">Overview</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Topics
      
     <span class="caret"></span>
@@ -413,7 +388,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tasks
      
     <span class="caret"></span>
@@ -452,7 +427,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Resources
      
     <span class="caret"></span>
@@ -476,36 +451,77 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore">Other multivariate analyses: cluster analysis</h1>
+<h1 class="title toc-ignore">Other multivariate analyses: cluster
+analysis</h1>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="#a-simple-cluster-analysis"><span class="toc-section-number">2</span> A simple cluster analysis</a><ul>
-<li><a href="#the-cluster-analysis"><span class="toc-section-number">2.1</span> The cluster analysis</a></li>
-<li><a href="#examining-the-cluster-analysis"><span class="toc-section-number">2.2</span> Examining the cluster analysis</a></li>
+<li><a href="#introduction" id="toc-introduction"><span
+class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#a-simple-cluster-analysis"
+id="toc-a-simple-cluster-analysis"><span
+class="toc-section-number">2</span> A simple cluster analysis</a>
+<ul>
+<li><a href="#the-cluster-analysis" id="toc-the-cluster-analysis"><span
+class="toc-section-number">2.1</span> The cluster analysis</a></li>
+<li><a href="#examining-the-cluster-analysis"
+id="toc-examining-the-cluster-analysis"><span
+class="toc-section-number">2.2</span> Examining the cluster
+analysis</a></li>
 </ul></li>
-<li><a href="#distances-among-observations-and-among-variables"><span class="toc-section-number">3</span> Distances: among observations and among variables</a></li>
-<li><a href="#heatmaps-2-way-time-and-space-clustering"><span class="toc-section-number">4</span> Heatmaps (2-way, time and space clustering)</a><ul>
-<li><a href="#a-simple-example-with-hovmoller-matrix-data"><span class="toc-section-number">4.1</span> A simple example with Hovmöller-matrix data</a><ul>
-<li><a href="#set-up"><span class="toc-section-number">4.1.1</span> Set up</a></li>
-<li><a href="#hovmoller-matrix-plot-decimated-decadal-data"><span class="toc-section-number">4.1.2</span> Hovmöller-matrix plot (decimated decadal data)</a></li>
-<li><a href="#hovmoller-matrix-heatmap-decimated-decadal-data"><span class="toc-section-number">4.1.3</span> Hovmöller-matrix heatmap (decimated decadal data)</a></li>
+<li><a href="#distances-among-observations-and-among-variables"
+id="toc-distances-among-observations-and-among-variables"><span
+class="toc-section-number">3</span> Distances: among observations and
+among variables</a></li>
+<li><a href="#heatmaps-2-way-time-and-space-clustering"
+id="toc-heatmaps-2-way-time-and-space-clustering"><span
+class="toc-section-number">4</span> Heatmaps (2-way, time and space
+clustering)</a>
+<ul>
+<li><a href="#a-simple-example-with-hovmöller-matrix-data"
+id="toc-a-simple-example-with-hovmöller-matrix-data"><span
+class="toc-section-number">4.1</span> A simple example with
+Hovmöller-matrix data</a>
+<ul>
+<li><a href="#set-up" id="toc-set-up"><span
+class="toc-section-number">4.1.1</span> Set up</a></li>
+<li><a href="#hovmöller-matrix-plot-decimated-decadal-data"
+id="toc-hovmöller-matrix-plot-decimated-decadal-data"><span
+class="toc-section-number">4.1.2</span> Hovmöller-matrix plot (decimated
+decadal data)</a></li>
+<li><a href="#hovmöller-matrix-heatmap-decimated-decadal-data"
+id="toc-hovmöller-matrix-heatmap-decimated-decadal-data"><span
+class="toc-section-number">4.1.3</span> Hovmöller-matrix heatmap
+(decimated decadal data)</a></li>
 </ul></li>
-<li><a href="#a-second-example-with-decadal-data"><span class="toc-section-number">4.2</span> A second example with decadal data</a><ul>
-<li><a href="#hovmoller-matrix-plot"><span class="toc-section-number">4.2.1</span> Hovmöller-matrix plot</a></li>
-<li><a href="#hovmoller-matrix-heatmap"><span class="toc-section-number">4.2.2</span> Hovmöller-matrix heatmap</a></li>
+<li><a href="#a-second-example-with-decadal-data"
+id="toc-a-second-example-with-decadal-data"><span
+class="toc-section-number">4.2</span> A second example with decadal
+data</a>
+<ul>
+<li><a href="#hovmöller-matrix-plot"
+id="toc-hovmöller-matrix-plot"><span
+class="toc-section-number">4.2.1</span> Hovmöller-matrix plot</a></li>
+<li><a href="#hovmöller-matrix-heatmap"
+id="toc-hovmöller-matrix-heatmap"><span
+class="toc-section-number">4.2.2</span> Hovmöller-matrix
+heatmap</a></li>
 </ul></li>
-<li><a href="#full-grid-example"><span class="toc-section-number">4.3</span> Full-grid example</a><ul>
-<li><a href="#set-up-1"><span class="toc-section-number">4.3.1</span> Set up</a></li>
-<li><a href="#matrix-plot"><span class="toc-section-number">4.3.2</span> Matrix plot</a></li>
-<li><a href="#heatmap"><span class="toc-section-number">4.3.3</span> Heatmap</a></li>
+<li><a href="#full-grid-example" id="toc-full-grid-example"><span
+class="toc-section-number">4.3</span> Full-grid example</a>
+<ul>
+<li><a href="#set-up-1" id="toc-set-up-1"><span
+class="toc-section-number">4.3.1</span> Set up</a></li>
+<li><a href="#matrix-plot" id="toc-matrix-plot"><span
+class="toc-section-number">4.3.2</span> Matrix plot</a></li>
+<li><a href="#heatmap" id="toc-heatmap"><span
+class="toc-section-number">4.3.3</span> Heatmap</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -515,366 +531,455 @@ $(document).ready(function () {
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
-<div id="introduction" class="section level1">
+<div id="introduction" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
-<p>There is a broad group of multivariate analyses that have as their objective the organization of individual observations (objects, sites, grid points, individuals), and these analyses are built upon the concept of multivariate distances (expressed either as similarities or dissimilarities) among the objects.</p>
+<p>There is a broad group of multivariate analyses that have as their
+objective the organization of individual observations (objects, sites,
+grid points, individuals), and these analyses are built upon the concept
+of multivariate distances (expressed either as similarities or
+dissimilarities) among the objects.</p>
 <p>The organization generally takes two forms:</p>
 <ul>
-<li>the arrangement of the objects in a lower-dimensional space than the data were originally observed on;</li>
-<li>the development of “natural” clusters or the classifications of the objects.</li>
+<li>the arrangement of the objects in a lower-dimensional space than the
+data were originally observed on;</li>
+<li>the development of “natural” clusters or the classifications of the
+objects.</li>
 </ul>
-<p>These analyses share many concepts and techniques (both numerical and practical) with other procedures such as principal components analysis, numerical taxonomy, discriminant analysis and so on.</p>
-<p>The analyses generally begin with the construction of an <em>n</em> x <em>n</em> matrix <strong>D</strong> of the distances between objects. For example, in a two-dimensional space, the elements <em>d<sub>ij</sub></em> of <strong>D</strong> could be the Euclidean distances between points,</p>
-<p><em>d<sub>ij</sub></em> = [(<em>x<sub>i1</sub></em>- <em>x<sub>j1</sub></em>)<sup>2</sup> + (<em>x<sub>i1</sub></em>- <em>x<sub>j1</sub></em>)<sup>2</sup>]<sup>½</sup></p>
-<p>The Euclidean distance, and related measures are easily generalized to more than two dimensions.</p>
+<p>These analyses share many concepts and techniques (both numerical and
+practical) with other procedures such as principal components analysis,
+numerical taxonomy, discriminant analysis and so on.</p>
+<p>The analyses generally begin with the construction of an <em>n</em> x
+<em>n</em> matrix <strong>D</strong> of the distances between objects.
+For example, in a two-dimensional space, the elements
+<em>d<sub>ij</sub></em> of <strong>D</strong> could be the Euclidean
+distances between points,</p>
+<p><em>d<sub>ij</sub></em> = [(<em>x<sub>i1</sub></em>-
+<em>x<sub>j1</sub></em>)<sup>2</sup> + (<em>x<sub>i1</sub></em>-
+<em>x<sub>j1</sub></em>)<sup>2</sup>]<sup>½</sup></p>
+<p>The Euclidean distance, and related measures are easily generalized
+to more than two dimensions.</p>
 </div>
-<div id="a-simple-cluster-analysis" class="section level1">
-<h1><span class="header-section-number">2</span> A simple cluster analysis</h1>
-<p>The basic idea of cluster analysis can be illustrated using the Oregon climate-station dataset, with the goal being to identify groups of stations with similar climates, which also regionalizes the climate of the state. Begin by reading a shape file for mapping the data, and the data itself.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># read county outlines</span></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(sp)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(rgdal)</a>
-<a class="sourceLine" id="cb1-4" title="4">otl_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/shp_files/OR/&quot;</span></a>
-<a class="sourceLine" id="cb1-5" title="5">otl_name &lt;-<span class="st"> &quot;orotl.shp&quot;</span></a>
-<a class="sourceLine" id="cb1-6" title="6">otl_file &lt;-<span class="st"> </span><span class="kw">paste</span>(otl_path, otl_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb1-7" title="7">orotl_shp &lt;-<span class="st"> </span><span class="kw">readOGR</span>(otl_file)</a></code></pre></div>
-<pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: &quot;/Users/bartlein/Projects/ESSD/data/shp_files/OR/orotl.shp&quot;, layer: &quot;orotl&quot;
-## with 36 features
-## It has 1 fields</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># read stations</span></a>
-<a class="sourceLine" id="cb3-2" title="2">orstationc_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
-<a class="sourceLine" id="cb3-3" title="3">orstationc_name &lt;-<span class="st"> &quot;orstationc.csv&quot;</span></a>
-<a class="sourceLine" id="cb3-4" title="4">orstationc_file &lt;-<span class="st"> </span><span class="kw">paste</span>(orstationc_path, orstationc_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb3-5" title="5">orstationc &lt;-<span class="st"> </span><span class="kw">read.csv</span>(orstationc_file)</a>
-<a class="sourceLine" id="cb3-6" title="6"><span class="kw">summary</span>(orstationc)</a></code></pre></div>
-<pre><code>##     station        lat             lon              elev              tjan             tjul      
-##  MLB    : 2   Min.   :42.05   Min.   :-124.6   Min.   :   2.00   Min.   :-6.000   Min.   :12.20  
-##  ANT    : 1   1st Qu.:43.60   1st Qu.:-123.2   1st Qu.:  94.25   1st Qu.:-1.225   1st Qu.:17.30  
-##  ARL    : 1   Median :44.46   Median :-121.7   Median : 462.00   Median : 0.750   Median :19.20  
-##  ASH    : 1   Mean   :44.32   Mean   :-121.3   Mean   : 556.99   Mean   : 1.417   Mean   :19.01  
-##  AST    : 1   3rd Qu.:45.28   3rd Qu.:-119.6   3rd Qu.: 863.75   3rd Qu.: 4.150   3rd Qu.:20.20  
-##  BAN    : 1   Max.   :46.15   Max.   :-117.0   Max.   :1974.00   Max.   : 8.400   Max.   :26.40  
-##  (Other):85                                                                                      
-##       tann             pjan             pjul            pann            idnum       
-##  Min.   : 3.200   Min.   : 14.00   Min.   : 4.00   Min.   : 198.0   Min.   :350197  
-##  1st Qu.: 8.700   1st Qu.: 39.75   1st Qu.: 7.00   1st Qu.: 299.0   1st Qu.:352308  
-##  Median :10.400   Median : 87.50   Median : 9.00   Median : 531.0   Median :354564  
-##  Mean   : 9.885   Mean   :141.67   Mean   :10.84   Mean   : 868.6   Mean   :354455  
-##  3rd Qu.:11.200   3rd Qu.:239.25   3rd Qu.:12.25   3rd Qu.:1355.8   3rd Qu.:356663  
-##  Max.   :12.600   Max.   :414.00   Max.   :34.00   Max.   :2517.0   Max.   :359316  
-##                                                                                     
-##                               Name   
-##  ANTELOPE 1 N USA-OR            : 1  
-##  ARLINGTON USA-OR               : 1  
-##  ASHLAND 1 N USA-OR             : 1  
-##  ASTORIA WSO           //R USA-O: 1  
-##  BAKER FAA AIRPORT USA-OR       : 1  
-##  BAKER KBKR USA-OR              : 1  
-##  (Other)                        :86</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">attach</span>(orstationc)</a></code></pre></div>
+<div id="a-simple-cluster-analysis" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> A simple cluster
+analysis</h1>
+<p>The basic idea of cluster analysis can be illustrated using the
+Oregon climate-station dataset, with the goal being to identify groups
+of stations with similar climates, which also regionalizes the climate
+of the state. Begin by reading a shape file for mapping the data, and
+the data itself.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># read county outlines</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(sp)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(rgdal)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>otl_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/shp_files/OR/&quot;</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>otl_name <span class="ot">&lt;-</span> <span class="st">&quot;orotl.shp&quot;</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>otl_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(otl_path, otl_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>orotl_shp <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(otl_file)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># read stations</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>orstationc_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>orstationc_name <span class="ot">&lt;-</span> <span class="st">&quot;orstationc.csv&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>orstationc_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(orstationc_path, orstationc_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>orstationc <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(orstationc_file)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">summary</span>(orstationc)</span></code></pre></div>
+<pre><code>##    station               lat             lon              elev              tjan             tjul      
+##  Length:92          Min.   :42.05   Min.   :-124.6   Min.   :   2.00   Min.   :-6.000   Min.   :12.20  
+##  Class :character   1st Qu.:43.60   1st Qu.:-123.2   1st Qu.:  94.25   1st Qu.:-1.225   1st Qu.:17.30  
+##  Mode  :character   Median :44.46   Median :-121.7   Median : 462.00   Median : 0.750   Median :19.20  
+##                     Mean   :44.32   Mean   :-121.3   Mean   : 556.99   Mean   : 1.417   Mean   :19.01  
+##                     3rd Qu.:45.28   3rd Qu.:-119.6   3rd Qu.: 863.75   3rd Qu.: 4.150   3rd Qu.:20.20  
+##                     Max.   :46.15   Max.   :-117.0   Max.   :1974.00   Max.   : 8.400   Max.   :26.40  
+##       tann             pjan             pjul            pann            idnum            Name          
+##  Min.   : 3.200   Min.   : 14.00   Min.   : 4.00   Min.   : 198.0   Min.   :350197   Length:92         
+##  1st Qu.: 8.700   1st Qu.: 39.75   1st Qu.: 7.00   1st Qu.: 299.0   1st Qu.:352308   Class :character  
+##  Median :10.400   Median : 87.50   Median : 9.00   Median : 531.0   Median :354564   Mode  :character  
+##  Mean   : 9.885   Mean   :141.67   Mean   :10.84   Mean   : 868.6   Mean   :354455                     
+##  3rd Qu.:11.200   3rd Qu.:239.25   3rd Qu.:12.25   3rd Qu.:1355.8   3rd Qu.:356663                     
+##  Max.   :12.600   Max.   :414.00   Max.   :34.00   Max.   :2517.0   Max.   :359316</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">attach</span>(orstationc)</span></code></pre></div>
+<pre><code>## The following objects are masked _by_ .GlobalEnv:
+## 
+##     lat, lon</code></pre>
 <p>Plot the station locations.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># plot stations</span></a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="kw">plot</span>(orotl_shp)</a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="kw">points</span>(lon, lat, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">125</span>, <span class="dv">-116</span>), <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">41</span>,<span class="dv">47</span>),</a>
-<a class="sourceLine" id="cb6-4" title="4">   <span class="dt">xlab=</span><span class="st">&quot;Latitude&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Longitude&quot;</span>, <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="kw">text</span>(lon, lat, <span class="dt">labels=</span>station, <span class="dt">cex=</span><span class="fl">0.6</span>)</a></code></pre></div>
-<p><img src="multivariate_files/figure-html/unnamed-chunk-3-1.png" width="75%" height="75%" /></p>
-<div id="the-cluster-analysis" class="section level2">
-<h2><span class="header-section-number">2.1</span> The cluster analysis</h2>
-<p>In this example, the groups of stations (or the climate regions of Oregon, as expressed in the climate-station data) will be defined via an “agglomerative-hierarchical” cluster analysis. In such an analysis, individual objects (observations) are combined according to their (dis)similarity, with the two <em>most- similar</em> objects being combined first (to create a new composite object), then the next two most similar objects (including the composites), and so on until a single object is defined. The sequence of combinations is illustrated using a “dendrogram” (cluster tree), and this can be examined to determine the number of clusters. The function cutree determines the cluster membership of each observation, which can be listed or plotted.</p>
-<p>The first step in an agglomerative cluster analysis (although not always expicitly displayed), is the calculation of a dissimilarity matrix, which is a square symmetrical matrix that illustrates the dissimilarities (typically Euclidean distances) between individual cases or observations, using, in this case the six climate variables to define the space that distance is calculated in.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co"># get dissimilarities (distances) and cluster</span></a>
-<a class="sourceLine" id="cb7-2" title="2"><span class="kw">library</span>(lattice)</a>
-<a class="sourceLine" id="cb7-3" title="3">X &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(orstationc[,<span class="dv">5</span><span class="op">:</span><span class="dv">10</span>])</a>
-<a class="sourceLine" id="cb7-4" title="4">X_dist &lt;-<span class="st"> </span><span class="kw">dist</span>(<span class="kw">scale</span>(X))</a>
-<a class="sourceLine" id="cb7-5" title="5">grid &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">obs1 =</span> <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">92</span>), <span class="dt">obs2 =</span> <span class="kw">seq</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">92</span>))</a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="kw">levelplot</span>(<span class="kw">as.matrix</span>(X_dist)<span class="op">/</span><span class="kw">max</span>(X_dist) <span class="op">~</span><span class="st"> </span>obs1<span class="op">*</span>obs2, <span class="dt">data=</span>grid, </a>
-<a class="sourceLine" id="cb7-7" title="7">    <span class="dt">col.regions =</span> <span class="kw">gray</span>(<span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="dt">by=</span><span class="fl">0.0625</span>)), <span class="dt">xlab=</span><span class="st">&quot;observation&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;observation&quot;</span>)</a></code></pre></div>
-<p><img src="multivariate_files/figure-html/unnamed-chunk-4-1.png" width="75%" height="75%" /></p>
-<p>In the code above, for convience, a matrix <strong>X</strong> was created to omit the variables we don’t want to include in the clustering (i.e. the non-climatic information). The levelplot() function plots the dissimilarity matrix that the cluster analysis works with. The “plaid” as opposed to completely random appearance of the plot indicates that it is likely that natural groups will exist in the data. The dark diagonal line is formed from the Eucldean distance values of 0.0 from the comparison of each observation with itself.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># plot stations</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">plot</span>(orotl_shp)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">points</span>(lon, lat, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">125</span>, <span class="sc">-</span><span class="dv">116</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">41</span>,<span class="dv">47</span>),</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>   <span class="at">xlab=</span><span class="st">&quot;Latitude&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Longitude&quot;</span>, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">text</span>(lon, lat, <span class="at">labels=</span>station, <span class="at">cex=</span><span class="fl">0.6</span>)</span></code></pre></div>
+<div id="the-cluster-analysis" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> The cluster
+analysis</h2>
+<p>In this example, the groups of stations (or the climate regions of
+Oregon, as expressed in the climate-station data) will be defined via an
+“agglomerative-hierarchical” cluster analysis. In such an analysis,
+individual objects (observations) are combined according to their
+(dis)similarity, with the two <em>most- similar</em> objects being
+combined first (to create a new composite object), then the next two
+most similar objects (including the composites), and so on until a
+single object is defined. The sequence of combinations is illustrated
+using a “dendrogram” (cluster tree), and this can be examined to
+determine the number of clusters. The function cutree determines the
+cluster membership of each observation, which can be listed or
+plotted.</p>
+<p>The first step in an agglomerative cluster analysis (although not
+always expicitly displayed), is the calculation of a dissimilarity
+matrix, which is a square symmetrical matrix that illustrates the
+dissimilarities (typically Euclidean distances) between individual cases
+or observations, using, in this case the six climate variables to define
+the space that distance is calculated in.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># get dissimilarities (distances) and cluster</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(orstationc[,<span class="dv">5</span><span class="sc">:</span><span class="dv">10</span>])</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>X_dist <span class="ot">&lt;-</span> <span class="fu">dist</span>(<span class="fu">scale</span>(X))</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">obs1 =</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">92</span>), <span class="at">obs2 =</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">92</span>))</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">levelplot</span>(<span class="fu">as.matrix</span>(X_dist)<span class="sc">/</span><span class="fu">max</span>(X_dist) <span class="sc">~</span> obs1<span class="sc">*</span>obs2, <span class="at">data=</span>grid, </span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>    <span class="at">col.regions =</span> <span class="fu">gray</span>(<span class="fu">seq</span>(<span class="dv">0</span>,<span class="dv">1</span>,<span class="at">by=</span><span class="fl">0.0625</span>)), <span class="at">xlab=</span><span class="st">&quot;observation&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;observation&quot;</span>)</span></code></pre></div>
+<p>In the code above, for convience, a matrix <strong>X</strong> was
+created to omit the variables we don’t want to include in the clustering
+(i.e. the non-climatic information). The levelplot() function plots the
+dissimilarity matrix that the cluster analysis works with. The “plaid”
+as opposed to completely random appearance of the plot indicates that it
+is likely that natural groups will exist in the data. The dark diagonal
+line is formed from the Eucldean distance values of 0.0 from the
+comparison of each observation with itself.</p>
 <p>Now do the cluster analysis:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co"># cluster analysis</span></a>
-<a class="sourceLine" id="cb8-2" title="2">X_clusters &lt;-<span class="st"> </span><span class="kw">hclust</span>(X_dist, <span class="dt">method =</span> <span class="st">&quot;ward.D2&quot;</span>)</a>
-<a class="sourceLine" id="cb8-3" title="3"><span class="kw">plot</span>(X_clusters, <span class="dt">labels=</span>station, <span class="dt">cex=</span><span class="fl">0.5</span>)</a></code></pre></div>
-<p><img src="multivariate_files/figure-html/unnamed-chunk-5-1.png" width="75%" height="75%" /></p>
-<p>The function <code>hclust()</code> performs a “Wards’s single-linkage” analysis, and the <code>plot()</code> function plots the dendrogram. Notice that the individual “leaves” of the plot are labeled by the climate-station names.</p>
-<p>The dendrogram can be inspected to get an idea of how many distinct clusters there are (and it can also identify unusual points–look for Crater Lake <code>CLK</code>). As a first guess, let’s say there were three distinct clusters evident in the dendrogram. The <code>cuttree()</code> function can be used to “cut” the dendrogram at a particular level:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="co"># cut dendrogram and plot points in each cluster </span></a>
-<a class="sourceLine" id="cb9-2" title="2">nclust &lt;-<span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb9-3" title="3">clusternum &lt;-<span class="st"> </span><span class="kw">cutree</span>(X_clusters, <span class="dt">k=</span>nclust)</a></code></pre></div>
-<p>And then the cluster membership (i.e. which cluster?) of each station can be mapped.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="co"># plot cluster membership of each station</span></a>
-<a class="sourceLine" id="cb10-2" title="2"><span class="kw">plot</span>(lon, lat, <span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="dv">125</span>, <span class="dv">-116</span>), <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">41</span>,<span class="dv">47</span>), <span class="dt">xlab=</span><span class="st">&quot;Latitude&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Longitude&quot;</span>,</a>
-<a class="sourceLine" id="cb10-3" title="3">     <span class="dt">main=</span><span class="kw">paste</span>(<span class="kw">as.character</span>(nclust), <span class="st">&quot;Clusters&quot;</span>), <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)</a>
-<a class="sourceLine" id="cb10-4" title="4"><span class="kw">plot</span>(orotl_shp, <span class="dt">add=</span>T)</a>
-<a class="sourceLine" id="cb10-5" title="5"><span class="kw">text</span>(lon, lat, <span class="dt">labels=</span>clusternum, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>)</a></code></pre></div>
-<p><img src="multivariate_files/figure-html/unnamed-chunk-7-1.png" width="75%" height="75%" /></p>
-<p>(A listing of the cluster number that each station belongs to can be gotten by the following code.)</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">print</span>(<span class="kw">cbind</span>(station, clusternum, <span class="kw">as.character</span>(Name)))</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># cluster analysis</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>X_clusters <span class="ot">&lt;-</span> <span class="fu">hclust</span>(X_dist, <span class="at">method =</span> <span class="st">&quot;ward.D2&quot;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fu">plot</span>(X_clusters, <span class="at">labels=</span>station, <span class="at">cex=</span><span class="fl">0.5</span>)</span></code></pre></div>
+<p>The function <code>hclust()</code> performs a “Wards’s
+single-linkage” analysis, and the <code>plot()</code> function plots the
+dendrogram. Notice that the individual “leaves” of the plot are labeled
+by the climate-station names.</p>
+<p>The dendrogram can be inspected to get an idea of how many distinct
+clusters there are (and it can also identify unusual points–look for
+Crater Lake <code>CLK</code>). As a first guess, let’s say there were
+three distinct clusters evident in the dendrogram. The
+<code>cuttree()</code> function can be used to “cut” the dendrogram at a
+particular level:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># cut dendrogram and plot points in each cluster </span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>nclust <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>clusternum <span class="ot">&lt;-</span> <span class="fu">cutree</span>(X_clusters, <span class="at">k=</span>nclust)</span></code></pre></div>
+<p>And then the cluster membership (i.e. which cluster?) of each station
+can be mapped.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># plot cluster membership of each station</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">plot</span>(lon, lat, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">125</span>, <span class="sc">-</span><span class="dv">116</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">41</span>,<span class="dv">47</span>), <span class="at">xlab=</span><span class="st">&quot;Latitude&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Longitude&quot;</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>     <span class="at">main=</span><span class="fu">paste</span>(<span class="fu">as.character</span>(nclust), <span class="st">&quot;Clusters&quot;</span>), <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">plot</span>(orotl_shp, <span class="at">add=</span>T)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="fu">text</span>(lon, lat, <span class="at">labels=</span>clusternum, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p>(A listing of the cluster number that each station belongs to can be
+gotten by the following code.)</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">cbind</span>(station, clusternum, <span class="fu">as.character</span>(Name)))</span></code></pre></div>
 </div>
-<div id="examining-the-cluster-analysis" class="section level2">
-<h2><span class="header-section-number">2.2</span> Examining the cluster analysis</h2>
-<p>The efficacy of the analyis in regionalizing or grouping the stations can be gauged usigns plots and a analysis that looks at the “separation” of the groups of stations.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="co"># examine clusters -- simple plots </span></a>
-<a class="sourceLine" id="cb12-2" title="2"><span class="kw">tapply</span>(tjan, clusternum, mean)</a></code></pre></div>
-<pre><code>##         1         2         3 
-## -1.466667  4.000000  5.305263</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">histogram</span>(<span class="op">~</span><span class="st"> </span>tjan <span class="op">|</span><span class="st"> </span><span class="kw">factor</span>(clusternum), <span class="dt">nint=</span><span class="dv">20</span>, <span class="dt">layout=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</a></code></pre></div>
-<p><img src="multivariate_files/figure-html/unnamed-chunk-9-1.png" width="75%" height="75%" /></p>
-<p>Note how many of the histograms seem multimodal–this is a clear sign of inhomogeneity of the clusters. Let’s see how the clusters differ. This can be done via discriminant analysis, which (like PCA) defines some new variables with desireable properties, in this case, new variables that maximally “spread out” the groups along the new variable axes:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="co"># discriminant analysis (chunk 3)</span></a>
-<a class="sourceLine" id="cb15-2" title="2"><span class="kw">library</span>(MASS)</a>
-<a class="sourceLine" id="cb15-3" title="3">cluster_lda1 &lt;-<span class="st"> </span><span class="kw">lda</span>(clusternum <span class="op">~</span><span class="st"> </span>tjan <span class="op">+</span><span class="st"> </span>tjul <span class="op">+</span><span class="st"> </span>tann <span class="op">+</span><span class="st"> </span>pjan <span class="op">+</span><span class="st"> </span>pjul <span class="op">+</span><span class="st"> </span>pann)</a>
-<a class="sourceLine" id="cb15-4" title="4">cluster_lda1</a></code></pre></div>
-<pre><code>## Call:
-## lda(clusternum ~ tjan + tjul + tann + pjan + pjul + pann)
-## 
-## Prior probabilities of groups:
-##         1         2         3 
-## 0.5217391 0.2717391 0.2065217 
-## 
-## Group means:
-##        tjan     tjul      tann      pjan     pjul      pann
-## 1 -1.466667 20.03958  8.835417  49.04167  9.00000  353.2708
-## 2  4.000000 19.36000 11.312000 186.64000  7.88000 1080.1600
-## 3  5.305263 15.95263 10.657895 316.52632 19.36842 1891.8947
-## 
-## Coefficients of linear discriminants:
-##               LD1          LD2
-## tjan  0.106062251 -1.357953404
-## tjul -0.213848899 -1.229994410
-## tann  0.521178594  2.210153884
-## pjan  0.010726336 -0.009918392
-## pjul  0.023851475  0.112201911
-## pann  0.001274417  0.001494494
-## 
-## Proportion of trace:
-##   LD1   LD2 
-## 0.937 0.063</code></pre>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">plot</span>(cluster_lda1)</a></code></pre></div>
-<p><img src="multivariate_files/figure-html/unnamed-chunk-10-1.png" width="75%" height="75%" /></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">cluster_dscore &lt;-<span class="st"> </span><span class="kw">predict</span>(cluster_lda1, <span class="dt">dimen=</span>nclust)<span class="op">$</span>x</a>
-<a class="sourceLine" id="cb18-2" title="2"><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>(nclust<span class="dv">-1</span>)) {</a>
-<a class="sourceLine" id="cb18-3" title="3">  <span class="kw">boxplot</span>(cluster_dscore[,j] <span class="op">~</span><span class="st"> </span>clusternum, <span class="dt">xlab=</span><span class="kw">paste</span>(<span class="st">&quot;LD&quot;</span>, <span class="kw">as.character</span>(j), <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb18-4" title="4">  }</a></code></pre></div>
-<p><img src="multivariate_files/figure-html/unnamed-chunk-10-2.png" width="75%" height="75%" /><img src="multivariate_files/figure-html/unnamed-chunk-10-3.png" width="75%" height="75%" /></p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">cor</span>(orstationc[<span class="dv">5</span><span class="op">:</span><span class="dv">10</span>],cluster_dscore)</a></code></pre></div>
-<pre><code>##             LD1         LD2
-## tjan  0.9112303 -0.30450608
-## tjul -0.5352598 -0.40124030
-## tann  0.5313206 -0.51027660
-## pjan  0.9720352  0.09629818
-## pjul  0.5199545  0.73301330
-## pann  0.9649685  0.16285890</code></pre>
-<p>The discriminant analysis here is used to answer the question “how do the clusters of stations differ climatically?” In this case, it looks like <code>pann</code> and <code>tann</code> are the variables most closely correlated with each discriminant function, and because each of these variables are more-or-less averages of the seasonal extreme variables, that might explain why the clusters seem inhomogeneous.</p>
-<p>The analysis can be repeated, extracting different numbers of clusters. The easiest way to do this is to copy the three chunks of code above into a text editor, changing the assignment to nclust and including or excluding before executing each chunk, one at a time.</p>
+<div id="examining-the-cluster-analysis" class="section level2"
+number="2.2">
+<h2><span class="header-section-number">2.2</span> Examining the cluster
+analysis</h2>
+<p>The efficacy of the analyis in regionalizing or grouping the stations
+can be gauged usigns plots and a analysis that looks at the “separation”
+of the groups of stations.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># examine clusters -- simple plots </span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">tapply</span>(tjan, clusternum, mean)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="fu">histogram</span>(<span class="sc">~</span> tjan <span class="sc">|</span> <span class="fu">factor</span>(clusternum), <span class="at">nint=</span><span class="dv">20</span>, <span class="at">layout=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span></code></pre></div>
+<p>Note how many of the histograms seem multimodal–this is a clear sign
+of inhomogeneity of the clusters. Let’s see how the clusters differ.
+This can be done via discriminant analysis, which (like PCA) defines
+some new variables with desireable properties, in this case, new
+variables that maximally “spread out” the groups along the new variable
+axes:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># discriminant analysis (chunk 3)</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">library</span>(MASS)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>cluster_lda1 <span class="ot">&lt;-</span> <span class="fu">lda</span>(clusternum <span class="sc">~</span> tjan <span class="sc">+</span> tjul <span class="sc">+</span> tann <span class="sc">+</span> pjan <span class="sc">+</span> pjul <span class="sc">+</span> pann)</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>cluster_lda1</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="fu">plot</span>(cluster_lda1)</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>cluster_dscore <span class="ot">&lt;-</span> <span class="fu">predict</span>(cluster_lda1, <span class="at">dimen=</span>nclust)<span class="sc">$</span>x</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>(nclust<span class="dv">-1</span>)) {</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>  <span class="fu">boxplot</span>(cluster_dscore[,j] <span class="sc">~</span> clusternum, <span class="at">xlab=</span><span class="fu">paste</span>(<span class="st">&quot;LD&quot;</span>, <span class="fu">as.character</span>(j), <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>  }</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="fu">cor</span>(orstationc[<span class="dv">5</span><span class="sc">:</span><span class="dv">10</span>],cluster_dscore)</span></code></pre></div>
+<p>The discriminant analysis here is used to answer the question “how do
+the clusters of stations differ climatically?” In this case, it looks
+like <code>pann</code> and <code>tann</code> are the variables most
+closely correlated with each discriminant function, and because each of
+these variables are more-or-less averages of the seasonal extreme
+variables, that might explain why the clusters seem inhomogeneous.</p>
+<p>The analysis can be repeated, extracting different numbers of
+clusters. The easiest way to do this is to copy the three chunks of code
+above into a text editor, changing the assignment to nclust and
+including or excluding before executing each chunk, one at a time.</p>
 </div>
 </div>
-<div id="distances-among-observations-and-among-variables" class="section level1">
-<h1><span class="header-section-number">3</span> Distances: among observations and among variables</h1>
-<p>As noted above, distance matrices are interesting in their own right, as well as being input to a cluster analysis. In a typical rectangular data set, there are two distance matrices that could be calculated, one comparing variables (i.e. the columns in a data frame), and the other comparing observations (or rows). In the examples below the "TraCE 21ka decadal data are used. There are (96 x 48) 4608 grid points and 2204 observations. Read the raster brick in the netCDF file (<code>Trace21_TREFHT_anm2.nc</code>), and reshape it the usual way:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="co"># reshape the 3-d array</span></a>
-<a class="sourceLine" id="cb21-2" title="2">var_vec_long &lt;-<span class="st"> </span><span class="kw">as.vector</span>(var_array)</a>
-<a class="sourceLine" id="cb21-3" title="3"><span class="kw">length</span>(var_vec_long)</a>
-<a class="sourceLine" id="cb21-4" title="4">X &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">matrix</span>(var_vec_long, <span class="dt">nrow =</span> nlon <span class="op">*</span><span class="st"> </span>nlat, <span class="dt">ncol =</span> nt))</a>
-<a class="sourceLine" id="cb21-5" title="5"><span class="kw">dim</span>(X)</a></code></pre></div>
-<p>Notice the use of the transposition function (<code>t()</code>) to get the data in the proper “tidy” arrangement for a data frame (variables in columns, observations in rows). Distance matrix calcualation can take a while, but the <code>parallelDist</code> package can be used to greatly speed things up, by handing off the creation of different blocks of the matrix to differnt processors in multi-processor machines.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="co"># load packages</span></a>
-<a class="sourceLine" id="cb22-2" title="2"><span class="co"># distance matrices</span></a>
-<a class="sourceLine" id="cb22-3" title="3"><span class="kw">library</span>(parallelDist)</a>
-<a class="sourceLine" id="cb22-4" title="4"><span class="kw">library</span>(raster)</a></code></pre></div>
-<p>The <code>parDist()</code> function gets the dissimilarity martrix:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="co"># disatances among observations (time)</span></a>
-<a class="sourceLine" id="cb23-2" title="2">dist_obs &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">parDist</span>(X)) </a>
-<a class="sourceLine" id="cb23-3" title="3"><span class="kw">dim</span>(dist_obs)</a></code></pre></div>
-<p>The dissimilarity martrix can be conveniently visualized by turning it into a raster, and then using the raster <code>plot()</code> function to visualize it.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">raster_obs &lt;-<span class="st"> </span><span class="kw">flip</span>(<span class="kw">raster</span>(dist_obs, <span class="dt">xmn=</span><span class="dv">0</span>, <span class="dt">ymn=</span><span class="dv">0</span>, <span class="dt">xmx=</span><span class="kw">dim</span>(dist_obs)[<span class="dv">1</span>], <span class="dt">ymx=</span><span class="kw">dim</span>(dist_obs)[<span class="dv">2</span>]), <span class="dt">direction=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb24-2" title="2">raster_obs</a></code></pre></div>
-<p>Note the use of the <code>maxpixels</code> argument to avoid smoothing in the image. The rendering of the image is faster if the image is written to a file:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">png</span>(dist_obs_pngfile, <span class="dt">width=</span><span class="dv">720</span>, <span class="dt">height=</span><span class="dv">720</span>) <span class="co"># open the file</span></a>
-<a class="sourceLine" id="cb25-2" title="2"><span class="kw">plot</span>(raster_obs, <span class="dt">maxpixels=</span><span class="kw">dim</span>(dist_obs)[<span class="dv">1</span>]<span class="op">*</span><span class="kw">dim</span>(dist_obs)[<span class="dv">2</span>], <span class="dt">col=</span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;RdPu&quot;</span>))) </a>
-<a class="sourceLine" id="cb25-3" title="3"><span class="kw">dev.off</span>()</a></code></pre></div>
+<div id="distances-among-observations-and-among-variables"
+class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Distances: among
+observations and among variables</h1>
+<p>As noted above, distance matrices are interesting in their own right,
+as well as being input to a cluster analysis. In a typical rectangular
+data set, there are two distance matrices that could be calculated, one
+comparing variables (i.e. the columns in a data frame), and the other
+comparing observations (or rows). In the examples below the “TraCE 21ka
+decadal data are used. There are (96 x 48) 4608 grid points and 2204
+observations. Read the raster brick in the netCDF file
+(<code>Trace21_TREFHT_anm2.nc</code>), and reshape it the usual way:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># reshape the 3-d array</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>var_vec_long <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(var_array)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">length</span>(var_vec_long)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">matrix</span>(var_vec_long, <span class="at">nrow =</span> nlon <span class="sc">*</span> nlat, <span class="at">ncol =</span> nt))</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="fu">dim</span>(X)</span></code></pre></div>
+<p>Notice the use of the transposition function (<code>t()</code>) to
+get the data in the proper “tidy” arrangement for a data frame
+(variables in columns, observations in rows). Distance matrix
+calcualation can take a while, but the <code>parallelDist</code> package
+can be used to greatly speed things up, by handing off the creation of
+different blocks of the matrix to differnt processors in multi-processor
+machines.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># load packages</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co"># distance matrices</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">library</span>(parallelDist)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="fu">library</span>(raster)</span></code></pre></div>
+<p>The <code>parDist()</code> function gets the dissimilarity
+martrix:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># disatances among observations (time)</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>dist_obs <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">parDist</span>(X)) </span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="fu">dim</span>(dist_obs)</span></code></pre></div>
+<p>The dissimilarity martrix can be conveniently visualized by turning
+it into a raster, and then using the raster <code>plot()</code> function
+to visualize it.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>raster_obs <span class="ot">&lt;-</span> <span class="fu">flip</span>(<span class="fu">raster</span>(dist_obs, <span class="at">xmn=</span><span class="dv">0</span>, <span class="at">ymn=</span><span class="dv">0</span>, <span class="at">xmx=</span><span class="fu">dim</span>(dist_obs)[<span class="dv">1</span>], <span class="at">ymx=</span><span class="fu">dim</span>(dist_obs)[<span class="dv">2</span>]), <span class="at">direction=</span><span class="dv">1</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>raster_obs</span></code></pre></div>
+<p>Note the use of the <code>maxpixels</code> argument to avoid
+smoothing in the image. The rendering of the image is faster if the
+image is written to a file:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">png</span>(dist_obs_pngfile, <span class="at">width=</span><span class="dv">720</span>, <span class="at">height=</span><span class="dv">720</span>) <span class="co"># open the file</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="fu">plot</span>(raster_obs, <span class="at">maxpixels=</span><span class="fu">dim</span>(dist_obs)[<span class="dv">1</span>]<span class="sc">*</span><span class="fu">dim</span>(dist_obs)[<span class="dv">2</span>], <span class="at">col=</span><span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;RdPu&quot;</span>))) </span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <p>And here’s the image:</p>
 <p><img src="TraCE_decadal_dist_var_v1.png" /></p>
-<p>The image is sort of a map: The grid points are arranged in the data frame with longitudes varying rapidly and the sqrare dark area (low dissimilarities) in the middle is the tropics, where the spatial variability of climate is low, while the more spatially variable higher-latitude regions (at all longitudes) frame the low-variability region.</p>
-<p>The dissimilarity matrix for variables is gotten in a similar fashion, but not the use of the transpose function <code>t()</code> to get the variables in rows, and observations in columns:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="co"># variables (grid points)</span></a>
-<a class="sourceLine" id="cb26-2" title="2">dist_var &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">parDist</span>(<span class="kw">t</span>(X))) </a>
-<a class="sourceLine" id="cb26-3" title="3"><span class="kw">dim</span>(dist_var)</a>
-<a class="sourceLine" id="cb26-4" title="4"></a>
-<a class="sourceLine" id="cb26-5" title="5">raster_var &lt;-<span class="st"> </span><span class="kw">flip</span>(<span class="kw">raster</span>(dist_var, <span class="dt">xmn=</span><span class="dv">0</span>, <span class="dt">ymn=</span><span class="dv">0</span>, <span class="dt">xmx=</span><span class="kw">dim</span>(dist_var)[<span class="dv">1</span>], <span class="dt">ymx=</span><span class="kw">dim</span>(dist_var)[<span class="dv">2</span>]), <span class="dt">direction=</span><span class="dv">1</span>)</a>
-<a class="sourceLine" id="cb26-6" title="6">raster_var</a>
-<a class="sourceLine" id="cb26-7" title="7"></a>
-<a class="sourceLine" id="cb26-8" title="8"><span class="kw">png</span>(dist_var_pngfile, <span class="dt">width=</span><span class="dv">720</span>, <span class="dt">height=</span><span class="dv">720</span>) <span class="co"># open the file</span></a>
-<a class="sourceLine" id="cb26-9" title="9"><span class="kw">plot</span>(raster_var, <span class="dt">maxpixels=</span><span class="kw">dim</span>(dist_var)[<span class="dv">1</span>]<span class="op">*</span><span class="kw">dim</span>(dist_var)[<span class="dv">2</span>], <span class="dt">col=</span><span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;RdPu&quot;</span>))) </a>
-<a class="sourceLine" id="cb26-10" title="10"><span class="kw">dev.off</span>()</a></code></pre></div>
+<p>The image is sort of a map: The grid points are arranged in the data
+frame with longitudes varying rapidly and the sqrare dark area (low
+dissimilarities) in the middle is the tropics, where the spatial
+variability of climate is low, while the more spatially variable
+higher-latitude regions (at all longitudes) frame the low-variability
+region.</p>
+<p>The dissimilarity matrix for variables is gotten in a similar
+fashion, but not the use of the transpose function <code>t()</code> to
+get the variables in rows, and observations in columns:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># variables (grid points)</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>dist_var <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">parDist</span>(<span class="fu">t</span>(X))) </span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="fu">dim</span>(dist_var)</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>raster_var <span class="ot">&lt;-</span> <span class="fu">flip</span>(<span class="fu">raster</span>(dist_var, <span class="at">xmn=</span><span class="dv">0</span>, <span class="at">ymn=</span><span class="dv">0</span>, <span class="at">xmx=</span><span class="fu">dim</span>(dist_var)[<span class="dv">1</span>], <span class="at">ymx=</span><span class="fu">dim</span>(dist_var)[<span class="dv">2</span>]), <span class="at">direction=</span><span class="dv">1</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>raster_var</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="fu">png</span>(dist_var_pngfile, <span class="at">width=</span><span class="dv">720</span>, <span class="at">height=</span><span class="dv">720</span>) <span class="co"># open the file</span></span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="fu">plot</span>(raster_var, <span class="at">maxpixels=</span><span class="fu">dim</span>(dist_var)[<span class="dv">1</span>]<span class="sc">*</span><span class="fu">dim</span>(dist_var)[<span class="dv">2</span>], <span class="at">col=</span><span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;RdPu&quot;</span>))) </span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <p><img src="TraCE_decadal_dist_obs_v1.png" /></p>
 <p>Here the temporal variability of is emphasized.</p>
 </div>
-<div id="heatmaps-2-way-time-and-space-clustering" class="section level1">
-<h1><span class="header-section-number">4</span> Heatmaps (2-way, time and space clustering)</h1>
-<p>“Heatmaps” are a visualization approach that is implemented in the <code>base</code> package of R. A heatmap basically consists of the raster-image type plot of the data frame, with the rows and columns of the matrix reaggranged using cluster analyses of the varables and observations. (Note that the cluster analyses are carried out individually, as oppsosed to simultaneously, an approach known as “biclustering”.) Typically, for small data sets, the matrix plot is augmented by dendrograms, and by “side bars” which plot some additional attribute of the data (location or time, for example) using a scatter plot, gradient plot, etc.</p>
-<div id="a-simple-example-with-hovmoller-matrix-data" class="section level2">
-<h2><span class="header-section-number">4.1</span> A simple example with Hovmöller-matrix data</h2>
-<p>A simple heatmap can be generated for a “Hovmöller matrix” calculated using the gridded data. The Hovmöller matrix contains longitudinal averages and is laid out with one row for each latitude and one column for each time.</p>
-<div id="set-up" class="section level3">
+<div id="heatmaps-2-way-time-and-space-clustering"
+class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Heatmaps (2-way, time
+and space clustering)</h1>
+<p>“Heatmaps” are a visualization approach that is implemented in the
+<code>base</code> package of R. A heatmap basically consists of the
+raster-image type plot of the data frame, with the rows and columns of
+the matrix reaggranged using cluster analyses of the varables and
+observations. (Note that the cluster analyses are carried out
+individually, as oppsosed to simultaneously, an approach known as
+“biclustering”.) Typically, for small data sets, the matrix plot is
+augmented by dendrograms, and by “side bars” which plot some additional
+attribute of the data (location or time, for example) using a scatter
+plot, gradient plot, etc.</p>
+<div id="a-simple-example-with-hovmöller-matrix-data"
+class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> A simple example with
+Hovmöller-matrix data</h2>
+<p>A simple heatmap can be generated for a “Hovmöller matrix” calculated
+using the gridded data. The Hovmöller matrix contains longitudinal
+averages and is laid out with one row for each latitude and one column
+for each time.</p>
+<div id="set-up" class="section level3" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Set up</h3>
 <p>Create the Hovmöller matrix:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="co"># Hovmöller matrix </span></a>
-<a class="sourceLine" id="cb27-2" title="2">X &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">0</span>, <span class="dt">nrow=</span>nlat, <span class="dt">ncol=</span>nt)</a>
-<a class="sourceLine" id="cb27-3" title="3"><span class="cf">for</span> (n <span class="cf">in</span> (<span class="dv">1</span><span class="op">:</span>nt)) {</a>
-<a class="sourceLine" id="cb27-4" title="4">  <span class="cf">for</span> (k <span class="cf">in</span> (<span class="dv">1</span><span class="op">:</span>nlat)) {</a>
-<a class="sourceLine" id="cb27-5" title="5">    <span class="cf">for</span> (j <span class="cf">in</span> (<span class="dv">1</span><span class="op">:</span>nlon)) {</a>
-<a class="sourceLine" id="cb27-6" title="6">      X[k, n] &lt;-<span class="st"> </span>X[k, n] <span class="op">+</span><span class="st"> </span>var_array[j, k, n]</a>
-<a class="sourceLine" id="cb27-7" title="7">    }</a>
-<a class="sourceLine" id="cb27-8" title="8">    X[k, n] &lt;-<span class="st"> </span>X[k,n ]<span class="op">/</span>nlon</a>
-<a class="sourceLine" id="cb27-9" title="9">  }</a>
-<a class="sourceLine" id="cb27-10" title="10">}</a>
-<a class="sourceLine" id="cb27-11" title="11"><span class="kw">dim</span>(X)</a>
-<a class="sourceLine" id="cb27-12" title="12">ncols &lt;-<span class="st"> </span><span class="kw">dim</span>(X)[<span class="dv">2</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># Hovmöller matrix </span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, <span class="at">nrow=</span>nlat, <span class="at">ncol=</span>nt)</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span>nt)) {</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span>nlat)) {</span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span>nlon)) {</span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>      X[k, n] <span class="ot">&lt;-</span> X[k, n] <span class="sc">+</span> var_array[j, k, n]</span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>    }</span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>    X[k, n] <span class="ot">&lt;-</span> X[k,n ]<span class="sc">/</span>nlon</span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>  }</span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a>}</span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="fu">dim</span>(X)</span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a>ncols <span class="ot">&lt;-</span> <span class="fu">dim</span>(X)[<span class="dv">2</span>]</span></code></pre></div>
 <p>Set row and column names for the matrix.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="co"># set row and column names</span></a>
-<a class="sourceLine" id="cb28-2" title="2"><span class="kw">rownames</span>(X) &lt;-<span class="st"> </span><span class="kw">str_pad</span>(<span class="kw">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, lat), <span class="dv">5</span>, <span class="dt">pad=</span><span class="st">&quot;0&quot;</span>)</a>
-<a class="sourceLine" id="cb28-3" title="3"><span class="kw">head</span>(<span class="kw">rownames</span>(X));<span class="kw">tail</span>(<span class="kw">rownames</span>(X)); <span class="kw">length</span>(<span class="kw">rownames</span>(X))</a>
-<a class="sourceLine" id="cb28-4" title="4"><span class="kw">colnames</span>(X) &lt;-<span class="st"> </span><span class="kw">str_pad</span>(<span class="kw">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, plt_xvals), <span class="dv">5</span>, <span class="dt">pad=</span><span class="st">&quot;0&quot;</span>)</a>
-<a class="sourceLine" id="cb28-5" title="5"><span class="kw">head</span>(<span class="kw">colnames</span>(X));<span class="kw">tail</span>(<span class="kw">colnames</span>(X)); <span class="kw">length</span>(<span class="kw">colnames</span>(X))</a></code></pre></div>
-<p>A matrix plot of the Hovmöller matrix will illustrate the data (and is an actual Hovmöller plot). To get high (northern) latitudes at the top of the plot, and high (southern) latitudes at the bottom, flip the data:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="co"># flip X</span></a>
-<a class="sourceLine" id="cb29-2" title="2">X &lt;-<span class="st"> </span>X[(nlat<span class="op">:</span><span class="dv">1</span>),]</a>
-<a class="sourceLine" id="cb29-3" title="3"><span class="kw">head</span>(<span class="kw">rownames</span>(X)); <span class="kw">tail</span>(<span class="kw">rownames</span>(X)); <span class="kw">length</span>(<span class="kw">rownames</span>(X))</a></code></pre></div>
-<p>For this example, the data are decimated, by taking every 20th observation (to allow the dendrograms to be visualized):</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="co"># subset</span></a>
-<a class="sourceLine" id="cb30-2" title="2">X &lt;-<span class="st"> </span>X[,<span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">2201</span>, <span class="dt">by=</span><span class="dv">20</span>)]</a>
-<a class="sourceLine" id="cb30-3" title="3"><span class="kw">dim</span>(X)</a>
-<a class="sourceLine" id="cb30-4" title="4">ncols &lt;-<span class="st"> </span><span class="kw">dim</span>(X)[<span class="dv">2</span>]</a>
-<a class="sourceLine" id="cb30-5" title="5"><span class="kw">rownames</span>(X)</a></code></pre></div>
-<p>More set up, Generate colors for the matrix pot and the side bars, which here will illustrate the latitude and time of each data point.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="co"># generate colors for heatmap and side bars</span></a>
-<a class="sourceLine" id="cb31-2" title="2">rcol &lt;-<span class="st"> </span><span class="kw">colorRampPalette</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;PRGn&quot;</span>))(nlat)</a>
-<a class="sourceLine" id="cb31-3" title="3">ccol &lt;-<span class="st"> </span><span class="kw">colorRampPalette</span>(<span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Purples&quot;</span>))(ncols)</a>
-<a class="sourceLine" id="cb31-4" title="4">ncols &lt;-<span class="st"> </span><span class="dv">10</span></a>
-<a class="sourceLine" id="cb31-5" title="5">zcol &lt;-<span class="st"> </span>(<span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))) <span class="co">#(ncols)</span></a>
-<a class="sourceLine" id="cb31-6" title="6">breaks =<span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">20</span>,<span class="op">-</span><span class="dv">10</span>,<span class="op">-</span><span class="dv">5</span>,<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb31-7" title="7"><span class="kw">length</span>(breaks)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># set row and column names</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">rownames</span>(X) <span class="ot">&lt;-</span> <span class="fu">str_pad</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, lat), <span class="dv">5</span>, <span class="at">pad=</span><span class="st">&quot;0&quot;</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rownames</span>(X));<span class="fu">tail</span>(<span class="fu">rownames</span>(X)); <span class="fu">length</span>(<span class="fu">rownames</span>(X))</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="fu">colnames</span>(X) <span class="ot">&lt;-</span> <span class="fu">str_pad</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, plt_xvals), <span class="dv">5</span>, <span class="at">pad=</span><span class="st">&quot;0&quot;</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">colnames</span>(X));<span class="fu">tail</span>(<span class="fu">colnames</span>(X)); <span class="fu">length</span>(<span class="fu">colnames</span>(X))</span></code></pre></div>
+<p>A matrix plot of the Hovmöller matrix will illustrate the data (and
+is an actual Hovmöller plot). To get high (northern) latitudes at the
+top of the plot, and high (southern) latitudes at the bottom, flip the
+data:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># flip X</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>X <span class="ot">&lt;-</span> X[(nlat<span class="sc">:</span><span class="dv">1</span>),]</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rownames</span>(X)); <span class="fu">tail</span>(<span class="fu">rownames</span>(X)); <span class="fu">length</span>(<span class="fu">rownames</span>(X))</span></code></pre></div>
+<p>For this example, the data are decimated, by taking every 20th
+observation (to allow the dendrograms to be visualized):</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co"># subset</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>X <span class="ot">&lt;-</span> X[,<span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">2201</span>, <span class="at">by=</span><span class="dv">20</span>)]</span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="fu">dim</span>(X)</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>ncols <span class="ot">&lt;-</span> <span class="fu">dim</span>(X)[<span class="dv">2</span>]</span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="fu">rownames</span>(X)</span></code></pre></div>
+<p>More set up, Generate colors for the matrix pot and the side bars,
+which here will illustrate the latitude and time of each data point.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># generate colors for heatmap and side bars</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>rcol <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;PRGn&quot;</span>))(nlat)</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>ccol <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Purples&quot;</span>))(ncols)</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>ncols <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>zcol <span class="ot">&lt;-</span> (<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))) <span class="co">#(ncols)</span></span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>breaks <span class="ot">=</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">20</span>,<span class="sc">-</span><span class="dv">10</span>,<span class="sc">-</span><span class="dv">5</span>,<span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a><span class="fu">length</span>(breaks)</span></code></pre></div>
 </div>
-<div id="hovmoller-matrix-plot-decimated-decadal-data" class="section level3">
-<h3><span class="header-section-number">4.1.2</span> Hovmöller-matrix plot (decimated decadal data)</h3>
+<div id="hovmöller-matrix-plot-decimated-decadal-data"
+class="section level3" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Hovmöller-matrix
+plot (decimated decadal data)</h3>
 <p>Produce the heatmap for the Hovmöller matrix:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1">png_file &lt;-<span class="st"> </span><span class="kw">paste</span>(file_label, <span class="st">&quot;_heatmap_hov_01&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb32-2" title="2"><span class="kw">png</span>(png_file, <span class="dt">width=</span><span class="dv">960</span>, <span class="dt">height=</span><span class="dv">960</span>)</a>
-<a class="sourceLine" id="cb32-3" title="3"><span class="kw">system.time</span>( X_heatmap &lt;-<span class="st"> </span><span class="kw">heatmap.2</span>(X, <span class="dt">cexRow =</span> <span class="fl">0.8</span>, <span class="dt">cexCol =</span> <span class="fl">0.8</span>, <span class="dt">scale=</span><span class="st">&quot;none&quot;</span>, </a>
-<a class="sourceLine" id="cb32-4" title="4">        <span class="dt">Rowv=</span><span class="ot">NA</span>, <span class="dt">Colv=</span><span class="ot">NA</span>, <span class="dt">dendrogram =</span> <span class="st">&quot;none&quot;</span>, <span class="co"># just plot data, don&#39;t do clustering</span></a>
-<a class="sourceLine" id="cb32-5" title="5">        <span class="dt">RowSideColors=</span>rcol, <span class="dt">ColSideColors=</span>ccol, <span class="dt">col=</span>zcol, <span class="dt">breaks=</span>breaks, <span class="dt">trace=</span><span class="st">&quot;none&quot;</span>, <span class="dt">density.info =</span> <span class="st">&quot;none&quot;</span>,</a>
-<a class="sourceLine" id="cb32-6" title="6">        <span class="dt">lmat=</span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="dt">lwid=</span><span class="kw">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="dt">lhei =</span> <span class="kw">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>), </a>
-<a class="sourceLine" id="cb32-7" title="7">        <span class="dt">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="dt">key =</span> <span class="ot">TRUE</span>, <span class="dt">key.title =</span> <span class="ot">NA</span>) </a>
-<a class="sourceLine" id="cb32-8" title="8">)</a>
-<a class="sourceLine" id="cb32-9" title="9"><span class="kw">dev.off</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_heatmap_hov_01&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(X, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>, </span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>        <span class="at">Rowv=</span><span class="cn">NA</span>, <span class="at">Colv=</span><span class="cn">NA</span>, <span class="at">dendrogram =</span> <span class="st">&quot;none&quot;</span>, <span class="co"># just plot data, don&#39;t do clustering</span></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>), </span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>) </span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a>)</span>
+<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <p><img src="TraCE_decadal_heatmap_hov_01.png" /></p>
-<p>Notice the way the side bars work in illustrating the location and time of each data value.</p>
+<p>Notice the way the side bars work in illustrating the location and
+time of each data value.</p>
 </div>
-<div id="hovmoller-matrix-heatmap-decimated-decadal-data" class="section level3">
-<h3><span class="header-section-number">4.1.3</span> Hovmöller-matrix heatmap (decimated decadal data)</h3>
+<div id="hovmöller-matrix-heatmap-decimated-decadal-data"
+class="section level3" number="4.1.3">
+<h3><span class="header-section-number">4.1.3</span> Hovmöller-matrix
+heatmap (decimated decadal data)</h3>
 <p>Now here’s the heatmap:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">png_file &lt;-<span class="st"> </span><span class="kw">paste</span>(file_label, <span class="st">&quot;_heatmap_01&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb33-2" title="2"><span class="kw">png</span>(png_file, <span class="dt">width=</span><span class="dv">960</span>, <span class="dt">height=</span><span class="dv">960</span>)</a>
-<a class="sourceLine" id="cb33-3" title="3"><span class="kw">system.time</span>( X_heatmap &lt;-<span class="st"> </span><span class="kw">heatmap.2</span>(X, <span class="dt">cexRow =</span> <span class="fl">0.8</span>, <span class="dt">cexCol =</span> <span class="fl">0.8</span>, <span class="dt">scale=</span><span class="st">&quot;none&quot;</span>, </a>
-<a class="sourceLine" id="cb33-4" title="4">        <span class="dt">RowSideColors=</span>rcol, <span class="dt">ColSideColors=</span>ccol, <span class="dt">col=</span>zcol, <span class="dt">breaks=</span>breaks, <span class="dt">trace=</span><span class="st">&quot;none&quot;</span>, <span class="dt">density.info =</span> <span class="st">&quot;none&quot;</span>,</a>
-<a class="sourceLine" id="cb33-5" title="5">        <span class="dt">lmat=</span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="dt">lwid=</span><span class="kw">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="dt">lhei =</span> <span class="kw">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>), </a>
-<a class="sourceLine" id="cb33-6" title="6">        <span class="dt">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="dt">key =</span> <span class="ot">TRUE</span>, <span class="dt">key.title =</span> <span class="ot">NA</span>) </a>
-<a class="sourceLine" id="cb33-7" title="7">)</a>
-<a class="sourceLine" id="cb33-8" title="8"><span class="kw">dev.off</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_heatmap_01&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(X, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>, </span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>), </span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>) </span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>)</span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <p><img src="TraCE_decadal_heatmap_01.png" /></p>
-<p>The heatmap has rearranged the data according to the cluster analyses of the observations and variables, placing more similar data points next to one another. Notice how the side bars allow one to figure out the location and time of individual points. Here, and not surprisingly, there appear to be four distinct time-space clusters (or “regimes”) in the data): glacial vs. interglacial (Holocene) and high latitudes (in both hemispheres) vs. low latitudes.</p>
+<p>The heatmap has rearranged the data according to the cluster analyses
+of the observations and variables, placing more similar data points next
+to one another. Notice how the side bars allow one to figure out the
+location and time of individual points. Here, and not surprisingly,
+there appear to be four distinct time-space clusters (or “regimes”) in
+the data): glacial vs. interglacial (Holocene) and high latitudes (in
+both hemispheres) vs. low latitudes.</p>
 </div>
 </div>
-<div id="a-second-example-with-decadal-data" class="section level2">
-<h2><span class="header-section-number">4.2</span> A second example with decadal data</h2>
-<p>A second example is given using the decadal data directly. Here, there are too many points to make the dendrograms interpretable in any way, and so they are suppressed.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1"><span class="co"># generate colors for horizontal side bar</span></a>
-<a class="sourceLine" id="cb34-2" title="2">ccol &lt;-<span class="st"> </span><span class="kw">colorRampPalette</span>(<span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Purples&quot;</span>))(ncols)</a></code></pre></div>
-<div id="hovmoller-matrix-plot" class="section level3">
-<h3><span class="header-section-number">4.2.1</span> Hovmöller-matrix plot</h3>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">png_file &lt;-<span class="st"> </span><span class="kw">paste</span>(file_label, <span class="st">&quot;_heatmap_hov_01&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb35-2" title="2"><span class="kw">png</span>(png_file, <span class="dt">width=</span><span class="dv">960</span>, <span class="dt">height=</span><span class="dv">960</span>)</a>
-<a class="sourceLine" id="cb35-3" title="3"><span class="kw">system.time</span>( X_heatmap &lt;-<span class="st"> </span><span class="kw">heatmap.2</span>(X, <span class="dt">cexRow =</span> <span class="fl">0.8</span>, <span class="dt">cexCol =</span> <span class="fl">0.8</span>, <span class="dt">scale=</span><span class="st">&quot;none&quot;</span>, <span class="dt">Rowv=</span><span class="ot">NA</span>, <span class="dt">Colv=</span><span class="ot">NA</span>, <span class="dt">dendrogram =</span> <span class="st">&quot;none&quot;</span>,</a>
-<a class="sourceLine" id="cb35-4" title="4">        <span class="dt">RowSideColors=</span>rcol, <span class="dt">ColSideColors=</span>ccol, <span class="dt">col=</span>zcol, <span class="dt">breaks=</span>breaks, <span class="dt">trace=</span><span class="st">&quot;none&quot;</span>, <span class="dt">density.info =</span> <span class="st">&quot;none&quot;</span>,</a>
-<a class="sourceLine" id="cb35-5" title="5">        <span class="dt">lmat=</span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="dt">lwid=</span><span class="kw">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="dt">lhei =</span> <span class="kw">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>), </a>
-<a class="sourceLine" id="cb35-6" title="6">        <span class="dt">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="dt">key =</span> <span class="ot">TRUE</span>, <span class="dt">key.title =</span> <span class="ot">NA</span>) </a>
-<a class="sourceLine" id="cb35-7" title="7">)</a>
-<a class="sourceLine" id="cb35-8" title="8"><span class="kw">dev.off</span>()</a></code></pre></div>
+<div id="a-second-example-with-decadal-data" class="section level2"
+number="4.2">
+<h2><span class="header-section-number">4.2</span> A second example with
+decadal data</h2>
+<p>A second example is given using the decadal data directly. Here,
+there are too many points to make the dendrograms interpretable in any
+way, and so they are suppressed.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co"># generate colors for horizontal side bar</span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>ccol <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Purples&quot;</span>))(ncols)</span></code></pre></div>
+<div id="hovmöller-matrix-plot" class="section level3" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Hovmöller-matrix
+plot</h3>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_heatmap_hov_01&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(X, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>, <span class="at">Rowv=</span><span class="cn">NA</span>, <span class="at">Colv=</span><span class="cn">NA</span>, <span class="at">dendrogram =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>), </span>
+<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>) </span>
+<span id="cb28-7"><a href="#cb28-7" tabindex="-1"></a>)</span>
+<span id="cb28-8"><a href="#cb28-8" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <p><img src="TraCE_decadal_heatmap_hov_02.png" /></p>
 </div>
-<div id="hovmoller-matrix-heatmap" class="section level3">
-<h3><span class="header-section-number">4.2.2</span> Hovmöller-matrix heatmap</h3>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1">png_file &lt;-<span class="st"> </span><span class="kw">paste</span>(file_label, <span class="st">&quot;_heatmap_01&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb36-2" title="2"><span class="kw">png</span>(png_file, <span class="dt">width=</span><span class="dv">960</span>, <span class="dt">height=</span><span class="dv">960</span>)</a>
-<a class="sourceLine" id="cb36-3" title="3"><span class="kw">system.time</span>( X_heatmap &lt;-<span class="st"> </span><span class="kw">heatmap.2</span>(X, <span class="dt">cexRow =</span> <span class="fl">0.8</span>, <span class="dt">cexCol =</span> <span class="fl">0.8</span>, <span class="dt">scale=</span><span class="st">&quot;none&quot;</span>, <span class="co"># Rowv=NA, Colv=NA, dendrogram = &quot;none&quot;,</span></a>
-<a class="sourceLine" id="cb36-4" title="4">        <span class="dt">RowSideColors=</span>rcol, <span class="dt">ColSideColors=</span>ccol, <span class="dt">col=</span>zcol, <span class="dt">breaks=</span>breaks, <span class="dt">trace=</span><span class="st">&quot;none&quot;</span>, <span class="dt">density.info =</span> <span class="st">&quot;none&quot;</span>,</a>
-<a class="sourceLine" id="cb36-5" title="5">        <span class="dt">lmat=</span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="dt">lwid=</span><span class="kw">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="dt">lhei =</span> <span class="kw">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>), </a>
-<a class="sourceLine" id="cb36-6" title="6">        <span class="dt">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="dt">key =</span> <span class="ot">TRUE</span>, <span class="dt">key.title =</span> <span class="ot">NA</span>) </a>
-<a class="sourceLine" id="cb36-7" title="7">)</a>
-<a class="sourceLine" id="cb36-8" title="8"><span class="kw">dev.off</span>()</a></code></pre></div>
+<div id="hovmöller-matrix-heatmap" class="section level3"
+number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> Hovmöller-matrix
+heatmap</h3>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_heatmap_01&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(X, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>, <span class="co"># Rowv=NA, Colv=NA, dendrogram = &quot;none&quot;,</span></span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>), </span>
+<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>) </span>
+<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a>)</span>
+<span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <p><img src="TraCE_decadal_heatmap_02.png" /></p>
 </div>
 </div>
-<div id="full-grid-example" class="section level2">
-<h2><span class="header-section-number">4.3</span> Full-grid example</h2>
-<p>Finally, a heatmap of the gridded data (as opposed to the Hovmöller matrix data) can be obtained</p>
-<div id="set-up-1" class="section level3">
+<div id="full-grid-example" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Full-grid
+example</h2>
+<p>Finally, a heatmap of the gridded data (as opposed to the Hovmöller
+matrix data) can be obtained</p>
+<div id="set-up-1" class="section level3" number="4.3.1">
 <h3><span class="header-section-number">4.3.1</span> Set up</h3>
-<p>There are several set up steps necessary. Reshape the array, and generate row and column names:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="co"># reshape the 3-d array</span></a>
-<a class="sourceLine" id="cb37-2" title="2">var_vec_long &lt;-<span class="st"> </span><span class="kw">as.vector</span>(var_array)</a>
-<a class="sourceLine" id="cb37-3" title="3"><span class="kw">length</span>(var_vec_long)</a>
-<a class="sourceLine" id="cb37-4" title="4">X &lt;-<span class="st"> </span><span class="kw">matrix</span>(var_vec_long, <span class="dt">nrow =</span> nlon <span class="op">*</span><span class="st"> </span>nlat, <span class="dt">ncol =</span> nt) <span class="co"># Don&#39;t transform as usual..</span></a>
-<a class="sourceLine" id="cb37-5" title="5"><span class="kw">dim</span>(X)</a>
-<a class="sourceLine" id="cb37-6" title="6">ncols &lt;-<span class="st"> </span><span class="kw">dim</span>(x)[<span class="dv">3</span>]</a></code></pre></div>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="co"># generaate row and column names</span></a>
-<a class="sourceLine" id="cb38-2" title="2"><span class="kw">rownames</span>(X) &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;E&quot;</span>, <span class="kw">str_pad</span>(<span class="kw">sprintf</span>(<span class="st">&quot;%.2f&quot;</span>, <span class="kw">round</span>(grid<span class="op">$</span>lon, <span class="dv">2</span>)), <span class="dv">5</span>, <span class="dt">pad=</span><span class="st">&quot;0&quot;</span>),</a>
-<a class="sourceLine" id="cb38-3" title="3">  <span class="st">&quot;N&quot;</span>, <span class="kw">str_pad</span>(<span class="kw">sprintf</span>(<span class="st">&quot;%.2f&quot;</span>, <span class="kw">round</span>(grid<span class="op">$</span>lat, <span class="dv">2</span>)), <span class="dv">5</span>, <span class="dt">pad=</span><span class="st">&quot;0&quot;</span>), <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb38-4" title="4"><span class="kw">head</span>(<span class="kw">rownames</span>(X), <span class="dv">20</span>); <span class="kw">tail</span>(<span class="kw">rownames</span>(X), <span class="dv">20</span>); <span class="kw">length</span>(<span class="kw">rownames</span>(X))</a>
-<a class="sourceLine" id="cb38-5" title="5"></a>
-<a class="sourceLine" id="cb38-6" title="6"><span class="kw">colnames</span>(X) &lt;-<span class="st"> </span><span class="kw">str_pad</span>(<span class="kw">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, t), <span class="dv">5</span>, <span class="dt">pad=</span><span class="st">&quot;0&quot;</span>)</a>
-<a class="sourceLine" id="cb38-7" title="7"><span class="kw">head</span>(<span class="kw">colnames</span>(X)); <span class="kw">tail</span>(<span class="kw">colnames</span>(X)); <span class="kw">length</span>(<span class="kw">colnames</span>(X))</a></code></pre></div>
+<p>There are several set up steps necessary. Reshape the array, and
+generate row and column names:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># reshape the 3-d array</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>var_vec_long <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(var_array)</span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a><span class="fu">length</span>(var_vec_long)</span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(var_vec_long, <span class="at">nrow =</span> nlon <span class="sc">*</span> nlat, <span class="at">ncol =</span> nt) <span class="co"># Don&#39;t transform as usual..</span></span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="fu">dim</span>(X)</span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a>ncols <span class="ot">&lt;-</span> <span class="fu">dim</span>(x)[<span class="dv">3</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># generaate row and column names</span></span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="fu">rownames</span>(X) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;E&quot;</span>, <span class="fu">str_pad</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%.2f&quot;</span>, <span class="fu">round</span>(grid<span class="sc">$</span>lon, <span class="dv">2</span>)), <span class="dv">5</span>, <span class="at">pad=</span><span class="st">&quot;0&quot;</span>),</span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>  <span class="st">&quot;N&quot;</span>, <span class="fu">str_pad</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%.2f&quot;</span>, <span class="fu">round</span>(grid<span class="sc">$</span>lat, <span class="dv">2</span>)), <span class="dv">5</span>, <span class="at">pad=</span><span class="st">&quot;0&quot;</span>), <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rownames</span>(X), <span class="dv">20</span>); <span class="fu">tail</span>(<span class="fu">rownames</span>(X), <span class="dv">20</span>); <span class="fu">length</span>(<span class="fu">rownames</span>(X))</span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a></span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a><span class="fu">colnames</span>(X) <span class="ot">&lt;-</span> <span class="fu">str_pad</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, t), <span class="dv">5</span>, <span class="at">pad=</span><span class="st">&quot;0&quot;</span>)</span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">colnames</span>(X)); <span class="fu">tail</span>(<span class="fu">colnames</span>(X)); <span class="fu">length</span>(<span class="fu">colnames</span>(X))</span></code></pre></div>
 <p>Flip the data…</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1"><span class="co"># flip X</span></a>
-<a class="sourceLine" id="cb39-2" title="2">X &lt;-<span class="st"> </span>X[((nlon<span class="op">*</span>nlat)<span class="op">:</span><span class="dv">1</span>),]</a>
-<a class="sourceLine" id="cb39-3" title="3"><span class="kw">head</span>(<span class="kw">rownames</span>(X)); <span class="kw">tail</span>(<span class="kw">rownames</span>(X)); <span class="kw">length</span>(<span class="kw">rownames</span>(X))</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co"># flip X</span></span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a>X <span class="ot">&lt;-</span> X[((nlon<span class="sc">*</span>nlat)<span class="sc">:</span><span class="dv">1</span>),]</span>
+<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rownames</span>(X)); <span class="fu">tail</span>(<span class="fu">rownames</span>(X)); <span class="fu">length</span>(<span class="fu">rownames</span>(X))</span></code></pre></div>
 <p>… and generate colors:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1"><span class="co"># generate colors for vertical side bar</span></a>
-<a class="sourceLine" id="cb40-2" title="2">icol &lt;-<span class="st"> </span><span class="kw">colorRampPalette</span>(<span class="kw">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;PRGn&quot;</span>))(nlat)</a>
-<a class="sourceLine" id="cb40-3" title="3">idx &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="kw">rep</span>((<span class="dv">1</span><span class="op">:</span>nlat), nlon))</a>
-<a class="sourceLine" id="cb40-4" title="4">rcol &lt;-<span class="st"> </span>icol[idx]</a>
-<a class="sourceLine" id="cb40-5" title="5">ccol &lt;-<span class="st"> </span><span class="kw">colorRampPalette</span>(<span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Purples&quot;</span>))(nt)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># generate colors for vertical side bar</span></span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a>icol <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;PRGn&quot;</span>))(nlat)</span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a>idx <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">rep</span>((<span class="dv">1</span><span class="sc">:</span>nlat), nlon))</span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a>rcol <span class="ot">&lt;-</span> icol[idx]</span>
+<span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a>ccol <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Purples&quot;</span>))(nt)</span></code></pre></div>
 </div>
-<div id="matrix-plot" class="section level3">
+<div id="matrix-plot" class="section level3" number="4.3.2">
 <h3><span class="header-section-number">4.3.2</span> Matrix plot</h3>
 <p>Here’s a matrix plot of the data:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1">png_file &lt;-<span class="st"> </span><span class="kw">paste</span>(file_label, <span class="st">&quot;_heatmap_hov_03&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb41-2" title="2"><span class="kw">png</span>(png_file, <span class="dt">width=</span><span class="dv">960</span>, <span class="dt">height=</span><span class="dv">960</span>)</a>
-<a class="sourceLine" id="cb41-3" title="3"><span class="kw">system.time</span>( X_heatmap &lt;-<span class="st"> </span><span class="kw">heatmap.2</span>(X, <span class="dt">cexRow =</span> <span class="fl">0.8</span>, <span class="dt">cexCol =</span> <span class="fl">0.8</span>, <span class="dt">scale=</span><span class="st">&quot;none&quot;</span>, </a>
-<a class="sourceLine" id="cb41-4" title="4">        <span class="dt">Rowv=</span><span class="ot">NA</span>, <span class="dt">Colv=</span><span class="ot">NA</span>, <span class="dt">dendrogram =</span> <span class="st">&quot;none&quot;</span>,</a>
-<a class="sourceLine" id="cb41-5" title="5">        <span class="dt">RowSideColors=</span>rcol, <span class="dt">ColSideColors=</span>ccol, <span class="dt">col=</span>zcol, <span class="dt">breaks=</span>breaks, <span class="dt">trace=</span><span class="st">&quot;none&quot;</span>, <span class="dt">density.info =</span> <span class="st">&quot;none&quot;</span>,</a>
-<a class="sourceLine" id="cb41-6" title="6">        <span class="dt">lmat=</span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="dt">lwid=</span><span class="kw">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="dt">lhei =</span> <span class="kw">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>), </a>
-<a class="sourceLine" id="cb41-7" title="7">        <span class="dt">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Locations&quot;</span>, <span class="dt">key =</span> <span class="ot">TRUE</span>, <span class="dt">key.title =</span> <span class="ot">NA</span>, <span class="dt">labRow =</span> <span class="ot">FALSE</span>, <span class="dt">labCol =</span> <span class="ot">FALSE</span>) </a>
-<a class="sourceLine" id="cb41-8" title="8">)</a>
-<a class="sourceLine" id="cb41-9" title="9"><span class="kw">dev.off</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_heatmap_hov_03&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(X, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>, </span>
+<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a>        <span class="at">Rowv=</span><span class="cn">NA</span>, <span class="at">Colv=</span><span class="cn">NA</span>, <span class="at">dendrogram =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb34-6"><a href="#cb34-6" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>), </span>
+<span id="cb34-7"><a href="#cb34-7" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Locations&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>, <span class="at">labRow =</span> <span class="cn">FALSE</span>, <span class="at">labCol =</span> <span class="cn">FALSE</span>) </span>
+<span id="cb34-8"><a href="#cb34-8" tabindex="-1"></a>)</span>
+<span id="cb34-9"><a href="#cb34-9" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <pre><code>##    user  system elapsed 
 ## 1700.08   42.51 1744.53</code></pre>
 <p><img src="TraCE_decadal_heatmap_hov_03.png" /></p>
 </div>
-<div id="heatmap" class="section level3">
+<div id="heatmap" class="section level3" number="4.3.3">
 <h3><span class="header-section-number">4.3.3</span> Heatmap</h3>
 <p>Heatmap of the grid-point data</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1">png_file &lt;-<span class="st"> </span><span class="kw">paste</span>(file_label, <span class="st">&quot;_heatmap_03&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb43-2" title="2"><span class="kw">png</span>(png_file, <span class="dt">width=</span><span class="dv">960</span>, <span class="dt">height=</span><span class="dv">960</span>)</a>
-<a class="sourceLine" id="cb43-3" title="3"></a>
-<a class="sourceLine" id="cb43-4" title="4"><span class="kw">system.time</span>( X_heatmap &lt;-<span class="st"> </span><span class="kw">heatmap.2</span>(X, <span class="dt">cexRow =</span> <span class="fl">0.8</span>, <span class="dt">cexCol =</span> <span class="fl">0.8</span>, <span class="dt">scale=</span><span class="st">&quot;none&quot;</span>, <span class="dt">dendrogram =</span> <span class="st">&quot;none&quot;</span>,</a>
-<a class="sourceLine" id="cb43-5" title="5">        <span class="dt">RowSideColors=</span>rcol, <span class="dt">ColSideColors=</span>ccol, <span class="dt">col=</span>zcol, <span class="dt">breaks=</span>breaks, <span class="dt">trace=</span><span class="st">&quot;none&quot;</span>, <span class="dt">density.info =</span> <span class="st">&quot;none&quot;</span>,</a>
-<a class="sourceLine" id="cb43-6" title="6">        <span class="dt">lmat=</span><span class="kw">rbind</span>(<span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="dt">lwid=</span><span class="kw">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="dt">lhei =</span> <span class="kw">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>), </a>
-<a class="sourceLine" id="cb43-7" title="7">        <span class="dt">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;Locations&quot;</span>, <span class="dt">key =</span> <span class="ot">TRUE</span>, <span class="dt">key.title =</span> <span class="ot">NA</span>, <span class="dt">labRow =</span> <span class="ot">FALSE</span>, <span class="dt">labCol =</span> <span class="ot">FALSE</span>) </a>
-<a class="sourceLine" id="cb43-8" title="8">)</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_heatmap_03&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(X, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>, <span class="at">dendrogram =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb36-5"><a href="#cb36-5" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb36-6"><a href="#cb36-6" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>), </span>
+<span id="cb36-7"><a href="#cb36-7" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Locations&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>, <span class="at">labRow =</span> <span class="cn">FALSE</span>, <span class="at">labCol =</span> <span class="cn">FALSE</span>) </span>
+<span id="cb36-8"><a href="#cb36-8" tabindex="-1"></a>)</span></code></pre></div>
 <pre><code>##    user  system elapsed 
 ##  643.89   42.26  688.10 </code></pre>
 <p><img src="TraCE_decadal_heatmap_03.png" /></p>
@@ -891,7 +996,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -899,6 +1004,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

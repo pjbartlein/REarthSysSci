@@ -1,55 +1,50 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>File transfer</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 
-
-
-
 <style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
 
 <link rel="stylesheet" href="html-md-01.css" type="text/css" />
 
@@ -61,13 +56,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -81,40 +71,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -142,7 +108,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -154,7 +120,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -164,11 +130,28 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -180,13 +163,12 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -194,16 +176,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -216,6 +191,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -227,18 +203,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -258,7 +222,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -271,7 +235,7 @@ $(document).ready(function () {
   <a href="overview.html">Overview</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Topics
      
     <span class="caret"></span>
@@ -323,7 +287,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tasks
      
     <span class="caret"></span>
@@ -362,7 +326,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Resources
      
     <span class="caret"></span>
@@ -386,7 +350,7 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -396,15 +360,26 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#ftp-and-sftp">FTP and SFTP</a></li>
-<li><a href="#globus">Globus</a></li>
+<li><a href="#ftp-and-sftp" id="toc-ftp-and-sftp">FTP and SFTP</a></li>
+<li><a href="#globus" id="toc-globus">Globus</a></li>
 </ul>
 </div>
 
 <div id="ftp-and-sftp" class="section level2">
 <h2>FTP and SFTP</h2>
-<p>FTP (File Transfer Protocol) and SFTP (SSH File Transfer Protocol, also known as “Secure FTP”) are built into most operating systems, and can be run at the command line. However, it is much more convenient to use an FTP client to browse to and transfer data. The most ubiquitous cross-platform (Windows and MacOS) client is likely Filezilla, which can be downloaded from <a href="https://filezilla-project.org">[https://filezilla-project.org]</a> (download the Filezilla client). Filezilla features a dual-pane file browser that shows both the local and remote file systems.</p>
-<p>To configure Filezilla to transfer files from an FTP server with data files for GEOG 4/595, click on File &gt; Site manager (or click the Site Manager icon on he Filezilla toolbar), and then click on the New Site button.</p>
+<p>FTP (File Transfer Protocol) and SFTP (SSH File Transfer Protocol,
+also known as “Secure FTP”) are built into most operating systems, and
+can be run at the command line. However, it is much more convenient to
+use an FTP client to browse to and transfer data. The most ubiquitous
+cross-platform (Windows and MacOS) client is likely Filezilla, which can
+be downloaded from <a
+href="https://filezilla-project.org">[https://filezilla-project.org]</a>
+(download the Filezilla client). Filezilla features a dual-pane file
+browser that shows both the local and remote file systems.</p>
+<p>To configure Filezilla to transfer files from an FTP server with data
+files for GEOG 4/595, click on File &gt; Site manager (or click the Site
+Manager icon on he Filezilla toolbar), and then click on the New Site
+button.</p>
 <p>Fill in the Site Manager fields as follows</p>
 <ul>
 <li>New site name: <code>ESSData</code><br />
@@ -415,18 +390,37 @@ $(document).ready(function () {
 <li>User: <code>RESS</code></li>
 <li>Password: <displayed in class></li>
 </ul>
-<p>Then click on Connect, and you should see the remote (i.e. the FTP server) server’s file structure. Individual files can be dragged back and forth between the Local and Remote sites.</p>
+<p>Then click on Connect, and you should see the remote (i.e. the FTP
+server) server’s file structure. Individual files can be dragged back
+and forth between the Local and Remote sites.</p>
 </div>
 <div id="globus" class="section level2">
 <h2>Globus</h2>
-<p>Globus <a href="https://www.globus.org">[https://www.globus.org]</a> is a file-transfer system that runs in a browser. Globus transfers files between “Endpoints”— folders on individual machines. To transfer files from <code>ClimateLab.uoregon.edu</code> you will need to set up an account, and install Globus Connect Personal, and create an endpoint:</p>
+<p>Globus <a href="https://www.globus.org">[https://www.globus.org]</a>
+is a file-transfer system that runs in a browser. Globus transfers files
+between “Endpoints”— folders on individual machines. To transfer files
+from <code>ClimateLab.uoregon.edu</code> you will need to set up an
+account, and install Globus Connect Personal, and create an
+endpoint:</p>
 <ul>
-<li>Setting up an account is explained on the page <a href="https://docs.globus.org/how-to/get-started/">[How to Log In and Transfer Files with Globus]</a></li>
-<li>Installation of Globus Connect Personal and creation of an Endpoint: <a href="https://docs.globus.org/how-to/globus-connect-personal-mac/">[Mac]</a> <a href="https://docs.globus.org/how-to/globus-connect-personal-windows/">[Windows]</a></li>
+<li>Setting up an account is explained on the page <a
+href="https://docs.globus.org/how-to/get-started/">[How to Log In and
+Transfer Files with Globus]</a></li>
+<li>Installation of Globus Connect Personal and creation of an Endpoint:
+<a
+href="https://docs.globus.org/how-to/globus-connect-personal-mac/">[Mac]</a>
+<a
+href="https://docs.globus.org/how-to/globus-connect-personal-windows/">[Windows]</a></li>
 </ul>
-<p>Then to browse the files on the Globus Endpoint at ClimateLab.uoregon.edu, paste the following into the address bar in a browser:</p>
+<p>Then to browse the files on the Globus Endpoint at
+ClimateLab.uoregon.edu, paste the following into the address bar in a
+browser:</p>
 <p><code>https://app.globus.org/file-manager?origin_id=d74454ce-e6b4-11e7-80f5-0a208f818180&amp;origin_path=%2FESSData%2F</code></p>
-<p>This wiil open the endpoint on <code>ClimateLab.uoregon.edu</code>. Then, see Section 4 of <a href="https://docs.globus.org/how-to/get-started/">[How to Log In and Transfer Files with Globus]</a>, for instructions on how to transfer files.</p>
+<p>This wiil open the endpoint on <code>ClimateLab.uoregon.edu</code>.
+Then, see Section 4 of <a
+href="https://docs.globus.org/how-to/get-started/">[How to Log In and
+Transfer Files with Globus]</a>, for instructions on how to transfer
+files.</p>
 </div>
 
 
@@ -438,7 +432,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -446,6 +440,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

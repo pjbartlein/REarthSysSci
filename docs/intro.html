@@ -1,55 +1,50 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Introduction: R, RStudio and other infrastructure</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 
-
-
-
 <style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
 
 <link rel="stylesheet" href="html-md-01.css" type="text/css" />
 
@@ -61,13 +56,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -81,40 +71,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -142,7 +108,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -154,7 +120,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -164,11 +130,28 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -180,13 +163,12 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -194,16 +176,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -216,6 +191,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -227,18 +203,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -258,7 +222,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -271,7 +235,7 @@ $(document).ready(function () {
   <a href="overview.html">Overview</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Topics
      
     <span class="caret"></span>
@@ -323,7 +287,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tasks
      
     <span class="caret"></span>
@@ -362,7 +326,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Resources
      
     <span class="caret"></span>
@@ -386,99 +350,205 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore">Introduction: R, RStudio and other infrastructure</h1>
+<h1 class="title toc-ignore">Introduction: R, RStudio and other
+infrastructure</h1>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#r-and-rstudio"><span class="toc-section-number">1</span> R and RStudio</a><ul>
-<li><a href="#r-cran-and-bioconductor"><span class="toc-section-number">1.1</span> R, CRAN, and Bioconductor</a></li>
-<li><a href="#rstudio"><span class="toc-section-number">1.2</span> RStudio</a></li>
-<li><a href="#microsoft-r-open"><span class="toc-section-number">1.3</span> Microsoft R Open</a></li>
+<li><a href="#r-and-rstudio" id="toc-r-and-rstudio"><span
+class="toc-section-number">1</span> R and RStudio</a>
+<ul>
+<li><a href="#r-cran-and-bioconductor"
+id="toc-r-cran-and-bioconductor"><span
+class="toc-section-number">1.1</span> R, CRAN, and Bioconductor</a></li>
+<li><a href="#rstudio" id="toc-rstudio"><span
+class="toc-section-number">1.2</span> RStudio</a></li>
+<li><a href="#microsoft-r-open" id="toc-microsoft-r-open"><span
+class="toc-section-number">1.3</span> Microsoft R Open</a></li>
 </ul></li>
-<li><a href="#other-infrastructure-and-utilities"><span class="toc-section-number">2</span> Other infrastructure and utilities</a><ul>
-<li><a href="#git-and-github-version-control"><span class="toc-section-number">2.1</span> Git and GitHub (Version Control)</a></li>
-<li><a href="#markdown"><span class="toc-section-number">2.2</span> Markdown</a></li>
-<li><a href="#other-useful-utilities-and-apps"><span class="toc-section-number">2.3</span> Other useful utilities and apps</a><ul>
-<li><a href="#data-storage"><span class="toc-section-number">2.3.1</span> Data storage</a></li>
-<li><a href="#data-viewing"><span class="toc-section-number">2.3.2</span> Data viewing</a></li>
-<li><a href="#file-transfer"><span class="toc-section-number">2.3.3</span> File transfer</a></li>
-<li><a href="#text-editors"><span class="toc-section-number">2.3.4</span> Text editors</a></li>
+<li><a href="#other-infrastructure-and-utilities"
+id="toc-other-infrastructure-and-utilities"><span
+class="toc-section-number">2</span> Other infrastructure and
+utilities</a>
+<ul>
+<li><a href="#git-and-github-version-control"
+id="toc-git-and-github-version-control"><span
+class="toc-section-number">2.1</span> Git and GitHub (Version
+Control)</a></li>
+<li><a href="#markdown" id="toc-markdown"><span
+class="toc-section-number">2.2</span> Markdown</a></li>
+<li><a href="#other-useful-utilities-and-apps"
+id="toc-other-useful-utilities-and-apps"><span
+class="toc-section-number">2.3</span> Other useful utilities and
+apps</a>
+<ul>
+<li><a href="#data-storage" id="toc-data-storage"><span
+class="toc-section-number">2.3.1</span> Data storage</a></li>
+<li><a href="#data-viewing" id="toc-data-viewing"><span
+class="toc-section-number">2.3.2</span> Data viewing</a></li>
+<li><a href="#file-transfer" id="toc-file-transfer"><span
+class="toc-section-number">2.3.3</span> File transfer</a></li>
+<li><a href="#text-editors" id="toc-text-editors"><span
+class="toc-section-number">2.3.4</span> Text editors</a></li>
 </ul></li>
 </ul></li>
 </ul>
 </div>
 
-<div id="r-and-rstudio" class="section level1">
+<div id="r-and-rstudio" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> R and RStudio</h1>
-<p>Before doing actual analyses of Earth-system science-type data using R, there is a bit of set-up and infrastructure installation to do. Although the list may seem daunting at first, the installations are quite straightforward.</p>
-<div id="r-cran-and-bioconductor" class="section level2">
-<h2><span class="header-section-number">1.1</span> R, CRAN, and Bioconductor</h2>
-<p>The “R Project” (or simply “R”) grew out of the development of the S language for data analysis and statistics at Bell Laboratories in the 1980s (and can be said to be an open-source version of S). R for different operating systems can be downloaded from “CRAN” (Comprehensive R Archive Network) site listed below. The basic installation of R is supplemented by a large number of packages (or libraries) that are also obtainable from CRAN or from Bioconductor, the latter being a collection of packages oriented to the analysis of life-science data.</p>
+<p>Before doing actual analyses of Earth-system science-type data using
+R, there is a bit of set-up and infrastructure installation to do.
+Although the list may seem daunting at first, the installations are
+quite straightforward.</p>
+<div id="r-cran-and-bioconductor" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> R, CRAN, and
+Bioconductor</h2>
+<p>The “R Project” (or simply “R”) grew out of the development of the S
+language for data analysis and statistics at Bell Laboratories in the
+1980s (and can be said to be an open-source version of S). R for
+different operating systems can be downloaded from “CRAN” (Comprehensive
+R Archive Network) site listed below. The basic installation of R is
+supplemented by a large number of packages (or libraries) that are also
+obtainable from CRAN or from Bioconductor, the latter being a collection
+of packages oriented to the analysis of life-science data.</p>
 <ul>
-<li>R Project webpage: <a href="https://www.r-project.org/" class="uri">https://www.r-project.org/</a><br />
+<li>R Project webpage: <a href="https://www.r-project.org/"
+class="uri">https://www.r-project.org/</a><br />
 </li>
-<li>CRAN: <a href="http://cran.us.r-project.org/index.html" class="uri">http://cran.us.r-project.org/index.html</a> (download R and CRAN packages)</li>
-<li>Bioconductor: <a href="http://bioconductor.org/" class="uri">http://bioconductor.org/</a> (download Bioconductor packages)</li>
+<li>CRAN: <a href="http://cran.us.r-project.org/index.html"
+class="uri">http://cran.us.r-project.org/index.html</a> (download R and
+CRAN packages)</li>
+<li>Bioconductor: <a href="http://bioconductor.org/"
+class="uri">http://bioconductor.org/</a> (download Bioconductor
+packages)</li>
 </ul>
 <p>The current version of R is 3.5.3 (22 March 2019).</p>
-<p>Here are a few links to some GEOG 4/595 materials on R (note that the installation directions may pertain to a previous version):</p>
+<p>Here are a few links to some GEOG 4/595 materials on R (note that the
+installation directions may pertain to a previous version):</p>
 <ul>
-<li>GEOG 4/595 (Geographic Data Analysis): <a href="https://pjbartlein.github.io/GeogDataAnalysis/index.html">https://pjbartlein.github.io/GeogDataAnalysis/index.html</a></li>
-<li>Getting and using R: <a href="https://pjbartlein.github.io/GeogDataAnalysis/ex01.html">https://pjbartlein.github.io/GeogDataAnalysis/ex01.html</a></li>
-<li>Installing packages: <a href="https://pjbartlein.github.io/GeogDataAnalysis/packages-and-data.html">https://pjbartlein.github.io/GeogDataAnalysis/packages-and-data.html</a></li>
+<li>GEOG 4/595 (Geographic Data Analysis): <a
+href="https://pjbartlein.github.io/GeogDataAnalysis/index.html">https://pjbartlein.github.io/GeogDataAnalysis/index.html</a></li>
+<li>Getting and using R: <a
+href="https://pjbartlein.github.io/GeogDataAnalysis/ex01.html">https://pjbartlein.github.io/GeogDataAnalysis/ex01.html</a></li>
+<li>Installing packages: <a
+href="https://pjbartlein.github.io/GeogDataAnalysis/packages-and-data.html">https://pjbartlein.github.io/GeogDataAnalysis/packages-and-data.html</a></li>
 </ul>
 </div>
-<div id="rstudio" class="section level2">
+<div id="rstudio" class="section level2" number="1.2">
 <h2><span class="header-section-number">1.2</span> RStudio</h2>
-<p>RStudio is a development environment for R that is much more powerful than the “built-in” Windows or Mac graphical user interfaces (GUIs), and additionally nicely supports the development of “R Markdown” documents that combine text, code and R output.</p>
+<p>RStudio is a development environment for R that is much more powerful
+than the “built-in” Windows or Mac graphical user interfaces (GUIs), and
+additionally nicely supports the development of “R Markdown” documents
+that combine text, code and R output.</p>
 <ul>
-<li>RStudio: <a href="https://www.rstudio.com/">https://www.rstudio.com/</a></li>
-<li>RStudio blog: <a href="https://blog.rstudio.org/">https://blog.rstudio.org/</a></li>
-<li>R Markdown: <a href="http://rmarkdown.rstudio.com/index.html">http://rmarkdown.rstudio.com/index.html</a></li>
+<li>RStudio: <a
+href="https://www.rstudio.com/">https://www.rstudio.com/</a></li>
+<li>RStudio blog: <a
+href="https://blog.rstudio.org/">https://blog.rstudio.org/</a></li>
+<li>R Markdown: <a
+href="http://rmarkdown.rstudio.com/index.html">http://rmarkdown.rstudio.com/index.html</a></li>
 </ul>
-<p>Note: See <strong>Install R and RStudio</strong> under the Tasks tab for an exercise that describes the installation of R and RStudio. <strong>Install packages and data</strong> under the Tasks tab describes how to install packages individually and en masse, as well as how to the workspace used for exercises in GEOG 4/595.</p>
+<p>Note: See <strong>Install R and RStudio</strong> under the Tasks tab
+for an exercise that describes the installation of R and RStudio.
+<strong>Install packages and data</strong> under the Tasks tab describes
+how to install packages individually and en masse, as well as how to the
+workspace used for exercises in GEOG 4/595.</p>
 </div>
-<div id="microsoft-r-open" class="section level2">
+<div id="microsoft-r-open" class="section level2" number="1.3">
 <h2><span class="header-section-number">1.3</span> Microsoft R Open</h2>
-<p>Microsoft sponsors something called the Microsoft R Application Network (MRAN), which is a collection of tools and resources that includes a specialized build of R known as Microsoft R Open (which was formerly knows as Revolution Analytics R). The version has been compiled to use the highly optimized Intel Math Kernel Library (MKL), which can greatly speed up some of the calculations involved in analyzing big data sets. In addition, to support reproducible research, MRAN supports “snapshots” of the CRAN packages that can be used by the <code>checkpoint()</code> function to use a fixed (i.e. not randomly updated) set of packages.</p>
+<p>Microsoft sponsors something called the Microsoft R Application
+Network (MRAN), which is a collection of tools and resources that
+includes a specialized build of R known as Microsoft R Open (which was
+formerly knows as Revolution Analytics R). The version has been compiled
+to use the highly optimized Intel Math Kernel Library (MKL), which can
+greatly speed up some of the calculations involved in analyzing big data
+sets. In addition, to support reproducible research, MRAN supports
+“snapshots” of the CRAN packages that can be used by the
+<code>checkpoint()</code> function to use a fixed (i.e. not randomly
+updated) set of packages.</p>
 <ul>
-<li>MRAN: <a href="https://mran.microsoft.com/">https://mran.microsoft.com/</a></li>
-<li>Microsoft R Open: <a href="https://mran.microsoft.com/download/">https://mran.microsoft.com/download/</a></li>
-<li>Installation notes: <a href="https://mran.microsoft.com/documents/rro/installation">https://mran.microsoft.com/documents/rro/installation</a></li>
+<li>MRAN: <a
+href="https://mran.microsoft.com/">https://mran.microsoft.com/</a></li>
+<li>Microsoft R Open: <a
+href="https://mran.microsoft.com/download/">https://mran.microsoft.com/download/</a></li>
+<li>Installation notes: <a
+href="https://mran.microsoft.com/documents/rro/installation">https://mran.microsoft.com/documents/rro/installation</a></li>
 </ul>
-<p>NOTE: It will likely not be necessary to use MRO for the course project, but the information is here for completeness.</p>
+<p>NOTE: It will likely not be necessary to use MRO for the course
+project, but the information is here for completeness.</p>
 </div>
 </div>
-<div id="other-infrastructure-and-utilities" class="section level1">
-<h1><span class="header-section-number">2</span> Other infrastructure and utilities</h1>
-<div id="git-and-github-version-control" class="section level2">
-<h2><span class="header-section-number">2.1</span> Git and GitHub (Version Control)</h2>
-<p>“Git” is an open-source version-control system, that allows one to track (and backup) the development of software by building a “local repository” of current and previous versions of code, data, markdown files, etc. on one’s machine, while “GitHub” is a website that hosts “remote repositories”, allowing them to be saved, reached (or restored) from any machine (using Git), which greatly facilitates collaboration.</p>
+<div id="other-infrastructure-and-utilities" class="section level1"
+number="2">
+<h1><span class="header-section-number">2</span> Other infrastructure
+and utilities</h1>
+<div id="git-and-github-version-control" class="section level2"
+number="2.1">
+<h2><span class="header-section-number">2.1</span> Git and GitHub
+(Version Control)</h2>
+<p>“Git” is an open-source version-control system, that allows one to
+track (and backup) the development of software by building a “local
+repository” of current and previous versions of code, data, markdown
+files, etc. on one’s machine, while “GitHub” is a website that hosts
+“remote repositories”, allowing them to be saved, reached (or restored)
+from any machine (using Git), which greatly facilitates
+collaboration.</p>
 <ul>
 <li>GitHub: <a href="https://github.com">https://github.com</a></li>
 </ul>
-<p>The key resources for setting up and using Git and GitHub with RStudio is a bookdown web page by Jenny Bryan and others at <a href="https://happygitwithr.com/index.html">https://happygitwithr.com/index.html</a>. See the Tasks tab above for directions for installing Git and establishing an account on GitHub.</p>
-<p>It is becoming standard practice that any specialized software used in writing a journal article be made available via a repository like GitHub, and to be searchable via a DOI—a “digital object identifier”— all in aid of fostering “reproducible research”. For example, for a paper currently under review in the journal <em>Geoscientific Model Development</em> we developed a number of Fortran programs and data sets that reside in a GitHub repository, and then added that repository to the list of those cataloged by an operation called Zenodo, which provides a “permanent” DOI.</p>
+<p>The key resources for setting up and using Git and GitHub with
+RStudio is a bookdown web page by Jenny Bryan and others at <a
+href="https://happygitwithr.com/index.html">https://happygitwithr.com/index.html</a>.
+See the Tasks tab above for directions for installing Git and
+establishing an account on GitHub.</p>
+<p>It is becoming standard practice that any specialized software used
+in writing a journal article be made available via a repository like
+GitHub, and to be searchable via a DOI—a “digital object identifier”—
+all in aid of fostering “reproducible research”. For example, for a
+paper currently under review in the journal <em>Geoscientific Model
+Development</em> we developed a number of Fortran programs and data sets
+that reside in a GitHub repository, and then added that repository to
+the list of those cataloged by an operation called Zenodo, which
+provides a “permanent” DOI.</p>
 <ul>
-<li>GitHub repository: <a href="https://github.com/pjbartlein/PaleoCalAdjust">https://github.com/pjbartlein/PaleoCalAdjust</a></li>
-<li>Zenodo-issued DOI: <a href="https://doi.org/10.5281/zenodo.1478824">https://doi.org/10.5281/zenodo.1478824</a></li>
+<li>GitHub repository: <a
+href="https://github.com/pjbartlein/PaleoCalAdjust">https://github.com/pjbartlein/PaleoCalAdjust</a></li>
+<li>Zenodo-issued DOI: <a
+href="https://doi.org/10.5281/zenodo.1478824">https://doi.org/10.5281/zenodo.1478824</a></li>
 </ul>
 <p>Here’s the GitHub repository for the course web page:</p>
 <ul>
-<li><a href="https://github.com/pjbartlein/REarthSysSci">https://github.com/pjbartlein/REarthSysSci</a></li>
+<li><a
+href="https://github.com/pjbartlein/REarthSysSci">https://github.com/pjbartlein/REarthSysSci</a></li>
 </ul>
-<p>Note: See <strong>Git and GitHub</strong> under the Tasks tab for instructions on getting a GitHub account and setting up a Git repository.</p>
+<p>Note: See <strong>Git and GitHub</strong> under the Tasks tab for
+instructions on getting a GitHub account and setting up a Git
+repository.</p>
 </div>
-<div id="markdown" class="section level2">
+<div id="markdown" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Markdown</h2>
-<p>This document is written in Markdown, which is a “lightweight” markup language (like HTML), that used a relatively simple syntax, and facilitates the transformation of human-readible text files into .html or .pdf documents. RMarkdown is a an R package, and a set of tools that are deeply embedded in RStudio that facilitates the construction of documents that combine text, R code and the output from the execution of that code, and that range in complexity from a single .html or .pdf file, to multi-page web sites, to books.</p>
-<p>RMarkdown thereby facilitates the concepts of “literate programming” <a href="https://en.wikipedia.org/wiki/Literate_programming">link</a>, and “reproducible research” <a href="https://en.wikipedia.org/wiki/Reproducibility">link</a>, which, in addition to explaining or documenting itself, also allows others (including an original investigator after some time has passed) to reproduce a data analysis or other research result.</p>
+<p>This document is written in Markdown, which is a “lightweight” markup
+language (like HTML), that used a relatively simple syntax, and
+facilitates the transformation of human-readible text files into .html
+or .pdf documents. RMarkdown is a an R package, and a set of tools that
+are deeply embedded in RStudio that facilitates the construction of
+documents that combine text, R code and the output from the execution of
+that code, and that range in complexity from a single .html or .pdf
+file, to multi-page web sites, to books.</p>
+<p>RMarkdown thereby facilitates the concepts of “literate programming”
+<a href="https://en.wikipedia.org/wiki/Literate_programming">link</a>,
+and “reproducible research” <a
+href="https://en.wikipedia.org/wiki/Reproducibility">link</a>, which, in
+addition to explaining or documenting itself, also allows others
+(including an original investigator after some time has passed) to
+reproduce a data analysis or other research result.</p>
 <p>Here is a simple Markdown (<code>.md</code>) file:</p>
 <pre><code># Introduction #
 
@@ -520,46 +590,91 @@ Here is a little code (and note the different font):
 <p>
 <code>plot(orstationc$elev, orstationc$tann)</code>
 </p>
-and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</strong>.
+and some more text, possibly <em>decorated</em> or <strong>otherwise
+formatted</strong>.
 <hr>
-<p>Although the syntax of Markdown is relatively simple, complex documents can be generated using conversion tools like Pandoc.</p>
-<p>See the <strong>Markdown &amp; RMarkdown</strong> task for some basic information and resources on Markdown and RMarkdown</p>
+<p>Although the syntax of Markdown is relatively simple, complex
+documents can be generated using conversion tools like Pandoc.</p>
+<p>See the <strong>Markdown &amp; RMarkdown</strong> task for some basic
+information and resources on Markdown and RMarkdown</p>
 </div>
-<div id="other-useful-utilities-and-apps" class="section level2">
-<h2><span class="header-section-number">2.3</span> Other useful utilities and apps</h2>
-<div id="data-storage" class="section level3">
+<div id="other-useful-utilities-and-apps" class="section level2"
+number="2.3">
+<h2><span class="header-section-number">2.3</span> Other useful
+utilities and apps</h2>
+<div id="data-storage" class="section level3" number="2.3.1">
 <h3><span class="header-section-number">2.3.1</span> Data storage</h3>
-<p>There are two related formats for storing and distributing Earth-system science data that are in widespread use:</p>
+<p>There are two related formats for storing and distributing
+Earth-system science data that are in widespread use:</p>
 <ul>
-<li>HDF5 (and the older HDF4 format and variants) <em><a href="https://www.hdfgroup.org/solutions/hdf5/">(The HDF Group)</a></em>, and</li>
-<li>netCDF <em><a href="https://www.unidata.ucar.edu/software/netcdf/">(UCAR UNIDATA)</a></em></li>
+<li>HDF5 (and the older HDF4 format and variants) <em><a
+href="https://www.hdfgroup.org/solutions/hdf5/">(The HDF
+Group)</a></em>, and</li>
+<li>netCDF <em><a
+href="https://www.unidata.ucar.edu/software/netcdf/">(UCAR
+UNIDATA)</a></em></li>
 </ul>
-<p>The two formats are actually related, in that netCDF uses the internal HDF format for storage. Both formats are self-documenting (i.e. they contain attributes or metadata that describe the contents of a particular file) and are machine independent. Each has an associated set of command-line utilities that can be used to rapidly learn what a particular file contains.</p>
-<p>See the <strong>Install netCDF</strong> task for directions on installing netCDF and related utilities.</p>
+<p>The two formats are actually related, in that netCDF uses the
+internal HDF format for storage. Both formats are self-documenting
+(i.e. they contain attributes or metadata that describe the contents of
+a particular file) and are machine independent. Each has an associated
+set of command-line utilities that can be used to rapidly learn what a
+particular file contains.</p>
+<p>See the <strong>Install netCDF</strong> task for directions on
+installing netCDF and related utilities.</p>
 </div>
-<div id="data-viewing" class="section level3">
+<div id="data-viewing" class="section level3" number="2.3.2">
 <h3><span class="header-section-number">2.3.2</span> Data viewing</h3>
-<p>Panoply is a data viewer that can open and display netCDF, HDF, and related files, and is great for inspecting the contents of a file. It is downloadable from <a href="https://www.giss.nasa.gov/tools/panoply/">[NASA Goddard Institude for Space Studies]</a></p>
-<p>It is, of course, possible to open and view netCDF and HDF files in R, but Panoply is much faster.</p>
-<p>See the <strong>Install Panoply</strong> task for installation directions.</p>
+<p>Panoply is a data viewer that can open and display netCDF, HDF, and
+related files, and is great for inspecting the contents of a file. It is
+downloadable from <a
+href="https://www.giss.nasa.gov/tools/panoply/">[NASA Goddard Institude
+for Space Studies]</a></p>
+<p>It is, of course, possible to open and view netCDF and HDF files in
+R, but Panoply is much faster.</p>
+<p>See the <strong>Install Panoply</strong> task for installation
+directions.</p>
 </div>
-<div id="file-transfer" class="section level3">
+<div id="file-transfer" class="section level3" number="2.3.3">
 <h3><span class="header-section-number">2.3.3</span> File transfer</h3>
-<p>Earth-system science data sets are typically large, multiple gigabytes (GB) in size each, with collections of variables ranging to multiple terabytes (TB). For example, individual variables in the “TraCE-21ka” transient paleoclimmte simulation data set (which contains monthly data from 22,000 to the late 20th Century) are 4.6 GB each, and collection of about 40 variables is around 3 TB. Data sets of this size are too large to conveniently download from web pages, particularly because some user interaction is required, and the individual files take a while to download.</p>
+<p>Earth-system science data sets are typically large, multiple
+gigabytes (GB) in size each, with collections of variables ranging to
+multiple terabytes (TB). For example, individual variables in the
+“TraCE-21ka” transient paleoclimmte simulation data set (which contains
+monthly data from 22,000 to the late 20th Century) are 4.6 GB each, and
+collection of about 40 variables is around 3 TB. Data sets of this size
+are too large to conveniently download from web pages, particularly
+because some user interaction is required, and the individual files take
+a while to download.</p>
 <p>There are two main approaches for the batch transfer of files:</p>
 <ul>
-<li>FTP and SFTP (File Transfer Protocol and SSH File Transfer Protocol), which is built into may operating systems, but is conveniently used with a client application (such as Filezilla)</li>
+<li>FTP and SFTP (File Transfer Protocol and SSH File Transfer
+Protocol), which is built into may operating systems, but is
+conveniently used with a client application (such as Filezilla)</li>
 <li>Globus, a browser-based file-transfer client.</li>
 </ul>
-<p>See the <strong>File transfer</strong> task for information on installing and using Filezilla and Globus.</p>
+<p>See the <strong>File transfer</strong> task for information on
+installing and using Filezilla and Globus.</p>
 </div>
-<div id="text-editors" class="section level3">
+<div id="text-editors" class="section level3" number="2.3.4">
 <h3><span class="header-section-number">2.3.4</span> Text editors</h3>
-<p>It’s often necessary to simply view, or to edit, text files. This can be in RStudio, or Word, but for a file of any size, this ranges from cumbersome to impossible. There are dozens of text editors, and adoption of one or another often winds up being a highly personal decision—a text editor either seems intuitive, or it doesn’t. A reasonable thing to do when adopting a text editor is to choose a cross-platform one, which can greatly facilitates moving from machine to machine. Three candidates, that behave somewhat similarly and include dozens of “packages” are:</p>
+<p>It’s often necessary to simply view, or to edit, text files. This can
+be in RStudio, or Word, but for a file of any size, this ranges from
+cumbersome to impossible. There are dozens of text editors, and adoption
+of one or another often winds up being a highly personal decision—a text
+editor either seems intuitive, or it doesn’t. A reasonable thing to do
+when adopting a text editor is to choose a cross-platform one, which can
+greatly facilitates moving from machine to machine. Three candidates,
+that behave somewhat similarly and include dozens of “packages” are:</p>
 <ul>
-<li>Sublime Text <a href="https://www.sublimehq.com">[https://www.sublimehq.com]</a> (License required for continuous use);</li>
-<li>Atom <a href="https://atom.io">[https://atom.io]</a>, free, from the operators of GitHub; and</li>
-<li>Visual Studio Code <a href="https://code.visualstudio.com">[https://code.visualstudio.com]</a>, free, from Microsoft.</li>
+<li>Sublime Text <a
+href="https://www.sublimehq.com">[https://www.sublimehq.com]</a>
+(License required for continuous use);</li>
+<li>Atom <a href="https://atom.io">[https://atom.io]</a>, free, from the
+operators of GitHub; and</li>
+<li>Visual Studio Code <a
+href="https://code.visualstudio.com">[https://code.visualstudio.com]</a>,
+free, from Microsoft.</li>
 </ul>
 </div>
 </div>
@@ -574,7 +689,7 @@ and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -582,6 +697,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

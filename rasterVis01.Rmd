@@ -40,7 +40,7 @@ Load the appropriate packages (installing them first if they're not present, i.e
 
 ```{r rstr02, message=FALSE, cache=FALSE}
 library(ncdf4)
-library(ncdf.tools)
+# library(ncdf.tools)
 library(raster)
 library(rasterVis)
 library(RColorBrewer)
@@ -240,7 +240,7 @@ dim(tmp_array)
 
 Convert the time variable from the *CF-Conventions* "time-since" format to a more conventional form:
 
-```{r tsconverttime}
+```{r tsconverttime, eval=FALSE}
 # convert time -- split the time units string into fields
 # convert time -- split the time units string into fields
 tustr <- strsplit(tunits$value, " ")
@@ -252,7 +252,7 @@ head(ptime); tail(ptime)
 
 Get the beginning and ending year of the time series:
 
-```{r tsbegyr}
+```{r tsbegyr, eval=FALSE}
 # get beginning year and ending year, number of years, and set nm
 beg_date <- strsplit(as.character(ptime[1]), " ")
 beg_yr <- as.numeric(unlist(strsplit(as.character(beg_date), "-"))[1])
@@ -265,7 +265,7 @@ print(c(beg_yr, end_yr, nyrs, nm))
 
 Generate a decimal year value for plotting consecutive values:
 
-```{r tsyrmn}
+```{r tsyrmn, eval=FALSE}
 # generate a decimal year ("YrMn") time coordinate
 YrMn <- seq(beg_yr, end_yr+1-(1/12), by=(1/12))
 head(YrMn); tail(YrMn)
@@ -273,7 +273,7 @@ head(YrMn); tail(YrMn)
 
 Generate year and month values for creating the dataframe that will be used to get multi-panel plots:
 
-```{r tsyearmonth}
+```{r tsyearmonth, eval=FALSE}
 # year
 year <- as.integer(YrMn)
 head(year); tail(year)
@@ -292,7 +292,7 @@ Note that `month` is a factor, and without intervention, the monthly panels will
 
 Now find the grid cell closest to Eugene (approximatly 123.1167 W and 44.08333 N).  This is done by using the `which.min()` function:
 
-```{r tsclosestpoint}
+```{r tsclosestpoint, eval=FALSE}
 # get indices of the grid cell closest to Eugene
 tlon <- -123.1167; tlat <- 44.0833
 j <- which.min(abs(lon-tlon))
@@ -304,7 +304,7 @@ print(c(j, lon[j], k, lat[k]))
 
 The data in the netCDF file are arranged in consecutive order, and so this is straightforward:
 
-```{r tsplot1}
+```{r tsplot1, eval=FALSE}
 # get time series for the closest gridpoint
 tmp_ts <- tmp_array[j, k, ]
 
@@ -316,7 +316,7 @@ plot(YrMn, tmp_ts, type="l", xlab="Year", ylab=dname, main=dlname$value, col="re
 
 Now make a dataframe consisting of `nt` values of the `YrMn` variable, the temperature time series `tmp_ts`, and the `year` and `month` variables generated above:
 
-```{r tsdataframe}
+```{r tsdataframe, eval=FALSE}
 # make dataframe
 tmp_df <- data.frame(YrMn, year, month, tmp_ts)
 str(tmp_df)
@@ -325,7 +325,7 @@ head(tmp_df); tail(tmp_df)
 
 Now, construct a `ggplot2` multi-panel (e.g. "faceted") plot.  The plot will be constructed with a lowess-smoother line in the background, overplotted by the annual values of each month in a separate panel.  
 
-```{r tsggplot1}
+```{r tsggplot1, eval=FALSE}
 ggplot(data = tmp_df, aes(x=year, y=tmp_ts)) +
   # geom_smooth(method = "lm", size=2, color="pink") +
   geom_smooth(method = "loess", size=0.5, color="purple") +
@@ -335,13 +335,13 @@ ggplot(data = tmp_df, aes(x=year, y=tmp_ts)) +
   
 The plot seems quite wide relative to the vertical space occupied by each monthly time series, which makes it difficult to notice any trends in the daa.  The aspect of the ratio can be adjusted, guided by the Bill Cleveland's notion of "banking to 45 (degrees)".  The function `bank_slopes()` in the package `ggthemes` can find the aspect ratio that optimizes that notion for a single time series (here, the values for December):
 
-```{r tsbanking}
+```{r tsbanking, eval=FALSE}
 bank_slopes(tmp_df$year[tmp_df$month == "Dec"], tmp_df$tmp_ts[tmp_df$month == "Dec"])
 ```
 
 A good first-guess aspect ratio can then be found by multiplying this value by the number of panels.  However, experience shows that multiplying by the half the number of panels provides a more pleasing result:
 
-```{r tsggplot2, fig.width=6, fig.height=6}
+```{r tsggplot2, fig.width=6, fig.height=6, eval=FALSE}
 ggplot(data = tmp_df, aes(x=year, y=tmp_ts)) +
   # geom_smooth(method = "lm", size=2, color="pink") +
   geom_smooth(method = "loess", size=0.5, color="purple") +
@@ -363,7 +363,7 @@ The data set used here is the NOAA Extended Sea-Surface Temperature (SST) data. 
 
 Read the SST data:
 
-```{r h1readsst}
+```{r h1readsst, eval=FALSE}
 # read SST data
 SST_path <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
 SST_mon_name <- "NOAA_ERSSTv5_sst.mnmean.nc"
@@ -375,7 +375,7 @@ ncin <- nc_open(SST_mon_file)
 
 Get longitude, latitudes and time:
 
-```{r h1lonlat}
+```{r h1lonlat, eval=FALSE}
 # get longitude and latitude
 lon <- ncvar_get(ncin,"lon")
 nlon <- dim(lon)
@@ -395,7 +395,7 @@ Note that longitudes run from 0 to 360 degrees E, while latitudes run from 90 N 
 
 Convert time:  
 
-```{r h1converttime}
+```{r h1converttime, eval=FALSE}
 # convert time -- split the time units string into fields
 tustr <- strsplit(tunits$value, " ")
 ptime <- convertDateNcdf2R(time, unlist(tustr)[1], 
@@ -406,7 +406,7 @@ head(ptime); tail(ptime)
 
 Now get the SST data
 
-```{r h1getdata}
+```{r h1getdata, eval=FALSE}
 # get monthly SSTs
 SST_mon <- ncvar_get(ncin,dname_mon)
 dlname_mon <- ncatt_get(ncin,dname_mon,"long_name")
@@ -417,14 +417,14 @@ dim(SST_mon)
 
 Close the netCDF file:
 
-```{r h1close1}
+```{r h1close1, eval=FALSE}
 # close the monthly data file
 nc_close(ncin)
 ```
 
 Flip the latitudes and data so that the data are layed out with the origin in the "lower left" of the map:
 
-```{r h1flipdata}
+```{r h1flipdata, eval=FALSE}
 # flip N-S
 temp_lat <- rep(NA, nlat)
 temp_lat[1:nlat] <- lat[nlat:1]
@@ -454,7 +454,7 @@ SST_mon <- temp_array
 
 Get a levelplot to check that the data has been read correctly:
 
-```{r h1levelplot`}
+```{r h1levelplot, eval=FALSE}
 # levelplot 
 n <- 2
 grid <- expand.grid(lon=lon, lat=lat)
@@ -466,7 +466,7 @@ plt + latticeExtra::layer(sp.lines(coast_outline, col="black", lwd=0.5))
 
 Inspection of the time range of the data reveals that there are few months from 2019 in the data array.  Get rid of these
 
-```{r h1chop1}
+```{r h1chop1, eval=FALSE}
 # chop off last three months of the data, and also the time variables
 SST_mon <- SST_mon[,, 1:(nt-3)]
 dim(SST_mon)
@@ -478,7 +478,7 @@ nt <- nt - 3
 
 Now get the long-term means (which have the same longitudes and latitudes as the monthly values, so no need to get those).:
 
-```{r h1getltms}
+```{r h1getltms, eval=FALSE}
 # get SSTs ltms
 SST_path <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
 SST_ltm_name <- "NOAA_ERSSTv5_sst.mon.ltm.1981-2010.nc"
@@ -507,7 +507,7 @@ nc_close(ncin)
 
 Flip the data (but not the latitudes; they are already in the right order):
 
-```{r h1flipltms}
+```{r h1flipltms, eval=FALSE}
 # flip N-S
 temp_array <- array(NA, dim = c(nlon, nlat, nm))
 temp_array[1:nlon, 1:nlat, 1:nm] <-  SST_ltm[1:nlon, nlat:1, 1:nm] 
@@ -532,7 +532,7 @@ SST_ltm <- temp_array
 
 Map the data to check that it's been read in ok:
 
-```{r h1levelplot2}
+```{r h1levelplot2, eval=FALSE}
 # levelplot 
 n <- 8
 grid <- expand.grid(lon=lon, lat=lat)
@@ -544,7 +544,7 @@ plt + latticeExtra::layer(sp.lines(coast_outline, col="black", lwd=0.5))
 
 Get the beginning and ending years
 
-```{r h1begyr}
+```{r h1begyr, eval=FALSE}
 # get beginning year and ending year
 beg_date <- strsplit(as.character(ptime[1]), " ")
 beg_yr <- as.numeric(unlist(strsplit(as.character(beg_date), "-"))[1])
@@ -556,14 +556,14 @@ print(c(beg_yr, end_yr, nyrs, nm))
 
 Now get the anomalies:
 
-```{r h1getanoms}
+```{r h1getanoms, eval=FALSE}
 # get anomalies
 SST_anm <- SST_mon - rep(SST_ltm, nyrs)
 ```
 
 Map the data to check the anomalies:
 
-```{r h1levelplot3}
+```{r h1levelplot3, eval=FALSE}
 # levelplot 
 n <- nt
 grid <- expand.grid(lon=lon, lat=lat)
@@ -577,7 +577,7 @@ plt + latticeExtra::layer(sp.lines(coast_outline, col="black", lwd=0.5))
 
 The first Hovmöller plot attempts to reproduce the NOAA ESRL PSD Hovmöller plot of tropical Pacific temperatures between 3.5 S and 3.5 N along a transect from the Indian ocean to the eastern Pacific [[View Plot]](https://www.esrl.noaa.gov/psd/map/images/sst/sst.month.anom.hov.io.gif).  Set up for selecting those data by getting the longitude `j` and latitude `k` indices of the bounding box:
 
-```{r h1tropPac1}
+```{r h1tropPac1, eval=FALSE}
 # get tropical Pacific
 tlon_min <- 40; tlon_max <- 280; tlat_min <- -4; tlat_max <- 4
 jmin <- which.min(abs(tlon_min - lon))
@@ -589,7 +589,7 @@ print(c(jmin, lon[jmin], jmax, lon[jmax], kmin, lat[kmin], kmax, lat[kmax]))
  
 Now create a raster brick from the 3-D array of anomalies, selecting data from the Pacific region just defined.  Also just get data from 1989 onwards:
 
-```{r h1raster1}
+```{r h1raster1, eval=FALSE}
 # tropical pacific
 SST_raster <- brick(SST_anm[jmin:jmax, kmax:kmin, 1621:nt], 
                     xmn=lon[jmin], xmx=lon[jmax], ymn=lat[kmin], ymx=lat[kmax],
@@ -599,7 +599,7 @@ SST_raster
 ```
 Replace the layer names with appropriate date labels:
 
-```{r h1datelabels}
+```{r h1datelabels, eval=FALSE}
 # replace layer names
 idx <- seq(as.Date(ptime[1621]), as.Date(ptime[nt]), by='month')
 idx <- as.yearmon(idx)
@@ -610,7 +610,7 @@ SST_raster
 
 Here's the Hovmöller plot:
 
-```{r hov1, fig.width=5, fig.height=5}
+```{r hov1, fig.width=5, fig.height=5, eval=FALSE}
 hovmoller(SST_raster,
       dirXY = x,
       at = do.breaks(c(-4,4),16),
@@ -641,7 +641,7 @@ SST_raster
 
 The horizon plot plots multiple time series (here average values for individual latitudinal zones) in a way that allows common trends to be visualized.  For this example, select a more latitudinally extensive chunk of data:
 
-```{r h1tropPac2}
+```{r h1tropPac2, eval=FALSE}
 # horizon plot
 # get tropical Pacific
 tlon_min <- 178; tlon_max <- 290; tlat_min <- -30; tlat_max <- 30
@@ -652,7 +652,7 @@ kmax <- which.min(abs(tlat_max - lat))
 print(c(jmin, lon[jmin], jmax, lon[jmax], kmin, lat[kmin], kmax, lat[kmax]))
 ```
 
-```{r h1raster2}
+```{r h1raster2, eval=FALSE}
 # tropical pacific
 SST_raster <- brick(SST_anm[jmin:jmax, kmax:kmin, 1621:nt], 
                     xmn=lon[jmin], xmx=lon[jmax], ymn=lat[kmin], ymx=lat[kmax],
@@ -661,7 +661,7 @@ SST_raster <- brick(SST_anm[jmin:jmax, kmax:kmin, 1621:nt],
 SST_raster
 ```
 
-```{r h1dates2}
+```{r h1dates2, eval=FALSE}
 # replace layer names
 idx <- seq(as.Date(ptime[1621]), as.Date(ptime[nt]), by='month')
 idx <- as.yearmon(idx)
@@ -672,7 +672,7 @@ SST_raster
 
 Here's the horizon plot:
 
-```{r horizon}
+```{r horizon, eval=FALSE}
 # horizonplot -- rasterVis example
 horizonplot(SST_raster, ylab="Latitude", xlab="Year",col.regions=rev(brewer.pal(n=8, 'RdBu')) )
 ```
@@ -683,7 +683,7 @@ This second example shows how a Hovmöller plot can be written directly to a .pn
 
 Use the `brick()` function in `raster` to read the data.
 
-```{r h2getdata}
+```{r h2getdata, eval=FALSE}
 # HADCRUT4 Combined Air Temperature/SST Anomalies
 # read a 3-D netCDF dataset
 hadcrut_path <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
@@ -697,7 +697,7 @@ print(c(filename(hadcrut), hasValues(hadcrut), inMemory(hadcrut)))
 
 As before, replace the layer names (dates) with something more appropriate:
 
-```{r h2layernames}
+```{r h2layernames, eval=FALSE}
 # replace layer names
 idx <- seq(as.Date('1850-01-01'), as.Date('2019-02-01'), 'month')
 idx <- as.yearmon(idx)
@@ -707,7 +707,7 @@ names(tmpplt) <- as.character(idx)
 
 Produce the plot, and send it to a `.png` file:
 
-```{r h2plot, fig.width=4, fig.height=4}
+```{r h2plot, fig.width=4, fig.height=4, eval=FALSE}
 # plot
 pngfile <- "HadCRUTv4_hov.png"
 png(pngfile, width=720, height=720) # open the file

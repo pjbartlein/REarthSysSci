@@ -258,7 +258,7 @@ It's possible to see broad trends in all of the pollen types, as well as in the 
 
 Each bin the above plot represents a bin that, in this case, holds 46 observations, and what is plotted as bars in each column  is the bin-average or frequency for those observations. Here's a second plot like the first, using more bins:
   
-  ```{r, hd35, echo=TRUE, eval=FALSE}
+```{r, hd35, echo=TRUE, eval=FALSE}
 tableplot(napol, sortCol="Lat", scales="lin", nBins=200, fontsize = 8)
 ```
 ```{r, hd36, out.height="90%", out.width="90%", message=FALSE, echo=FALSE}
@@ -267,7 +267,7 @@ suppressWarnings(tableplot(napol, sortCol="Lat", scales="lin", nBins=200, fontsi
 
 The same broad-scale patterns are evident in this plot, suggesting that the approach is robust with respect to the number of bins.  The next plot using the abundance of *Picea* (spruce to organize the data):
   
-  ```{r, hd37, echo=TRUE, eval=FALSE}
+```{r, hd37, echo=TRUE, eval=FALSE}
 tableplot(napol, sortCol="Picea", scales="lin", nBins=100, , fontsize = 8)
 ```
 ```{r, hd38, out.height="90%", out.width="90%", message=FALSE, echo=FALSE}

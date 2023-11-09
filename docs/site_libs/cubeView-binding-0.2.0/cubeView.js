@@ -36,7 +36,7 @@ var statusX;
 var statusY;
 var statusZ;
 
-var show_cross_section_lines = true;
+var show_cross_section_lines = false;
 
 function init(root, json, legend_filename) {
 	hovmoeller = new Hovmoeller(root, json, legend_filename);
@@ -101,15 +101,24 @@ function Hovmoeller(root, json, legend_filename) {
     dB = flipY(b64toArray(json.blue));
   }
 
+  let hght = root.clientHeight;
+  let wdth = root.clientWidth;
+  console.log(hght);
+
+
 	this.scene = new THREE.Scene();
-	this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+	this.camera = new THREE.PerspectiveCamera(45, wdth / hght, 0.001, 1000 );
+	//this.camera.position.set( 45, 35, 45 );
+	//console.log(this.camera.position);
+	//this.camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-	this.renderer = new THREE.WebGLRenderer({/*antialias: true*/});
-	this.renderer.setSize(window.innerWidth, window.innerHeight);
+	this.renderer = new THREE.WebGLRenderer({});
+	this.renderer.domElement.tabIndex = 1; // needed to make keys work in RStudio
+	this.renderer.setSize(wdth, hght);
 
-  this.controls = new THREE.TrackballControls(this.camera);
+  this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
 
-  this.controls.rotateSpeed = 3.0;
+  this.controls.rotateSpeed = 1.0;
 	this.controls.zoomSpeed = 1.0;
 	this.controls.panSpeed = 1.0;
   this.controls.staticMoving = true;
@@ -128,9 +137,9 @@ function Hovmoeller(root, json, legend_filename) {
   	var labelX = document.createElement("span");
   	var labelY = document.createElement("span");
   	var labelZ = document.createElement("span");
-  	labelX.innerHTML = "X&nbsp;";
-  	labelY.innerHTML = "&nbsp;Y&nbsp;";
-  	labelZ.innerHTML = "&nbsp;Z&nbsp;";
+  	labelX.innerHTML = "X:&nbsp;";
+  	labelY.innerHTML = "&nbsp;Y:&nbsp;";
+  	labelZ.innerHTML = "&nbsp;Z:&nbsp;";
   	statusX = document.createElement("span");
   	statusY = document.createElement("span");
   	statusZ = document.createElement("span");
@@ -140,9 +149,9 @@ function Hovmoeller(root, json, legend_filename) {
   	divStatus.appendChild(labelX);
   	divStatus.appendChild(statusX);
   	divStatus.appendChild(labelY);
-  	divStatus.appendChild(statusY);
-  	divStatus.appendChild(labelZ);
   	divStatus.appendChild(statusZ);
+  	divStatus.appendChild(labelZ);
+  	divStatus.appendChild(statusY);
   	divLegend.appendChild(divStatus);
   	root.appendChild(divLegend);
 	}
@@ -163,7 +172,7 @@ function Hovmoeller(root, json, legend_filename) {
 	  Z_BOX = MIN_RATIO;
 	}
 
-	var geometry = new THREE.BoxGeometry(X_BOX, Y_BOX,  Z_BOX);
+	var geometry = new THREE.BoxGeometry(X_BOX, Y_BOX, Z_BOX);
 
 	geometry.faceVertexUvs =
 		[[
@@ -194,8 +203,8 @@ function Hovmoeller(root, json, legend_filename) {
 	this.materialZY.map = new THREE.DataTexture(new Uint8Array(ZY_SIZE*4), Z_SIZE, Y_SIZE, format, type, mapping, wrapS, wrapT, magFilter, minFilter, anisotropy);
 
 
-	this.cube = new THREE.Mesh(geometry, new THREE.MeshFaceMaterial(this.materials));
-	this.scene.add(this.cube);
+	this.cube = new THREE.Mesh(geometry, this.materials);
+  this.scene.add(this.cube);
 
 	var line_material_x = new THREE.LineBasicMaterial({color:0xff5555, linewidth:3});
 	var line_material_y = new THREE.LineBasicMaterial({color:0x55ff55, linewidth:3});
@@ -234,6 +243,8 @@ function Hovmoeller(root, json, legend_filename) {
   this.scene.add(line_z);
 
 	this.camera.position.z = 1.5;
+	this.camera.position.y = 1.5;
+	this.camera.position.x = 1.5;
 
 	document.body.addEventListener('keydown', this.onKeyDown, false);
 
@@ -337,13 +348,13 @@ updateMaterialZY: function () {
 
 onKeyDown: function(e) {
 	switch (e.keyCode) {
-		case 33: // PAGE_UP
-      z_pos = z_pos===0?0:z_pos-1;
+		case 34: // PAGE_UP
+      y_pos = y_pos===0?0:y_pos-1;
 			e.preventDefault();
 			e.stopPropagation();
 			break;
-		case 34: // PAGE_DOWN
-      z_pos = z_pos===Z_SIZE-1?Z_SIZE-1:z_pos+1;
+		case 33: // PAGE_DOWN
+      y_pos = y_pos===Y_SIZE-1?Y_SIZE-1:y_pos+1;
 			e.preventDefault();
 			e.stopPropagation();
 			break;
@@ -358,12 +369,12 @@ onKeyDown: function(e) {
 			e.stopPropagation();
 			break;
 		case 38: //UP
-			y_pos =  y_pos===Y_SIZE-1?Y_SIZE-1:y_pos+1;
+			z_pos =  z_pos===Z_SIZE-1?Z_SIZE-1:z_pos+1;
 			e.preventDefault();
 			e.stopPropagation();
 			break;
 		case 40: //DOWN
-			y_pos = y_pos===0?0:y_pos-1;
+			z_pos = z_pos===0?0:z_pos-1;
 			e.preventDefault();
 			e.stopPropagation();
 			break;

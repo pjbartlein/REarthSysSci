@@ -9,7 +9,7 @@ output:
     collapsed: no
 ---
 
-```{r set-options, echo=FALSE}
+```{r set-options, echo=FALSE, eval=FALSE}
 options(width = 105)
 knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "75%", out.height = "75%")
 pdf.options(useDingbats = TRUE)
@@ -24,7 +24,7 @@ This second example illustrates the creating of a base map for North America tha
 
 Load the appropriate packages.
 
-```{r load packages2, messages=FALSE, results="hide"}
+```{r load packages2, messages=FALSE, results="hide", eval=FALSE, eval=FALSE}
 library(maptools)
 library(sp)
 library(rgdal)
@@ -35,7 +35,7 @@ library(lattice)
 
 Set the shapefile names, including those for global coastlines, adminstrative units (borders).  Set the filenames:
 
-```{r read NE shapefiles2}
+```{r read NE shapefiles2, eval=FALSE, eval=FALSE}
 # Natural Earth shape files -- global (Robinson) projections
 # get shapefiles from http://www.naturalearthdata.com
 shape_path <- "/Users/bartlein/Projects/ESSD/data/RMaps/source/"
@@ -47,7 +47,7 @@ lakes_shapefile <- paste(shape_path, "ne_10m_lakes/ne_10m_lakes.shp", sep="")
 
 Read and plot the shapefiles (note:  summary output is suppressed)
 
-```{r read shapefiles, , results="hide"}
+```{r read shapefiles, , results="hide", eval=FALSE, eval=FALSE}
 layer <- ogrListLayers(coast_shapefile)
 ogrInfo(coast_shapefile, layer=layer)
 coast_lines <- readOGR(coast_shapefile, layer=layer)
@@ -77,13 +77,13 @@ plot(lrglakes_poly, bor="purple", add=TRUE)
 ```
 Take a look at the `admin1_poly` dataframe, to figure out the codes for Candadian and U.S. provincial and state borders.
 
-```{r list data admin_poly}
+```{r list data admin_poly, eval=FALSE}
 head(admin0_poly)
 ```
 
 The approprate code to extract the U.S. and Canada data is `admin1_poly$sr_sov_a3 == "CAN"` and `admin1_poly$sr_sov_a3 == "US1"`.  Extract the borders, and plot the resulting shapefiles.
 
-```{r extract US and Candada}
+```{r extract US and Candada, eval=FALSE}
 can_poly <- admin1_poly[admin1_poly$sov_a3 == "CAN" ,]
 us_poly <- admin1_poly[admin1_poly$sov_a3 == "US1",]
 plot(coast_lines)
@@ -93,7 +93,7 @@ plot(us_poly, bor="blue", add=TRUE)
 
 Convert the U.S. and Canada polygons to `SpatialLines`:
 
-```{r convert polygons to spatial lines}
+```{r convert polygons to spatial lines, eval=FALSE}
 can_lines <- as(can_poly, "SpatialLines")
 us_lines <- as(us_poly, "SpatialLines")
 ```
@@ -102,14 +102,14 @@ us_lines <- as(us_poly, "SpatialLines")
 
 Set the `proj4string` value and the coordinate reference system for the na10km_v2 grid:
 
-```{r set proj4string}
+```{r set proj4string, eval=FALSE}
 na_proj4string <- "+proj=laea +lon_0=-100 +lat_0=50 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
 na_crs = CRS(na_proj4string)
 ```
 
 Project the various shapefiles (and plot the coastlines as an example):
 
-```{r project shapefiles}
+```{r project shapefiles, eval=FALSE}
 coast_lines_proj <-spTransform(coast_lines, na_crs)
 admin0_poly_proj <-spTransform(admin0_poly, na_crs)
 admin1_poly_proj <-spTransform(admin1_poly, na_crs)
@@ -127,7 +127,7 @@ plot(coast_lines_proj, add=TRUE)
 
 Define a bounding box for trimming the polygon and line shape files to the area covered by the na10km_v2 grid. The extent of the area is known from the definition of the grid, but could also be determined by reading an na10km_v2 netCDF file.  The projected `admin` shape files are quite complicated, and create "topology exception errors".  These can be fixed using an approach discussed on StackExchange [[link]](http://gis.stackexchange.com/questions/163445/r-solution-for-topologyexception-input-geom-1-is-invalid-self-intersection-er)
 
-```{r set bounding box and trim}
+```{r set bounding box and trim, eval=FALSE}
 na10km_bb <- as(extent(-5770000,5000000,-4510000,4480000), "SpatialPolygons")
 proj4string(na10km_bb) <- na_proj4string
 
@@ -142,7 +142,7 @@ na10km_us_lines_proj <- gIntersection(us_lines_proj, na10km_bb)
 
 Now do the `admin` shape files:
 
-```{r trim admin shapefiles}
+```{r trim admin shapefiles, eval=FALSE}
 na10km_bb <- gBuffer(na10km_bb, byid=TRUE, width=0)
 admin0_poly_proj <- gSimplify(admin0_poly_proj, tol = 0.00001)
 na10km_admin0_poly_proj <- gBuffer(admin0_poly_proj, byid=TRUE, width=0)
@@ -154,7 +154,7 @@ na10km_admin1_poly_proj <- gIntersection(admin1_poly_proj, byid=TRUE, na10km_bb)
 
 Plot the projected shapefiles.
 
-```{r plot projected shapefiles}
+```{r plot projected shapefiles, eval=FALSE}
 plot(na10km_coast_lines_proj)
 plot(na10km_admin0_poly_proj, bor="gray", add=TRUE)
 plot(na10km_can_lines_proj, col="pink", add=TRUE)
@@ -167,7 +167,7 @@ plot(na10km_bb, bor="purple", add=TRUE)
 
 Next, write out the projected shapefiles, first setting the output path.
 
-```{r write coast shapes2, warning=FALSE}
+```{r write coast shapes2, warning=FALSE, eval=FALSE}
 # write out the various shapefiles 
 outpath <- "/Users/bartlein/Projects/ESSD/data/RMaps/derived/na10km_10m/"
 outshape <- na10km_coast_lines_proj
@@ -180,14 +180,14 @@ writeOGR(outshape, outshapefile, outfile, driver="ESRI Shapefile", overwrite_lay
 ```
 It's always good practice to test whether the shapefile has ideed been written out correctly.  Read it back in and plot it.
 
-```{r test shape2, fig.height=4}
+```{r test shape2, fig.height=4, eval=FALSE}
 test <- readOGR(outshapefile)
 plot(test, col="black")
 ```
 
 Write out the other shape files (output is suppressed):
 
-```{r write other shapefiles2, results="hide", warning=FALSE}
+```{r write other shapefiles2, results="hide", warning=FALSE, eval=FALSE}
 # write out the various shapefiles 
 outshape <- na10km_bb
 outfile <- "na10km_10m_bb"
@@ -270,13 +270,13 @@ writeOGR(outshape, outshapefile, outfile, driver="ESRI Shapefile", overwrite_lay
 
 Load the appropriate packages.
 
-```{r load packages again, results="hide"}
+```{r load packages again, results="hide", eval=FALSE}
 library(sp)
 ```
 
 Read the shapefiles:
 
-```{r read projected shapefiles, results="hide", warning=FALSE}
+```{r read projected shapefiles, results="hide", warning=FALSE, eval=FALSE}
 shapepath <- "/Users/bartlein/Projects/ESSD/data/RMaps/derived/na10km_10m/"
 na10km_bb <- readOGR(paste(shapepath, "na10km_10m_bb.shp", sep=""))
 na10km_coast_lines_proj <- readOGR(paste(shapepath, "na10km_10m_coast_lines.shp", sep=""))
@@ -289,7 +289,7 @@ na10km_us_lines_proj <- readOGR(paste(shapepath, "na10km_10m_us_lines.shp", sep=
 
 Plot the projected and trimmed shapefiles: 
 
-```{r plot projected and trimmed shapefiles}
+```{r plot projected and trimmed shapefiles, eval=FALSE}
 plot(na10km_admin0_poly_proj, bor="gray")
 plot(na10km_can_lines_proj, col="gray", add=TRUE)
 plot(na10km_us_lines_proj, col="gray", add=TRUE)
@@ -302,7 +302,7 @@ plot(na10km_bb, bor="black", add=TRUE)
 
 Read a pre-computed shaded relief file.  This could also be crearted by reading the na10km_v2 grid-point elevations and using the `hillshade` function from the `raster` package.  Note that in this file, the coordinates are in km, and so they must be multiplied by 1000.
 
-```{r read shade and shade colors}
+```{r read shade and shade colors, eval=FALSE}
 datapath <- "/Users/bartlein/Projects/ESSD/data/csv_files/"
 datafile <- "na10km_shade.csv"
 shade <- read.csv(paste(datapath,datafile,sep=""))
@@ -313,7 +313,7 @@ head(shade)
 
 Convert the dataframe to a SpatialPixelsData Frame
 
-```{r convert dataframe to spatial pixels}
+```{r convert dataframe to spatial pixels, eval=FALSE}
 coordinates(shade) <- c("x","y")
 points2grid(shade)
 shade_pixels <- as(shade, "SpatialPixelsDataFrame")
@@ -322,7 +322,7 @@ summary(shade_pixels)
 
 Read some predetermined (gray-scale) colors for the shading.
 
-```{r read shade color file}
+```{r read shade color file, eval=FALSE}
 colorfile <- "shade40_clr.csv"
 shade_rgb <- read.csv(paste(datapath, colorfile, sep=""))
 shade_clr <- rgb(shade_rgb)
@@ -330,7 +330,7 @@ shade_clr <- rgb(shade_rgb)
 
 Set the (gray-scale) color numbers for each pixel:
 
-```{r set color numbers}
+```{r set color numbers, eval=FALSE}
 shade_int <- as.integer(((shade$shade+1)/2)*40)+1
 shade_colnum <- shade_clr[shade_int]
 ```
@@ -339,7 +339,7 @@ shade_colnum <- shade_clr[shade_int]
 
 Plot the shaded-relief colors and the various shape files.  The location of the text string was determined by plotting an initial version ofthe map, and using the `locate()` function.  The `cex=0.09` argument in the `points()` function was detrmined by trial and error.
 
-```{r shaded relief map, echo=TRUE, eval=FALSE, messages=FALSE}
+```{r shaded relief map, echo=TRUE, eval=FALSE, messages=FALSE, eval=FALSE}
 pdf(file = "na_shade01b.pdf")
 plot(na10km_bb, col="gray95")
 points(shade_pixels, pch=15, cex=0.09, col=shade_colnum)

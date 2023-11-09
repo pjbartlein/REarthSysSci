@@ -1,53 +1,78 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Maps in R (2)</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
-<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
-<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
-<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 
-<style type="text/css">code{white-space: pre;}</style>
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -56,9 +81,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -93,13 +118,20 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -107,39 +139,9 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
   }
 })();
 </script>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="html-md-01.css" type="text/css" />
 
@@ -151,13 +153,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -171,40 +168,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -232,7 +205,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -244,7 +217,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -254,11 +227,28 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -270,13 +260,12 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -284,16 +273,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -306,6 +288,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -317,18 +300,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -348,7 +319,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -361,7 +332,7 @@ $(document).ready(function () {
   <a href="overview.html">Overview</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Topics
      
     <span class="caret"></span>
@@ -413,7 +384,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tasks
      
     <span class="caret"></span>
@@ -452,7 +423,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Resources
      
     <span class="caret"></span>
@@ -476,7 +447,7 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -486,391 +457,334 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#a-second-example"><span class="toc-section-number">1</span> A second example</a><ul>
-<li><a href="#read-the-natural-earth-shapefiles"><span class="toc-section-number">1.1</span> Read the Natural Earth shapefiles</a></li>
-<li><a href="#project-the-shape-files"><span class="toc-section-number">1.2</span> Project the shape files</a></li>
-<li><a href="#write-out-the-projected-and-trimmed-shape-files"><span class="toc-section-number">1.3</span> Write out the projected and trimmed shape files</a></li>
+<li><a href="#a-second-example" id="toc-a-second-example"><span
+class="toc-section-number">1</span> A second example</a>
+<ul>
+<li><a href="#read-the-natural-earth-shapefiles"
+id="toc-read-the-natural-earth-shapefiles"><span
+class="toc-section-number">1.1</span> Read the Natural Earth
+shapefiles</a></li>
+<li><a href="#project-the-shape-files"
+id="toc-project-the-shape-files"><span
+class="toc-section-number">1.2</span> Project the shape files</a></li>
+<li><a href="#write-out-the-projected-and-trimmed-shape-files"
+id="toc-write-out-the-projected-and-trimmed-shape-files"><span
+class="toc-section-number">1.3</span> Write out the projected and
+trimmed shape files</a></li>
 </ul></li>
-<li><a href="#map-of-north-american-shaded-relief"><span class="toc-section-number">2</span> Map of North American shaded relief</a><ul>
-<li><a href="#read-the-read-the-projected-and-trimmed-shapefiles"><span class="toc-section-number">2.1</span> Read the read the projected and trimmed shapefiles</a></li>
-<li><a href="#read-a-shaded-relief-file"><span class="toc-section-number">2.2</span> Read a shaded relief file</a></li>
-<li><a href="#make-the-map"><span class="toc-section-number">2.3</span> Make the map</a></li>
+<li><a href="#map-of-north-american-shaded-relief"
+id="toc-map-of-north-american-shaded-relief"><span
+class="toc-section-number">2</span> Map of North American shaded
+relief</a>
+<ul>
+<li><a href="#read-the-read-the-projected-and-trimmed-shapefiles"
+id="toc-read-the-read-the-projected-and-trimmed-shapefiles"><span
+class="toc-section-number">2.1</span> Read the read the projected and
+trimmed shapefiles</a></li>
+<li><a href="#read-a-shaded-relief-file"
+id="toc-read-a-shaded-relief-file"><span
+class="toc-section-number">2.2</span> Read a shaded relief file</a></li>
+<li><a href="#make-the-map" id="toc-make-the-map"><span
+class="toc-section-number">2.3</span> Make the map</a></li>
 </ul></li>
 </ul>
 </div>
 
-<script>
-  addClassKlippyTo("pre.r, pre.markdown");
-  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
-</script>
-<div id="a-second-example" class="section level1">
+<div id="a-second-example" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> A second example</h1>
-<p>This second example illustrates the creating of a base map for North America that conforms to the projection used for the <code>na10km_v2</code> data. As before, <em>Natural Earth</em> shapefiles are read and projected, this time using a Lambert Azimuthal Equal-Area projection, and trimmed to the appropriate region.</p>
-<div id="read-the-natural-earth-shapefiles" class="section level2">
-<h2><span class="header-section-number">1.1</span> Read the Natural Earth shapefiles</h2>
+<p>This second example illustrates the creating of a base map for North
+America that conforms to the projection used for the
+<code>na10km_v2</code> data. As before, <em>Natural Earth</em>
+shapefiles are read and projected, this time using a Lambert Azimuthal
+Equal-Area projection, and trimmed to the appropriate region.</p>
+<div id="read-the-natural-earth-shapefiles" class="section level2"
+number="1.1">
+<h2><span class="header-section-number">1.1</span> Read the Natural
+Earth shapefiles</h2>
 <p>Load the appropriate packages.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(maptools)</a></code></pre></div>
-<pre><code>## Loading required package: sp</code></pre>
-<pre><code>## Checking rgeos availability: TRUE</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">library</span>(sp)</a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="kw">library</span>(rgdal)</a></code></pre></div>
-<pre><code>## rgdal: version: 1.4-3, (SVN revision 828)
-##  Geospatial Data Abstraction Library extensions to R successfully loaded
-##  Loaded GDAL runtime: GDAL 2.1.3, released 2017/20/01
-##  Path to GDAL shared files: /Library/Frameworks/R.framework/Versions/3.6/Resources/library/rgdal/gdal
-##  GDAL binary built with GEOS: FALSE 
-##  Loaded PROJ.4 runtime: Rel. 4.9.3, 15 August 2016, [PJ_VERSION: 493]
-##  Path to PROJ.4 shared files: /Library/Frameworks/R.framework/Versions/3.6/Resources/library/rgdal/proj
-##  Linking to sp version: 1.3-1</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw">library</span>(raster)</a>
-<a class="sourceLine" id="cb6-2" title="2"><span class="kw">library</span>(rgeos)</a></code></pre></div>
-<pre><code>## rgeos version: 0.4-3, (SVN revision 595)
-##  GEOS runtime version: 3.6.1-CAPI-1.10.1 
-##  Linking to sp version: 1.3-1 
-##  Polygon checking: TRUE</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">library</span>(lattice)</a></code></pre></div>
-<p>Set the shapefile names, including those for global coastlines, adminstrative units (borders). Set the filenames:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="co"># Natural Earth shape files -- global (Robinson) projections</span></a>
-<a class="sourceLine" id="cb9-2" title="2"><span class="co"># get shapefiles from http://www.naturalearthdata.com</span></a>
-<a class="sourceLine" id="cb9-3" title="3">shape_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/RMaps/source/&quot;</span></a>
-<a class="sourceLine" id="cb9-4" title="4">coast_shapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(shape_path, <span class="st">&quot;ne_10m_coastline/ne_10m_coastline.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb9-5" title="5">admin0_shapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(shape_path, <span class="st">&quot;ne_10m_admin_0_countries/ne_10m_admin_0_countries.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb9-6" title="6">admin1_shapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(shape_path, <span class="st">&quot;ne_10m_admin_1_states_provinces_lakes/ne_10m_admin_1_states_provinces_lakes.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb9-7" title="7">lakes_shapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(shape_path, <span class="st">&quot;ne_10m_lakes/ne_10m_lakes.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(maptools)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(sp)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(rgdal)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(raster)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(rgeos)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(lattice)</span></code></pre></div>
+<p>Set the shapefile names, including those for global coastlines,
+adminstrative units (borders). Set the filenames:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Natural Earth shape files -- global (Robinson) projections</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># get shapefiles from http://www.naturalearthdata.com</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>shape_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/RMaps/source/&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>coast_shapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(shape_path, <span class="st">&quot;ne_10m_coastline/ne_10m_coastline.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>admin0_shapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(shape_path, <span class="st">&quot;ne_10m_admin_0_countries/ne_10m_admin_0_countries.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>admin1_shapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(shape_path, <span class="st">&quot;ne_10m_admin_1_states_provinces_lakes/ne_10m_admin_1_states_provinces_lakes.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>lakes_shapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(shape_path, <span class="st">&quot;ne_10m_lakes/ne_10m_lakes.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <p>Read and plot the shapefiles (note: summary output is suppressed)</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">layer &lt;-<span class="st"> </span><span class="kw">ogrListLayers</span>(coast_shapefile)</a>
-<a class="sourceLine" id="cb10-2" title="2"><span class="kw">ogrInfo</span>(coast_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb10-3" title="3">coast_lines &lt;-<span class="st"> </span><span class="kw">readOGR</span>(coast_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb10-4" title="4"><span class="kw">summary</span>(coast_lines)  </a>
-<a class="sourceLine" id="cb10-5" title="5"><span class="kw">plot</span>(coast_lines)</a>
-<a class="sourceLine" id="cb10-6" title="6"></a>
-<a class="sourceLine" id="cb10-7" title="7">layer &lt;-<span class="st"> </span><span class="kw">ogrListLayers</span>(admin0_shapefile)</a>
-<a class="sourceLine" id="cb10-8" title="8"><span class="kw">ogrInfo</span>(admin0_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb10-9" title="9">admin0_poly &lt;-<span class="st"> </span><span class="kw">readOGR</span>(admin0_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb10-10" title="10"><span class="kw">summary</span>(admin0_poly)  </a>
-<a class="sourceLine" id="cb10-11" title="11"><span class="kw">plot</span>(admin0_poly, <span class="dt">bor=</span><span class="st">&quot;gray&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb10-12" title="12"></a>
-<a class="sourceLine" id="cb10-13" title="13">layer &lt;-<span class="st"> </span><span class="kw">ogrListLayers</span>(admin1_shapefile)</a>
-<a class="sourceLine" id="cb10-14" title="14"><span class="kw">ogrInfo</span>(admin1_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb10-15" title="15">admin1_poly &lt;-<span class="st"> </span><span class="kw">readOGR</span>(admin1_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb10-16" title="16"><span class="kw">summary</span>(admin1_poly)  </a>
-<a class="sourceLine" id="cb10-17" title="17"><span class="kw">plot</span>(admin1_poly, <span class="dt">bor=</span><span class="st">&quot;lightgreen&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb10-18" title="18"></a>
-<a class="sourceLine" id="cb10-19" title="19">layer &lt;-<span class="st"> </span><span class="kw">ogrListLayers</span>(lakes_shapefile)</a>
-<a class="sourceLine" id="cb10-20" title="20"><span class="kw">ogrInfo</span>(lakes_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb10-21" title="21">lakes_poly &lt;-<span class="st"> </span><span class="kw">readOGR</span>(lakes_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb10-22" title="22"><span class="kw">summary</span>(lakes_poly)  </a>
-<a class="sourceLine" id="cb10-23" title="23"><span class="kw">plot</span>(lakes_poly, <span class="dt">bor=</span><span class="st">&quot;lightblue&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb10-24" title="24"></a>
-<a class="sourceLine" id="cb10-25" title="25">lrglakes_poly &lt;-<span class="st"> </span>lakes_poly[<span class="kw">as.numeric</span>(lakes_poly<span class="op">$</span>scalerank) <span class="op">&lt;=</span><span class="st"> </span><span class="dv">2</span> ,]</a>
-<a class="sourceLine" id="cb10-26" title="26"><span class="kw">plot</span>(lrglakes_poly, <span class="dt">bor=</span><span class="st">&quot;purple&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="RMaps2_files/figure-html/read%20shapefiles,%20-1.png" width="75%" height="75%" /> Take a look at the <code>admin1_poly</code> dataframe, to figure out the codes for Candadian and U.S. provincial and state borders.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">head</span>(admin0_poly)</a></code></pre></div>
-<pre><code>##   scalerank      featurecla LABELRANK     SOVEREIGNT SOV_A3 ADM0_DIF LEVEL              TYPE       ADMIN
-## 0         3 Admin-0 country         5    Netherlands    NL1        1     2           Country       Aruba
-## 1         0 Admin-0 country         3    Afghanistan    AFG        0     2 Sovereign country Afghanistan
-## 2         0 Admin-0 country         3         Angola    AGO        0     2 Sovereign country      Angola
-## 3         3 Admin-0 country         6 United Kingdom    GB1        1     2        Dependency    Anguilla
-## 4         0 Admin-0 country         6        Albania    ALB        0     2 Sovereign country     Albania
-## 5         3 Admin-0 country         6        Finland    FI1        1     2           Country       Aland
-##   ADM0_A3 GEOU_DIF     GEOUNIT GU_A3 SU_DIF     SUBUNIT SU_A3 BRK_DIFF        NAME     NAME_LONG BRK_A3
-## 0     ABW        0       Aruba   ABW      0       Aruba   ABW        0       Aruba         Aruba    ABW
-## 1     AFG        0 Afghanistan   AFG      0 Afghanistan   AFG        0 Afghanistan   Afghanistan    AFG
-## 2     AGO        0      Angola   AGO      0      Angola   AGO        0      Angola        Angola    AGO
-## 3     AIA        0    Anguilla   AIA      0    Anguilla   AIA        0    Anguilla      Anguilla    AIA
-## 4     ALB        0     Albania   ALB      0     Albania   ALB        0     Albania       Albania    ALB
-## 5     ALD        0       Aland   ALD      0       Aland   ALD        0       Aland Aland Islands    ALD
-##      BRK_NAME BRK_GROUP ABBREV POSTAL                    FORMAL_EN FORMAL_FR NOTE_ADM0 NOTE_BRK
-## 0       Aruba      &lt;NA&gt;  Aruba     AW                        Aruba      &lt;NA&gt;     Neth.     &lt;NA&gt;
-## 1 Afghanistan      &lt;NA&gt;   Afg.     AF Islamic State of Afghanistan      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;
-## 2      Angola      &lt;NA&gt;   Ang.     AO  People&#39;s Republic of Angola      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;
-## 3    Anguilla      &lt;NA&gt;   Ang.     AI                         &lt;NA&gt;      &lt;NA&gt;      U.K.     &lt;NA&gt;
-## 4     Albania      &lt;NA&gt;   Alb.     AL          Republic of Albania      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;
-## 5       Aland      &lt;NA&gt;  Aland     AI                Åland Islands      &lt;NA&gt;      Fin.     &lt;NA&gt;
-##     NAME_SORT NAME_ALT MAPCOLOR7 MAPCOLOR8 MAPCOLOR9 MAPCOLOR13  POP_EST GDP_MD_EST POP_YEAR LASTCENSUS
-## 0       Aruba     &lt;NA&gt;         4         2         2          9   103065     2258.0      -99       2010
-## 1 Afghanistan     &lt;NA&gt;         5         6         8          7 28400000    22270.0      -99       1979
-## 2      Angola     &lt;NA&gt;         3         2         6          1 12799293   110300.0      -99       1970
-## 3    Anguilla     &lt;NA&gt;         6         6         6          3    14436      108.9      -99        -99
-## 4     Albania     &lt;NA&gt;         1         4         1          6  3639453    21810.0      -99       2001
-## 5       Aland     &lt;NA&gt;         4         1         4          6    27153     1563.0      -99        -99
-##   GDP_YEAR                    ECONOMY              INCOME_GRP WIKIPEDIA FIPS_10_ ISO_A2 ISO_A3 ISO_N3
-## 0      -99       6. Developing region 2. High income: nonOECD       -99       AA     AW    ABW    533
-## 1      -99  7. Least developed region           5. Low income       -99       AF     AF    AFG    004
-## 2      -99  7. Least developed region  3. Upper middle income       -99       AO     AO    AGO    024
-## 3      -99       6. Developing region  3. Upper middle income       -99       AV     AI    AIA    660
-## 4      -99       6. Developing region  4. Lower middle income       -99       AL     AL    ALB    008
-## 5      -99 2. Developed region: nonG7    1. High income: OECD       -99      -99     AX    ALA    248
-##   UN_A3 WB_A2 WB_A3   WOE_ID WOE_ID_EH                   WOE_NOTE ADM0_A3_IS ADM0_A3_US ADM0_A3_UN
-## 0   533    AW   ABW 23424736  23424736 Exact WOE match as country        ABW        ABW        -99
-## 1   004    AF   AFG 23424739  23424739 Exact WOE match as country        AFG        AFG        -99
-## 2   024    AO   AGO 23424745  23424745 Exact WOE match as country        AGO        AGO        -99
-## 3   660   -99   -99 23424751  23424751 Exact WOE match as country        AIA        AIA        -99
-## 4   008    AL   ALB 23424742  23424742 Exact WOE match as country        ALB        ALB        -99
-## 5   248   -99   -99 12577865  12577865 Exact WOE match as country        ALA        ALD        -99
-##   ADM0_A3_WB     CONTINENT REGION_UN       SUBREGION                 REGION_WB NAME_LEN LONG_LEN
-## 0        -99 North America  Americas       Caribbean Latin America &amp; Caribbean        5        5
-## 1        -99          Asia      Asia   Southern Asia                South Asia       11       11
-## 2        -99        Africa    Africa   Middle Africa        Sub-Saharan Africa        6        6
-## 3        -99 North America  Americas       Caribbean Latin America &amp; Caribbean        8        8
-## 4        -99        Europe    Europe Southern Europe     Europe &amp; Central Asia        7        7
-## 5        -99        Europe    Europe Northern Europe     Europe &amp; Central Asia        5       13
-##   ABBREV_LEN TINY HOMEPART
-## 0          5    4      -99
-## 1          4  -99        1
-## 2          4  -99        1
-## 3          4  -99      -99
-## 4          4  -99        1
-## 5          5    5      -99</code></pre>
-<p>The approprate code to extract the U.S. and Canada data is <code>admin1_poly$sr_sov_a3 == "CAN"</code> and <code>admin1_poly$sr_sov_a3 == "US1"</code>. Extract the borders, and plot the resulting shapefiles.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">can_poly &lt;-<span class="st"> </span>admin1_poly[admin1_poly<span class="op">$</span>sov_a3 <span class="op">==</span><span class="st"> &quot;CAN&quot;</span> ,]</a>
-<a class="sourceLine" id="cb13-2" title="2">us_poly &lt;-<span class="st"> </span>admin1_poly[admin1_poly<span class="op">$</span>sov_a3 <span class="op">==</span><span class="st"> &quot;US1&quot;</span>,]</a>
-<a class="sourceLine" id="cb13-3" title="3"><span class="kw">plot</span>(coast_lines)</a>
-<a class="sourceLine" id="cb13-4" title="4"><span class="kw">plot</span>(can_poly, <span class="dt">bor=</span><span class="st">&quot;red&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb13-5" title="5"><span class="kw">plot</span>(us_poly, <span class="dt">bor=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="RMaps2_files/figure-html/extract%20US%20and%20Candada-1.png" width="75%" height="75%" /></p>
-<p>Convert the U.S. and Canada polygons to <code>SpatialLines</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">can_lines &lt;-<span class="st"> </span><span class="kw">as</span>(can_poly, <span class="st">&quot;SpatialLines&quot;</span>)</a>
-<a class="sourceLine" id="cb14-2" title="2">us_lines &lt;-<span class="st"> </span><span class="kw">as</span>(us_poly, <span class="st">&quot;SpatialLines&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>layer <span class="ot">&lt;-</span> <span class="fu">ogrListLayers</span>(coast_shapefile)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">ogrInfo</span>(coast_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>coast_lines <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(coast_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">summary</span>(coast_lines)  </span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="fu">plot</span>(coast_lines)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>layer <span class="ot">&lt;-</span> <span class="fu">ogrListLayers</span>(admin0_shapefile)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="fu">ogrInfo</span>(admin0_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>admin0_poly <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(admin0_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="fu">summary</span>(admin0_poly)  </span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="fu">plot</span>(admin0_poly, <span class="at">bor=</span><span class="st">&quot;gray&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>layer <span class="ot">&lt;-</span> <span class="fu">ogrListLayers</span>(admin1_shapefile)</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a><span class="fu">ogrInfo</span>(admin1_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>admin1_poly <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(admin1_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="fu">summary</span>(admin1_poly)  </span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a><span class="fu">plot</span>(admin1_poly, <span class="at">bor=</span><span class="st">&quot;lightgreen&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>layer <span class="ot">&lt;-</span> <span class="fu">ogrListLayers</span>(lakes_shapefile)</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a><span class="fu">ogrInfo</span>(lakes_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>lakes_poly <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(lakes_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a><span class="fu">summary</span>(lakes_poly)  </span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a><span class="fu">plot</span>(lakes_poly, <span class="at">bor=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a>lrglakes_poly <span class="ot">&lt;-</span> lakes_poly[<span class="fu">as.numeric</span>(lakes_poly<span class="sc">$</span>scalerank) <span class="sc">&lt;=</span> <span class="dv">2</span> ,]</span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="fu">plot</span>(lrglakes_poly, <span class="at">bor=</span><span class="st">&quot;purple&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Take a look at the <code>admin1_poly</code> dataframe, to figure out
+the codes for Candadian and U.S. provincial and state borders.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">head</span>(admin0_poly)</span></code></pre></div>
+<p>The approprate code to extract the U.S. and Canada data is
+<code>admin1_poly$sr_sov_a3 == "CAN"</code> and
+<code>admin1_poly$sr_sov_a3 == "US1"</code>. Extract the borders, and
+plot the resulting shapefiles.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>can_poly <span class="ot">&lt;-</span> admin1_poly[admin1_poly<span class="sc">$</span>sov_a3 <span class="sc">==</span> <span class="st">&quot;CAN&quot;</span> ,]</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>us_poly <span class="ot">&lt;-</span> admin1_poly[admin1_poly<span class="sc">$</span>sov_a3 <span class="sc">==</span> <span class="st">&quot;US1&quot;</span>,]</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">plot</span>(coast_lines)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">plot</span>(can_poly, <span class="at">bor=</span><span class="st">&quot;red&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">plot</span>(us_poly, <span class="at">bor=</span><span class="st">&quot;blue&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Convert the U.S. and Canada polygons to
+<code>SpatialLines</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>can_lines <span class="ot">&lt;-</span> <span class="fu">as</span>(can_poly, <span class="st">&quot;SpatialLines&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>us_lines <span class="ot">&lt;-</span> <span class="fu">as</span>(us_poly, <span class="st">&quot;SpatialLines&quot;</span>)</span></code></pre></div>
 </div>
-<div id="project-the-shape-files" class="section level2">
-<h2><span class="header-section-number">1.2</span> Project the shape files</h2>
-<p>Set the <code>proj4string</code> value and the coordinate reference system for the na10km_v2 grid:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">na_proj4string &lt;-<span class="st"> &quot;+proj=laea +lon_0=-100 +lat_0=50 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs&quot;</span></a>
-<a class="sourceLine" id="cb15-2" title="2">na_crs =<span class="st"> </span><span class="kw">CRS</span>(na_proj4string)</a></code></pre></div>
-<p>Project the various shapefiles (and plot the coastlines as an example):</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">coast_lines_proj &lt;-<span class="kw">spTransform</span>(coast_lines, na_crs)</a>
-<a class="sourceLine" id="cb16-2" title="2">admin0_poly_proj &lt;-<span class="kw">spTransform</span>(admin0_poly, na_crs)</a>
-<a class="sourceLine" id="cb16-3" title="3">admin1_poly_proj &lt;-<span class="kw">spTransform</span>(admin1_poly, na_crs)</a>
-<a class="sourceLine" id="cb16-4" title="4">lakes_poly_proj &lt;-<span class="kw">spTransform</span>(lakes_poly, na_crs)</a>
-<a class="sourceLine" id="cb16-5" title="5">lrglakes_poly_proj &lt;-<span class="kw">spTransform</span>(lrglakes_poly, na_crs)</a>
-<a class="sourceLine" id="cb16-6" title="6">can_poly_proj &lt;-<span class="kw">spTransform</span>(can_poly, na_crs)</a>
-<a class="sourceLine" id="cb16-7" title="7">us_poly_proj &lt;-<span class="kw">spTransform</span>(us_poly, na_crs)</a>
-<a class="sourceLine" id="cb16-8" title="8">can_lines_proj &lt;-<span class="kw">spTransform</span>(can_lines, na_crs)</a>
-<a class="sourceLine" id="cb16-9" title="9">us_lines_proj &lt;-<span class="kw">spTransform</span>(us_lines, na_crs)</a>
-<a class="sourceLine" id="cb16-10" title="10"></a>
-<a class="sourceLine" id="cb16-11" title="11"><span class="kw">plot</span>(coast_lines_proj)</a>
-<a class="sourceLine" id="cb16-12" title="12"><span class="kw">plot</span>(admin0_poly_proj, <span class="dt">bor=</span><span class="st">&quot;gray&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb16-13" title="13"><span class="kw">plot</span>(coast_lines_proj, <span class="dt">add=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="RMaps2_files/figure-html/project%20shapefiles-1.png" width="75%" height="75%" /></p>
-<p>Define a bounding box for trimming the polygon and line shape files to the area covered by the na10km_v2 grid. The extent of the area is known from the definition of the grid, but could also be determined by reading an na10km_v2 netCDF file. The projected <code>admin</code> shape files are quite complicated, and create “topology exception errors”. These can be fixed using an approach discussed on StackExchange <a href="http://gis.stackexchange.com/questions/163445/r-solution-for-topologyexception-input-geom-1-is-invalid-self-intersection-er">[link]</a></p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">na10km_bb &lt;-<span class="st"> </span><span class="kw">as</span>(<span class="kw">extent</span>(<span class="op">-</span><span class="dv">5770000</span>,<span class="dv">5000000</span>,<span class="op">-</span><span class="dv">4510000</span>,<span class="dv">4480000</span>), <span class="st">&quot;SpatialPolygons&quot;</span>)</a>
-<a class="sourceLine" id="cb17-2" title="2"><span class="kw">proj4string</span>(na10km_bb) &lt;-<span class="st"> </span>na_proj4string</a>
-<a class="sourceLine" id="cb17-3" title="3"></a>
-<a class="sourceLine" id="cb17-4" title="4">na10km_coast_lines_proj &lt;-<span class="st"> </span><span class="kw">gIntersection</span>(coast_lines_proj, na10km_bb)</a>
-<a class="sourceLine" id="cb17-5" title="5">na10km_lakes_poly_proj &lt;-<span class="st"> </span><span class="kw">gIntersection</span>(lakes_poly_proj, na10km_bb)</a>
-<a class="sourceLine" id="cb17-6" title="6">na10km_lrglakes_poly_proj &lt;-<span class="st"> </span><span class="kw">gIntersection</span>(lrglakes_poly_proj, na10km_bb)</a>
-<a class="sourceLine" id="cb17-7" title="7">na10km_can_poly_proj &lt;-<span class="st"> </span><span class="kw">gIntersection</span>(can_poly_proj, na10km_bb)</a>
-<a class="sourceLine" id="cb17-8" title="8">na10km_us_poly_proj &lt;-<span class="st"> </span><span class="kw">gIntersection</span>(us_poly_proj, na10km_bb)</a>
-<a class="sourceLine" id="cb17-9" title="9">na10km_can_lines_proj &lt;-<span class="st"> </span><span class="kw">gIntersection</span>(can_lines_proj, na10km_bb)</a>
-<a class="sourceLine" id="cb17-10" title="10">na10km_us_lines_proj &lt;-<span class="st"> </span><span class="kw">gIntersection</span>(us_lines_proj, na10km_bb)</a></code></pre></div>
+<div id="project-the-shape-files" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Project the shape
+files</h2>
+<p>Set the <code>proj4string</code> value and the coordinate reference
+system for the na10km_v2 grid:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>na_proj4string <span class="ot">&lt;-</span> <span class="st">&quot;+proj=laea +lon_0=-100 +lat_0=50 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs&quot;</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>na_crs <span class="ot">=</span> <span class="fu">CRS</span>(na_proj4string)</span></code></pre></div>
+<p>Project the various shapefiles (and plot the coastlines as an
+example):</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>coast_lines_proj <span class="ot">&lt;-</span><span class="fu">spTransform</span>(coast_lines, na_crs)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>admin0_poly_proj <span class="ot">&lt;-</span><span class="fu">spTransform</span>(admin0_poly, na_crs)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>admin1_poly_proj <span class="ot">&lt;-</span><span class="fu">spTransform</span>(admin1_poly, na_crs)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>lakes_poly_proj <span class="ot">&lt;-</span><span class="fu">spTransform</span>(lakes_poly, na_crs)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>lrglakes_poly_proj <span class="ot">&lt;-</span><span class="fu">spTransform</span>(lrglakes_poly, na_crs)</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>can_poly_proj <span class="ot">&lt;-</span><span class="fu">spTransform</span>(can_poly, na_crs)</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>us_poly_proj <span class="ot">&lt;-</span><span class="fu">spTransform</span>(us_poly, na_crs)</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>can_lines_proj <span class="ot">&lt;-</span><span class="fu">spTransform</span>(can_lines, na_crs)</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>us_lines_proj <span class="ot">&lt;-</span><span class="fu">spTransform</span>(us_lines, na_crs)</span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="fu">plot</span>(coast_lines_proj)</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="fu">plot</span>(admin0_poly_proj, <span class="at">bor=</span><span class="st">&quot;gray&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="fu">plot</span>(coast_lines_proj, <span class="at">add=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Define a bounding box for trimming the polygon and line shape files
+to the area covered by the na10km_v2 grid. The extent of the area is
+known from the definition of the grid, but could also be determined by
+reading an na10km_v2 netCDF file. The projected <code>admin</code> shape
+files are quite complicated, and create “topology exception errors”.
+These can be fixed using an approach discussed on StackExchange <a
+href="http://gis.stackexchange.com/questions/163445/r-solution-for-topologyexception-input-geom-1-is-invalid-self-intersection-er">[link]</a></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>na10km_bb <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">extent</span>(<span class="sc">-</span><span class="dv">5770000</span>,<span class="dv">5000000</span>,<span class="sc">-</span><span class="dv">4510000</span>,<span class="dv">4480000</span>), <span class="st">&quot;SpatialPolygons&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">proj4string</span>(na10km_bb) <span class="ot">&lt;-</span> na_proj4string</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>na10km_coast_lines_proj <span class="ot">&lt;-</span> <span class="fu">gIntersection</span>(coast_lines_proj, na10km_bb)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>na10km_lakes_poly_proj <span class="ot">&lt;-</span> <span class="fu">gIntersection</span>(lakes_poly_proj, na10km_bb)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>na10km_lrglakes_poly_proj <span class="ot">&lt;-</span> <span class="fu">gIntersection</span>(lrglakes_poly_proj, na10km_bb)</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>na10km_can_poly_proj <span class="ot">&lt;-</span> <span class="fu">gIntersection</span>(can_poly_proj, na10km_bb)</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>na10km_us_poly_proj <span class="ot">&lt;-</span> <span class="fu">gIntersection</span>(us_poly_proj, na10km_bb)</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>na10km_can_lines_proj <span class="ot">&lt;-</span> <span class="fu">gIntersection</span>(can_lines_proj, na10km_bb)</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>na10km_us_lines_proj <span class="ot">&lt;-</span> <span class="fu">gIntersection</span>(us_lines_proj, na10km_bb)</span></code></pre></div>
 <p>Now do the <code>admin</code> shape files:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">na10km_bb &lt;-<span class="st"> </span><span class="kw">gBuffer</span>(na10km_bb, <span class="dt">byid=</span><span class="ot">TRUE</span>, <span class="dt">width=</span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb18-2" title="2">admin0_poly_proj &lt;-<span class="st"> </span><span class="kw">gSimplify</span>(admin0_poly_proj, <span class="dt">tol =</span> <span class="fl">0.00001</span>)</a>
-<a class="sourceLine" id="cb18-3" title="3">na10km_admin0_poly_proj &lt;-<span class="st"> </span><span class="kw">gBuffer</span>(admin0_poly_proj, <span class="dt">byid=</span><span class="ot">TRUE</span>, <span class="dt">width=</span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb18-4" title="4">na10km_admin0_poly_proj &lt;-<span class="st"> </span><span class="kw">gIntersection</span>(admin0_poly_proj, <span class="dt">byid=</span><span class="ot">TRUE</span>, na10km_bb)</a>
-<a class="sourceLine" id="cb18-5" title="5">admin1_poly_proj &lt;-<span class="st"> </span><span class="kw">gSimplify</span>(admin1_poly_proj, <span class="dt">tol =</span> <span class="fl">0.00001</span>)</a>
-<a class="sourceLine" id="cb18-6" title="6">na10km_admin1_poly_proj &lt;-<span class="st"> </span><span class="kw">gBuffer</span>(admin1_poly_proj, <span class="dt">byid=</span><span class="ot">TRUE</span>, <span class="dt">width=</span><span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb18-7" title="7">na10km_admin1_poly_proj &lt;-<span class="st"> </span><span class="kw">gIntersection</span>(admin1_poly_proj, <span class="dt">byid=</span><span class="ot">TRUE</span>, na10km_bb)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>na10km_bb <span class="ot">&lt;-</span> <span class="fu">gBuffer</span>(na10km_bb, <span class="at">byid=</span><span class="cn">TRUE</span>, <span class="at">width=</span><span class="dv">0</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>admin0_poly_proj <span class="ot">&lt;-</span> <span class="fu">gSimplify</span>(admin0_poly_proj, <span class="at">tol =</span> <span class="fl">0.00001</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>na10km_admin0_poly_proj <span class="ot">&lt;-</span> <span class="fu">gBuffer</span>(admin0_poly_proj, <span class="at">byid=</span><span class="cn">TRUE</span>, <span class="at">width=</span><span class="dv">0</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>na10km_admin0_poly_proj <span class="ot">&lt;-</span> <span class="fu">gIntersection</span>(admin0_poly_proj, <span class="at">byid=</span><span class="cn">TRUE</span>, na10km_bb)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>admin1_poly_proj <span class="ot">&lt;-</span> <span class="fu">gSimplify</span>(admin1_poly_proj, <span class="at">tol =</span> <span class="fl">0.00001</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>na10km_admin1_poly_proj <span class="ot">&lt;-</span> <span class="fu">gBuffer</span>(admin1_poly_proj, <span class="at">byid=</span><span class="cn">TRUE</span>, <span class="at">width=</span><span class="dv">0</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>na10km_admin1_poly_proj <span class="ot">&lt;-</span> <span class="fu">gIntersection</span>(admin1_poly_proj, <span class="at">byid=</span><span class="cn">TRUE</span>, na10km_bb)</span></code></pre></div>
 <p>Plot the projected shapefiles.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">plot</span>(na10km_coast_lines_proj)</a>
-<a class="sourceLine" id="cb19-2" title="2"><span class="kw">plot</span>(na10km_admin0_poly_proj, <span class="dt">bor=</span><span class="st">&quot;gray&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb19-3" title="3"><span class="kw">plot</span>(na10km_can_lines_proj, <span class="dt">col=</span><span class="st">&quot;pink&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb19-4" title="4"><span class="kw">plot</span>(na10km_us_lines_proj, <span class="dt">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb19-5" title="5"><span class="kw">plot</span>(na10km_lrglakes_poly_proj, <span class="dt">bor=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb19-6" title="6"><span class="kw">plot</span>(na10km_bb, <span class="dt">bor=</span><span class="st">&quot;purple&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="RMaps2_files/figure-html/plot%20projected%20shapefiles-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">plot</span>(na10km_coast_lines_proj)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">plot</span>(na10km_admin0_poly_proj, <span class="at">bor=</span><span class="st">&quot;gray&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">plot</span>(na10km_can_lines_proj, <span class="at">col=</span><span class="st">&quot;pink&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="fu">plot</span>(na10km_us_lines_proj, <span class="at">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="fu">plot</span>(na10km_lrglakes_poly_proj, <span class="at">bor=</span><span class="st">&quot;blue&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="fu">plot</span>(na10km_bb, <span class="at">bor=</span><span class="st">&quot;purple&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
-<div id="write-out-the-projected-and-trimmed-shape-files" class="section level2">
-<h2><span class="header-section-number">1.3</span> Write out the projected and trimmed shape files</h2>
-<p>Next, write out the projected shapefiles, first setting the output path.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="co"># write out the various shapefiles </span></a>
-<a class="sourceLine" id="cb20-2" title="2">outpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/RMaps/derived/na10km_10m/&quot;</span></a>
-<a class="sourceLine" id="cb20-3" title="3">outshape &lt;-<span class="st"> </span>na10km_coast_lines_proj</a>
-<a class="sourceLine" id="cb20-4" title="4">outfile &lt;-<span class="st"> &quot;na10km_10m_coast_lines&quot;</span></a>
-<a class="sourceLine" id="cb20-5" title="5">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb20-6" title="6">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb20-7" title="7"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb20-8" title="8">outshape &lt;-<span class="st"> </span><span class="kw">SpatialLinesDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb20-9" title="9"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p>It’s always good practice to test whether the shapefile has ideed been written out correctly. Read it back in and plot it.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">test &lt;-<span class="st"> </span><span class="kw">readOGR</span>(outshapefile)</a></code></pre></div>
-<pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: &quot;/Users/bartlein/Projects/ESSD/data/RMaps/derived/na10km_10m/na10km_10m_coast_lines&quot;, layer: &quot;na10km_10m_coast_lines&quot;
-## with 1 features
-## It has 1 fields</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw">plot</span>(test, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>)</a></code></pre></div>
-<p><img src="RMaps2_files/figure-html/test%20shape2-1.png" width="75%" height="75%" /></p>
+<div id="write-out-the-projected-and-trimmed-shape-files"
+class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> Write out the
+projected and trimmed shape files</h2>
+<p>Next, write out the projected shapefiles, first setting the output
+path.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># write out the various shapefiles </span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>outpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/RMaps/derived/na10km_10m/&quot;</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> na10km_coast_lines_proj</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;na10km_10m_coast_lines&quot;</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialLinesDataFrame</span>(outshape, spdf)</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p>It’s always good practice to test whether the shapefile has ideed
+been written out correctly. Read it back in and plot it.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(outshapefile)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">plot</span>(test, <span class="at">col=</span><span class="st">&quot;black&quot;</span>)</span></code></pre></div>
 <p>Write out the other shape files (output is suppressed):</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1"><span class="co"># write out the various shapefiles </span></a>
-<a class="sourceLine" id="cb24-2" title="2">outshape &lt;-<span class="st"> </span>na10km_bb</a>
-<a class="sourceLine" id="cb24-3" title="3">outfile &lt;-<span class="st"> &quot;na10km_10m_bb&quot;</span></a>
-<a class="sourceLine" id="cb24-4" title="4">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb24-5" title="5">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb24-6" title="6"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb24-7" title="7">outshape &lt;-<span class="st"> </span><span class="kw">SpatialPolygonsDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb24-8" title="8"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb24-9" title="9"></a>
-<a class="sourceLine" id="cb24-10" title="10">outshape &lt;-<span class="st"> </span>na10km_lakes_poly_proj</a>
-<a class="sourceLine" id="cb24-11" title="11">outfile &lt;-<span class="st"> &quot;na10km_10m_lakes_poly&quot;</span></a>
-<a class="sourceLine" id="cb24-12" title="12">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb24-13" title="13">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb24-14" title="14"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb24-15" title="15">outshape &lt;-<span class="st"> </span><span class="kw">SpatialPolygonsDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb24-16" title="16"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb24-17" title="17"></a>
-<a class="sourceLine" id="cb24-18" title="18">outshape &lt;-<span class="st"> </span>na10km_lrglakes_poly_proj</a>
-<a class="sourceLine" id="cb24-19" title="19">outfile &lt;-<span class="st"> &quot;na10km_10m_lrglakes_poly&quot;</span></a>
-<a class="sourceLine" id="cb24-20" title="20">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb24-21" title="21">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb24-22" title="22"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb24-23" title="23">outshape &lt;-<span class="st"> </span><span class="kw">SpatialPolygonsDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb24-24" title="24"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb24-25" title="25"></a>
-<a class="sourceLine" id="cb24-26" title="26">outshape &lt;-<span class="st"> </span>na10km_can_poly_proj</a>
-<a class="sourceLine" id="cb24-27" title="27">outfile &lt;-<span class="st"> &quot;na10km_10m_can_poly&quot;</span></a>
-<a class="sourceLine" id="cb24-28" title="28">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb24-29" title="29">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb24-30" title="30"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb24-31" title="31">outshape &lt;-<span class="st"> </span><span class="kw">SpatialPolygonsDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb24-32" title="32"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb24-33" title="33"></a>
-<a class="sourceLine" id="cb24-34" title="34">outshape &lt;-<span class="st"> </span>na10km_us_poly_proj</a>
-<a class="sourceLine" id="cb24-35" title="35">outfile &lt;-<span class="st"> &quot;na10km_10m_us_poly&quot;</span></a>
-<a class="sourceLine" id="cb24-36" title="36">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb24-37" title="37">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb24-38" title="38"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb24-39" title="39">outshape &lt;-<span class="st"> </span><span class="kw">SpatialPolygonsDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb24-40" title="40"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb24-41" title="41"></a>
-<a class="sourceLine" id="cb24-42" title="42">outshape &lt;-<span class="st"> </span>na10km_can_lines_proj</a>
-<a class="sourceLine" id="cb24-43" title="43">outfile &lt;-<span class="st"> &quot;na10km_10m_can_lines&quot;</span></a>
-<a class="sourceLine" id="cb24-44" title="44">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb24-45" title="45">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb24-46" title="46"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb24-47" title="47">outshape &lt;-<span class="st"> </span><span class="kw">SpatialLinesDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb24-48" title="48"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb24-49" title="49"></a>
-<a class="sourceLine" id="cb24-50" title="50">outshape &lt;-<span class="st"> </span>na10km_us_lines_proj</a>
-<a class="sourceLine" id="cb24-51" title="51">outfile &lt;-<span class="st"> &quot;na10km_10m_us_lines&quot;</span></a>
-<a class="sourceLine" id="cb24-52" title="52">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb24-53" title="53">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb24-54" title="54"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb24-55" title="55">outshape &lt;-<span class="st"> </span><span class="kw">SpatialLinesDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb24-56" title="56"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb24-57" title="57"></a>
-<a class="sourceLine" id="cb24-58" title="58">outshape &lt;-<span class="st"> </span>na10km_admin0_poly_proj</a>
-<a class="sourceLine" id="cb24-59" title="59">outfile &lt;-<span class="st"> &quot;na10km_10m_admin0_poly&quot;</span></a>
-<a class="sourceLine" id="cb24-60" title="60">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb24-61" title="61">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb24-62" title="62"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb24-63" title="63">outshape &lt;-<span class="st"> </span><span class="kw">SpatialPolygonsDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb24-64" title="64"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb24-65" title="65"></a>
-<a class="sourceLine" id="cb24-66" title="66">outshape &lt;-<span class="st"> </span>na10km_admin1_poly_proj</a>
-<a class="sourceLine" id="cb24-67" title="67">outfile &lt;-<span class="st"> &quot;na10km_10m_admin1_poly&quot;</span></a>
-<a class="sourceLine" id="cb24-68" title="68">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb24-69" title="69">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb24-70" title="70"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb24-71" title="71">outshape &lt;-<span class="st"> </span><span class="kw">SpatialPolygonsDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb24-72" title="72"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># write out the various shapefiles </span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> na10km_bb</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;na10km_10m_bb&quot;</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialPolygonsDataFrame</span>(outshape, spdf)</span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> na10km_lakes_poly_proj</span>
+<span id="cb14-11"><a href="#cb14-11" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;na10km_10m_lakes_poly&quot;</span></span>
+<span id="cb14-12"><a href="#cb14-12" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb14-14"><a href="#cb14-14" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb14-15"><a href="#cb14-15" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialPolygonsDataFrame</span>(outshape, spdf)</span>
+<span id="cb14-16"><a href="#cb14-16" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-17"><a href="#cb14-17" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> na10km_lrglakes_poly_proj</span>
+<span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;na10km_10m_lrglakes_poly&quot;</span></span>
+<span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb14-21"><a href="#cb14-21" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb14-22"><a href="#cb14-22" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb14-23"><a href="#cb14-23" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialPolygonsDataFrame</span>(outshape, spdf)</span>
+<span id="cb14-24"><a href="#cb14-24" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-25"><a href="#cb14-25" tabindex="-1"></a></span>
+<span id="cb14-26"><a href="#cb14-26" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> na10km_can_poly_proj</span>
+<span id="cb14-27"><a href="#cb14-27" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;na10km_10m_can_poly&quot;</span></span>
+<span id="cb14-28"><a href="#cb14-28" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb14-29"><a href="#cb14-29" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb14-30"><a href="#cb14-30" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb14-31"><a href="#cb14-31" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialPolygonsDataFrame</span>(outshape, spdf)</span>
+<span id="cb14-32"><a href="#cb14-32" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-33"><a href="#cb14-33" tabindex="-1"></a></span>
+<span id="cb14-34"><a href="#cb14-34" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> na10km_us_poly_proj</span>
+<span id="cb14-35"><a href="#cb14-35" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;na10km_10m_us_poly&quot;</span></span>
+<span id="cb14-36"><a href="#cb14-36" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb14-37"><a href="#cb14-37" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb14-38"><a href="#cb14-38" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb14-39"><a href="#cb14-39" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialPolygonsDataFrame</span>(outshape, spdf)</span>
+<span id="cb14-40"><a href="#cb14-40" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-41"><a href="#cb14-41" tabindex="-1"></a></span>
+<span id="cb14-42"><a href="#cb14-42" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> na10km_can_lines_proj</span>
+<span id="cb14-43"><a href="#cb14-43" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;na10km_10m_can_lines&quot;</span></span>
+<span id="cb14-44"><a href="#cb14-44" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb14-45"><a href="#cb14-45" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb14-46"><a href="#cb14-46" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb14-47"><a href="#cb14-47" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialLinesDataFrame</span>(outshape, spdf)</span>
+<span id="cb14-48"><a href="#cb14-48" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-49"><a href="#cb14-49" tabindex="-1"></a></span>
+<span id="cb14-50"><a href="#cb14-50" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> na10km_us_lines_proj</span>
+<span id="cb14-51"><a href="#cb14-51" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;na10km_10m_us_lines&quot;</span></span>
+<span id="cb14-52"><a href="#cb14-52" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb14-53"><a href="#cb14-53" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb14-54"><a href="#cb14-54" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb14-55"><a href="#cb14-55" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialLinesDataFrame</span>(outshape, spdf)</span>
+<span id="cb14-56"><a href="#cb14-56" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-57"><a href="#cb14-57" tabindex="-1"></a></span>
+<span id="cb14-58"><a href="#cb14-58" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> na10km_admin0_poly_proj</span>
+<span id="cb14-59"><a href="#cb14-59" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;na10km_10m_admin0_poly&quot;</span></span>
+<span id="cb14-60"><a href="#cb14-60" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb14-61"><a href="#cb14-61" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb14-62"><a href="#cb14-62" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb14-63"><a href="#cb14-63" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialPolygonsDataFrame</span>(outshape, spdf)</span>
+<span id="cb14-64"><a href="#cb14-64" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-65"><a href="#cb14-65" tabindex="-1"></a></span>
+<span id="cb14-66"><a href="#cb14-66" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> na10km_admin1_poly_proj</span>
+<span id="cb14-67"><a href="#cb14-67" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;na10km_10m_admin1_poly&quot;</span></span>
+<span id="cb14-68"><a href="#cb14-68" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb14-69"><a href="#cb14-69" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb14-70"><a href="#cb14-70" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb14-71"><a href="#cb14-71" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialPolygonsDataFrame</span>(outshape, spdf)</span>
+<span id="cb14-72"><a href="#cb14-72" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <p><a href="Rmaps2.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="map-of-north-american-shaded-relief" class="section level1">
-<h1><span class="header-section-number">2</span> Map of North American shaded relief</h1>
-<div id="read-the-read-the-projected-and-trimmed-shapefiles" class="section level2">
-<h2><span class="header-section-number">2.1</span> Read the read the projected and trimmed shapefiles</h2>
+<div id="map-of-north-american-shaded-relief" class="section level1"
+number="2">
+<h1><span class="header-section-number">2</span> Map of North American
+shaded relief</h1>
+<div id="read-the-read-the-projected-and-trimmed-shapefiles"
+class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Read the read the
+projected and trimmed shapefiles</h2>
 <p>Load the appropriate packages.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">library</span>(sp)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">library</span>(sp)</span></code></pre></div>
 <p>Read the shapefiles:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1">shapepath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/RMaps/derived/na10km_10m/&quot;</span></a>
-<a class="sourceLine" id="cb26-2" title="2">na10km_bb &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(shapepath, <span class="st">&quot;na10km_10m_bb.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb26-3" title="3">na10km_coast_lines_proj &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(shapepath, <span class="st">&quot;na10km_10m_coast_lines.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb26-4" title="4">na10km_admin0_poly_proj &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(shapepath, <span class="st">&quot;na10km_10m_admin0_poly.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb26-5" title="5">na10km_lakes_poly_proj &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(shapepath, <span class="st">&quot;na10km_10m_lakes_poly.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb26-6" title="6">na10km_lrglakes_poly_proj &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(shapepath, <span class="st">&quot;na10km_10m_lrglakes_poly.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb26-7" title="7">na10km_can_lines_proj &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(shapepath, <span class="st">&quot;na10km_10m_can_lines.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb26-8" title="8">na10km_us_lines_proj &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(shapepath, <span class="st">&quot;na10km_10m_us_lines.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>shapepath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/RMaps/derived/na10km_10m/&quot;</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>na10km_bb <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(shapepath, <span class="st">&quot;na10km_10m_bb.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>na10km_coast_lines_proj <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(shapepath, <span class="st">&quot;na10km_10m_coast_lines.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>na10km_admin0_poly_proj <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(shapepath, <span class="st">&quot;na10km_10m_admin0_poly.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>na10km_lakes_poly_proj <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(shapepath, <span class="st">&quot;na10km_10m_lakes_poly.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>na10km_lrglakes_poly_proj <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(shapepath, <span class="st">&quot;na10km_10m_lrglakes_poly.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>na10km_can_lines_proj <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(shapepath, <span class="st">&quot;na10km_10m_can_lines.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>na10km_us_lines_proj <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(shapepath, <span class="st">&quot;na10km_10m_us_lines.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span></code></pre></div>
 <p>Plot the projected and trimmed shapefiles:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="kw">plot</span>(na10km_admin0_poly_proj, <span class="dt">bor=</span><span class="st">&quot;gray&quot;</span>)</a>
-<a class="sourceLine" id="cb27-2" title="2"><span class="kw">plot</span>(na10km_can_lines_proj, <span class="dt">col=</span><span class="st">&quot;gray&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb27-3" title="3"><span class="kw">plot</span>(na10km_us_lines_proj, <span class="dt">col=</span><span class="st">&quot;gray&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb27-4" title="4"><span class="kw">plot</span>(na10km_lrglakes_poly_proj, <span class="dt">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb27-5" title="5"><span class="kw">plot</span>(na10km_coast_lines_proj, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb27-6" title="6"><span class="kw">plot</span>(na10km_bb, <span class="dt">bor=</span><span class="st">&quot;black&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="RMaps2_files/figure-html/plot%20projected%20and%20trimmed%20shapefiles-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">plot</span>(na10km_admin0_poly_proj, <span class="at">bor=</span><span class="st">&quot;gray&quot;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">plot</span>(na10km_can_lines_proj, <span class="at">col=</span><span class="st">&quot;gray&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="fu">plot</span>(na10km_us_lines_proj, <span class="at">col=</span><span class="st">&quot;gray&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="fu">plot</span>(na10km_lrglakes_poly_proj, <span class="at">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="fu">plot</span>(na10km_coast_lines_proj, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="fu">plot</span>(na10km_bb, <span class="at">bor=</span><span class="st">&quot;black&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
-<div id="read-a-shaded-relief-file" class="section level2">
-<h2><span class="header-section-number">2.2</span> Read a shaded relief file</h2>
-<p>Read a pre-computed shaded relief file. This could also be crearted by reading the na10km_v2 grid-point elevations and using the <code>hillshade</code> function from the <code>raster</code> package. Note that in this file, the coordinates are in km, and so they must be multiplied by 1000.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1">datapath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
-<a class="sourceLine" id="cb28-2" title="2">datafile &lt;-<span class="st"> &quot;na10km_shade.csv&quot;</span></a>
-<a class="sourceLine" id="cb28-3" title="3">shade &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">paste</span>(datapath,datafile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb28-4" title="4">shade<span class="op">$</span>x &lt;-<span class="st"> </span>shade<span class="op">$</span>x<span class="op">*</span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb28-5" title="5">shade<span class="op">$</span>y &lt;-<span class="st"> </span>shade<span class="op">$</span>y<span class="op">*</span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb28-6" title="6"><span class="kw">head</span>(shade)</a></code></pre></div>
-<pre><code>##          x       y    shade      lat       lon
-## 1 -5770000 -820000 0.691208 21.83661 -160.1851
-## 2 -5760000 -820000 0.691208 21.90175 -160.1023
-## 3 -5720000 -860000 0.310095 21.90119 -159.5651
-## 4 -5720000 -850000 0.333957 21.96637 -159.6163
-## 5 -5720000 -840000 0.559432 22.03148 -159.6676
-## 6 -5720000 -830000 0.956591 22.09651 -159.7191</code></pre>
+<div id="read-a-shaded-relief-file" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Read a shaded relief
+file</h2>
+<p>Read a pre-computed shaded relief file. This could also be crearted
+by reading the na10km_v2 grid-point elevations and using the
+<code>hillshade</code> function from the <code>raster</code> package.
+Note that in this file, the coordinates are in km, and so they must be
+multiplied by 1000.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>datapath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>datafile <span class="ot">&lt;-</span> <span class="st">&quot;na10km_shade.csv&quot;</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>shade <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">paste</span>(datapath,datafile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>shade<span class="sc">$</span>x <span class="ot">&lt;-</span> shade<span class="sc">$</span>x<span class="sc">*</span><span class="dv">1000</span></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>shade<span class="sc">$</span>y <span class="ot">&lt;-</span> shade<span class="sc">$</span>y<span class="sc">*</span><span class="dv">1000</span></span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="fu">head</span>(shade)</span></code></pre></div>
 <p>Convert the dataframe to a SpatialPixelsData Frame</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="kw">coordinates</span>(shade) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;x&quot;</span>,<span class="st">&quot;y&quot;</span>)</a>
-<a class="sourceLine" id="cb30-2" title="2"><span class="kw">points2grid</span>(shade)</a></code></pre></div>
-<pre><code>## Warning in points2grid(shade): grid has empty column/rows in dimension 1</code></pre>
-<pre><code>##                          x        y
-## cellcentre.offset -5770000 -4510000
-## cellsize             10000    10000
-## cells.dim             1078      900</code></pre>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">shade_pixels &lt;-<span class="st"> </span><span class="kw">as</span>(shade, <span class="st">&quot;SpatialPixelsDataFrame&quot;</span>)</a></code></pre></div>
-<pre><code>## Warning in points2grid(points, tolerance, round): grid has empty column/rows in dimension 1</code></pre>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1"><span class="kw">summary</span>(shade_pixels)</a></code></pre></div>
-<pre><code>## Object of class SpatialPixelsDataFrame
-## Coordinates:
-##        min     max
-## x -5775000 5005000
-## y -4515000 4485000
-## Is projected: NA 
-## proj4string : [NA]
-## Number of points: 282017
-## Grid attributes:
-##   cellcentre.offset cellsize cells.dim
-## x          -5770000    10000      1078
-## y          -4510000    10000       900
-## Data attributes:
-##      shade              lat              lon          
-##  Min.   :-0.5064   Min.   :-2.757   Min.   :-203.188  
-##  1st Qu.: 0.6297   1st Qu.:35.292   1st Qu.:-113.434  
-##  Median : 0.6958   Median :49.353   Median : -96.309  
-##  Mean   : 0.6556   Mean   :46.929   Mean   : -96.031  
-##  3rd Qu.: 0.7318   3rd Qu.:62.580   3rd Qu.: -74.614  
-##  Max.   : 1.0000   Max.   :83.617   Max.   :   4.453</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">coordinates</span>(shade) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;x&quot;</span>,<span class="st">&quot;y&quot;</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">points2grid</span>(shade)</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>shade_pixels <span class="ot">&lt;-</span> <span class="fu">as</span>(shade, <span class="st">&quot;SpatialPixelsDataFrame&quot;</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="fu">summary</span>(shade_pixels)</span></code></pre></div>
 <p>Read some predetermined (gray-scale) colors for the shading.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1">colorfile &lt;-<span class="st"> &quot;shade40_clr.csv&quot;</span></a>
-<a class="sourceLine" id="cb37-2" title="2">shade_rgb &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">paste</span>(datapath, colorfile, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb37-3" title="3">shade_clr &lt;-<span class="st"> </span><span class="kw">rgb</span>(shade_rgb)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>colorfile <span class="ot">&lt;-</span> <span class="st">&quot;shade40_clr.csv&quot;</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>shade_rgb <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">paste</span>(datapath, colorfile, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>shade_clr <span class="ot">&lt;-</span> <span class="fu">rgb</span>(shade_rgb)</span></code></pre></div>
 <p>Set the (gray-scale) color numbers for each pixel:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1">shade_int &lt;-<span class="st"> </span><span class="kw">as.integer</span>(((shade<span class="op">$</span>shade<span class="op">+</span><span class="dv">1</span>)<span class="op">/</span><span class="dv">2</span>)<span class="op">*</span><span class="dv">40</span>)<span class="op">+</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb38-2" title="2">shade_colnum &lt;-<span class="st"> </span>shade_clr[shade_int]</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>shade_int <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(((shade<span class="sc">$</span>shade<span class="sc">+</span><span class="dv">1</span>)<span class="sc">/</span><span class="dv">2</span>)<span class="sc">*</span><span class="dv">40</span>)<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>shade_colnum <span class="ot">&lt;-</span> shade_clr[shade_int]</span></code></pre></div>
 </div>
-<div id="make-the-map" class="section level2">
+<div id="make-the-map" class="section level2" number="2.3">
 <h2><span class="header-section-number">2.3</span> Make the map</h2>
-<p>Plot the shaded-relief colors and the various shape files. The location of the text string was determined by plotting an initial version ofthe map, and using the <code>locate()</code> function. The <code>cex=0.09</code> argument in the <code>points()</code> function was detrmined by trial and error.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1"><span class="kw">pdf</span>(<span class="dt">file =</span> <span class="st">&quot;na_shade01b.pdf&quot;</span>)</a>
-<a class="sourceLine" id="cb39-2" title="2"><span class="kw">plot</span>(na10km_bb, <span class="dt">col=</span><span class="st">&quot;gray95&quot;</span>)</a>
-<a class="sourceLine" id="cb39-3" title="3"><span class="kw">points</span>(shade_pixels, <span class="dt">pch=</span><span class="dv">15</span>, <span class="dt">cex=</span><span class="fl">0.09</span>, <span class="dt">col=</span>shade_colnum)</a>
-<a class="sourceLine" id="cb39-4" title="4"><span class="kw">plot</span>(na10km_admin0_poly_proj, <span class="dt">lwd=</span><span class="fl">0.2</span>, <span class="dt">bor=</span><span class="st">&quot;gray50&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb39-5" title="5"><span class="kw">plot</span>(na10km_can_lines_proj, <span class="dt">lwd=</span><span class="fl">0.2</span>, <span class="dt">col=</span><span class="st">&quot;gray50&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb39-6" title="6"><span class="kw">plot</span>(na10km_us_lines_proj, <span class="dt">lwd=</span><span class="fl">0.2</span>, <span class="dt">col=</span><span class="st">&quot;gray50&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb39-7" title="7"><span class="kw">plot</span>(na10km_lrglakes_poly_proj, <span class="dt">lwd=</span><span class="fl">0.2</span>, <span class="dt">bor=</span><span class="st">&quot;black&quot;</span>, <span class="dt">col=</span><span class="st">&quot;gray90&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb39-8" title="8"><span class="kw">plot</span>(na10km_coast_lines_proj, <span class="dt">lwd=</span><span class="fl">0.3</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb39-9" title="9"><span class="kw">text</span>(<span class="op">-</span><span class="dv">5770000</span>, <span class="dv">4620000</span>, <span class="dt">pos=</span><span class="kw">c</span>(<span class="dv">4</span>), <span class="dt">offset=</span><span class="fl">0.0</span>, <span class="dt">cex=</span><span class="fl">1.0</span>, <span class="st">&quot;NA10km_v2 -- 10m Natural Earth Outlines&quot;</span>)</a>
-<a class="sourceLine" id="cb39-10" title="10"><span class="kw">plot</span>(na10km_bb, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb39-11" title="11"><span class="kw">dev.off</span>()</a></code></pre></div>
-<p>The resulting plot will look like this: <img src="images/na_shade01b.png" /></p>
+<p>Plot the shaded-relief colors and the various shape files. The
+location of the text string was determined by plotting an initial
+version ofthe map, and using the <code>locate()</code> function. The
+<code>cex=0.09</code> argument in the <code>points()</code> function was
+detrmined by trial and error.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">pdf</span>(<span class="at">file =</span> <span class="st">&quot;na_shade01b.pdf&quot;</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="fu">plot</span>(na10km_bb, <span class="at">col=</span><span class="st">&quot;gray95&quot;</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">points</span>(shade_pixels, <span class="at">pch=</span><span class="dv">15</span>, <span class="at">cex=</span><span class="fl">0.09</span>, <span class="at">col=</span>shade_colnum)</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="fu">plot</span>(na10km_admin0_poly_proj, <span class="at">lwd=</span><span class="fl">0.2</span>, <span class="at">bor=</span><span class="st">&quot;gray50&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="fu">plot</span>(na10km_can_lines_proj, <span class="at">lwd=</span><span class="fl">0.2</span>, <span class="at">col=</span><span class="st">&quot;gray50&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="fu">plot</span>(na10km_us_lines_proj, <span class="at">lwd=</span><span class="fl">0.2</span>, <span class="at">col=</span><span class="st">&quot;gray50&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a><span class="fu">plot</span>(na10km_lrglakes_poly_proj, <span class="at">lwd=</span><span class="fl">0.2</span>, <span class="at">bor=</span><span class="st">&quot;black&quot;</span>, <span class="at">col=</span><span class="st">&quot;gray90&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a><span class="fu">plot</span>(na10km_coast_lines_proj, <span class="at">lwd=</span><span class="fl">0.3</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a><span class="fu">text</span>(<span class="sc">-</span><span class="dv">5770000</span>, <span class="dv">4620000</span>, <span class="at">pos=</span><span class="fu">c</span>(<span class="dv">4</span>), <span class="at">offset=</span><span class="fl">0.0</span>, <span class="at">cex=</span><span class="fl">1.0</span>, <span class="st">&quot;NA10km_v2 -- 10m Natural Earth Outlines&quot;</span>)</span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a><span class="fu">plot</span>(na10km_bb, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<p>The resulting plot will look like this: <img
+src="images/na_shade01b.png" /></p>
 <p><a href="Rmaps2.html">[Back to top]</a></p>
 </div>
 </div>
@@ -884,7 +798,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -892,6 +806,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

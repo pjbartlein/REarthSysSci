@@ -1,49 +1,78 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Plot Alpha</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -52,9 +81,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -89,13 +118,20 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -103,39 +139,9 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
   }
 })();
 </script>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="html-md-01.css" type="text/css" />
 
@@ -147,13 +153,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -167,40 +168,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -228,7 +205,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -240,7 +217,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -250,11 +227,28 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -266,13 +260,12 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -280,16 +273,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -302,6 +288,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -313,18 +300,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -344,7 +319,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -357,7 +332,7 @@ $(document).ready(function () {
   <a href="overview.html">Overview</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Topics
      
     <span class="caret"></span>
@@ -409,7 +384,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tasks
      
     <span class="caret"></span>
@@ -448,7 +423,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Resources
      
     <span class="caret"></span>
@@ -472,7 +447,7 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -482,79 +457,95 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a><ul>
-<li><a href="#load-packages"><span class="toc-section-number">1.1</span> Load packages</a></li>
+<li><a href="#introduction" id="toc-introduction"><span
+class="toc-section-number">1</span> Introduction</a>
+<ul>
+<li><a href="#load-packages" id="toc-load-packages"><span
+class="toc-section-number">1.1</span> Load packages</a></li>
 </ul></li>
-<li><a href="#read-data"><span class="toc-section-number">2</span> Read data</a><ul>
-<li><a href="#shapefile"><span class="toc-section-number">2.1</span> Shapefile</a><ul>
-<li><a href="#read-a-shapefile"><span class="toc-section-number">2.1.1</span> Read a shapefile</a></li>
-<li><a href="#plot-the-shape-file"><span class="toc-section-number">2.1.2</span> plot the shape file</a></li>
+<li><a href="#read-data" id="toc-read-data"><span
+class="toc-section-number">2</span> Read data</a>
+<ul>
+<li><a href="#shapefile" id="toc-shapefile"><span
+class="toc-section-number">2.1</span> Shapefile</a>
+<ul>
+<li><a href="#read-a-shapefile" id="toc-read-a-shapefile"><span
+class="toc-section-number">2.1.1</span> Read a shapefile</a></li>
+<li><a href="#plot-the-shape-file" id="toc-plot-the-shape-file"><span
+class="toc-section-number">2.1.2</span> plot the shape file</a></li>
 </ul></li>
-<li><a href="#read-alpha"><span class="toc-section-number">2.2</span> Read alpha</a></li>
+<li><a href="#read-alpha" id="toc-read-alpha"><span
+class="toc-section-number">2.2</span> Read alpha</a></li>
 </ul></li>
-<li><a href="#plot-the-data"><span class="toc-section-number">3</span> Plot the data</a></li>
+<li><a href="#plot-the-data" id="toc-plot-the-data"><span
+class="toc-section-number">3</span> Plot the data</a></li>
 </ul>
 </div>
 
-<div id="introduction" class="section level1">
+<div id="introduction" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
-<p>This RMarkdown document describes reading a netCDF file consisting of several bioclimatic variables, and plots one of them <code>alpha</code></p>
-<div id="load-packages" class="section level2">
+<p>This RMarkdown document describes reading a netCDF file consisting of
+several bioclimatic variables, and plots one of them
+<code>alpha</code></p>
+<div id="load-packages" class="section level2" number="1.1">
 <h2><span class="header-section-number">1.1</span> Load packages</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># load packages</span></a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(sf)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(raster)</a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="kw">library</span>(rasterVis)</a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="kw">library</span>(RColorBrewer)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># load packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(raster)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(rasterVis)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
 </div>
 </div>
-<div id="read-data" class="section level1">
+<div id="read-data" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Read data</h1>
-<div id="shapefile" class="section level2">
+<div id="shapefile" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Shapefile</h2>
-<div id="read-a-shapefile" class="section level3">
-<h3><span class="header-section-number">2.1.1</span> Read a shapefile</h3>
+<div id="read-a-shapefile" class="section level3" number="2.1.1">
+<h3><span class="header-section-number">2.1.1</span> Read a
+shapefile</h3>
 <p>Read a shapefile of world coastlines and countries.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># read a world shapefile</span></a>
-<a class="sourceLine" id="cb2-2" title="2">shp_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/&quot;</span></a>
-<a class="sourceLine" id="cb2-3" title="3">shp_name &lt;-<span class="st"> &quot;ne_110m_admin_0_countries.shp&quot;</span></a>
-<a class="sourceLine" id="cb2-4" title="4">shp_file &lt;-<span class="st"> </span><span class="kw">paste</span>(shp_path, shp_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb2-5" title="5">world_shp &lt;-<span class="st"> </span><span class="kw">read_sf</span>(shp_file)</a>
-<a class="sourceLine" id="cb2-6" title="6">world_outline &lt;-<span class="st"> </span><span class="kw">as</span>(<span class="kw">st_geometry</span>(world_shp), <span class="dt">Class=</span><span class="st">&quot;Spatial&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># read a world shapefile</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>shp_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>shp_name <span class="ot">&lt;-</span> <span class="st">&quot;ne_110m_admin_0_countries.shp&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>shp_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(shp_path, shp_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>world_shp <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(shp_file)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>world_outline <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">st_geometry</span>(world_shp), <span class="at">Class=</span><span class="st">&quot;Spatial&quot;</span>)</span></code></pre></div>
 </div>
-<div id="plot-the-shape-file" class="section level3">
-<h3><span class="header-section-number">2.1.2</span> plot the shape file</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># plot the world outlines</span></a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw">plot</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">lwd=</span><span class="dv">1</span>)</a></code></pre></div>
+<div id="plot-the-shape-file" class="section level3" number="2.1.2">
+<h3><span class="header-section-number">2.1.2</span> plot the shape
+file</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># plot the world outlines</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">plot</span>(world_outline, <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">lwd=</span><span class="dv">1</span>)</span></code></pre></div>
 <p><img src="plot_alpha_RMarkdown_1page_tmp_files/figure-html/plot_shapefile-1.png" width="672" /></p>
 </div>
 </div>
-<div id="read-alpha" class="section level2">
+<div id="read-alpha" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Read alpha</h2>
 <p>Now read in alpha.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># read alpha (AE/PE)</span></a>
-<a class="sourceLine" id="cb4-2" title="2">alpha_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD//data/nc_files/&quot;</span></a>
-<a class="sourceLine" id="cb4-3" title="3">alpha_name &lt;-<span class="st"> &quot;cru10min30_bio.nc&quot;</span></a>
-<a class="sourceLine" id="cb4-4" title="4">alpha_file &lt;-<span class="st"> </span><span class="kw">paste</span>(alpha_path, alpha_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb4-5" title="5">alpha &lt;-<span class="st"> </span><span class="kw">raster</span>(alpha_file, <span class="dt">varname=</span><span class="st">&quot;mipt&quot;</span>)</a>
-<a class="sourceLine" id="cb4-6" title="6">alpha</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># read alpha (AE/PE)</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>alpha_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD//data/nc_files/&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>alpha_name <span class="ot">&lt;-</span> <span class="st">&quot;cru10min30_bio.nc&quot;</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>alpha_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(alpha_path, alpha_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fu">raster</span>(alpha_file, <span class="at">varname=</span><span class="st">&quot;mipt&quot;</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>alpha</span></code></pre></div>
 <pre><code>## class      : RasterLayer 
 ## dimensions : 360, 720, 259200  (nrow, ncol, ncell)
 ## resolution : 0.5, 0.5  (x, y)
 ## extent     : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
-## crs        : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
-## source     : /Users/bartlein/Projects/ESSD/data/nc_files/cru10min30_bio.nc 
+## crs        : +proj=longlat +datum=WGS84 +no_defs 
+## source     : cru10min30_bio.nc 
 ## names      : Priestley.Taylor..alpha..parameter..AE.PE. 
 ## zvar       : mipt</code></pre>
 </div>
 </div>
-<div id="plot-the-data" class="section level1">
+<div id="plot-the-data" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Plot the data</h1>
-<p>Finally, plot alpha using the <code>levelplot()</code> function from <code>rasterVis</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># rasterVis plot</span></a>
-<a class="sourceLine" id="cb6-2" title="2">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;BrBG&quot;</span>))</a>
-<a class="sourceLine" id="cb6-3" title="3">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(alpha, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme, <span class="dt">main=</span><span class="st">&quot;AE/PE&quot;</span>)</a>
-<a class="sourceLine" id="cb6-4" title="4">plt <span class="op">+</span><span class="st"> </span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(world_outline, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">1.0</span>))</a></code></pre></div>
+<p>Finally, plot alpha using the <code>levelplot()</code> function from
+<code>rasterVis</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># rasterVis plot</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>mapTheme <span class="ot">&lt;-</span> <span class="fu">rasterTheme</span>(<span class="at">region=</span><span class="fu">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;BrBG&quot;</span>))</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>plt <span class="ot">&lt;-</span> <span class="fu">levelplot</span>(alpha, <span class="at">margin=</span>F, <span class="at">par.settings=</span>mapTheme, <span class="at">main=</span><span class="st">&quot;AE/PE&quot;</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>plt <span class="sc">+</span> <span class="fu">layer</span>(<span class="fu">sp.lines</span>(world_outline, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">1.0</span>))</span></code></pre></div>
 <p><img src="plot_alpha_RMarkdown_1page_tmp_files/figure-html/plot_data-1.png" width="672" /></p>
 </div>
 
@@ -567,7 +558,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -575,6 +566,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

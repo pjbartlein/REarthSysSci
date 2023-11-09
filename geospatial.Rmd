@@ -29,7 +29,7 @@ Here is a very simple example of reading and plotting a couple of shape files, t
 
 Load the `sp` and `rgdal` package:
 
-```{r load packages, message=FALSE}
+```{r load packages, message=FALSE, eval=FALSE}
 library(sp)
 library(rgdal)
 ```
@@ -38,7 +38,7 @@ When `maptools` or `sp` is loaded, they also check for the presence of the `rgeo
 
 Read two shape files, one of Oreogon county outlines, the other of climate-station locations:
 
-```{r read outlines}
+```{r read outlines, eval=FALSE}
 # read county outlines
 otl_path <- "/Users/bartlein/Projects/ESSD/data/shp_files/OR/"
 otl_name <- "orotl.shp"
@@ -48,20 +48,20 @@ orotl_shp <- readOGR(otl_file)
 
 Check what kind of spatial data class this shapefile is
 
-```{r check outlines}
+```{r check outlines, eval=FALSE}
 class(orotl_shp)
 summary(orotl_shp)
 ```
 
 Note that the shapefile is a `SpatialLinesDataFrame` that in addition to the geometry of the counties (the outlines) also contains data (the names).  Plot the county outline shapefile:
 
-```{r plotsoutlines}
+```{r plotsoutlines, eval=FALSE}
 plot(orotl_shp)
 ```
 
 Now get the climate-station data
 
-```{r read stations}
+```{r read stations, eval=FALSE}
 # read stations
 orstations_path <- "/Users/bartlein/Projects/ESSD/data/shp_files/OR/"
 orstations_name <- "orstations.shp"
@@ -79,7 +79,7 @@ Note that this shape file also contains some climate data for each station, as w
 
 Plot the station data:
 
-```{r plot stations}
+```{r plot stations, eval=FALSE}
 # plot the station data on top of the outline map
 plot(orotl_shp)
 points(orstations_shp, pch=16, cex=0.7, col="blue")
@@ -93,7 +93,7 @@ More examples of simple maps can be found in the materials for Lecture 5 in GEOG
 
 This example demonstrates how to extract data from a raster for a set of target points contained in a .csv file.  In this case, the raster is the Ramankutty and Foley potential natural vegetation data set ([https://www.nelson.wisc.edu/sage/data-and-models/global-land-use/index.php](Shttps://www.nelson.wisc.edu/sage/data-and-models/global-land-use/index.php)), and the target points are the Global Charcoal Database (GCDv3) site locations ([http://www.gpwg.paleofire.org](http://www.gpwg.paleofire.org))
 
-```{r begin extract}
+```{r begin extract, eval=FALSE}
 # load packages
 library(ncdf4)
 library(raster)
@@ -104,7 +104,7 @@ library(rasterVis)
 
 User the `raster` package to read the vegetation data
 
-```{r read veg}
+```{r read veg, eval=FALSE}
 # read potential natural vegetation data sage_veg30.nc:
 vegtype_path <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
 vegtype_name <- "sage_veg30.nc"
@@ -115,7 +115,7 @@ vegtype
 
 Plot the vegetation data using a `rasterVis` levelplot: 
 
-```{r plot veg}
+```{r plot veg, eval=FALSE}
 mapTheme <- rasterTheme(region=rev(brewer.pal(8,"Greens")))
 levelplot(vegtype, margin=F, par.settings=mapTheme,
                  main="Potential Natural Vegetation")
@@ -123,7 +123,7 @@ levelplot(vegtype, margin=F, par.settings=mapTheme,
 
 Read the charcoal data locations:
 
-```{r read charcoal}
+```{r read charcoal, eval=FALSE}
 # read GCDv3 sites
 csv_path <- "/Users/bartlein/Projects/ESSD/data/csv_files/"
 csv_name <- "v3i_nsa_globe.csv"
@@ -135,7 +135,7 @@ plot(gcdv3$Lon, gcdv3$Lat, pch=16, cex=0.5, col="blue")
 
 In order to use the `extract()` function from `raster`, the target points must be turned into a `SpatialPoints` data set.
 
-```{r spatial points}
+```{r spatial points, eval=FALSE}
 # turn into SpatialPoints
 gcdv3_coords <- cbind(gcdv3$Lon, gcdv3$Lat)
 gcdv3_pts <- SpatialPoints(coords=gcdv3_coords, proj4string = CRS("+proj=longlat +datum=WGS84"))
@@ -145,7 +145,7 @@ class(gcdv3_pts)
 
 Plot the target points on top of ths source map:
 
-```{r plot both}
+```{r plot both, eval=FALSE}
 plt <- levelplot(vegtype, margin=F, par.settings=mapTheme,
                  main="Potential Natural Vegetation")
 plt + layer(sp.points(gcdv3_pts, col="blue", pch=16, cex=0.5))
@@ -155,7 +155,7 @@ plt + layer(sp.points(gcdv3_pts, col="blue", pch=16, cex=0.5))
 
 Now extract the data for the target points:
 
-```{r extract}
+```{r extract, eval=FALSE}
 # extract data from the raster at the target points
 gcdv3_vegtype <- extract(vegtype, gcdv3_pts, method="simple")
 class(gcdv3_vegtype)
@@ -164,7 +164,7 @@ head(gcdv3_vegtype)
 
 Make a dataframe of the extracted data that could be saved as a .csv file, and plot it:
 
-```{r make dataframe}
+```{r make dataframe, eval=FALSE}
 pts <- data.frame(gcdv3$Lon, gcdv3$Lat, gcdv3_vegtype)
 names(pts) <- c("Lon", "Lat", "vegtype")
 head(pts, 10)
@@ -177,7 +177,7 @@ plot(pts$Lon, pts$Lat, col=plotclr[color_class+1], pch=16)
 
 Plot the extracted data at the target points on top of the source points.  If the extraction is successful, the target-point colors should dissappear against the background.
 
-```{r plot over}
+```{r plot over, eval=FALSE}
 plt <- levelplot(vegtype, margin=F, par.settings=mapTheme,
                  main="Potential Natural Vegetation")
 plotclr <- rev(brewer.pal(8,"Greens"))
@@ -194,24 +194,24 @@ plt + layer(sp.points(gcdv3_pts, col=plotclr[color_class], pch=16, cex=0.6)) +
 
 Here's a second example of extracting values from an array, by referencing the specific cell or array element that a target point falls in.  In this example, a netCDF file of bioclimatic variables is read using `ncdf4` and the values of `mtco` (mean temperature of the coldest month) are extracted.
 
-```{r library2}
+```{r library2, eval=FALSE}
 library(ncdf4)
 library(classInt)
 library(RColorBrewer)
 ```
 
-```{r ncdf4 read mtco, echo=TRUE, eval=TRUE, cache=FALSE}
+```{r ncdf4 read mtco, echo=TRUE, eval=FALSE, cache=FALSE}
 # set path and filename
 ncpath <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
 ncname <- "cru10min30_bio.nc"  
 ncfname <- paste(ncpath, ncname, sep="")
 ```
-```{r open mtco}
+```{r open mtco, eval=FALSE}
 # open a netCDF file
 ncin <- nc_open(ncfname)
 print(ncin)
 ```
-```{r ncdf4 mtco}
+```{r ncdf4 mtco, eval=FALSE}
 # get longitude and latitude
 lon <- ncvar_get(ncin,"lon")
 nlon <- dim(lon)
@@ -221,7 +221,7 @@ nlat <- dim(lat)
 head(lat)
 print(c(nlon,nlat))
 ```
-```{r ncdf4 get data}
+```{r ncdf4 get data, eval=FALSE}
 # get the mtco data
 mtco <- ncvar_get(ncin,"mtco")
 dlname <- ncatt_get(ncin,"mtco","long_name")
@@ -229,20 +229,20 @@ dunits <- ncatt_get(ncin,"mtco","units")
 fillvalue <- ncatt_get(ncin,"mtco","_FillValue")
 dim(mtco)
 ```
-```{r recode missing mtco}
+```{r recode missing mtco, eval=FALSE}
 mtco[mtco==fillvalue$value] <- NA
 ```
 
 Close the netCDF file using the `nc_close()` function.
 
-```{r ncdf4 close}
+```{r ncdf4 close, eval=FALSE}
 # close the netCDF file
 nc_close(ncin)
 ```
 
 Plot the control data.
 
-```{r levelplot1, fig.width=5, fig.height=3}
+```{r levelplot1, fig.width=5, fig.height=3, eval=FALSE}
 # levelplot of the slice
 grid <- expand.grid(lon=lon, lat=lat)
 cutpts <- c(-50,-40,-30,-20,-10,0,10,20,30,40,50)
@@ -254,7 +254,7 @@ Now extract the data for the target points:
 
 Get the indices (j's and k's) of the grid cell that each target point lies in.  For each target point, figure out which column (`j`) and row (`k`) a target point falls in.  This code is basically the same as that used in reshaping a "short" data frame into an array.  The function that is defined and executed within the `sapply()` function figures out which column (`j`) and row ('k') in the control-data array a target point falls in.  The `j`'s and `k`'s together describe the control-data grid cells the individual target points fall in.
 
-```{r get jk}
+```{r get jk, eval=FALSE}
 j <- sapply(gcdv3$Lon, function(x) which.min(abs(lon-x)))
 k <- sapply(gcdv3$Lat, function(x) which.min(abs(lat-x)))
 head(cbind(j,k)); tail(cbind(j,k))
@@ -262,14 +262,14 @@ head(cbind(j,k)); tail(cbind(j,k))
 
 Get the data for each j, k combination.  The way to do this is the convert the `mtco` array to a vector, and then calculate an index `jk` for each target value:
 
-```{r get data}
+```{r get data, eval=FALSE}
 mtco_vec <- as.vector(mtco)
 jk <- (k-1)*nlon + j
 gcdv3_mtco <- mtco_vec[jk]
 head(cbind(j,k,jk,gcdv3_mtco,lon[j],lat[k]))
 ```
 
-```{r make dataframe mtco}
+```{r make dataframe mtco, eval=FALSE}
 gcdv3_mtco[is.na(gcdv3_mtco)] <- -99
 pts <- data.frame(gcdv3$Lon, gcdv3$Lat, gcdv3_mtco)
 names(pts) <- c("Lon", "Lat", "mtco")
@@ -277,7 +277,7 @@ head(pts, 20)
 ```
 Plot the extracted values of `mtco`.  To do this, the colors for plotting the different levels of `mtco` are generated from and `RColorBrewer` palette, and augmented by gray (`"#AAAAAA"`) to handle missing values (i.e. from marine charcoal records, or those from sites "off" the cru10min30 grid).
 
-```{r plot mtco}
+```{r plot mtco, eval=FALSE}
 plotclr <- rev(brewer.pal(10,"RdBu"))
 plotclr <- c("#AAAAAA", plotclr)
 cutpts <- c(-50,-40,-30,-20,-10,0,10,20,30,40,50)
@@ -293,13 +293,13 @@ A common problem arises in dealing with spatial data is the "clipping" or "trimm
 
 ## Read the polygon and target-point files ##
 
-```{r clip begin}
+```{r clip begin, eval=FALSE}
 library(rgeos)
 ```
 
 Read the shapefile for *Picea mariana*
 
-```{r read picae}
+```{r read picae, eval=FALSE}
 # read the shape file for Picea Mariana
 shp_path <- "/Users/bartlein/Projects/ESSD/data/shp_files/USGS_pp1650/"
 shp_name <- "picemari.shp"
@@ -309,7 +309,7 @@ picea_shp <- readOGR(shp_file)
 
 Add a coordinate refernce system to the shapefile, and plot it:
 
-```{r add proj4string}
+```{r add proj4string, eval=FALSE}
 proj4string(picea_shp) = CRS("+proj=longlat +datum=WGS84")
 class(picea_shp)
 plot(picea_shp)
@@ -317,7 +317,7 @@ plot(picea_shp)
 
 Read the na10km_v2 points as a .csv file (for illustration, in practice it would be more efficient to read it as a netCDF file).
 
-```{r read na10km_v2}
+```{r read na10km_v2, eval=FALSE}
 # read the na10km_v2 points (as a .csv file)
 csv_path <- "/Users/bartlein/Projects/ESSD/data/csv_files/"
 csv_name <- "na10km_v2.csv"
@@ -328,13 +328,13 @@ str(na10km_v2)
 
 For convenience in display (because the na10km_v2 grid includes Europe and wraps around the dateline), reduce it to only the points west of 45W:
 
-```{r trim}
+```{r trim, eval=FALSE}
 na10km_v2 <- na10km_v2[na10km_v2$lon <= -45.0, ]
 ```
 
 Make a `SpatialPointsDataFrame` of the na10km_v2 data-point locations, and plot it:
 
-```{r na10km dataframe}
+```{r na10km dataframe, eval=FALSE}
 # make a SpatialPointsDataFrame
 na10km_v2_coords <- cbind(na10km_v2$lon, na10km_v2$lat)
 na10km_v2_pts <- SpatialPoints(coords=na10km_v2_coords, proj4string = CRS("+proj=longlat +datum=WGS84"))
@@ -346,7 +346,7 @@ plot(na10km_v2_pts, pch=16, cex=0.4)
 
 Now overlay the points onto the polygons.  Note that the input shape file was a `SpatialPolygonsDataFrame` object, so convert it to a simpler "SpatialPolygons" file first.  The `over()` function from `rgeos` takes a little while to run.
 
-```{r over}
+```{r over, eval=FALSE}
 # overlay the two shape files
 picea_poly <- as(picea_shp, "SpatialPolygons")
 class(picea_poly)
@@ -356,7 +356,7 @@ class(picea_pts)
 
 Make a dataframe from the "trimmed" points and plot it on top of the na10km_v2 points:
 
-```{r plot trimmed}
+```{r plot trimmed, eval=FALSE}
 picea_pts2 <- data.frame(na10km_v2_coords[!is.na(picea_pts), ] )
 plot(na10km_v2_pts, pch=16, cex=0.4)
 points(picea_pts2, pch=16, cex=0.1, col="green")
@@ -370,14 +370,14 @@ Another common task is to grid or rasterize a set of point data, creating a grid
 
 ## Read the data sets, and create empty rasters ##
 
-```{r rasterize begin}
-library(raster)
-library(rasterVis)
+```{r rasterize begin, eval=FALSE}
+library(raster, eval=FALSE)
+library(rasterVis, eval=FALSE)
 ```
 
 Read the fire-start data:
 
-```{r read fire}
+```{r read fire, eval=FALSE}
 # read the FPA-FOD fire-start data
 csv_path <- "/Users/bartlein/Projects/ESSD/data/csv_files/"
 csv_name <- "fpafod_1992-2013.csv"
@@ -388,7 +388,7 @@ str(fpafod)
 
 Convert the fire-start data to a `SpatialPointsDataFrame`
 
-```{r fire dataframe}
+```{r fire dataframe, eval=FALSE}
 fpafod_coords <- cbind(fpafod$longitude, fpafod$latitude)
 fpafod_pts <- SpatialPointsDataFrame(coords=fpafod_coords, data=data.frame(fpafod$area_ha))
 names(fpafod_pts) <- "area_ha"
@@ -396,7 +396,7 @@ names(fpafod_pts) <- "area_ha"
 
 Create a couple of empty rasters to hold the rasterized data:  
 
-```{r create rasters}
+```{r create rasters, eval=FALSE}
 # create (empty) rasters
 cell_size <- 0.5
 lon_min <- -128.0; lon_max <- -65.0; lat_min <- 25.5; lat_max <- 50.5
@@ -411,7 +411,7 @@ us_fire_area
 
 Now rasterize the data, first as counts (number of fires in each grid cell), and then as the average size of the fires in each grid cell.  Also plot the data (both on a log10 scale:
 
-```{r rasterize}
+```{r rasterize, eval=FALSE}
 # rasterize
 us_fire_counts <- rasterize(fpafod_coords, us_fire_counts, fun="count")
 us_fire_counts
@@ -426,7 +426,7 @@ plot(log10(us_fire_area$area_ha), col=brewer.pal(9,"YlOrRd"), sub="log10 Mean Ar
 
 Write the two rasterized data sets out as variables in a netCDF data set.  Create some variables, and replace the R `NAs` with netCDF fillvalues:
 
-```{r netCDF setup}
+```{r netCDF setup, eval=FALSE}
 # make necessary vectors and arrays
 lon <- seq(lon_min+0.25, lon_max-0.25, by=cell_size)
 lat <- seq(lat_max-0.25, lat_min+0.25, by=-1*cell_size)
@@ -444,7 +444,7 @@ us_fire_area2[is.na(us_fire_area2)] <- fillvalue
 
 Write out a netCDF file:
 
-```{r write netCDF}
+```{r write netCDF, eval=FALSE}
 # write out a netCDF file
 library(ncdf4)
 
@@ -506,7 +506,7 @@ The example here uses a lower-resolution verions of the `ETOPO1` global DEM as t
 
 Load the appropriate packages.  
 
-```{r ncdf4 package, message=FALSE, warning=FALSE, results='hide'}
+```{r ncdf4 package, message=FALSE, warning=FALSE, results='hide', eval=FALSE}
 # load the ncdf4 package
 library(ncdf4)
 library(lattice)
@@ -515,7 +515,7 @@ library(fields)
 
 Read the etopo1 netCDF file.  This particular file is one in which the original 30-sec data have been aggregated (by averaging) to six minutes or one-tenth of a degree (to speed up the execution of the examples).  In practice, one would work with the original higher resolution data.  Do some setup an open the file, and list its contents.
 
-```{r ncdf4 openMac, echo=TRUE, eval=TRUE}
+```{r ncdf4 openMac, echo=TRUE, eval=FALSE}
 # set path and filename
 ncpath <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
 ncname <- "etopo1_ig_06min.nc"  
@@ -523,7 +523,7 @@ ncfname <- paste(ncpath, ncname,  sep="")
 dname <- "elev"  
 ```
 
-```{r open etopo1}
+```{r open etopo1, eval=FALSE}
 # open a netCDF file
 ncin <- nc_open(ncfname)
 print(ncin)
@@ -531,7 +531,7 @@ print(ncin)
 
 Get the "control" longitudes and latitudes.
 
-```{r etopo1 get lons and lats}
+```{r etopo1 get lons and lats, eval=FALSE}
 # get longitude and latitude
 lon <- ncvar_get(ncin,"lon")
 nlon <- dim(lon)
@@ -544,7 +544,7 @@ print(c(nlon,nlat))
 
 Now read the elevations, and various attributes:
 
-```{r get elev}
+```{r get elev, eval=FALSE}
 # get elevations
 etopo1_array <- ncvar_get(ncin,dname)
 dlname <- ncatt_get(ncin,dname,"long_name")
@@ -554,7 +554,7 @@ dsource <- ncatt_get(ncin, "elev", "source")
 dim(etopo1_array)
 ```
 
-```{r etopo1 get global attributes}
+```{r etopo1 get global attributes, eval=FALSE}
 # get global attributes
 title <- ncatt_get(ncin,0,"title")
 institution <- ncatt_get(ncin,0,"institution")
@@ -565,14 +565,14 @@ Conventions <- ncatt_get(ncin,0,"Conventions")
 
 Close the netCDF file using the `nc_close()` function.
 
-```{r ncdf4 close etopo1}
+```{r ncdf4 close etopo1, eval=FALSE}
 # close the netCDF file
 nc_close(ncin)
 ```
 
 Produce a quick map to check that the data make sense.  (*Always do this!*)
 
-```{r levelplot elev, fig.width=5, fig.height=3, cache=TRUE}
+```{r levelplot elev, fig.width=5, fig.height=3, cache=TRUE, eval=FALSE}
 # levelplot of elevations
 grid <- expand.grid(lon=lon, lat=lat)
 cutpts <- c(-7000, -6000, -4000, -2000, 0, 500, 1000, 1500, 2000, 3000, 4000, 5000)
@@ -582,7 +582,7 @@ levelplot(etopo1_array ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T,
 
 Open and read the .csv file containing the "target"" points.
 
-```{r read na10km_v2 target points}
+```{r read na10km_v2 target points, eval=FALSE}
 # read na10km_v2 grid-point locations -- land-points only
 csv_path <- "/Users/bartlein/Projects/ESSD/data/csv_files/"
 csv_name <- "na10km_v2_pts.csv"
@@ -593,7 +593,7 @@ str(na10km_v2)
 
 Get the number of target points:
 
-```{r get ntarg}
+```{r get ntarg, eval=FALSE}
 # get number of target points
 ntarg <- dim(na10km_v2)[1]
 ntarg
@@ -603,7 +603,7 @@ ntarg
 
 Set up to do the interpolation.  Generate x's and y's for the target grid.  In practice, these might be read in from a netCDF file.  Here we need them to define an array that will hold the interpolated values.
 
-```{r interp setup}
+```{r interp setup, eval=FALSE}
 # set dimesions of output array, and define "marginal" x- and y-values
 nx <- 1078; ny <- 900
 x <- seq(-5770000, 5000000, by=10000)
@@ -616,7 +616,7 @@ interp_mat <- array(NA, dim=c(nx, ny))
 
 Get the array subscripts for each point.  This is similar to the work done in reshaping a "short" data frame to an array, as in Week 4 
 
-```{r targ subs}
+```{r targ subs, eval=FALSE}
 # get array subscripts for each target point
 j <- sapply(na10km_v2$x, function(c) which.min(abs(x-c)))
 k <- sapply(na10km_v2$y, function(c) which.min(abs(y-c)))
@@ -626,7 +626,7 @@ tail(cbind(j,k,na10km_v2$lon,na10km_v2$lat))
 
 Now do bilinear interpolation using the `fields` package:
 
-```{r bilinear}
+```{r bilinear, eval=FALSE}
 # bilinear interpolation from fields package
 control_dat <- list(x=lon, y=lat, z=etopo1_array)
 interp_var <- interp.surface(control_dat, cbind(na10km_v2$lon,na10km_v2$lat))
@@ -637,7 +637,7 @@ interp_mat[cbind(j,k)] <- interp_var[1:ntarg]
 
 Get a quick map:
 
-```{r interp map}
+```{r interp map, eval=FALSE}
 grid <- expand.grid(x=x, y=y)
 cutpts <- c(-7000, -6000, -4000, -2000, 0, 500, 1000, 1500, 2000, 3000, 4000, 5000)
 levelplot(interp_mat ~ x * y, data=grid, at=cutpts, cuts=11, pretty=T, 
@@ -646,7 +646,7 @@ levelplot(interp_mat ~ x * y, data=grid, at=cutpts, cuts=11, pretty=T,
 
 At this point, `interp_mat` could be written out as a variable in a netCDF file (along with dimension and attribute data).  Also make a data frame of the interpolated data, which could be written out as a .csv file:
 
-```{r make df}
+```{r make df, eval=FALSE}
 # make a dataframe of the interpolated elevations
 out_df <- data.frame(cbind(na10km_v2$x, na10km_v2$y, na10km_v2$lon, na10km_v2$lat, interp_var))
 names(out_df) <- c("x", "y", "lon", "lat", "elev")

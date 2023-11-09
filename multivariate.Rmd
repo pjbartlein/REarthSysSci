@@ -38,7 +38,7 @@ The Euclidean distance, and related measures are easily generalized to more than
 
 The basic idea of cluster analysis can be illustrated using the Oregon climate-station dataset, with the goal being to identify groups of stations with similar climates, which also regionalizes the climate of the state.  Begin by reading a shape file for mapping the data, and the data itself.
 
-```{r, message=FALSE}
+```{r, message=FALSE, eval=FALSE}
 # read county outlines
 library(sp)
 library(rgdal)
@@ -59,7 +59,7 @@ attach(orstationc)
 
 Plot the station locations.
 
-```{r}
+```{r, eval=FALSE}
 # plot stations
 plot(orotl_shp)
 points(lon, lat, xlim=c(-125, -116), ylim=c(41,47),
@@ -73,7 +73,7 @@ In this example, the groups of stations (or the climate regions of Oregon, as ex
 
 The first step in an agglomerative cluster analysis (although not always expicitly displayed), is the calculation of a dissimilarity matrix, which is a square symmetrical matrix that illustrates the dissimilarities (typically Euclidean distances) between individual cases or observations, using, in this case the six climate variables to define the space that distance is calculated in.
 
-```{r, fig.asp=1}
+```{r, fig.asp=1, eval=FALSE}
 # get dissimilarities (distances) and cluster
 library(lattice)
 X <- as.matrix(orstationc[,5:10])
@@ -87,7 +87,7 @@ In the code above, for convience, a matrix **X** was created to omit the variabl
 
 Now do the cluster analysis:
 
-```{r}
+```{r, eval=FALSE}
 # cluster analysis
 X_clusters <- hclust(X_dist, method = "ward.D2")
 plot(X_clusters, labels=station, cex=0.5)
@@ -97,7 +97,7 @@ The function `hclust()` performs a "Wards's single-linkage" analysis, and the `p
 
 The dendrogram can be inspected to get an idea of how many distinct clusters there are (and it can also identify unusual points–look for Crater Lake `CLK`). As a first guess, let’s say there were three distinct clusters evident in the dendrogram.  The `cuttree()` function can be used to "cut" the dendrogram at a particular level:
 
-```{r}
+```{r, eval=FALSE}
 # cut dendrogram and plot points in each cluster 
 nclust <- 3
 clusternum <- cutree(X_clusters, k=nclust)
@@ -105,7 +105,7 @@ clusternum <- cutree(X_clusters, k=nclust)
 
 And then the cluster membership (i.e. which cluster?) of each station can be mapped.
 
-```{r}
+```{r, eval=FALSE}
 # plot cluster membership of each station
 plot(lon, lat, xlim=c(-125, -116), ylim=c(41,47), xlab="Latitude", ylab="Longitude",
      main=paste(as.character(nclust), "Clusters"), type="n")
@@ -124,7 +124,7 @@ print(cbind(station, clusternum, as.character(Name)))
 
 The efficacy of the analyis in regionalizing or grouping the stations can be gauged usigns plots and a analysis that looks at the "separation" of the groups of stations.
 
-```{r}
+```{r, eval=FALSE}
 # examine clusters -- simple plots 
 tapply(tjan, clusternum, mean)
 histogram(~ tjan | factor(clusternum), nint=20, layout=c(1,3))
@@ -132,7 +132,7 @@ histogram(~ tjan | factor(clusternum), nint=20, layout=c(1,3))
 
 Note how many of the histograms seem multimodal–this is a clear sign of inhomogeneity of the clusters. Let’s see how the clusters differ.  This can be done via discriminant analysis, which (like PCA) defines some new variables with desireable properties, in this case, new variables that maximally "spread out" the groups along the new variable axes:
 
-```{r}
+```{r, eval=FALSE}
 # discriminant analysis (chunk 3)
 library(MASS)
 cluster_lda1 <- lda(clusternum ~ tjan + tjul + tann + pjan + pjul + pann)

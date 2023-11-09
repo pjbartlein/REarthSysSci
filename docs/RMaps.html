@@ -1,53 +1,82 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Maps in R</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
 <link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
 <link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
 <script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
 
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
-<style type="text/css">code{white-space: pre;}</style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(title);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -56,9 +85,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; } /* Alert */
 code span.an { color: #008000; } /* Annotation */
@@ -93,13 +122,20 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
   for (var i = 0; i < sheets.length; i++) {
     if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
     try { var rules = sheets[i].cssRules; } catch (e) { continue; }
-    for (var j = 0; j < rules.length; j++) {
+    var j = 0;
+    while (j < rules.length) {
       var rule = rules[j];
       // check if there is a div.sourceCode rule
-      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
       var style = rule.style.cssText;
       // check if color or background-color is set
-      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
       // replace div.sourceCode by a pre.sourceCode rule
       sheets[i].deleteRule(j);
       sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
@@ -107,39 +143,9 @@ code span.wa { color: #008000; font-weight: bold; } /* Warning */
   }
 })();
 </script>
-<style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+
 
 <link rel="stylesheet" href="html-md-01.css" type="text/css" />
 
@@ -151,13 +157,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -171,40 +172,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -232,7 +209,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -244,7 +221,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -254,11 +231,28 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -270,13 +264,12 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -284,16 +277,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -306,6 +292,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -317,18 +304,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -348,7 +323,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -361,7 +336,7 @@ $(document).ready(function () {
   <a href="overview.html">Overview</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Topics
      
     <span class="caret"></span>
@@ -413,7 +388,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tasks
      
     <span class="caret"></span>
@@ -452,7 +427,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Resources
      
     <span class="caret"></span>
@@ -476,7 +451,7 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -486,21 +461,54 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a></li>
-<li><a href="#set-up-outlines-and-polygons-for-global-robinson-projection-maps"><span class="toc-section-number">2</span> Set up outlines and polygons for global (Robinson projection) maps</a><ul>
-<li><a href="#read-natural-earth-shapefiles"><span class="toc-section-number">2.1</span> Read Natural Earth shapefiles</a></li>
-<li><a href="#project-the-shapefiles"><span class="toc-section-number">2.2</span> Project the shapefiles</a></li>
-<li><a href="#write-out-the-projected-shapefiles"><span class="toc-section-number">2.3</span> Write out the projected shapefiles</a></li>
-<li><a href="#clip-out-a-polygon-for-the-caspian"><span class="toc-section-number">2.4</span> Clip out a polygon for the Caspian</a></li>
+<li><a href="#introduction" id="toc-introduction"><span
+class="toc-section-number">1</span> Introduction</a></li>
+<li><a
+href="#set-up-outlines-and-polygons-for-global-robinson-projection-maps"
+id="toc-set-up-outlines-and-polygons-for-global-robinson-projection-maps"><span
+class="toc-section-number">2</span> Set up outlines and polygons for
+global (Robinson projection) maps</a>
+<ul>
+<li><a href="#read-natural-earth-shapefiles"
+id="toc-read-natural-earth-shapefiles"><span
+class="toc-section-number">2.1</span> Read Natural Earth
+shapefiles</a></li>
+<li><a href="#project-the-shapefiles"
+id="toc-project-the-shapefiles"><span
+class="toc-section-number">2.2</span> Project the shapefiles</a></li>
+<li><a href="#write-out-the-projected-shapefiles"
+id="toc-write-out-the-projected-shapefiles"><span
+class="toc-section-number">2.3</span> Write out the projected
+shapefiles</a></li>
+<li><a href="#clip-out-a-polygon-for-the-caspian"
+id="toc-clip-out-a-polygon-for-the-caspian"><span
+class="toc-section-number">2.4</span> Clip out a polygon for the
+Caspian</a></li>
 </ul></li>
-<li><a href="#set-up-tree-cover-data"><span class="toc-section-number">3</span> Set up tree-cover data</a><ul>
-<li><a href="#read-the-tree-cover-data"><span class="toc-section-number">3.1</span> Read the tree-cover data</a></li>
-<li><a href="#project-the-treecover-points-and-polygons"><span class="toc-section-number">3.2</span> Project the treecover points and polygons</a></li>
+<li><a href="#set-up-tree-cover-data"
+id="toc-set-up-tree-cover-data"><span
+class="toc-section-number">3</span> Set up tree-cover data</a>
+<ul>
+<li><a href="#read-the-tree-cover-data"
+id="toc-read-the-tree-cover-data"><span
+class="toc-section-number">3.1</span> Read the tree-cover data</a></li>
+<li><a href="#project-the-treecover-points-and-polygons"
+id="toc-project-the-treecover-points-and-polygons"><span
+class="toc-section-number">3.2</span> Project the treecover points and
+polygons</a></li>
 </ul></li>
-<li><a href="#map-the-gcdv3-charcoal-records"><span class="toc-section-number">4</span> Map the GCDv3 charcoal records</a><ul>
-<li><a href="#read-the-projected-shape-files"><span class="toc-section-number">4.1</span> Read the projected shape files</a></li>
-<li><a href="#read-the-gcdv3-data"><span class="toc-section-number">4.2</span> Read the GCDv3 data</a></li>
-<li><a href="#plot-the-maps"><span class="toc-section-number">4.3</span> Plot the maps</a></li>
+<li><a href="#map-the-gcdv3-charcoal-records"
+id="toc-map-the-gcdv3-charcoal-records"><span
+class="toc-section-number">4</span> Map the GCDv3 charcoal records</a>
+<ul>
+<li><a href="#read-the-projected-shape-files"
+id="toc-read-the-projected-shape-files"><span
+class="toc-section-number">4.1</span> Read the projected shape
+files</a></li>
+<li><a href="#read-the-gcdv3-data" id="toc-read-the-gcdv3-data"><span
+class="toc-section-number">4.2</span> Read the GCDv3 data</a></li>
+<li><a href="#plot-the-maps" id="toc-plot-the-maps"><span
+class="toc-section-number">4.3</span> Plot the maps</a></li>
 </ul></li>
 </ul>
 </div>
@@ -509,649 +517,539 @@ $(document).ready(function () {
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
-<div id="introduction" class="section level1">
+<div id="introduction" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
-<p>R has the ability through the <code>maps</code> package and the base graphics to generate maps, but such “out-of-the-box” maps, like other base graphics-generated illustrations, these may not be suitable for immediate publication. Other options exit, for example, using packages like <code>ggmaps,</code> <code>mapview,</code> or <code>mapmate.</code> However, the ability of the <code>sp</code> and <code>rgdal</code> packages to handle the diverse kinds of spatial data, including shapefiles, provides a facility for creating publishable maps. The examples here use a set of shapefiles downloaded from the <em>Natural Earth</em> web page <a href="http://www.naturalearthdata.com">[http://www.naturalearthdata.com]</a>.</p>
-<p>This first example recreates Figure 1 from Marlon, J.R., et al., 2016, Reconstructions of biomass burning from sediment-charcoal records to improve data–model comparisons. <em>Biogeosciences</em> 13:3225-3244. <a href="http://www.biogeosciences.net/13/3225/2016/">[http://www.biogeosciences.net/13/3225/2016/]</a>. There are two general steps in the production of this map, the first involves 1) projecting the <em>Natural Earth</em> shapefiles into the Robinson projection (which are reusable for other applications), and the second the projection of the data and assembly into the finished map.</p>
+<p>R has the ability through the <code>maps</code> package and the base
+graphics to generate maps, but such “out-of-the-box” maps, like other
+base graphics-generated illustrations, these may not be suitable for
+immediate publication. Other options exit, for example, using packages
+like <code>ggmaps,</code> <code>mapview,</code> or <code>mapmate.</code>
+However, the ability of the <code>sp</code> and <code>rgdal</code>
+packages to handle the diverse kinds of spatial data, including
+shapefiles, provides a facility for creating publishable maps. The
+examples here use a set of shapefiles downloaded from the <em>Natural
+Earth</em> web page <a
+href="http://www.naturalearthdata.com">[http://www.naturalearthdata.com]</a>.</p>
+<p>This first example recreates Figure 1 from Marlon, J.R., et al.,
+2016, Reconstructions of biomass burning from sediment-charcoal records
+to improve data–model comparisons. <em>Biogeosciences</em> 13:3225-3244.
+<a
+href="http://www.biogeosciences.net/13/3225/2016/">[http://www.biogeosciences.net/13/3225/2016/]</a>.
+There are two general steps in the production of this map, the first
+involves 1) projecting the <em>Natural Earth</em> shapefiles into the
+Robinson projection (which are reusable for other applications), and the
+second the projection of the data and assembly into the finished
+map.</p>
 </div>
-<div id="set-up-outlines-and-polygons-for-global-robinson-projection-maps" class="section level1">
-<h1><span class="header-section-number">2</span> Set up outlines and polygons for global (Robinson projection) maps</h1>
-<div id="read-natural-earth-shapefiles" class="section level2">
-<h2><span class="header-section-number">2.1</span> Read Natural Earth shapefiles</h2>
-<p>The first step is to read a set of shapefiles downloaded from the Natural Earth web page <a href="http://www.naturalearthdata.com">[http://www.naturalearthdata.com]</a>, and project these into the Robinson projection. Two CRAN packages, <code>rnaturalearth</code> and <code>rnaturalearthdata</code> can be used to manage and download the data within R, but the <em>Natural Earth</em> web pages are worth looking at.</p>
+<div
+id="set-up-outlines-and-polygons-for-global-robinson-projection-maps"
+class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Set up outlines and
+polygons for global (Robinson projection) maps</h1>
+<div id="read-natural-earth-shapefiles" class="section level2"
+number="2.1">
+<h2><span class="header-section-number">2.1</span> Read Natural Earth
+shapefiles</h2>
+<p>The first step is to read a set of shapefiles downloaded from the
+Natural Earth web page <a
+href="http://www.naturalearthdata.com">[http://www.naturalearthdata.com]</a>,
+and project these into the Robinson projection. Two CRAN packages,
+<code>rnaturalearth</code> and <code>rnaturalearthdata</code> can be
+used to manage and download the data within R, but the <em>Natural
+Earth</em> web pages are worth looking at.</p>
 <p>Begin by loading the appropriate packages:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(sp)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(rgdal)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(rgeos)</a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="kw">library</span>(raster)</a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="kw">library</span>(rasterVis)</a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="kw">library</span>(classInt)</a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="kw">library</span>(RColorBrewer)</a></code></pre></div>
-<p>Now read the shape files, including those for global coastlines, adminstrative units (borders), large lakes, and a graticule. Set the filenames:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># Natural Earth shape files -- global (Robinson) projections</span></a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="co"># get shapefiles from http://www.naturalearthdata.com</span></a>
-<a class="sourceLine" id="cb2-3" title="3">shape_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/RMaps/source/&quot;</span></a>
-<a class="sourceLine" id="cb2-4" title="4">coast_shapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(shape_path, <span class="st">&quot;ne_50m_coastline/ne_50m_coastline.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb2-5" title="5">ocean_shapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(shape_path, <span class="st">&quot;ne_50m_ocean/ne_50m_ocean.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb2-6" title="6">admin0_shapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(shape_path, <span class="st">&quot;ne_50m_admin_0_countries/ne_50m_admin_0_countries.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb2-7" title="7">admin1_shapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(shape_path, <span class="st">&quot;ne_50m_admin_1_states_provinces_lakes/ne_50m_admin_1_states_provinces_lakes.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb2-8" title="8">lakes_shapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(shape_path, <span class="st">&quot;ne_50m_lakes/ne_50m_lakes.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb2-9" title="9">bb_shapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(shape_path, <span class="st">&quot;ne_50m_graticules_all/ne_50m_wgs84_bounding_box.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb2-10" title="10">grat30_shapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(shape_path, <span class="st">&quot;ne_50m_graticules_all/ne_50m_graticules_30.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a></code></pre></div>
-<p>Before reading each file, determine what kind it is (e.g. lines vs. polygons), then read and plot it. Using the <code>ogrInfo()</code> and <code>readOGR</code> functions from <code>rgdal</code> eliminates the necessity of selecting the appropriate function in <code>maptools</code>. In the ‘plot()’ functions below, use the <code>col</code> argument for lines, <code>bor</code> for polygon border colors.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># find out kind of shapefile (lines vs. polygons)</span></a>
-<a class="sourceLine" id="cb3-2" title="2">layer &lt;-<span class="st"> </span><span class="kw">ogrListLayers</span>(coast_shapefile)</a>
-<a class="sourceLine" id="cb3-3" title="3"><span class="kw">ogrInfo</span>(coast_shapefile, <span class="dt">layer=</span>layer)</a></code></pre></div>
-<pre><code>## Source: &quot;/Users/bartlein/Projects/ESSD/data/RMaps/source/ne_50m_coastline/ne_50m_coastline.shp&quot;, layer: &quot;ne_50m_coastline&quot;
-## Driver: ESRI Shapefile; number of rows: 1428 
-## Feature type: wkbLineString with 2 dimensions
-## Extent: (-180 -85.19219) - (180 83.59961)
-## CRS: +proj=longlat +datum=WGS84 +no_defs  
-## LDID: 87 
-## Number of fields: 2 
-##         name type length  typeName
-## 1  scalerank   12     10 Integer64
-## 2 featurecla    4     32    String</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># read the shape file</span></a>
-<a class="sourceLine" id="cb5-2" title="2">coast_lines &lt;-<span class="st"> </span><span class="kw">readOGR</span>(coast_shapefile, <span class="dt">layer=</span>layer)</a></code></pre></div>
-<pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: &quot;/Users/bartlein/Projects/ESSD/data/RMaps/source/ne_50m_coastline/ne_50m_coastline.shp&quot;, layer: &quot;ne_50m_coastline&quot;
-## with 1428 features
-## It has 2 fields
-## Integer64 fields read as strings:  scalerank</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">summary</span>(coast_lines)  </a></code></pre></div>
-<pre><code>## Object of class SpatialLinesDataFrame
-## Coordinates:
-##          min       max
-## x -180.00000 180.00000
-## y  -85.19219  83.59961
-## Is projected: FALSE 
-## proj4string :
-## [+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0]
-## Data attributes:
-##  scalerank     featurecla  
-##  0:1428    Coastline:1428</code></pre>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">plot</span>(coast_lines, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>)</a></code></pre></div>
-<p><img src="RMaps_files/figure-html/read%20coast-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(sp)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co"># library(rgdal)</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="co"># library(rgeos)</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(raster)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(rasterVis)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(classInt)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
+<p>Now read the shape files, including those for global coastlines,
+adminstrative units (borders), large lakes, and a graticule. Set the
+filenames:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Natural Earth shape files -- global (Robinson) projections</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co"># get shapefiles from http://www.naturalearthdata.com</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>shape_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/RMaps/source/&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>coast_shapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(shape_path, <span class="st">&quot;ne_50m_coastline/ne_50m_coastline.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>ocean_shapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(shape_path, <span class="st">&quot;ne_50m_ocean/ne_50m_ocean.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>admin0_shapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(shape_path, <span class="st">&quot;ne_50m_admin_0_countries/ne_50m_admin_0_countries.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>admin1_shapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(shape_path, <span class="st">&quot;ne_50m_admin_1_states_provinces_lakes/ne_50m_admin_1_states_provinces_lakes.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>lakes_shapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(shape_path, <span class="st">&quot;ne_50m_lakes/ne_50m_lakes.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>bb_shapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(shape_path, <span class="st">&quot;ne_50m_graticules_all/ne_50m_wgs84_bounding_box.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>grat30_shapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(shape_path, <span class="st">&quot;ne_50m_graticules_all/ne_50m_graticules_30.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p>Before reading each file, determine what kind it is (e.g. lines
+vs. polygons), then read and plot it. Using the <code>ogrInfo()</code>
+and <code>readOGR</code> functions from <code>rgdal</code> eliminates
+the necessity of selecting the appropriate function in
+<code>maptools</code>. In the ‘plot()’ functions below, use the
+<code>col</code> argument for lines, <code>bor</code> for polygon border
+colors.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># find out kind of shapefile (lines vs. polygons)</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>layer <span class="ot">&lt;-</span> <span class="fu">ogrListLayers</span>(coast_shapefile)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">ogrInfo</span>(coast_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co"># read the shape file</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>coast_lines <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(coast_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="fu">summary</span>(coast_lines)  </span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="fu">plot</span>(coast_lines, <span class="at">col=</span><span class="st">&quot;purple&quot;</span>)</span></code></pre></div>
 <p>Get the Proj4 string for later use&gt;</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">unproj_proj4string &lt;-<span class="st"> </span><span class="kw">proj4string</span>(coast_lines)</a>
-<a class="sourceLine" id="cb10-2" title="2">unproj_proj4string</a></code></pre></div>
-<pre><code>## [1] &quot;+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0&quot;</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>unproj_proj4string <span class="ot">&lt;-</span> <span class="fu">proj4string</span>(coast_lines)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>unproj_proj4string</span></code></pre></div>
 <p>Read the ocean polygons.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="co"># find out kind of shapefile (lines vs. polygons)</span></a>
-<a class="sourceLine" id="cb12-2" title="2">layer &lt;-<span class="st"> </span><span class="kw">ogrListLayers</span>(ocean_shapefile)</a>
-<a class="sourceLine" id="cb12-3" title="3"><span class="kw">ogrInfo</span>(ocean_shapefile, <span class="dt">layer=</span>layer)</a></code></pre></div>
-<pre><code>## Source: &quot;/Users/bartlein/Projects/ESSD/data/RMaps/source/ne_50m_ocean/ne_50m_ocean.shp&quot;, layer: &quot;ne_50m_ocean&quot;
-## Driver: ESRI Shapefile; number of rows: 1 
-## Feature type: wkbPolygon with 2 dimensions
-## Extent: (-180 -85.19219) - (180 90)
-## CRS: +proj=longlat +datum=WGS84 +no_defs  
-## LDID: 87 
-## Number of fields: 2 
-##         name type length  typeName
-## 1  scalerank   12     10 Integer64
-## 2 featurecla    4     32    String</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="co"># read the shape file</span></a>
-<a class="sourceLine" id="cb14-2" title="2">ocean_poly &lt;-<span class="st"> </span><span class="kw">readOGR</span>(ocean_shapefile, <span class="dt">layer=</span>layer)</a></code></pre></div>
-<pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: &quot;/Users/bartlein/Projects/ESSD/data/RMaps/source/ne_50m_ocean/ne_50m_ocean.shp&quot;, layer: &quot;ne_50m_ocean&quot;
-## with 1 features
-## It has 2 fields
-## Integer64 fields read as strings:  scalerank</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">summary</span>(ocean_poly)  </a></code></pre></div>
-<pre><code>## Object of class SpatialPolygonsDataFrame
-## Coordinates:
-##          min max
-## x -180.00000 180
-## y  -85.19219  90
-## Is projected: FALSE 
-## proj4string :
-## [+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0]
-## Data attributes:
-##  scalerank featurecla
-##  0:1       Ocean:1</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="kw">plot</span>(ocean_poly, <span class="dt">col=</span><span class="st">&quot;lightblue&quot;</span>)</a></code></pre></div>
-<p><img src="RMaps_files/figure-html/read%20ocean-1.png" width="75%" height="75%" /></p>
-<p>Read the other shape files the same way. (Note that the summary output is suppressed here.)</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">layer &lt;-<span class="st"> </span><span class="kw">ogrListLayers</span>(admin0_shapefile)</a>
-<a class="sourceLine" id="cb19-2" title="2"><span class="kw">ogrInfo</span>(admin0_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb19-3" title="3">admin0_poly &lt;-<span class="st"> </span><span class="kw">readOGR</span>(admin0_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb19-4" title="4"><span class="kw">summary</span>(admin0_poly)  </a>
-<a class="sourceLine" id="cb19-5" title="5"></a>
-<a class="sourceLine" id="cb19-6" title="6">layer &lt;-<span class="st"> </span><span class="kw">ogrListLayers</span>(admin1_shapefile)</a>
-<a class="sourceLine" id="cb19-7" title="7"><span class="kw">ogrInfo</span>(admin1_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb19-8" title="8">admin1_poly &lt;-<span class="st"> </span><span class="kw">readOGR</span>(admin1_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb19-9" title="9"><span class="kw">summary</span>(admin1_poly)  </a>
-<a class="sourceLine" id="cb19-10" title="10"></a>
-<a class="sourceLine" id="cb19-11" title="11">layer &lt;-<span class="st"> </span><span class="kw">ogrListLayers</span>(lakes_shapefile)</a>
-<a class="sourceLine" id="cb19-12" title="12"><span class="kw">ogrInfo</span>(lakes_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb19-13" title="13">lakes_poly &lt;-<span class="st"> </span><span class="kw">readOGR</span>(lakes_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb19-14" title="14"><span class="kw">summary</span>(lakes_poly)  </a>
-<a class="sourceLine" id="cb19-15" title="15"></a>
-<a class="sourceLine" id="cb19-16" title="16">lrglakes_poly &lt;-<span class="st"> </span>lakes_poly[<span class="kw">as.numeric</span>(lakes_poly<span class="op">$</span>scalerank) <span class="op">&lt;=</span><span class="st"> </span><span class="dv">2</span> ,]</a>
-<a class="sourceLine" id="cb19-17" title="17"></a>
-<a class="sourceLine" id="cb19-18" title="18">layer &lt;-<span class="st"> </span><span class="kw">ogrListLayers</span>(grat30_shapefile)</a>
-<a class="sourceLine" id="cb19-19" title="19"><span class="kw">ogrInfo</span>(grat30_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb19-20" title="20">grat30_lines &lt;-<span class="st"> </span><span class="kw">readOGR</span>(grat30_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb19-21" title="21"><span class="kw">summary</span>(grat30_lines)  </a>
-<a class="sourceLine" id="cb19-22" title="22"></a>
-<a class="sourceLine" id="cb19-23" title="23">layer &lt;-<span class="st"> </span><span class="kw">ogrListLayers</span>(bb_shapefile)</a>
-<a class="sourceLine" id="cb19-24" title="24"><span class="kw">ogrInfo</span>(bb_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb19-25" title="25">bb_poly &lt;-<span class="st"> </span><span class="kw">readOGR</span>(bb_shapefile, <span class="dt">layer=</span>layer)</a>
-<a class="sourceLine" id="cb19-26" title="26"><span class="kw">summary</span>(bb_poly) </a>
-<a class="sourceLine" id="cb19-27" title="27">bb_lines &lt;-<span class="st"> </span><span class="kw">as</span>(bb_poly, <span class="st">&quot;SpatialLines&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># find out kind of shapefile (lines vs. polygons)</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>layer <span class="ot">&lt;-</span> <span class="fu">ogrListLayers</span>(ocean_shapefile)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">ogrInfo</span>(ocean_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="co"># read the shape file</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>ocean_poly <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(ocean_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="fu">summary</span>(ocean_poly)  </span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a><span class="fu">plot</span>(ocean_poly, <span class="at">col=</span><span class="st">&quot;lightblue&quot;</span>)</span></code></pre></div>
+<p>Read the other shape files the same way. (Note that the summary
+output is suppressed here.)</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>layer <span class="ot">&lt;-</span> <span class="fu">ogrListLayers</span>(admin0_shapefile)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">ogrInfo</span>(admin0_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>admin0_poly <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(admin0_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">summary</span>(admin0_poly)  </span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>layer <span class="ot">&lt;-</span> <span class="fu">ogrListLayers</span>(admin1_shapefile)</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="fu">ogrInfo</span>(admin1_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>admin1_poly <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(admin1_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="fu">summary</span>(admin1_poly)  </span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>layer <span class="ot">&lt;-</span> <span class="fu">ogrListLayers</span>(lakes_shapefile)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a><span class="fu">ogrInfo</span>(lakes_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>lakes_poly <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(lakes_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a><span class="fu">summary</span>(lakes_poly)  </span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>lrglakes_poly <span class="ot">&lt;-</span> lakes_poly[<span class="fu">as.numeric</span>(lakes_poly<span class="sc">$</span>scalerank) <span class="sc">&lt;=</span> <span class="dv">2</span> ,]</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>layer <span class="ot">&lt;-</span> <span class="fu">ogrListLayers</span>(grat30_shapefile)</span>
+<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a><span class="fu">ogrInfo</span>(grat30_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>grat30_lines <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(grat30_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a><span class="fu">summary</span>(grat30_lines)  </span>
+<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a></span>
+<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>layer <span class="ot">&lt;-</span> <span class="fu">ogrListLayers</span>(bb_shapefile)</span>
+<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a><span class="fu">ogrInfo</span>(bb_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>bb_poly <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(bb_shapefile, <span class="at">layer=</span>layer)</span>
+<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a><span class="fu">summary</span>(bb_poly) </span>
+<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a>bb_lines <span class="ot">&lt;-</span> <span class="fu">as</span>(bb_poly, <span class="st">&quot;SpatialLines&quot;</span>)</span></code></pre></div>
 <p>Plot everything (except ocean).</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="co"># plot everything</span></a>
-<a class="sourceLine" id="cb20-2" title="2"><span class="kw">plot</span>(coast_lines, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>)</a>
-<a class="sourceLine" id="cb20-3" title="3"><span class="kw">plot</span>(admin0_poly, <span class="dt">bor=</span><span class="st">&quot;gray&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb20-4" title="4"><span class="kw">plot</span>(admin1_poly, <span class="dt">bor=</span><span class="st">&quot;pink&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb20-5" title="5"><span class="kw">plot</span>(lakes_poly, <span class="dt">bor=</span><span class="st">&quot;lightblue&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb20-6" title="6"><span class="kw">plot</span>(lrglakes_poly, <span class="dt">bor=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb20-7" title="7"><span class="kw">plot</span>(grat30_lines, <span class="dt">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb20-8" title="8"><span class="kw">plot</span>(bb_lines, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb20-9" title="9"><span class="kw">plot</span>(coast_lines, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="RMaps_files/figure-html/plot%20input%20shapefiles-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># plot everything</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">plot</span>(coast_lines, <span class="at">col=</span><span class="st">&quot;black&quot;</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">plot</span>(admin0_poly, <span class="at">bor=</span><span class="st">&quot;gray&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fu">plot</span>(admin1_poly, <span class="at">bor=</span><span class="st">&quot;pink&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="fu">plot</span>(lakes_poly, <span class="at">bor=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">plot</span>(lrglakes_poly, <span class="at">bor=</span><span class="st">&quot;blue&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="fu">plot</span>(grat30_lines, <span class="at">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a><span class="fu">plot</span>(bb_lines, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="fu">plot</span>(coast_lines, <span class="at">col=</span><span class="st">&quot;purple&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
-<div id="project-the-shapefiles" class="section level2">
-<h2><span class="header-section-number">2.2</span> Project the shapefiles</h2>
-<p>Next, transform (project) the individual shapefiles into the Robinson projection using <code>spTransform</code>. Set the <code>proj4</code> string for the projectdion using the <code>CRS()</code> function.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="co"># set Robinson CRS</span></a>
-<a class="sourceLine" id="cb21-2" title="2">unproj_crs &lt;-<span class="st"> </span><span class="kw">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0&quot;</span>)</a>
-<a class="sourceLine" id="cb21-3" title="3">unproj_crs</a></code></pre></div>
-<pre><code>## CRS arguments:
-##  +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1">robin_crs &lt;-<span class="st"> </span><span class="kw">CRS</span>(<span class="st">&quot;+proj=robin +lon_0=0w&quot;</span>)</a>
-<a class="sourceLine" id="cb23-2" title="2">robin_crs</a></code></pre></div>
-<pre><code>## CRS arguments: +proj=robin +lon_0=0w +ellps=WGS84</code></pre>
+<div id="project-the-shapefiles" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Project the
+shapefiles</h2>
+<p>Next, transform (project) the individual shapefiles into the Robinson
+projection using <code>spTransform</code>. Set the <code>proj4</code>
+string for the projectdion using the <code>CRS()</code> function.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># set Robinson CRS</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>unproj_crs <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0&quot;</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>unproj_crs</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>robin_crs <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">&quot;+proj=robin +lon_0=0w&quot;</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>robin_crs</span></code></pre></div>
 <p>Now do the projections.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="co"># do projections</span></a>
-<a class="sourceLine" id="cb25-2" title="2">bb_poly_proj &lt;-<span class="st"> </span><span class="kw">spTransform</span>(bb_poly, robin_crs)</a>
-<a class="sourceLine" id="cb25-3" title="3">coast_lines_proj &lt;-<span class="st"> </span><span class="kw">spTransform</span>(coast_lines, robin_crs)</a>
-<a class="sourceLine" id="cb25-4" title="4">admin0_poly_proj &lt;-<span class="st"> </span><span class="kw">spTransform</span>(admin0_poly, robin_crs)</a>
-<a class="sourceLine" id="cb25-5" title="5">admin1_poly_proj &lt;-<span class="st"> </span><span class="kw">spTransform</span>(admin1_poly, robin_crs)</a>
-<a class="sourceLine" id="cb25-6" title="6">lakes_poly_proj &lt;-<span class="st"> </span><span class="kw">spTransform</span>(lakes_poly, robin_crs)</a>
-<a class="sourceLine" id="cb25-7" title="7">grat30_lines_proj &lt;-<span class="st"> </span><span class="kw">spTransform</span>(grat30_lines, robin_crs)</a>
-<a class="sourceLine" id="cb25-8" title="8">lrglakes_poly_proj &lt;-<span class="st"> </span><span class="kw">spTransform</span>(lrglakes_poly, robin_crs)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># do projections</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>bb_poly_proj <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(bb_poly, robin_crs)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>coast_lines_proj <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(coast_lines, robin_crs)</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>admin0_poly_proj <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(admin0_poly, robin_crs)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>admin1_poly_proj <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(admin1_poly, robin_crs)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>lakes_poly_proj <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(lakes_poly, robin_crs)</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>grat30_lines_proj <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(grat30_lines, robin_crs)</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>lrglakes_poly_proj <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(lrglakes_poly, robin_crs)</span></code></pre></div>
 <p>Plot the projected shapefiles.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="co"># plot projected files</span></a>
-<a class="sourceLine" id="cb26-2" title="2"><span class="kw">plot</span>(bb_poly_proj, <span class="dt">col=</span><span class="st">&quot;gray95&quot;</span>)</a>
-<a class="sourceLine" id="cb26-3" title="3"><span class="kw">plot</span>(admin0_poly_proj, <span class="dt">col=</span><span class="st">&quot;white&quot;</span>, <span class="dt">bor=</span><span class="st">&quot;pink&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb26-4" title="4"><span class="kw">plot</span>(admin1_poly_proj, <span class="dt">col=</span><span class="st">&quot;white&quot;</span>, <span class="dt">bor=</span><span class="st">&quot;pink&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb26-5" title="5"><span class="kw">plot</span>(lakes_poly_proj, <span class="dt">bor=</span><span class="st">&quot;lightblue&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb26-6" title="6"><span class="kw">plot</span>(lrglakes_poly_proj, <span class="dt">bor=</span><span class="st">&quot;purple&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb26-7" title="7"><span class="kw">plot</span>(coast_lines_proj, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb26-8" title="8"><span class="kw">plot</span>(grat30_lines_proj, <span class="dt">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb26-9" title="9"><span class="kw">plot</span>(bb_poly_proj, <span class="dt">bor=</span><span class="st">&quot;black&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="RMaps_files/figure-html/plot%20projected-1.png" width="75%" height="75%" /></p>
-<p>Because the map we’re creating will use the borders and lakes only as outlines (as opposed to polygons that might be filled with a specific color), those polygons can be converted to <code>SpatialLines</code> objects.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="co"># convert polygons to spatial lines</span></a>
-<a class="sourceLine" id="cb27-2" title="2">admin0_lines_proj &lt;-<span class="st"> </span><span class="kw">as</span>(admin0_poly_proj, <span class="st">&quot;SpatialLines&quot;</span>)</a>
-<a class="sourceLine" id="cb27-3" title="3">admin1_lines_proj &lt;-<span class="st"> </span><span class="kw">as</span>(admin1_poly_proj, <span class="st">&quot;SpatialLines&quot;</span>)</a>
-<a class="sourceLine" id="cb27-4" title="4">lakes_lines_proj &lt;-<span class="st"> </span><span class="kw">as</span>(lakes_poly_proj, <span class="st">&quot;SpatialLines&quot;</span>)</a>
-<a class="sourceLine" id="cb27-5" title="5">lrglakes_lines_proj &lt;-<span class="st"> </span><span class="kw">as</span>(lrglakes_poly_proj, <span class="st">&quot;SpatialLines&quot;</span>)</a>
-<a class="sourceLine" id="cb27-6" title="6">bb_lines_proj &lt;-<span class="st"> </span><span class="kw">as</span>(bb_poly_proj, <span class="st">&quot;SpatialLines&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># plot projected files</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">plot</span>(bb_poly_proj, <span class="at">col=</span><span class="st">&quot;gray95&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">plot</span>(admin0_poly_proj, <span class="at">col=</span><span class="st">&quot;white&quot;</span>, <span class="at">bor=</span><span class="st">&quot;pink&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">plot</span>(admin1_poly_proj, <span class="at">col=</span><span class="st">&quot;white&quot;</span>, <span class="at">bor=</span><span class="st">&quot;pink&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="fu">plot</span>(lakes_poly_proj, <span class="at">bor=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="fu">plot</span>(lrglakes_poly_proj, <span class="at">bor=</span><span class="st">&quot;purple&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="fu">plot</span>(coast_lines_proj, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="fu">plot</span>(grat30_lines_proj, <span class="at">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="fu">plot</span>(bb_poly_proj, <span class="at">bor=</span><span class="st">&quot;black&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Because the map we’re creating will use the borders and lakes only as
+outlines (as opposed to polygons that might be filled with a specific
+color), those polygons can be converted to <code>SpatialLines</code>
+objects.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># convert polygons to spatial lines</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>admin0_lines_proj <span class="ot">&lt;-</span> <span class="fu">as</span>(admin0_poly_proj, <span class="st">&quot;SpatialLines&quot;</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>admin1_lines_proj <span class="ot">&lt;-</span> <span class="fu">as</span>(admin1_poly_proj, <span class="st">&quot;SpatialLines&quot;</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>lakes_lines_proj <span class="ot">&lt;-</span> <span class="fu">as</span>(lakes_poly_proj, <span class="st">&quot;SpatialLines&quot;</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>lrglakes_lines_proj <span class="ot">&lt;-</span> <span class="fu">as</span>(lrglakes_poly_proj, <span class="st">&quot;SpatialLines&quot;</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>bb_lines_proj <span class="ot">&lt;-</span> <span class="fu">as</span>(bb_poly_proj, <span class="st">&quot;SpatialLines&quot;</span>)</span></code></pre></div>
 <p>Plot the <code>SpatialLines</code> objects</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="co"># test the SpatialLines shapefiles</span></a>
-<a class="sourceLine" id="cb28-2" title="2"><span class="kw">plot</span>(bb_poly_proj, <span class="dt">col=</span><span class="st">&quot;gray95&quot;</span>)</a>
-<a class="sourceLine" id="cb28-3" title="3"><span class="kw">plot</span>(coast_lines_proj, <span class="dt">col=</span><span class="st">&quot;green&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb28-4" title="4"><span class="kw">plot</span>(admin0_lines_proj, <span class="dt">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb28-5" title="5"><span class="kw">plot</span>(admin1_lines_proj, <span class="dt">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb28-6" title="6"><span class="kw">plot</span>(lakes_lines_proj, <span class="dt">col=</span><span class="st">&quot;blue&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb28-7" title="7"><span class="kw">plot</span>(lrglakes_lines_proj, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb28-8" title="8"><span class="kw">plot</span>(grat30_lines_proj, <span class="dt">col=</span><span class="st">&quot;gray&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb28-9" title="9"><span class="kw">plot</span>(coast_lines_proj, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb28-10" title="10"><span class="kw">plot</span>(bb_lines_proj, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="RMaps_files/figure-html/plot%20spatial%20lines-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># test the SpatialLines shapefiles</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">plot</span>(bb_poly_proj, <span class="at">col=</span><span class="st">&quot;gray95&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="fu">plot</span>(coast_lines_proj, <span class="at">col=</span><span class="st">&quot;green&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">plot</span>(admin0_lines_proj, <span class="at">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="fu">plot</span>(admin1_lines_proj, <span class="at">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="fu">plot</span>(lakes_lines_proj, <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="fu">plot</span>(lrglakes_lines_proj, <span class="at">col=</span><span class="st">&quot;purple&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="fu">plot</span>(grat30_lines_proj, <span class="at">col=</span><span class="st">&quot;gray&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="fu">plot</span>(coast_lines_proj, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="fu">plot</span>(bb_lines_proj, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
-<div id="write-out-the-projected-shapefiles" class="section level2">
-<h2><span class="header-section-number">2.3</span> Write out the projected shapefiles</h2>
-<p>Next, write out the projected shapefiles, first setting the output path.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="co"># write out the various shapefiles </span></a>
-<a class="sourceLine" id="cb29-2" title="2">outpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/RMaps/derived/glrob_50m/&quot;</span></a>
-<a class="sourceLine" id="cb29-3" title="3">outshape &lt;-<span class="st"> </span>coast_lines_proj</a>
-<a class="sourceLine" id="cb29-4" title="4">outfile &lt;-<span class="st"> &quot;glRob_50m_coast_lines&quot;</span></a>
-<a class="sourceLine" id="cb29-5" title="5">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb29-6" title="6">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb29-7" title="7"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb29-8" title="8">outshape &lt;-<span class="st"> </span><span class="kw">SpatialLinesDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb29-9" title="9"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p>It’s always good practice to test whether the shapefile has ideed been written out correctly. Read it back in and plot it.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1">test &lt;-<span class="st"> </span><span class="kw">readOGR</span>(outshapefile)</a></code></pre></div>
-<pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: &quot;/Users/bartlein/Projects/ESSD/data/RMaps/derived/glRob_50m/glRob_50m_coast_lines&quot;, layer: &quot;glRob_50m_coast_lines&quot;
-## with 1428 features
-## It has 1 fields</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" title="1"><span class="kw">plot</span>(test, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>)</a></code></pre></div>
-<p><img src="RMaps_files/figure-html/test%20shape-1.png" width="75%" height="75%" /></p>
+<div id="write-out-the-projected-shapefiles" class="section level2"
+number="2.3">
+<h2><span class="header-section-number">2.3</span> Write out the
+projected shapefiles</h2>
+<p>Next, write out the projected shapefiles, first setting the output
+path.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># write out the various shapefiles </span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>outpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/RMaps/derived/glrob_50m/&quot;</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> coast_lines_proj</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;glRob_50m_coast_lines&quot;</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialLinesDataFrame</span>(outshape, spdf)</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p>It’s always good practice to test whether the shapefile has ideed
+been written out correctly. Read it back in and plot it.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>test <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(outshapefile)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">plot</span>(test, <span class="at">col=</span><span class="st">&quot;black&quot;</span>)</span></code></pre></div>
 <p>Write out the other shapefiles.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1">outshape &lt;-<span class="st"> </span>bb_poly_proj</a>
-<a class="sourceLine" id="cb33-2" title="2">outfile &lt;-<span class="st"> &quot;glRob_50m_bb_poly&quot;</span></a>
-<a class="sourceLine" id="cb33-3" title="3">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb33-4" title="4">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb33-5" title="5"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb33-6" title="6">outshape &lt;-<span class="st"> </span><span class="kw">SpatialPolygonsDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb33-7" title="7"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb33-8" title="8"></a>
-<a class="sourceLine" id="cb33-9" title="9">outshape &lt;-<span class="st"> </span>bb_lines_proj</a>
-<a class="sourceLine" id="cb33-10" title="10">outfile &lt;-<span class="st"> &quot;glRob_50m_bb_lines&quot;</span></a>
-<a class="sourceLine" id="cb33-11" title="11">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb33-12" title="12">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb33-13" title="13"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb33-14" title="14">outshape &lt;-<span class="st"> </span><span class="kw">SpatialLinesDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb33-15" title="15"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb33-16" title="16"></a>
-<a class="sourceLine" id="cb33-17" title="17">outshape &lt;-<span class="st"> </span>admin0_poly_proj</a>
-<a class="sourceLine" id="cb33-18" title="18">outfile &lt;-<span class="st"> &quot;glRob_50m_admin0_poly&quot;</span></a>
-<a class="sourceLine" id="cb33-19" title="19">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb33-20" title="20">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb33-21" title="21"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb33-22" title="22">outshape &lt;-<span class="st"> </span><span class="kw">SpatialPolygonsDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb33-23" title="23"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb33-24" title="24"></a>
-<a class="sourceLine" id="cb33-25" title="25">outshape &lt;-<span class="st"> </span>admin0_lines_proj</a>
-<a class="sourceLine" id="cb33-26" title="26">outfile &lt;-<span class="st"> &quot;glRob_50m_admin0_lines&quot;</span></a>
-<a class="sourceLine" id="cb33-27" title="27">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb33-28" title="28">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb33-29" title="29"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb33-30" title="30">outshape &lt;-<span class="st"> </span><span class="kw">SpatialLinesDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb33-31" title="31"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb33-32" title="32"></a>
-<a class="sourceLine" id="cb33-33" title="33">outshape &lt;-<span class="st"> </span>admin1_poly_proj</a>
-<a class="sourceLine" id="cb33-34" title="34">outfile &lt;-<span class="st"> &quot;glRob_50m_admin1_poly&quot;</span></a>
-<a class="sourceLine" id="cb33-35" title="35">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb33-36" title="36">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb33-37" title="37"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb33-38" title="38">outshape &lt;-<span class="st"> </span><span class="kw">SpatialPolygonsDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb33-39" title="39"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb33-40" title="40"></a>
-<a class="sourceLine" id="cb33-41" title="41">outshape &lt;-<span class="st"> </span>admin1_lines_proj</a>
-<a class="sourceLine" id="cb33-42" title="42">outfile &lt;-<span class="st"> &quot;glRob_50m_admin1_lines&quot;</span></a>
-<a class="sourceLine" id="cb33-43" title="43">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb33-44" title="44">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb33-45" title="45"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb33-46" title="46">outshape &lt;-<span class="st"> </span><span class="kw">SpatialLinesDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb33-47" title="47"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb33-48" title="48"></a>
-<a class="sourceLine" id="cb33-49" title="49">outshape &lt;-<span class="st"> </span>lakes_poly_proj</a>
-<a class="sourceLine" id="cb33-50" title="50">outfile &lt;-<span class="st"> &quot;glRob_50m_lakes_poly&quot;</span></a>
-<a class="sourceLine" id="cb33-51" title="51">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb33-52" title="52">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb33-53" title="53"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb33-54" title="54">outshape &lt;-<span class="st"> </span><span class="kw">SpatialPolygonsDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb33-55" title="55"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb33-56" title="56"></a>
-<a class="sourceLine" id="cb33-57" title="57">outshape &lt;-<span class="st"> </span>lakes_lines_proj</a>
-<a class="sourceLine" id="cb33-58" title="58">outfile &lt;-<span class="st"> &quot;glRob_50m_lakes_lines&quot;</span></a>
-<a class="sourceLine" id="cb33-59" title="59">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb33-60" title="60">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb33-61" title="61"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb33-62" title="62">outshape &lt;-<span class="st"> </span><span class="kw">SpatialLinesDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb33-63" title="63"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb33-64" title="64"></a>
-<a class="sourceLine" id="cb33-65" title="65">outshape &lt;-<span class="st"> </span>lrglakes_poly_proj</a>
-<a class="sourceLine" id="cb33-66" title="66">outfile &lt;-<span class="st"> &quot;glRob_50m_lrglakes_poly&quot;</span></a>
-<a class="sourceLine" id="cb33-67" title="67">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb33-68" title="68">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb33-69" title="69"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb33-70" title="70">outshape &lt;-<span class="st"> </span><span class="kw">SpatialPolygonsDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb33-71" title="71"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb33-72" title="72"></a>
-<a class="sourceLine" id="cb33-73" title="73">outshape &lt;-<span class="st"> </span>lrglakes_lines_proj</a>
-<a class="sourceLine" id="cb33-74" title="74">outfile &lt;-<span class="st"> &quot;glRob_50m_lrglakes_lines&quot;</span></a>
-<a class="sourceLine" id="cb33-75" title="75">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb33-76" title="76">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb33-77" title="77"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb33-78" title="78">outshape &lt;-<span class="st"> </span><span class="kw">SpatialLinesDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb33-79" title="79"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb33-80" title="80"></a>
-<a class="sourceLine" id="cb33-81" title="81">outshape &lt;-<span class="st"> </span>grat30_lines_proj</a>
-<a class="sourceLine" id="cb33-82" title="82">outfile &lt;-<span class="st"> &quot;glRob_50m_grat30_lines&quot;</span></a>
-<a class="sourceLine" id="cb33-83" title="83">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb33-84" title="84">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb33-85" title="85"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb33-86" title="86">outshape &lt;-<span class="st"> </span><span class="kw">SpatialLinesDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb33-87" title="87"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> bb_poly_proj</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;glRob_50m_bb_poly&quot;</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialPolygonsDataFrame</span>(outshape, spdf)</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> bb_lines_proj</span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;glRob_50m_bb_lines&quot;</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialLinesDataFrame</span>(outshape, spdf)</span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a></span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> admin0_poly_proj</span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;glRob_50m_admin0_poly&quot;</span></span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb15-22"><a href="#cb15-22" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialPolygonsDataFrame</span>(outshape, spdf)</span>
+<span id="cb15-23"><a href="#cb15-23" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-24"><a href="#cb15-24" tabindex="-1"></a></span>
+<span id="cb15-25"><a href="#cb15-25" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> admin0_lines_proj</span>
+<span id="cb15-26"><a href="#cb15-26" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;glRob_50m_admin0_lines&quot;</span></span>
+<span id="cb15-27"><a href="#cb15-27" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb15-28"><a href="#cb15-28" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb15-29"><a href="#cb15-29" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb15-30"><a href="#cb15-30" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialLinesDataFrame</span>(outshape, spdf)</span>
+<span id="cb15-31"><a href="#cb15-31" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-32"><a href="#cb15-32" tabindex="-1"></a></span>
+<span id="cb15-33"><a href="#cb15-33" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> admin1_poly_proj</span>
+<span id="cb15-34"><a href="#cb15-34" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;glRob_50m_admin1_poly&quot;</span></span>
+<span id="cb15-35"><a href="#cb15-35" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb15-36"><a href="#cb15-36" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb15-37"><a href="#cb15-37" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb15-38"><a href="#cb15-38" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialPolygonsDataFrame</span>(outshape, spdf)</span>
+<span id="cb15-39"><a href="#cb15-39" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-40"><a href="#cb15-40" tabindex="-1"></a></span>
+<span id="cb15-41"><a href="#cb15-41" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> admin1_lines_proj</span>
+<span id="cb15-42"><a href="#cb15-42" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;glRob_50m_admin1_lines&quot;</span></span>
+<span id="cb15-43"><a href="#cb15-43" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb15-44"><a href="#cb15-44" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb15-45"><a href="#cb15-45" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb15-46"><a href="#cb15-46" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialLinesDataFrame</span>(outshape, spdf)</span>
+<span id="cb15-47"><a href="#cb15-47" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-48"><a href="#cb15-48" tabindex="-1"></a></span>
+<span id="cb15-49"><a href="#cb15-49" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> lakes_poly_proj</span>
+<span id="cb15-50"><a href="#cb15-50" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;glRob_50m_lakes_poly&quot;</span></span>
+<span id="cb15-51"><a href="#cb15-51" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb15-52"><a href="#cb15-52" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb15-53"><a href="#cb15-53" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb15-54"><a href="#cb15-54" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialPolygonsDataFrame</span>(outshape, spdf)</span>
+<span id="cb15-55"><a href="#cb15-55" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-56"><a href="#cb15-56" tabindex="-1"></a></span>
+<span id="cb15-57"><a href="#cb15-57" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> lakes_lines_proj</span>
+<span id="cb15-58"><a href="#cb15-58" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;glRob_50m_lakes_lines&quot;</span></span>
+<span id="cb15-59"><a href="#cb15-59" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb15-60"><a href="#cb15-60" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb15-61"><a href="#cb15-61" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb15-62"><a href="#cb15-62" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialLinesDataFrame</span>(outshape, spdf)</span>
+<span id="cb15-63"><a href="#cb15-63" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-64"><a href="#cb15-64" tabindex="-1"></a></span>
+<span id="cb15-65"><a href="#cb15-65" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> lrglakes_poly_proj</span>
+<span id="cb15-66"><a href="#cb15-66" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;glRob_50m_lrglakes_poly&quot;</span></span>
+<span id="cb15-67"><a href="#cb15-67" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb15-68"><a href="#cb15-68" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb15-69"><a href="#cb15-69" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb15-70"><a href="#cb15-70" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialPolygonsDataFrame</span>(outshape, spdf)</span>
+<span id="cb15-71"><a href="#cb15-71" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-72"><a href="#cb15-72" tabindex="-1"></a></span>
+<span id="cb15-73"><a href="#cb15-73" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> lrglakes_lines_proj</span>
+<span id="cb15-74"><a href="#cb15-74" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;glRob_50m_lrglakes_lines&quot;</span></span>
+<span id="cb15-75"><a href="#cb15-75" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb15-76"><a href="#cb15-76" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb15-77"><a href="#cb15-77" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb15-78"><a href="#cb15-78" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialLinesDataFrame</span>(outshape, spdf)</span>
+<span id="cb15-79"><a href="#cb15-79" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb15-80"><a href="#cb15-80" tabindex="-1"></a></span>
+<span id="cb15-81"><a href="#cb15-81" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> grat30_lines_proj</span>
+<span id="cb15-82"><a href="#cb15-82" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;glRob_50m_grat30_lines&quot;</span></span>
+<span id="cb15-83"><a href="#cb15-83" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb15-84"><a href="#cb15-84" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb15-85"><a href="#cb15-85" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb15-86"><a href="#cb15-86" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialLinesDataFrame</span>(outshape, spdf)</span>
+<span id="cb15-87"><a href="#cb15-87" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
-<div id="clip-out-a-polygon-for-the-caspian" class="section level2">
-<h2><span class="header-section-number">2.4</span> Clip out a polygon for the Caspian</h2>
-<p>Another setup step, and again one that creates some resuable files, is to make a polygon shape file for the Caspian Sea, which can be plotted and filled with color.</p>
-<p>The first step is to creat a “bounding box” that surrouds the Caspian.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" title="1">caspian_bb &lt;-<span class="st"> </span><span class="kw">as</span>(<span class="kw">extent</span>(<span class="dv">45</span>, <span class="dv">56</span>, <span class="dv">35</span>, <span class="dv">50</span>), <span class="st">&quot;SpatialPolygons&quot;</span>)</a>
-<a class="sourceLine" id="cb34-2" title="2"><span class="kw">proj4string</span>(caspian_bb) &lt;-<span class="st"> </span>unproj_proj4string</a>
-<a class="sourceLine" id="cb34-3" title="3"><span class="kw">summary</span>(caspian_bb)</a></code></pre></div>
-<pre><code>## Object of class SpatialPolygons
-## Coordinates:
-##   min max
-## x  45  56
-## y  35  50
-## Is projected: FALSE 
-## proj4string :
-## [+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0]</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="co"># get the points that define the ouline of the Caspian</span></a>
-<a class="sourceLine" id="cb36-2" title="2">caspian_poly &lt;-<span class="st"> </span><span class="kw">gIntersection</span>(ocean_poly, caspian_bb)</a>
-<a class="sourceLine" id="cb36-3" title="3"><span class="kw">proj4string</span>(caspian_poly) &lt;-<span class="st"> </span>unproj_proj4string</a>
-<a class="sourceLine" id="cb36-4" title="4"><span class="kw">summary</span>(caspian_poly)</a></code></pre></div>
-<pre><code>## Object of class SpatialPolygons
-## Coordinates:
-##        min      max
-## x 46.70723 54.72324
-## y 36.61450 47.11016
-## Is projected: FALSE 
-## proj4string :
-## [+proj=longlat +datum=WGS84 +no_defs +ellps=WGS84 +towgs84=0,0,0]</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="kw">plot</span>(coast_lines, <span class="dt">col=</span><span class="st">&quot;purple&quot;</span>)</a>
-<a class="sourceLine" id="cb38-2" title="2"><span class="kw">plot</span>(caspian_poly, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="RMaps_files/figure-html/Caspian%20outline-1.png" width="75%" height="75%" /></p>
+<div id="clip-out-a-polygon-for-the-caspian" class="section level2"
+number="2.4">
+<h2><span class="header-section-number">2.4</span> Clip out a polygon
+for the Caspian</h2>
+<p>Another setup step, and again one that creates some resuable files,
+is to make a polygon shape file for the Caspian Sea, which can be
+plotted and filled with color.</p>
+<p>The first step is to creat a “bounding box” that surrouds the
+Caspian.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>caspian_bb <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">extent</span>(<span class="dv">45</span>, <span class="dv">56</span>, <span class="dv">35</span>, <span class="dv">50</span>), <span class="st">&quot;SpatialPolygons&quot;</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">proj4string</span>(caspian_bb) <span class="ot">&lt;-</span> unproj_proj4string</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="fu">summary</span>(caspian_bb)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># get the points that define the ouline of the Caspian</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>caspian_poly <span class="ot">&lt;-</span> <span class="fu">gIntersection</span>(ocean_poly, caspian_bb)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="fu">proj4string</span>(caspian_poly) <span class="ot">&lt;-</span> unproj_proj4string</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="fu">summary</span>(caspian_poly)</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a><span class="fu">plot</span>(coast_lines, <span class="at">col=</span><span class="st">&quot;purple&quot;</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="fu">plot</span>(caspian_poly, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <p>Project and plot the Caspian polygon:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1">caspian_poly_proj &lt;-<span class="st"> </span><span class="kw">spTransform</span>(caspian_poly, robin_crs)</a>
-<a class="sourceLine" id="cb39-2" title="2"><span class="kw">plot</span>(bb_poly_proj, <span class="dt">bor=</span><span class="st">&quot;black&quot;</span>)</a>
-<a class="sourceLine" id="cb39-3" title="3"><span class="kw">plot</span>(coast_lines_proj, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb39-4" title="4"><span class="kw">plot</span>(caspian_poly_proj, <span class="dt">col=</span><span class="st">&quot;red&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="RMaps_files/figure-html/project%20polygon-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>caspian_poly_proj <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(caspian_poly, robin_crs)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="fu">plot</span>(bb_poly_proj, <span class="at">bor=</span><span class="st">&quot;black&quot;</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">plot</span>(coast_lines_proj, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="fu">plot</span>(caspian_poly_proj, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <p>Write out the Caspian polygon.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">outshape &lt;-<span class="st"> </span>caspian_poly_proj</a>
-<a class="sourceLine" id="cb40-2" title="2">outfile &lt;-<span class="st"> &quot;glRob_50m_caspian_poly&quot;</span></a>
-<a class="sourceLine" id="cb40-3" title="3">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb40-4" title="4">spdf &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">as.numeric</span>(<span class="kw">row.names</span>(outshape)))</a>
-<a class="sourceLine" id="cb40-5" title="5"><span class="kw">row.names</span>(spdf) &lt;-<span class="st"> </span><span class="kw">row.names</span>(outshape)</a>
-<a class="sourceLine" id="cb40-6" title="6">outshape &lt;-<span class="st"> </span><span class="kw">SpatialPolygonsDataFrame</span>(outshape, spdf)</a>
-<a class="sourceLine" id="cb40-7" title="7"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<pre><code>## Warning in writeOGR(outshape, outshapefile, outfile, driver = &quot;ESRI Shapefile&quot;, : Field names abbreviated
-## for ESRI Shapefile driver</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> caspian_poly_proj</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;glRob_50m_caspian_poly&quot;</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>spdf <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">as.numeric</span>(<span class="fu">row.names</span>(outshape)))</span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a><span class="fu">row.names</span>(spdf) <span class="ot">&lt;-</span> <span class="fu">row.names</span>(outshape)</span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> <span class="fu">SpatialPolygonsDataFrame</span>(outshape, spdf)</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <p><a href="Rmaps.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="set-up-tree-cover-data" class="section level1">
-<h1><span class="header-section-number">3</span> Set up tree-cover data</h1>
-<p>One version of Fig. 1 in Marlon et al. (2016) includes a gray-shade “layer” of the “UMD” tree-cover data (Defries et al., 2000, A new global 1-km dataset of percentage tree cover derived from remote sensing, <em>Global Change Biology</em> 6:247-254) <a href="http://glcf.umd.edu/data/treecover/data.shtml">[http://glcf.umd.edu/data/treecover/data.shtml]</a>, used to provide a background context for the location of the GCDv3 sites. The data were converted to a netCDF file, and this is read, and in turn coverted to spatial points and spatial polygon dataframes.</p>
-<div id="read-the-tree-cover-data" class="section level2">
-<h2><span class="header-section-number">3.1</span> Read the tree-cover data</h2>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1"><span class="co"># read a single-variable netCDF dataset using raster()</span></a>
-<a class="sourceLine" id="cb42-2" title="2">tree_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></a>
-<a class="sourceLine" id="cb42-3" title="3">tree_name &lt;-<span class="st"> &quot;treecov.nc&quot;</span></a>
-<a class="sourceLine" id="cb42-4" title="4">tree_file &lt;-<span class="st"> </span><span class="kw">paste</span>(tree_path, tree_name, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb42-5" title="5">tree &lt;-<span class="st"> </span><span class="kw">raster</span>(tree_file) <span class="co"># open treecov.nc</span></a>
-<a class="sourceLine" id="cb42-6" title="6">tree</a></code></pre></div>
-<pre><code>## class       : RasterLayer 
-## dimensions  : 360, 720, 259200  (nrow, ncol, ncell)
-## resolution  : 0.5, 0.5  (x, y)
-## extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
-## coord. ref. : +proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0 
-## data source : /Users/bartlein/Projects/ESSD/data/nc_files/treecov.nc 
-## names       : treecov 
-## zvar        : treecov</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" title="1"><span class="co"># levelplot</span></a>
-<a class="sourceLine" id="cb44-2" title="2">mapTheme &lt;-<span class="st"> </span><span class="kw">rasterTheme</span>(<span class="dt">region=</span><span class="kw">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;Greens&quot;</span>))</a>
-<a class="sourceLine" id="cb44-3" title="3">plt &lt;-<span class="st"> </span><span class="kw">levelplot</span>(tree, <span class="dt">margin=</span>F, <span class="dt">par.settings=</span>mapTheme)</a>
-<a class="sourceLine" id="cb44-4" title="4">plt <span class="op">+</span><span class="st"> </span>latticeExtra<span class="op">::</span><span class="kw">layer</span>(<span class="kw">sp.lines</span>(coast_lines, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.5</span>))</a></code></pre></div>
-<p><img src="RMaps_files/figure-html/plottreecover-1.png" width="75%" height="75%" /></p>
+<div id="set-up-tree-cover-data" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Set up tree-cover
+data</h1>
+<p>One version of Fig. 1 in Marlon et al. (2016) includes a gray-shade
+“layer” of the “UMD” tree-cover data (Defries et al., 2000, A new global
+1-km dataset of percentage tree cover derived from remote sensing,
+<em>Global Change Biology</em> 6:247-254) <a
+href="http://glcf.umd.edu/data/treecover/data.shtml">[http://glcf.umd.edu/data/treecover/data.shtml]</a>,
+used to provide a background context for the location of the GCDv3
+sites. The data were converted to a netCDF file, and this is read, and
+in turn coverted to spatial points and spatial polygon dataframes.</p>
+<div id="read-the-tree-cover-data" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Read the tree-cover
+data</h2>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># read a single-variable netCDF dataset using raster()</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>tree_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>tree_name <span class="ot">&lt;-</span> <span class="st">&quot;treecov.nc&quot;</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>tree_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(tree_path, tree_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>tree <span class="ot">&lt;-</span> <span class="fu">raster</span>(tree_file) <span class="co"># open treecov.nc</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>tree</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># levelplot</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>mapTheme <span class="ot">&lt;-</span> <span class="fu">rasterTheme</span>(<span class="at">region=</span><span class="fu">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;Greens&quot;</span>))</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>plt <span class="ot">&lt;-</span> <span class="fu">levelplot</span>(tree, <span class="at">margin=</span>F, <span class="at">par.settings=</span>mapTheme)</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>plt <span class="sc">+</span> latticeExtra<span class="sc">::</span><span class="fu">layer</span>(<span class="fu">sp.lines</span>(coast_lines, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">0.5</span>))</span></code></pre></div>
 <p>Create a SpatialPoints data frame, and plot it:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="co"># create spatial points data frame</span></a>
-<a class="sourceLine" id="cb45-2" title="2">tree_pts &lt;-<span class="st"> </span><span class="kw">as</span>(tree, <span class="st">&quot;SpatialPointsDataFrame&quot;</span>)</a>
-<a class="sourceLine" id="cb45-3" title="3"><span class="kw">summary</span>(tree_pts)</a></code></pre></div>
-<pre><code>## Object of class SpatialPointsDataFrame
-## Coordinates:
-##       min    max
-## x -179.75 179.75
-## y  -55.75  83.25
-## Is projected: FALSE 
-## proj4string :
-## [+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0]
-## Number of points: 60480
-## Data attributes:
-##     treecov     
-##  Min.   :-2.00  
-##  1st Qu.:-1.00  
-##  Median :-1.00  
-##  Mean   :20.22  
-##  3rd Qu.:42.00  
-##  Max.   :80.00</code></pre>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="co"># plot treecover as spatialpoints</span></a>
-<a class="sourceLine" id="cb47-2" title="2">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Greens&quot;</span>)</a>
-<a class="sourceLine" id="cb47-3" title="3">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>,<span class="dv">60</span>,<span class="dv">70</span>,<span class="dv">80</span>,<span class="dv">90</span>)</a>
-<a class="sourceLine" id="cb47-4" title="4">color_class &lt;-<span class="st"> </span><span class="kw">findInterval</span>(tree_pts<span class="op">$</span>treecov, cutpts)<span class="op">+</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb47-5" title="5"><span class="kw">plot</span>(tree_pts<span class="op">$</span>x, tree_pts<span class="op">$</span>y, <span class="dt">col=</span>plotclr[color_class], <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.25</span>)</a>
-<a class="sourceLine" id="cb47-6" title="6"><span class="kw">plot</span>(coast_lines, <span class="dt">add=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="RMaps_files/figure-html/plot%20treecover_spatialpoinst-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># create spatial points data frame</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>tree_pts <span class="ot">&lt;-</span> <span class="fu">as</span>(tree, <span class="st">&quot;SpatialPointsDataFrame&quot;</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">summary</span>(tree_pts)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co"># plot treecover as spatialpoints</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Greens&quot;</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>,<span class="dv">60</span>,<span class="dv">70</span>,<span class="dv">80</span>,<span class="dv">90</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>color_class <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(tree_pts<span class="sc">$</span>treecov, cutpts)<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="fu">plot</span>(tree_pts<span class="sc">$</span>x, tree_pts<span class="sc">$</span>y, <span class="at">col=</span>plotclr[color_class], <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">0.25</span>)</span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a><span class="fu">plot</span>(coast_lines, <span class="at">add=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <p>Convert the points to polygons.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="co"># spatial polygons (takes a while, especially to plot)</span></a>
-<a class="sourceLine" id="cb48-2" title="2">tree_poly &lt;-<span class="st"> </span><span class="kw">as</span>(tree, <span class="st">&quot;SpatialPolygonsDataFrame&quot;</span>)</a>
-<a class="sourceLine" id="cb48-3" title="3"><span class="kw">summary</span>(tree_poly)</a></code></pre></div>
-<pre><code>## Object of class SpatialPolygonsDataFrame
-## Coordinates:
-##    min   max
-## x -180 180.0
-## y  -56  83.5
-## Is projected: FALSE 
-## proj4string :
-## [+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0]
-## Data attributes:
-##     treecov     
-##  Min.   :-2.00  
-##  1st Qu.:-1.00  
-##  Median :-1.00  
-##  Mean   :20.22  
-##  3rd Qu.:42.00  
-##  Max.   :80.00</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># spatial polygons (takes a while, especially to plot)</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>tree_poly <span class="ot">&lt;-</span> <span class="fu">as</span>(tree, <span class="st">&quot;SpatialPolygonsDataFrame&quot;</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="fu">summary</span>(tree_poly)</span></code></pre></div>
 <p>Plot the treecover polygons.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1"><span class="co"># plot the polygons</span></a>
-<a class="sourceLine" id="cb50-2" title="2"><span class="co">#pdf(file=&quot;treecov_poly.pdf&quot;)</span></a>
-<a class="sourceLine" id="cb50-3" title="3">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Greens&quot;</span>)</a>
-<a class="sourceLine" id="cb50-4" title="4">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>,<span class="dv">60</span>,<span class="dv">70</span>,<span class="dv">80</span>,<span class="dv">90</span>)</a>
-<a class="sourceLine" id="cb50-5" title="5">color_class &lt;-<span class="st"> </span><span class="kw">findInterval</span>(tree_poly<span class="op">$</span>treecov, cutpts)<span class="op">+</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb50-6" title="6">clr &lt;-<span class="st"> </span>plotclr[color_class]</a>
-<a class="sourceLine" id="cb50-7" title="7"><span class="kw">plot</span>(bb_lines, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>)</a>
-<a class="sourceLine" id="cb50-8" title="8"><span class="kw">plot</span>(tree_poly, <span class="dt">col=</span>clr, <span class="dt">bor=</span>clr, <span class="dt">lwd=</span><span class="fl">0.1</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb50-9" title="9"><span class="kw">plot</span>(coast_lines, <span class="dt">lwd=</span><span class="fl">0.25</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="RMaps_files/figure-html/plot%20treecover%20polygons-1.png" width="75%" height="75%" /></p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1"><span class="co">#dev.off()</span></a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co"># plot the polygons</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="co">#pdf(file=&quot;treecov_poly.pdf&quot;)</span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Greens&quot;</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>,<span class="dv">60</span>,<span class="dv">70</span>,<span class="dv">80</span>,<span class="dv">90</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>color_class <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(tree_poly<span class="sc">$</span>treecov, cutpts)<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>clr <span class="ot">&lt;-</span> plotclr[color_class]</span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a><span class="fu">plot</span>(bb_lines, <span class="at">col=</span><span class="st">&quot;black&quot;</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a><span class="fu">plot</span>(tree_poly, <span class="at">col=</span>clr, <span class="at">bor=</span>clr, <span class="at">lwd=</span><span class="fl">0.1</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a><span class="fu">plot</span>(coast_lines, <span class="at">lwd=</span><span class="fl">0.25</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb25-10"><a href="#cb25-10" tabindex="-1"></a><span class="co">#dev.off()</span></span></code></pre></div>
 <p>Write out the shapefiles.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1"><span class="co"># write tree_ptws</span></a>
-<a class="sourceLine" id="cb52-2" title="2">outpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/RMaps/derived/treecov/&quot;</span></a>
-<a class="sourceLine" id="cb52-3" title="3">outshape &lt;-<span class="st"> </span>tree_pts</a>
-<a class="sourceLine" id="cb52-4" title="4">outfile &lt;-<span class="st"> &quot;treecov_pts&quot;</span></a>
-<a class="sourceLine" id="cb52-5" title="5">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb52-6" title="6"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb52-7" title="7"><span class="co"># write &lt;- tree_poly</span></a>
-<a class="sourceLine" id="cb52-8" title="8">outshape &lt;-<span class="st"> </span>tree_poly</a>
-<a class="sourceLine" id="cb52-9" title="9">outfile &lt;-<span class="st"> &quot;treecov_poly&quot;</span></a>
-<a class="sourceLine" id="cb52-10" title="10">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb52-11" title="11"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># write tree_ptws</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>outpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/RMaps/derived/treecov/&quot;</span></span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> tree_pts</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;treecov_pts&quot;</span></span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a><span class="co"># write &lt;- tree_poly</span></span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> tree_poly</span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;treecov_poly&quot;</span></span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb26-11"><a href="#cb26-11" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 </div>
-<div id="project-the-treecover-points-and-polygons" class="section level2">
-<h2><span class="header-section-number">3.2</span> Project the treecover points and polygons</h2>
+<div id="project-the-treecover-points-and-polygons"
+class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Project the treecover
+points and polygons</h2>
 <p>Project and plot the shapefiles</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" title="1">tree_pts_proj &lt;-<span class="st"> </span><span class="kw">spTransform</span>(tree_pts, robin_crs)</a>
-<a class="sourceLine" id="cb53-2" title="2"><span class="kw">summary</span>(tree_pts_proj)</a></code></pre></div>
-<pre><code>## Object of class SpatialPointsDataFrame
-## Coordinates:
-##         min      max
-## x -14606972 16782196
-## y  -5913980  8319388
-## Is projected: TRUE 
-## proj4string : [+proj=robin +lon_0=0w +ellps=WGS84]
-## Number of points: 60480
-## Data attributes:
-##     treecov     
-##  Min.   :-2.00  
-##  1st Qu.:-1.00  
-##  Median :-1.00  
-##  Mean   :20.22  
-##  3rd Qu.:42.00  
-##  Max.   :80.00</code></pre>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" title="1">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Greens&quot;</span>)</a>
-<a class="sourceLine" id="cb55-2" title="2">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>,<span class="dv">60</span>,<span class="dv">70</span>,<span class="dv">80</span>,<span class="dv">90</span>)</a>
-<a class="sourceLine" id="cb55-3" title="3">color_class &lt;-<span class="st"> </span><span class="kw">findInterval</span>(tree_pts_proj<span class="op">$</span>treecov, cutpts)<span class="op">+</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb55-4" title="4"><span class="kw">plot</span>(bb_lines_proj, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">axes=</span><span class="ot">FALSE</span>, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb55-5" title="5"><span class="kw">points</span>(tree_pts_proj<span class="op">$</span>x, tree_pts_proj<span class="op">$</span>y, <span class="dt">col=</span>plotclr[color_class], <span class="dt">pch=</span><span class="dv">16</span>, <span class="dt">cex=</span><span class="fl">0.25</span>)</a>
-<a class="sourceLine" id="cb55-6" title="6"><span class="kw">plot</span>(coast_lines_proj, <span class="dt">add=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="RMaps_files/figure-html/plot%20treecover%20projected%20spatialpoints-1.png" width="75%" height="75%" /></p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" title="1">tree_poly_proj &lt;-<span class="st"> </span><span class="kw">spTransform</span>(tree_poly, robin_crs)</a>
-<a class="sourceLine" id="cb56-2" title="2"><span class="kw">summary</span>(tree_poly_proj)</a></code></pre></div>
-<pre><code>## Object of class SpatialPolygonsDataFrame
-## Coordinates:
-##         min      max
-## x -14636489 16811803
-## y  -5939113  8334404
-## Is projected: TRUE 
-## proj4string : [+proj=robin +lon_0=0w +ellps=WGS84]
-## Data attributes:
-##     treecov     
-##  Min.   :-2.00  
-##  1st Qu.:-1.00  
-##  Median :-1.00  
-##  Mean   :20.22  
-##  3rd Qu.:42.00  
-##  Max.   :80.00</code></pre>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1">plotclr &lt;-<span class="st"> </span><span class="kw">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Greens&quot;</span>)</a>
-<a class="sourceLine" id="cb58-2" title="2">cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>,<span class="dv">60</span>,<span class="dv">70</span>,<span class="dv">80</span>,<span class="dv">90</span>)</a>
-<a class="sourceLine" id="cb58-3" title="3">color_class &lt;-<span class="st"> </span><span class="kw">findInterval</span>(tree_poly_proj<span class="op">$</span>treecov, cutpts)<span class="op">+</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb58-4" title="4">clr &lt;-<span class="st"> </span>plotclr[color_class]</a>
-<a class="sourceLine" id="cb58-5" title="5"><span class="kw">plot</span>(bb_lines_proj, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">axes=</span><span class="ot">FALSE</span>, <span class="dt">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="dt">ylab =</span> <span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb58-6" title="6"><span class="kw">plot</span>(tree_poly_proj, <span class="dt">col=</span>clr, <span class="dt">bor=</span>clr, <span class="dt">lwd=</span><span class="fl">0.1</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb58-7" title="7"><span class="kw">plot</span>(coast_lines_proj, <span class="dt">lwd=</span><span class="fl">0.25</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="RMaps_files/figure-html/plot%20treecover%20projected%20polygons-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>tree_pts_proj <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(tree_pts, robin_crs)</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">summary</span>(tree_pts_proj)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Greens&quot;</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>,<span class="dv">60</span>,<span class="dv">70</span>,<span class="dv">80</span>,<span class="dv">90</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a>color_class <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(tree_pts_proj<span class="sc">$</span>treecov, cutpts)<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="fu">plot</span>(bb_lines_proj, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">axes=</span><span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a><span class="fu">points</span>(tree_pts_proj<span class="sc">$</span>x, tree_pts_proj<span class="sc">$</span>y, <span class="at">col=</span>plotclr[color_class], <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">0.25</span>)</span>
+<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a><span class="fu">plot</span>(coast_lines_proj, <span class="at">add=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a>tree_poly_proj <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(tree_poly, robin_crs)</span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="fu">summary</span>(tree_poly_proj)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Greens&quot;</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>,<span class="dv">60</span>,<span class="dv">70</span>,<span class="dv">80</span>,<span class="dv">90</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>color_class <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(tree_poly_proj<span class="sc">$</span>treecov, cutpts)<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>clr <span class="ot">&lt;-</span> plotclr[color_class]</span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="fu">plot</span>(bb_lines_proj, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">axes=</span><span class="cn">FALSE</span>, <span class="at">xlab =</span> <span class="st">&quot;&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;&quot;</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a><span class="fu">plot</span>(tree_poly_proj, <span class="at">col=</span>clr, <span class="at">bor=</span>clr, <span class="at">lwd=</span><span class="fl">0.1</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a><span class="fu">plot</span>(coast_lines_proj, <span class="at">lwd=</span><span class="fl">0.25</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <p>Write out the projected shapefiles.</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" title="1"><span class="co"># write tree_pts_proj</span></a>
-<a class="sourceLine" id="cb59-2" title="2">outshape &lt;-<span class="st"> </span>tree_pts_proj</a>
-<a class="sourceLine" id="cb59-3" title="3">outfile &lt;-<span class="st"> &quot;treecov_pts_proj&quot;</span></a>
-<a class="sourceLine" id="cb59-4" title="4">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb59-5" title="5"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb59-6" title="6"><span class="co"># write &lt;- tree_poly_proj</span></a>
-<a class="sourceLine" id="cb59-7" title="7">outshape &lt;-<span class="st"> </span>tree_poly_proj</a>
-<a class="sourceLine" id="cb59-8" title="8">outfile &lt;-<span class="st"> &quot;treecov_poly_proj&quot;</span></a>
-<a class="sourceLine" id="cb59-9" title="9">outshapefile &lt;-<span class="st"> </span><span class="kw">paste</span>(outpath,outfile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>)</a>
-<a class="sourceLine" id="cb59-10" title="10"><span class="kw">writeOGR</span>(outshape, outshapefile, outfile, <span class="dt">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="dt">overwrite_layer=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># write tree_pts_proj</span></span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> tree_pts_proj</span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;treecov_pts_proj&quot;</span></span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a><span class="co"># write &lt;- tree_poly_proj</span></span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a>outshape <span class="ot">&lt;-</span> tree_poly_proj</span>
+<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a>outfile <span class="ot">&lt;-</span> <span class="st">&quot;treecov_poly_proj&quot;</span></span>
+<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a>outshapefile <span class="ot">&lt;-</span> <span class="fu">paste</span>(outpath,outfile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a><span class="fu">writeOGR</span>(outshape, outshapefile, outfile, <span class="at">driver=</span><span class="st">&quot;ESRI Shapefile&quot;</span>, <span class="at">overwrite_layer=</span><span class="cn">TRUE</span>)</span></code></pre></div>
 <p><a href="Rmaps.html">[Back to top]</a></p>
 </div>
 </div>
-<div id="map-the-gcdv3-charcoal-records" class="section level1">
-<h1><span class="header-section-number">4</span> Map the GCDv3 charcoal records</h1>
-<p>Figure 1 of Marlon et al. (2016) shows the distribution of charcoal records, and additionally shows by means of symbol color the number of samples in each record. Two versions of the figure will be produced: 1) as published, and 2) with the tree-cover data as a gray-shaded background.</p>
-<div id="read-the-projected-shape-files" class="section level2">
-<h2><span class="header-section-number">4.1</span> Read the projected shape files</h2>
+<div id="map-the-gcdv3-charcoal-records" class="section level1"
+number="4">
+<h1><span class="header-section-number">4</span> Map the GCDv3 charcoal
+records</h1>
+<p>Figure 1 of Marlon et al. (2016) shows the distribution of charcoal
+records, and additionally shows by means of symbol color the number of
+samples in each record. Two versions of the figure will be produced: 1)
+as published, and 2) with the tree-cover data as a gray-shaded
+background.</p>
+<div id="read-the-projected-shape-files" class="section level2"
+number="4.1">
+<h2><span class="header-section-number">4.1</span> Read the projected
+shape files</h2>
 <p>First read the projected (Robinson) shape files produced above.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1"><span class="kw">library</span>(sp)</a>
-<a class="sourceLine" id="cb60-2" title="2"><span class="kw">library</span>(classInt)</a></code></pre></div>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" title="1"><span class="co"># read the projected Robinson shapefiles</span></a>
-<a class="sourceLine" id="cb61-2" title="2">shapepath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/RMaps/derived/glRob_50m/&quot;</span></a>
-<a class="sourceLine" id="cb61-3" title="3">coast_lines_proj &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(shapepath, <span class="st">&quot;glRob_50m_coast_lines&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb61-4" title="4">admin0_lines_proj &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(shapepath, <span class="st">&quot;glRob_50m_admin0_lines&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb61-5" title="5">admin0_poly_proj &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(shapepath, <span class="st">&quot;glRob_50m_admin0_poly&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb61-6" title="6">bb_lines_proj &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(shapepath, <span class="st">&quot;glRob_50m_bb_lines&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb61-7" title="7">bb_poly_proj &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(shapepath, <span class="st">&quot;glRob_50m_bb_poly&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb61-8" title="8">grat30_lines_proj &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(shapepath, <span class="st">&quot;glRob_50m_grat30_lines&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb61-9" title="9">lrglakes_poly_proj &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(shapepath, <span class="st">&quot;glRob_50m_lrglakes_poly&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb61-10" title="10">caspian_poly_proj &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(shapepath, <span class="st">&quot;glRob_50m_caspian_poly&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a></code></pre></div>
-<p>Read the projected tree-cover polygons (this can be slow–lots of polygons!)</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="co"># tree-cover shape file</span></a>
-<a class="sourceLine" id="cb62-2" title="2">treecover_path &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/RMaps/derived/treecov/&quot;</span></a>
-<a class="sourceLine" id="cb62-3" title="3">tree_poly_proj &lt;-<span class="st"> </span><span class="kw">readOGR</span>(<span class="kw">paste</span>(treecover_path, <span class="st">&quot;treecov_poly_proj.shp&quot;</span>, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))  </a></code></pre></div>
-<pre><code>## OGR data source with driver: ESRI Shapefile 
-## Source: &quot;/Users/bartlein/Projects/ESSD/data/RMaps/derived/treecov/treecov_poly_proj.shp&quot;, layer: &quot;treecov_poly_proj&quot;
-## with 60480 features
-## It has 3 fields</code></pre>
-<p>Set cutpoints and gray-scale color numbers for plotting the tree-cover data. These were calculated to follow a “Munsell sequence” of equally perceived class intervals.</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1"><span class="co"># colors for tree cover</span></a>
-<a class="sourceLine" id="cb64-2" title="2">tree_clr_upper &lt;-<span class="st"> </span><span class="kw">c</span>(   <span class="dv">1</span>,    <span class="dv">15</span>,    <span class="dv">20</span>,    <span class="dv">25</span>,    <span class="dv">30</span>,    <span class="dv">35</span>,    <span class="dv">40</span>,    <span class="dv">45</span>,    <span class="dv">50</span>,    <span class="dv">55</span>,    <span class="dv">60</span>,    <span class="dv">65</span>,    <span class="dv">70</span>,    <span class="dv">75</span>,   <span class="dv">999</span>)</a>
-<a class="sourceLine" id="cb64-3" title="3">tree_clr_gray &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">1.000</span>, <span class="fl">0.979</span>, <span class="fl">0.954</span>, <span class="fl">0.926</span>, <span class="fl">0.894</span>, <span class="fl">0.859</span>, <span class="fl">0.820</span>, <span class="fl">0.778</span>, <span class="fl">0.733</span>, <span class="fl">0.684</span>, <span class="fl">0.632</span>, <span class="fl">0.576</span>, <span class="fl">0.517</span>, <span class="fl">0.455</span>, <span class="fl">0.389</span>)</a>
-<a class="sourceLine" id="cb64-4" title="4">colnum &lt;-<span class="st"> </span><span class="kw">findInterval</span>(tree_poly_proj<span class="op">$</span>treecov, tree_clr_upper)<span class="op">+</span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb64-5" title="5">clr &lt;-<span class="st"> </span><span class="kw">gray</span>(tree_clr_gray[colnum], <span class="dt">alpha=</span><span class="ot">NULL</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="fu">library</span>(sp)</span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="fu">library</span>(classInt)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># read the projected Robinson shapefiles</span></span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a>shapepath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/RMaps/derived/glRob_50m/&quot;</span></span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a>coast_lines_proj <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(shapepath, <span class="st">&quot;glRob_50m_coast_lines&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a>admin0_lines_proj <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(shapepath, <span class="st">&quot;glRob_50m_admin0_lines&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a>admin0_poly_proj <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(shapepath, <span class="st">&quot;glRob_50m_admin0_poly&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb33-6"><a href="#cb33-6" tabindex="-1"></a>bb_lines_proj <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(shapepath, <span class="st">&quot;glRob_50m_bb_lines&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb33-7"><a href="#cb33-7" tabindex="-1"></a>bb_poly_proj <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(shapepath, <span class="st">&quot;glRob_50m_bb_poly&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb33-8"><a href="#cb33-8" tabindex="-1"></a>grat30_lines_proj <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(shapepath, <span class="st">&quot;glRob_50m_grat30_lines&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb33-9"><a href="#cb33-9" tabindex="-1"></a>lrglakes_poly_proj <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(shapepath, <span class="st">&quot;glRob_50m_lrglakes_poly&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb33-10"><a href="#cb33-10" tabindex="-1"></a>caspian_poly_proj <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(shapepath, <span class="st">&quot;glRob_50m_caspian_poly&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span></code></pre></div>
+<p>Read the projected tree-cover polygons (this can be slow–lots of
+polygons!)</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="co"># tree-cover shape file</span></span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a>treecover_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/RMaps/derived/treecov/&quot;</span></span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a>tree_poly_proj <span class="ot">&lt;-</span> <span class="fu">readOGR</span>(<span class="fu">paste</span>(treecover_path, <span class="st">&quot;treecov_poly_proj.shp&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))  </span></code></pre></div>
+<p>Set cutpoints and gray-scale color numbers for plotting the
+tree-cover data. These were calculated to follow a “Munsell sequence” of
+equally perceived class intervals.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="co"># colors for tree cover</span></span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a>tree_clr_upper <span class="ot">&lt;-</span> <span class="fu">c</span>(   <span class="dv">1</span>,    <span class="dv">15</span>,    <span class="dv">20</span>,    <span class="dv">25</span>,    <span class="dv">30</span>,    <span class="dv">35</span>,    <span class="dv">40</span>,    <span class="dv">45</span>,    <span class="dv">50</span>,    <span class="dv">55</span>,    <span class="dv">60</span>,    <span class="dv">65</span>,    <span class="dv">70</span>,    <span class="dv">75</span>,   <span class="dv">999</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a>tree_clr_gray <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">1.000</span>, <span class="fl">0.979</span>, <span class="fl">0.954</span>, <span class="fl">0.926</span>, <span class="fl">0.894</span>, <span class="fl">0.859</span>, <span class="fl">0.820</span>, <span class="fl">0.778</span>, <span class="fl">0.733</span>, <span class="fl">0.684</span>, <span class="fl">0.632</span>, <span class="fl">0.576</span>, <span class="fl">0.517</span>, <span class="fl">0.455</span>, <span class="fl">0.389</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a>colnum <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(tree_poly_proj<span class="sc">$</span>treecov, tree_clr_upper)<span class="sc">+</span><span class="dv">1</span></span>
+<span id="cb35-5"><a href="#cb35-5" tabindex="-1"></a>clr <span class="ot">&lt;-</span> <span class="fu">gray</span>(tree_clr_gray[colnum], <span class="at">alpha=</span><span class="cn">NULL</span>)</span></code></pre></div>
 </div>
-<div id="read-the-gcdv3-data" class="section level2">
-<h2><span class="header-section-number">4.2</span> Read the GCDv3 data</h2>
+<div id="read-the-gcdv3-data" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Read the GCDv3
+data</h2>
 <p>Read the GCDv3 charcoal site-location data.</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" title="1"><span class="co"># read the data</span></a>
-<a class="sourceLine" id="cb65-2" title="2">csvpath &lt;-<span class="st"> &quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></a>
-<a class="sourceLine" id="cb65-3" title="3">csvname &lt;-<span class="st"> &quot;GCDv3_MapData_Fig1.csv&quot;</span></a>
-<a class="sourceLine" id="cb65-4" title="4">gcdv3 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="kw">paste</span>(csvpath, csvname, <span class="dt">sep=</span><span class="st">&quot;&quot;</span>))</a>
-<a class="sourceLine" id="cb65-5" title="5">gcdv3_pts &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">cbind</span>(gcdv3<span class="op">$</span>Long,gcdv3<span class="op">$</span>Lat,gcdv3<span class="op">$</span>samples22k))</a>
-<a class="sourceLine" id="cb65-6" title="6"><span class="kw">names</span>(gcdv3_pts) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;samples22k&quot;</span>)</a>
-<a class="sourceLine" id="cb65-7" title="7"><span class="kw">head</span>(gcdv3_pts)</a></code></pre></div>
-<pre><code>##         lon     lat samples22k
-## 1 -110.6161 44.6628        668
-## 2 -110.3467 44.9183        567
-## 3 -114.9867 45.7044        367
-## 4 -114.2619 45.8919        387
-## 5 -114.6503 46.3206        435
-## 6 -113.4403 45.8406        971</code></pre>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" title="1"><span class="kw">coordinates</span>(gcdv3_pts) &lt;-<span class="st"> </span><span class="er">~</span>lon<span class="op">+</span>lat</a>
-<a class="sourceLine" id="cb67-2" title="2"><span class="kw">proj4string</span>(gcdv3_pts) &lt;-<span class="st"> </span><span class="kw">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0&quot;</span>)</a>
-<a class="sourceLine" id="cb67-3" title="3"><span class="kw">summary</span>(gcdv3_pts)</a></code></pre></div>
-<pre><code>## Object of class SpatialPointsDataFrame
-## Coordinates:
-##            min      max
-## lon -179.56000 179.5000
-## lat  -54.88333  69.3833
-## Is projected: FALSE 
-## proj4string :
-## [+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0]
-## Number of points: 736
-## Data attributes:
-##    samples22k    
-##  Min.   :   5.0  
-##  1st Qu.:  29.0  
-##  Median :  58.0  
-##  Mean   : 162.0  
-##  3rd Qu.: 118.5  
-##  Max.   :8166.0</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="co"># read the data</span></span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>csvpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a>csvname <span class="ot">&lt;-</span> <span class="st">&quot;GCDv3_MapData_Fig1.csv&quot;</span></span>
+<span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a>gcdv3 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">paste</span>(csvpath, csvname, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb36-5"><a href="#cb36-5" tabindex="-1"></a>gcdv3_pts <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(gcdv3<span class="sc">$</span>Long,gcdv3<span class="sc">$</span>Lat,gcdv3<span class="sc">$</span>samples22k))</span>
+<span id="cb36-6"><a href="#cb36-6" tabindex="-1"></a><span class="fu">names</span>(gcdv3_pts) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;samples22k&quot;</span>)</span>
+<span id="cb36-7"><a href="#cb36-7" tabindex="-1"></a><span class="fu">head</span>(gcdv3_pts)</span>
+<span id="cb36-8"><a href="#cb36-8" tabindex="-1"></a><span class="fu">coordinates</span>(gcdv3_pts) <span class="ot">&lt;-</span> <span class="er">~</span>lon<span class="sc">+</span>lat</span>
+<span id="cb36-9"><a href="#cb36-9" tabindex="-1"></a><span class="fu">proj4string</span>(gcdv3_pts) <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">&quot;+proj=longlat +datum=WGS84 +ellps=WGS84 +towgs84=0,0,0&quot;</span>)</span>
+<span id="cb36-10"><a href="#cb36-10" tabindex="-1"></a><span class="fu">summary</span>(gcdv3_pts)</span></code></pre></div>
 <p>Set symbol size and colors for the charcoal points.</p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb69-1" title="1"><span class="co"># symbol size and colors</span></a>
-<a class="sourceLine" id="cb69-2" title="2">nsamp_cutpts &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">10</span>,<span class="dv">100</span>,<span class="dv">1000</span>,<span class="dv">10000</span>)</a>
-<a class="sourceLine" id="cb69-3" title="3">nsamp_colors &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;green3&quot;</span>,<span class="st">&quot;deepskyblue2&quot;</span>,<span class="st">&quot;slateblue4&quot;</span>,<span class="st">&quot;purple&quot;</span>)</a>
-<a class="sourceLine" id="cb69-4" title="4">nsamp_cex &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb69-5" title="5">nsamp_num &lt;-<span class="st"> </span><span class="kw">findInterval</span>(gcdv3_pts<span class="op">$</span>samples22k, nsamp_cutpts)<span class="op">+</span><span class="dv">1</span></a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="co"># symbol size and colors</span></span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a>nsamp_cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="dv">100</span>,<span class="dv">1000</span>,<span class="dv">10000</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a>nsamp_colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;green3&quot;</span>,<span class="st">&quot;deepskyblue2&quot;</span>,<span class="st">&quot;slateblue4&quot;</span>,<span class="st">&quot;purple&quot;</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" tabindex="-1"></a>nsamp_cex <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>,<span class="fl">0.5</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" tabindex="-1"></a>nsamp_num <span class="ot">&lt;-</span> <span class="fu">findInterval</span>(gcdv3_pts<span class="sc">$</span>samples22k, nsamp_cutpts)<span class="sc">+</span><span class="dv">1</span></span></code></pre></div>
 <p>Project the charcoal point data.</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="co"># project the data</span></a>
-<a class="sourceLine" id="cb70-2" title="2">robin.crs &lt;-<span class="st"> </span><span class="kw">CRS</span>(<span class="st">&quot;+proj=robin +lon_0=0w&quot;</span>)</a>
-<a class="sourceLine" id="cb70-3" title="3">gcdv3_pts.proj &lt;-<span class="st"> </span><span class="kw">spTransform</span>(gcdv3_pts, robin.crs)</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="co"># project the data</span></span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a>robin.crs <span class="ot">&lt;-</span> <span class="fu">CRS</span>(<span class="st">&quot;+proj=robin +lon_0=0w&quot;</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a>gcdv3_pts.proj <span class="ot">&lt;-</span> <span class="fu">spTransform</span>(gcdv3_pts, robin.crs)</span></code></pre></div>
 </div>
-<div id="plot-the-maps" class="section level2">
+<div id="plot-the-maps" class="section level2" number="4.3">
 <h2><span class="header-section-number">4.3</span> Plot the maps</h2>
-<p>First, plot the sites with no background. The code below creates a .pdf file in the working directory.</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb71-1" title="1"><span class="co"># version with no background</span></a>
-<a class="sourceLine" id="cb71-2" title="2">pdffile &lt;-<span class="st"> &quot;gcdv3_nsamp.pdf&quot;</span></a>
-<a class="sourceLine" id="cb71-3" title="3"><span class="kw">pdf</span>(<span class="kw">paste</span>(pdffile,<span class="dt">sep=</span><span class="st">&quot;&quot;</span>), <span class="dt">paper=</span><span class="st">&quot;letter&quot;</span>, <span class="dt">width=</span><span class="dv">8</span>, <span class="dt">height=</span><span class="dv">8</span>)</a>
-<a class="sourceLine" id="cb71-4" title="4"></a>
-<a class="sourceLine" id="cb71-5" title="5">  <span class="kw">plot</span>(bb_poly_proj, <span class="dt">col=</span><span class="st">&quot;gray90&quot;</span>, <span class="dt">bor=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.1</span>)</a>
-<a class="sourceLine" id="cb71-6" title="6">  <span class="kw">plot</span>(grat30_lines_proj, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.3</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb71-7" title="7">  <span class="kw">plot</span>(admin0_poly_proj, <span class="dt">col=</span><span class="st">&quot;white&quot;</span>, <span class="dt">bor=</span><span class="st">&quot;gray50&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.4</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb71-8" title="8">  <span class="kw">plot</span>(lrglakes_poly_proj, <span class="dt">col=</span><span class="st">&quot;gray90&quot;</span>, <span class="dt">bor=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.2</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb71-9" title="9">  <span class="kw">plot</span>(caspian_poly_proj, <span class="dt">col=</span><span class="st">&quot;gray90&quot;</span>, <span class="dt">bor=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.2</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb71-10" title="10">  <span class="kw">plot</span>(coast_lines_proj, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.5</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb71-11" title="11">  <span class="kw">plot</span>(bb_lines_proj, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">1.0</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb71-12" title="12">  </a>
-<a class="sourceLine" id="cb71-13" title="13">  <span class="kw">plot</span>(gcdv3_pts.proj, <span class="dt">pch=</span><span class="dv">2</span>, <span class="dt">col=</span>nsamp_colors[nsamp_num], <span class="dt">cex=</span>nsamp_cex[nsamp_num], <span class="dt">lwd=</span><span class="fl">0.6</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb71-14" title="14">  </a>
-<a class="sourceLine" id="cb71-15" title="15">  <span class="kw">text</span>(<span class="op">-</span><span class="dv">17000000</span>, <span class="dv">9100000</span>, <span class="dt">pos=</span><span class="dv">4</span>, <span class="dt">cex=</span><span class="fl">0.8</span>, <span class="st">&quot;GCDv3 -- Number of Samples (Since 22 ka)&quot;</span>)</a>
-<a class="sourceLine" id="cb71-16" title="16">  <span class="kw">legend</span>(<span class="op">-</span><span class="dv">17000000</span>, <span class="dv">-5000000</span>, <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;&lt; 10&quot;</span>,<span class="st">&quot;10 - 100&quot;</span>,<span class="st">&quot;100 - 1000&quot;</span>,<span class="st">&quot;&gt; 1000&quot;</span>), <span class="dt">bg=</span><span class="st">&quot;white&quot;</span>,</a>
-<a class="sourceLine" id="cb71-17" title="17">    <span class="dt">title=</span><span class="st">&quot;Number of Samples&quot;</span>, <span class="dt">pch=</span><span class="dv">2</span>, <span class="dt">pt.lwd=</span><span class="fl">0.6</span>, <span class="dt">col=</span>nsamp_colors, <span class="dt">cex=</span><span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb71-18" title="18"></a>
-<a class="sourceLine" id="cb71-19" title="19"><span class="kw">dev.off</span>()</a></code></pre></div>
+<p>First, plot the sites with no background. The code below creates a
+.pdf file in the working directory.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="co"># version with no background</span></span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>pdffile <span class="ot">&lt;-</span> <span class="st">&quot;gcdv3_nsamp.pdf&quot;</span></span>
+<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a><span class="fu">pdf</span>(<span class="fu">paste</span>(pdffile,<span class="at">sep=</span><span class="st">&quot;&quot;</span>), <span class="at">paper=</span><span class="st">&quot;letter&quot;</span>, <span class="at">width=</span><span class="dv">8</span>, <span class="at">height=</span><span class="dv">8</span>)</span>
+<span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" tabindex="-1"></a>  <span class="fu">plot</span>(bb_poly_proj, <span class="at">col=</span><span class="st">&quot;gray90&quot;</span>, <span class="at">bor=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">0.1</span>)</span>
+<span id="cb39-6"><a href="#cb39-6" tabindex="-1"></a>  <span class="fu">plot</span>(grat30_lines_proj, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">0.3</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb39-7"><a href="#cb39-7" tabindex="-1"></a>  <span class="fu">plot</span>(admin0_poly_proj, <span class="at">col=</span><span class="st">&quot;white&quot;</span>, <span class="at">bor=</span><span class="st">&quot;gray50&quot;</span>, <span class="at">lwd=</span><span class="fl">0.4</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb39-8"><a href="#cb39-8" tabindex="-1"></a>  <span class="fu">plot</span>(lrglakes_poly_proj, <span class="at">col=</span><span class="st">&quot;gray90&quot;</span>, <span class="at">bor=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">0.2</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb39-9"><a href="#cb39-9" tabindex="-1"></a>  <span class="fu">plot</span>(caspian_poly_proj, <span class="at">col=</span><span class="st">&quot;gray90&quot;</span>, <span class="at">bor=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">0.2</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb39-10"><a href="#cb39-10" tabindex="-1"></a>  <span class="fu">plot</span>(coast_lines_proj, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">0.5</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb39-11"><a href="#cb39-11" tabindex="-1"></a>  <span class="fu">plot</span>(bb_lines_proj, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">1.0</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb39-12"><a href="#cb39-12" tabindex="-1"></a>  </span>
+<span id="cb39-13"><a href="#cb39-13" tabindex="-1"></a>  <span class="fu">plot</span>(gcdv3_pts.proj, <span class="at">pch=</span><span class="dv">2</span>, <span class="at">col=</span>nsamp_colors[nsamp_num], <span class="at">cex=</span>nsamp_cex[nsamp_num], <span class="at">lwd=</span><span class="fl">0.6</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb39-14"><a href="#cb39-14" tabindex="-1"></a>  </span>
+<span id="cb39-15"><a href="#cb39-15" tabindex="-1"></a>  <span class="fu">text</span>(<span class="sc">-</span><span class="dv">17000000</span>, <span class="dv">9100000</span>, <span class="at">pos=</span><span class="dv">4</span>, <span class="at">cex=</span><span class="fl">0.8</span>, <span class="st">&quot;GCDv3 -- Number of Samples (Since 22 ka)&quot;</span>)</span>
+<span id="cb39-16"><a href="#cb39-16" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="sc">-</span><span class="dv">17000000</span>, <span class="sc">-</span><span class="dv">5000000</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;&lt; 10&quot;</span>,<span class="st">&quot;10 - 100&quot;</span>,<span class="st">&quot;100 - 1000&quot;</span>,<span class="st">&quot;&gt; 1000&quot;</span>), <span class="at">bg=</span><span class="st">&quot;white&quot;</span>,</span>
+<span id="cb39-17"><a href="#cb39-17" tabindex="-1"></a>    <span class="at">title=</span><span class="st">&quot;Number of Samples&quot;</span>, <span class="at">pch=</span><span class="dv">2</span>, <span class="at">pt.lwd=</span><span class="fl">0.6</span>, <span class="at">col=</span>nsamp_colors, <span class="at">cex=</span><span class="fl">0.5</span>)</span>
+<span id="cb39-18"><a href="#cb39-18" tabindex="-1"></a></span>
+<span id="cb39-19"><a href="#cb39-19" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <p>The resulting plot will look like this:<br />
 <img src="images/gcdv3_nsamp.png" /></p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="co"># version with treecover background</span></a>
-<a class="sourceLine" id="cb72-2" title="2">pdffile &lt;-<span class="st"> &quot;gcdv3_nsamp_treecov.pdf&quot;</span></a>
-<a class="sourceLine" id="cb72-3" title="3"><span class="kw">pdf</span>(pdffile, <span class="dt">paper=</span><span class="st">&quot;letter&quot;</span>, <span class="dt">width=</span><span class="dv">8</span>, <span class="dt">height=</span><span class="dv">8</span>)</a>
-<a class="sourceLine" id="cb72-4" title="4"></a>
-<a class="sourceLine" id="cb72-5" title="5">  <span class="kw">plot</span>(bb_poly_proj, <span class="dt">col=</span><span class="st">&quot;aliceblue&quot;</span>, <span class="dt">bor=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.1</span>)</a>
-<a class="sourceLine" id="cb72-6" title="6">  <span class="kw">plot</span>(grat30_lines_proj, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.2</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb72-7" title="7">  <span class="kw">plot</span>(tree_poly_proj, <span class="dt">col=</span>clr, <span class="dt">bor=</span>clr, <span class="dt">lwd=</span><span class="fl">0.01</span>, <span class="dt">ljoin=</span><span class="st">&quot;bevel&quot;</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb72-8" title="8">  <span class="kw">plot</span>(admin0_lines_proj, <span class="dt">col=</span><span class="st">&quot;gray50&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.2</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb72-9" title="9">  <span class="kw">plot</span>(lrglakes_poly_proj, <span class="dt">col=</span><span class="st">&quot;aliceblue&quot;</span>, <span class="dt">bor=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.2</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb72-10" title="10">  <span class="kw">plot</span>(caspian_poly_proj, <span class="dt">col=</span><span class="st">&quot;aliceblue&quot;</span>, <span class="dt">bor=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.2</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb72-11" title="11">  <span class="kw">plot</span>(coast_lines_proj, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">0.2</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb72-12" title="12">  <span class="kw">plot</span>(bb_lines_proj, <span class="dt">col=</span><span class="st">&quot;black&quot;</span>, <span class="dt">lwd=</span><span class="fl">1.0</span>, <span class="dt">add=</span><span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb72-13" title="13">  </a>
-<a class="sourceLine" id="cb72-14" title="14">  <span class="co"># print the symbols in white to knockout underlying tree cover</span></a>
-<a class="sourceLine" id="cb72-15" title="15">  <span class="kw">plot</span>(gcdv3_pts.proj, <span class="dt">pch=</span><span class="dv">2</span>, <span class="dt">col=</span><span class="st">&quot;white&quot;</span>, <span class="dt">cex=</span>nsamp_cex[nsamp_num], <span class="dt">lwd=</span><span class="fl">1.5</span>, <span class="dt">add=</span><span class="ot">TRUE</span>) </a>
-<a class="sourceLine" id="cb72-16" title="16">  <span class="kw">plot</span>(gcdv3_pts.proj, <span class="dt">pch=</span><span class="dv">2</span>, <span class="dt">col=</span>nsamp_colors[nsamp_num], <span class="dt">cex=</span>nsamp_cex[nsamp_num], <span class="dt">lwd=</span><span class="fl">0.6</span>, <span class="dt">add=</span><span class="ot">TRUE</span>) </a>
-<a class="sourceLine" id="cb72-17" title="17"></a>
-<a class="sourceLine" id="cb72-18" title="18">  <span class="kw">text</span>(<span class="op">-</span><span class="dv">17000000</span>, <span class="dv">9100000</span>, <span class="dt">pos=</span><span class="dv">4</span>, <span class="dt">cex=</span><span class="fl">0.8</span>, <span class="st">&quot;GCDv3 -- Number of Samples (Since 22 ka)&quot;</span>)</a>
-<a class="sourceLine" id="cb72-19" title="19">  <span class="kw">legend</span>(<span class="op">-</span><span class="dv">17000000</span>, <span class="dv">-5000000</span>, <span class="dt">legend=</span><span class="kw">c</span>(<span class="st">&quot;&lt; 10&quot;</span>,<span class="st">&quot;10 - 100&quot;</span>,<span class="st">&quot;100 - 1000&quot;</span>,<span class="st">&quot;&gt; 1000&quot;</span>), <span class="dt">bg=</span><span class="st">&quot;white&quot;</span>,</a>
-<a class="sourceLine" id="cb72-20" title="20">    <span class="dt">title=</span><span class="st">&quot;Number of Samples&quot;</span>, <span class="dt">pch=</span><span class="dv">2</span>, <span class="dt">pt.lwd=</span><span class="fl">0.6</span>, <span class="dt">col=</span>nsamp_colors, <span class="dt">cex=</span><span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb72-21" title="21"><span class="kw">dev.off</span>()</a></code></pre></div>
-<p>The resulting plot will look like this: <img src="images/gcdv3_nsamp_treecov.png" /></p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="co"># version with treecover background</span></span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a>pdffile <span class="ot">&lt;-</span> <span class="st">&quot;gcdv3_nsamp_treecov.pdf&quot;</span></span>
+<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a><span class="fu">pdf</span>(pdffile, <span class="at">paper=</span><span class="st">&quot;letter&quot;</span>, <span class="at">width=</span><span class="dv">8</span>, <span class="at">height=</span><span class="dv">8</span>)</span>
+<span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a></span>
+<span id="cb40-5"><a href="#cb40-5" tabindex="-1"></a>  <span class="fu">plot</span>(bb_poly_proj, <span class="at">col=</span><span class="st">&quot;aliceblue&quot;</span>, <span class="at">bor=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">0.1</span>)</span>
+<span id="cb40-6"><a href="#cb40-6" tabindex="-1"></a>  <span class="fu">plot</span>(grat30_lines_proj, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">0.2</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb40-7"><a href="#cb40-7" tabindex="-1"></a>  <span class="fu">plot</span>(tree_poly_proj, <span class="at">col=</span>clr, <span class="at">bor=</span>clr, <span class="at">lwd=</span><span class="fl">0.01</span>, <span class="at">ljoin=</span><span class="st">&quot;bevel&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb40-8"><a href="#cb40-8" tabindex="-1"></a>  <span class="fu">plot</span>(admin0_lines_proj, <span class="at">col=</span><span class="st">&quot;gray50&quot;</span>, <span class="at">lwd=</span><span class="fl">0.2</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb40-9"><a href="#cb40-9" tabindex="-1"></a>  <span class="fu">plot</span>(lrglakes_poly_proj, <span class="at">col=</span><span class="st">&quot;aliceblue&quot;</span>, <span class="at">bor=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">0.2</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb40-10"><a href="#cb40-10" tabindex="-1"></a>  <span class="fu">plot</span>(caspian_poly_proj, <span class="at">col=</span><span class="st">&quot;aliceblue&quot;</span>, <span class="at">bor=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">0.2</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb40-11"><a href="#cb40-11" tabindex="-1"></a>  <span class="fu">plot</span>(coast_lines_proj, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">0.2</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb40-12"><a href="#cb40-12" tabindex="-1"></a>  <span class="fu">plot</span>(bb_lines_proj, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">1.0</span>, <span class="at">add=</span><span class="cn">TRUE</span>)</span>
+<span id="cb40-13"><a href="#cb40-13" tabindex="-1"></a>  </span>
+<span id="cb40-14"><a href="#cb40-14" tabindex="-1"></a>  <span class="co"># print the symbols in white to knockout underlying tree cover</span></span>
+<span id="cb40-15"><a href="#cb40-15" tabindex="-1"></a>  <span class="fu">plot</span>(gcdv3_pts.proj, <span class="at">pch=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&quot;white&quot;</span>, <span class="at">cex=</span>nsamp_cex[nsamp_num], <span class="at">lwd=</span><span class="fl">1.5</span>, <span class="at">add=</span><span class="cn">TRUE</span>) </span>
+<span id="cb40-16"><a href="#cb40-16" tabindex="-1"></a>  <span class="fu">plot</span>(gcdv3_pts.proj, <span class="at">pch=</span><span class="dv">2</span>, <span class="at">col=</span>nsamp_colors[nsamp_num], <span class="at">cex=</span>nsamp_cex[nsamp_num], <span class="at">lwd=</span><span class="fl">0.6</span>, <span class="at">add=</span><span class="cn">TRUE</span>) </span>
+<span id="cb40-17"><a href="#cb40-17" tabindex="-1"></a></span>
+<span id="cb40-18"><a href="#cb40-18" tabindex="-1"></a>  <span class="fu">text</span>(<span class="sc">-</span><span class="dv">17000000</span>, <span class="dv">9100000</span>, <span class="at">pos=</span><span class="dv">4</span>, <span class="at">cex=</span><span class="fl">0.8</span>, <span class="st">&quot;GCDv3 -- Number of Samples (Since 22 ka)&quot;</span>)</span>
+<span id="cb40-19"><a href="#cb40-19" tabindex="-1"></a>  <span class="fu">legend</span>(<span class="sc">-</span><span class="dv">17000000</span>, <span class="sc">-</span><span class="dv">5000000</span>, <span class="at">legend=</span><span class="fu">c</span>(<span class="st">&quot;&lt; 10&quot;</span>,<span class="st">&quot;10 - 100&quot;</span>,<span class="st">&quot;100 - 1000&quot;</span>,<span class="st">&quot;&gt; 1000&quot;</span>), <span class="at">bg=</span><span class="st">&quot;white&quot;</span>,</span>
+<span id="cb40-20"><a href="#cb40-20" tabindex="-1"></a>    <span class="at">title=</span><span class="st">&quot;Number of Samples&quot;</span>, <span class="at">pch=</span><span class="dv">2</span>, <span class="at">pt.lwd=</span><span class="fl">0.6</span>, <span class="at">col=</span>nsamp_colors, <span class="at">cex=</span><span class="fl">0.5</span>)</span>
+<span id="cb40-21"><a href="#cb40-21" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<p>The resulting plot will look like this: <img
+src="images/gcdv3_nsamp_treecov.png" /></p>
 <p><a href="Rmaps.html">[Back to top]</a></p>
 </div>
 </div>
@@ -1165,7 +1063,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -1173,6 +1071,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

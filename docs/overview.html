@@ -1,55 +1,50 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Overview</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 
-
-
-
 <style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
 
 <link rel="stylesheet" href="html-md-01.css" type="text/css" />
 
@@ -61,13 +56,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -81,40 +71,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -142,7 +108,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -154,7 +120,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -164,11 +130,28 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -180,13 +163,12 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -194,16 +176,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -216,6 +191,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -227,18 +203,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -258,7 +222,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -271,7 +235,7 @@ $(document).ready(function () {
   <a href="overview.html">Overview</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Topics
      
     <span class="caret"></span>
@@ -323,7 +287,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tasks
      
     <span class="caret"></span>
@@ -362,7 +326,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Resources
      
     <span class="caret"></span>
@@ -386,7 +350,7 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -396,20 +360,47 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#course-objectives"><span class="toc-section-number">1</span> Course objectives</a></li>
-<li><a href="#topics-covered"><span class="toc-section-number">2</span> Topics covered</a></li>
-<li><a href="#schedule"><span class="toc-section-number">3</span> Schedule</a></li>
-<li><a href="#project"><span class="toc-section-number">4</span> Project</a></li>
+<li><a href="#course-objectives" id="toc-course-objectives"><span
+class="toc-section-number">1</span> Course objectives</a></li>
+<li><a href="#topics-covered" id="toc-topics-covered"><span
+class="toc-section-number">2</span> Topics covered</a></li>
+<li><a href="#schedule" id="toc-schedule"><span
+class="toc-section-number">3</span> Schedule</a></li>
+<li><a href="#project" id="toc-project"><span
+class="toc-section-number">4</span> Project</a></li>
 </ul>
 </div>
 
-<div id="course-objectives" class="section level1">
+<div id="course-objectives" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Course objectives</h1>
-<p>The aim of this course is to review some of the developments in the analysis and visualization of Earth-System Science (ESS) data using the R language and data-analysis environment. ESS data sets are generally large (in terms of both the number of attributes and number of data points), and are therefore frequently used as examples of “big data”. They are often well organized, in the sense of being represented as raster “slices” or “bricks” with dimensions like longitude, latitude and time, but can also instances of traditional “rectangular” data sets, where the rows represent individual locations and the columns variables or attributes.</p>
-<p>Concurrently with the development of such large data sets, the tools for analyzing them have proliferated. These tools include special-purpose packages specifically designed for particular data sets (like NCL for analyzing and mapping weather and climate data), individual programming languages and environments like Matlab, Python and R, as well as traditional programming languages like Fortran or C. Among these options, R easily has the best developed set of data-analytical, visualization, and statistical tools (with thousands of individual packages available), and also has the necessary tools for reading and writing ESS data in their various “native” forms.</p>
-<p>The goal of this course is to describe the nature of the ESS data and data-set formats, the tools for reading and write such data, and the procedures for visualizing and analysis the data. In addition, the general ideas of “reproducible research” will be discussed and put to use in developing individual projects that explore some particular data sets.</p>
+<p>The aim of this course is to review some of the developments in the
+analysis and visualization of Earth-System Science (ESS) data using the
+R language and data-analysis environment. ESS data sets are generally
+large (in terms of both the number of attributes and number of data
+points), and are therefore frequently used as examples of “big data”.
+They are often well organized, in the sense of being represented as
+raster “slices” or “bricks” with dimensions like longitude, latitude and
+time, but can also instances of traditional “rectangular” data sets,
+where the rows represent individual locations and the columns variables
+or attributes.</p>
+<p>Concurrently with the development of such large data sets, the tools
+for analyzing them have proliferated. These tools include
+special-purpose packages specifically designed for particular data sets
+(like NCL for analyzing and mapping weather and climate data),
+individual programming languages and environments like Matlab, Python
+and R, as well as traditional programming languages like Fortran or C.
+Among these options, R easily has the best developed set of
+data-analytical, visualization, and statistical tools (with thousands of
+individual packages available), and also has the necessary tools for
+reading and writing ESS data in their various “native” forms.</p>
+<p>The goal of this course is to describe the nature of the ESS data and
+data-set formats, the tools for reading and write such data, and the
+procedures for visualizing and analysis the data. In addition, the
+general ideas of “reproducible research” will be discussed and put to
+use in developing individual projects that explore some particular data
+sets.</p>
 </div>
-<div id="topics-covered" class="section level1">
+<div id="topics-covered" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Topics covered</h1>
 <p>The specific topics that will be examined include:</p>
 <ul>
@@ -418,22 +409,28 @@ $(document).ready(function () {
 <li>Markdown, RMarkdown and reproducible research</li>
 <li>ESS data sources</li>
 <li>reading, writing and recasting ESS data</li>
-<li>key R packages for reading and writing data (e.g. <code>ncdf4</code> and <code>raster</code>)</li>
+<li>key R packages for reading and writing data (e.g. <code>ncdf4</code>
+and <code>raster</code>)</li>
 <li>mapping and geospatial techniques in R</li>
 <li>basic visualization tools</li>
-<li>strategies for dealing with high-dimension, high-resolution data</li>
+<li>strategies for dealing with high-dimension, high-resolution
+data</li>
 <li>prediction and multivariate analysis</li>
 </ul>
-<p>These topics implement and document a particular data-analysis “design pattern” that involves</p>
+<p>These topics implement and document a particular data-analysis
+“design pattern” that involves</p>
 <ol style="list-style-type: decimal">
-<li>data input (using, for example, <code>ncdf4</code>, <code>rhdf5</code>, <code>raster</code>, or an ODBC relational database package)</li>
-<li>recasting the raster brick input data into a rectangular data frame</li>
+<li>data input (using, for example, <code>ncdf4</code>,
+<code>rhdf5</code>, <code>raster</code>, or an ODBC relational database
+package)</li>
+<li>recasting the raster brick input data into a rectangular data
+frame</li>
 <li>analysis and visualization</li>
 <li>recasting a “results” data frame back to a raster</li>
 <li>data output, using the same packages as in step 1</li>
 </ol>
 </div>
-<div id="schedule" class="section level1">
+<div id="schedule" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Schedule</h1>
 <pre><code>Week Topic                                         Tasks
    1:  Introduction and infrastructure               Install R, RStudio, GitHub account, etc. 
@@ -446,55 +443,78 @@ $(document).ready(function () {
    8:  Visualization of high-dimensional data
    9:  Multivariate analyses
   10:  Other R packages and project discussion       Project presentation and discussion</code></pre>
-<p>Setting up an effective and efficient environment for data analysis (i.e. a “tool chain”) can be as much of a time-waster as a time-saver. We will describe and use a basic set of tools, including:</p>
+<p>Setting up an effective and efficient environment for data analysis
+(i.e. a “tool chain”) can be as much of a time-waster as a time-saver.
+We will describe and use a basic set of tools, including:</p>
 <ul>
 <li>R itself, and R packages from CRAN</li>
-<li>RStudio, and related packages (e.g. <code>knitr</code>, <code>rmarkdown</code>)</li>
+<li>RStudio, and related packages (e.g. <code>knitr</code>,
+<code>rmarkdown</code>)</li>
 <li>a GitHub account, and a Git client (e.g. Sourcetree)</li>
-<li>a Markdown editor (e.g. MarkdownPad (Windows) or Macdown (Mac), many others)</li>
+<li>a Markdown editor (e.g. MarkdownPad (Windows) or Macdown (Mac), many
+others)</li>
 <li>a text editor (e.g. Sublime Text, Atom, Visual Studio Code)</li>
 <li>file-transfer approaches (SFTP (Filezilla) and Globus)</li>
 <li>netCDF utilities and apps (netCDF, CDO, NCO, Panoply)</li>
 </ul>
 </div>
-<div id="project" class="section level1">
+<div id="project" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Project</h1>
 <p>Student effort in the course will involve</p>
 <ul>
-<li>the analysis of a typical or interesting ESS data set using R, and the documentation of that analysis as an R Markdown Notebook, HTML web page, Word document, or some other useful format supported by RMarkdown.<br />
+<li>the analysis of a typical or interesting ESS data set using R, and
+the documentation of that analysis as an R Markdown Notebook, HTML web
+page, Word document, or some other useful format supported by
+RMarkdown.<br />
 </li>
-<li>participating in a collaborative research environment, which involves both
+<li>participating in a collaborative research environment, which
+involves both
 <ul>
 <li>asking questions and asking for help as issues arise, and</li>
 <li>answering questions, as far as possible.</li>
 </ul></li>
 </ul>
 <p>Some examples of analyses and documentation follow:</p>
-<p>Here’s an example of an R Markdown HTML page describing the analysis of the Global Charcoal Database (GCD):</p>
+<p>Here’s an example of an R Markdown HTML page describing the analysis
+of the Global Charcoal Database (GCD):</p>
 <ul>
-<li><a href="https://pjbartlein.github.io/GCDv3Analysis/index.html">https://pjbartlein.github.io/GCDv3Analysis/index.html</a>.</li>
+<li><a
+href="https://pjbartlein.github.io/GCDv3Analysis/index.html">https://pjbartlein.github.io/GCDv3Analysis/index.html</a>.</li>
 </ul>
-<p>and a simpler, one-HTML-document description of a particular analysis comparing two approaches for curve-fitting can be found at:</p>
+<p>and a simpler, one-HTML-document description of a particular analysis
+comparing two approaches for curve-fitting can be found at:</p>
 <ul>
-<li><a href="http://geog.uoregon.edu/bartlein/courses/geog490/locfit_boot_v3.html">http://geog.uoregon.edu/bartlein/courses/geog490/locfit_boot_v3.html</a>.</li>
+<li><a
+href="http://geog.uoregon.edu/bartlein/courses/geog490/locfit_boot_v3.html">http://geog.uoregon.edu/bartlein/courses/geog490/locfit_boot_v3.html</a>.</li>
 </ul>
-<p>Here’s a link to a web page describing the development of a daily fire-start data set for the U.S. and Canada:</p>
+<p>Here’s a link to a web page describing the development of a daily
+fire-start data set for the U.S. and Canada:</p>
 <ul>
-<li><a href="http://geog.uoregon.edu/bartlein/FireStarts/index.html">http://geog.uoregon.edu/bartlein/FireStarts/index.html</a>.</li>
+<li><a
+href="http://geog.uoregon.edu/bartlein/FireStarts/index.html">http://geog.uoregon.edu/bartlein/FireStarts/index.html</a>.</li>
 </ul>
-<p>This is a link to a “supplemental file” accompanying an article on biomass-burning contribution to climate-carbon cycle feedback, created as a Word document (and converted to a .pdf):</p>
+<p>This is a link to a “supplemental file” accompanying an article on
+biomass-burning contribution to climate-carbon cycle feedback, created
+as a Word document (and converted to a .pdf):</p>
 <ul>
-<li><a href="https://www.earth-syst-dynam.net/9/663/2018/esd-9-663-2018-supplement.pdf">https://www.earth-syst-dynam.net/9/663/2018/esd-9-663-2018-supplement.pdf</a></li>
+<li><a
+href="https://www.earth-syst-dynam.net/9/663/2018/esd-9-663-2018-supplement.pdf">https://www.earth-syst-dynam.net/9/663/2018/esd-9-663-2018-supplement.pdf</a></li>
 </ul>
 <p>… and here’s a link to the article:</p>
 <ul>
-<li><a href="https://www.earth-syst-dynam.net/9/663/2018/">https://www.earth-syst-dynam.net/9/663/2018/</a>.</li>
+<li><a
+href="https://www.earth-syst-dynam.net/9/663/2018/">https://www.earth-syst-dynam.net/9/663/2018/</a>.</li>
 </ul>
-<p>Also, this web page, as well as that for GEOG 4/595 Geographic Data Analysis provide examples of web pages created using R, RStudio and RMarkdown:</p>
+<p>Also, this web page, as well as that for GEOG 4/595 Geographic Data
+Analysis provide examples of web pages created using R, RStudio and
+RMarkdown:</p>
 <ul>
-<li><a href="https://pjbartlein.github.io/GeogDataAnalysis/">https://pjbartlein.github.io/GeogDataAnalysis/</a>.</li>
+<li><a
+href="https://pjbartlein.github.io/GeogDataAnalysis/">https://pjbartlein.github.io/GeogDataAnalysis/</a>.</li>
 </ul>
-<p>As to the two elements of participating in collaborative research, the first bullet (asking questions) is the more important of the two.</p>
+<p>As to the two elements of participating in collaborative research,
+the first bullet (asking questions) is the more important of the
+two.</p>
 </div>
 
 
@@ -506,7 +526,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -514,6 +534,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>

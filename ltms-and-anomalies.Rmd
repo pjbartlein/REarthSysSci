@@ -27,7 +27,7 @@ Load the necessary packages, and set paths and filenames:
 ```{r}
 # load the ncdf4 package
 library(ncdf4)
-library(ncdf.tools)
+# library(ncdf.tools)
 library(lattice)
 library(RColorBrewer)
 #library(chron)
@@ -69,22 +69,22 @@ ny <- nt/nm
 
 # convert time -- split the time units string into fields
 print(tunits)
-tustr <- strsplit(tunits$value, " ")
-ptime <- convertDateNcdf2R(time, unlist(tustr)[1], origin = as.POSIXct(unlist(tustr)[3], 
-            tz = "UTC"), time.format = "%Y-%m-%d")
-head(time); tail(time)
-head(ptime); tail(ptime)
+# tustr <- strsplit(tunits$value, " ")
+# ptime <- convertDateNcdf2R(time, unlist(tustr)[1], origin = as.POSIXct(unlist(tustr)[3], 
+#             tz = "UTC"), time.format = "%Y-%m-%d")
+# head(time); tail(time)
+# head(ptime); tail(ptime)
 ```
 
 Get the years from `ptime` and also generate a sequence of index values for months.
 
 ```{r}
 # get years from ptime & generate months
-year <- as.numeric(unlist(strsplit(as.character(ptime),"-"))[seq(1, nt*3, by=3)])
-head(year); tail(year)
-month <- rep(seq(1:12), ny)
-head(month); tail(month)
-head(ptime); tail(ptime)
+# year <- as.numeric(unlist(strsplit(as.character(ptime),"-"))[seq(1, nt*3, by=3)])
+# head(year); tail(year)
+# month <- rep(seq(1:12), ny)
+# head(month); tail(month)
+# head(ptime); tail(ptime)
 ```
 
 ## Read the array ##
@@ -106,7 +106,7 @@ datasource <- ncatt_get(ncin,0,"source")
 references <- ncatt_get(ncin,0,"references")
 history <- ncatt_get(ncin,0,"history")
 Conventions <- ncatt_get(ncin,0,"Conventions")
-head(ptime); tail(ptime)
+# head(ptime); tail(ptime)
 ```
 
 Close the netCDF data set.
@@ -142,26 +142,26 @@ levelplot(tmp_array[,, n] ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T,
 Get the indices for the beginning and end of the base period, and save them as a string.
 ```{r}
 # get beginning obs of base period
-begyr <- 1961; endyr <- 1990; nyrs <- endyr - begyr + 1
-begobs <- ((begyr - year[1]) * nm) + 1
-endobs <- ((endyr - year[1] + 1) * nm)
-base_period <- paste(as.character(begyr)," - ", as.character(endyr), sep="")
-print(c(begyr, endyr, begobs, endobs, base_period))
+# begyr <- 1961; endyr <- 1990; nyrs <- endyr - begyr + 1
+# begobs <- ((begyr - year[1]) * nm) + 1
+# endobs <- ((endyr - year[1] + 1) * nm)
+# base_period <- paste(as.character(begyr)," - ", as.character(endyr), sep="")
+# print(c(begyr, endyr, begobs, endobs, base_period))
 ```
 
 Get a levelplot of the first observation in the base period.
 
 ```{r}
 # levelplot of begobs
-tmp_slice <- tmp_array[,, begobs]
-grid <- expand.grid(lon=lon, lat=lat)
-cutpts <- c(-50,-40,-30,-20,-10,0,10,20,30,40,50)
-levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T, 
-          col.regions=(rev(brewer.pal(10,"RdBu"))))
+# tmp_slice <- tmp_array[,, begobs]
+# grid <- expand.grid(lon=lon, lat=lat)
+# cutpts <- c(-50,-40,-30,-20,-10,0,10,20,30,40,50)
+# levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T, 
+#           col.regions=(rev(brewer.pal(10,"RdBu"))))
 ```
 
 Create a new array with just the base period data in it.
-```{r}
+```{r, eval=FALSE}
 # base-period array
 tmp_array_base <- array(dim = c(nlon, nlat, nyrs * nm))
 dim(tmp_array_base)
@@ -170,7 +170,7 @@ tmp_array_base <- tmp_array[,, begobs:endobs]
 
 Get a levelplot of that, which should match the previous plot
 
-```{r}
+```{r, eval=FALSE}
 # levelplot of tmp_array_base
 tmp_slice <- tmp_array_base[,, 1]
 grid <- expand.grid(lon=lon, lat=lat)
@@ -183,7 +183,7 @@ levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T,
 
 The long-term means are calculated by looping over the grid cells and months.
 
-```{r}
+```{r, eval=FALSE}
 # long-term means
 tmp_ltm <- array(NA, dim = c(nlon, nlat, nm))
 dim(tmp_ltm)
@@ -199,7 +199,7 @@ for (j in 1:nlon) {
 
 Levelplot of the long-term means:
 
-```{r}
+```{r, eval=FALSE}
 # levelplot of tmp_ltm
 tmp_slice <- tmp_ltm[,, 1]
 grid <- expand.grid(lon=lon, lat=lat)
@@ -213,7 +213,7 @@ levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T,
 
 The anomalies are gotten for each grid point by simply expanding the twelve ltm values (one for each month of the year) over the `ny` year of the record, and differencing.  In this way, the anomaly for each January in the record is the difference between the "absolute" (but not "absolute value" (`abs()`)) or observed value, and the January long-term mean.
 
-```{r}
+```{r, eval=FALSE}
 # anomalies
 tmp_anm <- array(NA, dim = c(nlon, nlat, nt))
 tmp_anm <- tmp_array - rep(tmp_ltm, ny)
@@ -221,7 +221,7 @@ tmp_anm <- tmp_array - rep(tmp_ltm, ny)
 
 Get a levelplot of an anomoly.  Note the different cutpoints.
 
-```{r}
+```{r, eval=FALSE}
 # levelplot of tmp_ltm
 tmp_slice <- tmp_anm[,, 1]
 grid <- expand.grid(lon=lon, lat=lat)

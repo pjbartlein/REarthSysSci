@@ -1,55 +1,50 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 
 
 <title>Git and GitHub</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 
-
-
-
 <style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
 
 <link rel="stylesheet" href="html-md-01.css" type="text/css" />
 
@@ -61,13 +56,8 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
@@ -81,40 +71,16 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 51px;
-  padding-bottom: 40px;
-}
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
-.section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
-}
 .dropdown-submenu {
   position: relative;
 }
@@ -142,7 +108,7 @@ body {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #ffffff;
+  border-left-color: #adb5bd;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -154,7 +120,7 @@ body {
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -164,11 +130,28 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
 
@@ -180,13 +163,12 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
-  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -194,16 +176,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -216,6 +191,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -227,18 +203,6 @@ $(document).ready(function () {
   display: none;
 }
 </style>
-
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-
-$(document).ready(function () {
-  $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open')
-  });
-});
-</script>
 
 <!-- code folding -->
 
@@ -258,7 +222,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -271,7 +235,7 @@ $(document).ready(function () {
   <a href="overview.html">Overview</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Topics
      
     <span class="caret"></span>
@@ -323,7 +287,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Tasks
      
     <span class="caret"></span>
@@ -362,7 +326,7 @@ $(document).ready(function () {
   </ul>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Resources
      
     <span class="caret"></span>
@@ -386,7 +350,7 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
@@ -396,24 +360,44 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#getting-going">Getting going</a></li>
+<li><a href="#getting-going" id="toc-getting-going">Getting
+going</a></li>
 </ul>
 </div>
 
-<p>A repository is a collection of files, including code, data, and documents, that can be used to store multiple versions of files as the development of a project proceeds. Repositories can be local (i.e. file on the machine being used for development), but they are most effective if that are <em>remote</em> or offsite. Offsite repositories provide two important advantages: 1) they backup files that could be lost for any number of reasons (hard-drive failures, machine loss or meltdown), and 2) they are accessible from other machines, and by collaborators.</p>
-<p>“Git” is one version-control system that creates and manages repositories (and note “Git” is purported not to mean anything), and “GitHub” is a website that hosts remote repositories, web pages, and some (smallish) data sets.</p>
-<p>The use of Git and GitHub in R and RStudio is excellently described in the Bookdown document <a href="https://happygitwithr.com/index.html">[<em>Happy Git and GitHub for the useR (HappyGitWithR)</em>]</a> by Jenny Bryan at the Univ. British Columbia. This is the primary source for guidance and use of Git and GitHub from within RStudio.</p>
+<p>A repository is a collection of files, including code, data, and
+documents, that can be used to store multiple versions of files as the
+development of a project proceeds. Repositories can be local (i.e. file
+on the machine being used for development), but they are most effective
+if that are <em>remote</em> or offsite. Offsite repositories provide two
+important advantages: 1) they backup files that could be lost for any
+number of reasons (hard-drive failures, machine loss or meltdown), and
+2) they are accessible from other machines, and by collaborators.</p>
+<p>“Git” is one version-control system that creates and manages
+repositories (and note “Git” is purported not to mean anything), and
+“GitHub” is a website that hosts remote repositories, web pages, and
+some (smallish) data sets.</p>
+<p>The use of Git and GitHub in R and RStudio is excellently described
+in the Bookdown document <a
+href="https://happygitwithr.com/index.html">[<em>Happy Git and GitHub
+for the useR (HappyGitWithR)</em>]</a> by Jenny Bryan at the Univ.
+British Columbia. This is the primary source for guidance and use of Git
+and GitHub from within RStudio.</p>
 <div id="getting-going" class="section level2">
 <h2>Getting going</h2>
 <p>The key steps include:</p>
 <ol style="list-style-type: decimal">
-<li>registering a (free) GitHub account at <a href="github.com">[github.com]</a> (see Section 4 of <em>HappyGitWithR</em>) (See also the <a href="https://education.github.com">[GitHub Education]</a> page.)</li>
+<li>registering a (free) GitHub account at <a
+href="github.com">[github.com]</a> (see Section 4 of
+<em>HappyGitWithR</em>) (See also the <a
+href="https://education.github.com">[GitHub Education]</a> page.)</li>
 <li>installing Git (Section 6)</li>
 <li>installing a Git client (Sourcetree)</li>
 <li>configuring RStudio and GitHub (Sections 9-14)</li>
 <li>starting a new project (Section 15)</li>
 </ol>
-<p>The basic idea is to create a (mostly) empty new repository on GitHub, and then “clone” to a local machine. The steps include:</p>
+<p>The basic idea is to create a (mostly) empty new repository on
+GitHub, and then “clone” to a local machine. The steps include:</p>
 <p>At GitHub:</p>
 <ol start="6" style="list-style-type: decimal">
 <li>create a new repository (e.g. <code>REarthSysSci</code>)</li>
@@ -421,27 +405,33 @@ $(document).ready(function () {
 </ol>
 <p>On the local machine:</p>
 <ol start="8" style="list-style-type: decimal">
-<li>create a folder, e.g. <code>~/Projects/DataVis/working/REarthSysSci</code></li>
+<li>create a folder,
+e.g. <code>~/Projects/DataVis/working/REarthSysSci</code></li>
 </ol>
 <p>In RStudio:</p>
 <ol start="9" style="list-style-type: decimal">
-<li>create a project in an existing folder (File &gt; New Project… &gt; Version Control &gt; Git<br />
+<li>create a project in an existing folder (File &gt; New Project… &gt;
+Version Control &gt; Git<br />
 </li>
-<li>Repository URL (e.g.): <code>https://github.com/pjbartlein/REarthSysSci</code><br />
+<li>Repository URL (e.g.):
+<code>https://github.com/pjbartlein/REarthSysSci</code><br />
 </li>
 <li>Project directory name: <code>REarthSysSci</code><br />
 </li>
 <li>Browse to folder: <code>~/Projects/DataVis/working/</code></li>
 <li>click on “Create Project”</li>
 </ol>
-<p>(note that <code>.gitignore</code>, <code>README.md</code> and <code>REarthSysSci</code> have turned up in working directory)</p>
+<p>(note that <code>.gitignore</code>, <code>README.md</code> and
+<code>REarthSysSci</code> have turned up in working directory)</p>
 <p>Then, on the local machine:</p>
 <ol start="14" style="list-style-type: decimal">
-<li>Edit <code>README.md</code> and save (perhaps using a Markdown editor, or in RStudio)</li>
+<li>Edit <code>README.md</code> and save (perhaps using a Markdown
+editor, or in RStudio)</li>
 <li>Click on <code>Tools &gt; Version Control &gt; Commit</code><br />
 </li>
 <li>Click on checkboxes to “stage” files</li>
-<li>Click on the <code>Push</code> button to synchronize the local repository with the remote GitHub repository.</li>
+<li>Click on the <code>Push</code> button to synchronize the local
+repository with the remote GitHub repository.</li>
 </ol>
 </div>
 
@@ -454,7 +444,7 @@ $(document).ready(function () {
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -462,6 +452,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
