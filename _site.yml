@@ -78,6 +78,7 @@ navbar:
 output:
   html_document:
     theme: cosmo
+    version: 4
     highlight: haddock
     css: html-md-01.css
     fig_caption: no
