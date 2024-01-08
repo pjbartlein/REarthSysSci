@@ -31,17 +31,27 @@ These topics implement and document a particular data-analysis "design pattern" 
 
 # Schedule #
 ```
-Week Topic                                         Tasks
-   1:  Introduction and infrastructure               Install R, RStudio, GitHub account, etc. 
-   2:  R for data visualization and analysis         Simple data analyses with R
-   3:  Earth-system science data                     Markdown authoring
-   4:  Data input and output (ncdf4 and raster)      Project data-set selection
-   5:  Geospatial analyses and mapping in R
-   6:  R Markdown and a project web site
-   7:  Visualization                                 Project progress report      
-   8:  Visualization of high-dimensional data
-   9:  Multivariate analyses
-  10:  Other R packages and project discussion       Project presentation and discussion
+Topic                                              Tasks
+   1:  Introduction and infrastructure               Install R, RStudio 
+   2:  Using R for data visualization and analysis   Simple data analyses with R
+   3:  Earth-system science data                     Packages and data                    
+   4:  netCDF, HDF, etc.                             Install netCDF and Panoply      
+   5:  raster, terra & stars                         File transfer  
+   6:  Plots (1)                                     Text editor  
+   7:  Plots (2)                                     Project data-set selection
+   8:  Maps (1)                                      Markdown and Markdown
+   9:  Maps (2)                                      Pandoc  
+  10:  Geospatial analysis in R                      GitHub and UO pages.uoregon.edu  
+  11:  Correlation and regression                    Local web pages
+  12:  Other predictive models  
+  13:  Principal components analysis  
+  14:  Singular value decomposition  
+  15:  High-resolution and high-dimension data  
+  16:  Multivariate methods  
+  17:  Time-series analysis  
+  18:  Other languages  
+  19:  Project presentations  
+  20:  Project presentations
 ```
 
 Setting up an effective and efficient environment for data analysis (i.e. a "tool chain") can be as much of a time-waster as a time-saver.  We will describe and use a basic set of tools, including:  
@@ -54,12 +64,14 @@ Setting up an effective and efficient environment for data analysis (i.e. a "too
 - file-transfer approaches (SFTP (Filezilla) and Globus)
 - netCDF utilities and apps (netCDF, CDO, NCO, Panoply)
 
-# Project #
+# Project and Tasks#
 
 Student effort in the course will involve  
 
-- the analysis of a typical or interesting ESS data set using R, and the documentation of that analysis as an R Markdown Notebook, HTML web page, Word document, or some other useful format supported by RMarkdown.  
-- participating in a collaborative research environment, which involves both
+- the completion of several tasks, such as installing R, taking it for a spin, installing various other software packages, etc. 
+
+- The visualization/analysis of a typical or interesting ESS data set using R, and the documentation of that analysis as an R Markdown Notebook, HTML web page, Word document, or some other useful format supported by RMarkdown.  
+- Participating in a collaborative research environment, which involves both
 	- asking questions and asking for help as issues arise, and
 	- answering questions, as far as possible. 
 
