@@ -35,7 +35,7 @@ These topics implement and document a particular data-analysis "design pattern" 
 ```
 Topic                                              Tasks
    1:  Introduction and infrastructure               Install R, RStudio 
-   2:  Using R for data visualization and analysis   Simple data analyses with R
+   2:  Using R for data visualization and analysis   Using R exercise
    3:  Earth-system science data                                     
    4:  netCDF, HDF, etc.                             Install netCDF and Panoply      
    5:  raster, terra & stars                         File transfer  

@@ -49,13 +49,15 @@ navbar:
     - text: "Install R and RStudio"
       href: installR.html
     - text: "Using R exercise"
-      href: Ex_UsingR.html
+      href: UsingR.html
     - text: "Install netCDF & Panoply"
       href: install_netCDF.html
     - text: "File transfer"
       href: transfer.html
     - text: "Install a text editor"
       href: texteditor.html
+    - text: "Project data set selection"
+      href: dataselection.html
     - text: "Markdown and RMarkdown"
       href: markdown.html
     - text: "Pandoc"

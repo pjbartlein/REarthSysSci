@@ -12,14 +12,13 @@ The "R Project" (or simply "R") grew out of the development of the S language fo
 - CRAN:  http://cran.us.r-project.org/index.html (download R and CRAN packages)
 - Bioconductor:  http://bioconductor.org/ (download Bioconductor packages)
 
-The current version of R is 3.5.3 (22 March 2019).
+The current version of R is 4.3.2 (23 October 2023).
 
 Here are a few links to some GEOG 4/595 materials on R (note that the installation directions may pertain to a previous version):
 
 - GEOG 4/595 (Geographic Data Analysis): 
   [https://pjbartlein.github.io/GeogDataAnalysis/index.html](https://pjbartlein.github.io/GeogDataAnalysis/index.html)
-- Getting and using R: [https://pjbartlein.github.io/GeogDataAnalysis/ex01.html](https://pjbartlein.github.io/GeogDataAnalysis/ex01.html)
-- Installing packages:  [https://pjbartlein.github.io/GeogDataAnalysis/packages-and-data.html](https://pjbartlein.github.io/GeogDataAnalysis/packages-and-data.html)
+- Getting and using R: [https://pjbartlein.github.io/REarthSysSci/installR.html](https://pjbartlein.github.io/REarthSysSci/installR.html)
 
 ## RStudio ##
 
