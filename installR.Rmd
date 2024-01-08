@@ -1,0 +1,337 @@
+---
+title: "Exercise 1"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: no
+    toc_float: false
+    collapsed: no
+    css: html-md-01.css
+---
+
+```{r set-options, echo=FALSE}
+options(width = 115)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2024, but may undergo further edits.</span></p>
+**Geography 4/590:  R for Earth System Science**  
+**Winter 2024**
+
+**Task 1:  Getting and using R and RStudio**  
+**Finish by Tuesday, Jan 16 (or soon thereafter, at least before Week 3)**
+
+**1.  Introduction**
+
+The object of this exercise is to install and set up R and RStudio, and to experiment with some basic procedures. R is actually a computer language (that is quite similar to the S language for data analysis and visualization developed at AT&T's Bell Labs), but is best thought of as an "environment" for producing both numerical and graphical analyses of data.  R has several advantages for us here, because
+
+- it is "open-source" software (which for our purposes means that it can be freely downloaded);
+- it is available for a number of different operating systems, including Windows, Linux, and Macintosh;
+- by itself is fairly powerful, but is extensible (meaning that procedures for analyzing data that don't currently exist can be readily developed);
+- it has the capability for mapping data, an asset not generally available in other statistical software; and
+- it has multiple add-on "packages" specifically designed for the analysis of spatial data.  
+
+The home page for the "R project" is at [http://www.r-project.org](http://www.r-project.org) 
+
+Both the Mac and Windows versions of R have their own built-in GUIs (Graphical User Interfaces), but they are a little idiosyncratic. RStudio ([https://www.rstudio.com](https://www.rstudio.com)) is a free and open-source environment for running R, and it looks and behaves virtually the same in both Windows and OS X or MacOS, and so it will be used throughout the course.
+
+#### **Read through the following before beginning...** ####
+
+**2. Getting R**
+
+There are several options for running R:  1) downloading R to an accessible "personal" machine, 2) running it in a lab, like SSIL, and 3) running R and RStudio in a Windows 10 virtual machine.  The latter works fine, but has several disadvantages that can be worked around (the main one being that data has to copied somewhere at the end of a session, or it will be lost), and the virtual machine can be accessed from a browser.  Directions for using the virtual machine can be found here: [Virtual Machine Instructions](https://pjbartlein.github.io/GeogDataAnalysis/vm_inst.html).  If you will be using the virtual machine, it would be useful to still read the following, but you can skip sections 2 and 4 below.
+
+R can be downloaded from one of the "CRAN" (Comprehensive R Archive Network) sites.  In the US, the main site is at [https://cran.r-project.org](https://cran.r-project.org)  To download R, go to a CRAN website, and look in the  "Download and Install R" area.  Click on the appropriate link.   
+
+*Windows 10 and 11*
+
+Note:  Depending on the age of your computer and version of Windows, you may be running either a "32-bit" or "64-bit" version of the Windows operating system.  If you have the 64-bit version (most likely), R will install the appropriate version (R x64 4.3.2) and will also (for backwards compatibility) install the 32-bit version (R i386 4.3.2).  You can run either, but you will probably just want to run the 64-bit version.  
+
+1. On the "R for Windows" page, for example, click on the "base" link (which should take you to the "Download R-4.3.2 for Windows" page, or you can  click directly on this link:  [https://cran.r-project.org/bin/windows/](https://cran.r-project.org/bin/windows/)).   
+2. On this page, click either on the "base" or "install R for the first time links".  
+2. On the next page, click on "Download R 4.3.2 for Windows" link, and save that file to your hard disk when prompted.  Saving to the desktop is fine.  
+3. To begin the installation, double-click on the downloaded file, or open it from a downloads window. Don't be alarmed unknown publisher type warnings.  Window's  UAC (User Account Control) will also worry about an unidentified program wanting access to your computer.  Click on "Run".  
+4. Select the proposed options in each part of the install dialog.
+When the "Select Components" screen appears, just accept the standard choices  
+
+*MacOS*  
+
+On the "R for Mac OS X" page ([https://cran.r-project.org/bin/macosx/](https://cran.r-project.org/bin/macosx/)), there are multiple packages that could be downloaded, but there are two choices for "newer" versoins of MacOS (There are also packages for older versions):
+
+- `R-4.3.2-arm64.pkg` if you're running a Mac with an Apple Silicon chip,
+- `R-4.3.2-x86_64.pkg` if you're running a Mac with an Intel chip
+
+2. To download the package click on the (e.g.) "`R-4.3.2-arm64.pkg`" link.
+3. After the package finishes downloading, right-click in the downloads window of your browser, and click on "Show in Finder" (or just look in the Downloads folder).  This will open a new Finder window with the installer package.
+4. Then double-click on the installer package, and after a few screens, select a destination for the installation of the R framework (the program) and the R.app GUI.  Note that you will have supply the Administator's password.  Close the window when the installation is done.
+5. An application will appear in the Applications folder:  R.app.  You may want to drag R.app to the Dock to make R easier to start up.  
+
+There are three sort of technical "FAQ" pages that contain additional information that may be useful for working out the kinks.  These include  
+
+- R Windows FAQ:   [http://cran.us.r-project.org/bin/windows/base/rw-FAQ.html](http://cran.us.r-project.org/bin/windows/base/rw-FAQ.html)
+- R for Mac OS X FAQ:  [http://cran.us.r-project.org/bin/macosx/RMacOSX-FAQ.html](http://cran.us.r-project.org/bin/macosx/RMacOSX-FAQ.html), and
+- R FAQ (general):   [http://cran.r-project.org/doc/FAQ/R-FAQ.html](http://cran.r-project.org/doc/FAQ/R-FAQ.html).  
+
+**3. Set Up R**  
+
+Both the Windows and MacOS versions of R come with built-in GUI's (graphical user interfaces) that are broadly similar, but there are slight differences in how each works, and what a "best practices" workflow and set of working folders looks like.  Thee differences are obviated by using RStudio (see below).  R uses a "working folder" to store its workspace (an `.RData` file, invisible on a Mac), script files `*.R`, saved plots (as `.pdf` or `.png`) files, etc.
+
+*Windows*  
+
+To create a working folder,
+
+1. start Windows Explorer (right-click on the Start button, and click on "File Explorer")
+2. browse to or create a new folder that will contain the R data and files (e.g. create a new folder called "`geog495`" or something).  Pick a sensible location for this folder; on Windows 10, probably in the `c:/Users/xxxx/Documents/` folder (e.g. `c:/Users/bartlein/Documents/`) (Note that in "modern" versions of Windows, file paths can be constructed with forward slashes.)
+3. open that folder by clicking on it, and
+4. create a folders in the `geog495` folder you just created called `data` (`File > New > Folder` etc.). That folder will be empty at first.
+
+On the Windows 10 virtual machine, 
+
+1. start Windows Explorer (right-click on the Start button, and click on "File Explorer")
+2. browse to your `Student_Data` folder, and
+4. create a folder there called `data` (`File > New > Folder` etc.). The folder will be empty at first.
+
+*MacOS*  
+
+To create a working folder, the procedure is similar to that on Windows  
+
+1. click on Finder, and open a new window if necessary, and browse to your `User/Documents` folder (where User is your user name), or alternatively, User/Projects, because the /Documents folder can get pretty complicated over time.
+2. click on `File > New Folder`, and create a new folder in your `User/Documents` folder and name this `geog495`
+4. create a subfolder in that folder named `data`.
+
+So to summarize, the working folders/directories might be be:
+
+- Windows:  `C:/Users/userid/Documents/geog495/`
+- Window on a virtual machine:  `R:/geog495_1/Student_Data/userid/`
+- macOS:  `User/userid/Documents/geog495/`
+
+And the `/data` folders should be 
+
+- Windows:  `C:/Users/userid/Documents/geog495/data/`
+- Window on a virtual machine:  `R:/geog495_1/Student_Data/userid/data/`
+- macOS:  `User/userid/Documents/geog495/data/`
+
+where `userid` is your specific userid.  
+
+In practice, it may be useful to create multiple working folders to keep different projects separate, and you're free to name the folders anything you want.  The rest of this exercise assumes that they were names as above.
+
+**4. Installing and Using RStudio**
+
+RStudio ([http://www.rstudio.com](http://www.rstudio.com)) is an IDE (integrated development environment) that provides a consistent environment for running R across different platforms (i.e. Windows, OS X or MacOS, Linux).  The “environment” contains four “panes” two of which include the standard command-line “console” interface of R, and a code or script editor that is generally more useful that those built into the standard R applications for Windows or the Mac, plus two other panes that provide a graphics window, help window, workspace summary and so on.  The panes are tiled, and remain in the foreground, making it a little easier to navigate around the different windows that appear in the Windows and Mac applications.  The IDE also provides other nice features that assist coding in general (like autocompletion) and in doing the report writing and documentation required to do “reproducible research” and also developing R packages.  RStudio is under continuous development (the current version is Version 1.3.1093), and so there are occasional problems that arise, but most are minor.
+
+Installing RStudio is not too complicated.  The RStudio page is at:  [https://www.rstudio.com](https://www.rstudio.com), and after a few clicks you can choose the version for the particular operating system (Windows, OS X or MacOS, several flavors of Linux) that you’re using  Here's a direct link to the downloads page:  
+
+- [https://rstudio.com/products/rstudio/download/#download/](https://rstudio.com/products/rstudio/download/#download).  
+
+Note that the specific version numbers below may change as RStudio is updated. Note also that RStudio.com is now posit.com.
+
+*Windows*
+
+1. Clicking on the Windows Windows 10 installation package will bring up a standard Windows download dialog box.  Save the file to an appropriate place.
+2. Open the downloaded file.  
+3. Accept the proposed defaults, and quit the installer when finished.  You should see an RStudio icon on the desktop
+
+*Mac*
+
+1. Download the macOS disk-image installation.  Save the file.
+2. Open the downloaded file (`RStudio-1.3.1093.dmg`) by clicking on it.  This will open a dialog box that asks if you want to open the file with the default DiskImageMounter application.  
+3. Clicking on ok will open a window showing icons for your Applications folder and the RStudio.app. Drag and drop the RStudio.app onto the Applications folder icon.
+4. If you wish, browse to your Applications folder and drag RStudio.app to the Dock.
+
+RStudio is flexible enough in its layout (Tools > Options > Pane Layout), that individual work habits can be accommodated.  A typical layout might be:
+
+- upper left:  R script (e,g, filename.R) editing window
+- lower left:  R Console
+- upper right:  Plots pane
+- lower right:  a pane with Workspace, History, Files, Packages and Help tabs
+
+Useful menus in RStudio include:
+
+- Session, where the working directory can be set and workspaces loaded and saved;
+- File, where “Projects” (basically, a bundle of .Rdata workspaces and script files) can be loaded and saved; and
+- Tools, where packages can be downloaded and updated, and where the Options dialog can be found.
+
+In practice, R scripts (*.R) can be opened or created in the script editing pane.  Individual lines of code (or the whole script) can be “run” or sent to the console by selecting them, and clicking on the “Run” icon at the top of the script pane, or by selecting and then pressing Ctrl-Enter (Windows) or Command-Enter (Mac).  The standard R command line can also be used in the R Console pane.
+
+Graphical output can be viewed in a larger format by using the Zoom tool on the Plots pane.
+
+Another feature of RStudio is its ability to create "R Notebook" and "R Markdown" documents that combine text, code and the results of executing that code, an element of what is known as "Reproducible Research".  This feature will be discussed further as the course goes on.
+
+**5. Starting RStudio**
+
+To start the RStudio "gui" (graphical user interface), click on the start menu in Windows, and type RStudio) or click on the RStudio.app GUI (Mac) in the Applications folder (which you can copy to the Dock). 
+
+After a brief pause, RStudio will open, and you should see the message like this in the Console pane:  
+
+  R version 4.3.2 (2023-10-31) -- "Eye Holes"
+  Copyright (C) 2023 The R Foundation for Statistical Computing
+  Platform: x86_64-apple-darwin20 (64-bit)
+	...
+
+**6. Quitting R**
+
+There are several ways to quit R -- clicking on the "close window" button, typing `File > Quit Session` from the RStudio menu.   RStudio will ask if you want to save the current workspace image and any other files you've created or edited.  In general, you'll want to do that, but there are cases when you might not want to (e.g. you've accidentally deleted some intermediate results).
+
+**7. Getting Help**
+
+The first thing to do in learning new software is figure out how to get help.  R has several approaches:
+
+- A quick way to get help on a particular function or command, for example, the quit function described above, is to type a question mark plus the name of the function at the command line, e.g. `?quit`, you can also type `help(quit)`. (Note that typing `?quit` will be one of the few times in which a function (`quit()`) is typed without the parentheses.
+- You can also get to a web page-based help system by typing `help.start()` at the command line or using the `Help > R Help`	on the RStudio menu.  
+
+The key links on the help page are:
+
+1. "An Introduction to R" (the built-in main manual)
+2. "Package" which lists the contents of the basic and added packages that R knows about.
+3. "Search Engine and Keywords" which allows you to search for function names and the keywords associated with each function, and for information on built-in data sets.  
+
+One of the issues with R is that error messages can be rather obscure.  The most frequent sources of errors are simple typos, followed by those generate by copying and editing code.  With time, you'll develop a feel for what the error messages mean.
+
+**8. Projects in RStudio**
+
+One very nice feature of RStudio is its ability to create _Projects_ which help a lot in keeping data (e.g. `.csv`-type text files, or R's internal `.RData` format) and scripts (e.g. files that end in `.R`, or .`Rmd`) organized.  Also, multiple Projects can reside on the same machine (or user account on the machine), which helps keep your work organized.  Project folders can be created internally in RStudio, but it may be easier to create the folders outside of RStudio, and then use the `File > New Project > Existing Directory` dialog to browse to that folder or directory.  (Note (don't do this now):  A useful folder or directory hierarchy would be created by using the two subfolders or directories to the working directories described above, the `R` one for code, the `.RData` workspace file, and `*.R` and `*.Rmd` source files, and the other `data` to download data into.  Then in the New Project dialog, one would browse to, say `c:/Users/bartlein/Documents/geog495/R/` (Windows), or `User/Documents/R/` (OS X/MacOS) to create the Project file (`R.Rproj`), and download data to `c:/Users/bartlein/Documents/geog495/data/` (Windows), or `User/Documents/data/` (OS X/MacOS).)  Projects can also be created on the virtual machine. 
+
+It's also possible to easily begin where you left off, by browsing to a Project file, and simply clicking on it to start RStudio.
+
+**9. A Data Set**
+
+The Summit Cr. geomorphic data consists of 88 observations of 11 variables along an 0.8-km stretch of Summit Cr. in eastern Oregon. This data set was collected by Pat McDowell, Frank Magilligan and their students as part of their study of the effects of cattle "exclosures" on the morphology of stream channels. They divided this stretch of Summit Cr. into individual "hydrologic units" (HU's) that were either pools, shallow "riffles," or straight "glides." The overall study area is divided into three sections: an upstream reach (reach A) in which cattle are permitted to graze, a middle reach (reach B) from which cattle have been excluded, and a downstream reach (reach C), in which cattle were again permitted to graze.
+
+The dataset contains the following information:
+
+|Col. |name | scale | R class | Definition |
+|-----|-----|-------|---------|------------|
+|====|==========|===========|=======|=============================================================|
+|1|Location|alphanumeric|character|ID for a particular cross section|
+|2|Reach|nominal|factor|Reach (A=upstream reach(grazed); B=exclosure (no cattle); C=downstream (grazed))|
+|3|HU|nominal|factor|Hydrologic unit type (P=pool; R=riffle; G="glide" or straightwater stretch)|
+|4|CumLen|ratio|numeric|cumulative distance downstream from the upstream end of the study area (m)|
+|5|Length|ratio|numeric|length of a hydrologic unit (m)|
+|6|DepthWS|ratio|numeric|depth of the channel from the water surface to the bottom (m)|
+|7|WidthWS|ratio|numeric|width of the channel at the bankfull stage (m)|
+|8|WidthBF|ratio|numeric|width of the channel at the bankfull stage (m)|
+|9|HUAreaWS|ratio|numeric|area covered by the hydrologic unit at the water surface (sq m)|
+|10|HUAreaBF|ratio|numeric|area covered by the hydrologic unit at the bankfull stage (sq m)|
+|11|wsgrad|ratio|numeric|water-surface gradient (m/m, i.e. dimensionless|
+
+The above table is sometimes referred to as a "codebook" that provides an expanded definition for each variable.  (There is a tradeoff between shortish variable names, which are efficient to type, and longish variable names that are more self-explanatory.)
+
+**10. Importing the Data Set**
+
+*The "working directory" issue.*
+
+NOTE:  The directions described below will only work if the file being downloaded is indeed downloaded to the `/data` folder in the working folder created earlier, and the folder is indeed the current working folder in R.  If you wind up downloading the file somewhere else, like your `/Downloads` folder, you should move it into your working folder.  
+
+The current working folder can be discovered by typing the following in the Console window:
+
+```{r echo=TRUE, eval=FALSE}
+getwd()
+```
+
+If you're not in the working directory, you can use the RStudio `Session > Set Working Directory > Choose Working Directory...` dialog.  You can also "strong-arm" the change of the working directory using the `setwd()` function:  
+
+    setwd("C:/Users/bartlein/Documents/geog495/data/") # Windows
+    setwd("C:\\Users\\bartlein\\Documents\\geog495\\data\\") # classical Windows
+    
+    setwd("R:/geog495_1/Student_Data/userid/") # virtual machine
+    setwd("R:\\geog495_1\\Student_Data\\userid\\") # virtual machine -- classical Windows foremat
+        
+    setwd("/Users/userid/Documents/geog495/") # macOS
+
+Note the use of either the forward slash or double backslash in specifying the folder paths in Windows.  (R uses a single backslash "`\`" as an operator, and so the first backslash "escapes" the second, telling R to treat the combination like a single backslash.) It's easier to use the forward-slash format.
+
+
+*Reading data*
+
+NOTE:  Punctuation, spelling and case are important.  R is case sensitive; in other words, `Sumcr` is not the same thing as `sumcr`, and `Read.csv` is not the same as `read.csv`.
+
+R can read data from a number of different sources, including text (ascii) data and the .csv (comma separated values) format of Excel spreadsheets, as well as from an internal format, which is text-based, but not easily readable by humans.  R stores the data, names of variables, etc. in an efficient form in its workspace (.Rdata) that can be saved and reloaded.
+
+At the time of this writing, the most efficient way to open and import a new data set is in .csv format, which can be download from a web page, either the "data sets" page on the course web page, or from a link on one of the exercise pages like this one.
+
+Importing a data set or shape file into R is a two-step procedure:  1) getting or downloading the data set from a server onto the computer you're using, and 2) reading into R.
+
+To __*download*__ the Summit Cr. data set, (Step 1)
+
+1. right-click on a link to a data set on a web page, like this one:  [[sumcr.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/sumcr.csv)
+2. then save the file (using Internet Explorer, click on "Save target as..." or for Firefox, click on "Save link as...", or using Safari on the Mac, click on "Download Linked Files As…"
+3. then browse to the `data` subfolder in the working folder created above and
+4. save the file.  
+
+Recall that the data folders are:
+
+- Windows:  `C:/Users/userid/Documents/geog495/data/`
+- Window on a virtual machine:  `R:/geog495_1/Student_Data/userid/data/`
+- macOS:  `/Users/userid/Documents/geog495/data/`
+
+To __*read*__ the Summit Cr. data set into R on Windows, type the following:
+
+```{r echo=TRUE, eval=FALSE}
+sumcr <- read.csv("C:/Users/userid/Documents/geog495/data/sumcr.csv")
+```
+while on the virtual machine, type the following
+
+```{r echo=TRUE, eval=FALSE}
+sumcr <- read.csv("R:/geog495_1/Student_Data/userid/data/sumcr.csv") 
+```
+
+and on the Mac, type the following
+
+```{r echo=TRUE, eval=FALSE}
+sumcr <- read.csv("/Users/bartlein/Documents/geog495/data/sumcr.csv")  
+```
+
+where, as usual, `"userid"` is your userid.  Make sure that the file paths are bracketed by quotation marks.
+
+The `read.csv()` function creates a data frame "object" called "`sumcr`" that contains the data from the .csv file.  Note that the data frame object doesn't need to have the same name as the file, especially if the filename is complicated.  The "`<-`" arrow is called the "assignment operator", which, as it sounds, assigns whatever object is to its right to whatever object is to its left, sometimes creating a new object in the process.  In reading a line of text, the operator is usually spoken as "gets" as in "the dataframe `sumcr` gets the contents of the `sumcr.csv` file."  In newer versions of R, the equals (=) sign can be used, but in most existing texts and .pdf files, the `<-` version is used.
+
+The advantage of the download-first-then-read-in approach is that you have an Excel-editable copy of the data set in your working folder.
+
+An alternative approach for reading data is to use the `file.choose()` function to browse to a particular file:
+
+```{r echo=TRUE, eval=FALSE}
+sumcr <- read.csv(file.choose())
+```
+
+This will open a "Select file..." dialog box.  There's a disadvantage to this approach in that it is not "reproducible"--at some later time, you may not be able to recall what file was read in to produce a particular result.
+
+*Looking at the data*
+
+The first thing to do is to check to see that R indeed has the Summit Cr. data frame in its workspace.  This can be done by typing `ls()` (the list function) at the command line, or (Windows) clicking on Misc > List objects on the RGui menu. 
+
+The data frame can be examined by simply typing the name of the data frame at the command line (e.g. `sumcr`), which will create a lot of output, or by typing `head(sumcr)`, which lists the first five lines (and guess what `tail(sumcr)` does..)..
+
+The `names()` function can be used to get a list of the variables in a data frame, e.g.: 
+
+```{r echo=TRUE, eval=FALSE}
+names(sumcr)
+```
+
+The individual variables are referred to by a "compound"  name consisting of the data frame name and the variable name, joined by a dollar sign (`$`), e.g. `sumcr$WidthWS`  Note that variable names are case-sensitive too (e.g. the name `sumcr$WidthWS` is not the same as `sumcr$widthws`.)  This manner of referring to variables can be made less cumbersome by using the `attach()` function.  For example, try typing the following (don't type the material in parentheses, or the comments within a line, just the text in the Courier type face:
+
+```{r echo=TRUE, eval=FALSE}
+sumcr$WidthWS   # (works ok)
+WidthWS   # (produces the error message 'Object "WidthWS" not found')
+```
+
+Then try typing `attach(sumcr)`, press Enter, and now type `WidthWS` on the next line (should work ok now).  
+
+**11.  What to hand in.**
+
+Use the `summary()` function to produce a quick summarization of the data set:
+
+```{r echo=TRUE, eval=FALSE}
+summary(sumcr)
+```
+
+To hand it in, simply copy-and-paste it into a Canvas email.
+
+To print the summary out, select the text, and click on the "print" icon, or use File > Print.
+
+**12. Quitting RStudio**
+
+R does not automatically save any script files you may have created or any updates that may have been made to `.RData`, but there are dialogs that should pop up when quitting RStudio.  Quit RStudio using the File > Quit Session... menu.  A dialog box will pop up saying "Quit R Session, Save workspace image to ..."  Click on "Save", and likewise for any `.R` or `.Rmd` scripts you may have created.
+
+

@@ -67,7 +67,8 @@ An alternative way of reading data is to read in an entire workspace (`*.RData`)
 
 ```{r load_RData}
 # load data from a saved .RData file
-con <- url("https://pjbartlein.github.io/REarthSysSci/data/RData/geog490.RData")
+# con <- url("https://pjbartlein.github.io/REarthSysSci/data/RData/geog490.RData")
+con <- url("https://pjbartlein.github.io/GeogDataAnalysis/data/Rdata/geog495.RData")
 load(file=con) 
 close(con) 
 ```
@@ -313,7 +314,7 @@ library(classInt) # finds class intervals for continuous variables
 library(sf)
 
 # map of precipitation stations
-plot(wus_shp, lwd=3, col="gray")
+plot(wus_sf, lwd=3, col="gray")
 points(wus_pratio$lon, wus_pratio$lat, pch=16, cex=0.8)
 ```
 
@@ -328,7 +329,7 @@ class <- classIntervals(wus_pratio$pjulpjan, nclr, style="fixed",
   fixedBreaks=c(9999.0, 10.0, 5.0, 2.0, 1.25, 1.0, .800, .500, .200, 
     .100, 0.0))
 colcode <- findColours(class, plotclr)
-plot(wus_shp)
+plot(wus_sf)
 points(wus_pratio$lon, wus_pratio$lat, pch=16, col=colcode, main="Jan/Jul Precipitation")
 legend(-125,33.5, legend=names(attr(colcode, "table")),
   fill=attr(colcode, "palette"), cex=0.5, bty="n")
