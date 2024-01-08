@@ -48,8 +48,6 @@ navbar:
     menu:
     - text: "Install R and RStudio"
       href: installR.html
-    - text: "Install packages and data"
-      href: packages-and-data.html
     - text: "Using R exercise"
       href: Ex_UsingR.html
     - text: "Install netCDF & Panoply"

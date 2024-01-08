@@ -36,9 +36,15 @@ NOTE:  The base packages of R are updated every few months or so, and sometimes 
 *Windows (R GUI)*
 
 In the R for Windows GUI, packages can be installed at the Console command line, or through the Packages > Install package(s) menu.  That latter choice produces a long list of packages that must be scrolled through, which is why the direct Console command-line approach works better.  If the "personal library" file has been set up correctly, then typing or copying `install.packages("sp")` to the Console command line should work without a problem.  If the library was not correctly created, R will respond with the following: 
-	## install.packages("sf")	## trying URL 'https://cran.rstudio.com/bin/macosx/big-sur-x86_64/contrib/4.3/sf_1.0-14.tgz'	## Content type 'application/x-gzip' length 91103299 bytes (86.9 MB)	## ==================================================	## downloaded 86.9 MB
+
+	## install.packages("sf")
+	## trying URL 'https://cran.rstudio.com/bin/macosx/big-sur-x86_64/contrib/4.3/sf_1.0-14.tgz'
+	## Content type 'application/x-gzip' length 91103299 bytes (86.9 MB)
+	## ==================================================
+	## downloaded 86.9 MB
 	
-	## The downloaded binary packages are in	##	/var/folders/_z/00grn4pd407dtnp256rd81k00000gp/T//Rtmp4Tsroj/downloaded_packages
+	## The downloaded binary packages are in
+	##	/var/folders/_z/00grn4pd407dtnp256rd81k00000gp/T//Rtmp4Tsroj/downloaded_packages
 	
 This message indicates that the personal library file hadn't been created earlier. R will immediately pop up two dialog boxes, one after the other:  
 
