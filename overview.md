@@ -40,7 +40,7 @@ Topic                                              Tasks
    4:  netCDF, HDF, etc.                             Install netCDF and Panoply      
    5:  raster, terra & stars                         File transfer  
    6:  Plots (1)                                     Text editor  
-   7:  Plots (2)                                     Project data-set selection
+   7:  Plots (2)                                     Project dataset selection
    8:  Maps (1)                                      Markdown and Markdown
    9:  Maps (2)                                      Pandoc  
   10:  Geospatial analysis in R                      GitHub and UO pages.uoregon.edu  
