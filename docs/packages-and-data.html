@@ -373,7 +373,7 @@ $(document).ready(function () {
 
 <p>
 <span style="color: #00cc00;">NOTE: This page has been revised for
-Winter 2021, but may undergo further edits.</span>
+Winter 2024, but may undergo further edits.</span>
 </p>
 <div
 id="installing-r-packages-loading-a-saved-workspace-and-creating-rstudio-projects"
@@ -412,9 +412,9 @@ web browser), where <code>username</code> is your specific Windows user
 name. Use Windows Explorer to browse to your <code>\Documents</code> (or
 “<code>\My Documents</code>”) folder and successively create the
 sub-folders <code>\R</code>, <code>\win-library</code>, and
-<code>\4.0</code>. (Later, when you update R to a new version (e.g. R
-4.1.x) you can create another new personal library folder named, for
-example, <code>C:\Users\username\Documents\R\win-library\4.1\</code>,
+<code>\4.3</code>. (Later, when you update R to a new version (e.g. R
+4.3.2) you can create another new personal library folder named, for
+example, <code>C:\Users\username\Documents\R\win-library\4.3\</code>,
 move the old packages there, and then use R or RStudio to update
 them.)</p>
 <p><strong>3. Installing a single package</strong></p>
@@ -427,7 +427,7 @@ RStudio) all have in common the simple Console command-line approach,
 where the following can be typed in or copied to the “Console” window
 (<em>Note that the package name here must be surrounded by
 quotes</em>):</p>
-<pre><code>install.packages(&quot;sp&quot;)</code></pre>
+<pre><code>install.packages(&quot;sf&quot;)</code></pre>
 <p>On Windows, this approach requires that the “personal library”
 described above has been set up, and on both Windows and Mac OS X/MacOS,
 and that the “binary” or pre-built packages are actually available in a
@@ -444,9 +444,14 @@ better. If the “personal library” file has been set up correctly, then
 typing or copying <code>install.packages("sp")</code> to the Console
 command line should work without a problem. If the library was not
 correctly created, R will respond with the following:</p>
-<pre><code>## install.packages(&quot;sp&quot;)  
-## Warning in install.packages(&quot;sp&quot;) :  
-##   &#39;lib = &quot;C:/Program Files/R/R-4.0.3/library&quot;&#39; is not writable</code></pre>
+<pre><code>## install.packages(&quot;sf&quot;)
+## trying URL &#39;https://cran.rstudio.com/bin/macosx/big-sur-x86_64/contrib/4.3/sf_1.0-14.tgz&#39;
+## Content type &#39;application/x-gzip&#39; length 91103299 bytes (86.9 MB)
+## ==================================================
+## downloaded 86.9 MB
+
+## The downloaded binary packages are in
+##  /var/folders/_z/00grn4pd407dtnp256rd81k00000gp/T//Rtmp4Tsroj/downloaded_packages</code></pre>
 <p>This message indicates that the personal library file hadn’t been
 created earlier. R will immediately pop up two dialog boxes, one after
 the other:</p>

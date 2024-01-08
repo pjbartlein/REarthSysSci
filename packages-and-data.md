@@ -18,8 +18,8 @@ Because Windows objects to the idea of programs installing files into the `C:\Pr
 
 `C:\Users\username\Documents\R\win-library\4.0\`
 
-using Windows Explorer (the file manager, not Internet Explorer, the web browser), where `username` is your specific Windows user name.  Use Windows Explorer to browse to your `\Documents` (or "`\My Documents`") folder and successively create the sub-folders `\R`, `\win-library`, and `\4.0`.
-(Later, when you update R to a new version (e.g. R 4.1.x) you can create another new personal library folder named, for example, `C:\Users\username\Documents\R\win-library\4.1\`, move the old packages there, and then use R or RStudio to update them.)
+using Windows Explorer (the file manager, not Internet Explorer, the web browser), where `username` is your specific Windows user name.  Use Windows Explorer to browse to your `\Documents` (or "`\My Documents`") folder and successively create the sub-folders `\R`, `\win-library`, and `\4.3`.
+(Later, when you update R to a new version (e.g. R 4.3.2) you can create another new personal library folder named, for example, `C:\Users\username\Documents\R\win-library\4.3\`, move the old packages there, and then use R or RStudio to update them.)
 
 **3.  Installing a single package**  
 
@@ -27,7 +27,7 @@ Much of the time only a single package must be installed.  In those instances, u
 
 The various ways of running R (Windows or Mac OS X/macOS GUIs, RStudio) all have in common the simple Console command-line approach, where the following can be typed in or copied to the "Console" window (*Note that the package name here must be surrounded by quotes*):
 
-	install.packages("sp")
+	install.packages("sf")
 
 On Windows, this approach requires that the "personal library" described above has been set up, and on both Windows and Mac OS X/MacOS, and that the "binary" or pre-built packages are actually available in a repository like CRAN.  
 
@@ -36,11 +36,10 @@ NOTE:  The base packages of R are updated every few months or so, and sometimes 
 *Windows (R GUI)*
 
 In the R for Windows GUI, packages can be installed at the Console command line, or through the Packages > Install package(s) menu.  That latter choice produces a long list of packages that must be scrolled through, which is why the direct Console command-line approach works better.  If the "personal library" file has been set up correctly, then typing or copying `install.packages("sp")` to the Console command line should work without a problem.  If the library was not correctly created, R will respond with the following: 
-
-	## install.packages("sp")  
-	## Warning in install.packages("sp") :  
-	##   'lib = "C:/Program Files/R/R-4.0.3/library"' is not writable
-
+	## install.packages("sf")	## trying URL 'https://cran.rstudio.com/bin/macosx/big-sur-x86_64/contrib/4.3/sf_1.0-14.tgz'	## Content type 'application/x-gzip' length 91103299 bytes (86.9 MB)	## ==================================================	## downloaded 86.9 MB
+	
+	## The downloaded binary packages are in	##	/var/folders/_z/00grn4pd407dtnp256rd81k00000gp/T//Rtmp4Tsroj/downloaded_packages
+	
 This message indicates that the personal library file hadn't been created earlier. R will immediately pop up two dialog boxes, one after the other:  
 
 1. Would you like to use a personal library instead?`  
