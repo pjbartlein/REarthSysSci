@@ -1,3 +1,5 @@
+<span style="color: green;">**NOTE:&nbsp; This page has been revised for the 2024 version of the course, but there may be some additional edits.** &nbsp; <br>
+
 # R and RStudio #
 
 Before doing actual analyses of Earth-system science-type data using R, there is a bit of set-up and infrastructure installation to do.  Although the list may seem daunting at first, the installations are quite straightforward. 
@@ -28,16 +30,6 @@ RStudio is a development environment for R that is much more powerful than the "
 - R Markdown:  [http://rmarkdown.rstudio.com/index.html](http://rmarkdown.rstudio.com/index.html)
 
 Note:  See **Install R and RStudio** under the Tasks tab for an exercise that describes the installation of R and RStudio.  **Install packages and data** under the Tasks tab describes how to install packages individually and en masse, as well as how to the workspace used for exercises in GEOG 4/595. 
-
-## Microsoft R Open ##
-
-Microsoft sponsors something called the Microsoft R Application Network (MRAN), which is a collection of tools and resources that includes a specialized build of R known as Microsoft R Open (which was formerly knows as Revolution Analytics R).  The version has been compiled to use the highly optimized Intel Math Kernel Library (MKL), which can greatly speed up some of the calculations involved in analyzing big data sets.  In addition, to support reproducible research, MRAN supports "snapshots" of the CRAN packages that can be used by the `checkpoint()` function to use a fixed (i.e. not randomly updated) set of packages.  
-
-- MRAN: [https://mran.microsoft.com/](https://mran.microsoft.com/)
-- Microsoft R Open:  [https://mran.microsoft.com/download/](https://mran.microsoft.com/download/) 
-- Installation notes:  [https://mran.microsoft.com/documents/rro/installation](https://mran.microsoft.com/documents/rro/installation)
-
-NOTE:  It will likely not be necessary to use MRO for the course project, but the information is here for completeness.
 
 # Other infrastructure and utilities #
 
@@ -144,4 +136,4 @@ It's often necessary to simply view, or to edit, text files.  This can be in RSt
 
 - Sublime Text [[https://www.sublimehq.com]](https://www.sublimehq.com) (License required for continuous use);
 - Atom [[https://atom.io]](https://atom.io), free, from the operators of GitHub; and 
-- Visual Studio Code [[https://code.visualstudio.com]](https://code.visualstudio.com), free, from Microsoft.
+- Visual Studio Code [[https://code.visualstudio.com]](https://code.visualstudio.com), free, from Microsoft. VS Code now has a number of add-in packages, including those for writing and previewing Markdown (.md) files and is recommended here.

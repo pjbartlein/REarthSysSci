@@ -1,3 +1,5 @@
+<span style="color: green;">**NOTE:&nbsp; This page has been revised for the 2024 version of the course, but there may be some additional edits.** &nbsp; <br>
+
 # Course objectives #
 
 The aim of this course is to review some of the developments in the visualization and analysis of Earth-System Science (ESS) data using the R language and data-analysis environment.  ESS data sets are generally large (in terms of both the number of attributes or variables and number of data points), and are therefore frequently used as examples of "big data".  They are often well organized, in the sense of being represented as raster "slices" or "bricks" with dimensions like longitude, latitude and time, but can also be instances of  traditional "rectangular" data sets, where the rows represent individual locations and the columns variables or attributes.
@@ -78,6 +80,20 @@ Student effort in the course will involve:
 Completion of the tasks should not be a major effort, and aren't really gradable (except for doneness). The project will require more effort, ranging from a project that involves getting data, doing some basic visualizations, and "publishing" the results (text and images) on a simple web page, to something more elaborate, involving some advanced statistical analyses, and a more involved publication such as the course web page, or some other RMarkdown product.
 
 It will be up to individual students how far or how deeply they want to go. A general principle that's worth following here is that a simpler story told well is better than a complicated story told in a half-assed fashion. Because the end product will be publicly available, it can readily contribute to a portfolio, and experience shows that including a URL to a nice-looking product on a resume or job application letter pays off.
+
+Collaboration would be fine, with the development of an agree-upon "Author Responsibility" document ahead of time.
+
+To summarize, the project will involve:
+
+- identifying an interesting Earth-system science-type data set, most likely in the netCDF or HDF format
+- downloading of transferring the appropriate file(s)
+- reading the data into R
+- exploring the data using maps, plot, descriptive statistics
+- coming up with a "story" or outline that could involve visualizations or data analyses
+- creating an RMarkdown-type document to tell that story
+- rendering the .Rmd document to .html (or an alternative)
+- copying the rendered document to the web
+- making a quick (3-5 minute) presentation in class
 
 # Examples#
 

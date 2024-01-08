@@ -16,7 +16,9 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
-<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2024, but may undergo further edits.</span></p>
+<span style="color: green;">**NOTE:&nbsp; This page has been revised for the 2024 version of the course, but there may be some additional edits.** &nbsp; 
+<br>
+
 **Geography 4/590:  R for Earth System Science**  
 **Winter 2024**
 
@@ -191,7 +193,7 @@ One of the issues with R is that error messages can be rather obscure.  The most
 
 **8. Projects in RStudio**
 
-One very nice feature of RStudio is its ability to create _Projects_ which help a lot in keeping data (e.g. `.csv`-type text files, or R's internal `.RData` format) and scripts (e.g. files that end in `.R`, or .`Rmd`) organized.  Also, multiple Projects can reside on the same machine (or user account on the machine), which helps keep your work organized.  Project folders can be created internally in RStudio, but it may be easier to create the folders outside of RStudio, and then use the `File > New Project > Existing Directory` dialog to browse to that folder or directory.  (Note (don't do this now):  A useful folder or directory hierarchy would be created by using the two subfolders or directories to the working directories described above, the `R` one for code, the `.RData` workspace file, and `*.R` and `*.Rmd` source files, and the other `data` to download data into.  Then in the New Project dialog, one would browse to, say `c:/Users/bartlein/Documents/geog495/R/` (Windows), or `User/Documents/R/` (OS X/MacOS) to create the Project file (`R.Rproj`), and download data to `c:/Users/bartlein/Documents/geog495/data/` (Windows), or `User/Documents/data/` (OS X/MacOS).)  Projects can also be created on the virtual machine. 
+One very nice feature of RStudio is its ability to create _Projects_ which help a lot in keeping data (e.g. `.csv`-type text files, or R's internal `.RData` format) and scripts (e.g. files that end in `.R`, or .`Rmd`) organized.  Also, multiple Projects can reside on the same machine (or user account on the machine), which helps keep your work organized.  Project folders can be created internally in RStudio, but it may be easier to create the folders outside of RStudio, and then use the `File > New Project > Existing Directory` dialog to browse to that folder or directory.  (Note (don't do this now):  A useful folder or directory hierarchy would be created by using the two subfolders or directories to the working directories described above, the `R` one for code, the `.RData` workspace file, and `*.R` and `*.Rmd` source files, and the other `data` to download data into.  Then in the New Project dialog, one would browse to, say `c:/Users/bartlein/Documents/geog495/R/` (Windows), or `User/Documents/R/` (MacOS) to create the Project file (`R.Rproj`), and download data to `c:/Users/bartlein/Documents/geog495/data/` (Windows), or `User/Documents/data/` (MacOS).)  Projects can also be created on the virtual machine. 
 
 It's also possible to easily begin where you left off, by browsing to a Project file, and simply clicking on it to start RStudio.
 
