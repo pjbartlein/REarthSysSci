@@ -144,7 +144,7 @@ Also, this web page, as well as that for GEOG 4/595 Geographic Data Analysis pro
 
 - [https://pjbartlein.github.io/GeogDataAnalysis/](https://pjbartlein.github.io/GeogDataAnalysis/).
 
-# Getting help#
+# Getting help #
 
 One thing that will become immediately apparent is that R produces cryptic error messages. Because it's hardly ever the case that you'll be typing new code into an empty document, many errors arise from simple editing mistakes or typos. Simply Googling the error message will quickly resolve an issue, and often will take you to one of the following links:
 
