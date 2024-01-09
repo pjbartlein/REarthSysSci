@@ -46,6 +46,7 @@ navbar:
     
   - text: Tasks 
     menu:
+    - text: "Tasks"
     - text: "Install R and RStudio"
       href: installR.html
     - text: "Using R exercise"

@@ -305,6 +305,7 @@ $(document).ready(function () {
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Tasks</li>
     <li>
       <a href="installR.html">Install R and RStudio</a>
     </li>
@@ -406,22 +407,19 @@ generally offer to create one the first time you download a package (see
 the examples below), but Windows sometimes does not get the permissions
 entirely correct. The best thing to do is to create the folder yourself
 before downloading a package the first time, i.e., create the folder</p>
-<p><code>C:\Users\username\Documents\R\win-library\4.0\</code></p>
+<p><code>c:\Users\bartlein\AppData\Local\R\win-library\4.3\</code></p>
 <p>using Windows Explorer (the file manager, not Internet Explorer, the
 web browser), where <code>username</code> is your specific Windows user
-name. Use Windows Explorer to browse to your <code>\Documents</code> (or
-“<code>\My Documents</code>”) folder and successively create the
-sub-folders <code>\R</code>, <code>\win-library</code>, and
-<code>\4.3</code>. (Later, when you update R to a new version (e.g. R
-4.3.2) you can create another new personal library folder named, for
-example, <code>C:\Users\username\Documents\R\win-library\4.3\</code>,
+name. Use Windows Explorer to browse to your
+<code>\AppData\Local\`` folder and successively create the sub-folders</code><code>,</code>-library<code>, and</code>\4.3<code>. (Later, when you update R to a new version (e.g. R 4.4.0) you can create another new personal library folder named, for example,</code>C:-library\4.4`,
 move the old packages there, and then use R or RStudio to update
 them.)</p>
 <p><strong>3. Installing a single package</strong></p>
 <p>Much of the time only a single package must be installed. In those
 instances, using the Console command line, or RStudio is quite
 efficient. The following illustrates several different ways that, for
-example, the <code>sp</code> or “spatial” package can be installed.</p>
+example, the <code>sf</code> or “simple features” package can be
+installed.</p>
 <p>The various ways of running R (Windows or Mac OS X/macOS GUIs,
 RStudio) all have in common the simple Console command-line approach,
 where the following can be typed in or copied to the “Console” window
@@ -551,8 +549,8 @@ function is null.</p>
 <p><strong>5. Installation of multiple packages at a time</strong></p>
 <p>It’s possible to use the various GUIs to install more than one
 package at time, but this most conveniently done via the Console command
-line. The following packages are among those that will be used in the
-exercises or to run the code in the lectures:</p>
+line. The following packages are among those that will be used to run
+the code in the lectures:</p>
 <p><code>sp</code>, <code>car</code>, <code>cluster</code>,
 <code>corrplot</code>, <code>fields</code>, <code>gam</code>,
 <code>ggplot2</code>, <code>gridExtra</code>, <code>iplots</code>,
