@@ -410,7 +410,7 @@ $(document).ready(function () {
       <a href="installR.html">Install R and RStudio</a>
     </li>
     <li>
-      <a href="UsingR.html">Using R exercise</a>
+      <a href="Ex_UsingR.html">Using R exercise</a>
     </li>
     <li>
       <a href="install_netCDF.html">Install netCDF &amp; Panoply</a>
@@ -682,10 +682,9 @@ the web, by opening a “connection” to a URL, and then using the
 <code>load()</code> function (which also can be used to load a workspace
 file from a local folder).</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># load data from a saved .RData file</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co"># con &lt;- url(&quot;https://pjbartlein.github.io/REarthSysSci/data/RData/geog490.RData&quot;)</span></span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">url</span>(<span class="st">&quot;https://pjbartlein.github.io/GeogDataAnalysis/data/Rdata/geog495.RData&quot;</span>)</span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="fu">load</span>(<span class="at">file=</span>con) </span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="fu">close</span>(con) </span></code></pre></div>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">url</span>(<span class="st">&quot;https://pjbartlein.github.io/REarthSysSci/data/RData/geog490.RData&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">load</span>(<span class="at">file=</span>con) </span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="fu">close</span>(con) </span></code></pre></div>
 <p>Note how the “Environment” tab in RStudio has become populated with
 individual objects.</p>
 </div>

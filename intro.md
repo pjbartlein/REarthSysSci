@@ -14,11 +14,12 @@ The "R Project" (or simply "R") grew out of the development of the S language fo
 
 The current version of R is 4.3.2 (23 October 2023).
 
-Here are a few links to some GEOG 4/595 materials on R (note that the installation directions may pertain to a previous version):
+Here is the link to Getting and using R for this course: [https://pjbartlein.github.io/REarthSysSci/installR.html](https://pjbartlein.github.io/REarthSysSci/installR.html) (Or use the `Tasks > Install R and Studio` menu tab.)
+
+Here is a link to some GEOG 4/595 materials on R (note that the installation directions may pertain to a previous version):
 
 - GEOG 4/595 (Geographic Data Analysis): 
   [https://pjbartlein.github.io/GeogDataAnalysis/index.html](https://pjbartlein.github.io/GeogDataAnalysis/index.html)
-- Getting and using R: [https://pjbartlein.github.io/REarthSysSci/installR.html](https://pjbartlein.github.io/REarthSysSci/installR.html)
 
 ## RStudio ##
 
@@ -32,7 +33,7 @@ Note:  See **Install R and RStudio** under the Tasks tab for an exercise that de
 
 # Other infrastructure and utilities #
 
-## Git and GitHub (Version Control)
+## Git and GitHub (Version Control and Web-Page Hosting)
 
 "Git" is an open-source version-control system, that allows one to track (and backup) the development of software by building a "local repository" of current and previous versions of code, data, markdown files, etc. on one's machine, while "GitHub" is a website that hosts "remote repositories", allowing them to be saved, reached (or restored) from any machine (using Git), which greatly facilitates collaboration.   
 
@@ -51,6 +52,19 @@ Here's the GitHub repository for the course web page:
 - [https://github.com/pjbartlein/REarthSysSci](https://github.com/pjbartlein/REarthSysSci)
 
 Note:  See **Git and GitHub** under the Tasks tab for instructions on getting a GitHub account and setting up a Git repository.
+
+## UO pages.uoregon.edu ##
+
+All UO users have an account and space (50 GB) on `pages.uoregon.edu` that can be used to host web pages: 
+
+- [[https://service.uoregon.edu/TDClient/2030/Portal/KB/ArticleDet?ID=43068]](https://service.uoregon.edu/TDClient/2030/Portal/KB/ArticleDet?ID=43068)
+
+For example, here are a couple of animations of the meteorological conditions accompanying the 2020 Labor Day fires hosted on my web space on `pages.uoregon.edu`:
+
+- [https://pages.uoregon.edu/bartlein/McKenzieFire/2020-09-06.html](https://pages.uoregon.edu/bartlein/McKenzieFire/2020-09-06.html)
+- [https://pages.uoregon.edu/bartlein/McKenzieFire/2020-09-06_OR.html](https://pages.uoregon.edu/bartlein/McKenzieFire/2020-09-06_OR.html)
+
+`pages.uoregon.edu` can be used to host the `.html` files produced for the course project.
 
 ## Markdown ##
 

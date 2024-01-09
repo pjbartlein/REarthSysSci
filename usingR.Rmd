@@ -68,8 +68,7 @@ An alternative way of reading data is to read in an entire workspace (`*.RData`)
 
 ```{r load_RData}
 # load data from a saved .RData file
-# con <- url("https://pjbartlein.github.io/REarthSysSci/data/RData/geog490.RData")
-con <- url("https://pjbartlein.github.io/GeogDataAnalysis/data/Rdata/geog495.RData")
+con <- url("https://pjbartlein.github.io/REarthSysSci/data/RData/geog490.RData")
 load(file=con) 
 close(con) 
 ```
