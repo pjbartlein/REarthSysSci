@@ -95,9 +95,25 @@ To summarize, the project will involve:
 - copying the rendered document to the web
 - making a quick (3-5 minute) presentation in class
 
+# Grading #
+
+As will become apparent (and see the examples below), there are various "levels" of Projects that can be attempted, ranging from a simple Markdown "Notebook" hosted on `pages.uoregon.edu` to a multi-page Markdown web site, with an accompanying GitHub code repository and web site, and a complete and tidy project at any level should be the goal to get "full marks" (e.g. an A- or B-level grade for the course). However, there is a difference in the minimum effort between the course levels:
+
+**GEOG 490:** Completion of the Tasks in a timely fashion, and a Project consisting of an RMarkdown Notebook or web page hosted on `pages.uoregon.edu`.
+
+**GEOG 590:** Completion of the Tasks in a timely fashion, and a Project consisting of an Markdown web page or web site, accompanied by a GitHub repository, hosted either on `pages.uoregon.edu` or GitHub.
+
 # Examples#
 
 Some examples of analyses and documentation follow:
+
+Here's an example of two simple RMarkdown products:
+
+- a simple RMarkdown Notebook .html file: [[hhttps://pjbartlein.github.io/REarthSysSci/plot_alpha_RNotebook.html]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_RNotebook.html)
+- a bare-bones RMarkdown web site: [[https://pjbartlein.github.io/REarthSysSci/plot_alpha_RMarkdown_Site.html]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_RMarkdown_Site.html)
+
+
+
 
 Here's an example of an R Markdown HTML page describing the analysis of the Global Charcoal Database (GCD): 
 
@@ -140,4 +156,61 @@ One thing that will become immediately apparent is that R produces cryptic error
 - StackOverflow: [[https://stackoverflow.com/collectives/r-language]](https://stackoverflow.com/collectives/r-language)
 
 ChatGPT is another option for getting some ideas on error messages, and for getting simple code fragments, but it can easily get off track (Garbage In -> Garbage Out).
+
+# Other stuff #
+
+**Text:**. No textbook; .pdfs and URLs will be posted on the course web page. See the `Other > Readings` tab .   
+
+**Web pages:**  
+
+- Course Canvas page:  [http://canvas.uoregon.edu/](http://canvas.uoregon.edu/) (Used only for Announcements, etc.)
+- Course Weg page (this page): [[https://pjbartlein.github.io/REarthSysSci/index.html]](https://pjbartlein.github.io/REarthSysSci/index.html)
+
+**Grading:**  See above.
+
+**Incompletes:** There is a new, less flexible policy for Incompletes:  [[https://provost.uoregon.edu/grades-incompletes-policy]](https://provost.uoregon.edu/grades-incompletes-policy).  Do not use the possibility of an "automatic" incomplete as a time-management tool at the end of the term.
+
+**Attendance (Student:** You really should attend class. The last half hour of class each day (3:20 - 3:50pm) will be devoted to debugging and other non-lecture-type activities.
+
+**Attendance (Instructor):** UO has announced a pilot "Floating Holiday" for *employees* (not students, Ah-ha-ha--sorry) [[https://hr.uoregon.edu/floating-holiday-pilot-2023-24]](https://hr.uoregon.edu/floating-holiday-pilot-2023-24). I would generally claim the day of Perihelion  for its climatic and Earth-system science significance, but Perihelion occurred before classes started this year (Jan 2nd). Maybe Imbolc or St. Brigid's day--I'll let you know). 
+
+**Communicating with instructors:**  Pat Bartlein, <bartlein@uoregon.edu>, OH at 2-3pm Wednesdays (via Zoom), or by email. GE  or by email.  
+ 
+* If interest warrants, we will have an ongoing discussion area on Canvas on course mechanics and topics. You can post questions there.  If you have a question, others probably do too, and it would be a service to everyone to ask.  
+* We will also communicate course information through Canvas announcements and emails.   Announcements and emails are archived there and automatically forwarded to your UO email, and can even reach you by text. Check and adjust your Canvas settings under Account > Notifications. 
+* We understand you may have irregular or constrained schedules, and we are available to talk outside the scheduled office hours.  Email or call.  Voicemail messages will be sent to us as an email.  We may not be available all the time, and sowe may need to set an appointment to talk. 
+* *Response time*:  The instructor and GE will check emails intermittently during weekdays.  Usually you will be able to get an answer from us on weekdays within six hours. In evenings and on weekends, response time will be much slower.  We want to answer your questions and help you succeed in this course.  Help us do that by starting on assignments early so you can identify questions early enough to get a response from us.   
+
+**Technical Requirements:** You will need access to the internet, to UO's Canvas site, and to a browser at a minimum, and ideally a personal computer you have administrative rights on. 
+If you have questions about accessing and using Canvas, visit the [Canvas Support for Students](https://service.uoregon.edu/TDClient/2030/Portal/KB/ArticleDet?ID=86662) page. Canvas and Technology Support also is available by phone or live chat,  Monday-Sunday 6 a.m. to 12 a.m.
+541-346-4357 [livehelp.uoregon.edu](livehelp.uoregon.edu).
+If you face Internet access challenges, computer labs are open for students on campus. To learn more about options visit Information Services' [Internet Access Resources](https://service.uoregon.edu/TDClient/2030/Portal/KB/ArticleDet?ID=101263).
+
+**Other topics, including classroom behavior:**  Computers are welcome, for note taking, viewing course-related material, and trying out code. Using a computer, tablet, or phone during class for anything else would be unprofessional.
+
+**Standard University Policies and Sources for Help:**  
+
+The support provided by the following may be useful:  
+
+* UO Division of student life:  [http://studentaffairs.uoregon.edu/](http://studentaffairs.uoregon.edu/)
+
+* University Counseling and Testing Center:  [http://counseling.uoregon.edu](http://counseling.uoregon.edu)  
+* UO Accessible Education Center [http://aec.uoregon.edu/](http://aec.uoregon.edu/)  
+* UO Emergency and Safety Services:  [https://safety.uoregon.edu/emergency-and-safety-services](https://safety.uoregon.edu/emergency-and-safety-services)  
+
+* *Accessible Education:*  Please let us know within the first two weeks of the term if you need assistance to fully participate in the course. Participation includes access to lectures, web-based information, in-class activities, and exams. The Accessible Education Center [http://aec.uoregon.edu/](http://aec.uoregon.edu/) works with students to provide an instructor notification letter that outlines accommodations and adjustments to class design that will enable better access. Contact the Accessible Education Center for assistance with access or disability-related questions or concerns.  
+* *Conduct:* The University Student Conduct Code (available at [conduct.uoregon.edu](conduct.uoregon.edu) defines academic misconduct. Students are prohibited from committing or attempting to commit any act that constitutes academic misconduct. By way of example, students should not give or receive (or attempt to give or receive) unauthorized help on assignments or examinations without express permission from the instructor. *However, you do have permission to discuss and collaborate on the exercise tasks, providing answers are constructed independently.* Students should properly acknowledge and document all sources of information (e.g. quotations, paraphrases, ideas) and use only the sources and resources authorized by the instructor. If there is any question about whether an act constitutes academic misconduct, it is the students' obligation to clarify the question with the instructor before committing or attempting to commit the act. Additional information about a common form of academic misconduct, plagiarism, is available at:   
+[https://researchguides.uoregon.edu/citing-plagiarism](https://researchguides.uoregon.edu/citing-plagiarism)  
+* *Inclement Weather:* (Let's hope for a little...) It is generally expected that class will meet unless the University is officially closed for inclement weather. If it becomes necessary to cancel class while the University remains open, this will be announced on Canvas and by email. Updates on inclement weather and closure are also communicated in other ways described here: [https://hr.uoregon.edu/about-hr/campus-notifications/inclement-weather/inclement-weather-immediate-updates](https://hr.uoregon.edu/about-hr/campus-notifications/inclement-weather/inclement-weather-immediate-updates)  
+* *We are designated reporters:* For information about my reporting obligations as an employee, please see Employee Reporting Obligations on the Office of Investigations and Civil Rights Compliance (OICRC) website. Students experiencing sex or gender-based discrimination, harassment or violence should call the 24-7 hotline 541-346-SAFE [7244] or visit [safe.uoregon.edu](safe.uoregon.edu) for help. Students experiencing all forms of prohibited discrimination or harassment may contact the Dean of Students Office at 5411-346-3216 or the non-confidential Title IX Coordinator/OICRC at 541-346-3123. Additional resources are available at investigations.uoregon.edu/how-get-support. We are also mandatory reporters of child abuse. Please find more information at Mandatory Reporting of Child Abuse and Neglect.  
+
+* *Mental Health and Wellness:* Life at college can be very complicated. Students often feel overwhelmed or stressed, experience anxiety or depression, struggle with relationships, or just need help navigating challenges in their life. If you're facing such challenges, you don't need to handle them on your own--there's help and support on campus. As your instructor if I believe you may need additional support, I will express my concerns, the reasons for them, and refer you to resources that might be helpful. It is not my intention to know the details of what might be bothering you, but simply to let you know I care and that help is available. Getting help is a courageous thing to do—for yourself and those you care about. University Health Services help students cope with difficult emotions and life stressors. If you need general resources on coping with stress or want to talk with another student who has been in the same place as you, visit the Duck Nest (located in the EMU on the ground floor) and get help from one of the specially trained Peer Wellness Advocates. Find out more at [health.uoregon.edu/ducknest](health.uoregon.edu/ducknest). University Counseling Services (UCS) has a team of dedicated staff members to support you with your concerns, many of whom can provide identity-based support. All clinical services are free and confidential. Find out more at counseling.uoregon.edu or by calling 541-346-3227 (anytime UCS is closed, the After-Hours Support and Crisis Line is available by calling this same number).
+
+* *Basic Needs:* Any student who has difficulty affording groceries or accessing sufficient food to eat every day, or who lacks a safe and stable place to live and believes this may affect their performance in the course is urged to contact the Dean of Students Office (346-3216, 164 Oregon Hall) for support. This UO webpage includes resources for food, housing, healthcare, childcare, transportation, technology, finances, and legal support: [https://blogs.uoregon.edu/basicneeds/food/](https://blogs.uoregon.edu/basicneeds/food/)
+
+* *Accommodation for Religious Observances:* The university makes reasonable accommodations, upon request, for students who are unable to attend a class for religious obligations or observance reasons, in accordance with the university discrimination policy which says "Any student who, because of religious beliefs, is unable to attend classes on a particular day shall be excused from attendance requirements and from any examination or other assignment on that day. The student shall make up the examination or other assignment missed because of the absence."" To request accommodations for this course for religious observance, visit the Office of the Registrar's website and complete and submit to the instructor the "Student Religious Accommodation Request" form prior to the end of the second week of the term ([https://registrar.uoregon.edu/calendars/religious-observances](https://registrar.uoregon.edu/calendars/religious-observances))
+
+**Covid Containment Plan*: [[https://provost.uoregon.edu/covid-containment-plan-classes]](https://provost.uoregon.edu/covid-containment-plan-classes)
+
+
 
