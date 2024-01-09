@@ -11,7 +11,7 @@
 
 
 
-<title>Exercise 1</title>
+<title>Install R and R Studio</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -467,7 +467,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Exercise 1</h1>
+<h1 class="title toc-ignore">Install R and R Studio</h1>
 
 </div>
 
@@ -1068,14 +1068,28 @@ type face:</p>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>WidthWS   <span class="co"># (produces the error message &#39;Object &quot;WidthWS&quot; not found&#39;)</span></span></code></pre></div>
 <p>Then try typing <code>attach(sumcr)</code>, press Enter, and now type
 <code>WidthWS</code> on the next line (should work ok now).</p>
-<p><strong>11. What to hand in.</strong></p>
+<p><strong>11 Installing packages</strong></p>
+<p>R uses “packages” to add functionality to “base R”. Packages (or
+“libraries” – the S-language term) may include combinations of R code,
+Fortran and C. They must be installed, and then are loaded using the
+<code>library()</code> function. The lecture and task pages will
+demonstrate how this works as we go on. In the meantime, a minimal set
+of packages can be installed that will allow the initial lectures and
+demonstrations of R to be reproduced. To install a number of packages at
+once, copy and paste the following into the Console window, or copy into
+an R script and run the code.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">&quot;tidyverse&quot;</span>, <span class="st">&quot;sp&quot;</span>, <span class="st">&quot;sf&quot;</span>, <span class="st">&quot;raster&quot;</span>, <span class="st">&quot;terra&quot;</span>, <span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;GGally&quot;</span>))</span></code></pre></div>
+<p>A lot of output will be produced as the packages are downloaded,
+unpacked, etc. If you get a meassge about using a private or local
+library, reply “yes”.</p>
+<p><strong>12. What to hand in.</strong></p>
 <p>Use the <code>summary()</code> function to produce a quick
 summarization of the data set:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">summary</span>(sumcr)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">summary</span>(sumcr)</span></code></pre></div>
 <p>To hand it in, simply copy-and-paste it into a Canvas email.</p>
 <p>To print the summary out, select the text, and click on the “print”
 icon, or use File &gt; Print.</p>
-<p><strong>12. Quitting RStudio</strong></p>
+<p><strong>13. Quitting RStudio</strong></p>
 <p>R does not automatically save any script files you may have created
 or any updates that may have been made to <code>.RData</code>, but there
 are dialogs that should pop up when quitting RStudio. Quit RStudio using

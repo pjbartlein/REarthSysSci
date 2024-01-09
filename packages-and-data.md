@@ -16,14 +16,14 @@ Note that you will need to be connected to the Internet to download the various 
 
 Because Windows objects to the idea of programs installing files into the `C:\Program Files` folder, R will run into trouble when it attempts to install add-in packages there.  The most reliable work-around seems to be to create what's known as a "personal library" where the packages are stored.  The R GUI for Windows and RStudio will generally offer to create one the first time you download a package (see the examples below), but Windows sometimes does not get the permissions entirely correct.  The best thing to do is to create the folder yourself before downloading a package the first time, i.e., create the folder
 
-`C:\Users\username\Documents\R\win-library\4.0\`
+`c:\Users\bartlein\AppData\Local\R\win-library\4.3\`
 
-using Windows Explorer (the file manager, not Internet Explorer, the web browser), where `username` is your specific Windows user name.  Use Windows Explorer to browse to your `\Documents` (or "`\My Documents`") folder and successively create the sub-folders `\R`, `\win-library`, and `\4.3`.
-(Later, when you update R to a new version (e.g. R 4.3.2) you can create another new personal library folder named, for example, `C:\Users\username\Documents\R\win-library\4.3\`, move the old packages there, and then use R or RStudio to update them.)
+using Windows Explorer (the file manager, not Internet Explorer, the web browser), where `username` is your specific Windows user name.  Use Windows Explorer to browse to your `\AppData\Local\`` folder and successively create the sub-folders `\R`, `\win-library`, and `\4.3`.
+(Later, when you update R to a new version (e.g. R 4.4.0) you can create another new personal library folder named, for example, `C:\Users\username\AppData\Local\R\win-library\4.4\`, move the old packages there, and then use R or RStudio to update them.)
 
 **3.  Installing a single package**  
 
-Much of the time only a single package must be installed.  In those instances, using the Console command line, or RStudio is quite efficient.  The following illustrates several different ways that, for example, the `sp` or "spatial" package can be installed.
+Much of the time only a single package must be installed.  In those instances, using the Console command line, or RStudio is quite efficient.  The following illustrates several different ways that, for example, the `sf` or "simple features" package can be installed.
 
 The various ways of running R (Windows or Mac OS X/macOS GUIs, RStudio) all have in common the simple Console command-line approach, where the following can be typed in or copied to the "Console" window (*Note that the package name here must be surrounded by quotes*):
 
@@ -118,7 +118,7 @@ Note that here as elsewhere, the `update.packages` function needs be accompanied
 
 **5. Installation of multiple packages at a time**
 
-It's possible to use the various GUIs to install more than one package at time, but this most conveniently done via the Console command line.  The following packages are among those that will be used in the exercises or to run the code in the lectures:
+It's possible to use the various GUIs to install more than one package at time, but this most conveniently done via the Console command line.  The following packages are among those that will be used to run the code in the lectures:
 
 `sp`, `car`, `cluster`, `corrplot`, `fields`, `gam`, `ggplot2`, `gridExtra`, `iplots`, `leaps`, 
 `maps`, `maptools`, `maptree`, `mapview`, `mvtsplot`, `ncdf4`, `psych`, `qgraph`, `raster`, 

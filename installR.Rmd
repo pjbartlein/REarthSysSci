@@ -1,5 +1,5 @@
 ---
-title: "Exercise 1"
+title: "Install R and R Studio"
 output: 
   html_document:
     fig_caption: no
@@ -320,7 +320,17 @@ WidthWS   # (produces the error message 'Object "WidthWS" not found')
 
 Then try typing `attach(sumcr)`, press Enter, and now type `WidthWS` on the next line (should work ok now).  
 
-**11.  What to hand in.**
+**11 Installing packages**
+
+R uses "packages" to add functionality to "base R". Packages (or "libraries" -- the S-language term) may include combinations of R code, Fortran and C. They must be installed, and then are loaded using the `library()` function. The lecture and task pages will demonstrate how this works as we go on. In the meantime, a minimal set of packages can be installed that will allow the initial lectures and demonstrations of R to be reproduced. To install a number of packages at once, copy and paste the following into the Console window, or copy into an R script and run the code.
+
+```{r echo=TRUE, eval=FALSE}
+install.packages(c("tidyverse", "sp", "sf", "raster", "terra", "ggplot2", "GGally"))
+```
+
+A lot of output will be produced as the packages are downloaded, unpacked, etc. If you get a meassge about using a private or local library, reply "yes".
+
+**12.  What to hand in.**
 
 Use the `summary()` function to produce a quick summarization of the data set:
 
@@ -332,7 +342,7 @@ To hand it in, simply copy-and-paste it into a Canvas email.
 
 To print the summary out, select the text, and click on the "print" icon, or use File > Print.
 
-**12. Quitting RStudio**
+**13. Quitting RStudio**
 
 R does not automatically save any script files you may have created or any updates that may have been made to `.RData`, but there are dialogs that should pop up when quitting RStudio.  Quit RStudio using the File > Quit Session... menu.  A dialog box will pop up saying "Quit R Session, Save workspace image to ..."  Click on "Save", and likewise for any `.R` or `.Rmd` scripts you may have created.
 
