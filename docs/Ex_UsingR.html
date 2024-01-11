@@ -56,7 +56,7 @@
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -631,9 +631,8 @@ distribution of glaciated cirques relative to unglaciated ones.</p>
 <p>Here is the code for plotting cirque elevation as a function of
 longitude (i.e. longitude on the x-axis, elevation on the y-axis).</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># cirques: Elev vs. Lon</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">attach</span>(cirques)</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">plot</span>(Elev <span class="sc">~</span> Lon, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="fu">points</span>(Elev <span class="sc">~</span> Lon, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span><span class="fu">as.factor</span>(Glacier))</span></code></pre></div>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">plot</span>(Elev <span class="sc">~</span> Lon, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">points</span>(Elev <span class="sc">~</span> Lon, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span><span class="fu">as.factor</span>(Glacier))</span></code></pre></div>
 <blockquote>
 <p>Q5: Examine the relationship between cirque elevation and latitude.
 Is there any kind of systematic relationship, or is the relationship

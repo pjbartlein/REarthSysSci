@@ -180,7 +180,6 @@ Here is the code for plotting cirque elevation as a function of longitude (i.e. 
 
 ```{r scat2, echo=TRUE, eval=FALSE}
 # cirques: Elev vs. Lon
-attach(cirques)
 plot(Elev ~ Lon, type="n")
 points(Elev ~ Lon, pch=16, col=as.factor(Glacier))
 ```
