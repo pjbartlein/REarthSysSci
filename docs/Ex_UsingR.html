@@ -518,7 +518,10 @@ by right-clicking on the link, and saving to a suitable directory.</p>
 <p>Here, the file is assumed to have been dowloaded to the folder
 <code>/Users/bartlein/projects/geog490/data/csv_files/</code>. (Note
 that this folder is not necessarly the default working directory of R,
-which can found using the function <code>getwd()</code>)</p>
+which can found using the function <code>getwd()</code>, or set using
+<code>setwd("directory_name")</code>, where
+<code>"directory_name"</code> is the name of the directory you wish to
+set the working directory to.)</p>
 <p>This is an example of reading the radiative forcing .csv file:
 <em>Don’t actually run this–the data will be read in along with a lot of
 other files in the next step.</em></p>
@@ -543,16 +546,16 @@ individual objects.</p>
 <p>A quick look at the data can be gotten using the <code>str()</code>
 (“structure”) function, and a five number” (plus the mean) summary of
 the data can be gotten using the <code>summary()</code> function. Here
-the data are the Oregon cirques data set, which contains the location of
-cirque basins around the state, and an indicator variable that notes
-whether they currently contain glaciers or not.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">summary</span>(cirques)</span></code></pre></div>
+the data are the “SPECMAP” oxygen-isotope data that (more-or-less)
+represent the size of the ice sheets over the past 800,000 yrs, along
+with the values of insolation (incoming solar radiation) at 65N.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">summary</span>(specmap)</span></code></pre></div>
 <p>Other summary functions provide other basic information on a data
 set:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># other summaries</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">names</span>(cirques)</span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">head</span>(cirques)</span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">tail</span>(cirques)</span></code></pre></div>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">names</span>(specmap)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">head</span>(specmap)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">tail</span>(specmap)</span></code></pre></div>
 <p><strong>4. Simple visualization</strong></p>
 <p><em>Univariate enumerative plots – Index plots</em></p>
 <p>Here is the code for generating the index plot of oxygen-isotope
