@@ -548,11 +548,18 @@ class="toc-section-number">6.2</span> Precipiation-ratio data</a></li>
 <li><a href="#map-the-unprojected-data"
 id="toc-map-the-unprojected-data"><span
 class="toc-section-number">6.3</span> Map the unprojected data</a></li>
+</ul></li>
+<li><a
+href="#descriptive-plots-for-high-dimension-or-high-resolution-data"
+id="toc-descriptive-plots-for-high-dimension-or-high-resolution-data"><span
+class="toc-section-number">7</span> Descriptive plots for high-dimension
+or high-resolution data</a>
+<ul>
 <li><a href="#transparency" id="toc-transparency"><span
-class="toc-section-number">6.4</span> Transparency</a></li>
+class="toc-section-number">7.1</span> Transparency</a></li>
 <li><a href="#parallel-coordinate-plots"
 id="toc-parallel-coordinate-plots"><span
-class="toc-section-number">6.5</span> Parallel-coordinate plots</a></li>
+class="toc-section-number">7.2</span> Parallel-coordinate plots</a></li>
 </ul></li>
 </ul>
 </div>
@@ -1280,17 +1287,21 @@ plotted as symbols on top. The map clearly shows the spatial variations
 in precipitation seasonality: winer wet along the west coast and
 intermountain West, and summer wet over the Great Plains, and eastern
 Rocky Mtns. The interesting regions on the map are those where there is
-mixture or sharp contrast in precipitation seasonality. # Descriptive
-plots for high-dimension or high-resolution data</p>
+mixture or sharp contrast in precipitation seasonality.</p>
+</div>
+</div>
+<div id="descriptive-plots-for-high-dimension-or-high-resolution-data"
+class="section level1" number="7">
+<h1><span class="header-section-number">7</span> Descriptive plots for
+high-dimension or high-resolution data</h1>
 <p>High dimension (lots of variables) or high-resolution (lots of
 observations) generate a number of issues in simply visualizing the
 data, and relationships among variables. Here are two approaches, the
 use of transparency in standard plots, and <em>parallel coordiate
 plots</em> (which also use transparency) to visualize all observations
 of all variables in a single image.</p>
-</div>
-<div id="transparency" class="section level2" number="6.4">
-<h2><span class="header-section-number">6.4</span> Transparency</h2>
+<div id="transparency" class="section level2" number="7.1">
+<h2><span class="header-section-number">7.1</span> Transparency</h2>
 <p>A simple scatter plot (below, left) showing the relationship between
 January and July precipitation ratios illustrates how the crowding of
 points makes interpretation difficult. The crowding can be overcome by
@@ -1328,8 +1339,8 @@ elevation is rather complicated.</p>
 <p><img src="usingR_files/figure-html/hd10-1.png" width="100%" height="100%" /></p>
 <div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" tabindex="-1"></a>par <span class="ot">&lt;-</span> opar <span class="co"># restore graphics parameter</span></span></code></pre></div>
 </div>
-<div id="parallel-coordinate-plots" class="section level2" number="6.5">
-<h2><span class="header-section-number">6.5</span> Parallel-coordinate
+<div id="parallel-coordinate-plots" class="section level2" number="7.2">
+<h2><span class="header-section-number">7.2</span> Parallel-coordinate
 plots</h2>
 <p>Parallel coordiate plots in a sense present an individual axis for
 each variable in a dataframe along which the individual values of the

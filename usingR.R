@@ -109,6 +109,66 @@ round(cor(wus_pratio), 3)
 library(corrplot)
 corrplot(cor(wus_pratio), method = "color")
 
+library(maps)
+
+wus_map <- map("state", regions=c("washington", "oregon", "california", "idaho", "nevada",
+  "montana", "utah", "arizona", "wyoming", "colorado", "new mexico", "north dakota", "south dakota",
+  "nebraska", "kansas", "oklahoma", "texas"), plot = FALSE, fill = FALSE)
+
+class(wus_map)
+str(wus_map)
+
+plot(wus_map, pch=16, cex=0.5)
+
+wus_sf <- st_as_sf(map("state", regions=c("washington", "oregon", "california", "idaho", "nevada",
+    "montana", "utah", "arizona", "wyoming", "colorado", "new mexico", "north dakota", "south dakota",
+    "nebraska", "kansas", "oklahoma", "texas"), plot = FALSE, fill = TRUE))
+
+class(wus_sf)
+
+plot(wus_sf)
+
+plot(st_geometry(wus_sf))
+
+head(wus_sf)
+
+ggplot() + geom_sf(data = wus_sf) + theme_bw()
+
+na_sf <- st_as_sf(map("world", regions=c("usa", "canada", "mexico"), plot = FALSE, fill = TRUE))
+conus_sf <- st_as_sf(map("state", plot = FALSE, fill = TRUE))
+
+na2_sf <- rbind(na_sf, conus_sf)
+
+head(na2_sf)
+
+ggplot() + geom_sf(data = na2_sf) + theme_bw()
+
+csvfile <- "/Users/bartlein/Documents/geog495/data/csv/wus_pratio.csv"
+wus_pratio <- read.csv(csvfile)
+names(wus_pratio)
+
+# get July to annual precipitation ratios
+wus_pratio$pjulpjan <- wus_pratio$pjulpann/wus_pratio$pjanpann  # pann values cancel out
+head(wus_pratio)
+
+# convert the (continous) preciptation ratio to a factor
+cutpts <- c(0.0, .100, .200, .500, .800, 1.0, 1.25, 2.0, 5.0, 10.0, 9999.0)
+pjulpjan_factor <- factor(findInterval(wus_pratio$pjulpjan, cutpts))
+head(cbind(wus_pratio$pjulpjan, pjulpjan_factor, cutpts[pjulpjan_factor]))
+
+## ggplot2 map of pjulpjan
+ggplot() +
+  geom_sf(data = na2_sf, fill=NA, color="gray") +
+  geom_sf(data = wus_sf, fill=NA, color="black") +
+  geom_point(aes(wus_pratio$lon, wus_pratio$lat, color = pjulpjan_factor), size = 1.0 ) +
+  scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
+                     labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
+                                "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
+                     name = "Jul:Jan Ppt. Ratio") +
+  labs(x = "Longitude", y = "Latitude") +
+  coord_sf(crs = st_crs(wus_sf), xlim = c(-125, -90), ylim = c(25, 50)) +
+  theme_bw()
+
 # plot January vs. July precipitation ratios
 opar <- par(mfcol=c(1,2)) # save graphics parameters
 

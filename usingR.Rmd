@@ -487,7 +487,8 @@ ggplot() +
 ```
 
 Note the build-up of the differnt layers on the map:  First, the combined (`na2_sf`) outlines of the U.S. Canada and Mexico and the coterminous U.S. states are plotted in gray, then the specific outlines of the western U.S. states are added in black (to emphasize the focus on the western U.S.), and finally the precipitation ratios are plotted as symbols on top.  The map clearly shows the spatial variations in precipitation seasonality:  winer wet along the west coast and intermountain West, and summer wet over the Great Plains, and eastern Rocky Mtns.  The interesting regions on the map are those where there is mixture or sharp contrast in precipitation seasonality.
-# Descriptive plots for high-dimension or high-resolution data
+
+# Descriptive plots for high-dimension or high-resolution data #
 
 High dimension (lots of variables) or high-resolution (lots of observations) generate a number of issues in simply visualizing the data, and relationships among variables.  Here are two approaches, the use of transparency in standard plots, and *parallel coordiate plots* (which also use transparency) to visualize all observations of all variables in a single image.
 
