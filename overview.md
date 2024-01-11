@@ -110,6 +110,8 @@ Some examples of analyses and documentation follow:
 Here's an example of two simple RMarkdown products:
 
 - a simple RMarkdown Notebook .html file: [[hhttps://pjbartlein.github.io/REarthSysSci/plot_alpha_RNotebook.html]](https://pjbartlein.github.io/REarthSysSci/plot_alpha_RNotebook.html)
+- a very simple RMarkdown Web Site (with a navigation bar added using a Bootstrap/Bootswatch theme): 
+[[https://pjbartlein.github.io/geog490project/index.html]](https://pjbartlein.github.io/geog490project/index.html)
 
 Here's an example of an R Markdown HTML page describing the analysis of the Global Charcoal Database (GCD): 
 
