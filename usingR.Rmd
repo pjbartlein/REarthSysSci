@@ -347,10 +347,6 @@ library(corrplot)
 corrplot(cor(wus_pratio), method = "color")
 ```
 
-# An example of enhanced plots -- Western U.S. precipitation ratios #
-
-
-
 # Descriptive plots for high-dimension or high-resolution data #
 
 High dimension (lots of variables) or high-resolution (lots of observations) generate a number of issues in simply visualizing the data, and relationships among variables.  Here are two approaches, the use of transparency in standard plots, and *parallel coordiate plots* (which also use transparency) to visualize all observations of all variables in a single image.
