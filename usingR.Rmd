@@ -299,6 +299,10 @@ ggplot(orstationc, aes(elev, tann)) + geom_point() + geom_smooth(color = "blue")
 
 Descriptive statistics as one might expect, are numerical (i.e. statistics) summaries of the properties of individual variables, or of the relatinships among variables.  Below are a few examples.
 
+Here's a plot of "precipitation ratios" (the ratio of precipitation in a particular month to annual precipitation, which removes the influence of topography on precipitation)
+
+![](images/wus_precip_ratio.png)
+The production of this map will be covered later, in one of the "Maps in R" lectures.
 ## Univariate statistics
 
 The `summary()` function provides that "five-number" (plus the mean) summary:
@@ -345,148 +349,7 @@ corrplot(cor(wus_pratio), method = "color")
 
 # An example of enhanced plots -- Western U.S. precipitation ratios #
 
-The following example illustrates a fairly realistic task, producing a projected map of nicely scaled precipitaion-ratio (July vs. January) values for weather stations across the West.  Such precipitation ratios illustrate the seasonality (e.g. summer vs. winter) of precipitation, and cancel out the strong effect of elevation on precipitation amounts. (High-elevation stations in general have higher precipitation than low-elevations stations, and that effect would otherwise overprint the large-scale pattern of precipitation seasonality.)  The precipitation data are stored in a `.csv` file, and the example illustrates the creation of suitable base map, and the projection of both the base map and the precipitation data.
 
-## Base maps ##
-
-Here the base map will be extracted from the `maps` package data base.  (An alternative source might be the "Natural Earth" shapefiles, accessible through the `rnaturalearth` package.)  Begin by loading the `maps` package:
-
-```{r m1}
-library(maps)
-```
-
-The `map()` function extracts the outlines for, in this case the western U.S. states listed in the `regions` argument of the function.
-
-```{r m2}
-wus_map <- map("state", regions=c("washington", "oregon", "california", "idaho", "nevada",
-  "montana", "utah", "arizona", "wyoming", "colorado", "new mexico", "north dakota", "south dakota",
-  "nebraska", "kansas", "oklahoma", "texas"), plot = FALSE, fill = FALSE)
-```
-
-The `class()` function indicates the class of the data set, in this case "map" and the contents of the object can be listed using the `str()` function:
-
-```{r m3}
-class(wus_map)
-str(wus_map)
-```
-
-The "geometry" of the data can be seen by plotting it, as a scatter plot:
-
-```{r m4}
-plot(wus_map, pch=16, cex=0.5)
-```
-
-What we want, however is a base map of class `sf` (i.e. a simple-features object).  That can be done by wrapping the `map()` by the `st_as_sf()` function:
-
-```{r m5}
-wus_sf <- st_as_sf(map("state", regions=c("washington", "oregon", "california", "idaho", "nevada",
-    "montana", "utah", "arizona", "wyoming", "colorado", "new mexico", "north dakota", "south dakota",
-    "nebraska", "kansas", "oklahoma", "texas"), plot = FALSE, fill = TRUE))
-```    
-
-It can be verified that the class of `wus_sf` is indeed a simple feature `sf` as well as a standard dataframe, `data.frame`:
-
-```{r m6}
-class(wus_sf)
-```
-
-Plot `wus_sf`
-
-```{r m7}
-plot(wus_sf)
-```
-
-and just the geometry (i.e. outlines)
-
-```{r m8}
-plot(st_geometry(wus_sf))
-```
-
-The contents of the object can be listed using `head()`, which describes the object, and as in its usual application, lists the first few lines:
-
-```{r m9}
-head(wus_sf)
-```
-
-Here's a `ggplot2` map:
-
-```{r m10}
-ggplot() + geom_sf(data = wus_sf) + theme_bw()
-```
-
-Similar basemaps with the outlines of the U.S., Canada, and Mexico, and of the coterminous U.S. can also be extracted.
-
-```{r m11}
-na_sf <- st_as_sf(map("world", regions=c("usa", "canada", "mexico"), plot = FALSE, fill = TRUE))
-conus_sf <- st_as_sf(map("state", plot = FALSE, fill = TRUE))
-```
-
-Because `na_sf` and `conus_sf` are data.frames, they can be combined in the usual way, using `rbind()`:
-
-```{r m12}
-na2_sf <- rbind(na_sf, conus_sf)
-```
-
-Verify that the objects are indeed combined:
-
-```{r m13}
-head(na2_sf)
-```
-
-Plot the combined object:
-
-```{r m14}
-ggplot() + geom_sf(data = na2_sf) + theme_bw()
-```
-
-
-## Precipiation-ratio data ##
-
-The precipitation-ratio data can be read in the usual way:
-
-```{r m15}
-csvfile <- "/Users/bartlein/Documents/geog495/data/csv/wus_pratio.csv"
-wus_pratio <- read.csv(csvfile)
-names(wus_pratio)
-```
-
-Get the July-to-January precipitation ratio.  (The input values are all ratios themselves of the value for a particular month to the annual value. Dividing the July ratio by the January ratio cancles out annual precipitation, and gives us the ratio we want.)
-
-```{r m16}
-# get July to annual precipitation ratios
-wus_pratio$pjulpjan <- wus_pratio$pjulpann/wus_pratio$pjanpann  # pann values cancel out
-head(wus_pratio)
-```
-
-To produce a map with "nice" class-interval coloring of the symbols, we'll want to create a factor using the `findInterval()` function from the `classInt` package.  This is done by first specifiying the cutpoints (here a quasi-logrithmic scale appropriate for ratios), then appying the `findInterval()` function and the `factor()` function.
-
-```{r m17}
-# convert the (continous) preciptation ratio to a factor
-cutpts <- c(0.0, .100, .200, .500, .800, 1.0, 1.25, 2.0, 5.0, 10.0, 9999.0)
-pjulpjan_factor <- factor(findInterval(wus_pratio$pjulpjan, cutpts))
-head(cbind(wus_pratio$pjulpjan, pjulpjan_factor, cutpts[pjulpjan_factor]))
-```
- 
-## Map the unprojected data ##
-
-Map the outlines, and overlay the point data:
-
-```{r m18}
-## ggplot2 map of pjulpjan
-ggplot() +
-  geom_sf(data = na2_sf, fill=NA, color="gray") +
-  geom_sf(data = wus_sf, fill=NA, color="black") +
-  geom_point(aes(wus_pratio$lon, wus_pratio$lat, color = pjulpjan_factor), size = 1.0 ) +
-  scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
-                     labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
-                                "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
-                     name = "Jul:Jan Ppt. Ratio") +
-  labs(x = "Longitude", y = "Latitude") +
-  coord_sf(crs = st_crs(wus_sf), xlim = c(-125, -90), ylim = c(25, 50)) +
-  theme_bw()
-```
-
-Note the build-up of the differnt layers on the map:  First, the combined (`na2_sf`) outlines of the U.S. Canada and Mexico and the coterminous U.S. states are plotted in gray, then the specific outlines of the western U.S. states are added in black (to emphasize the focus on the western U.S.), and finally the precipitation ratios are plotted as symbols on top.  The map clearly shows the spatial variations in precipitation seasonality:  winer wet along the west coast and intermountain West, and summer wet over the Great Plains, and eastern Rocky Mtns.  The interesting regions on the map are those where there is mixture or sharp contrast in precipitation seasonality.
 
 # Descriptive plots for high-dimension or high-resolution data #
 
