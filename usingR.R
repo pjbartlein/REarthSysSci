@@ -91,60 +91,6 @@ ggplot(orstationc, aes(elev, tann)) + geom_point() + geom_smooth(color = "blue")
   xlab("Elevation (m)") + ylab("Annual Mean Temperature (C)") +
           ggtitle("Oregon Climate Station Data")
 
-## # load packages
-## library(maptools) # loads sp library too
-## # library(rgeos)
-## library(RColorBrewer) # creates nice color schemes
-## library(classInt) # finds class intervals for continuous variables
-## library(sf)
-## 
-## # map of precipitation stations
-## plot(wus_sf, lwd=3, col="gray")
-## points(wus_pratio$lon, wus_pratio$lat, pch=16, cex=0.8)
-
-## # a second map with some colors
-## wus_pratio$pjulpjan <- wus_pratio$pjulpann/wus_pratio$pjanpann  # pann values cancel out
-## nclr <- 10
-## plotclr <- brewer.pal(nclr,"PRGn")
-## class <- classIntervals(wus_pratio$pjulpjan, nclr, style="fixed",
-##   fixedBreaks=c(9999.0, 10.0, 5.0, 2.0, 1.25, 1.0, .800, .500, .200,
-##     .100, 0.0))
-## colcode <- findColours(class, plotclr)
-## plot(wus_sf)
-## points(wus_pratio$lon, wus_pratio$lat, pch=16, col=colcode, main="Jan/Jul Precipitation")
-## legend(-125,33.5, legend=names(attr(colcode, "table")),
-##   fill=attr(colcode, "palette"), cex=0.5, bty="n")
-
-# get western state outlines from `maps` package
-wus_states <- map_data("state", region = c("washington", "oregon", "california", "idaho", "nevada",
-  "montana", "utah", "arizona", "wyoming", "colorado", "new mexico", "north dakota", "south dakota",
-  "nebraska", "kansas", "oklahoma", "texas")) 
-head(wus_states)
-
-# plot the western states outlines
-ggplot(wus_states, aes(long, lat)) + geom_polygon(aes(group = group), color = "gray50", fill = NA) +
-  coord_quickmap() + theme_bw()
-
-# recode pjulpjan to a factor
-library(sf)
-wus_pratio_sf <- st_as_sf(wus_pratio, coords = c("lon", "lat"))
-cutpts <- c(0.0, .100, .200, .500, .800, 1.0, 1.25, 2.0, 5.0, 10.0, 9999.0)
-pjulpjan_factor <- factor(findInterval(wus_pratio_sf$pjulpann/wus_pratio_sf$pjulpann, cutpts))
-head(cbind(wus_pratio$pjulpjan, pjulpjan_factor, cutpts[pjulpjan_factor]))
-
-## ## ggplot2 map of pjulpjan
-## # ggplot(wus_pratio_sf, aes(lon, lat))  +
-## #   geom_polygon(aes(long, lat, group = group), wus_states, color = "gray50", fill = NA) +
-## #   scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
-## #     labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
-## #                "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
-## #     name = "Jul:Jan Ppt. Ratio") +
-## #   geom_point(aes(wus_pratio_sf, color = wus_pratio_sf$pjulpjan_factor), size = 1.0 ) +
-## #   coord_quickmap() + theme_bw()
-## 
-## # ggplot2 map of pjulpman projected
-## 
-
 # univariate descriptive statistics
 summary(wus_pratio)
 
