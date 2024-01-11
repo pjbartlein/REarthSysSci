@@ -1,8 +1,3 @@
-options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE, out.width = "75%", out.height = "75%")
-pdf.options(useDingbats = TRUE)
-klippy::klippy(position = c('top', 'right'))
-
 # read a .csv file
 csv_path <- "/Users/bartlein/projects/geog490/data/csv_files/"
 csv_name <- "IPCC-RF.csv"
@@ -77,39 +72,6 @@ ggplot(orstationc, aes(y = log10(pjulpjan))) + geom_boxplot()
 ggplot(orstationc, aes(elev, pjulpjan)) + geom_point() + geom_smooth(color = "blue") +
   xlab("Elevation (m)") + ylab("July:January Precipitation Ratio") +
           ggtitle("Oregon Climate Station Data")
-
-# Code chunk 1:  set up
-library(rgeos)
-library(maptools)
-library(sp)
-library(RColorBrewer)
-library(classInt)
-
-# Code chunk 2: set variable and get colors
-plotvar <- orstationc$pjan # pick a variable to plot
-plottitle <- "January Precipitation"
-nclr <- 8 # number of colors
-plotclr <- brewer.pal(nclr,"PuBu") # get nclr colors
-
-# find equal-frequency intervals
-class <- classIntervals(plotvar, nclr, style="quantile")
-colcode <- findColours(class, plotclr)
-cutpts <- round(class$brks, digits=1)
-cutpts
-
-# Code chunk 3: plot the shape file and the selected variable
-plot(orotl_shp)
-
-# add points
-points(orstationc$lon, orstationc$lat, pch=16, col=colcode, cex=2)
-points(orstationc$lon, orstationc$lat, cex=2) # draws black line around each point
-
-# add legend
-legend(x=-118, y=43.5, legend=names(attr(colcode, "table")),
-    fill=attr(colcode, "palette"), cex=0.6, bty="n")
-
-# add the title
-title(plottitle)
 
 # fortify shapefile
 orcounty_gg <- fortify(orcounty_shp)

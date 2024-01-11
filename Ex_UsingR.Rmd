@@ -40,7 +40,8 @@ Although it is possible to browse to a particular file in order to open it (i.e.
 
 Here, the file is assumed to have been dowloaded to the folder `/Users/bartlein/projects/geog490/data/csv_files/`.  (Note that this folder is not necessarly the default working directory of R, which can found using the function `getwd()`)
 
-Read the radiative forcing .csv file:
+This is an example of reading the radiative forcing .csv file:
+*Don't actually run this--the data will be read in along with a lot of other files in the next step.*
 
 ```{r read_csv, echo=TRUE, eval=FALSE}
 # read a .csv file
@@ -243,47 +244,8 @@ ggplot(orstationc, aes(elev, pjulpjan)) + geom_point() + geom_smooth(color = "bl
 >Q8:  Describe the relationship.  One issue that might be influencing this relationship is that there is a strong relationship between longitude and elevation across the state.  How might that be addressed by simple plots?
 
 &nbsp;
- 
-**7. Simple maps**
 
-The following code produces a simple map of one of the Oregon climate-station data.
-
-```{r maps01, echo=TRUE, eval=FALSE}
-# Code chunk 1:  set up
-library(rgeos)
-library(maptools)
-library(sp)
-library(RColorBrewer)
-library(classInt)
-
-# Code chunk 2: set variable and get colors
-plotvar <- orstationc$pjan # pick a variable to plot
-plottitle <- "January Precipitation"
-nclr <- 8 # number of colors
-plotclr <- brewer.pal(nclr,"PuBu") # get nclr colors
-
-# find equal-frequency intervals
-class <- classIntervals(plotvar, nclr, style="quantile")
-colcode <- findColours(class, plotclr)
-cutpts <- round(class$brks, digits=1)
-cutpts
-
-# Code chunk 3: plot the shape file and the selected variable
-plot(orotl_shp)
-
-# add points
-points(orstationc$lon, orstationc$lat, pch=16, col=colcode, cex=2)
-points(orstationc$lon, orstationc$lat, cex=2) # draws black line around each point
-
-# add legend
-legend(x=-118, y=43.5, legend=names(attr(colcode, "table")),
-    fill=attr(colcode, "palette"), cex=0.6, bty="n")
-
-# add the title
-title(plottitle)
-```
-
-**8. Maps with ggplot2**
+**7. Maps with ggplot2**
 
 The next code chunk translates the Oregon county shapefile into a "tidyverse" format suitable for plotting with `ggplot2`:
 
@@ -340,7 +302,7 @@ Note that the Purple to Green color scale spans the range of precipitation-ratio
 
 &nbsp;
 
-**9. Univariate statistics**
+**8. Univariate statistics**
 
 Here is code for summarizing the Oregon climate-station data:
 
@@ -349,7 +311,7 @@ Here is code for summarizing the Oregon climate-station data:
 summary(orstationc)
 ```
 
-**10. Bivariate descriptive statistics (correlations)**
+**9. Bivariate descriptive statistics (correlations)**
 
 The following code produces a correlation matrix and `corrplot()` graphical depiction of the matrix.  Note the use of the `round()` function to reduce the number of digits in the correlation.  "Unwrap" the `cor()` function to see what the correlation matrix looks like unrounded.
 
@@ -364,7 +326,7 @@ library(corrplot)
 corrplot(cor(orstationc[2:10]), method = "color")
 ```
 
-**11. Parallel-coordinate plots**
+**10. Parallel-coordinate plots**
 
 Next, take a look at some parallel-coordinate plots for the Oregon climate-station data.  First, create a new datafram, eliminating the character and x- and y-coordinate variables from the data frame.  The the use of the "square-bracket" selection method to grab specific columns from the `orstationc` dataframe.
 
