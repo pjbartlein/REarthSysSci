@@ -303,7 +303,8 @@ Here's a plot of "precipitation ratios" (the ratio of precipitation in a particu
 
 ![](images/wus_precip_ratio.png)
 The production of this map will be covered later, in one of the "Maps in R" lectures.
-## Univariate statistics
+
+## Univariate statistics ##
 
 The `summary()` function provides that "five-number" (plus the mean) summary:
 
@@ -333,7 +334,25 @@ ggplot(wus_pratio, aes(x = pjulpjan_factor, y=elev, group = pjulpjan_factor)) + 
 
 ## Bivariate descriptive statistics (correlations)
 
-The main statistic for characterizing the strength and sense of the relationship between two variables is the correlation coefficient, but beware that the statistic is a measure of the *liner* relationship between variables.  Here is a correlation matric for the western U.S. precipitation ratio data set:
+The main statistic for characterizing the strength and sense of the relationship between two variables is the correlation coefficient, but beware that the statistic is a measure of the *liner* relationship between variables.  
+
+The simplist visualization of a a bivariate relationship is the scatter plot (also known as the scatter diagram, x-y plot, point plot, etc.)
+
+```{r desc35}
+# scatter plot of the January precipitation ratio vs. the July precipitation ratio)
+plot(wus_pratio$pjulpann, wus_pratio$pjanpann, pch = 16, cex = 0.5)
+```
+
+The simplest measure of the strength of the *linear* relationship between two variables is the correlation coefficient.
+
+```{r desc36}
+# correlation January precipitation ratio vs. the July precipitation ratio)
+cor(wus_pratio$pjulpann, wus_pratio$pjanpann)
+```
+
+It's obvious from the scatter plot that the relationship is *not* linear. More about that later.
+
+Here is a correlation matrix for the western U.S. precipitation ratio data set:
 
 ```{r desc04}
 # correlations among western US precip-ratio variables
