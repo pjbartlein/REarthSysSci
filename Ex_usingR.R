@@ -2,7 +2,7 @@
 csv_path <- "/Users/bartlein/projects/geog490/data/csv_files/"
 csv_name <- "IPCC-RF.csv"
 csv_file <- paste(csv_path, csv_name, sep="")
-IPCC_RF <- read.csv(csv_file)
+IPCC-RF <- read.csv(csv_file)
 
 # load data from a saved .RData file
 con <- url("https://pjbartlein.github.io/REarthSysSci/data/RData/geog490.RData")
