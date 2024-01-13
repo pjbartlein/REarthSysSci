@@ -2,19 +2,19 @@
 csv_path <- "/Users/bartlein/projects/geog490/data/csv_files/"
 csv_name <- "IPCC-RF.csv"
 csv_file <- paste(csv_path, csv_name, sep="")
-IPCC-RF <- read.csv(csv_file)
+IPCC_RF <- read.csv(csv_file)
 
 # load data from a saved .RData file
-con <- url("https://pjbartlein.github.io/REarthSysSci/data/RData/geog490.RData")
-load(file=con)
-close(con)
+con <- url("https://pages.uoregon.edu/bartlein/RESS/RData/geog490.RData")
+load(file=con) 
+close(con) 
 
-summary(cirques)
+summary(specmap)
 
 # other summaries
-names(cirques)
-head(cirques)
-tail(cirques)
+names(specmap)
+head(specmap)
+tail(specmap)
 
 # attach SPECMAP data, index plot
 attach(specmap)
@@ -48,7 +48,6 @@ points(Lon, Lat, col=as.factor(Glacier))
 boxplot(Elev ~ Glacier)
 
 # cirques: Elev vs. Lon
-attach(cirques)
 plot(Elev ~ Lon, type="n")
 points(Elev ~ Lon, pch=16, col=as.factor(Glacier))
 
@@ -58,6 +57,10 @@ names(orstationc)
 
 # load the `ggplot2` package
 library(ggplot2)
+
+# also load the `sf` and `RColorBrewer` package
+library(sf)
+library(RColorBrewer)
 
 # ggplot2 histogram
 ggplot(orstationc, aes(x=pjulpjan)) + geom_histogram(binwidth = 0.05)
@@ -73,34 +76,40 @@ ggplot(orstationc, aes(elev, pjulpjan)) + geom_point() + geom_smooth(color = "bl
   xlab("Elevation (m)") + ylab("July:January Precipitation Ratio") +
           ggtitle("Oregon Climate Station Data")
 
-# fortify shapefile
-orcounty_gg <- fortify(orcounty_shp)
-head(orcounty_gg)
+## ggplot of Oregon climate stations
+ggplot(orstationc, aes(x=lon, y=lat, size=elev)) + geom_point(shape=21, color="black", fill="lightblue")
 
-# ggplot map of orcounty_gg
-ggplot(orcounty_gg, aes(long,lat)) + geom_polygon(aes(group = group), color = "gray50", fill = NA) +
-  coord_quickmap() + theme_bw()
+plot(st_geometry(orotl_sf), axes = TRUE)
+plot(st_geometry(orstations_sf), axes = TRUE)
 
-# bubble plot
-ggplot(orstationc, aes(lon, lat))  +
-  geom_polygon(aes(long, lat, group = group), orcounty_gg, color = "gray50", fill = NA) +
-  geom_point(aes(size = elev)) +
-  coord_quickmap() + theme_bw()
+cutpts <- c(0,200,500,1000,2000,9999)
+plot_factor <- factor(findInterval(orstations_sf$pann, cutpts))
+nclr <- 5
+plotclr <- brewer.pal(nclr+1,"BuPu")[2:(nclr+1)]
+ggplot() +
+  geom_sf(data = orotl_sf, fill=NA) +
+  geom_point(aes(orstations_sf$lon, orstations_sf$lat, color = plot_factor), size = 5.0, pch=16) +
+  scale_colour_manual(values=plotclr, aesthetics = "colour",
+                      labels = c("0 - 200", "200 - 500", "500 - 1000", "1000 - 2000", "> 2000"),
+                      name = "Ann. Precip.", drop=TRUE) +
+  labs(x = "Longitude", y = "Latitude") +
+  theme_bw()
 
-# recode pjulpjan to a factor
+
+# recode pjulpjan to a factor (note: cutpoints are general for Western N.A.)
 cutpts <- c(0.0, .100, .200, .500, .800, 1.0, 1.25, 2.0, 5.0, 10.0)
 pjulpjan_factor <- factor(findInterval(orstationc$pjulpjan, cutpts))
 head(cbind(orstationc$pjulpjan, pjulpjan_factor, cutpts[pjulpjan_factor]))
 
-# ggplot2 map of pjulpjan
-ggplot(orstationc, aes(lon, lat))  +
-  geom_polygon(aes(long, lat, group = group), orcounty_gg, color = "gray50", fill = NA) +
+ggplot() +
+  geom_sf(data = orotl_sf, fill=NA) +
+  geom_point(aes(orstations_sf$lon, orstations_sf$lat, color = pjulpjan_factor), size = 5.0, pch=16) +
   scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
-    labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
-               "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
-    name = "Jul:Jan Ppt. Ratio") +
-  geom_point(aes(lon, lat, color = pjulpjan_factor), size = 3.0 ) +
-  coord_quickmap() + theme_bw()
+                     labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
+                                "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
+                     name = "Jul:Jan Ppt. Ratio") +
+  labs(x = "Longitude", y = "Latitude") +
+  theme_bw()
 
 # univariate descriptive statistics
 summary(orstationc)
@@ -134,8 +143,8 @@ orstationc2$select_pts <- factor(ifelse(lat >= latmin & lat <= latmax & lon >= l
 
 # pcp
 a <- ggparcoord(data = orstationc2[order(orstationc2$select_pts),],
-  columns = c(1:10), groupColumn = "select_pts",
-  scale = "uniminmax", alphaLines=0.3) + ylab("") +
+                columns = c(1:10), groupColumn = "select_pts",
+                scale = "uniminmax", alphaLines=0.3) + ylab("") +
   theme(axis.text.x  = element_text(angle=315, vjust=1.0, hjust=0.0, size=8),
         axis.title.x = element_blank(),
         axis.text.y = element_blank(), axis.ticks.y = element_blank(),
@@ -143,12 +152,12 @@ a <- ggparcoord(data = orstationc2[order(orstationc2$select_pts),],
   scale_color_manual(values = c(rgb(0, 0, 0, 0.3), "red"))
 
 # map
-b <- ggplot(orstationc2, aes(lon, lat))  +
-  geom_polygon(aes(long, lat, group = group), orcounty_gg, color = "gray50", fill = NA) +
-  geom_point(aes(lon, lat, color = select_pts), size = 1.0 ) +
+b <- ggplot()  +
+  geom_sf(data = orotl_sf, fill=NA) +
+  geom_point(aes(orstations_sf$lon, orstations_sf$lat, color = orstationc2$select_pts), size = 4.0, pch=16) +
   theme_bw() +
   theme(legend.position = "none") +
-  coord_quickmap() + scale_color_manual(values = c("gray", "red"))
+  scale_color_manual(values = c("gray", "red"))
 
 grid.arrange(a, b, nrow = 1)
 
@@ -156,7 +165,7 @@ grid.arrange(a, b, nrow = 1)
 cutpoint <- 0.2
 v <- orstationc2$pjulpjan
 v <- (v-min(v))/(max(v)-min(v))
-orstationc2$select_pts <- factor(ifelse(v >= cutpoint, 1, 0))
+select_pts <- factor(ifelse(v >= cutpoint, 1, 0))
 
 # pcp
 a <- ggparcoord(data = orstationc2[order(orstationc2$select_pts),],
@@ -169,11 +178,11 @@ a <- ggparcoord(data = orstationc2[order(orstationc2$select_pts),],
   scale_color_manual(values = c(rgb(0, 0, 0, 0.3), "red"))
 
 # map
-b <- ggplot(orstationc2, aes(lon, lat))  +
-  geom_polygon(aes(long, lat, group = group), orcounty_gg, color = "gray50", fill = NA) +
-  geom_point(aes(lon, lat, color = select_pts), size = 1.0 ) +
+b <- ggplot()  +
+  geom_sf(data = orotl_sf, fill=NA) +
+  geom_point(aes(orstations_sf$lon, orstations_sf$lat, color = select_pts), size = 4.0, pch=16) +
   theme_bw() +
   theme(legend.position = "none") +
-  coord_quickmap() + scale_color_manual(values = c("gray", "red"))
+  scale_color_manual(values = c("gray", "red"))
 
 grid.arrange(a, b, nrow = 1, ncol = 2)

@@ -1,8 +1,3 @@
-options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "75%", out.height = "75%", verbose=TRUE)
-pdf.options(useDingbats = TRUE)
-klippy::klippy(position = c('top', 'right'))
-
 # read a .csv file
 csv_path <- "/Users/bartlein/projects/ESSD/data/csv_files/"
 csv_name <- "IPCC-RF.csv"
@@ -164,21 +159,21 @@ wus_pratio$select_pts <- factor(ifelse(lat >= latmin & lat <= latmax & lon >= lo
 
 # pcp
 a <- ggparcoord(data = wus_pratio[order(wus_pratio$select_pts),],
-  columns = c(1:16), groupColumn = "select_pts",
-  scale = "uniminmax", alphaLines=0.1) + ylab("") +
+                columns = c(1:14), groupColumn = "select_pts",
+                scale = "uniminmax", alphaLines=0.1) + ylab("") +
   theme(axis.text.x  = element_text(angle=315, vjust=1.0, hjust=0.0, size=8),
         axis.title.x = element_blank(), 
         axis.text.y = element_blank(), axis.ticks.y = element_blank(),
         legend.position = "none") +
   scale_color_manual(values = c(rgb(0, 0, 0, 0.2), "red"))
-  
+
 # map
-b <- ggplot(wus_pratio, aes(lon, lat))  +
-  geom_polygon(aes(long, lat, group = group), wus_states, color = "gray50", fill = NA) +
-  geom_point(aes(lon, lat, color = select_pts), size = 0.8 ) +
-  theme_bw() + 
+b <- ggplot()  +
+  geom_sf(data = wus_sf, fill=NA) +
+  geom_point(aes(wus_pratio$lon, wus_pratio$lat, color = wus_pratio$select_pts), size = 1.0, pch=16) +
+  theme_bw() +
   theme(legend.position = "none") +
-  coord_quickmap() + scale_color_manual(values = c("gray", "red"))
+  scale_color_manual(values = c("gray", "red"))
 
 grid.arrange(a, b, nrow = 1)
 
@@ -190,7 +185,7 @@ wus_pratio$select_pts <- factor(ifelse(v >= cutpoint, 1, 0))
 
 # pcp
 a <- ggparcoord(data = wus_pratio[order(wus_pratio$select_pts),],
-                columns = c(1:16), groupColumn = "select_pts",
+                columns = c(1:14), groupColumn = "select_pts",
                 scale = "uniminmax", alphaLines=0.1) + ylab("") +
   theme(axis.text.x  = element_text(angle=315, vjust=1.0, hjust=0.0, size=8),
         axis.title.x = element_blank(), 
@@ -199,11 +194,11 @@ a <- ggparcoord(data = wus_pratio[order(wus_pratio$select_pts),],
   scale_color_manual(values = c(rgb(0, 0, 0, 0.2), "red"))
 
 # map
-b <- ggplot(wus_pratio, aes(lon, lat))  +
-  geom_polygon(aes(long, lat, group = group), wus_states, color = "gray50", fill = NA) +
-  geom_point(aes(lon, lat, color = select_pts), size = 0.8 ) +
-  theme_bw() + 
+b <- ggplot()  +
+  geom_sf(data = wus_sf, fill=NA) +
+  geom_point(aes(wus_pratio$lon, wus_pratio$lat, color = wus_pratio$select_pts), size = 1.0, pch=16) +
+  theme_bw() +
   theme(legend.position = "none") +
-  coord_quickmap() + scale_color_manual(values = c("gray", "red"))
+  scale_color_manual(values = c("gray", "red"))
 
 grid.arrange(a, b, nrow = 1, ncol = 2)

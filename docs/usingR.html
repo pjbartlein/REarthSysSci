@@ -1229,23 +1229,25 @@ on both plots.</p>
 <span id="cb61-5"><a href="#cb61-5" tabindex="-1"></a></span>
 <span id="cb61-6"><a href="#cb61-6" tabindex="-1"></a><span class="co"># pcp</span></span>
 <span id="cb61-7"><a href="#cb61-7" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">ggparcoord</span>(<span class="at">data =</span> wus_pratio[<span class="fu">order</span>(wus_pratio<span class="sc">$</span>select_pts),],</span>
-<span id="cb61-8"><a href="#cb61-8" tabindex="-1"></a>  <span class="at">columns =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>), <span class="at">groupColumn =</span> <span class="st">&quot;select_pts&quot;</span>,</span>
-<span id="cb61-9"><a href="#cb61-9" tabindex="-1"></a>  <span class="at">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="at">alphaLines=</span><span class="fl">0.1</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb61-8"><a href="#cb61-8" tabindex="-1"></a>                <span class="at">columns =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>), <span class="at">groupColumn =</span> <span class="st">&quot;select_pts&quot;</span>,</span>
+<span id="cb61-9"><a href="#cb61-9" tabindex="-1"></a>                <span class="at">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="at">alphaLines=</span><span class="fl">0.1</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
 <span id="cb61-10"><a href="#cb61-10" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x  =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">315</span>, <span class="at">vjust=</span><span class="fl">1.0</span>, <span class="at">hjust=</span><span class="fl">0.0</span>, <span class="at">size=</span><span class="dv">8</span>),</span>
 <span id="cb61-11"><a href="#cb61-11" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), </span>
 <span id="cb61-12"><a href="#cb61-12" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
 <span id="cb61-13"><a href="#cb61-13" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
 <span id="cb61-14"><a href="#cb61-14" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.2</span>), <span class="st">&quot;red&quot;</span>))</span>
-<span id="cb61-15"><a href="#cb61-15" tabindex="-1"></a>  </span>
+<span id="cb61-15"><a href="#cb61-15" tabindex="-1"></a></span>
 <span id="cb61-16"><a href="#cb61-16" tabindex="-1"></a><span class="co"># map</span></span>
-<span id="cb61-17"><a href="#cb61-17" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(wus_pratio, <span class="fu">aes</span>(lon, lat))  <span class="sc">+</span></span>
-<span id="cb61-18"><a href="#cb61-18" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="fu">aes</span>(long, lat, <span class="at">group =</span> group), wus_states, <span class="at">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb61-19"><a href="#cb61-19" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(lon, lat, <span class="at">color =</span> select_pts), <span class="at">size =</span> <span class="fl">0.8</span> ) <span class="sc">+</span></span>
-<span id="cb61-20"><a href="#cb61-20" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb61-17"><a href="#cb61-17" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">ggplot</span>()  <span class="sc">+</span></span>
+<span id="cb61-18"><a href="#cb61-18" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> wus_sf, <span class="at">fill=</span><span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb61-19"><a href="#cb61-19" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(wus_pratio<span class="sc">$</span>lon, wus_pratio<span class="sc">$</span>lat, <span class="at">color =</span> wus_pratio<span class="sc">$</span>select_pts), <span class="at">size =</span> <span class="fl">1.0</span>, <span class="at">pch=</span><span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb61-20"><a href="#cb61-20" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb61-21"><a href="#cb61-21" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
-<span id="cb61-22"><a href="#cb61-22" tabindex="-1"></a>  <span class="fu">coord_quickmap</span>() <span class="sc">+</span> <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>))</span>
+<span id="cb61-22"><a href="#cb61-22" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>))</span>
 <span id="cb61-23"><a href="#cb61-23" tabindex="-1"></a></span>
 <span id="cb61-24"><a href="#cb61-24" tabindex="-1"></a><span class="fu">grid.arrange</span>(a, b, <span class="at">nrow =</span> <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
 <p><img src="usingR_files/figure-html/pcp03-1.png" width="100%" height="100%" /></p>
 <p>The points in western Oregon and wesetern Washington clearly have a
 winter-wet precipitation regime. A second highlighting approach is to
@@ -1253,31 +1255,33 @@ select observations according to a particular range of values for a
 variable. Here points with wet Augusts (e.g. points with an
 August:Annual precipition ratio greater than 0.5) are selected, and
 highlighted in the parallel coordinates plot and location map:</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a><span class="co"># variable-value selection</span></span>
-<span id="cb62-2"><a href="#cb62-2" tabindex="-1"></a>cutpoint <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
-<span id="cb62-3"><a href="#cb62-3" tabindex="-1"></a>v <span class="ot">&lt;-</span> wus_pratio<span class="sc">$</span>paugpann</span>
-<span id="cb62-4"><a href="#cb62-4" tabindex="-1"></a>v <span class="ot">&lt;-</span> (v<span class="sc">-</span><span class="fu">min</span>(v))<span class="sc">/</span>(<span class="fu">max</span>(v)<span class="sc">-</span><span class="fu">min</span>(v))</span>
-<span id="cb62-5"><a href="#cb62-5" tabindex="-1"></a>wus_pratio<span class="sc">$</span>select_pts <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(v <span class="sc">&gt;=</span> cutpoint, <span class="dv">1</span>, <span class="dv">0</span>))</span>
-<span id="cb62-6"><a href="#cb62-6" tabindex="-1"></a></span>
-<span id="cb62-7"><a href="#cb62-7" tabindex="-1"></a><span class="co"># pcp</span></span>
-<span id="cb62-8"><a href="#cb62-8" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">ggparcoord</span>(<span class="at">data =</span> wus_pratio[<span class="fu">order</span>(wus_pratio<span class="sc">$</span>select_pts),],</span>
-<span id="cb62-9"><a href="#cb62-9" tabindex="-1"></a>                <span class="at">columns =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>), <span class="at">groupColumn =</span> <span class="st">&quot;select_pts&quot;</span>,</span>
-<span id="cb62-10"><a href="#cb62-10" tabindex="-1"></a>                <span class="at">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="at">alphaLines=</span><span class="fl">0.1</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb62-11"><a href="#cb62-11" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x  =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">315</span>, <span class="at">vjust=</span><span class="fl">1.0</span>, <span class="at">hjust=</span><span class="fl">0.0</span>, <span class="at">size=</span><span class="dv">8</span>),</span>
-<span id="cb62-12"><a href="#cb62-12" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), </span>
-<span id="cb62-13"><a href="#cb62-13" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb62-14"><a href="#cb62-14" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
-<span id="cb62-15"><a href="#cb62-15" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.2</span>), <span class="st">&quot;red&quot;</span>))</span>
-<span id="cb62-16"><a href="#cb62-16" tabindex="-1"></a></span>
-<span id="cb62-17"><a href="#cb62-17" tabindex="-1"></a><span class="co"># map</span></span>
-<span id="cb62-18"><a href="#cb62-18" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(wus_pratio, <span class="fu">aes</span>(lon, lat))  <span class="sc">+</span></span>
-<span id="cb62-19"><a href="#cb62-19" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="fu">aes</span>(long, lat, <span class="at">group =</span> group), wus_states, <span class="at">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb62-20"><a href="#cb62-20" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(lon, lat, <span class="at">color =</span> select_pts), <span class="at">size =</span> <span class="fl">0.8</span> ) <span class="sc">+</span></span>
-<span id="cb62-21"><a href="#cb62-21" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb62-22"><a href="#cb62-22" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
-<span id="cb62-23"><a href="#cb62-23" tabindex="-1"></a>  <span class="fu">coord_quickmap</span>() <span class="sc">+</span> <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>))</span>
-<span id="cb62-24"><a href="#cb62-24" tabindex="-1"></a></span>
-<span id="cb62-25"><a href="#cb62-25" tabindex="-1"></a><span class="fu">grid.arrange</span>(a, b, <span class="at">nrow =</span> <span class="dv">1</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a><span class="co"># variable-value selection</span></span>
+<span id="cb63-2"><a href="#cb63-2" tabindex="-1"></a>cutpoint <span class="ot">&lt;-</span> <span class="fl">0.5</span></span>
+<span id="cb63-3"><a href="#cb63-3" tabindex="-1"></a>v <span class="ot">&lt;-</span> wus_pratio<span class="sc">$</span>paugpann</span>
+<span id="cb63-4"><a href="#cb63-4" tabindex="-1"></a>v <span class="ot">&lt;-</span> (v<span class="sc">-</span><span class="fu">min</span>(v))<span class="sc">/</span>(<span class="fu">max</span>(v)<span class="sc">-</span><span class="fu">min</span>(v))</span>
+<span id="cb63-5"><a href="#cb63-5" tabindex="-1"></a>wus_pratio<span class="sc">$</span>select_pts <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(v <span class="sc">&gt;=</span> cutpoint, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb63-6"><a href="#cb63-6" tabindex="-1"></a></span>
+<span id="cb63-7"><a href="#cb63-7" tabindex="-1"></a><span class="co"># pcp</span></span>
+<span id="cb63-8"><a href="#cb63-8" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">ggparcoord</span>(<span class="at">data =</span> wus_pratio[<span class="fu">order</span>(wus_pratio<span class="sc">$</span>select_pts),],</span>
+<span id="cb63-9"><a href="#cb63-9" tabindex="-1"></a>                <span class="at">columns =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">14</span>), <span class="at">groupColumn =</span> <span class="st">&quot;select_pts&quot;</span>,</span>
+<span id="cb63-10"><a href="#cb63-10" tabindex="-1"></a>                <span class="at">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="at">alphaLines=</span><span class="fl">0.1</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb63-11"><a href="#cb63-11" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x  =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">315</span>, <span class="at">vjust=</span><span class="fl">1.0</span>, <span class="at">hjust=</span><span class="fl">0.0</span>, <span class="at">size=</span><span class="dv">8</span>),</span>
+<span id="cb63-12"><a href="#cb63-12" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb63-13"><a href="#cb63-13" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb63-14"><a href="#cb63-14" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb63-15"><a href="#cb63-15" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.2</span>), <span class="st">&quot;red&quot;</span>))</span>
+<span id="cb63-16"><a href="#cb63-16" tabindex="-1"></a></span>
+<span id="cb63-17"><a href="#cb63-17" tabindex="-1"></a><span class="co"># map</span></span>
+<span id="cb63-18"><a href="#cb63-18" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">ggplot</span>()  <span class="sc">+</span></span>
+<span id="cb63-19"><a href="#cb63-19" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> wus_sf, <span class="at">fill=</span><span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb63-20"><a href="#cb63-20" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(wus_pratio<span class="sc">$</span>lon, wus_pratio<span class="sc">$</span>lat, <span class="at">color =</span> wus_pratio<span class="sc">$</span>select_pts), <span class="at">size =</span> <span class="fl">1.0</span>, <span class="at">pch=</span><span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb63-21"><a href="#cb63-21" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb63-22"><a href="#cb63-22" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb63-23"><a href="#cb63-23" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>))</span>
+<span id="cb63-24"><a href="#cb63-24" tabindex="-1"></a></span>
+<span id="cb63-25"><a href="#cb63-25" tabindex="-1"></a><span class="fu">grid.arrange</span>(a, b, <span class="at">nrow =</span> <span class="dv">1</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## old-style crs object detected; please recreate object with a recent sf::st_crs()
+## old-style crs object detected; please recreate object with a recent sf::st_crs()</code></pre>
 <p><img src="usingR_files/figure-html/pcp04-1.png" width="100%" height="100%" /></p>
 <p>The North American Monsoon region is clearly depicted.</p>
 </div>
