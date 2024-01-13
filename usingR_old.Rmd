@@ -318,17 +318,17 @@ In what follows, we'll want to examine the large-scale patterns of the seasonali
 
 ```{r hd04, fig.height=6, fig.width=6, eval=FALSE}
 # # a second map with some colors
-# ggplot() +
-#   geom_sf(data = na_sf, fill=NA, color="gray") +
-#   geom_sf(data = wus_sf, fill=NA, color="black") +
-#   geom_point(aes(wus_pratio$lon, wus_pratio$lat, color = pjulpjan_factor), size = 1.0 ) +
-#   scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
-#                      labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
-#                                 "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
-#                      name = "Jul:Jan Ppt. Ratio") +
-#   labs(x = "Longitude", y = "Latitude") +
-#   coord_sf(crs = st_crs(wus_sf), xlim = c(-125, -90), ylim = c(25, 50)) +
-#   theme_bw()
+ggplot() +
+  geom_sf(data = na_sf, fill=NA, color="gray") +
+  geom_sf(data = wus_sf, fill=NA, color="black") +
+  geom_point(aes(wus_pratio$lon, wus_pratio$lat, color = pjulpjan_factor), size = 1.0 ) +
+  scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
+                     labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
+                                "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
+                     name = "Jul:Jan Ppt. Ratio") +
+  labs(x = "Longitude", y = "Latitude") +
+  coord_sf(crs = st_crs(wus_sf), xlim = c(-125, -90), ylim = c(25, 50)) +
+  theme_bw()
 ```
 
 ## ggplot2 maps
@@ -356,7 +356,7 @@ Here's a `ggplot2` map of the the July:January precipitation ratio.  Note that t
 ```{r ggmap03}
 # some spatial setup
 wus_pratio_sf <- st_as_sf(wus_pratio, coords = c("lon", "lat"))
-# wus_sf <- st_as_sf(wus_shp, coords = c("lon", "lat"))
+wus_sf <- st_as_sf(wus_shp, coords = c("lon", "lat"))
 lon <- st_coordinates(wus_pratio_sf)[,1]
 lat <- st_coordinates(wus_pratio_sf)[,2]
 
@@ -369,17 +369,17 @@ pjulpjan_factor <- factor(findInterval(ratio, cutpts))
 
 Next, the map:  
 
-```{r ggmap04, eval=TRUE}
+```{r ggmap04, eval=FALSE}
 ggplot() +
-  # geom_sf(data = na_sf, fill=NA, color="gray") +
-  # geom_sf(data = wus_sf, fill=NA, color="black") +
+  geom_sf(data = na_sf, fill=NA, color="gray") +
+  geom_sf(data = wus_sf, fill=NA, color="black") +
   geom_point(aes(wus_pratio$lon, wus_pratio$lat, color = pjulpjan_factor), size = 1.0 ) +
   scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
                      labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
                                 "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
                      name = "Jul:Jan Ppt. Ratio") +
   labs(x = "Longitude", y = "Latitude") +
-  # coord_sf(crs = st_crs(wus_sf), xlim = c(-125, -90), ylim = c(25, 50)) +
+  coord_sf(crs = st_crs(wus_sf), xlim = c(-125, -90), ylim = c(25, 50)) +
   theme_bw()
 ```
 
