@@ -19,7 +19,7 @@ head(IPCC_RF)
 tail(IPCC_RF)
 
 # load data from a saved .RData file
-con <- url("https://pjbartlein.github.io/REarthSysSci/data/RData/geog490.RData")
+con <- url("https://pages.uoregon.edu/bartlein/RESS/RData/geog490.RData")
 load(file=con) 
 close(con) 
 
@@ -91,8 +91,19 @@ ggplot(orstationc, aes(elev, tann)) + geom_point() + geom_smooth(color = "blue")
   xlab("Elevation (m)") + ylab("Annual Mean Temperature (C)") +
           ggtitle("Oregon Climate Station Data")
 
+## # load packages
+## library(sf)
+## library(RColorBrewer)
+## library(classInt)
+
 # univariate descriptive statistics
 summary(wus_pratio)
+
+# recode pjulpjan to a factor
+ratio <- wus_pratio_sf$pjulpann/wus_pratio_sf$pjanpann
+ratio[is.na(ratio)] <- 9999.0
+cutpts <- c(0.0, .100, .200, .500, .800, 1.0, 1.25, 2.0, 5.0, 10.0, 9999.0)
+pjulpjan_factor <- factor(findInterval(ratio, cutpts))
 
 # elevation summary for differnt pjulpjan classes
 tapply(wus_pratio$elev, pjulpjan_factor, summary)

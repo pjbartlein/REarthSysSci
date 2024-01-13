@@ -67,7 +67,7 @@ An alternative way of reading data is to read in an entire workspace (`*.RData`)
 
 ```{r load_RData}
 # load data from a saved .RData file
-con <- url("https://pjbartlein.github.io/REarthSysSci/data/RData/geog490.RData")
+con <- url("https://pages.uoregon.edu/bartlein/RESS/RData/geog490.RData")
 load(file=con) 
 close(con) 
 ```
@@ -300,88 +300,20 @@ The display of high resolution data (in addition to the standard approach of sim
 
 Begin by loading the appropriate packages.  The data and shapefiles are in the `geog490.RData` file.
 
-## Simple maps
-
-Here's a simple map of the station locations.  The following code produces a standard map with the stations represented by dots.  (There is a lot of symbol overplotting -- one technique to avoid overplotting would be to simply reduce the character size using the `cex` argument, but then the points may disappear.  A better approach is described later.)
-
 ```{r maps01, message=FALSE, fig.height=6, fig.width=6, eval=FALSE}
 # load packages
-library(RColorBrewer) # creates nice color schemes
-library(classInt) # finds class intervals for continuous variables
 library(sf)
-
-# map of precipitation stations
-plot(st_geometry(wus_pratio_sf), axes = TRUE, pch = 16, cex = 0.5, col = "gray")
-```
-
-In what follows, we'll want to examine the large-scale patterns of the seasonality (summer-wet vs. winter-wet) of precipitation.  The data consist of monthly precipitation ratios, or the average precipitation for a particular month and station divided by the average annual total precipitation.  This has the effect of removing the very large imprint of elevation on precipitation totals.  The ratio of July to January precipitation provides a single overall description of precipitation seasonality.
-
-```{r hd04, fig.height=6, fig.width=6, eval=FALSE}
-# # a second map with some colors
-# ggplot() +
-#   geom_sf(data = na_sf, fill=NA, color="gray") +
-#   geom_sf(data = wus_sf, fill=NA, color="black") +
-#   geom_point(aes(wus_pratio$lon, wus_pratio$lat, color = pjulpjan_factor), size = 1.0 ) +
-#   scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
-#                      labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
-#                                 "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
-#                      name = "Jul:Jan Ppt. Ratio") +
-#   labs(x = "Longitude", y = "Latitude") +
-#   coord_sf(crs = st_crs(wus_sf), xlim = c(-125, -90), ylim = c(25, 50)) +
-#   theme_bw()
+library(RColorBrewer)
+library(classInt)
 ```
 
 ## ggplot2 maps
 
-It's possible to generate maps that are a little closer to "camera ready" using `ggplot2`.  The package has the capability of extracting outlines from the `maps` package in R (and also to do some simple projection using the `mapproj` package).  Here's an example of a map of the western states, first extracting the outlines, and then plotting them: 
+It's possible to generate maps that are very close to "camera ready" using `ggplot2`.  The package has the capability of extracting outlines from the `maps` package in R (and also to do some simple projection using the `mapproj` package).  Here's an example of a map of the western states, the construction of which will be described later.
 
-```{r ggmap01}
-# get western state outlines from `maps` package
-wus_states <- map_data("state", region = c("washington", "oregon", "california", "idaho", "nevada",
-  "montana", "utah", "arizona", "wyoming", "colorado", "new mexico", "north dakota", "south dakota",
-  "nebraska", "kansas", "oklahoma", "texas")) 
-head(wus_states)
-```
+![](images/wus_precip_ratio.png)
 
-```{r ggmap02}
-# plot the western states outlines
-ggplot(wus_states, aes(long, lat)) + geom_polygon(aes(group = group), color = "gray50", fill = "grey90") +
-  coord_quickmap() + theme_bw()
-```
-
-Note the use of `theme_bw()` to get a traditional black-lines-on-white-background.
-
-Here's a `ggplot2` map of the the July:January precipitation ratio.  Note that the data are first tranformed from "continuous" to categorical or "factor" data, which facilitates making a map with a descrete color scale.
-
-```{r ggmap03}
-# some spatial setup
-wus_pratio_sf <- st_as_sf(wus_pratio, coords = c("lon", "lat"))
-# wus_sf <- st_as_sf(wus_shp, coords = c("lon", "lat"))
-lon <- st_coordinates(wus_pratio_sf)[,1]
-lat <- st_coordinates(wus_pratio_sf)[,2]
-
-# recode pjulpjan to a factor
-ratio <- wus_pratio_sf$pjulpann/wus_pratio_sf$pjanpann
-ratio[is.na(ratio)] <- 9999.0
-cutpts <- c(0.0, .100, .200, .500, .800, 1.0, 1.25, 2.0, 5.0, 10.0, 9999.0)
-pjulpjan_factor <- factor(findInterval(ratio, cutpts))
-```
-
-Next, the map:  
-
-```{r ggmap04, eval=TRUE}
-ggplot() +
-  # geom_sf(data = na_sf, fill=NA, color="gray") +
-  # geom_sf(data = wus_sf, fill=NA, color="black") +
-  geom_point(aes(wus_pratio$lon, wus_pratio$lat, color = pjulpjan_factor), size = 1.0 ) +
-  scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
-                     labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
-                                "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
-                     name = "Jul:Jan Ppt. Ratio") +
-  labs(x = "Longitude", y = "Latitude") +
-  # coord_sf(crs = st_crs(wus_sf), xlim = c(-125, -90), ylim = c(25, 50)) +
-  theme_bw()
-```
+In what follows, we'll want to examine the large-scale patterns of the seasonality (summer-wet vs. winter-wet) of precipitation.  The data consist of monthly precipitation ratios, or the average precipitation for a particular month and station divided by the average annual total precipitation.  This has the effect of removing the very large imprint of elevation on precipitation totals.  The ratio of July to January precipitation provides a single overall description of precipitation seasonality.
 
 # Descriptive statistics
 
@@ -394,6 +326,16 @@ The `summary()` function provides that "five-number" (plus the mean) summary:
 ```{r desc01}
 # univariate descriptive statistics
 summary(wus_pratio)
+```
+
+Recode the January to July precipitation ratio to a factor:
+
+```{r recode}
+# recode pjulpjan to a factor
+ratio <- wus_pratio_sf$pjulpann/wus_pratio_sf$pjanpann
+ratio[is.na(ratio)] <- 9999.0
+cutpts <- c(0.0, .100, .200, .500, .800, 1.0, 1.25, 2.0, 5.0, 10.0, 9999.0)
+pjulpjan_factor <- factor(findInterval(ratio, cutpts))
 ```
 
 The `tapply()` function can be used to get statistics by group, in this case for the July:January precipitation-ratio categories:
