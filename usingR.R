@@ -86,10 +86,10 @@ ggplot(orstationc, aes(elev, tann)) + geom_point() + geom_smooth(color = "blue")
   xlab("Elevation (m)") + ylab("Annual Mean Temperature (C)") +
           ggtitle("Oregon Climate Station Data")
 
-## # load packages
-## library(sf)
-## library(RColorBrewer)
-## library(classInt)
+# load packages
+library(sf)
+library(RColorBrewer)
+library(classInt)
 
 # univariate descriptive statistics
 summary(wus_pratio)

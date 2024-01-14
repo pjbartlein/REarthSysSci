@@ -193,3 +193,4 @@ b <- ggplot()  +
   scale_color_manual(values = c("gray", "red"))
 
 grid.arrange(a, b, nrow = 1, ncol = 2)
+
