@@ -21,7 +21,7 @@ klippy::klippy(position = c('top', 'right'))
 **Winter 2024**
 
 **Exercise Using R**  
-**Finish by Friday, Jan 26**
+**Finish by Monday, Jan 29**
 
 **1. Introduction**  
 
@@ -36,7 +36,7 @@ The first task is usually to read a data set, and this first part of the exercis
 *Read a .csv file*
 
 Although it is possible to browse to a particular file in order to open it (i.e. using the `file.choose()` function), for reproducibility, it's better to explicitly specify the source (i.e. path) of the data.  The following code reads a .csv file `IPCC-RF.csv` that contains radiative forcing values for various controls of global climate since 1750 CE, expressed in terms of Wm<sup>-2</sup> contributions to the Earth's preindustrial energy balance.  The data can be downloaded from 
-[[https://pjbartlein.github.io/REarthSysSci/data/csv/IPCC-RF.csv]](https://pjbartlein.github.io/REarthSysSci/data/csv/IPCC-RF.csv) by right-clicking on the link, and saving to a suitable directory.  
+[[https://pages.uoregon.edu/bartlein//RESS/csv_files/IPCC_RF.csv]](https://pages.uoregon.edu/bartlein//RESS/csv_files/IPCC_RF.csv) by right-clicking on the link, and saving to a suitable directory.  
 
 Here, the file is assumed to have been dowloaded to the folder `/Users/bartlein/projects/geog490/data/csv_files/`.  (Note that this folder is not necessarly the default working directory of R, which can found using the function `getwd()`, or set using `setwd("directory_name")`, where `"directory_name"` is the name of the directory you wish to set the working directory to.)
 
@@ -190,6 +190,16 @@ points(Elev ~ Lon, pch=16, col=as.factor(Glacier))
 
 **6. Enhanced (ggplot2) graphics**
 
+First, load some packages:
+
+```{r}
+library(sf)
+library(RColorBrewer)
+library(classInt)
+```
+
+The first package is the `sf` package, which handles spatial data, `RColorBrewer` implements Cindy Brewer's color scales, and the third, `classInt` is a untility packages that facilitates recoding continuous numerical data into factors (or class intervals) for mapping.
+
 Before continuing, it would be efficient to calculate a new variable, the July:January precipitation ratio for the Oregon climate-station data set.  This can be conveniently done as follows, where the `names()` function used to verify that the variable has been added.  (Note that if at the end of the current R session the workspace is not saved, this new variable will go away.)
 
 ```{r calc, echo=TRUE, eval=FALSE}
@@ -246,36 +256,53 @@ ggplot(orstationc, aes(elev, pjulpjan)) + geom_point() + geom_smooth(color = "bl
 
 **7. Maps with ggplot2**
 
-The next code chunk translates the Oregon county shapefile into a "tidyverse" format suitable for plotting with `ggplot2`:
+The next code chunk plots the location of the Oregon climate-station locations:
 
 ```{r ggmap01, echo=TRUE, eval=FALSE}
-# fortify shapefile
-orcounty_gg <- fortify(orcounty_shp)
-head(orcounty_gg)
+# ggplot2 map of Oregon climate-station locations
+ggplot() +
+  geom_sf(data = orotl_sf, fill=NA) +
+  geom_point(aes(orstations_sf$lon, orstations_sf$lat, color = plot_factor), size = 5.0, col = "gray50", pch=16) +
+  labs(x = "Longitude", y = "Latitude") +
+  theme_bw()
+```
+There are two components to this map. The first is the basemap outlines of Oregon counties, which are contained in the `orotl_sf` "simple features" object. The contents of `orotl_sf` can be viewed by simply typing `orotl_sf` at the command line in the Console window, or mapped using the following:
+
+```{r  eval=FALSE}
+# plot st_geometry of orotl_sf
+plot(st_geometry(orotl_sf), axes = TRUE)
+```
+The second component is the `orstations_sf` object, which contains the climate data itself:
+
+```{r eval=FALSE}
+# plot st_geometry of orstations_sf
+plot(st_geometry(orstations_sf), axes = TRUE)
 ```
 
-Here's what the translated shapfile looks like, plotted using `ggplot2`:
-
-```{r ggmap02, echo=TRUE, eval=FALSE}
-# ggplot map of orcounty_gg
-ggplot(orcounty_gg, aes(long,lat)) + geom_polygon(aes(group = group), color = "gray50", fill = NA) +
-  coord_quickmap() + theme_bw()
-```
-
-The following code creates a "bubble plot" of the elevations of the climate station.
+Here's a map of annual precipitation `orstations_sf$pann`:
 
 ```{r ggmap03, echo=TRUE, eval=FALSE}
-# bubble plot
-ggplot(orstationc, aes(lon, lat))  +
-  geom_polygon(aes(long, lat, group = group), orcounty_gg, color = "gray50", fill = NA) +
-  geom_point(aes(size = elev)) +
-  coord_quickmap() + theme_bw()
+# recode the annual precipitation data to a factor
+cutpts <- c(0,200,500,1000,2000,9999)
+plot_factor <- factor(findInterval(orstations_sf$pann, cutpts))
+nclr <- 5
+plotclr <- brewer.pal(nclr+1,"BuPu")[2:(nclr+1)]
+
+# get the map
+ggplot() +
+  geom_sf(data = orotl_sf, fill=NA) +
+  geom_point(aes(orstations_sf$lon, orstations_sf$lat, color = plot_factor), size = 5.0, pch=16) +
+  scale_colour_manual(values=plotclr, aesthetics = "colour",
+                      labels = c("0 - 200", "200 - 500", "500 - 1000", "1000 - 2000", "> 2000"),
+                      name = "Ann. Precip.", drop=TRUE) +
+  labs(x = "Longitude", y = "Latitude") +
+  theme_bw()
 ```
 
-The following code will plot the July:January precipitation data using `ggplot2`.  First, recode the data to a factor variable indicating the particular class interval each data value falls in.  (And note the (quasi) logarithmic scale used).
+The following code will plot the July:January precipitation ratio data using `ggplot2`.  First, recode the data to a factor variable indicating the particular class interval each data value falls in.  (And note the (quasi) logarithmic scale used).
 
 ```{r ggmap04, echo=TRUE, eval=FALSE}
-# recode pjulpjan to a factor
+# recode pjulpjan to a factor (note: cutpoints are general for Western N.A.)
 cutpts <- c(0.0, .100, .200, .500, .800, 1.0, 1.25, 2.0, 5.0, 10.0)
 pjulpjan_factor <- factor(findInterval(orstationc$pjulpjan, cutpts))
 head(cbind(orstationc$pjulpjan, pjulpjan_factor, cutpts[pjulpjan_factor]))
@@ -285,14 +312,15 @@ Here is code for the map:
 
 ```{r ggmap05, echo=TRUE, eval=FALSE}
 # ggplot2 map of pjulpjan
-ggplot(orstationc, aes(lon, lat))  +
-  geom_polygon(aes(long, lat, group = group), orcounty_gg, color = "gray50", fill = NA) +
+ggplot() +
+  geom_sf(data = orotl_sf, fill=NA) +
+  geom_point(aes(orstations_sf$lon, orstations_sf$lat, color = pjulpjan_factor), size = 5.0, pch=16) +
   scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
-    labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
-               "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
-    name = "Jul:Jan Ppt. Ratio") +
-  geom_point(aes(lon, lat, color = pjulpjan_factor), size = 3.0 ) +
-  coord_quickmap() + theme_bw()
+                     labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
+                                "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
+                     name = "Jul:Jan Ppt. Ratio") +
+  labs(x = "Longitude", y = "Latitude") +
+  theme_bw()
 ```
 
 Note that the Purple to Green color scale spans the range of precipitation-ratio data for the state, as opposed to the whole of the western U.S.
@@ -303,7 +331,19 @@ Note that the Purple to Green color scale spans the range of precipitation-ratio
 
 **8. Univariate statistics**
 
-Here is code for summarizing the Oregon climate-station data:
+There are actually two versions of the Oregon climate station data in the `geog490.RData` database: `orstations_sf` is a "simple features" spatial object (and data.frame), while `orstationc` is a simple data frame, read in from a .csv file. The difference can be noted using the `class()` and `head()` functions:
+
+```{r eval=FALSE}
+# classes of orstation_sf and orstationc
+class(orstations_sf)
+head(orstations_sf)
+class(orstationc)
+head(orstationc)
+```
+
+Generally, if there is any mapping to be done, the `sf` (simple features) spatial data object is the preferred way to store the data, but if the analysis focuses only on simple analyses, the data.frame/spreadsheet format is fine.
+
+Here is code for summarizing the `data.frame` version of the Oregon climate-station data, which has spatial information in it, but is not a spatial object like `orstation_sf`.
 
 ```{r desc01, echo=TRUE, eval=FALSE}
 # univariate descriptive statistics
@@ -335,7 +375,9 @@ orstationc2 <- data.frame(orstationc[2:10],orstationc[15])
 names(orstationc2)
 ```
 
-Here is the code for a parallel-coordinate plot:
+Parallel-coordinate plots provide an elegant way to look for structure in multiple-variable data sets, especially spatial data. The plots are constructed by rescaling (0 to 1) the values of the individual variables, and then connecting the values for individual cases or observations with a line, with each variable represented by a "column" in the plot. If there is any pattern (spatial or otherwise) in the data groups of observations (individual lines) will show up, but if the data are simply random, the parallel-coordinate plot will look like a structureless jumble of lines.
+
+Here is the code for a parallel-coordinate plot of the Oregon climate-station data:
 
 ```{r pcp01, echo=TRUE, eval=FALSE}
 # load library
@@ -350,61 +392,63 @@ ggparcoord(data = orstationc2,
         axis.text.y = element_blank(), axis.ticks.y = element_blank() )
 ```
 
-Next, explore the spatial patterns of the Oregon climate-station data (including the July:January precipitation-ratio variable).  Here's the code for a selection of points by latitude/longitude ranges:
+The plot is a little messy, but a prominant "M" pattern emerges shown by high January and annual temperatures and low July temperatures.
+
+Next, explore the spatial patterns of the Oregon climate-station data (including the July:January precipitation-ratio variable).  Here's the code for a selection of points by latitude/longitude ranges (i.e. identifying stations in western Oregon):
 
 ```{r pcp03, echo=TRUE, eval=FALSE}
 # lon/lat window
-lonmin <- -125.0; lonmax <- -120.0; latmin <- 42.0; latmax <- 49.0 
+lonmin <- -125.0; lonmax <- -122.0; latmin <- 42.0; latmax <- 49.0
 lon <- orstationc2$lon; lat <- orstationc2$lat
 orstationc2$select_pts <- factor(ifelse(lat >= latmin & lat <= latmax & lon >= lonmin & lon <= lonmax, 1, 0))
-
-# pcp
-a <- ggparcoord(data = orstationc2[order(orstationc2$select_pts),],
-  columns = c(1:10), groupColumn = "select_pts",
-  scale = "uniminmax", alphaLines=0.3) + ylab("") +
-  theme(axis.text.x  = element_text(angle=315, vjust=1.0, hjust=0.0, size=8),
-        axis.title.x = element_blank(), 
-        axis.text.y = element_blank(), axis.ticks.y = element_blank(),
-        legend.position = "none") +
-  scale_color_manual(values = c(rgb(0, 0, 0, 0.3), "red"))
-  
-# map
-b <- ggplot(orstationc2, aes(lon, lat))  +
-  geom_polygon(aes(long, lat, group = group), orcounty_gg, color = "gray50", fill = NA) +
-  geom_point(aes(lon, lat, color = select_pts), size = 1.0 ) +
-  theme_bw() + 
-  theme(legend.position = "none") +
-  coord_quickmap() + scale_color_manual(values = c("gray", "red"))
-
-grid.arrange(a, b, nrow = 1)
-```
-
-And here is the code for a variable-value selection:
-
-```{r pcp04, echo=TRUE, eval=FALSE}
-# variable-value selection
-cutpoint <- 0.2
-v <- orstationc2$pjulpjan
-v <- (v-min(v))/(max(v)-min(v))
-orstationc2$select_pts <- factor(ifelse(v >= cutpoint, 1, 0))
 
 # pcp
 a <- ggparcoord(data = orstationc2[order(orstationc2$select_pts),],
                 columns = c(1:10), groupColumn = "select_pts",
                 scale = "uniminmax", alphaLines=0.3) + ylab("") +
   theme(axis.text.x  = element_text(angle=315, vjust=1.0, hjust=0.0, size=8),
-        axis.title.x = element_blank(), 
+        axis.title.x = element_blank(),
         axis.text.y = element_blank(), axis.ticks.y = element_blank(),
         legend.position = "none") +
   scale_color_manual(values = c(rgb(0, 0, 0, 0.3), "red"))
 
 # map
-b <- ggplot(orstationc2, aes(lon, lat))  +
-  geom_polygon(aes(long, lat, group = group), orcounty_gg, color = "gray50", fill = NA) +
-  geom_point(aes(lon, lat, color = select_pts), size = 1.0 ) +
-  theme_bw() + 
+b <- ggplot()  +
+  geom_sf(data = orotl_sf, fill=NA) +
+  geom_point(aes(orstations_sf$lon, orstations_sf$lat, color = orstationc2$select_pts), size = 4.0, pch=16) +
+  theme_bw() +
   theme(legend.position = "none") +
-  coord_quickmap() + scale_color_manual(values = c("gray", "red"))
+  scale_color_manual(values = c("gray", "red"))
+
+grid.arrange(a, b, nrow = 1)
+```
+
+And here is the code for a variable-value selection, where the station (point) selection identifies stations with high July to January precipitation ratios:
+
+```{r pcp04, echo=TRUE, eval=FALSE}
+# variable-value selection
+cutpoint <- 0.2
+v <- orstationc2$pjulpjan
+v <- (v-min(v))/(max(v)-min(v))
+select_pts <- factor(ifelse(v >= cutpoint, 1, 0))
+
+# pcp
+a <- ggparcoord(data = orstationc2[order(orstationc2$select_pts),],
+                columns = c(1:10), groupColumn = "select_pts",
+                scale = "uniminmax", alphaLines=0.3) + ylab("") +
+  theme(axis.text.x  = element_text(angle=315, vjust=1.0, hjust=0.0, size=8),
+        axis.title.x = element_blank(),
+        axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+        legend.position = "none") +
+  scale_color_manual(values = c(rgb(0, 0, 0, 0.3), "red"))
+
+# map
+b <- ggplot()  +
+  geom_sf(data = orotl_sf, fill=NA) +
+  geom_point(aes(orstations_sf$lon, orstations_sf$lat, color = select_pts), size = 4.0, pch=16) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  scale_color_manual(values = c("gray", "red"))
 
 grid.arrange(a, b, nrow = 1, ncol = 2)
 ```

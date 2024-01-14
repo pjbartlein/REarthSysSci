@@ -1,6 +1,6 @@
 # read a .csv file
 csv_path <- "/Users/bartlein/projects/geog490/data/csv_files/"
-csv_name <- "IPCC-RF.csv"
+csv_name <- "IPCC_RF.csv"
 csv_file <- paste(csv_path, csv_name, sep="")
 IPCC_RF <- read.csv(csv_file)
 
@@ -77,15 +77,22 @@ ggplot(orstationc, aes(elev, pjulpjan)) + geom_point() + geom_smooth(color = "bl
           ggtitle("Oregon Climate Station Data")
 
 ## ggplot of Oregon climate stations
-ggplot(orstationc, aes(x=lon, y=lat, size=elev)) + geom_point(shape=21, color="black", fill="lightblue")
+ggplot() +
+  geom_sf(data = orotl_sf, fill=NA) +
+  geom_point(aes(orstations_sf$lon, orstations_sf$lat, color = plot_factor), size = 5.0, col = "gray50", pch=16) +
+  labs(x = "Longitude", y = "Latitude") +
+  theme_bw()
 
 plot(st_geometry(orotl_sf), axes = TRUE)
 plot(st_geometry(orstations_sf), axes = TRUE)
 
+# recode the annual precipitation data to a factor
 cutpts <- c(0,200,500,1000,2000,9999)
 plot_factor <- factor(findInterval(orstations_sf$pann, cutpts))
 nclr <- 5
 plotclr <- brewer.pal(nclr+1,"BuPu")[2:(nclr+1)]
+
+# get the map
 ggplot() +
   geom_sf(data = orotl_sf, fill=NA) +
   geom_point(aes(orstations_sf$lon, orstations_sf$lat, color = plot_factor), size = 5.0, pch=16) +

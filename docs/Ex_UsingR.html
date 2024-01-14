@@ -480,7 +480,7 @@ $(document).ready(function () {
 <p><strong>Geography 4/590: R for Earth-System Science</strong><br />
 <strong>Winter 2024</strong></p>
 <p><strong>Exercise Using R</strong><br />
-<strong>Finish by Friday, Jan 26</strong></p>
+<strong>Finish by Monday, Jan 29</strong></p>
 <p><strong>1. Introduction</strong></p>
 <p>The aim of this exercise is to use R for doing some simple analyses
 of “typical” Earth-system science data sets (with “typical” in quotes
@@ -513,7 +513,7 @@ reproducibility, it’s better to explicitly specify the source
 various controls of global climate since 1750 CE, expressed in terms of
 Wm<sup>-2</sup> contributions to the Earth’s preindustrial energy
 balance. The data can be downloaded from <a
-href="https://pjbartlein.github.io/REarthSysSci/data/csv/IPCC-RF.csv">[https://pjbartlein.github.io/REarthSysSci/data/csv/IPCC-RF.csv]</a>
+href="https://pages.uoregon.edu/bartlein//RESS/csv_files/IPCC_RF.csv">[https://pages.uoregon.edu/bartlein//RESS/csv_files/IPCC_RF.csv]</a>
 by right-clicking on the link, and saving to a suitable directory.</p>
 <p>Here, the file is assumed to have been dowloaded to the folder
 <code>/Users/bartlein/projects/geog490/data/csv_files/</code>. (Note
@@ -640,22 +640,32 @@ completely random?</p>
 </blockquote>
 <p> </p>
 <p><strong>6. Enhanced (ggplot2) graphics</strong></p>
+<p>First, load some packages:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code></pre></div>
+<pre><code>## Linking to GEOS 3.11.0, GDAL 3.5.3, PROJ 9.1.0; sf_use_s2() is TRUE</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">library</span>(classInt)</span></code></pre></div>
+<p>The first package is the <code>sf</code> package, which handles
+spatial data, <code>RColorBrewer</code> implements Cindy Brewer’s color
+scales, and the third, <code>classInt</code> is a untility packages that
+facilitates recoding continuous numerical data into factors (or class
+intervals) for mapping.</p>
 <p>Before continuing, it would be efficient to calculate a new variable,
 the July:January precipitation ratio for the Oregon climate-station data
 set. This can be conveniently done as follows, where the
 <code>names()</code> function used to verify that the variable has been
 added. (Note that if at the end of the current R session the workspace
 is not saved, this new variable will go away.)</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># new variable</span></span>
-<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>orstationc<span class="sc">$</span>pjulpjan <span class="ot">&lt;-</span> orstationc<span class="sc">$</span>pjul <span class="sc">/</span> orstationc<span class="sc">$</span>pjan</span>
-<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">names</span>(orstationc)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># new variable</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>orstationc<span class="sc">$</span>pjulpjan <span class="ot">&lt;-</span> orstationc<span class="sc">$</span>pjul <span class="sc">/</span> orstationc<span class="sc">$</span>pjan</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">names</span>(orstationc)</span></code></pre></div>
 <p>Here is some code for plotting the new variable:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># load the `ggplot2` package</span></span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># ggplot2 histogram</span></span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x=</span>pjulpjan)) <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.05</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># ggplot2 boxplots</span></span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">y =</span> pjulpjan)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>() </span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># load the `ggplot2` package</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># ggplot2 histogram</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x=</span>pjulpjan)) <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># ggplot2 boxplots</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">y =</span> pjulpjan)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>() </span></code></pre></div>
 <blockquote>
 <p>Q6: Describe the distribution of <code>orstationc$pjulpjan</code>. Is
 the distribution symmetric or not? Does the distribution of the
@@ -665,8 +675,8 @@ been used to map the precipitationratio variables?</p>
 <p> </p>
 <p>Plot the precipitation-ratio data again, this time transformed by
 taking the logarithms (base 10) of the data:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># ggplot2 boxplots</span></span>
-<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">log10</span>(pjulpjan))) <span class="sc">+</span> <span class="fu">geom_boxplot</span>() </span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># ggplot2 boxplots</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">y =</span> <span class="fu">log10</span>(pjulpjan))) <span class="sc">+</span> <span class="fu">geom_boxplot</span>() </span></code></pre></div>
 <blockquote>
 <p>Q7: What does the log tranformation do to the distribution of the
 precipitation-ratio data?</p>
@@ -674,10 +684,10 @@ precipitation-ratio data?</p>
 <p> </p>
 <p>Next, take a look at the relationship between the precipitation-ratio
 variable and elevation.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="do">## ggplot2 scatter diagram of Oregon climate-station data</span></span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(elev, pjulpjan)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
-<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Elevation (m)&quot;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;July:January Precipitation Ratio&quot;</span>) <span class="sc">+</span></span>
-<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>          <span class="fu">ggtitle</span>(<span class="st">&quot;Oregon Climate Station Data&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="do">## ggplot2 scatter diagram of Oregon climate-station data</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(elev, pjulpjan)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_smooth</span>(<span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Elevation (m)&quot;</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;July:January Precipitation Ratio&quot;</span>) <span class="sc">+</span></span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>          <span class="fu">ggtitle</span>(<span class="st">&quot;Oregon Climate Station Data&quot;</span>)</span></code></pre></div>
 <blockquote>
 <p>Q8: Describe the relationship. One issue that might be influencing
 this relationship is that there is a strong relationship between
@@ -686,41 +696,62 @@ simple plots?</p>
 </blockquote>
 <p> </p>
 <p><strong>7. Maps with ggplot2</strong></p>
-<p>The next code chunk translates the Oregon county shapefile into a
-“tidyverse” format suitable for plotting with <code>ggplot2</code>:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># fortify shapefile</span></span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>orcounty_gg <span class="ot">&lt;-</span> <span class="fu">fortify</span>(orcounty_shp)</span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="fu">head</span>(orcounty_gg)</span></code></pre></div>
-<p>Here’s what the translated shapfile looks like, plotted using
-<code>ggplot2</code>:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># ggplot map of orcounty_gg</span></span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="fu">ggplot</span>(orcounty_gg, <span class="fu">aes</span>(long,lat)) <span class="sc">+</span> <span class="fu">geom_polygon</span>(<span class="fu">aes</span>(<span class="at">group =</span> group), <span class="at">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>  <span class="fu">coord_quickmap</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p>The following code creates a “bubble plot” of the elevations of the
-climate station.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co"># bubble plot</span></span>
-<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(lon, lat))  <span class="sc">+</span></span>
-<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="fu">aes</span>(long, lat, <span class="at">group =</span> group), orcounty_gg, <span class="at">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> elev)) <span class="sc">+</span></span>
-<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>  <span class="fu">coord_quickmap</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p>The following code will plot the July:January precipitation data
-using <code>ggplot2</code>. First, recode the data to a factor variable
-indicating the particular class interval each data value falls in. (And
-note the (quasi) logarithmic scale used).</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># recode pjulpjan to a factor</span></span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.0</span>, .<span class="dv">100</span>, .<span class="dv">200</span>, .<span class="dv">500</span>, .<span class="dv">800</span>, <span class="fl">1.0</span>, <span class="fl">1.25</span>, <span class="fl">2.0</span>, <span class="fl">5.0</span>, <span class="fl">10.0</span>)</span>
-<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>pjulpjan_factor <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">findInterval</span>(orstationc<span class="sc">$</span>pjulpjan, cutpts))</span>
-<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">cbind</span>(orstationc<span class="sc">$</span>pjulpjan, pjulpjan_factor, cutpts[pjulpjan_factor]))</span></code></pre></div>
+<p>The next code chunk plots the location of the Oregon climate-station
+locations:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># ggplot2 map of Oregon climate-station locations</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> orotl_sf, <span class="at">fill=</span><span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(orstations_sf<span class="sc">$</span>lon, orstations_sf<span class="sc">$</span>lat, <span class="at">color =</span> plot_factor), <span class="at">size =</span> <span class="fl">5.0</span>, <span class="at">col =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">pch=</span><span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p>There are two components to this map. The first is the basemap
+outlines of Oregon counties, which are contained in the
+<code>orotl_sf</code> “simple features” object. The contents of
+<code>orotl_sf</code> can be viewed by simply typing
+<code>orotl_sf</code> at the command line in the Console window, or
+mapped using the following:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co"># plot st_geometry of orotl_sf</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(orotl_sf), <span class="at">axes =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>The second component is the <code>orstations_sf</code> object, which
+contains the climate data itself:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># plot st_geometry of orstations_sf</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(orstations_sf), <span class="at">axes =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p>Here’s a map of annual precipitation
+<code>orstations_sf$pann</code>:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co"># recode the annual precipitation data to a factor</span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">200</span>,<span class="dv">500</span>,<span class="dv">1000</span>,<span class="dv">2000</span>,<span class="dv">9999</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a>plot_factor <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">findInterval</span>(orstations_sf<span class="sc">$</span>pann, cutpts))</span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a>nclr <span class="ot">&lt;-</span> <span class="dv">5</span></span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(nclr<span class="sc">+</span><span class="dv">1</span>,<span class="st">&quot;BuPu&quot;</span>)[<span class="dv">2</span><span class="sc">:</span>(nclr<span class="sc">+</span><span class="dv">1</span>)]</span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a></span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a><span class="co"># get the map</span></span>
+<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> orotl_sf, <span class="at">fill=</span><span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb27-10"><a href="#cb27-10" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(orstations_sf<span class="sc">$</span>lon, orstations_sf<span class="sc">$</span>lat, <span class="at">color =</span> plot_factor), <span class="at">size =</span> <span class="fl">5.0</span>, <span class="at">pch=</span><span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb27-11"><a href="#cb27-11" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values=</span>plotclr, <span class="at">aesthetics =</span> <span class="st">&quot;colour&quot;</span>,</span>
+<span id="cb27-12"><a href="#cb27-12" tabindex="-1"></a>                      <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;0 - 200&quot;</span>, <span class="st">&quot;200 - 500&quot;</span>, <span class="st">&quot;500 - 1000&quot;</span>, <span class="st">&quot;1000 - 2000&quot;</span>, <span class="st">&quot;&gt; 2000&quot;</span>),</span>
+<span id="cb27-13"><a href="#cb27-13" tabindex="-1"></a>                      <span class="at">name =</span> <span class="st">&quot;Ann. Precip.&quot;</span>, <span class="at">drop=</span><span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb27-14"><a href="#cb27-14" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
+<span id="cb27-15"><a href="#cb27-15" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p>The following code will plot the July:January precipitation ratio
+data using <code>ggplot2</code>. First, recode the data to a factor
+variable indicating the particular class interval each data value falls
+in. (And note the (quasi) logarithmic scale used).</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="co"># recode pjulpjan to a factor (note: cutpoints are general for Western N.A.)</span></span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.0</span>, .<span class="dv">100</span>, .<span class="dv">200</span>, .<span class="dv">500</span>, .<span class="dv">800</span>, <span class="fl">1.0</span>, <span class="fl">1.25</span>, <span class="fl">2.0</span>, <span class="fl">5.0</span>, <span class="fl">10.0</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a>pjulpjan_factor <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">findInterval</span>(orstationc<span class="sc">$</span>pjulpjan, cutpts))</span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">cbind</span>(orstationc<span class="sc">$</span>pjulpjan, pjulpjan_factor, cutpts[pjulpjan_factor]))</span></code></pre></div>
 <p>Here is code for the map:</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co"># ggplot2 map of pjulpjan</span></span>
-<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(lon, lat))  <span class="sc">+</span></span>
-<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="fu">aes</span>(long, lat, <span class="at">group =</span> group), orcounty_gg, <span class="at">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">type =</span> <span class="st">&quot;div&quot;</span>, <span class="at">palette =</span> <span class="st">&quot;PRGn&quot;</span>, <span class="at">aesthetics =</span> <span class="st">&quot;color&quot;</span>, <span class="at">direction =</span> <span class="dv">1</span>,</span>
-<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;0.0 - 0.1&quot;</span>, <span class="st">&quot;0.1 - 0.2&quot;</span>, <span class="st">&quot;0.2 - 0.5&quot;</span>, <span class="st">&quot;0.5 - 0.8&quot;</span>, <span class="st">&quot;0.8 - 1.0&quot;</span>,</span>
-<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>               <span class="st">&quot;1.0 - 1.25&quot;</span>, <span class="st">&quot;1.25 - 2.0&quot;</span>, <span class="st">&quot;2.0 - 5.0&quot;</span>, <span class="st">&quot;5.0 - 10.0&quot;</span>, <span class="st">&quot;&gt; 10.0&quot;</span>),</span>
-<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>    <span class="at">name =</span> <span class="st">&quot;Jul:Jan Ppt. Ratio&quot;</span>) <span class="sc">+</span></span>
-<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(lon, lat, <span class="at">color =</span> pjulpjan_factor), <span class="at">size =</span> <span class="fl">3.0</span> ) <span class="sc">+</span></span>
-<span id="cb25-9"><a href="#cb25-9" tabindex="-1"></a>  <span class="fu">coord_quickmap</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># ggplot2 map of pjulpjan</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> orotl_sf, <span class="at">fill=</span><span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(orstations_sf<span class="sc">$</span>lon, orstations_sf<span class="sc">$</span>lat, <span class="at">color =</span> pjulpjan_factor), <span class="at">size =</span> <span class="fl">5.0</span>, <span class="at">pch=</span><span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">type =</span> <span class="st">&quot;div&quot;</span>, <span class="at">palette =</span> <span class="st">&quot;PRGn&quot;</span>, <span class="at">aesthetics =</span> <span class="st">&quot;color&quot;</span>, <span class="at">direction =</span> <span class="dv">1</span>,</span>
+<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;0.0 - 0.1&quot;</span>, <span class="st">&quot;0.1 - 0.2&quot;</span>, <span class="st">&quot;0.2 - 0.5&quot;</span>, <span class="st">&quot;0.5 - 0.8&quot;</span>, <span class="st">&quot;0.8 - 1.0&quot;</span>,</span>
+<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a>                                <span class="st">&quot;1.0 - 1.25&quot;</span>, <span class="st">&quot;1.25 - 2.0&quot;</span>, <span class="st">&quot;2.0 - 5.0&quot;</span>, <span class="st">&quot;5.0 - 10.0&quot;</span>, <span class="st">&quot;&gt; 10.0&quot;</span>),</span>
+<span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a>                     <span class="at">name =</span> <span class="st">&quot;Jul:Jan Ppt. Ratio&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-9"><a href="#cb29-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
+<span id="cb29-10"><a href="#cb29-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p>Note that the Purple to Green color scale spans the range of
 precipitation-ratio data for the state, as opposed to the whole of the
 western U.S.</p>
@@ -730,9 +761,26 @@ the state.</p>
 </blockquote>
 <p> </p>
 <p><strong>8. Univariate statistics</strong></p>
-<p>Here is code for summarizing the Oregon climate-station data:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># univariate descriptive statistics</span></span>
-<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">summary</span>(orstationc)</span></code></pre></div>
+<p>There are actually two versions of the Oregon climate station data in
+the <code>geog490.RData</code> database: <code>orstations_sf</code> is a
+“simple features” spatial object (and data.frame), while
+<code>orstationc</code> is a simple data frame, read in from a .csv
+file. The difference can be noted using the <code>class()</code> and
+<code>head()</code> functions:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># classes of orstation_sf and orstationc</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="fu">class</span>(orstations_sf)</span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a><span class="fu">head</span>(orstations_sf)</span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a><span class="fu">class</span>(orstationc)</span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="fu">head</span>(orstationc)</span></code></pre></div>
+<p>Generally, if there is any mapping to be done, the <code>sf</code>
+(simple features) spatial data object is the preferred way to store the
+data, but if the analysis focuses only on simple analyses, the
+data.frame/spreadsheet format is fine.</p>
+<p>Here is code for summarizing the <code>data.frame</code> version of
+the Oregon climate-station data, which has spatial information in it,
+but is not a spatial object like <code>orstation_sf</code>.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># univariate descriptive statistics</span></span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="fu">summary</span>(orstationc)</span></code></pre></div>
 <p><strong>9. Bivariate descriptive statistics
 (correlations)</strong></p>
 <p>The following code produces a correlation matrix and
@@ -740,84 +788,99 @@ the state.</p>
 of the <code>round()</code> function to reduce the number of digits in
 the correlation. “Unwrap” the <code>cor()</code> function to see what
 the correlation matrix looks like unrounded.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co"># correlations among Oregon climate-station variables</span></span>
-<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(orstationc[<span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>]), <span class="dv">3</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="co"># corrplot of correlation matrix</span></span>
-<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span>
-<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="fu">corrplot</span>(<span class="fu">cor</span>(orstationc[<span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>]), <span class="at">method =</span> <span class="st">&quot;color&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co"># correlations among Oregon climate-station variables</span></span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">cor</span>(orstationc[<span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>]), <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># corrplot of correlation matrix</span></span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="fu">library</span>(corrplot)</span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a><span class="fu">corrplot</span>(<span class="fu">cor</span>(orstationc[<span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>]), <span class="at">method =</span> <span class="st">&quot;color&quot;</span>)</span></code></pre></div>
 <p><strong>10. Parallel-coordinate plots</strong></p>
 <p>Next, take a look at some parallel-coordinate plots for the Oregon
 climate-station data. First, create a new datafram, eliminating the
 character and x- and y-coordinate variables from the data frame. The the
 use of the “square-bracket” selection method to grab specific columns
 from the <code>orstationc</code> dataframe.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># create new data frame without text</span></span>
-<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>orstationc2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(orstationc[<span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>],orstationc[<span class="dv">15</span>])</span>
-<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="fu">names</span>(orstationc2)</span></code></pre></div>
-<p>Here is the code for a parallel-coordinate plot:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># load library</span></span>
-<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
-<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
-<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a></span>
-<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="co"># parallel coordinate plot</span></span>
-<span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a><span class="fu">ggparcoord</span>(<span class="at">data =</span> orstationc2,</span>
-<span id="cb30-7"><a href="#cb30-7" tabindex="-1"></a>  <span class="at">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="at">alphaLines =</span> <span class="fl">0.1</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb30-8"><a href="#cb30-8" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x  =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">315</span>, <span class="at">vjust=</span><span class="fl">1.0</span>, <span class="at">hjust=</span><span class="fl">0.0</span>, <span class="at">size=</span><span class="dv">10</span>),</span>
-<span id="cb30-9"><a href="#cb30-9" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), </span>
-<span id="cb30-10"><a href="#cb30-10" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>() )</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="co"># create new data frame without text</span></span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a>orstationc2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(orstationc[<span class="dv">2</span><span class="sc">:</span><span class="dv">10</span>],orstationc[<span class="dv">15</span>])</span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a><span class="fu">names</span>(orstationc2)</span></code></pre></div>
+<p>Parallel-coordinate plots provide an elegant way to look for
+structure in multiple-variable data sets, especially spatial data. The
+plots are constructed by rescaling (0 to 1) the values of the individual
+variables, and then connecting the values for individual cases or
+observations with a line, with each variable represented by a “column”
+in the plot. If there is any pattern (spatial or otherwise) in the data
+groups of observations (individual lines) will show up, but if the data
+are simply random, the parallel-coordinate plot will look like a
+structureless jumble of lines.</p>
+<p>Here is the code for a parallel-coordinate plot of the Oregon
+climate-station data:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="co"># load library</span></span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" tabindex="-1"></a><span class="co"># parallel coordinate plot</span></span>
+<span id="cb35-6"><a href="#cb35-6" tabindex="-1"></a><span class="fu">ggparcoord</span>(<span class="at">data =</span> orstationc2,</span>
+<span id="cb35-7"><a href="#cb35-7" tabindex="-1"></a>  <span class="at">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="at">alphaLines =</span> <span class="fl">0.1</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-8"><a href="#cb35-8" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x  =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">315</span>, <span class="at">vjust=</span><span class="fl">1.0</span>, <span class="at">hjust=</span><span class="fl">0.0</span>, <span class="at">size=</span><span class="dv">10</span>),</span>
+<span id="cb35-9"><a href="#cb35-9" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb35-10"><a href="#cb35-10" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>() )</span></code></pre></div>
+<p>The plot is a little messy, but a prominant “M” pattern emerges shown
+by high January and annual temperatures and low July temperatures.</p>
 <p>Next, explore the spatial patterns of the Oregon climate-station data
 (including the July:January precipitation-ratio variable). Here’s the
-code for a selection of points by latitude/longitude ranges:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># lon/lat window</span></span>
-<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>lonmin <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">125.0</span>; lonmax <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">120.0</span>; latmin <span class="ot">&lt;-</span> <span class="fl">42.0</span>; latmax <span class="ot">&lt;-</span> <span class="fl">49.0</span> </span>
-<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>lon <span class="ot">&lt;-</span> orstationc2<span class="sc">$</span>lon; lat <span class="ot">&lt;-</span> orstationc2<span class="sc">$</span>lat</span>
-<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a>orstationc2<span class="sc">$</span>select_pts <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(lat <span class="sc">&gt;=</span> latmin <span class="sc">&amp;</span> lat <span class="sc">&lt;=</span> latmax <span class="sc">&amp;</span> lon <span class="sc">&gt;=</span> lonmin <span class="sc">&amp;</span> lon <span class="sc">&lt;=</span> lonmax, <span class="dv">1</span>, <span class="dv">0</span>))</span>
-<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a></span>
-<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a><span class="co"># pcp</span></span>
-<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">ggparcoord</span>(<span class="at">data =</span> orstationc2[<span class="fu">order</span>(orstationc2<span class="sc">$</span>select_pts),],</span>
-<span id="cb31-8"><a href="#cb31-8" tabindex="-1"></a>  <span class="at">columns =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>), <span class="at">groupColumn =</span> <span class="st">&quot;select_pts&quot;</span>,</span>
-<span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a>  <span class="at">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="at">alphaLines=</span><span class="fl">0.3</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x  =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">315</span>, <span class="at">vjust=</span><span class="fl">1.0</span>, <span class="at">hjust=</span><span class="fl">0.0</span>, <span class="at">size=</span><span class="dv">8</span>),</span>
-<span id="cb31-11"><a href="#cb31-11" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), </span>
-<span id="cb31-12"><a href="#cb31-12" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb31-13"><a href="#cb31-13" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
-<span id="cb31-14"><a href="#cb31-14" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.3</span>), <span class="st">&quot;red&quot;</span>))</span>
-<span id="cb31-15"><a href="#cb31-15" tabindex="-1"></a>  </span>
-<span id="cb31-16"><a href="#cb31-16" tabindex="-1"></a><span class="co"># map</span></span>
-<span id="cb31-17"><a href="#cb31-17" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc2, <span class="fu">aes</span>(lon, lat))  <span class="sc">+</span></span>
-<span id="cb31-18"><a href="#cb31-18" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="fu">aes</span>(long, lat, <span class="at">group =</span> group), orcounty_gg, <span class="at">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb31-19"><a href="#cb31-19" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(lon, lat, <span class="at">color =</span> select_pts), <span class="at">size =</span> <span class="fl">1.0</span> ) <span class="sc">+</span></span>
-<span id="cb31-20"><a href="#cb31-20" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb31-21"><a href="#cb31-21" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
-<span id="cb31-22"><a href="#cb31-22" tabindex="-1"></a>  <span class="fu">coord_quickmap</span>() <span class="sc">+</span> <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>))</span>
-<span id="cb31-23"><a href="#cb31-23" tabindex="-1"></a></span>
-<span id="cb31-24"><a href="#cb31-24" tabindex="-1"></a><span class="fu">grid.arrange</span>(a, b, <span class="at">nrow =</span> <span class="dv">1</span>)</span></code></pre></div>
-<p>And here is the code for a variable-value selection:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co"># variable-value selection</span></span>
-<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a>cutpoint <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
-<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a>v <span class="ot">&lt;-</span> orstationc2<span class="sc">$</span>pjulpjan</span>
-<span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a>v <span class="ot">&lt;-</span> (v<span class="sc">-</span><span class="fu">min</span>(v))<span class="sc">/</span>(<span class="fu">max</span>(v)<span class="sc">-</span><span class="fu">min</span>(v))</span>
-<span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a>orstationc2<span class="sc">$</span>select_pts <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(v <span class="sc">&gt;=</span> cutpoint, <span class="dv">1</span>, <span class="dv">0</span>))</span>
-<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a></span>
-<span id="cb32-7"><a href="#cb32-7" tabindex="-1"></a><span class="co"># pcp</span></span>
-<span id="cb32-8"><a href="#cb32-8" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">ggparcoord</span>(<span class="at">data =</span> orstationc2[<span class="fu">order</span>(orstationc2<span class="sc">$</span>select_pts),],</span>
-<span id="cb32-9"><a href="#cb32-9" tabindex="-1"></a>                <span class="at">columns =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>), <span class="at">groupColumn =</span> <span class="st">&quot;select_pts&quot;</span>,</span>
-<span id="cb32-10"><a href="#cb32-10" tabindex="-1"></a>                <span class="at">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="at">alphaLines=</span><span class="fl">0.3</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
-<span id="cb32-11"><a href="#cb32-11" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x  =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">315</span>, <span class="at">vjust=</span><span class="fl">1.0</span>, <span class="at">hjust=</span><span class="fl">0.0</span>, <span class="at">size=</span><span class="dv">8</span>),</span>
-<span id="cb32-12"><a href="#cb32-12" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), </span>
-<span id="cb32-13"><a href="#cb32-13" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb32-14"><a href="#cb32-14" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
-<span id="cb32-15"><a href="#cb32-15" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.3</span>), <span class="st">&quot;red&quot;</span>))</span>
-<span id="cb32-16"><a href="#cb32-16" tabindex="-1"></a></span>
-<span id="cb32-17"><a href="#cb32-17" tabindex="-1"></a><span class="co"># map</span></span>
-<span id="cb32-18"><a href="#cb32-18" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc2, <span class="fu">aes</span>(lon, lat))  <span class="sc">+</span></span>
-<span id="cb32-19"><a href="#cb32-19" tabindex="-1"></a>  <span class="fu">geom_polygon</span>(<span class="fu">aes</span>(long, lat, <span class="at">group =</span> group), orcounty_gg, <span class="at">color =</span> <span class="st">&quot;gray50&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb32-20"><a href="#cb32-20" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(lon, lat, <span class="at">color =</span> select_pts), <span class="at">size =</span> <span class="fl">1.0</span> ) <span class="sc">+</span></span>
-<span id="cb32-21"><a href="#cb32-21" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb32-22"><a href="#cb32-22" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
-<span id="cb32-23"><a href="#cb32-23" tabindex="-1"></a>  <span class="fu">coord_quickmap</span>() <span class="sc">+</span> <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>))</span>
-<span id="cb32-24"><a href="#cb32-24" tabindex="-1"></a></span>
-<span id="cb32-25"><a href="#cb32-25" tabindex="-1"></a><span class="fu">grid.arrange</span>(a, b, <span class="at">nrow =</span> <span class="dv">1</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
+code for a selection of points by latitude/longitude ranges
+(i.e. identifying stations in western Oregon):</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="co"># lon/lat window</span></span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>lonmin <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">125.0</span>; lonmax <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">122.0</span>; latmin <span class="ot">&lt;-</span> <span class="fl">42.0</span>; latmax <span class="ot">&lt;-</span> <span class="fl">49.0</span></span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a>lon <span class="ot">&lt;-</span> orstationc2<span class="sc">$</span>lon; lat <span class="ot">&lt;-</span> orstationc2<span class="sc">$</span>lat</span>
+<span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a>orstationc2<span class="sc">$</span>select_pts <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(lat <span class="sc">&gt;=</span> latmin <span class="sc">&amp;</span> lat <span class="sc">&lt;=</span> latmax <span class="sc">&amp;</span> lon <span class="sc">&gt;=</span> lonmin <span class="sc">&amp;</span> lon <span class="sc">&lt;=</span> lonmax, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb36-5"><a href="#cb36-5" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" tabindex="-1"></a><span class="co"># pcp</span></span>
+<span id="cb36-7"><a href="#cb36-7" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">ggparcoord</span>(<span class="at">data =</span> orstationc2[<span class="fu">order</span>(orstationc2<span class="sc">$</span>select_pts),],</span>
+<span id="cb36-8"><a href="#cb36-8" tabindex="-1"></a>                <span class="at">columns =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>), <span class="at">groupColumn =</span> <span class="st">&quot;select_pts&quot;</span>,</span>
+<span id="cb36-9"><a href="#cb36-9" tabindex="-1"></a>                <span class="at">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="at">alphaLines=</span><span class="fl">0.3</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb36-10"><a href="#cb36-10" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x  =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">315</span>, <span class="at">vjust=</span><span class="fl">1.0</span>, <span class="at">hjust=</span><span class="fl">0.0</span>, <span class="at">size=</span><span class="dv">8</span>),</span>
+<span id="cb36-11"><a href="#cb36-11" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb36-12"><a href="#cb36-12" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb36-13"><a href="#cb36-13" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb36-14"><a href="#cb36-14" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.3</span>), <span class="st">&quot;red&quot;</span>))</span>
+<span id="cb36-15"><a href="#cb36-15" tabindex="-1"></a></span>
+<span id="cb36-16"><a href="#cb36-16" tabindex="-1"></a><span class="co"># map</span></span>
+<span id="cb36-17"><a href="#cb36-17" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">ggplot</span>()  <span class="sc">+</span></span>
+<span id="cb36-18"><a href="#cb36-18" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> orotl_sf, <span class="at">fill=</span><span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb36-19"><a href="#cb36-19" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(orstations_sf<span class="sc">$</span>lon, orstations_sf<span class="sc">$</span>lat, <span class="at">color =</span> orstationc2<span class="sc">$</span>select_pts), <span class="at">size =</span> <span class="fl">4.0</span>, <span class="at">pch=</span><span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb36-20"><a href="#cb36-20" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb36-21"><a href="#cb36-21" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb36-22"><a href="#cb36-22" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>))</span>
+<span id="cb36-23"><a href="#cb36-23" tabindex="-1"></a></span>
+<span id="cb36-24"><a href="#cb36-24" tabindex="-1"></a><span class="fu">grid.arrange</span>(a, b, <span class="at">nrow =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p>And here is the code for a variable-value selection, where the
+station (point) selection identifies stations with high July to January
+precipitation ratios:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="co"># variable-value selection</span></span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a>cutpoint <span class="ot">&lt;-</span> <span class="fl">0.2</span></span>
+<span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a>v <span class="ot">&lt;-</span> orstationc2<span class="sc">$</span>pjulpjan</span>
+<span id="cb37-4"><a href="#cb37-4" tabindex="-1"></a>v <span class="ot">&lt;-</span> (v<span class="sc">-</span><span class="fu">min</span>(v))<span class="sc">/</span>(<span class="fu">max</span>(v)<span class="sc">-</span><span class="fu">min</span>(v))</span>
+<span id="cb37-5"><a href="#cb37-5" tabindex="-1"></a>select_pts <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(v <span class="sc">&gt;=</span> cutpoint, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb37-6"><a href="#cb37-6" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" tabindex="-1"></a><span class="co"># pcp</span></span>
+<span id="cb37-8"><a href="#cb37-8" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">ggparcoord</span>(<span class="at">data =</span> orstationc2[<span class="fu">order</span>(orstationc2<span class="sc">$</span>select_pts),],</span>
+<span id="cb37-9"><a href="#cb37-9" tabindex="-1"></a>                <span class="at">columns =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>), <span class="at">groupColumn =</span> <span class="st">&quot;select_pts&quot;</span>,</span>
+<span id="cb37-10"><a href="#cb37-10" tabindex="-1"></a>                <span class="at">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="at">alphaLines=</span><span class="fl">0.3</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb37-11"><a href="#cb37-11" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x  =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">315</span>, <span class="at">vjust=</span><span class="fl">1.0</span>, <span class="at">hjust=</span><span class="fl">0.0</span>, <span class="at">size=</span><span class="dv">8</span>),</span>
+<span id="cb37-12"><a href="#cb37-12" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb37-13"><a href="#cb37-13" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb37-14"><a href="#cb37-14" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb37-15"><a href="#cb37-15" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.3</span>), <span class="st">&quot;red&quot;</span>))</span>
+<span id="cb37-16"><a href="#cb37-16" tabindex="-1"></a></span>
+<span id="cb37-17"><a href="#cb37-17" tabindex="-1"></a><span class="co"># map</span></span>
+<span id="cb37-18"><a href="#cb37-18" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">ggplot</span>()  <span class="sc">+</span></span>
+<span id="cb37-19"><a href="#cb37-19" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> orotl_sf, <span class="at">fill=</span><span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb37-20"><a href="#cb37-20" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(orstations_sf<span class="sc">$</span>lon, orstations_sf<span class="sc">$</span>lat, <span class="at">color =</span> select_pts), <span class="at">size =</span> <span class="fl">4.0</span>, <span class="at">pch=</span><span class="dv">16</span>) <span class="sc">+</span></span>
+<span id="cb37-21"><a href="#cb37-21" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb37-22"><a href="#cb37-22" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb37-23"><a href="#cb37-23" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>))</span>
+<span id="cb37-24"><a href="#cb37-24" tabindex="-1"></a></span>
+<span id="cb37-25"><a href="#cb37-25" tabindex="-1"></a><span class="fu">grid.arrange</span>(a, b, <span class="at">nrow =</span> <span class="dv">1</span>, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
 <p>Experiment with the longitudinal cutoff, as well as different
 variables for selecting points.</p>
 <blockquote>
