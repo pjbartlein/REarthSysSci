@@ -11,8 +11,9 @@ output:
 
 ```{r set-options, echo=FALSE}
 options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "75%", out.height = "75%", verbose=TRUE)
 pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
 ```
 
 ```{r child="install_netCDF.md"}
