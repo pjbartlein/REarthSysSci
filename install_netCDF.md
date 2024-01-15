@@ -131,6 +131,7 @@ Here's a link to downloads page for Panoply: [[https://www.giss.nasa.gov/tools/p
 Here's a link to the Java installer for MacOS [[https://www.java.com/en/download/]](https://www.java.com/en/download/). You can verify that Java has been installed by opening a terminal and typing `java -version`.
 
 Here's a link to downloads page for Panoply: [[https://www.giss.nasa.gov/tools/panoply/download/]](https://www.giss.nasa.gov/tools/panoply/download/). There are three choices for Panoply for MacOS: 
+
 - For older Intel-based Macs, choose `Download Panoply 5.3.1 for macOS, 44 MB DMG, uses native filechooser`, 
 - or (if you have multiple monitors), choose `Download Panoply 5.3.1 for macOS, 44 MB DMG, uses Java filechooser`, 
 - or (if you have a newer "Apple Silicon" Mac, choose `Download Panoply 5.3.1 for macOS, 44 MB DMG, requires Mx "Apple silicon" Mac with ARM64 Java`. 
