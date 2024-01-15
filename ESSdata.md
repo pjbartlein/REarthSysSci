@@ -112,8 +112,9 @@ Panoply [[link]](https://www.giss.nasa.gov/tools/panoply/) is cross-platform app
 
 ## Climate-model output ##
 
-CMIP5 is the climate-modeling component of the IPCC AR5 assessment, and nearly all of the data are available online through the ESG (Earth System Grid).  Additional climate-simulation data are available from the National Center for Atmospheric Research (NCAR).
+CMIP5 is the climate-modeling component of the IPCC assessments, and nearly all of the data are available online through the ESG (Earth System Grid).  Additional climate-simulation data are available from the National Center for Atmospheric Research (NCAR).
 
+- CMIP 5: [[https://aims2.llnl.gov/search]](https://aims2.llnl.gov/search)
 - CMIP 6: [[https://wcrp-cmip.org/cmip-data-access/]](https://wcrp-cmip.org/cmip-data-access/)
 - NCAR:  [[https://www.earthsystemgrid.org/home.html]](https://www.earthsystemgrid.org/home.html)
 
