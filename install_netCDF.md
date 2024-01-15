@@ -15,15 +15,15 @@ In addition to `ncdump`, there are two sets of command line utilities, `CDO` and
 To set up the netCDF command-line utilities in Windows, 
 
 1. download and install the netCDF-C library and utilites from  
-[http://www.unidata.ucar.edu/software/netcdf/docs/winbin.html](http://www.unidata.ucar.edu/software/netcdf/docs/winbin.html)  (e.g. netCDF4.9.2-NC4-DAP-64.exe) 
-2. Install as usual by clicking on the file; the destination folder  will likely be `c:\Program Files\netCDF 4.9.2\` 
+[http://www.unidata.ucar.edu/software/netcdf/docs/winbin.html](http://www.unidata.ucar.edu/software/netcdf/docs/winbin.html)  (e.g. `netCDF4.9.2-NC4-DAP-64.exe`) 
+2. Install as usual by clicking on the file; the destination folder will likely be `"c:/Program Files/netCDF 4.9.2/"` 
 3. When prompted, select "Add netCDF to the system PATH for all users" 
 4. Check to make sure the `PATH` environment variable has been set:
-	Control Panel > All Control Panel Items > System > Advanced System Settings > Environment Variables > System Variables Pane, Click on Path, and add the following if not present:  `"c:\Program Files\netCDF 4.9.2\";"c:\Program Files\netCDF 4.9.2\bin\";"c:\Program Files\netCDF 4.9.2\lib\"`
+	Control Panel > All Control Panel Items > System > Advanced System Settings > Environment Variables > System Variables Pane, Click on Path, and add the following if not present:  `"c:/Program Files/netCDF 4.9.2/"`; `"c:/Program Files/netCDF 4.9.2/bin/"`; `"c:/Program Files/netCDF 4.9.2/lib/"`
 3. create a `.bat` (batch) file named `ncd.bat` in the netCDF folder created in the second step, with the following contents: 
  
 ```
-	"c:\Program Files\netCDF 4.9.2\bin\ncdump" -c %1
+	"c:/Program Files/netCDF 4.9.2/bin/ncdump" -c %1
 	rem netCDF_4.9.2
 	pause
 ```
@@ -40,26 +40,27 @@ Install Homebrew, if you don't have it already: [[http://brew.sh/index.html]](ht
 
 If already installed, update Homebrew  (see [https://github.com/Homebrew/brew/blob/master/docs/FAQ.md](https://github.com/Homebrew/brew/blob/master/docs/FAQ.md)): 
 
-```	
+```
 	brew update
 	brew upgrade
 	brew cleanup
 ```
 
 Then install netCDF by pasting the following into a terminal window
-```	
-	brew install netcdf
+
+```
+	brew install netcdf	
 ```
 
 Make a text file simply named `ncd`, with following contents, and place in the folder `/usr/local/bin/`
 
- ```
+```
 	#! /bin/bash
 	pwd
 	/usr/local/Cellar/netcdf/4.9.2_1/bin/ncdump -c $1
 ```
 
-(Note that the folder path may need to be adjusted; at the time of this writing the current version of netCDF on Homebrew was `4.9.2_1`.  The appropriate path can be found by typing `locate ncdump` at the command prompt, which should yield a reply like /`usr/local/Cellar/netcdf/4.9.2_1/bin/ncdump`)
+(Note that the folder path may need to be adjusted; at the time of this writing the current version of netCDF on Homebrew was `4.9.2_1`.  The appropriate path can be found by typing `locate ncdump` at the command prompt, which should yield a reply like `/usr/local/Cellar/netcdf/4.9.2_1/bin/ncdump`)
 
 Make the file executable by opening a Terminal window in `/usr/local/bin/` and typing:
 
@@ -117,7 +118,7 @@ Panoply's help resources are not substantial (which is fine, because it is extra
 - [[http://www.geo.uni-bremen.de/Interdynamik/images/stories/pdf/visualizing_netcdf_panoply.pdf]](http://www.geo.uni-bremen.de/Interdynamik/images/stories/pdf/visualizing_netcdf_panoply.pdf)
 - and here is the Panoply help page [[https://www.giss.nasa.gov/tools/panoply/help/]](https://www.giss.nasa.gov/tools/panoply/help/)
 
-Panoply is written inf Java, and requires a Java runtime environment to be installed first.
+Panoply is written in Java, and requires a Java runtime environment to be installed first.
 
 ## Windows ##
 
@@ -127,9 +128,12 @@ Here's a link to downloads page for Panoply: [[https://www.giss.nasa.gov/tools/p
 
 ## MacOS ##
 
-Here's a link to the Java installer for MacOS [[https://www.java.com/en/download/]](https://www.java.com/en/download/) . You can verify that Java has been installed by opening a terminal and typing `java -version`.
+Here's a link to the Java installer for MacOS [[https://www.java.com/en/download/]](https://www.java.com/en/download/). You can verify that Java has been installed by opening a terminal and typing `java -version`.
 
-Here's a link to downloads page for Panoply: [[https://www.giss.nasa.gov/tools/panoply/download/]](https://www.giss.nasa.gov/tools/panoply/download/). There are three choices for Panoply for MacOS: For older Intel-based Macs, choose `Download Panoply 5.3.1 for macOS, 44 MB DMG, uses native filechooser`, or (if you have multiple monitors), choose `Download Panoply 5.3.1 for macOS, 44 MB DMG, uses Java filechooser`, or (if you have a newer "Apple Silicon" Mac, choose `Download Panoply 5.3.1 for macOS, 44 MB DMG, requires Mx "Apple silicon" Mac with ARM64 Java`. 
+Here's a link to downloads page for Panoply: [[https://www.giss.nasa.gov/tools/panoply/download/]](https://www.giss.nasa.gov/tools/panoply/download/). There are three choices for Panoply for MacOS: 
+- For older Intel-based Macs, choose `Download Panoply 5.3.1 for macOS, 44 MB DMG, uses native filechooser`, 
+- or (if you have multiple monitors), choose `Download Panoply 5.3.1 for macOS, 44 MB DMG, uses Java filechooser`, 
+- or (if you have a newer "Apple Silicon" Mac, choose `Download Panoply 5.3.1 for macOS, 44 MB DMG, requires Mx "Apple silicon" Mac with ARM64 Java`. 
 
 
 
