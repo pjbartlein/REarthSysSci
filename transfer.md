@@ -1,3 +1,7 @@
+<span style="color: green;">**NOTE:&nbsp; This page has been revised for the 2024 version of the course, but there may be some additional edits.** &nbsp; <br>
+
+**Install FileZilla (or an equivalent) by Tuesday, Jan. 30th**
+
 Downloading or transferring typical Earth-system science data sets used to be a big deal, with each "data provider" using a different approach for distributing files. Most data sets now have simple links on web pages, and can be downloaded with a click or two. In cases where there are a lot files, scripts can be generated that automate downloading, which at times can take several days. For even larger data sets, like the complete output of a climate simulation, FedEx-ing a bare hard drive works pretty well. An older, but still reliable way to move data is via FTP/SFTP, which we will use in this course to provide data for illustrating various topics
 
 ## Downloading from web pages (HTTPSever) ##

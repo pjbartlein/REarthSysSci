@@ -1,3 +1,6 @@
+<span style="color: green;">**NOTE:&nbsp; This page has been revised for the 2024 version of the course, but there may be some additional edits.** &nbsp; <br>
+
+**Finish by Thursday, Jan. 25th**
 
 # netCDF # 
 

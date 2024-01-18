@@ -1,3 +1,5 @@
+<span style="color: green;">**NOTE:&nbsp; This page has been revised for the 2024 version of the course, but there may be some additional edits.** &nbsp; <br>
+
 # ESS Data Formats #
 
 Twenty years ago, there were a large number of disparate formats for storing large data sets, and the transfer of data from one computing system to another was a big deal, often relying on frequent playing of the "find-the-continents" game.  Now, however, there are two general styles of dataset storage: 1) machine-independent self-documenting gridded datasets, and 2) relational data bases (e.g. MS Access, mySQL) (with common Excel formats (.csv, .xlsx) as special cases of database tables).  Gridded data sets are chiefly represented by the netCDF and HDF5 formats, which include self-documenting "attribute" data, with an older "binary" data format (GRIB2) still in widespread use for exchanging real-time weather forecasting data, and there is growing "interoperatability" among these formats.  Databases are in widespread use for storing data that may be heterogeneous in the sense of not being gridded, and possibly having multiple tables.

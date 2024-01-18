@@ -1,3 +1,7 @@
+<span style="color: green;">**NOTE:&nbsp; This page has been revised for the 2024 version of the course, but there may be some additional edits.** &nbsp; <br>
+
+**Instaal a text editor by the beginning of Week 5**
+
 # Install Visual Studio Code #
 
 Visual Stude Code (or VS Code, or simply "Code") is rapidly growing in popularity because it is flexible, has many extensions to support different languages and tasks, and is free. The editor in RStudio is quite capable, and while VS Code supports the editing and execution of R script files (`*.R`), its main utility here will be editing Markdown (`*.md`) files.
