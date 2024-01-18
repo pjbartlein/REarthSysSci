@@ -20,9 +20,9 @@ On the Visual Studio Code downloads page, click on the blue Windows download but
 
 ## "Live" previewing ##
 
-Markdown files are basically text files, but their main utility is that they can be "rendered" by programs that incorporate "Markdown" engines into files better suited for posting on web pages or as stand-alone documents (e.g. `*.html`, `*.pdf`, or `*.docx` files). That's essentially what takes place in previewing a Markdown document.
+Markdown files are basically text files, but their main utility is that they can be "rendered" by programs that incorporate Markdown "engines" into files better suited for posting on web pages or for use as stand-alone documents (e.g. `*.html`, `*.pdf`, or `*.docx` files). That's essentially what takes place in previewing a Markdown document.
 
-Create a new file called `test.md`
+Create a new file called `test.md` using VS Code.
 
 Here is a simple Markdown (`.md`) file, which you can paste into the newly created file (copy everything in the box):
 

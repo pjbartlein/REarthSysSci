@@ -226,7 +226,7 @@ ggplot(orstationc, aes(x=pjulpjan)) + geom_histogram(binwidth = 0.05)
 ggplot(orstationc, aes(y = pjulpjan)) + geom_boxplot() 
 ```
 
->Q6: Describe the distribution of `orstationc$pjulpjan`.  Is the distribution symmetric or not?  Does the distribution of the precipitation ratio explain the particular scale cutpoints that have been used to map the precipitationratio variables?
+>Q6: Describe the distribution of `orstationc$pjulpjan`.  Is the distribution symmetric or not?  Does the distribution of the precipitation ratio explain the particular scale cutpoints that have been used to map the precipitation ratio variables?
 
 &nbsp;
 
