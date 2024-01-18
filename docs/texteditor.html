@@ -393,6 +393,9 @@ Rendering</a>
 <ul>
 <li><a href="#installing-pandoc" id="toc-installing-pandoc">Installing
 Pandoc</a></li>
+<li><a href="#using-pandoc-to-render-a-markdown-file"
+id="toc-using-pandoc-to-render-a-markdown-file">Using Pandoc to render a
+Markdown file</a></li>
 </ul></li>
 </ul>
 </div>
@@ -451,9 +454,8 @@ stand-alone documents (e.g. <code>*.html</code>, <code>*.pdf</code>, or
 <code>*.docx</code> files). That’s essentially what takes place in
 previewing a Markdown document.</p>
 <p>Create a new file called <code>test.md</code></p>
-Here is a simple Markdown (<code>.md</code>) file, which you can paste
-into the newly created file (copy everything between the lines):
-<hr>
+<p>Here is a simple Markdown (<code>.md</code>) file, which you can
+paste into the newly created file (copy everything in the box):</p>
 <pre><code># Introduction
 Some text, and little discussion, including a bulleted list
 -&nbsp;first list item
@@ -463,7 +465,6 @@ Here is a little code (and note the different font):
 `plot(orstationc$elev, orstationc$tann)`
 and some more text, possibly *decorated* or **otherwise formatted**.
 </code></pre>
-<hr>
 <p>Over on the upper right-hand side of the editing window there will be
 a little “two-pane” window icon with a tool-tip that says
 <code>Markdown Preview; Open Preview to the Side...</code> Click on
@@ -535,7 +536,7 @@ or punctuation (e.g. replace <code>html-md-01.css</code> with
 <div id="markdown-rendering" class="section level1">
 <h1>Markdown Rendering</h1>
 <p>The conversion of a Markdown (<code>*.md</code>) text file into a
-more nicely formatted document is referred to a “rendering”. Built-in
+nicely formatted document is referred to a “rendering”. Built-in
 Markdown rendering “engines” are part of many commercially available
 Markdown editors (as well as free ones), but a particularly powerful and
 flexible renderer is Pandoc, which describes itself as “a universal
@@ -548,6 +549,28 @@ href="https://pandoc.org/MANUAL.html">[https://pandoc.org/MANUAL.html]</a>.</p>
 <div id="installing-pandoc" class="section level2">
 <h2>Installing Pandoc</h2>
 <p><strong><em>MacOS</em></strong></p>
+<ul>
+<li>Browse to the Pandoc downloads page at <a
+href="https://github.com/jgm/pandoc/releases/tag/3.1.11.1">[https://github.com/jgm/pandoc/releases/tag/3.1.11.1]</a></li>
+<li>Depending on the age of your Mac, download a particular installer by
+clicking on:
+<ul>
+<li><code>pandoc-3.1.11.1-arm64-macOS.pkg</code> for a newer Apple
+Silicon-chip Mac, or</li>
+<li><code>pandoc-3.1.11.1-x86_64-macOS.pkg</code> for an older
+Intel-chip Mac.</li>
+</ul></li>
+<li>Browse to the downloaded package file, and click on it to install.
+Agree to the EULA and accept all of the defaults, enter your password
+when asked.</li>
+</ul>
+<p>Open a Terminal window, and type <code>pandoc --version</code> (note
+the two hyphens), and you should see something like</p>
+<pre><code>    pandoc 3.1.11.1
+    Features: +server +lua
+    Scripting engine: Lua 5.4
+    User data directory: /Users/bartlein/.local/share/pandoc
+    Copyright (C) 2006-2023 John MacFarlane. Web: https://pandoc.org</code></pre>
 <p><strong><em>Windows</em></strong></p>
 <ul>
 <li>Browse to the Pandoc downloads page at <a
@@ -557,16 +580,46 @@ and it will be downloaded and saved to your downloads folder.</li>
 <li>Browse to that file, and click on it to install. Check the boxes,
 and click on <code>Finish</code></li>
 </ul>
-<p>Open a CMD (terminal) window and type <code>pandoc --version</code>,
-and you should see something like:</p>
-<pre><code>    c:\Users\bartlein\Projects\geog490&gt;pandoc --version
-    pandoc 3.1.11.1
+<p>Open a CMD (terminal) window and type <code>pandoc --version</code>
+(note the two hyphens), and you should see something like:</p>
+<pre><code>    pandoc 3.1.11.1
     Features: +server +lua
     Scripting engine: Lua 5.4
     User data directory: C:\Users\bartlein\AppData\Roaming\pandoc
     Copyright (C) 2006-2023 John MacFarlane. Web: https://pandoc.org
-    This is free software; see the source for copying conditions. There is no
-    warranty, not even for merchantability or fitness for a particular purpose. </code></pre>
+    ...</code></pre>
+</div>
+<div id="using-pandoc-to-render-a-markdown-file" class="section level2">
+<h2>Using Pandoc to render a Markdown file</h2>
+<p>As an example, let’s render the <code>test.md</code> file created
+above, converting it to an <code>.html</code> file. First download an
+appropriate <code>.css</code> file, for example, one of those we used
+earlier when previewing files:</p>
+<ul>
+<li><a
+href="https://pjbartlein.github.io/REarthSysSci/html-md-01.css">[https://pjbartlein.github.io/REarthSysSci/html-md-01.css]</a></li>
+<li><a
+href="https://pjbartlein.github.io/REarthSysSci/github.css">[https://pjbartlein.github.io/REarthSysSci/github.css]</a></li>
+</ul>
+<p>(Right-click and save to a folder with the <code>*.md</code> file you
+want to render <code>test.md</code> in this case.</p>
+<p>Create a text file in the same folder named
+<code>render_to_html.txt</code> with the following contents (making sure
+there are now spaces in the string
+<code>--css=html-md-01.css</code>):</p>
+<pre><code>    pandoc -s test.md -o test.html --css=html-md-01.css</code></pre>
+<p>Save the file, but leave it open.</p>
+<p>Open a CMD or Terminal window in the folder with the
+test.md<code>and</code>.css<code>files. Copy and paste the contents of</code>render_to_html.txt<code>into the CMD/Terminal window. Pandoc will complain about the</code>test.md`
+not having a title. Ignore that.</p>
+<p>Double click on the newly created <code>test.html</code> file to view
+it in the browser.</p>
+<p>It’s also possible to convert a Markdown document to a Word
+(<code>*.docx</code>)</p>
+<pre><code>    pandoc test.html -o test.docx</code></pre>
+<p>This conversion can make use of a “reference” Word document that is
+specifically formatted as, for example, a journal article or thesis or
+dissertation chapter.</p>
 </div>
 </div>
 

@@ -24,8 +24,8 @@ Markdown files are basically text files, but their main utility is that they can
 
 Create a new file called `test.md`
 
-Here is a simple Markdown (`.md`) file, which you can paste into the newly created file (copy everything between the lines):
-<hr>
+Here is a simple Markdown (`.md`) file, which you can paste into the newly created file (copy everything in the box):
+
 <pre><code># Introduction
 Some text, and little discussion, including a bulleted list
 -&nbsp;first list item
@@ -35,7 +35,6 @@ Here is a little code (and note the different font):
 `plot(orstationc$elev, orstationc$tann)`
 and some more text, possibly *decorated* or **otherwise formatted**.
 </code></pre>
-<hr>
 
 Over on the upper right-hand side of the editing window there will be a little "two-pane" window icon with a tool-tip that says `Markdown Preview; Open Preview to the Side...` Click on that, and you should see a `Preview test.md` preview window open up showing the "rendered" Markdown.
 
@@ -86,7 +85,7 @@ To switch to a different `.css` file:
 
 # Markdown Rendering #
 
-The conversion of a Markdown (`*.md`) text file into a more nicely formatted document is referred to a "rendering". Built-in Markdown rendering "engines" are part of many commercially available Markdown editors (as well as free ones), but a particularly powerful and flexible renderer is Pandoc, which describes itself as "a universal document converter", which it pretty much is. 
+The conversion of a Markdown (`*.md`) text file into a nicely formatted document is referred to a "rendering". Built-in Markdown rendering "engines" are part of many commercially available Markdown editors (as well as free ones), but a particularly powerful and flexible renderer is Pandoc, which describes itself as "a universal document converter", which it pretty much is. 
 
 Here's the Pandoc web page: [[https://pandoc.org/]](https://pandoc.org/), and the weird diagram illustrates the range of document conversions possible. The User Guide is here: [[https://pandoc.org/MANUAL.html]](https://pandoc.org/MANUAL.html).
 
@@ -94,6 +93,19 @@ Here's the Pandoc web page: [[https://pandoc.org/]](https://pandoc.org/), and th
 
 ***MacOS***
 
+- Browse to the Pandoc downloads page at [[https://github.com/jgm/pandoc/releases/tag/3.1.11.1]](https://github.com/jgm/pandoc/releases/tag/3.1.11.1)
+- Depending on the age of your Mac, download a particular installer by clicking on:
+	- `pandoc-3.1.11.1-arm64-macOS.pkg` for a newer Apple Silicon-chip Mac, or 
+	- `pandoc-3.1.11.1-x86_64-macOS.pkg` for an older Intel-chip Mac.
+- Browse to the downloaded package file, and click on it to install. Agree to the EULA and accept all of the defaults, enter your password when asked.
+
+Open a Terminal window, and type `pandoc --version` (note the two hyphens), and you should see something like
+
+		pandoc 3.1.11.1
+		Features: +server +lua
+		Scripting engine: Lua 5.4
+		User data directory: /Users/bartlein/.local/share/pandoc
+		Copyright (C) 2006-2023 John MacFarlane. Web: https://pandoc.org
 
 ***Windows***
 
@@ -101,19 +113,42 @@ Here's the Pandoc web page: [[https://pandoc.org/]](https://pandoc.org/), and th
 - Click on the file `pandoc-3.1.11.1-windows-x86_64.msi` and it will be downloaded and saved to your downloads folder.
 - Browse to that file, and click on it to install. Check the boxes, and click on `Finish`
 
-Open a CMD (terminal) window and type `pandoc --version`, and you should see something like:
+Open a CMD (terminal) window and type `pandoc --version` (note the two hyphens), and you should see something like:
 
-		c:\Users\bartlein\Projects\geog490>pandoc --version
 		pandoc 3.1.11.1
 		Features: +server +lua
 		Scripting engine: Lua 5.4
 		User data directory: C:\Users\bartlein\AppData\Roaming\pandoc
 		Copyright (C) 2006-2023 John MacFarlane. Web: https://pandoc.org
-		This is free software; see the source for copying conditions. There is no
-		warranty, not even for merchantability or fitness for a particular purpose. 
+		...
 
+## Using Pandoc to render a Markdown file ##
 
+As an example, let's render the `test.md` file created above, converting it to an `.html` file. First download an appropriate `.css` file, for example, one of those we used earlier when previewing files:
 
+- [[https://pjbartlein.github.io/REarthSysSci/html-md-01.css]](https://pjbartlein.github.io/REarthSysSci/html-md-01.css)
+- [[https://pjbartlein.github.io/REarthSysSci/github.css]](https://pjbartlein.github.io/REarthSysSci/github.css)
 
+(Right-click and save to a folder with the `*.md` file you want to render `test.md` in this case.
+
+Create a text file in the same folder named `render_to_html.txt` with the following contents (making sure there are now spaces in the string `--css=html-md-01.css`):
+
+```		
+	pandoc -s test.md -o test.html --css=html-md-01.css
+```
+
+Save the file, but leave it open.
+
+Open a CMD or Terminal window in the folder with the test.md` and `.css` files. Copy and paste the contents of `render_to_html.txt` into the CMD/Terminal window. Pandoc will complain about the `test.md` not having a title. Ignore that.
+
+Double click on the newly created `test.html` file to view it in the browser.
+
+It's also possible to convert a Markdown document to a Word (`*.docx`)
+
+```		
+	pandoc test.html -o test.docx
+```
+
+This conversion can make use of a "reference" Word document that is specifically formatted as, for example, a journal article or thesis or dissertation chapter.
 
 

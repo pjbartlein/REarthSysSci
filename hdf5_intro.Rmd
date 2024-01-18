@@ -32,14 +32,14 @@ The `rhdf5` package can be retrived from Bioconductor, and installed as follows.
 # install rhdf5
 if (!requireNamespace("rhdf5", quietly = TRUE))
   install.packages("BiocManager")
-BiocManager::install("rhdf5", version = "3.18")
+BiocManager::install("rhdf5", version = "3.18", force = TRUE)
 ```
 
 The examples below use data from TEMIS, the Tropospheric Emission Monitoring Internet Service ([[http://www.temis.nl/index.php]](http://www.temis.nl/index.php)), and the Global Fire Emissions Database (GFED, [[https://www.globalfiredata.org/index.html]](https://www.globalfiredata.org/index.html)).  The TEMIS data are HDF4 and need to be converted, while the GFED data are HDF5.  The specific data sets can be found on the ClimateLab SFTP server.
 
 The various conversion tasks and tools are:
 
-- HDF4 to HDF5:  `h4toh5convert` from the HDFGroup [[h4h5tools]](https://portal.hdfgroup.org/display/support/Download+h4h5tools)
+- HDF4 to HDF5:  `h4toh5convert` from the HDFGroup [[h4h5tools]](https://portal.hdfgroup.org/downloads/h4h5tools/h4h5tools_2_2_5.html)
 - HDF4 to netCDF:  `h4tonccf` (netCDF-3), and `h4tonccf_nc4` (netCDF-4), from HDF-EOS [[http://hdfeos.org/software/h4cflib.php]](http://hdfeos.org/software/h4cflib.php)
 - HDF4 and HDF5 (and other file types) to netCDF:  `ncl_convert2nc` from Unidata [[https://www.ncl.ucar.edu/]](https://www.ncl.ucar.edu/overview.shtml)
 
@@ -73,7 +73,7 @@ world_shp <- read_sf(shp_file)
 world_outline <- as(st_geometry(world_shp), Class="Spatial")
 
 # plot the outline
-plot(world_outline, col="blue", lwd=1)
+plot(world_outline, col="lightblue", lwd=1)
 ```
 
 ## Convert an HDF4 file to HDF5
@@ -84,6 +84,7 @@ The HDF4 file can be converted by typing in a terminal or command window (for ex
 
 ```{r convert, echo=TRUE, eval=FALSE}
 h4toh5convert uvief20190423.hdf
+# or: /Users/bartlein/Downloads/hdf/HDF_Group/H4H5/2.2.5/bin/h4toh5convert GFED4.0_DQ_2015270_BA.hdf
 ```
 
 This will create the file `uvief20190423.h5`.  (Note that an explicit output filename and path can be included.  Not everything in the HDF4 file will be converted, and it's likely that a number of error messages will appear, giving the impression that the operation has failed.  Check to see whether in fact the HDF5 was indeed created.)
