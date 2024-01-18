@@ -33,7 +33,7 @@ These topics implement and document a particular data-analysis "design pattern" 
 
 # Schedule #
 ```
-Topic                                              Tasks
+Topic/Lecture                                      Tasks
    1:  Introduction and infrastructure               Install R, RStudio 
    2:  Using R for data visualization and analysis   Using R exercise
    3:  Earth-system science data                                     
@@ -53,7 +53,9 @@ Topic                                              Tasks
   17:  Time-series analysis  
   18:  Other languages  
   19:  Project presentations  
-  20:  Project presentations
+  20:  Project presentations  
+Other Topics  
+       HDF in R
 ```
 
 Setting up an effective and efficient environment for data analysis (i.e. a "tool chain") can be as much of a time-waster as a time-saver.  We will describe and use a basic set of tools, including:  
