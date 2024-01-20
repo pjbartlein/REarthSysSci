@@ -28,9 +28,9 @@ Compared to netCDF files, HDF files can be messy:  they can contain images as we
 
 # Preliminary set up #
 
-The `rhdf5` package can be retrived from Bioconductor, and installed as follows.  Generally, a lot of dependent packages will also need to be installed, as well, but the process is usually straightforward.
+The `rhdf5` package can be retrieved from Bioconductor, and installed as follows.  Generally, a lot of dependent packages will also need to be installed, as well, but the process is usually straightforward.a
 
-```{r install_rhdf5, eval=FALSE, echo=TRUE, message=FALSE}
+```{r install_rhdf5, eval=TRUE, echo=TRUE, message=FALSE}
 # install rhdf5
 if (!requireNamespace("rhdf5", quietly = TRUE))
   install.packages("BiocManager")
@@ -45,7 +45,7 @@ The various conversion tasks and tools are:
 - HDF4 to netCDF:  `h4tonccf` (netCDF-3), and `h4tonccf_nc4` (netCDF-4), from HDF-EOS [[http://hdfeos.org/software/h4cflib.php]](http://hdfeos.org/software/h4cflib.php)
 - HDF4 and HDF5 (and other file types) to netCDF:  `ncl_convert2nc` from Unidata [[https://www.ncl.ucar.edu/]](https://www.ncl.ucar.edu/overview.shtml)
 
-The first two conversion tools have installers for MacOS, Windows and Linux.  On the Mac, it will usually be the case that the executable file should be moved to the /Applications folder, while on Windows the usual fooling around with paths will be required.  The `ncl_convert2nc` tool is part of NCL, which can be installed on run on Windows 10 machines using the Linux subsystem for Windows.
+The first two conversion tools have installers for MacOS, Windows and Linux.  On the Mac, it will usually be the case that the executable file should be moved to the /Applications folder, while on Windows the usual fooling around with paths will be required.  The `ncl_convert2nc` tool is part of NCL, which can be installed on run on Windows 10/11 machines using the Linux subsystem for Windows (WSL2.
 
 There are some useful tutorials on using HDF in R from the NSF NEON program:
 
@@ -59,22 +59,15 @@ Begin by loading the appropriate packages:
 # load packages
 library(sf)
 library(rhdf5)
-library(latticeExtra)
-library(raster)
-library(rasterVis)
+library(terra)
 library(RColorBrewer)
 ```
 
-For latter plotting of the data, also read a world outline shape file:
-```{r shapefile}
-# read a world shapefile
-shp_path <- "/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/"
-shp_name <- "ne_110m_admin_0_countries.shp"
-shp_file <- paste(shp_path, shp_name, sep="")
-world_shp <- read_sf(shp_file)
-world_outline <- as(st_geometry(world_shp), Class="Spatial")
+For latter plotting of the data, also read a world outline file. The file(s) can be copied from the class RESS server, or by downloading the contents of the folder at `https://pages.uoregon.edu/bartlein/RESS/shp_files/world2015/` Note that shape files consist of multiple files, e.g. `*.shp`, `*.shx`, `*.dbf`, `*.prj`, `cpg`, and all must be downloaded.
 
-# plot the outline
+```{r hdf5-intro-1}
+shp_file <- "/Users/bartlein/Projects/ESSD/data/shp_files/world2015/UIA_World_Countries_Boundaries.shp"
+world_outline <- as(st_geometry(read_sf(shp_file)), Class = "Spatial")
 plot(world_outline, col="lightblue", lwd=1)
 ```
 
@@ -82,22 +75,25 @@ plot(world_outline, col="lightblue", lwd=1)
 
 In this example, a data set of the "Clear-Sky UV Index"" from TEMIS was downloaded (i.e. `uvief20190423.hdf` -- 2019-04-23) from the website listed above.  This is an HDF4 file, which can be verified in Panoply.  Viewing files in Panoply is always good practice--in this case the particular layout of the data in file is rather ambiguous at first glance, and so getting a look at the contents of the file before attempting to read it is a good idea.
 
+Copy the file a convenient places, say, a folder `/hdf_files` in your data folder (e.g. `/Users/bartlein/Projects/ESSD/data/hdf_files/`)
+
 The HDF4 file can be converted by typing in a terminal or command window (for example):
 
 ```{r convert, echo=TRUE, eval=FALSE}
 h4toh5convert uvief20190423.hdf
-# or: /Users/bartlein/Downloads/hdf/HDF_Group/H4H5/2.2.5/bin/h4toh5convert GFED4.0_DQ_2015270_BA.hdf
+# or, e.g.: /Users/bartlein/Downloads/hdf/HDF_Group/H4H5/2.2.5/bin/h4toh5convert GFED4.0_DQ_2015270_BA.hdf
+# if the h4toh5convert.exe program isn't in the PATH
 ```
 
-This will create the file `uvief20190423.h5`.  (Note that an explicit output filename and path can be included.  Not everything in the HDF4 file will be converted, and it's likely that a number of error messages will appear, giving the impression that the operation has failed.  Check to see whether in fact the HDF5 was indeed created.)
+This will create the file `uvief20190423.h5`.  (Note that an explicit output filename and path can be included.  Not everything in the HDF4 file will be converted, and it's likely that a number of error messages will appear, giving the impression that the operation has failed.  Check to see whether in fact the HDF5 was indeed created, and has something in it (via Panoply).)
 
 # Read a simple HDF5 file #
 
 Begin by setting paths and filenames:
 
-```{r, file1paths}
+```{r hdf5-intro-2, file1paths}
 # set path and filename
-hdf_path <- "/Users/bartlein/Projects/ESSD//data/hdf_files/"
+hdf_path <- "/Users/bartlein/Projects/ESSD/data/hdf_files/"
 hdf_name <- "uvief20190423.h5"
 hdf_file <- paste(hdf_path, hdf_name, sep="")
 ```
@@ -131,41 +127,72 @@ nlat
 head(lat); tail(lat)
 ```
 
-Get the UV data, and convert it to a `raster` object, and get a short summary:
+Get the UV data, and convert it to a `SpatRaster` object, and get a short summary. Note that the UVI data is in layer 3 of the raster brick.
 
-```{r readh1}
+```{r read_UVI1}
+hdf_file <- "/Users/bartlein/Dropbox/DataVis/working/data/hdf_files/uvief20190423.h5"
+UVI_in <- rast(hdf_file, lyrs = 3)
+UVI_in
+plot(UVI_in)
+```
+
+Notice that the raster has an unknown extent (i.e the range of longitudes and latitudes), and it also appears to be upside down. Flip the raster, and add the longitude and latitude extent.
+
+```{r hdf5-intro-3}
+# flip the raster
+UVI <- flip(UVI_in, direction = "vertical")
+# add the spatial extent
+ext(UVI) <- c(-179.875, 179.875, -89.875, 89.875)
+UVI
+```
+
+Plot the raster: 
+
+```{r hdf5-intro-4}
+plot(UVI)
+```
+
+Looks ok. Remove the input file:
+
+```{r hdf5-intro-5}
+# Remove the input file
+remove(UVI_in)
+```
+
+Note that the data could also be read as an a matrix, or 2d array
+
+```{r readh1, ECHO = TRUE, EVAL = FALSE}
 # read the UV data
 h1 <- h5read(hdf_file, "/UVI_field")
 class(h1); str(h1)
-UVI <- raster(h1)
-UVI
 ```
 
-Get a quick look using the `raster` version of the `image()` function:
+Remove the array:
 
-```{r image1, fig.height=4, fig.width=4, out.width = "50%", out.height = "50%"}
-# quick look
-image(UVI)
-```
-
-The layout of the data in the file is obviously not straightforward.  First, the coordinates of the data are not longitudes and latitudes but simply values that range from 0 to 1, and the orientation of the grid is such that the `raster` object needs to be both tranposed (exchanging x and y), and flipped north to south.  this can be done as follows, also adding explicit longitude and latitude dimensions:
-
-```{r transpose_and_flip}
-# transpose and flip the raster 
-UVI <- flip(raster(t(h1), xmn=lon[1], xmx=lon[nlon], ymn=lat[1], ymx=lat[nlat]), "y")
-UVI
+```{r hdf5-intro-6}
+# Remove the input file
+remove(h1)
 ```
 
 ## Plot the UV data
 
-A `rasterVis` plot can be produced as follows:
-
-```{r rasterVis1}
-# rasterVis plot
-mapTheme <- rasterTheme(region=brewer.pal(8,"YlOrRd"))
-plt <- levelplot(UVI, margin=F, par.settings=mapTheme, main="UV Index")
-plt + layer(sp.lines(world_outline, col="black", lwd=1.0))
+Convert the `world_outline` to a spatial vector for adding to the map
+```{r hdf5-intro-7 }
+# convert world_outline to a spatial vector
+world_otl <- vect(world_outline)
+class(world_otl)
+plot(world_otl)
 ```
+
+A plot with overlain outlines can be produced as follows:
+
+```{r rasterPlot}
+color_fun <- colorRampPalette(brewer.pal(9,"YlOrRd"))
+plot(UVI, col = color_fun(50), main = "UV Index", ylab = "Latitude", xlab = "Longitude")
+plot(world_otl, add = TRUE)
+```
+
+The `colorRampPalette()` function creates another function `color_fun` that can be used to interpolate a color scale or ramp, here the `RColorBrewer` "YlOrRd" scale. When supplied to the `col` argument in the `plot()` function, it creats a color ramp with 50 steps
 
 Close the open files before moving on:
 
@@ -178,7 +205,7 @@ h5closeAll()
 
 A much more stuctured file that exploits the ability of HDF5 to store data in "groups" that mimics in some ways the directory or folder structure on a local computer is represented by the GFED4.1 fire data set.  As usual, begin by setting paths and file names.
 
-```{r}
+```{r hdf5-intro-8}
 # set path 
 hdf_path <- "/Users/bartlein/Projects/ESSD//data/hdf_files/"
 hdf_name <- "GFED4.1s_2016.hdf5"
@@ -241,7 +268,7 @@ Read the attributes of the `burned_area` variable:
 
 ```{r readattr2}
 # read the attributes of the burned_area variable
-h5readAttributes(hdf_file, name = "burned_area")
+h5readAttributes(hdf_file, name = "/burned_area")
 ```
 
 From the listing of the contents of the file, and the information provided in Panoply, it can be seen that, for example, the burned fraction (the proportion of a grid cell burned), for July 2016 is in the variable named `/burned_area/07/burned_fraction`.  Get that variable:
@@ -250,34 +277,44 @@ From the listing of the contents of the file, and the information provided in Pa
 # read a raster slice
 h2 <- h5read(hdf_file, "/burned_area/07/burned_fraction")
 class(h2); str(h2)
-BF <- raster(h2)
+BF <- rast(h2)
 BF
 ```
 
 Take a quick look:
 
-```{r image2, fig.height=4, fig.width=4, out.width = "50%", out.height = "50%"}
+```{r image2}
 # image plot
-image(log10(BF))
+plot(log10(BF))
 ```
 
 The image plot, confirmed by Panoply, suggests that the raster needs to be transposed.
 
 ```{r transpose BF}
 # tranpose the raster
-BF <- raster(t(h2), xmn=lon[1], xmx=lon[nlon], ymn=lat[1], ymx=lat[nlat])
+BF <- t(BF)
 BF
+plot(log10(BF))
 ```
 
+As was the case with the Ozone data, the rasterized input data (`BF`) does not contain spatial entent data. These can be gotten from the longitude and latitude data read in above using the `h5read()` function.
+
+```{r hdf5-intro-9}
+# set spatial extent
+# add the spatial extent
+ext(BF) <- c(lon[1], lon[nlon], lat[1], lat[nlat])
+BF
+plot(log10(BF))
+```
 ## plot the GFED burned fraction data
 
 Plot the data:
 
-```{r rasterVis2}
-# rasterVis plot
-mapTheme <- rasterTheme(region=brewer.pal(8,"OrRd"))
-plt <- levelplot(log10(BF), margin=F, par.settings=mapTheme, main="log10 Burned Fraction")
-plt + layer(sp.lines(world_outline, col="black", lwd=1.0))
+```{r rasterPlot2}
+color_fun <- colorRampPalette(brewer.pal(9,"YlOrRd"))
+plot(log10(BF), col = color_fun(50), main = "UV Index", ylab = "Latitude", xlab = "Longitude")
+plot(world_otl, add = TRUE)
 ```
+
 
 

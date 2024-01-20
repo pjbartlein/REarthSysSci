@@ -498,13 +498,7 @@ class="toc-section-number">3.1</span> Plot the UV data</a></li>
 <li><a href="#read-a-more-complicated-hdf5-file"
 id="toc-read-a-more-complicated-hdf5-file"><span
 class="toc-section-number">4</span> Read a more complicated HDF5
-file</a>
-<ul>
-<li><a href="#plot-the-gfed-burned-fraction-data"
-id="toc-plot-the-gfed-burned-fraction-data"><span
-class="toc-section-number">4.1</span> plot the GFED burned fraction
-data</a></li>
-</ul></li>
+file</a></li>
 </ul>
 </div>
 
@@ -540,14 +534,17 @@ on a local machine. This will become evident below.</p>
 </div>
 <div id="preliminary-set-up" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> Preliminary set up</h1>
-<p>The <code>rhdf5</code> package can be retrived from Bioconductor, and
-installed as follows. Generally, a lot of dependent packages will also
-need to be installed, as well, but the process is usually
-straightforward.</p>
+<p>The <code>rhdf5</code> package can be retrieved from Bioconductor,
+and installed as follows. Generally, a lot of dependent packages will
+also need to be installed, as well, but the process is usually
+straightforward.a</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install rhdf5</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">requireNamespace</span>(<span class="st">&quot;rhdf5&quot;</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>))</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">&quot;BiocManager&quot;</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">&quot;rhdf5&quot;</span>, <span class="at">version =</span> <span class="st">&quot;3.18&quot;</span>, <span class="at">force =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## 
+## The downloaded binary packages are in
+##  /var/folders/_z/00grn4pd407dtnp256rd81k00000gp/T//Rtmpk51qcq/downloaded_packages</code></pre>
 <p>The examples below use data from TEMIS, the Tropospheric Emission
 Monitoring Internet Service (<a
 href="http://www.temis.nl/index.php">[http://www.temis.nl/index.php]</a>),
@@ -572,7 +569,8 @@ Linux. On the Mac, it will usually be the case that the executable file
 should be moved to the /Applications folder, while on Windows the usual
 fooling around with paths will be required. The
 <code>ncl_convert2nc</code> tool is part of NCL, which can be installed
-on run on Windows 10 machines using the Linux subsystem for Windows.</p>
+on run on Windows 10/11 machines using the Linux subsystem for Windows
+(WSL2.</p>
 <p>There are some useful tutorials on using HDF in R from the NSF NEON
 program:</p>
 <ul>
@@ -584,25 +582,22 @@ href="https://www.neonscience.org/hdf5-intro-r">[hdf5-intro-r]</a></li>
 href="https://github.com/NEONScience/NEON-Data-Skills/tree/master/code/HDF5">[HDF5]</a></li>
 </ul>
 <p>Begin by loading the appropriate packages:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># load packages</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">library</span>(rhdf5)</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">library</span>(latticeExtra)</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">library</span>(raster)</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">library</span>(rasterVis)</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
-<p>For latter plotting of the data, also read a world outline shape
-file:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># read a world shapefile</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>shp_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/shp_files/ne_110m_admin_0_countries/&quot;</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>shp_name <span class="ot">&lt;-</span> <span class="st">&quot;ne_110m_admin_0_countries.shp&quot;</span></span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>shp_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(shp_path, shp_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>world_shp <span class="ot">&lt;-</span> <span class="fu">read_sf</span>(shp_file)</span>
-<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>world_outline <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">st_geometry</span>(world_shp), <span class="at">Class=</span><span class="st">&quot;Spatial&quot;</span>)</span>
-<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co"># plot the outline</span></span>
-<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="fu">plot</span>(world_outline, <span class="at">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">lwd=</span><span class="dv">1</span>)</span></code></pre></div>
-<p><img src="hdf5_intro_files/figure-html/shapefile-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># load packages</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">library</span>(rhdf5)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
+<p>For latter plotting of the data, also read a world outline file. The
+file(s) can be copied from the class RESS server, or by downloading the
+contents of the folder at
+<code>https://pages.uoregon.edu/bartlein/RESS/shp_files/world2015/</code>
+Note that shape files consist of multiple files,
+e.g. <code>*.shp</code>, <code>*.shx</code>, <code>*.dbf</code>,
+<code>*.prj</code>, <code>cpg</code>, and all must be downloaded.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>shp_file <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/shp_files/world2015/UIA_World_Countries_Boundaries.shp&quot;</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>world_outline <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">st_geometry</span>(<span class="fu">read_sf</span>(shp_file)), <span class="at">Class =</span> <span class="st">&quot;Spatial&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">plot</span>(world_outline, <span class="at">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">lwd=</span><span class="dv">1</span>)</span></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/hdf5-intro-1-1.png" width="75%" height="75%" /></p>
 <div id="convert-an-hdf4-file-to-hdf5" class="section level2"
 number="2.1">
 <h2><span class="header-section-number">2.1</span> Convert an HDF4 file
@@ -614,29 +609,34 @@ Panoply. Viewing files in Panoply is always good practice–in this case
 the particular layout of the data in file is rather ambiguous at first
 glance, and so getting a look at the contents of the file before
 attempting to read it is a good idea.</p>
+<p>Copy the file a convenient places, say, a folder
+<code>/hdf_files</code> in your data folder
+(e.g. <code>/Users/bartlein/Projects/ESSD/data/hdf_files/</code>)</p>
 <p>The HDF4 file can be converted by typing in a terminal or command
 window (for example):</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>h4toh5convert uvief20190423.hdf</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># or: /Users/bartlein/Downloads/hdf/HDF_Group/H4H5/2.2.5/bin/h4toh5convert GFED4.0_DQ_2015270_BA.hdf</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>h4toh5convert uvief20190423.hdf</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co"># or, e.g.: /Users/bartlein/Downloads/hdf/HDF_Group/H4H5/2.2.5/bin/h4toh5convert GFED4.0_DQ_2015270_BA.hdf</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co"># if the h4toh5convert.exe program isn&#39;t in the PATH</span></span></code></pre></div>
 <p>This will create the file <code>uvief20190423.h5</code>. (Note that
 an explicit output filename and path can be included. Not everything in
 the HDF4 file will be converted, and it’s likely that a number of error
 messages will appear, giving the impression that the operation has
-failed. Check to see whether in fact the HDF5 was indeed created.)</p>
+failed. Check to see whether in fact the HDF5 was indeed created, and
+has something in it (via Panoply).)</p>
 </div>
 </div>
 <div id="read-a-simple-hdf5-file" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Read a simple HDF5
 file</h1>
 <p>Begin by setting paths and filenames:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># set path and filename</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>hdf_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD//data/hdf_files/&quot;</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>hdf_name <span class="ot">&lt;-</span> <span class="st">&quot;uvief20190423.h5&quot;</span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>hdf_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(hdf_path, hdf_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># set path and filename</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>hdf_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/hdf_files/&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>hdf_name <span class="ot">&lt;-</span> <span class="st">&quot;uvief20190423.h5&quot;</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>hdf_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(hdf_path, hdf_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <p>List the contents of the file. (WARNING: This can produce a lot of
 output)</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># list the file content</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">h5ls</span>(hdf_file)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># list the file content</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">h5ls</span>(hdf_file)</span></code></pre></div>
 <pre><code>##   group         name       otype  dclass        dim
 ## 0     /    Latitudes H5I_DATASET   FLOAT        720
 ## 1     /   Longitudes H5I_DATASET   FLOAT       1440
@@ -647,8 +647,8 @@ output)</p>
 ## 6     /     fakeDim1 H5I_DATASET INTEGER       1440</code></pre>
 <p>Read the attributes of the <code>UVI_field</code> variable, the UV
 index:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># read the attributes of UVI_field</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">h5readAttributes</span>(hdf_file, <span class="at">name =</span> <span class="st">&quot;UVI_field&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># read the attributes of UVI_field</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">h5readAttributes</span>(hdf_file, <span class="at">name =</span> <span class="st">&quot;UVI_field&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning in H5Aread(A, ...): Reading attribute data of type &#39;VLEN&#39; not yet implemented. Values replaced
 ## by NA&#39;s.</code></pre>
 <pre><code>## $DIMENSION_LIST
@@ -666,71 +666,96 @@ index:</p>
 ## $Units
 ## [1] &quot;1  [ 1 UV index unit equals 25 mW/m2 ]&quot;</code></pre>
 <p>Get the latitudes and longitudes of the grid:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># get lons and lats</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;/Longitudes&quot;</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>nlon <span class="ot">&lt;-</span> <span class="fu">length</span>(lon)</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>nlon</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># get lons and lats</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;/Longitudes&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>nlon <span class="ot">&lt;-</span> <span class="fu">length</span>(lon)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>nlon</span></code></pre></div>
 <pre><code>## [1] 1440</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">head</span>(lon); <span class="fu">tail</span>(lon)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">head</span>(lon); <span class="fu">tail</span>(lon)</span></code></pre></div>
 <pre><code>## [1] -179.875 -179.625 -179.375 -179.125 -178.875 -178.625</code></pre>
 <pre><code>## [1] 178.625 178.875 179.125 179.375 179.625 179.875</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;/Latitudes&quot;</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>nlat <span class="ot">&lt;-</span> <span class="fu">length</span>(lat)</span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>nlat</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;/Latitudes&quot;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>nlat <span class="ot">&lt;-</span> <span class="fu">length</span>(lat)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>nlat</span></code></pre></div>
 <pre><code>## [1] 720</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">head</span>(lat); <span class="fu">tail</span>(lat)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">head</span>(lat); <span class="fu">tail</span>(lat)</span></code></pre></div>
 <pre><code>## [1] -89.875 -89.625 -89.375 -89.125 -88.875 -88.625</code></pre>
 <pre><code>## [1] 88.625 88.875 89.125 89.375 89.625 89.875</code></pre>
-<p>Get the UV data, and convert it to a <code>raster</code> object, and
-get a short summary:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># read the UV data</span></span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>h1 <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;/UVI_field&quot;</span>)</span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="fu">class</span>(h1); <span class="fu">str</span>(h1)</span></code></pre></div>
+<p>Get the UV data, and convert it to a <code>SpatRaster</code> object,
+and get a short summary. Note that the UVI data is in layer 3 of the
+raster brick.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>hdf_file <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Dropbox/DataVis/working/data/hdf_files/uvief20190423.h5&quot;</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>UVI_in <span class="ot">&lt;-</span> <span class="fu">rast</span>(hdf_file, <span class="at">lyrs =</span> <span class="dv">3</span>)</span></code></pre></div>
+<pre><code>## Warning: [rast] unknown extent</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>UVI_in</span></code></pre></div>
+<pre><code>## class       : SpatRaster 
+## dimensions  : 720, 1440, 1  (nrow, ncol, nlyr)
+## resolution  : 1, 1  (x, y)
+## extent      : 0, 1440, 0, 720  (xmin, xmax, ymin, ymax)
+## coord. ref. :  
+## source      : uvief20190423.h5://UVI_field 
+## varname     : UVI_field 
+## name        : UVI_field</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">plot</span>(UVI_in)</span></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/read_UVI1-1.png" width="75%" height="75%" /></p>
+<p>Notice that the raster has an unknown extent (i.e the range of
+longitudes and latitudes), and it also appears to be upside down. Flip
+the raster, and add the longitude and latitude extent.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co"># flip the raster</span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>UVI <span class="ot">&lt;-</span> <span class="fu">flip</span>(UVI_in, <span class="at">direction =</span> <span class="st">&quot;vertical&quot;</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="co"># add the spatial extent</span></span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="fu">ext</span>(UVI) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">179.875</span>, <span class="fl">179.875</span>, <span class="sc">-</span><span class="fl">89.875</span>, <span class="fl">89.875</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a>UVI</span></code></pre></div>
+<pre><code>## class       : SpatRaster 
+## dimensions  : 720, 1440, 1  (nrow, ncol, nlyr)
+## resolution  : 0.2498264, 0.2496528  (x, y)
+## extent      : -179.875, 179.875, -89.875, 89.875  (xmin, xmax, ymin, ymax)
+## coord. ref. :  
+## source(s)   : memory
+## varname     : UVI_field 
+## name        : UVI_field 
+## min value   :         0 
+## max value   :     18342</code></pre>
+<p>Plot the raster:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="fu">plot</span>(UVI)</span></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/hdf5-intro-4-1.png" width="75%" height="75%" /></p>
+<p>Looks ok. Remove the input file:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># Remove the input file</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="fu">remove</span>(UVI_in)</span></code></pre></div>
+<p>Note that the data could also be read as an a matrix, or 2d array</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># read the UV data</span></span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>h1 <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;/UVI_field&quot;</span>)</span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a><span class="fu">class</span>(h1); <span class="fu">str</span>(h1)</span></code></pre></div>
 <pre><code>## [1] &quot;matrix&quot; &quot;array&quot;</code></pre>
 <pre><code>##  int [1:1440, 1:720] 0 0 0 0 0 0 0 0 0 0 ...</code></pre>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>UVI <span class="ot">&lt;-</span> <span class="fu">raster</span>(h1)</span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>UVI</span></code></pre></div>
-<pre><code>## class      : RasterLayer 
-## dimensions : 1440, 720, 1036800  (nrow, ncol, ncell)
-## resolution : 0.001388889, 0.0006944444  (x, y)
-## extent     : 0, 1, 0, 1  (xmin, xmax, ymin, ymax)
-## crs        : NA 
-## source     : memory
-## names      : layer 
-## values     : 0, 18342  (min, max)</code></pre>
-<p>Get a quick look using the <code>raster</code> version of the
-<code>image()</code> function:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># quick look</span></span>
-<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">image</span>(UVI)</span></code></pre></div>
-<p><img src="hdf5_intro_files/figure-html/image1-1.png" width="50%" height="50%" /></p>
-<p>The layout of the data in the file is obviously not straightforward.
-First, the coordinates of the data are not longitudes and latitudes but
-simply values that range from 0 to 1, and the orientation of the grid is
-such that the <code>raster</code> object needs to be both tranposed
-(exchanging x and y), and flipped north to south. this can be done as
-follows, also adding explicit longitude and latitude dimensions:</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co"># transpose and flip the raster </span></span>
-<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>UVI <span class="ot">&lt;-</span> <span class="fu">flip</span>(<span class="fu">raster</span>(<span class="fu">t</span>(h1), <span class="at">xmn=</span>lon[<span class="dv">1</span>], <span class="at">xmx=</span>lon[nlon], <span class="at">ymn=</span>lat[<span class="dv">1</span>], <span class="at">ymx=</span>lat[nlat]), <span class="st">&quot;y&quot;</span>)</span>
-<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a>UVI</span></code></pre></div>
-<pre><code>## class      : RasterLayer 
-## dimensions : 720, 1440, 1036800  (nrow, ncol, ncell)
-## resolution : 0.2498264, 0.2496528  (x, y)
-## extent     : -179.875, 179.875, -89.875, 89.875  (xmin, xmax, ymin, ymax)
-## crs        : NA 
-## source     : memory
-## names      : layer 
-## values     : 0, 18342  (min, max)</code></pre>
+<p>Remove the array:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="co"># Remove the input file</span></span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a><span class="fu">remove</span>(h1)</span></code></pre></div>
 <div id="plot-the-uv-data" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Plot the UV data</h2>
-<p>A <code>rasterVis</code> plot can be produced as follows:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># rasterVis plot</span></span>
-<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>mapTheme <span class="ot">&lt;-</span> <span class="fu">rasterTheme</span>(<span class="at">region=</span><span class="fu">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;YlOrRd&quot;</span>))</span>
-<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a>plt <span class="ot">&lt;-</span> <span class="fu">levelplot</span>(UVI, <span class="at">margin=</span>F, <span class="at">par.settings=</span>mapTheme, <span class="at">main=</span><span class="st">&quot;UV Index&quot;</span>)</span>
-<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a>plt <span class="sc">+</span> <span class="fu">layer</span>(<span class="fu">sp.lines</span>(world_outline, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">1.0</span>))</span></code></pre></div>
-<p><img src="hdf5_intro_files/figure-html/rasterVis1-1.png" width="75%" height="75%" /></p>
+<p>Convert the <code>world_outline</code> to a spatial vector for adding
+to the map</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="co"># convert world_outline to a spatial vector</span></span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a>world_otl <span class="ot">&lt;-</span> <span class="fu">vect</span>(world_outline)</span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a><span class="fu">class</span>(world_otl)</span></code></pre></div>
+<pre><code>## [1] &quot;SpatVector&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;terra&quot;</code></pre>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="fu">plot</span>(world_otl)</span></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/hdf5-intro-7-1.png" width="75%" height="75%" /></p>
+<p>A plot with overlain outlines can be produced as follows:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a>color_fun <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;YlOrRd&quot;</span>))</span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a><span class="fu">plot</span>(UVI, <span class="at">col =</span> <span class="fu">color_fun</span>(<span class="dv">50</span>), <span class="at">main =</span> <span class="st">&quot;UV Index&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Longitude&quot;</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a><span class="fu">plot</span>(world_otl, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/rasterPlot-1.png" width="75%" height="75%" /></p>
+<p>The <code>colorRampPalette()</code> function creates another function
+<code>color_fun</code> that can be used to interpolate a color scale or
+ramp, here the <code>RColorBrewer</code> “YlOrRd” scale. When supplied
+to the <code>col</code> argument in the <code>plot()</code> function, it
+creats a color ramp with 50 steps</p>
 <p>Close the open files before moving on:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># close open HDF5 files</span></span>
-<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="fu">h5closeAll</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="co"># close open HDF5 files</span></span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a><span class="fu">h5closeAll</span>()</span></code></pre></div>
 </div>
 </div>
 <div id="read-a-more-complicated-hdf5-file" class="section level1"
@@ -741,113 +766,131 @@ HDF5 file</h1>
 data in “groups” that mimics in some ways the directory or folder
 structure on a local computer is represented by the GFED4.1 fire data
 set. As usual, begin by setting paths and file names.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># set path </span></span>
-<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>hdf_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD//data/hdf_files/&quot;</span></span>
-<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>hdf_name <span class="ot">&lt;-</span> <span class="st">&quot;GFED4.1s_2016.hdf5&quot;</span></span>
-<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a>hdf_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(hdf_path, hdf_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="co"># set path </span></span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a>hdf_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD//data/hdf_files/&quot;</span></span>
+<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a>hdf_name <span class="ot">&lt;-</span> <span class="st">&quot;GFED4.1s_2016.hdf5&quot;</span></span>
+<span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a>hdf_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(hdf_path, hdf_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <p>List the file contents, DOUBLE WARNING: This really does produce a
 lot of output, only some is included here:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co"># list the file contents</span></span>
-<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="fu">h5ls</span>(hdf_file) <span class="co"># may create a lot of output</span></span></code></pre></div>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="do">##                            group                name       otype  dclass        dim</span></span>
-<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="do">## 0                              /              ancill   H5I_GROUP                   </span></span>
-<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a><span class="do">## 1                        /ancill       basis_regions H5I_DATASET INTEGER 1440 x 720</span></span>
-<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a><span class="do">## 2                        /ancill      grid_cell_area H5I_DATASET   FLOAT 1440 x 720</span></span>
-<span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a><span class="do">## 3                              /           biosphere   H5I_GROUP                   </span></span>
-<span id="cb33-6"><a href="#cb33-6" tabindex="-1"></a><span class="do">## 4                     /biosphere                  01   H5I_GROUP                   </span></span>
-<span id="cb33-7"><a href="#cb33-7" tabindex="-1"></a><span class="do">## 5                  /biosphere/01                  BB H5I_DATASET   FLOAT 1440 x 720</span></span>
-<span id="cb33-8"><a href="#cb33-8" tabindex="-1"></a><span class="do">## 6                  /biosphere/01                 NPP H5I_DATASET   FLOAT 1440 x 720</span></span>
-<span id="cb33-9"><a href="#cb33-9" tabindex="-1"></a><span class="do">## 7                  /biosphere/01                  Rh H5I_DATASET   FLOAT 1440 x 720</span></span>
-<span id="cb33-10"><a href="#cb33-10" tabindex="-1"></a><span class="do">## 8                     /biosphere                  02   H5I_GROUP                   </span></span>
-<span id="cb33-11"><a href="#cb33-11" tabindex="-1"></a><span class="do">## 9                  /biosphere/02                  BB H5I_DATASET   FLOAT 1440 x 720</span></span>
-<span id="cb33-12"><a href="#cb33-12" tabindex="-1"></a><span class="do">## 10                 /biosphere/02                 NPP H5I_DATASET   FLOAT 1440 x 720</span></span>
-<span id="cb33-13"><a href="#cb33-13" tabindex="-1"></a><span class="do">## 11                 /biosphere/02                  Rh H5I_DATASET   FLOAT 1440 x 720</span></span>
-<span id="cb33-14"><a href="#cb33-14" tabindex="-1"></a>...</span>
-<span id="cb33-15"><a href="#cb33-15" tabindex="-1"></a></span>
-<span id="cb33-16"><a href="#cb33-16" tabindex="-1"></a><span class="do">## 52                             /         burned_area   H5I_GROUP                   </span></span>
-<span id="cb33-17"><a href="#cb33-17" tabindex="-1"></a><span class="do">## 53                  /burned_area                  01   H5I_GROUP                   </span></span>
-<span id="cb33-18"><a href="#cb33-18" tabindex="-1"></a><span class="do">## 54               /burned_area/01     burned_fraction H5I_DATASET   FLOAT 1440 x 720</span></span>
-<span id="cb33-19"><a href="#cb33-19" tabindex="-1"></a><span class="do">## 55               /burned_area/01              source H5I_DATASET INTEGER 1440 x 720</span></span>
-<span id="cb33-20"><a href="#cb33-20" tabindex="-1"></a><span class="do">## 56                  /burned_area                  02   H5I_GROUP                   </span></span>
-<span id="cb33-21"><a href="#cb33-21" tabindex="-1"></a><span class="do">## 57               /burned_area/02     burned_fraction H5I_DATASET   FLOAT 1440 x 720</span></span>
-<span id="cb33-22"><a href="#cb33-22" tabindex="-1"></a><span class="do">## 58               /burned_area/02              source H5I_DATASET INTEGER 1440 x 720</span></span>
-<span id="cb33-23"><a href="#cb33-23" tabindex="-1"></a><span class="do">## 59                  /burned_area                  03   H5I_GROUP                   </span></span>
-<span id="cb33-24"><a href="#cb33-24" tabindex="-1"></a>...</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="co"># list the file contents</span></span>
+<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a><span class="fu">h5ls</span>(hdf_file) <span class="co"># may create a lot of output</span></span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="do">##                            group                name       otype  dclass        dim</span></span>
+<span id="cb42-2"><a href="#cb42-2" tabindex="-1"></a><span class="do">## 0                              /              ancill   H5I_GROUP                   </span></span>
+<span id="cb42-3"><a href="#cb42-3" tabindex="-1"></a><span class="do">## 1                        /ancill       basis_regions H5I_DATASET INTEGER 1440 x 720</span></span>
+<span id="cb42-4"><a href="#cb42-4" tabindex="-1"></a><span class="do">## 2                        /ancill      grid_cell_area H5I_DATASET   FLOAT 1440 x 720</span></span>
+<span id="cb42-5"><a href="#cb42-5" tabindex="-1"></a><span class="do">## 3                              /           biosphere   H5I_GROUP                   </span></span>
+<span id="cb42-6"><a href="#cb42-6" tabindex="-1"></a><span class="do">## 4                     /biosphere                  01   H5I_GROUP                   </span></span>
+<span id="cb42-7"><a href="#cb42-7" tabindex="-1"></a><span class="do">## 5                  /biosphere/01                  BB H5I_DATASET   FLOAT 1440 x 720</span></span>
+<span id="cb42-8"><a href="#cb42-8" tabindex="-1"></a><span class="do">## 6                  /biosphere/01                 NPP H5I_DATASET   FLOAT 1440 x 720</span></span>
+<span id="cb42-9"><a href="#cb42-9" tabindex="-1"></a><span class="do">## 7                  /biosphere/01                  Rh H5I_DATASET   FLOAT 1440 x 720</span></span>
+<span id="cb42-10"><a href="#cb42-10" tabindex="-1"></a><span class="do">## 8                     /biosphere                  02   H5I_GROUP                   </span></span>
+<span id="cb42-11"><a href="#cb42-11" tabindex="-1"></a><span class="do">## 9                  /biosphere/02                  BB H5I_DATASET   FLOAT 1440 x 720</span></span>
+<span id="cb42-12"><a href="#cb42-12" tabindex="-1"></a><span class="do">## 10                 /biosphere/02                 NPP H5I_DATASET   FLOAT 1440 x 720</span></span>
+<span id="cb42-13"><a href="#cb42-13" tabindex="-1"></a><span class="do">## 11                 /biosphere/02                  Rh H5I_DATASET   FLOAT 1440 x 720</span></span>
+<span id="cb42-14"><a href="#cb42-14" tabindex="-1"></a>...</span>
+<span id="cb42-15"><a href="#cb42-15" tabindex="-1"></a></span>
+<span id="cb42-16"><a href="#cb42-16" tabindex="-1"></a><span class="do">## 52                             /         burned_area   H5I_GROUP                   </span></span>
+<span id="cb42-17"><a href="#cb42-17" tabindex="-1"></a><span class="do">## 53                  /burned_area                  01   H5I_GROUP                   </span></span>
+<span id="cb42-18"><a href="#cb42-18" tabindex="-1"></a><span class="do">## 54               /burned_area/01     burned_fraction H5I_DATASET   FLOAT 1440 x 720</span></span>
+<span id="cb42-19"><a href="#cb42-19" tabindex="-1"></a><span class="do">## 55               /burned_area/01              source H5I_DATASET INTEGER 1440 x 720</span></span>
+<span id="cb42-20"><a href="#cb42-20" tabindex="-1"></a><span class="do">## 56                  /burned_area                  02   H5I_GROUP                   </span></span>
+<span id="cb42-21"><a href="#cb42-21" tabindex="-1"></a><span class="do">## 57               /burned_area/02     burned_fraction H5I_DATASET   FLOAT 1440 x 720</span></span>
+<span id="cb42-22"><a href="#cb42-22" tabindex="-1"></a><span class="do">## 58               /burned_area/02              source H5I_DATASET INTEGER 1440 x 720</span></span>
+<span id="cb42-23"><a href="#cb42-23" tabindex="-1"></a><span class="do">## 59                  /burned_area                  03   H5I_GROUP                   </span></span>
+<span id="cb42-24"><a href="#cb42-24" tabindex="-1"></a>...</span></code></pre></div>
 <p>Read the longtidues and latiudes. A preliminary look at the file in
 Panoply revealed that longitudes and latitudes were stored as full
 matices, as opposed to vectors. Consequently, after reading, only the
 first row (for longitude) and first column (for latitude) were
 stored.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="co"># read lons and lats</span></span>
-<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a>lon_array <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;lon&quot;</span>)</span>
-<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a>lon <span class="ot">&lt;-</span> lon_array[,<span class="dv">1</span>]</span>
-<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a>nlon <span class="ot">&lt;-</span> <span class="fu">length</span>(lon)</span>
-<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a>nlon</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="co"># read lons and lats</span></span>
+<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a>lon_array <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;lon&quot;</span>)</span>
+<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a>lon <span class="ot">&lt;-</span> lon_array[,<span class="dv">1</span>]</span>
+<span id="cb43-4"><a href="#cb43-4" tabindex="-1"></a>nlon <span class="ot">&lt;-</span> <span class="fu">length</span>(lon)</span>
+<span id="cb43-5"><a href="#cb43-5" tabindex="-1"></a>nlon</span></code></pre></div>
 <pre><code>## [1] 1440</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">head</span>(lon); <span class="fu">tail</span>(lon)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="fu">head</span>(lon); <span class="fu">tail</span>(lon)</span></code></pre></div>
 <pre><code>## [1] -179.875 -179.625 -179.375 -179.125 -178.875 -178.625</code></pre>
 <pre><code>## [1] 178.625 178.875 179.125 179.375 179.625 179.875</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a>lat_array <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;lat&quot;</span>)</span>
-<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>lat <span class="ot">&lt;-</span> lat_array[<span class="dv">1</span>,]</span>
-<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a>nlat <span class="ot">&lt;-</span> <span class="fu">length</span>(lat)</span>
-<span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a>nlat</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a>lat_array <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;lat&quot;</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a>lat <span class="ot">&lt;-</span> lat_array[<span class="dv">1</span>,]</span>
+<span id="cb48-3"><a href="#cb48-3" tabindex="-1"></a>nlat <span class="ot">&lt;-</span> <span class="fu">length</span>(lat)</span>
+<span id="cb48-4"><a href="#cb48-4" tabindex="-1"></a>nlat</span></code></pre></div>
 <pre><code>## [1] 720</code></pre>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> lat[nlat<span class="sc">:</span><span class="dv">1</span>]</span>
-<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a><span class="fu">head</span>(lat); <span class="fu">tail</span>(lat)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> lat[nlat<span class="sc">:</span><span class="dv">1</span>]</span>
+<span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a><span class="fu">head</span>(lat); <span class="fu">tail</span>(lat)</span></code></pre></div>
 <pre><code>## [1] -89.875 -89.625 -89.375 -89.125 -88.875 -88.625</code></pre>
 <pre><code>## [1] 88.625 88.875 89.125 89.375 89.625 89.875</code></pre>
 <p>Read the attributes of the <code>burned_area</code> variable:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="co"># read the attributes of the burned_area variable</span></span>
-<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a><span class="fu">h5readAttributes</span>(hdf_file, <span class="at">name =</span> <span class="st">&quot;burned_area&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="co"># read the attributes of the burned_area variable</span></span>
+<span id="cb53-2"><a href="#cb53-2" tabindex="-1"></a><span class="fu">h5readAttributes</span>(hdf_file, <span class="at">name =</span> <span class="st">&quot;/burned_area&quot;</span>)</span></code></pre></div>
 <pre><code>## list()</code></pre>
 <p>From the listing of the contents of the file, and the information
 provided in Panoply, it can be seen that, for example, the burned
 fraction (the proportion of a grid cell burned), for July 2016 is in the
 variable named <code>/burned_area/07/burned_fraction</code>. Get that
 variable:</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="co"># read a raster slice</span></span>
-<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a>h2 <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;/burned_area/07/burned_fraction&quot;</span>)</span>
-<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a><span class="fu">class</span>(h2); <span class="fu">str</span>(h2)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" tabindex="-1"></a><span class="co"># read a raster slice</span></span>
+<span id="cb55-2"><a href="#cb55-2" tabindex="-1"></a>h2 <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;/burned_area/07/burned_fraction&quot;</span>)</span>
+<span id="cb55-3"><a href="#cb55-3" tabindex="-1"></a><span class="fu">class</span>(h2); <span class="fu">str</span>(h2)</span></code></pre></div>
 <pre><code>## [1] &quot;matrix&quot; &quot;array&quot;</code></pre>
 <pre><code>##  num [1:1440, 1:720] 0 0 0 0 0 0 0 0 0 0 ...</code></pre>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a>BF <span class="ot">&lt;-</span> <span class="fu">raster</span>(h2)</span>
-<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a>BF</span></code></pre></div>
-<pre><code>## class      : RasterLayer 
-## dimensions : 1440, 720, 1036800  (nrow, ncol, ncell)
-## resolution : 0.001388889, 0.0006944444  (x, y)
-## extent     : 0, 1, 0, 1  (xmin, xmax, ymin, ymax)
-## crs        : NA 
-## source     : memory
-## names      : layer 
-## values     : 0, 0.8838143  (min, max)</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a>BF <span class="ot">&lt;-</span> <span class="fu">rast</span>(h2)</span>
+<span id="cb58-2"><a href="#cb58-2" tabindex="-1"></a>BF</span></code></pre></div>
+<pre><code>## class       : SpatRaster 
+## dimensions  : 1440, 720, 1  (nrow, ncol, nlyr)
+## resolution  : 1, 1  (x, y)
+## extent      : 0, 720, 0, 1440  (xmin, xmax, ymin, ymax)
+## coord. ref. :  
+## source(s)   : memory
+## name        :     lyr.1 
+## min value   : 0.0000000 
+## max value   : 0.8838143</code></pre>
 <p>Take a quick look:</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="co"># image plot</span></span>
-<span id="cb51-2"><a href="#cb51-2" tabindex="-1"></a><span class="fu">image</span>(<span class="fu">log10</span>(BF))</span></code></pre></div>
-<p><img src="hdf5_intro_files/figure-html/image2-1.png" width="50%" height="50%" /></p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a><span class="co"># image plot</span></span>
+<span id="cb60-2"><a href="#cb60-2" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">log10</span>(BF))</span></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/image2-1.png" width="75%" height="75%" /></p>
 <p>The image plot, confirmed by Panoply, suggests that the raster needs
 to be transposed.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="co"># tranpose the raster</span></span>
-<span id="cb52-2"><a href="#cb52-2" tabindex="-1"></a>BF <span class="ot">&lt;-</span> <span class="fu">raster</span>(<span class="fu">t</span>(h2), <span class="at">xmn=</span>lon[<span class="dv">1</span>], <span class="at">xmx=</span>lon[nlon], <span class="at">ymn=</span>lat[<span class="dv">1</span>], <span class="at">ymx=</span>lat[nlat])</span>
-<span id="cb52-3"><a href="#cb52-3" tabindex="-1"></a>BF</span></code></pre></div>
-<pre><code>## class      : RasterLayer 
-## dimensions : 720, 1440, 1036800  (nrow, ncol, ncell)
-## resolution : 0.2498264, 0.2496528  (x, y)
-## extent     : -179.875, 179.875, -89.875, 89.875  (xmin, xmax, ymin, ymax)
-## crs        : NA 
-## source     : memory
-## names      : layer 
-## values     : 0, 0.8838143  (min, max)</code></pre>
-<div id="plot-the-gfed-burned-fraction-data" class="section level2"
-number="4.1">
-<h2><span class="header-section-number">4.1</span> plot the GFED burned
-fraction data</h2>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a><span class="co"># tranpose the raster</span></span>
+<span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a>BF <span class="ot">&lt;-</span> <span class="fu">t</span>(BF)</span>
+<span id="cb61-3"><a href="#cb61-3" tabindex="-1"></a>BF</span></code></pre></div>
+<pre><code>## class       : SpatRaster 
+## dimensions  : 720, 1440, 1  (nrow, ncol, nlyr)
+## resolution  : 1, 1  (x, y)
+## extent      : 0, 1440, 0, 720  (xmin, xmax, ymin, ymax)
+## coord. ref. :  
+## source(s)   : memory
+## name        :     lyr.1 
+## min value   : 0.0000000 
+## max value   : 0.8838143</code></pre>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">log10</span>(BF))</span></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/transpose%20BF-1.png" width="75%" height="75%" /></p>
+<p>As was the case with the Ozone data, the rasterized input data
+(<code>BF</code>) does not contain spatial entent data. These can be
+gotten from the longitude and latitude data read in above using the
+<code>h5read()</code> function.</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" tabindex="-1"></a><span class="co"># set spatial extent</span></span>
+<span id="cb64-2"><a href="#cb64-2" tabindex="-1"></a><span class="co"># add the spatial extent</span></span>
+<span id="cb64-3"><a href="#cb64-3" tabindex="-1"></a><span class="fu">ext</span>(BF) <span class="ot">&lt;-</span> <span class="fu">c</span>(lon[<span class="dv">1</span>], lon[nlon], lat[<span class="dv">1</span>], lat[nlat])</span>
+<span id="cb64-4"><a href="#cb64-4" tabindex="-1"></a>BF</span></code></pre></div>
+<pre><code>## class       : SpatRaster 
+## dimensions  : 720, 1440, 1  (nrow, ncol, nlyr)
+## resolution  : 0.2498264, 0.2496528  (x, y)
+## extent      : -179.875, 179.875, -89.875, 89.875  (xmin, xmax, ymin, ymax)
+## coord. ref. :  
+## source(s)   : memory
+## name        :     lyr.1 
+## min value   : 0.0000000 
+## max value   : 0.8838143</code></pre>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">log10</span>(BF))</span></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/hdf5-intro-9-1.png" width="75%" height="75%" />
+## plot the GFED burned fraction data</p>
 <p>Plot the data:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="co"># rasterVis plot</span></span>
-<span id="cb54-2"><a href="#cb54-2" tabindex="-1"></a>mapTheme <span class="ot">&lt;-</span> <span class="fu">rasterTheme</span>(<span class="at">region=</span><span class="fu">brewer.pal</span>(<span class="dv">8</span>,<span class="st">&quot;OrRd&quot;</span>))</span>
-<span id="cb54-3"><a href="#cb54-3" tabindex="-1"></a>plt <span class="ot">&lt;-</span> <span class="fu">levelplot</span>(<span class="fu">log10</span>(BF), <span class="at">margin=</span>F, <span class="at">par.settings=</span>mapTheme, <span class="at">main=</span><span class="st">&quot;log10 Burned Fraction&quot;</span>)</span>
-<span id="cb54-4"><a href="#cb54-4" tabindex="-1"></a>plt <span class="sc">+</span> <span class="fu">layer</span>(<span class="fu">sp.lines</span>(world_outline, <span class="at">col=</span><span class="st">&quot;black&quot;</span>, <span class="at">lwd=</span><span class="fl">1.0</span>))</span></code></pre></div>
-<p><img src="hdf5_intro_files/figure-html/rasterVis2-1.png" width="75%" height="75%" /></p>
-</div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a>color_fun <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;YlOrRd&quot;</span>))</span>
+<span id="cb67-2"><a href="#cb67-2" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">log10</span>(BF), <span class="at">col =</span> <span class="fu">color_fun</span>(<span class="dv">50</span>), <span class="at">main =</span> <span class="st">&quot;UV Index&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Longitude&quot;</span>)</span>
+<span id="cb67-3"><a href="#cb67-3" tabindex="-1"></a><span class="fu">plot</span>(world_otl, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/rasterPlot2-1.png" width="75%" height="75%" /></p>
 </div>
 
 
