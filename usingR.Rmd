@@ -70,7 +70,6 @@ An alternative way of reading data is to read in an entire workspace (`*.RData`)
 # load data from a saved .RData file
 con <- url("https://pages.uoregon.edu/bartlein/RESS/RData/geog490.RData")
 load(file=con) 
-close(con) 
 ```
 
 Note how the "Environment" tab in RStudio has become populated with individual objects.

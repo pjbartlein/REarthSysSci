@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Introduction: R, RStudio and other infrastructure</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Earth-System Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="intro.html">Introduction: R, RStudio, and other infrastructure</a>
+    </li>
+    <li>
+      <a href="usingR.html">Using R</a>
+    </li>
+    <li>
+      <a href="ESSdata.html">Earth-system science data</a>
+    </li>
+    <li>
+      <a href="netCDF.html">netCDF in R</a>
+    </li>
+    <li>
+      <a href="raster_intro.html">raster, terra, and netCDF in R</a>
+    </li>
+    <li>
+      <a href="plots1.html">Plots (1)</a>
+    </li>
+    <li>
+      <a href="plots1.html">Plots (2)</a>
+    </li>
+    <li>
+      <a href="maps1.html">Maps (1)</a>
+    </li>
+    <li>
+      <a href="maps21.html">Maps (2)</a>
+    </li>
+    <li>
+      <a href="geospatial.html">Geospatial analyses</a>
+    </li>
+    <li>
+      <a href="correlation.html">Correlation and regression</a>
+    </li>
+    <li>
+      <a href="prediction.html">Prediction</a>
+    </li>
+    <li>
+      <a href="pca.html">PCA</a>
+    </li>
+    <li>
+      <a href="svd.html">Singular Value Decomposistion</a>
+    </li>
+    <li>
+      <a href="highdim.html">High-resolution &amp; high-dimensional data</a>
+    </li>
+    <li>
+      <a href="multivariate.html">Multivariate methods</a>
+    </li>
+    <li>
+      <a href="timeseries.html">Time-series analysis</a>
+    </li>
+    <li>
+      <a href="otherlang.html">Other Languages</a>
+    </li>
+    <li class="dropdown-header">Other topics</li>
+    <li>
+      <a href="hdf5_intro.html">HDF in R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Tasks
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Tasks</li>
+    <li>
+      <a href="installR.html">Install R and RStudio</a>
+    </li>
+    <li>
+      <a href="Ex_UsingR.html">Using R exercise</a>
+    </li>
+    <li>
+      <a href="install_netCDF.html">Install netCDF &amp; Panoply</a>
+    </li>
+    <li>
+      <a href="transfer.html">File transfer</a>
+    </li>
+    <li>
+      <a href="texteditor.html">Install a text editor</a>
+    </li>
+    <li>
+      <a href="dataselection.html">Project data set selection</a>
+    </li>
+    <li>
+      <a href="markdown.html">Markdown and RMarkdown</a>
+    </li>
+    <li>
+      <a href="pandoc.html">Pandoc</a>
+    </li>
+    <li>
+      <a href="GitHub.html">GitHub and UO pages.uoregon.edu</a>
+    </li>
+    <li>
+      <a href="localweb.html">Local websites</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="websites.html">Old course web pages</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Introduction: R, RStudio and other
+infrastructure</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#r-and-rstudio" id="toc-r-and-rstudio"><span
+class="toc-section-number">1</span> R and RStudio</a>
+<ul>
+<li><a href="#r-cran-and-bioconductor"
+id="toc-r-cran-and-bioconductor"><span
+class="toc-section-number">1.1</span> R, CRAN, and Bioconductor</a></li>
+<li><a href="#rstudio" id="toc-rstudio"><span
+class="toc-section-number">1.2</span> RStudio</a></li>
+</ul></li>
+<li><a href="#other-infrastructure-and-utilities"
+id="toc-other-infrastructure-and-utilities"><span
+class="toc-section-number">2</span> Other infrastructure and
+utilities</a>
+<ul>
+<li><a href="#git-and-github-version-control-and-web-page-hosting"
+id="toc-git-and-github-version-control-and-web-page-hosting"><span
+class="toc-section-number">2.1</span> Git and GitHub (Version Control
+and Web-Page Hosting)</a></li>
+<li><a href="#uo-pages.uoregon.edu" id="toc-uo-pages.uoregon.edu"><span
+class="toc-section-number">2.2</span> UO pages.uoregon.edu</a></li>
+<li><a href="#markdown" id="toc-markdown"><span
+class="toc-section-number">2.3</span> Markdown</a></li>
+<li><a href="#other-useful-utilities-and-apps"
+id="toc-other-useful-utilities-and-apps"><span
+class="toc-section-number">2.4</span> Other useful utilities and
+apps</a>
+<ul>
+<li><a href="#data-storage" id="toc-data-storage"><span
+class="toc-section-number">2.4.1</span> Data storage</a></li>
+<li><a href="#data-viewing" id="toc-data-viewing"><span
+class="toc-section-number">2.4.2</span> Data viewing</a></li>
+<li><a href="#file-transfer" id="toc-file-transfer"><span
+class="toc-section-number">2.4.3</span> File transfer</a></li>
+<li><a href="#text-editors" id="toc-text-editors"><span
+class="toc-section-number">2.4.4</span> Text editors</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+
+<p><span style="color: green;"><strong>NOTE:  This page has been revised
+for the 2024 version of the course, but there may be some additional
+edits.</strong>   <br></p>
+<div id="r-and-rstudio" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> R and RStudio</h1>
+<p>Before doing actual analyses of Earth-system science-type data using
+R, there is a bit of set-up and infrastructure installation to do.
+Although the list may seem daunting at first, the installations are
+quite straightforward.</p>
+<div id="r-cran-and-bioconductor" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> R, CRAN, and
+Bioconductor</h2>
+<p>The “R Project” (or simply “R”) grew out of the development of the S
+language for data analysis and statistics at Bell Laboratories in the
+1980s (and can be said to be an open-source version of S). R for
+different operating systems can be downloaded from “CRAN” (Comprehensive
+R Archive Network) site listed below. The basic installation of R is
+supplemented by a large number of packages (or libraries) that are also
+obtainable from CRAN or from Bioconductor, the latter being a collection
+of packages oriented to the analysis of life-science data.</p>
+<ul>
+<li>R Project webpage: <a href="https://www.r-project.org/"
+class="uri">https://www.r-project.org/</a><br />
+</li>
+<li>CRAN: <a href="http://cran.us.r-project.org/index.html"
+class="uri">http://cran.us.r-project.org/index.html</a> (download R and
+CRAN packages)</li>
+<li>Bioconductor: <a href="http://bioconductor.org/"
+class="uri">http://bioconductor.org/</a> (download Bioconductor
+packages)</li>
+</ul>
+<p>The current version of R is 4.3.2 (23 October 2023).</p>
+<p>Here is the link to Getting and using R for this course: <a
+href="https://pjbartlein.github.io/REarthSysSci/installR.html">https://pjbartlein.github.io/REarthSysSci/installR.html</a>
+(Or use the <code>Tasks &gt; Install R and Studio</code> menu tab.)</p>
+<p>Here is a link to some GEOG 4/595 materials on R (note that the
+installation directions may pertain to a previous version):</p>
+<ul>
+<li>GEOG 4/595 (Geographic Data Analysis): <a
+href="https://pjbartlein.github.io/GeogDataAnalysis/index.html">https://pjbartlein.github.io/GeogDataAnalysis/index.html</a></li>
+</ul>
+</div>
+<div id="rstudio" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> RStudio</h2>
+<p>RStudio is a development environment for R that is much more powerful
+than the “built-in” Windows or Mac graphical user interfaces (GUIs), and
+additionally nicely supports the development of “R Markdown” documents
+that combine text, code and R output.</p>
+<ul>
+<li>RStudio: <a
+href="https://www.rstudio.com/">https://www.rstudio.com/</a></li>
+<li>RStudio blog: <a
+href="https://blog.rstudio.org/">https://blog.rstudio.org/</a></li>
+<li>R Markdown: <a
+href="http://rmarkdown.rstudio.com/index.html">http://rmarkdown.rstudio.com/index.html</a></li>
+</ul>
+<p>Note: See <strong>Install R and RStudio</strong> under the Tasks tab
+for an exercise that describes the installation of R and RStudio.
+<strong>Install packages and data</strong> under the Tasks tab describes
+how to install packages individually and en masse, as well as how to the
+workspace used for exercises in GEOG 4/595.</p>
+</div>
+</div>
+<div id="other-infrastructure-and-utilities" class="section level1"
+number="2">
+<h1><span class="header-section-number">2</span> Other infrastructure
+and utilities</h1>
+<div id="git-and-github-version-control-and-web-page-hosting"
+class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Git and GitHub
+(Version Control and Web-Page Hosting)</h2>
+<p>“Git” is an open-source version-control system, that allows one to
+track (and backup) the development of software by building a “local
+repository” of current and previous versions of code, data, markdown
+files, etc. on one’s machine, while “GitHub” is a website that hosts
+“remote repositories”, allowing them to be saved, reached (or restored)
+from any machine (using Git), which greatly facilitates
+collaboration.</p>
+<ul>
+<li>GitHub: <a href="https://github.com">https://github.com</a></li>
+</ul>
+<p>The key resources for setting up and using Git and GitHub with
+RStudio is a bookdown web page by Jenny Bryan and others at <a
+href="https://happygitwithr.com/index.html">https://happygitwithr.com/index.html</a>.
+See the Tasks tab above for directions for installing Git and
+establishing an account on GitHub.</p>
+<p>It is becoming standard practice that any specialized software used
+in writing a journal article be made available via a repository like
+GitHub, and to be searchable via a DOI—a “digital object identifier”—
+all in aid of fostering “reproducible research”. For example, for a
+paper currently under review in the journal <em>Geoscientific Model
+Development</em> we developed a number of Fortran programs and data sets
+that reside in a GitHub repository, and then added that repository to
+the list of those cataloged by an operation called Zenodo, which
+provides a “permanent” DOI.</p>
+<ul>
+<li>GitHub repository: <a
+href="https://github.com/pjbartlein/PaleoCalAdjust">https://github.com/pjbartlein/PaleoCalAdjust</a></li>
+<li>Zenodo-issued DOI: <a
+href="https://doi.org/10.5281/zenodo.1478824">https://doi.org/10.5281/zenodo.1478824</a></li>
+</ul>
+<p>Here’s the GitHub repository for the course web page:</p>
+<ul>
+<li><a
+href="https://github.com/pjbartlein/REarthSysSci">https://github.com/pjbartlein/REarthSysSci</a></li>
+</ul>
+<p>Note: See <strong>Git and GitHub</strong> under the Tasks tab for
+instructions on getting a GitHub account and setting up a Git
+repository.</p>
+</div>
+<div id="uo-pages.uoregon.edu" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> UO
+pages.uoregon.edu</h2>
+<p>All UO users have an account and space (50 GB) on
+<code>pages.uoregon.edu</code> that can be used to host web pages:</p>
+<ul>
+<li><a
+href="https://service.uoregon.edu/TDClient/2030/Portal/KB/ArticleDet?ID=43068">[https://service.uoregon.edu/TDClient/2030/Portal/KB/ArticleDet?ID=43068]</a></li>
+</ul>
+<p>For example, here are a couple of animations of the meteorological
+conditions accompanying the 2020 Labor Day fires hosted on my web space
+on <code>pages.uoregon.edu</code>:</p>
+<ul>
+<li><a
+href="https://pages.uoregon.edu/bartlein/McKenzieFire/2020-09-06.html">https://pages.uoregon.edu/bartlein/McKenzieFire/2020-09-06.html</a></li>
+<li><a
+href="https://pages.uoregon.edu/bartlein/McKenzieFire/2020-09-06_OR.html">https://pages.uoregon.edu/bartlein/McKenzieFire/2020-09-06_OR.html</a></li>
+</ul>
+<p><code>pages.uoregon.edu</code> can be used to host the
+<code>.html</code> files produced for the course project.</p>
+</div>
+<div id="markdown" class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Markdown</h2>
+<p>This document is written in Markdown, which is a “lightweight” markup
+language (like HTML), that used a relatively simple syntax, and
+facilitates the transformation of human-readible text files into .html
+or .pdf documents. RMarkdown is a an R package, and a set of tools that
+are deeply embedded in RStudio that facilitates the construction of
+documents that combine text, R code and the output from the execution of
+that code, and that range in complexity from a single .html or .pdf
+file, to multi-page web sites, to books.</p>
+<p>RMarkdown thereby facilitates the concepts of “literate programming”
+<a href="https://en.wikipedia.org/wiki/Literate_programming">link</a>,
+and “reproducible research” <a
+href="https://en.wikipedia.org/wiki/Reproducibility">link</a>, which, in
+addition to explaining or documenting itself, also allows others
+(including an original investigator after some time has passed) to
+reproduce a data analysis or other research result.</p>
+<p>Here is a simple Markdown (<code>.md</code>) file:</p>
+<pre><code># Introduction #
+
+Some text, and little discussion, including a bulleted list
+- first list item
+- second list time
+
+## Some code ##
+
+Here is a little code (and note the different font):
+
+ ```
+ plot(orstationc$elev, orstationc$tann)
+ ```
+and some more text, possibly *decorated* or **otherwise formatted**.
+</code></pre>
+And here is what the file looks like when rendered:
+<hr>
+<h1>
+Introduction
+</h1>
+<p>
+Some text, and little discussion, including a bulleted list
+</p>
+<ul>
+<li>
+first list item
+</li>
+<li>
+second list time
+</li>
+</ul>
+<h2>
+Some code
+</h2>
+<p>
+Here is a little code (and note the different font):
+</p>
+<p>
+<code>plot(orstationc$elev, orstationc$tann)</code>
+</p>
+and some more text, possibly <em>decorated</em> or <strong>otherwise
+formatted</strong>.
+<hr>
+<p>Although the syntax of Markdown is relatively simple, complex
+documents can be generated using conversion tools like Pandoc.</p>
+<p>See the <strong>Markdown &amp; RMarkdown</strong> task for some basic
+information and resources on Markdown and RMarkdown</p>
+</div>
+<div id="other-useful-utilities-and-apps" class="section level2"
+number="2.4">
+<h2><span class="header-section-number">2.4</span> Other useful
+utilities and apps</h2>
+<div id="data-storage" class="section level3" number="2.4.1">
+<h3><span class="header-section-number">2.4.1</span> Data storage</h3>
+<p>There are two related formats for storing and distributing
+Earth-system science data that are in widespread use:</p>
+<ul>
+<li>HDF5 (and the older HDF4 format and variants) <em><a
+href="https://www.hdfgroup.org/solutions/hdf5/">(The HDF
+Group)</a></em>, and</li>
+<li>netCDF <em><a
+href="https://www.unidata.ucar.edu/software/netcdf/">(UCAR
+UNIDATA)</a></em></li>
+</ul>
+<p>The two formats are actually related, in that netCDF uses the
+internal HDF format for storage. Both formats are self-documenting
+(i.e. they contain attributes or metadata that describe the contents of
+a particular file) and are machine independent. Each has an associated
+set of command-line utilities that can be used to rapidly learn what a
+particular file contains.</p>
+<p>See the <strong>Install netCDF</strong> task for directions on
+installing netCDF and related utilities.</p>
+</div>
+<div id="data-viewing" class="section level3" number="2.4.2">
+<h3><span class="header-section-number">2.4.2</span> Data viewing</h3>
+<p>Panoply is a data viewer that can open and display netCDF, HDF, and
+related files, and is great for inspecting the contents of a file. It is
+downloadable from <a
+href="https://www.giss.nasa.gov/tools/panoply/">[NASA Goddard Institude
+for Space Studies]</a></p>
+<p>It is, of course, possible to open and view netCDF and HDF files in
+R, but Panoply is much faster.</p>
+<p>See the <strong>Install Panoply</strong> task for installation
+directions.</p>
+</div>
+<div id="file-transfer" class="section level3" number="2.4.3">
+<h3><span class="header-section-number">2.4.3</span> File transfer</h3>
+<p>Earth-system science data sets are typically large, multiple
+gigabytes (GB) in size each, with collections of variables ranging to
+multiple terabytes (TB). For example, individual variables in the
+“TraCE-21ka” transient paleoclimmte simulation data set (which contains
+monthly data from 22,000 to the late 20th Century) are 4.6 GB each, and
+collection of about 40 variables is around 3 TB. Data sets of this size
+are too large to conveniently download from web pages, particularly
+because some user interaction is required, and the individual files take
+a while to download.</p>
+<p>There are two main approaches for the batch transfer of files:</p>
+<ul>
+<li>FTP and SFTP (File Transfer Protocol and SSH File Transfer
+Protocol), which is built into may operating systems, but is
+conveniently used with a client application (such as Filezilla)</li>
+<li>Globus, a browser-based file-transfer client.</li>
+</ul>
+<p>See the <strong>File transfer</strong> task for information on
+installing and using Filezilla and Globus.</p>
+</div>
+<div id="text-editors" class="section level3" number="2.4.4">
+<h3><span class="header-section-number">2.4.4</span> Text editors</h3>
+<p>It’s often necessary to simply view, or to edit, text files. This can
+be in RStudio, or Word, but for a file of any size, this ranges from
+cumbersome to impossible. There are dozens of text editors, and adoption
+of one or another often winds up being a highly personal decision—a text
+editor either seems intuitive, or it doesn’t. A reasonable thing to do
+when adopting a text editor is to choose a cross-platform one, which can
+greatly facilitates moving from machine to machine. Three candidates,
+that behave somewhat similarly and include dozens of “packages” are:</p>
+<ul>
+<li>Sublime Text <a
+href="https://www.sublimehq.com">[https://www.sublimehq.com]</a>
+(License required for continuous use);</li>
+<li>Atom <a href="https://atom.io">[https://atom.io]</a>, free, from the
+operators of GitHub; and</li>
+<li>Visual Studio Code <a
+href="https://code.visualstudio.com">[https://code.visualstudio.com]</a>,
+free, from Microsoft. VS Code now has a number of add-in packages,
+including those for writing and previewing Markdown (.md) files and is
+recommended here.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

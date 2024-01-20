@@ -1,3 +1,8 @@
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "75%", out.height = "75%", verbose=TRUE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+
 # read a .csv file
 csv_path <- "/Users/bartlein/projects/ESSD/data/csv_files/"
 csv_name <- "IPCC-RF.csv"
@@ -16,7 +21,6 @@ tail(IPCC_RF)
 # load data from a saved .RData file
 con <- url("https://pages.uoregon.edu/bartlein/RESS/RData/geog490.RData")
 load(file=con) 
-close(con) 
 
 # attach SPECMAP data, index plot
 attach(specmap)
@@ -86,10 +90,10 @@ ggplot(orstationc, aes(elev, tann)) + geom_point() + geom_smooth(color = "blue")
   xlab("Elevation (m)") + ylab("Annual Mean Temperature (C)") +
           ggtitle("Oregon Climate Station Data")
 
-# load packages
-library(sf)
-library(RColorBrewer)
-library(classInt)
+## # load packages
+## library(sf)
+## library(RColorBrewer)
+## library(classInt)
 
 # univariate descriptive statistics
 summary(wus_pratio)
