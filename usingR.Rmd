@@ -66,7 +66,7 @@ The `class()` function indicates that the .csv file exists in R's workspace as a
 
 An alternative way of reading data is to read in an entire workspace (`*.RData`) at once.  The following code reads those data from the web, by opening a "connection" to a URL, and then using the `load()` function (which also can be used to load a workspace file from a local folder).
 
-```{r load_RData}
+```{r load_RData, eval=FALSE}
 # load data from a saved .RData file
 con <- url("https://pages.uoregon.edu/bartlein/RESS/RData/geog490.RData")
 load(file=con) 
