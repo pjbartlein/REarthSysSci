@@ -1,12 +1,15 @@
 ---
 title: "HDF"
-output: 
+output:
+  pdf_document:
+    toc: true
   html_document:
-    fig_caption: no
-    number_sections: yes
-    toc: yes
-    toc_float: False
-    collapsed: no
+    number_sections: true
+    toc: true
+    toc_float: false
+    collapsed: false
+editor_options:
+  chunk_output_type: console
 ---
 
 ```{r set-options, echo=FALSE}
@@ -30,7 +33,7 @@ Compared to netCDF files, HDF files can be messy:  they can contain images as we
 
 The `rhdf5` package can be retrieved from Bioconductor, and installed as follows.  Generally, a lot of dependent packages will also need to be installed, as well, but the process is usually straightforward.a
 
-```{r install_rhdf5, eval=TRUE, echo=TRUE, message=FALSE}
+```{r install_rhdf5, eval=FALSE, echo=TRUE, message=FALSE}
 # install rhdf5
 if (!requireNamespace("rhdf5", quietly = TRUE))
   install.packages("BiocManager")
@@ -268,7 +271,7 @@ Read the attributes of the `burned_area` variable:
 
 ```{r readattr2}
 # read the attributes of the burned_area variable
-h5readAttributes(hdf_file, name = "/burned_area")
+h5readAttributes(hdf_file, name = "/burned_area/07/burned_fraction/")
 ```
 
 From the listing of the contents of the file, and the information provided in Panoply, it can be seen that, for example, the burned fraction (the proportion of a grid cell burned), for July 2016 is in the variable named `/burned_area/07/burned_fraction`.  Get that variable:
@@ -277,6 +280,21 @@ From the listing of the contents of the file, and the information provided in Pa
 # read a raster slice
 h2 <- h5read(hdf_file, "/burned_area/07/burned_fraction")
 class(h2); str(h2)
+```
+
+The distribution of the burned fraction data is extremely long-tailed, meaning there are a lot of small values and few large ones:
+```{r hist1}
+hist(h2, breaks = 40)
+```
+
+The usual strategy for dealing with such data is to log transform it:
+```{r hist2}
+h2[h2 == 0.0] <- NA
+h2 <- log10(h2)
+hist(h2, breaks = 40)
+```
+
+```{r hist3}
 BF <- rast(h2)
 BF
 ```
@@ -284,37 +302,39 @@ BF
 Take a quick look:
 
 ```{r image2}
-# image plot
-plot(log10(BF))
+# terra plot
+plot((BF))
 ```
 
-The image plot, confirmed by Panoply, suggests that the raster needs to be transposed.
+The plot, confirmed by Panoply, suggests that the raster needs to be transposed.
 
 ```{r transpose BF}
 # tranpose the raster
 BF <- t(BF)
 BF
-plot(log10(BF))
+plot(BF)
 ```
 
 As was the case with the Ozone data, the rasterized input data (`BF`) does not contain spatial entent data. These can be gotten from the longitude and latitude data read in above using the `h5read()` function.
 
 ```{r hdf5-intro-9}
-# set spatial extent
 # add the spatial extent
 ext(BF) <- c(lon[1], lon[nlon], lat[1], lat[nlat])
 BF
-plot(log10(BF))
+plot(BF)
 ```
-## plot the GFED burned fraction data
+## plot the GFED burned fraction data ##
 
 Plot the data:
 
 ```{r rasterPlot2}
 color_fun <- colorRampPalette(brewer.pal(9,"YlOrRd"))
-plot(log10(BF), col = color_fun(50), main = "UV Index", ylab = "Latitude", xlab = "Longitude")
+plot(BF, y = 1, col = color_fun(50), main = "log10 Burned Fraction First", ylab = "Latitude", xlab = "Longitude")
 plot(world_otl, add = TRUE)
 ```
+
+
+
 
 
 
