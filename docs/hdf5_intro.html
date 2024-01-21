@@ -498,7 +498,13 @@ class="toc-section-number">3.1</span> Plot the UV data</a></li>
 <li><a href="#read-a-more-complicated-hdf5-file"
 id="toc-read-a-more-complicated-hdf5-file"><span
 class="toc-section-number">4</span> Read a more complicated HDF5
-file</a></li>
+file</a>
+<ul>
+<li><a href="#plot-the-gfed-burned-fraction-data"
+id="toc-plot-the-gfed-burned-fraction-data"><span
+class="toc-section-number">4.1</span> plot the GFED burned fraction
+data</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -895,13 +901,17 @@ gotten from the longitude and latitude data read in above using the
 ## min value   : -5.09686064 
 ## max value   : -0.05363899</code></pre>
 <div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="fu">plot</span>(BF)</span></code></pre></div>
-<p><img src="hdf5_intro_files/figure-html/hdf5-intro-9-1.png" width="75%" height="75%" />
-## plot the GFED burned fraction data ##</p>
+<p><img src="hdf5_intro_files/figure-html/hdf5-intro-9-1.png" width="75%" height="75%" /></p>
+<div id="plot-the-gfed-burned-fraction-data" class="section level2"
+number="4.1">
+<h2><span class="header-section-number">4.1</span> plot the GFED burned
+fraction data</h2>
 <p>Plot the data:</p>
 <div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" tabindex="-1"></a>color_fun <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;YlOrRd&quot;</span>))</span>
 <span id="cb68-2"><a href="#cb68-2" tabindex="-1"></a><span class="fu">plot</span>(BF, <span class="at">y =</span> <span class="dv">1</span>, <span class="at">col =</span> <span class="fu">color_fun</span>(<span class="dv">50</span>), <span class="at">main =</span> <span class="st">&quot;log10 Burned Fraction First&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Longitude&quot;</span>)</span>
 <span id="cb68-3"><a href="#cb68-3" tabindex="-1"></a><span class="fu">plot</span>(world_otl, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="hdf5_intro_files/figure-html/rasterPlot2-1.png" width="75%" height="75%" /></p>
+</div>
 </div>
 
 

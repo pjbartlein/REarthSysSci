@@ -323,6 +323,7 @@ ext(BF) <- c(lon[1], lon[nlon], lat[1], lat[nlat])
 BF
 plot(BF)
 ```
+
 ## plot the GFED burned fraction data ##
 
 Plot the data:
