@@ -66,19 +66,22 @@ library(terra)
 library(RColorBrewer)
 ```
 
-For latter plotting of the data, also read a world outline file. The file(s) can be copied from the class RESS server, or by downloading the contents of the folder at `https://pages.uoregon.edu/bartlein/RESS/shp_files/world2015/` Note that shape files consist of multiple files, e.g. `*.shp`, `*.shx`, `*.dbf`, `*.prj`, `cpg`, and all must be downloaded.
+For latter plotting of the data, also read a world outline file. The file(s) can be copied from the class RESS server, or by downloading the contents of the folder at [[https://pages.uoregon.edu/bartlein/RESS/shp_files/world2015/]](https://pages.uoregon.edu/bartlein/RESS/shp_files/world2015/). Clicking on this link should open a file listing on the server, from which you can download the files. Note that shape files consist of multiple files, e.g. `*.shp`, `*.shx`, `*.dbf`, `*.prj`, `cpg`, and all must be downloaded.Alternatively you could use FileZilla to download the files from the course SFTP server. Note that shape files consist of multiple files, e.g. `*.shp`, `*.shx`, `*.dbf`, `*.prj`, `cpg`, and all must be downloaded.
+
+Move the download files to a convenient folder, e.g. `/Users/bartlein/Projects/ESSD/data/shp_files/world2015/`, and plot the outlines.
 
 ```{r hdf5-intro-1}
-shp_file <- "/Users/bartlein/Projects/ESSD/data/shp_files/world2015/UIA_World_Countries_Boundaries.shp"
+# plot the world outline
+shp_file <- "/Users/bartlein/Projects/RESS/data/shp_files/world2015/UIA_World_Countries_Boundaries.shp"
 world_outline <- as(st_geometry(read_sf(shp_file)), Class = "Spatial")
 plot(world_outline, col="lightblue", lwd=1)
 ```
 
+Here's a link to the `.hdf` file: [[https://pages.uoregon.edu/bartlein/RESS/hdf_files/hdf_files/uvief20190423.hdf/]](https://pages.uoregon.edu/bartlein/RESS/hdf_files/uvief20190423.hdf). Download the file and copy the file a convenient places, say, a folder `/hdf_files` in your data folder (e.g. `/Users/bartlein/Projects/ESSD/data/hdf_files/`)
+
 ## Convert an HDF4 file to HDF5
 
 In this example, a data set of the "Clear-Sky UV Index"" from TEMIS was downloaded (i.e. `uvief20190423.hdf` -- 2019-04-23) from the website listed above.  This is an HDF4 file, which can be verified in Panoply.  Viewing files in Panoply is always good practice--in this case the particular layout of the data in file is rather ambiguous at first glance, and so getting a look at the contents of the file before attempting to read it is a good idea.
-
-Copy the file a convenient places, say, a folder `/hdf_files` in your data folder (e.g. `/Users/bartlein/Projects/ESSD/data/hdf_files/`)
 
 The HDF4 file can be converted by typing in a terminal or command window (for example):
 
@@ -206,7 +209,7 @@ h5closeAll()
 
 # Read a more complicated HDF5 file
 
-A much more stuctured file that exploits the ability of HDF5 to store data in "groups" that mimics in some ways the directory or folder structure on a local computer is represented by the GFED4.1 fire data set.  As usual, begin by setting paths and file names.
+A much more stuctured file that exploits the ability of HDF5 to store data in "groups" that mimics in some ways the directory or folder structure on a local computer is represented by the GFED4.1 fire data set.  Here's a link to the file:  [[https://pages.uoregon.edu/bartlein/RESS/hdf_files/hdf_files/GFED4.1s_2016.hdf5]](https://pages.uoregon.edu/bartlein/RESS/hdf_files/GFED4.1s_2016.hdf5). Dowload the file as usual.  Begin by setting paths and file names.
 
 ```{r hdf5-intro-8}
 # set path 

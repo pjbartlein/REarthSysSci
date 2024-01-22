@@ -592,15 +592,30 @@ href="https://github.com/NEONScience/NEON-Data-Skills/tree/master/code/HDF5">[HD
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
 <p>For latter plotting of the data, also read a world outline file. The
 file(s) can be copied from the class RESS server, or by downloading the
-contents of the folder at
-<code>https://pages.uoregon.edu/bartlein/RESS/shp_files/world2015/</code>
-Note that shape files consist of multiple files,
-e.g. <code>*.shp</code>, <code>*.shx</code>, <code>*.dbf</code>,
-<code>*.prj</code>, <code>cpg</code>, and all must be downloaded.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>shp_file <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/shp_files/world2015/UIA_World_Countries_Boundaries.shp&quot;</span></span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>world_outline <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">st_geometry</span>(<span class="fu">read_sf</span>(shp_file)), <span class="at">Class =</span> <span class="st">&quot;Spatial&quot;</span>)</span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">plot</span>(world_outline, <span class="at">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">lwd=</span><span class="dv">1</span>)</span></code></pre></div>
+contents of the folder at <a
+href="https://pages.uoregon.edu/bartlein/RESS/shp_files/world2015/">[https://pages.uoregon.edu/bartlein/RESS/shp_files/world2015/]</a>.
+Clicking on this link should open a file listing on the server, from
+which you can download the files. Note that shape files consist of
+multiple files, e.g. <code>*.shp</code>, <code>*.shx</code>,
+<code>*.dbf</code>, <code>*.prj</code>, <code>cpg</code>, and all must
+be downloaded.Alternatively you could use FileZilla to download the
+files from the course SFTP server. Note that shape files consist of
+multiple files, e.g. <code>*.shp</code>, <code>*.shx</code>,
+<code>*.dbf</code>, <code>*.prj</code>, <code>cpg</code>, and all must
+be downloaded.</p>
+<p>Move the download files to a convenient folder,
+e.g. <code>/Users/bartlein/Projects/ESSD/data/shp_files/world2015/</code>,
+and plot the outlines.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># plot the world outline</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>shp_file <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/shp_files/world2015/UIA_World_Countries_Boundaries.shp&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>world_outline <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">st_geometry</span>(<span class="fu">read_sf</span>(shp_file)), <span class="at">Class =</span> <span class="st">&quot;Spatial&quot;</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">plot</span>(world_outline, <span class="at">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">lwd=</span><span class="dv">1</span>)</span></code></pre></div>
 <p><img src="hdf5_intro_files/figure-html/hdf5-intro-1-1.png" width="75%" height="75%" /></p>
+<p>Here’s a link to the <code>.hdf</code> file: <a
+href="https://pages.uoregon.edu/bartlein/RESS/hdf_files/uvief20190423.hdf">[https://pages.uoregon.edu/bartlein/RESS/hdf_files/hdf_files/uvief20190423.hdf/]</a>.
+Download the file and copy the file a convenient places, say, a folder
+<code>/hdf_files</code> in your data folder
+(e.g. <code>/Users/bartlein/Projects/ESSD/data/hdf_files/</code>)</p>
 <div id="convert-an-hdf4-file-to-hdf5" class="section level2"
 number="2.1">
 <h2><span class="header-section-number">2.1</span> Convert an HDF4 file
@@ -612,9 +627,6 @@ Panoply. Viewing files in Panoply is always good practice–in this case
 the particular layout of the data in file is rather ambiguous at first
 glance, and so getting a look at the contents of the file before
 attempting to read it is a good idea.</p>
-<p>Copy the file a convenient places, say, a folder
-<code>/hdf_files</code> in your data folder
-(e.g. <code>/Users/bartlein/Projects/ESSD/data/hdf_files/</code>)</p>
 <p>The HDF4 file can be converted by typing in a terminal or command
 window (for example):</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>h4toh5convert uvief20190423.hdf</span>
@@ -768,7 +780,9 @@ HDF5 file</h1>
 <p>A much more stuctured file that exploits the ability of HDF5 to store
 data in “groups” that mimics in some ways the directory or folder
 structure on a local computer is represented by the GFED4.1 fire data
-set. As usual, begin by setting paths and file names.</p>
+set. Here’s a link to the file: <a
+href="https://pages.uoregon.edu/bartlein/RESS/hdf_files/GFED4.1s_2016.hdf5">[https://pages.uoregon.edu/bartlein/RESS/hdf_files/hdf_files/GFED4.1s_2016.hdf5]</a>.
+Dowload the file as usual. Begin by setting paths and file names.</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="co"># set path </span></span>
 <span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>hdf_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD//data/hdf_files/&quot;</span></span>
 <span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a>hdf_name <span class="ot">&lt;-</span> <span class="st">&quot;GFED4.1s_2016.hdf5&quot;</span></span>
