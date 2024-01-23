@@ -356,7 +356,7 @@ $(document).ready(function () {
       <a href="netCDF.html">netCDF in R</a>
     </li>
     <li>
-      <a href="raster_intro.html">raster, terra, and netCDF in R</a>
+      <a href="terra_netCDF.html">terra, and netCDF in R</a>
     </li>
     <li>
       <a href="plots1.html">Plots (1)</a>
@@ -368,7 +368,7 @@ $(document).ready(function () {
       <a href="maps1.html">Maps (1)</a>
     </li>
     <li>
-      <a href="maps21.html">Maps (2)</a>
+      <a href="maps2.html">Maps (2)</a>
     </li>
     <li>
       <a href="geospatial.html">Geospatial analyses</a>
@@ -398,6 +398,9 @@ $(document).ready(function () {
       <a href="otherlang.html">Other Languages</a>
     </li>
     <li class="dropdown-header">Other topics</li>
+    <li>
+      <a href="sf_terra_starts">sf, terra, stars</a>
+    </li>
     <li>
       <a href="hdf5_intro.html">HDF in R</a>
     </li>
@@ -725,7 +728,7 @@ downloaded, <code>ncname</code> is the name of the netCDF file, while
 <h2><span class="header-section-number">2.1</span> Open the netCDF
 file</h2>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># set path and filename</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>ncpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>ncpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/&quot;</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>ncname <span class="ot">&lt;-</span> <span class="st">&quot;cru10min30_tmp&quot;</span>  </span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="fu">paste</span>(ncpath, ncname, <span class="st">&quot;.nc&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>dname <span class="ot">&lt;-</span> <span class="st">&quot;tmp&quot;</span>  <span class="co"># note: tmp means temperature (not temporary)</span></span></code></pre></div>
@@ -736,10 +739,10 @@ utility <code>ncdump</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># open a netCDF file</span></span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>ncin <span class="ot">&lt;-</span> <span class="fu">nc_open</span>(ncfname)</span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">print</span>(ncin)</span></code></pre></div>
-<pre><code>## File /Users/bartlein/Projects/ESSD/data/nc_files/cru10min30_tmp.nc (NC_FORMAT_CLASSIC):
+<pre><code>## File /Users/bartlein/Projects/RESS/data/nc_files/cru10min30_tmp.nc (NC_FORMAT_CLASSIC):
 ## 
 ##      2 variables (excluding dimension variables):
-##         float climatology_bounds[nv,time]   
+##         float time_bounds[nv,time]   
 ##         float tmp[lon,lat,time]   
 ##             long_name: air_temperature
 ##             units: degC
@@ -772,7 +775,8 @@ utility <code>ncdump</code>.</p>
 ##         institution: http://www.cru.uea.ac.uk/
 ##         source: http://www.cru.uea.ac.uk/~markn/cru05/cru05_intro.html
 ##         references: New et al. (2002) Climate Res 21:1-25
-##         history: P.J. Bartlein, 19 Jun 2005
+##         history: Wed Oct 29 11:27:35 2014: ncrename -v climatology_bounds,time_bounds cru10min30_tmp.nc
+## P.J. Bartlein, 19 Jun 2005
 ##         Conventions: CF-1.0</code></pre>
 <p>Note that in an <code>ncdump</code> of the file, the coordinates of
 the variable <code>tmp</code> are listed in the reverse order as they
@@ -845,37 +849,13 @@ typing an attribute name at the command line.</p>
 <p>Close the netCDF file using the <code>nc_close()</code> function.</p>
 <p>Check what’s in the current workspace:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">ls</span>()</span></code></pre></div>
-<pre><code>##  [1] &quot;alpha&quot;                        &quot;BF&quot;                           &quot;burn&quot;                        
-##  [4] &quot;burnf&quot;                        &quot;carp96t&quot;                      &quot;cirques&quot;                     
-##  [7] &quot;color_fun&quot;                    &quot;con&quot;                          &quot;conus_sf&quot;                    
-## [10] &quot;Conventions&quot;                  &quot;cygage&quot;                       &quot;cygdepths&quot;                   
-## [13] &quot;datasource&quot;                   &quot;dlname&quot;                       &quot;dname&quot;                       
-## [16] &quot;dunits&quot;                       &quot;fillvalue&quot;                    &quot;gfire2&quot;                      
-## [19] &quot;h2&quot;                           &quot;hadcrut3&quot;                     &quot;hdf_file&quot;                    
-## [22] &quot;hdf_name&quot;                     &quot;hdf_path&quot;                     &quot;history&quot;                     
-## [25] &quot;institution&quot;                  &quot;IPCC_RF&quot;                      &quot;IPCC_RFtrans&quot;                
-## [28] &quot;iris&quot;                         &quot;island&quot;                       &quot;lat&quot;                         
-## [31] &quot;lat_array&quot;                    &quot;layer&quot;                        &quot;logtrans&quot;                    
-## [34] &quot;lon&quot;                          &quot;lon_array&quot;                    &quot;midwotl_sf&quot;                  
-## [37] &quot;midwotl_study_area_sf&quot;        &quot;midwtf2&quot;                      &quot;na_sf&quot;                       
-## [40] &quot;na2_sf&quot;                       &quot;napol&quot;                        &quot;ncfname&quot;                     
-## [43] &quot;ncin&quot;                         &quot;ncname&quot;                       &quot;ncpath&quot;                      
-## [46] &quot;ne_110m_admin_0_countries_sf&quot; &quot;nlat&quot;                         &quot;nlon&quot;                        
-## [49] &quot;nt&quot;                           &quot;orcounty_sf&quot;                  &quot;orcountyp&quot;                   
-## [52] &quot;orgrid&quot;                       &quot;orotl_sf&quot;                     &quot;orsim&quot;                       
-## [55] &quot;orstationc&quot;                   &quot;orstationc2&quot;                  &quot;orstations_sf&quot;               
-## [58] &quot;ortann&quot;                       &quot;ozone_data&quot;                   &quot;picea_sf&quot;                    
-## [61] &quot;Pollute&quot;                      &quot;references&quot;                   &quot;shapefile&quot;                   
-## [64] &quot;shp_file&quot;                     &quot;sierra&quot;                       &quot;specmap&quot;                     
-## [67] &quot;SST&quot;                          &quot;streams&quot;                      &quot;sumcr&quot;                       
-## [70] &quot;time&quot;                         &quot;title&quot;                        &quot;tmp_array&quot;                   
-## [73] &quot;trecov_pts_sf&quot;                &quot;treecov&quot;                      &quot;tstreams&quot;                    
-## [76] &quot;tunits&quot;                       &quot;UVI&quot;                          &quot;vegkey&quot;                      
-## [79] &quot;vegtype&quot;                      &quot;world_otl&quot;                    &quot;world_outline&quot;               
-## [82] &quot;world_sf&quot;                     &quot;wus_alpha&quot;                    &quot;wus_map&quot;                     
-## [85] &quot;wus_pratio&quot;                   &quot;wus_pratio_sf&quot;                &quot;wus_sf&quot;                      
-## [88] &quot;yellpratio&quot;                   &quot;ynplk_sf&quot;                     &quot;ynprivers_sf&quot;                
-## [91] &quot;ynpstate_sf&quot;                  &quot;ypolsqrt&quot;</code></pre>
+<pre><code>##  [1] &quot;BF&quot;            &quot;color_fun&quot;     &quot;Conventions&quot;   &quot;datasource&quot;    &quot;dlname&quot;        &quot;dname&quot;        
+##  [7] &quot;dunits&quot;        &quot;fillvalue&quot;     &quot;h1&quot;            &quot;h2&quot;            &quot;hdf_file&quot;      &quot;hdf_name&quot;     
+## [13] &quot;hdf_path&quot;      &quot;history&quot;       &quot;institution&quot;   &quot;lat&quot;           &quot;lat_array&quot;     &quot;log10BF&quot;      
+## [19] &quot;lon&quot;           &quot;lon_array&quot;     &quot;ncfname&quot;       &quot;ncin&quot;          &quot;ncname&quot;        &quot;ncpath&quot;       
+## [25] &quot;nlat&quot;          &quot;nlon&quot;          &quot;nt&quot;            &quot;references&quot;    &quot;shp_file&quot;      &quot;time&quot;         
+## [31] &quot;title&quot;         &quot;tmp_array&quot;     &quot;tunits&quot;        &quot;UVI&quot;           &quot;UVI_in&quot;        &quot;world_otl&quot;    
+## [37] &quot;world_outline&quot;</code></pre>
 <p><a href="netCDF.html">[Back to top]</a></p>
 </div>
 </div>
@@ -896,14 +876,9 @@ the CF (Climate Forecast) “time since” format that is not usually
 human-readable. Here are some example conversions:</p>
 <p>Load some necessary packages (install them if necessary)</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># load some packages</span></span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="fu">library</span>(chron)</span></code></pre></div>
-<pre><code>## 
-## Attaching package: &#39;chron&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:terra&#39;:
-## 
-##     origin, origin&lt;-</code></pre>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
-<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="fu">library</span>(chron)</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
 <div id="convert-the-time-variable" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Convert the time
 variable</h2>
@@ -912,13 +887,13 @@ variable</h2>
 <code>tunits$value</code> string into its component parts, and then
 using the <code>chron()</code> function to determine the absolute value
 of each time value from the time origin.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># convert time -- split the time units string into fields</span></span>
-<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>tustr <span class="ot">&lt;-</span> <span class="fu">strsplit</span>(tunits<span class="sc">$</span>value, <span class="st">&quot; &quot;</span>)</span>
-<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>tdstr <span class="ot">&lt;-</span> <span class="fu">strsplit</span>(<span class="fu">unlist</span>(tustr)[<span class="dv">3</span>], <span class="st">&quot;-&quot;</span>)</span>
-<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>tmonth <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">unlist</span>(tdstr)[<span class="dv">2</span>])</span>
-<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>tday <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">unlist</span>(tdstr)[<span class="dv">3</span>])</span>
-<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>tyear <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">unlist</span>(tdstr)[<span class="dv">1</span>])</span>
-<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a><span class="fu">chron</span>(time,<span class="at">origin=</span><span class="fu">c</span>(tmonth, tday, tyear))</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co"># convert time -- split the time units string into fields</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>tustr <span class="ot">&lt;-</span> <span class="fu">strsplit</span>(tunits<span class="sc">$</span>value, <span class="st">&quot; &quot;</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a>tdstr <span class="ot">&lt;-</span> <span class="fu">strsplit</span>(<span class="fu">unlist</span>(tustr)[<span class="dv">3</span>], <span class="st">&quot;-&quot;</span>)</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>tmonth <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">unlist</span>(tdstr)[<span class="dv">2</span>])</span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>tday <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">unlist</span>(tdstr)[<span class="dv">3</span>])</span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>tyear <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(<span class="fu">unlist</span>(tdstr)[<span class="dv">1</span>])</span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a><span class="fu">chron</span>(time,<span class="at">origin=</span><span class="fu">c</span>(tmonth, tday, tyear))</span></code></pre></div>
 <pre><code>##  [1] (01/16/76 12:00:00) (02/15/76 12:00:00) (03/16/76 12:00:00) (04/16/76 00:00:00) (05/16/76 12:00:00)
 ##  [6] (06/16/76 00:00:00) (07/16/76 12:00:00) (08/16/76 12:00:00) (09/16/76 00:00:00) (10/16/76 12:00:00)
 ## [11] (11/16/76 00:00:00) (12/16/76 12:00:00)</code></pre>
@@ -942,8 +917,8 @@ which are set as attributes of a variable. In R, such unavailable data
 are indicated using the “<code>NA</code>” value. The following code
 fragment illustrates how to replace the netCDF variable’s fill values
 with R <code>NA</code>’s .</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="co"># replace netCDF fill values with NA&#39;s</span></span>
-<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>tmp_array[tmp_array<span class="sc">==</span>fillvalue<span class="sc">$</span>value] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co"># replace netCDF fill values with NA&#39;s</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>tmp_array[tmp_array<span class="sc">==</span>fillvalue<span class="sc">$</span>value] <span class="ot">&lt;-</span> <span class="cn">NA</span></span></code></pre></div>
 <p>The <code>head()</code> function can be used before and after
 executing the “square bracket” selection and replacement to verify that
 the <code>NA</code> values have indeed replace the netCDF fill
@@ -952,7 +927,7 @@ of non-missing (i.e. land, except for Antarctica, which is not present
 in the data set) grid cells can be gotten by determining the length of a
 vector of values representing one slice from the brick, omitting the
 <code>NA</code> values:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">na.omit</span>(<span class="fu">as.vector</span>(tmp_array[,,<span class="dv">1</span>])))</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">na.omit</span>(<span class="fu">as.vector</span>(tmp_array[,,<span class="dv">1</span>])))</span></code></pre></div>
 <pre><code>## [1] 62961</code></pre>
 </div>
 <div
@@ -982,15 +957,15 @@ as a .csv file.</p>
 number="3.3.1">
 <h3><span class="header-section-number">3.3.1</span> Get a single slice
 of data</h3>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># get a single slice or layer (January)</span></span>
-<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>tmp_slice <span class="ot">&lt;-</span> tmp_array[,,m]</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="co"># get a single slice or layer (January)</span></span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a>tmp_slice <span class="ot">&lt;-</span> tmp_array[,,m]</span></code></pre></div>
 <p>The dimensions of <code>tmp_slice</code>, e.g. 720, 360, can be
 verified using the <code>dim()</code> function.</p>
 <p>A quick look (map) of the extracted slice of data can be gotten using
 the <code>image()</code> function.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co"># quick map</span></span>
-<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="fu">image</span>(lon,lat,tmp_slice, <span class="at">col=</span><span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># quick map</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="fu">image</span>(lon,lat,tmp_slice, <span class="at">col=</span><span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>)))</span></code></pre></div>
 <p><img src="netCDF_files/figure-html/image1-1.png" width="75%" height="75%" /></p>
 <p>A better map can be obtained using the <code>levelplot()</code>
 function from the <code>lattice</code> package. The
@@ -999,11 +974,11 @@ function from the <code>lattice</code> package. The
 rapidly), one for each element in the <code>tmp_slice</code> array.
 Specific values of the cutpoints of temperature categories are defined
 to cover the range of temperature values here.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># levelplot of the slice</span></span>
-<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">lon=</span>lon, <span class="at">lat=</span>lat)</span>
-<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">50</span>,<span class="sc">-</span><span class="dv">40</span>,<span class="sc">-</span><span class="dv">30</span>,<span class="sc">-</span><span class="dv">20</span>,<span class="sc">-</span><span class="dv">10</span>,<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>)</span>
-<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a><span class="fu">levelplot</span>(tmp_slice <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
-<span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))))</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># levelplot of the slice</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">lon=</span>lon, <span class="at">lat=</span>lat)</span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">50</span>,<span class="sc">-</span><span class="dv">40</span>,<span class="sc">-</span><span class="dv">30</span>,<span class="sc">-</span><span class="dv">20</span>,<span class="sc">-</span><span class="dv">10</span>,<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a><span class="fu">levelplot</span>(tmp_slice <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))))</span></code></pre></div>
 <p><img src="netCDF_files/figure-html/levelplot1-1.png" width="75%" height="75%" /></p>
 </div>
 <div id="create-a-data-frame" class="section level3" number="3.3.2">
@@ -1016,14 +991,14 @@ frame</h3>
 into a long vector. The size of the objects that are created can be
 verified using the <code>dim()</code> and <code>length()</code>
 functions.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="co"># create dataframe -- reshape data</span></span>
-<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a><span class="co"># matrix (nlon*nlat rows by 2 cols) of lons and lats</span></span>
-<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a>lonlat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lon,lat))</span>
-<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a><span class="fu">dim</span>(lonlat)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># create dataframe -- reshape data</span></span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="co"># matrix (nlon*nlat rows by 2 cols) of lons and lats</span></span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>lonlat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lon,lat))</span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a><span class="fu">dim</span>(lonlat)</span></code></pre></div>
 <pre><code>## [1] 259200      2</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="co"># vector of `tmp` values</span></span>
-<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>tmp_vec <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(tmp_slice)</span>
-<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a><span class="fu">length</span>(tmp_vec)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># vector of `tmp` values</span></span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a>tmp_vec <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(tmp_slice)</span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a><span class="fu">length</span>(tmp_vec)</span></code></pre></div>
 <pre><code>## [1] 259200</code></pre>
 <p>The <code>data.frame()</code> and <code>cbind()</code> functions are
 used to assemble the columns of the data frame, which are assigned
@@ -1031,10 +1006,10 @@ appropriate names using the <code>names()</code> function (on the
 left-hand side of assignment operator). The <code>head()</code>
 function, applied on top of the <code>na.omit()</code> function lists
 the first rows of values without <code>NA</code>s:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="co"># create dataframe and add names</span></span>
-<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a>tmp_df01 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(lonlat,tmp_vec))</span>
-<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a><span class="fu">names</span>(tmp_df01) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;lat&quot;</span>,<span class="fu">paste</span>(dname,<span class="fu">as.character</span>(m), <span class="at">sep=</span><span class="st">&quot;_&quot;</span>))</span>
-<span id="cb38-4"><a href="#cb38-4" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">na.omit</span>(tmp_df01), <span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="co"># create dataframe and add names</span></span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a>tmp_df01 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(lonlat,tmp_vec))</span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a><span class="fu">names</span>(tmp_df01) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;lat&quot;</span>,<span class="fu">paste</span>(dname,<span class="fu">as.character</span>(m), <span class="at">sep=</span><span class="st">&quot;_&quot;</span>))</span>
+<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">na.omit</span>(tmp_df01), <span class="dv">10</span>)</span></code></pre></div>
 <pre><code>##          lon    lat tmp_1
 ## 49186 -67.25 -55.75   8.2
 ## 49901 -69.75 -55.25   7.9
@@ -1054,11 +1029,11 @@ frame</h3>
 <p>Finally the data frame is written out to the working directory as a
 .csv file, using <code>na.omit()</code> again to drop the observations
 with missing data (i.e. ocean points and Antarctica).</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="co"># set path and filename</span></span>
-<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a>csvpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/csv_files&quot;</span></span>
-<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a>csvname <span class="ot">&lt;-</span> <span class="st">&quot;cru_tmp_1.csv&quot;</span></span>
-<span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a>csvfile <span class="ot">&lt;-</span> <span class="fu">paste</span>(csvpath, csvname, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb40-5"><a href="#cb40-5" tabindex="-1"></a><span class="fu">write.table</span>(<span class="fu">na.omit</span>(tmp_df01),csvfile, <span class="at">row.names=</span><span class="cn">FALSE</span>, <span class="at">sep=</span><span class="st">&quot;,&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="co"># set path and filename</span></span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a>csvpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/csv_files&quot;</span></span>
+<span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a>csvname <span class="ot">&lt;-</span> <span class="st">&quot;cru_tmp_1.csv&quot;</span></span>
+<span id="cb37-4"><a href="#cb37-4" tabindex="-1"></a>csvfile <span class="ot">&lt;-</span> <span class="fu">paste</span>(csvpath, csvname, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" tabindex="-1"></a><span class="fu">write.table</span>(<span class="fu">na.omit</span>(tmp_df01),csvfile, <span class="at">row.names=</span><span class="cn">FALSE</span>, <span class="at">sep=</span><span class="st">&quot;,&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 <div
@@ -1081,18 +1056,18 @@ work only if the netCDF file (and hence the data array) follow the “CF”
 conventions, i.e. that the variable tmp has been defined to have
 dimensions <code>nlon</code> by <code>nlat</code> by <code>nt</code>, in
 that order.)</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="co"># reshape the array into vector</span></span>
-<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a>tmp_vec_long <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(tmp_array)</span>
-<span id="cb41-3"><a href="#cb41-3" tabindex="-1"></a><span class="fu">length</span>(tmp_vec_long)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="co"># reshape the array into vector</span></span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a>tmp_vec_long <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(tmp_array)</span>
+<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a><span class="fu">length</span>(tmp_vec_long)</span></code></pre></div>
 <pre><code>## [1] 3110400</code></pre>
 <p>Then reshape that vector into a 259200 by 12 matrix using the
 <code>matrix()</code> function, and verify its dimensions, which should
 be 259200 by 12.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="co"># reshape the vector into a matrix</span></span>
-<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a>tmp_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(tmp_vec_long, <span class="at">nrow=</span>nlon<span class="sc">*</span>nlat, <span class="at">ncol=</span>nt)</span>
-<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a><span class="fu">dim</span>(tmp_mat)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="co"># reshape the vector into a matrix</span></span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a>tmp_mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(tmp_vec_long, <span class="at">nrow=</span>nlon<span class="sc">*</span>nlat, <span class="at">ncol=</span>nt)</span>
+<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a><span class="fu">dim</span>(tmp_mat)</span></code></pre></div>
 <pre><code>## [1] 259200     12</code></pre>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">na.omit</span>(tmp_mat))</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">na.omit</span>(tmp_mat))</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]
 ## [1,]  8.2  8.2  6.9  5.2  3.1  1.7  1.1  1.8  3.1   4.9   6.3   7.5
 ## [2,]  7.9  7.8  6.7  5.1  3.2  1.9  1.4  1.9  3.2   4.8   6.1   7.3
@@ -1102,13 +1077,13 @@ be 259200 by 12.</p>
 ## [6,]  9.1  9.0  7.5  5.7  3.3  1.8  1.3  2.2  3.8   5.7   7.2   8.4</code></pre>
 <p>Create the second data frame from the <code>tmp_mat</code>
 matrix.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="co"># create a dataframe</span></span>
-<span id="cb47-2"><a href="#cb47-2" tabindex="-1"></a>lonlat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lon,lat))</span>
-<span id="cb47-3"><a href="#cb47-3" tabindex="-1"></a>tmp_df02 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(lonlat,tmp_mat))</span>
-<span id="cb47-4"><a href="#cb47-4" tabindex="-1"></a><span class="fu">names</span>(tmp_df02) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;tmpJan&quot;</span>,<span class="st">&quot;tmpFeb&quot;</span>,<span class="st">&quot;tmpMar&quot;</span>,<span class="st">&quot;tmpApr&quot;</span>,<span class="st">&quot;tmpMay&quot;</span>,<span class="st">&quot;tmpJun&quot;</span>,</span>
-<span id="cb47-5"><a href="#cb47-5" tabindex="-1"></a>  <span class="st">&quot;tmpJul&quot;</span>,<span class="st">&quot;tmpAug&quot;</span>,<span class="st">&quot;tmpSep&quot;</span>,<span class="st">&quot;tmpOct&quot;</span>,<span class="st">&quot;tmpNov&quot;</span>,<span class="st">&quot;tmpDec&quot;</span>)</span>
-<span id="cb47-6"><a href="#cb47-6" tabindex="-1"></a><span class="co"># options(width=96)</span></span>
-<span id="cb47-7"><a href="#cb47-7" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">na.omit</span>(tmp_df02, <span class="dv">20</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="co"># create a dataframe</span></span>
+<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a>lonlat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lon,lat))</span>
+<span id="cb44-3"><a href="#cb44-3" tabindex="-1"></a>tmp_df02 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(lonlat,tmp_mat))</span>
+<span id="cb44-4"><a href="#cb44-4" tabindex="-1"></a><span class="fu">names</span>(tmp_df02) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;tmpJan&quot;</span>,<span class="st">&quot;tmpFeb&quot;</span>,<span class="st">&quot;tmpMar&quot;</span>,<span class="st">&quot;tmpApr&quot;</span>,<span class="st">&quot;tmpMay&quot;</span>,<span class="st">&quot;tmpJun&quot;</span>,</span>
+<span id="cb44-5"><a href="#cb44-5" tabindex="-1"></a>  <span class="st">&quot;tmpJul&quot;</span>,<span class="st">&quot;tmpAug&quot;</span>,<span class="st">&quot;tmpSep&quot;</span>,<span class="st">&quot;tmpOct&quot;</span>,<span class="st">&quot;tmpNov&quot;</span>,<span class="st">&quot;tmpDec&quot;</span>)</span>
+<span id="cb44-6"><a href="#cb44-6" tabindex="-1"></a><span class="co"># options(width=96)</span></span>
+<span id="cb44-7"><a href="#cb44-7" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">na.omit</span>(tmp_df02, <span class="dv">20</span>))</span></code></pre></div>
 <pre><code>##          lon    lat tmpJan tmpFeb tmpMar tmpApr tmpMay tmpJun tmpJul tmpAug tmpSep tmpOct tmpNov tmpDec
 ## 49186 -67.25 -55.75    8.2    8.2    6.9    5.2    3.1    1.7    1.1    1.8    3.1    4.9    6.3    7.5
 ## 49901 -69.75 -55.25    7.9    7.8    6.7    5.1    3.2    1.9    1.4    1.9    3.2    4.8    6.1    7.3
@@ -1122,11 +1097,11 @@ matrix.</p>
 mean</h3>
 <p>Get the annual mean, mtwa and mtco (mean temperatures of the warmest
 and coldest montth) values and add them to the second data frame.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="co"># get the annual mean and MTWA and MTCO</span></span>
-<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a>tmp_df02<span class="sc">$</span>mtwa <span class="ot">&lt;-</span> <span class="fu">apply</span>(tmp_df02[<span class="dv">3</span><span class="sc">:</span><span class="dv">14</span>],<span class="dv">1</span>,max) <span class="co"># mtwa</span></span>
-<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a>tmp_df02<span class="sc">$</span>mtco <span class="ot">&lt;-</span> <span class="fu">apply</span>(tmp_df02[<span class="dv">3</span><span class="sc">:</span><span class="dv">14</span>],<span class="dv">1</span>,min) <span class="co"># mtco</span></span>
-<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a>tmp_df02<span class="sc">$</span>mat <span class="ot">&lt;-</span> <span class="fu">apply</span>(tmp_df02[<span class="dv">3</span><span class="sc">:</span><span class="dv">14</span>],<span class="dv">1</span>,mean) <span class="co"># annual (i.e. row) means</span></span>
-<span id="cb49-5"><a href="#cb49-5" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">na.omit</span>(tmp_df02))</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="co"># get the annual mean and MTWA and MTCO</span></span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a>tmp_df02<span class="sc">$</span>mtwa <span class="ot">&lt;-</span> <span class="fu">apply</span>(tmp_df02[<span class="dv">3</span><span class="sc">:</span><span class="dv">14</span>],<span class="dv">1</span>,max) <span class="co"># mtwa</span></span>
+<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a>tmp_df02<span class="sc">$</span>mtco <span class="ot">&lt;-</span> <span class="fu">apply</span>(tmp_df02[<span class="dv">3</span><span class="sc">:</span><span class="dv">14</span>],<span class="dv">1</span>,min) <span class="co"># mtco</span></span>
+<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a>tmp_df02<span class="sc">$</span>mat <span class="ot">&lt;-</span> <span class="fu">apply</span>(tmp_df02[<span class="dv">3</span><span class="sc">:</span><span class="dv">14</span>],<span class="dv">1</span>,mean) <span class="co"># annual (i.e. row) means</span></span>
+<span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">na.omit</span>(tmp_df02))</span></code></pre></div>
 <pre><code>##          lon    lat tmpJan tmpFeb tmpMar tmpApr tmpMay tmpJun tmpJul tmpAug tmpSep tmpOct tmpNov tmpDec
 ## 49186 -67.25 -55.75    8.2    8.2    6.9    5.2    3.1    1.7    1.1    1.8    3.1    4.9    6.3    7.5
 ## 49901 -69.75 -55.25    7.9    7.8    6.7    5.1    3.2    1.9    1.4    1.9    3.2    4.8    6.1    7.3
@@ -1141,7 +1116,7 @@ and coldest montth) values and add them to the second data frame.</p>
 ## 49903  7.8  0.8 4.483333
 ## 49904  8.9  1.5 5.391667
 ## 49905  9.1  1.3 5.416667</code></pre>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">na.omit</span>(tmp_df02))</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="fu">dim</span>(<span class="fu">na.omit</span>(tmp_df02))</span></code></pre></div>
 <pre><code>## [1] 62961    17</code></pre>
 </div>
 <div id="write-out-the-second-data-frame" class="section level3"
@@ -1149,17 +1124,17 @@ number="3.4.3">
 <h3><span class="header-section-number">3.4.3</span> Write out the
 second data frame</h3>
 <p>Write the second data frame out as a .csv file, dropping NAs.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="co"># write out the dataframe as a .csv file</span></span>
-<span id="cb53-2"><a href="#cb53-2" tabindex="-1"></a>csvpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/csv_files/&quot;</span></span>
-<span id="cb53-3"><a href="#cb53-3" tabindex="-1"></a>csvname <span class="ot">&lt;-</span> <span class="st">&quot;cru_tmp_2.csv&quot;</span></span>
-<span id="cb53-4"><a href="#cb53-4" tabindex="-1"></a>csvfile <span class="ot">&lt;-</span> <span class="fu">paste</span>(csvpath, csvname, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb53-5"><a href="#cb53-5" tabindex="-1"></a><span class="fu">write.table</span>(<span class="fu">na.omit</span>(tmp_df02),csvfile, <span class="at">row.names=</span><span class="cn">FALSE</span>, <span class="at">sep=</span><span class="st">&quot;,&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="co"># write out the dataframe as a .csv file</span></span>
+<span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a>csvpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/csv_files/&quot;</span></span>
+<span id="cb50-3"><a href="#cb50-3" tabindex="-1"></a>csvname <span class="ot">&lt;-</span> <span class="st">&quot;cru_tmp_2.csv&quot;</span></span>
+<span id="cb50-4"><a href="#cb50-4" tabindex="-1"></a>csvfile <span class="ot">&lt;-</span> <span class="fu">paste</span>(csvpath, csvname, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb50-5"><a href="#cb50-5" tabindex="-1"></a><span class="fu">write.table</span>(<span class="fu">na.omit</span>(tmp_df02),csvfile, <span class="at">row.names=</span><span class="cn">FALSE</span>, <span class="at">sep=</span><span class="st">&quot;,&quot;</span>)</span></code></pre></div>
 <p>Create a third data frame, with only non-missing values. This will be
 used later to demonstrate how to convert a “short” data frame into full
 matrix or array for writing out as a netCDF file.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="co"># create a dataframe without missing values</span></span>
-<span id="cb54-2"><a href="#cb54-2" tabindex="-1"></a>tmp_df03 <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(tmp_df02)</span>
-<span id="cb54-3"><a href="#cb54-3" tabindex="-1"></a><span class="fu">head</span>(tmp_df03)</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="co"># create a dataframe without missing values</span></span>
+<span id="cb51-2"><a href="#cb51-2" tabindex="-1"></a>tmp_df03 <span class="ot">&lt;-</span> <span class="fu">na.omit</span>(tmp_df02)</span>
+<span id="cb51-3"><a href="#cb51-3" tabindex="-1"></a><span class="fu">head</span>(tmp_df03)</span></code></pre></div>
 <pre><code>##          lon    lat tmpJan tmpFeb tmpMar tmpApr tmpMay tmpJun tmpJul tmpAug tmpSep tmpOct tmpNov tmpDec
 ## 49186 -67.25 -55.75    8.2    8.2    6.9    5.2    3.1    1.7    1.1    1.8    3.1    4.9    6.3    7.5
 ## 49901 -69.75 -55.25    7.9    7.8    6.7    5.1    3.2    1.9    1.4    1.9    3.2    4.8    6.1    7.3
@@ -1175,44 +1150,17 @@ matrix or array for writing out as a netCDF file.</p>
 ## 49904  8.9  1.5 5.391667
 ## 49905  9.1  1.3 5.416667</code></pre>
 <p>Check what’s in the current workspace now:</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="fu">ls</span>()</span></code></pre></div>
-<pre><code>##   [1] &quot;alpha&quot;                        &quot;BF&quot;                           &quot;burn&quot;                        
-##   [4] &quot;burnf&quot;                        &quot;carp96t&quot;                      &quot;cirques&quot;                     
-##   [7] &quot;color_fun&quot;                    &quot;con&quot;                          &quot;conus_sf&quot;                    
-##  [10] &quot;Conventions&quot;                  &quot;csvfile&quot;                      &quot;csvname&quot;                     
-##  [13] &quot;csvpath&quot;                      &quot;cutpts&quot;                       &quot;cygage&quot;                      
-##  [16] &quot;cygdepths&quot;                    &quot;datasource&quot;                   &quot;dlname&quot;                      
-##  [19] &quot;dname&quot;                        &quot;dunits&quot;                       &quot;fillvalue&quot;                   
-##  [22] &quot;gfire2&quot;                       &quot;grid&quot;                         &quot;h2&quot;                          
-##  [25] &quot;hadcrut3&quot;                     &quot;hdf_file&quot;                     &quot;hdf_name&quot;                    
-##  [28] &quot;hdf_path&quot;                     &quot;history&quot;                      &quot;institution&quot;                 
-##  [31] &quot;IPCC_RF&quot;                      &quot;IPCC_RFtrans&quot;                 &quot;iris&quot;                        
-##  [34] &quot;island&quot;                       &quot;lat&quot;                          &quot;lat_array&quot;                   
-##  [37] &quot;layer&quot;                        &quot;logtrans&quot;                     &quot;lon&quot;                         
-##  [40] &quot;lon_array&quot;                    &quot;lonlat&quot;                       &quot;m&quot;                           
-##  [43] &quot;midwotl_sf&quot;                   &quot;midwotl_study_area_sf&quot;        &quot;midwtf2&quot;                     
-##  [46] &quot;na_sf&quot;                        &quot;na2_sf&quot;                       &quot;napol&quot;                       
-##  [49] &quot;ncfname&quot;                      &quot;ncin&quot;                         &quot;ncname&quot;                      
-##  [52] &quot;ncpath&quot;                       &quot;ne_110m_admin_0_countries_sf&quot; &quot;nlat&quot;                        
-##  [55] &quot;nlon&quot;                         &quot;nt&quot;                           &quot;orcounty_sf&quot;                 
-##  [58] &quot;orcountyp&quot;                    &quot;orgrid&quot;                       &quot;orotl_sf&quot;                    
-##  [61] &quot;orsim&quot;                        &quot;orstationc&quot;                   &quot;orstationc2&quot;                 
-##  [64] &quot;orstations_sf&quot;                &quot;ortann&quot;                       &quot;ozone_data&quot;                  
-##  [67] &quot;picea_sf&quot;                     &quot;Pollute&quot;                      &quot;references&quot;                  
-##  [70] &quot;shapefile&quot;                    &quot;shp_file&quot;                     &quot;sierra&quot;                      
-##  [73] &quot;specmap&quot;                      &quot;SST&quot;                          &quot;streams&quot;                     
-##  [76] &quot;sumcr&quot;                        &quot;tday&quot;                         &quot;tdstr&quot;                       
-##  [79] &quot;time&quot;                         &quot;title&quot;                        &quot;tmonth&quot;                      
-##  [82] &quot;tmp_array&quot;                    &quot;tmp_df01&quot;                     &quot;tmp_df02&quot;                    
-##  [85] &quot;tmp_df03&quot;                     &quot;tmp_mat&quot;                      &quot;tmp_slice&quot;                   
-##  [88] &quot;tmp_vec&quot;                      &quot;tmp_vec_long&quot;                 &quot;trecov_pts_sf&quot;               
-##  [91] &quot;treecov&quot;                      &quot;tstreams&quot;                     &quot;tunits&quot;                      
-##  [94] &quot;tustr&quot;                        &quot;tyear&quot;                        &quot;UVI&quot;                         
-##  [97] &quot;vegkey&quot;                       &quot;vegtype&quot;                      &quot;world_otl&quot;                   
-## [100] &quot;world_outline&quot;                &quot;world_sf&quot;                     &quot;wus_alpha&quot;                   
-## [103] &quot;wus_map&quot;                      &quot;wus_pratio&quot;                   &quot;wus_pratio_sf&quot;               
-## [106] &quot;wus_sf&quot;                       &quot;yellpratio&quot;                   &quot;ynplk_sf&quot;                    
-## [109] &quot;ynprivers_sf&quot;                 &quot;ynpstate_sf&quot;                  &quot;ypolsqrt&quot;</code></pre>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="fu">ls</span>()</span></code></pre></div>
+<pre><code>##  [1] &quot;BF&quot;            &quot;color_fun&quot;     &quot;Conventions&quot;   &quot;csvfile&quot;       &quot;csvname&quot;       &quot;csvpath&quot;      
+##  [7] &quot;cutpts&quot;        &quot;datasource&quot;    &quot;dlname&quot;        &quot;dname&quot;         &quot;dunits&quot;        &quot;fillvalue&quot;    
+## [13] &quot;grid&quot;          &quot;h1&quot;            &quot;h2&quot;            &quot;hdf_file&quot;      &quot;hdf_name&quot;      &quot;hdf_path&quot;     
+## [19] &quot;history&quot;       &quot;institution&quot;   &quot;lat&quot;           &quot;lat_array&quot;     &quot;log10BF&quot;       &quot;lon&quot;          
+## [25] &quot;lon_array&quot;     &quot;lonlat&quot;        &quot;m&quot;             &quot;ncfname&quot;       &quot;ncin&quot;          &quot;ncname&quot;       
+## [31] &quot;ncpath&quot;        &quot;nlat&quot;          &quot;nlon&quot;          &quot;nt&quot;            &quot;references&quot;    &quot;shp_file&quot;     
+## [37] &quot;tday&quot;          &quot;tdstr&quot;         &quot;time&quot;          &quot;title&quot;         &quot;tmonth&quot;        &quot;tmp_array&quot;    
+## [43] &quot;tmp_df01&quot;      &quot;tmp_df02&quot;      &quot;tmp_df03&quot;      &quot;tmp_mat&quot;       &quot;tmp_slice&quot;     &quot;tmp_vec&quot;      
+## [49] &quot;tmp_vec_long&quot;  &quot;tunits&quot;        &quot;tustr&quot;         &quot;tyear&quot;         &quot;UVI&quot;           &quot;UVI_in&quot;       
+## [55] &quot;world_otl&quot;     &quot;world_outline&quot;</code></pre>
 <p><a href="netCDF.html">[Back to top]</a></p>
 <p><a href="netCDF.html">[Back to top]</a></p>
 </div>
@@ -1232,10 +1180,10 @@ the data frame contains only a subset of points in the full array.</p>
 <p>There are several approaches for doing the reshaping, ranging from
 explict and slow, to rather cryptic, but fast. The individual approaches
 below can be timed using the <code>proc.time()</code> function:</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a><span class="co"># time an R process</span></span>
-<span id="cb58-2"><a href="#cb58-2" tabindex="-1"></a>ptm <span class="ot">&lt;-</span> <span class="fu">proc.time</span>() <span class="co"># start the timer</span></span>
-<span id="cb58-3"><a href="#cb58-3" tabindex="-1"></a><span class="co"># ... some code ...</span></span>
-<span id="cb58-4"><a href="#cb58-4" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm <span class="co"># how long?</span></span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" tabindex="-1"></a><span class="co"># time an R process</span></span>
+<span id="cb55-2"><a href="#cb55-2" tabindex="-1"></a>ptm <span class="ot">&lt;-</span> <span class="fu">proc.time</span>() <span class="co"># start the timer</span></span>
+<span id="cb55-3"><a href="#cb55-3" tabindex="-1"></a><span class="co"># ... some code ...</span></span>
+<span id="cb55-4"><a href="#cb55-4" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm <span class="co"># how long?</span></span></code></pre></div>
 <p>Specific times will vary, of course, from machine to machine.</p>
 <div id="convert-a-full-r-data-frame-to-an-array" class="section level2"
 number="4.1">
@@ -1257,25 +1205,25 @@ array; in this example, the longitudes (<code>lon</code>), latitudes
 should be defined for the “full” array, and not just for the
 observations in the data frame. One approach is to simply copy those
 values from an “original” netCDF data set.</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" tabindex="-1"></a><span class="co"># copy lon, lat and time from the initial netCDF data set</span></span>
-<span id="cb59-2"><a href="#cb59-2" tabindex="-1"></a>lon2 <span class="ot">&lt;-</span> lon</span>
-<span id="cb59-3"><a href="#cb59-3" tabindex="-1"></a>lat2 <span class="ot">&lt;-</span> lat</span>
-<span id="cb59-4"><a href="#cb59-4" tabindex="-1"></a>time2 <span class="ot">&lt;-</span> time</span>
-<span id="cb59-5"><a href="#cb59-5" tabindex="-1"></a>tunits2 <span class="ot">&lt;-</span> tunits</span>
-<span id="cb59-6"><a href="#cb59-6" tabindex="-1"></a>nlon2 <span class="ot">&lt;-</span> nlon; nlat2 <span class="ot">&lt;-</span> nlat; nt2 <span class="ot">&lt;-</span> nt</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="co"># copy lon, lat and time from the initial netCDF data set</span></span>
+<span id="cb56-2"><a href="#cb56-2" tabindex="-1"></a>lon2 <span class="ot">&lt;-</span> lon</span>
+<span id="cb56-3"><a href="#cb56-3" tabindex="-1"></a>lat2 <span class="ot">&lt;-</span> lat</span>
+<span id="cb56-4"><a href="#cb56-4" tabindex="-1"></a>time2 <span class="ot">&lt;-</span> time</span>
+<span id="cb56-5"><a href="#cb56-5" tabindex="-1"></a>tunits2 <span class="ot">&lt;-</span> tunits</span>
+<span id="cb56-6"><a href="#cb56-6" tabindex="-1"></a>nlon2 <span class="ot">&lt;-</span> nlon; nlat2 <span class="ot">&lt;-</span> nlat; nt2 <span class="ot">&lt;-</span> nt</span></code></pre></div>
 <p>Another approach is to generate or specify the dimension variables
 explicitly. However, this may be problematical if the source file
 longitudes and latitudes were not generated in exactly the same way, or
 were saved at lower (single) precision.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a><span class="co"># generate lons, lats and set time</span></span>
-<span id="cb60-2"><a href="#cb60-2" tabindex="-1"></a>lon2 <span class="ot">&lt;-</span> <span class="fu">as.array</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="fl">179.75</span>,<span class="fl">179.75</span>,<span class="fl">0.5</span>))</span>
-<span id="cb60-3"><a href="#cb60-3" tabindex="-1"></a>nlon2 <span class="ot">&lt;-</span> <span class="dv">720</span></span>
-<span id="cb60-4"><a href="#cb60-4" tabindex="-1"></a>lat2 <span class="ot">&lt;-</span> <span class="fu">as.array</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="fl">89.75</span>,<span class="fl">89.75</span>,<span class="fl">0.5</span>))</span>
-<span id="cb60-5"><a href="#cb60-5" tabindex="-1"></a>nlat2 <span class="ot">&lt;-</span> <span class="dv">360</span></span>
-<span id="cb60-6"><a href="#cb60-6" tabindex="-1"></a>time2 <span class="ot">&lt;-</span><span class="fu">as.array</span>(<span class="fu">c</span>(<span class="fl">27773.5</span>, <span class="fl">27803.5</span>, <span class="fl">27833.5</span>, <span class="fl">27864.0</span>, <span class="fl">27894.5</span>, <span class="fl">27925.0</span>,</span>
-<span id="cb60-7"><a href="#cb60-7" tabindex="-1"></a>       <span class="fl">27955.5</span>, <span class="fl">27986.5</span>, <span class="fl">28017.0</span>, <span class="fl">28047.5</span>, <span class="fl">28078.0</span>, <span class="fl">28108.5</span>))</span>
-<span id="cb60-8"><a href="#cb60-8" tabindex="-1"></a>nt2 <span class="ot">&lt;-</span> <span class="dv">12</span></span>
-<span id="cb60-9"><a href="#cb60-9" tabindex="-1"></a>tunits2 <span class="ot">&lt;-</span> <span class="st">&quot;days since 1900-01-01 00:00:00.0 -0:00&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a><span class="co"># generate lons, lats and set time</span></span>
+<span id="cb57-2"><a href="#cb57-2" tabindex="-1"></a>lon2 <span class="ot">&lt;-</span> <span class="fu">as.array</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="fl">179.75</span>,<span class="fl">179.75</span>,<span class="fl">0.5</span>))</span>
+<span id="cb57-3"><a href="#cb57-3" tabindex="-1"></a>nlon2 <span class="ot">&lt;-</span> <span class="dv">720</span></span>
+<span id="cb57-4"><a href="#cb57-4" tabindex="-1"></a>lat2 <span class="ot">&lt;-</span> <span class="fu">as.array</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="fl">89.75</span>,<span class="fl">89.75</span>,<span class="fl">0.5</span>))</span>
+<span id="cb57-5"><a href="#cb57-5" tabindex="-1"></a>nlat2 <span class="ot">&lt;-</span> <span class="dv">360</span></span>
+<span id="cb57-6"><a href="#cb57-6" tabindex="-1"></a>time2 <span class="ot">&lt;-</span><span class="fu">as.array</span>(<span class="fu">c</span>(<span class="fl">27773.5</span>, <span class="fl">27803.5</span>, <span class="fl">27833.5</span>, <span class="fl">27864.0</span>, <span class="fl">27894.5</span>, <span class="fl">27925.0</span>,</span>
+<span id="cb57-7"><a href="#cb57-7" tabindex="-1"></a>       <span class="fl">27955.5</span>, <span class="fl">27986.5</span>, <span class="fl">28017.0</span>, <span class="fl">28047.5</span>, <span class="fl">28078.0</span>, <span class="fl">28108.5</span>))</span>
+<span id="cb57-8"><a href="#cb57-8" tabindex="-1"></a>nt2 <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb57-9"><a href="#cb57-9" tabindex="-1"></a>tunits2 <span class="ot">&lt;-</span> <span class="st">&quot;days since 1900-01-01 00:00:00.0 -0:00&quot;</span></span></code></pre></div>
 </div>
 <div id="reshaping-a-full-data-frame-to-an-array" class="section level3"
 number="4.1.2">
@@ -1294,30 +1242,30 @@ the number of times third)). The conversion is done in two steps: 1)
 converting that part of the the data frame containing the 12 monthly
 values into into a 2-d matrix, and then 2) reshaping the 2-d matrix into
 a 3-d array.</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a>ptm <span class="ot">&lt;-</span> <span class="fu">proc.time</span>() <span class="co"># start the timer</span></span>
-<span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a><span class="co"># convert tmp_df02 back into an array</span></span>
-<span id="cb61-3"><a href="#cb61-3" tabindex="-1"></a>tmp_mat2 <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df02[<span class="dv">3</span><span class="sc">:</span>(<span class="dv">3</span><span class="sc">+</span>nt<span class="dv">-1</span>)])</span>
-<span id="cb61-4"><a href="#cb61-4" tabindex="-1"></a><span class="fu">dim</span>(tmp_mat2)</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a>ptm <span class="ot">&lt;-</span> <span class="fu">proc.time</span>() <span class="co"># start the timer</span></span>
+<span id="cb58-2"><a href="#cb58-2" tabindex="-1"></a><span class="co"># convert tmp_df02 back into an array</span></span>
+<span id="cb58-3"><a href="#cb58-3" tabindex="-1"></a>tmp_mat2 <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df02[<span class="dv">3</span><span class="sc">:</span>(<span class="dv">3</span><span class="sc">+</span>nt<span class="dv">-1</span>)])</span>
+<span id="cb58-4"><a href="#cb58-4" tabindex="-1"></a><span class="fu">dim</span>(tmp_mat2)</span></code></pre></div>
 <pre><code>## [1] 259200     12</code></pre>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a><span class="co"># then reshape the array</span></span>
-<span id="cb63-2"><a href="#cb63-2" tabindex="-1"></a>tmp_array2 <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp_mat2, <span class="at">dim=</span><span class="fu">c</span>(nlon2,nlat2,nt))</span>
-<span id="cb63-3"><a href="#cb63-3" tabindex="-1"></a><span class="fu">dim</span>(tmp_array2)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a><span class="co"># then reshape the array</span></span>
+<span id="cb60-2"><a href="#cb60-2" tabindex="-1"></a>tmp_array2 <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp_mat2, <span class="at">dim=</span><span class="fu">c</span>(nlon2,nlat2,nt))</span>
+<span id="cb60-3"><a href="#cb60-3" tabindex="-1"></a><span class="fu">dim</span>(tmp_array2)</span></code></pre></div>
 <pre><code>## [1] 720 360  12</code></pre>
 <p>The columns containing <code>mtwa</code>, <code>mtco</code> and
 <code>mat</code> are each transformed into 2-D arrays.</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a><span class="co"># convert mtwa, mtco and mat to arrays</span></span>
-<span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a>mtwa_array2 <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp_df02<span class="sc">$</span>mtwa, <span class="at">dim=</span><span class="fu">c</span>(nlon2,nlat2))</span>
-<span id="cb65-3"><a href="#cb65-3" tabindex="-1"></a><span class="fu">dim</span>(mtwa_array2)</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a><span class="co"># convert mtwa, mtco and mat to arrays</span></span>
+<span id="cb62-2"><a href="#cb62-2" tabindex="-1"></a>mtwa_array2 <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp_df02<span class="sc">$</span>mtwa, <span class="at">dim=</span><span class="fu">c</span>(nlon2,nlat2))</span>
+<span id="cb62-3"><a href="#cb62-3" tabindex="-1"></a><span class="fu">dim</span>(mtwa_array2)</span></code></pre></div>
 <pre><code>## [1] 720 360</code></pre>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a>mtco_array2 <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp_df02<span class="sc">$</span>mtco, <span class="at">dim=</span><span class="fu">c</span>(nlon2,nlat2))</span>
-<span id="cb67-2"><a href="#cb67-2" tabindex="-1"></a><span class="fu">dim</span>(mtco_array2)</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" tabindex="-1"></a>mtco_array2 <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp_df02<span class="sc">$</span>mtco, <span class="at">dim=</span><span class="fu">c</span>(nlon2,nlat2))</span>
+<span id="cb64-2"><a href="#cb64-2" tabindex="-1"></a><span class="fu">dim</span>(mtco_array2)</span></code></pre></div>
 <pre><code>## [1] 720 360</code></pre>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" tabindex="-1"></a>mat_array2 <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp_df02<span class="sc">$</span>mat, <span class="at">dim=</span><span class="fu">c</span>(nlon2,nlat2))</span>
-<span id="cb69-2"><a href="#cb69-2" tabindex="-1"></a><span class="fu">dim</span>(mat_array2)</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" tabindex="-1"></a>mat_array2 <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp_df02<span class="sc">$</span>mat, <span class="at">dim=</span><span class="fu">c</span>(nlon2,nlat2))</span>
+<span id="cb66-2"><a href="#cb66-2" tabindex="-1"></a><span class="fu">dim</span>(mat_array2)</span></code></pre></div>
 <pre><code>## [1] 720 360</code></pre>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm <span class="co"># how long?</span></span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm <span class="co"># how long?</span></span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.077   0.033   0.111</code></pre>
+##   0.040   0.009   0.050</code></pre>
 </div>
 <div id="check-the-conversion" class="section level3" number="4.1.3">
 <h3><span class="header-section-number">4.1.3</span> Check the
@@ -1325,18 +1273,18 @@ conversion</h3>
 <p>It’s generally a good idea to plot (map) the resulting arrays to
 check for anomalies or misapprehensions about the layout of the data.
 First plot the January values, then MTWA, MTCO and MAT.</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" tabindex="-1"></a><span class="co"># some plots to check creation of arrays</span></span>
-<span id="cb73-2"><a href="#cb73-2" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
-<span id="cb73-3"><a href="#cb73-3" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
-<span id="cb73-4"><a href="#cb73-4" tabindex="-1"></a></span>
-<span id="cb73-5"><a href="#cb73-5" tabindex="-1"></a><span class="fu">levelplot</span>(tmp_array2[,,<span class="dv">1</span>] <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
-<span id="cb73-6"><a href="#cb73-6" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;Mean July Temperature (C)&quot;</span>)</span>
-<span id="cb73-7"><a href="#cb73-7" tabindex="-1"></a><span class="fu">levelplot</span>(mtwa_array2 <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
-<span id="cb73-8"><a href="#cb73-8" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;MTWA (C)&quot;</span>)</span>
-<span id="cb73-9"><a href="#cb73-9" tabindex="-1"></a><span class="fu">levelplot</span>(mtco_array2 <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
-<span id="cb73-10"><a href="#cb73-10" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;MTCO (C)&quot;</span>)</span>
-<span id="cb73-11"><a href="#cb73-11" tabindex="-1"></a><span class="fu">levelplot</span>(mat_array2 <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
-<span id="cb73-12"><a href="#cb73-12" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;MAT (C)&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" tabindex="-1"></a><span class="co"># some plots to check creation of arrays</span></span>
+<span id="cb70-2"><a href="#cb70-2" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
+<span id="cb70-3"><a href="#cb70-3" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb70-4"><a href="#cb70-4" tabindex="-1"></a></span>
+<span id="cb70-5"><a href="#cb70-5" tabindex="-1"></a><span class="fu">levelplot</span>(tmp_array2[,,<span class="dv">1</span>] <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
+<span id="cb70-6"><a href="#cb70-6" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;Mean July Temperature (C)&quot;</span>)</span>
+<span id="cb70-7"><a href="#cb70-7" tabindex="-1"></a><span class="fu">levelplot</span>(mtwa_array2 <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
+<span id="cb70-8"><a href="#cb70-8" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;MTWA (C)&quot;</span>)</span>
+<span id="cb70-9"><a href="#cb70-9" tabindex="-1"></a><span class="fu">levelplot</span>(mtco_array2 <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
+<span id="cb70-10"><a href="#cb70-10" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;MTCO (C)&quot;</span>)</span>
+<span id="cb70-11"><a href="#cb70-11" tabindex="-1"></a><span class="fu">levelplot</span>(mat_array2 <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
+<span id="cb70-12"><a href="#cb70-12" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;MAT (C)&quot;</span>)</span></code></pre></div>
 <p><img src="netCDF_files/figure-html/array06-1.png" width="75%" height="75%" /><img src="netCDF_files/figure-html/array06-2.png" width="75%" height="75%" /><img src="netCDF_files/figure-html/array06-3.png" width="75%" height="75%" /><img src="netCDF_files/figure-html/array06-4.png" width="75%" height="75%" /></p>
 <p>Looks ok.</p>
 </div>
@@ -1361,35 +1309,35 @@ using three different approaches.</p>
 <div id="initial-set-up" class="section level3" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> Initial set up</h3>
 <p>As before, dimension variables are generated or copied:</p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" tabindex="-1"></a><span class="co"># generate lons, lats and set time</span></span>
-<span id="cb74-2"><a href="#cb74-2" tabindex="-1"></a>lon3 <span class="ot">&lt;-</span> <span class="fu">as.array</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="fl">179.750</span>,<span class="fl">179.750</span>,<span class="fl">0.50</span>))</span>
-<span id="cb74-3"><a href="#cb74-3" tabindex="-1"></a>nlon3 <span class="ot">&lt;-</span> <span class="dv">720</span></span>
-<span id="cb74-4"><a href="#cb74-4" tabindex="-1"></a>lat3 <span class="ot">&lt;-</span> <span class="fu">as.array</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="fl">89.750</span>,<span class="fl">89.750</span>,<span class="fl">0.50</span>))</span>
-<span id="cb74-5"><a href="#cb74-5" tabindex="-1"></a>nlat3 <span class="ot">&lt;-</span> <span class="dv">360</span></span>
-<span id="cb74-6"><a href="#cb74-6" tabindex="-1"></a>time3 <span class="ot">&lt;-</span> <span class="fu">as.array</span>(<span class="fu">c</span>(<span class="fl">27773.5</span>, <span class="fl">27803.5</span>, <span class="fl">27833.5</span>, <span class="fl">27864.0</span>, <span class="fl">27894.5</span>, <span class="fl">27925.0</span>,</span>
-<span id="cb74-7"><a href="#cb74-7" tabindex="-1"></a>       <span class="fl">27955.5</span>, <span class="fl">27986.5</span>, <span class="fl">28017.0</span>, <span class="fl">28047.5</span>, <span class="fl">28078.0</span>, <span class="fl">28108.5</span>))</span>
-<span id="cb74-8"><a href="#cb74-8" tabindex="-1"></a>nt3 <span class="ot">&lt;-</span> <span class="dv">12</span></span>
-<span id="cb74-9"><a href="#cb74-9" tabindex="-1"></a>tunits3 <span class="ot">&lt;-</span> <span class="st">&quot;days since 1900-01-01 00:00:00.0 -0:00&quot;</span></span></code></pre></div>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" tabindex="-1"></a><span class="co"># copy lon, lat and time from initial netCDF data set</span></span>
-<span id="cb75-2"><a href="#cb75-2" tabindex="-1"></a>lon4 <span class="ot">&lt;-</span> lon</span>
-<span id="cb75-3"><a href="#cb75-3" tabindex="-1"></a>lat4 <span class="ot">&lt;-</span> lat</span>
-<span id="cb75-4"><a href="#cb75-4" tabindex="-1"></a>time4 <span class="ot">&lt;-</span> time</span>
-<span id="cb75-5"><a href="#cb75-5" tabindex="-1"></a>tunits4 <span class="ot">&lt;-</span> tunits</span>
-<span id="cb75-6"><a href="#cb75-6" tabindex="-1"></a>nlon4 <span class="ot">&lt;-</span> nlon; nlat4 <span class="ot">&lt;-</span> nlat; nt4 <span class="ot">&lt;-</span> nt</span></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" tabindex="-1"></a><span class="co"># generate lons, lats and set time</span></span>
+<span id="cb71-2"><a href="#cb71-2" tabindex="-1"></a>lon3 <span class="ot">&lt;-</span> <span class="fu">as.array</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="fl">179.750</span>,<span class="fl">179.750</span>,<span class="fl">0.50</span>))</span>
+<span id="cb71-3"><a href="#cb71-3" tabindex="-1"></a>nlon3 <span class="ot">&lt;-</span> <span class="dv">720</span></span>
+<span id="cb71-4"><a href="#cb71-4" tabindex="-1"></a>lat3 <span class="ot">&lt;-</span> <span class="fu">as.array</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="fl">89.750</span>,<span class="fl">89.750</span>,<span class="fl">0.50</span>))</span>
+<span id="cb71-5"><a href="#cb71-5" tabindex="-1"></a>nlat3 <span class="ot">&lt;-</span> <span class="dv">360</span></span>
+<span id="cb71-6"><a href="#cb71-6" tabindex="-1"></a>time3 <span class="ot">&lt;-</span> <span class="fu">as.array</span>(<span class="fu">c</span>(<span class="fl">27773.5</span>, <span class="fl">27803.5</span>, <span class="fl">27833.5</span>, <span class="fl">27864.0</span>, <span class="fl">27894.5</span>, <span class="fl">27925.0</span>,</span>
+<span id="cb71-7"><a href="#cb71-7" tabindex="-1"></a>       <span class="fl">27955.5</span>, <span class="fl">27986.5</span>, <span class="fl">28017.0</span>, <span class="fl">28047.5</span>, <span class="fl">28078.0</span>, <span class="fl">28108.5</span>))</span>
+<span id="cb71-8"><a href="#cb71-8" tabindex="-1"></a>nt3 <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb71-9"><a href="#cb71-9" tabindex="-1"></a>tunits3 <span class="ot">&lt;-</span> <span class="st">&quot;days since 1900-01-01 00:00:00.0 -0:00&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" tabindex="-1"></a><span class="co"># copy lon, lat and time from initial netCDF data set</span></span>
+<span id="cb72-2"><a href="#cb72-2" tabindex="-1"></a>lon4 <span class="ot">&lt;-</span> lon</span>
+<span id="cb72-3"><a href="#cb72-3" tabindex="-1"></a>lat4 <span class="ot">&lt;-</span> lat</span>
+<span id="cb72-4"><a href="#cb72-4" tabindex="-1"></a>time4 <span class="ot">&lt;-</span> time</span>
+<span id="cb72-5"><a href="#cb72-5" tabindex="-1"></a>tunits4 <span class="ot">&lt;-</span> tunits</span>
+<span id="cb72-6"><a href="#cb72-6" tabindex="-1"></a>nlon4 <span class="ot">&lt;-</span> nlon; nlat4 <span class="ot">&lt;-</span> nlat; nt4 <span class="ot">&lt;-</span> nt</span></code></pre></div>
 <p>Next, an <em>nlon</em> by <em>nlat</em> by <em>nt</em> array is
 created, and filled with the original fill value (or an alternative).
 Also, three <em>nlon</em> by <em>nlat</em> arrays for <code>MTWA</code>,
 <code>MTCO</code>, and <code>MAT</code> are created and filled. The
 generated lontitudes and latitudes are used here (as opposed to copies
 from the original netCDF file–this is more general)</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" tabindex="-1"></a><span class="co"># create arrays</span></span>
-<span id="cb76-2"><a href="#cb76-2" tabindex="-1"></a><span class="co"># nlon * nlat * nt array</span></span>
-<span id="cb76-3"><a href="#cb76-3" tabindex="-1"></a>fillvalue <span class="ot">&lt;-</span> <span class="fl">1e32</span></span>
-<span id="cb76-4"><a href="#cb76-4" tabindex="-1"></a>tmp_array3 <span class="ot">&lt;-</span> <span class="fu">array</span>(fillvalue, <span class="at">dim=</span><span class="fu">c</span>(nlon3,nlat3,nt3))</span>
-<span id="cb76-5"><a href="#cb76-5" tabindex="-1"></a><span class="co"># nlon * nlat arrays for mtwa, mtco and mat</span></span>
-<span id="cb76-6"><a href="#cb76-6" tabindex="-1"></a>mtwa_array3 <span class="ot">&lt;-</span> <span class="fu">array</span>(fillvalue, <span class="at">dim=</span><span class="fu">c</span>(nlon3,nlat3))</span>
-<span id="cb76-7"><a href="#cb76-7" tabindex="-1"></a>mtco_array3 <span class="ot">&lt;-</span> <span class="fu">array</span>(fillvalue, <span class="at">dim=</span><span class="fu">c</span>(nlon3,nlat3))</span>
-<span id="cb76-8"><a href="#cb76-8" tabindex="-1"></a>mat_array3 <span class="ot">&lt;-</span> <span class="fu">array</span>(fillvalue, <span class="at">dim=</span><span class="fu">c</span>(nlon3,nlat3))</span></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" tabindex="-1"></a><span class="co"># create arrays</span></span>
+<span id="cb73-2"><a href="#cb73-2" tabindex="-1"></a><span class="co"># nlon * nlat * nt array</span></span>
+<span id="cb73-3"><a href="#cb73-3" tabindex="-1"></a>fillvalue <span class="ot">&lt;-</span> <span class="fl">1e32</span></span>
+<span id="cb73-4"><a href="#cb73-4" tabindex="-1"></a>tmp_array3 <span class="ot">&lt;-</span> <span class="fu">array</span>(fillvalue, <span class="at">dim=</span><span class="fu">c</span>(nlon3,nlat3,nt3))</span>
+<span id="cb73-5"><a href="#cb73-5" tabindex="-1"></a><span class="co"># nlon * nlat arrays for mtwa, mtco and mat</span></span>
+<span id="cb73-6"><a href="#cb73-6" tabindex="-1"></a>mtwa_array3 <span class="ot">&lt;-</span> <span class="fu">array</span>(fillvalue, <span class="at">dim=</span><span class="fu">c</span>(nlon3,nlat3))</span>
+<span id="cb73-7"><a href="#cb73-7" tabindex="-1"></a>mtco_array3 <span class="ot">&lt;-</span> <span class="fu">array</span>(fillvalue, <span class="at">dim=</span><span class="fu">c</span>(nlon3,nlat3))</span>
+<span id="cb73-8"><a href="#cb73-8" tabindex="-1"></a>mat_array3 <span class="ot">&lt;-</span> <span class="fu">array</span>(fillvalue, <span class="at">dim=</span><span class="fu">c</span>(nlon3,nlat3))</span></code></pre></div>
 </div>
 <div id="explicit-copying-from-a-data-frame-to-array"
 class="section level3" number="4.2.2">
@@ -1401,23 +1349,23 @@ each observation falls in (using the <code>which.min()</code> function),
 and then copy the values for each row into the arrays. This takes a
 relatively long time for data sets with hundreds of rows and
 columns.</p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" tabindex="-1"></a><span class="co"># loop over the rows in the data frame </span></span>
-<span id="cb77-2"><a href="#cb77-2" tabindex="-1"></a><span class="co"># most explicit, but takes a VERY LONG TIME</span></span>
-<span id="cb77-3"><a href="#cb77-3" tabindex="-1"></a>ptm <span class="ot">&lt;-</span> <span class="fu">proc.time</span>() <span class="co"># time the loop</span></span>
-<span id="cb77-4"><a href="#cb77-4" tabindex="-1"></a>nobs <span class="ot">&lt;-</span> <span class="fu">dim</span>(tmp_df03)[<span class="dv">1</span>]</span>
-<span id="cb77-5"><a href="#cb77-5" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nobs) {</span>
-<span id="cb77-6"><a href="#cb77-6" tabindex="-1"></a>  </span>
-<span id="cb77-7"><a href="#cb77-7" tabindex="-1"></a>  <span class="co"># figure out location in the target array of the values in each row of the data frame</span></span>
-<span id="cb77-8"><a href="#cb77-8" tabindex="-1"></a>  j <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(lon3<span class="sc">-</span>tmp_df03<span class="sc">$</span>lon[i]))</span>
-<span id="cb77-9"><a href="#cb77-9" tabindex="-1"></a>  k <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(lat3<span class="sc">-</span>tmp_df03<span class="sc">$</span>lat[i]))</span>
-<span id="cb77-10"><a href="#cb77-10" tabindex="-1"></a>  </span>
-<span id="cb77-11"><a href="#cb77-11" tabindex="-1"></a>  <span class="co"># copy data from the data frame to array</span></span>
-<span id="cb77-12"><a href="#cb77-12" tabindex="-1"></a>  tmp_array3[j,k,<span class="dv">1</span><span class="sc">:</span>nt] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03[i,<span class="dv">3</span><span class="sc">:</span>(nt<span class="sc">+</span><span class="dv">2</span>)])</span>
-<span id="cb77-13"><a href="#cb77-13" tabindex="-1"></a>  mtwa_array3[j,k] <span class="ot">&lt;-</span> tmp_df03<span class="sc">$</span>mtwa[i]</span>
-<span id="cb77-14"><a href="#cb77-14" tabindex="-1"></a>  mtco_array3[j,k] <span class="ot">&lt;-</span> tmp_df03<span class="sc">$</span>mtco[i]</span>
-<span id="cb77-15"><a href="#cb77-15" tabindex="-1"></a>  mat_array3[j,k] <span class="ot">&lt;-</span> tmp_df03<span class="sc">$</span>mat[i]</span>
-<span id="cb77-16"><a href="#cb77-16" tabindex="-1"></a>}</span>
-<span id="cb77-17"><a href="#cb77-17" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm <span class="co"># how long?</span></span></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" tabindex="-1"></a><span class="co"># loop over the rows in the data frame </span></span>
+<span id="cb74-2"><a href="#cb74-2" tabindex="-1"></a><span class="co"># most explicit, but takes a VERY LONG TIME</span></span>
+<span id="cb74-3"><a href="#cb74-3" tabindex="-1"></a>ptm <span class="ot">&lt;-</span> <span class="fu">proc.time</span>() <span class="co"># time the loop</span></span>
+<span id="cb74-4"><a href="#cb74-4" tabindex="-1"></a>nobs <span class="ot">&lt;-</span> <span class="fu">dim</span>(tmp_df03)[<span class="dv">1</span>]</span>
+<span id="cb74-5"><a href="#cb74-5" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nobs) {</span>
+<span id="cb74-6"><a href="#cb74-6" tabindex="-1"></a>  </span>
+<span id="cb74-7"><a href="#cb74-7" tabindex="-1"></a>  <span class="co"># figure out location in the target array of the values in each row of the data frame</span></span>
+<span id="cb74-8"><a href="#cb74-8" tabindex="-1"></a>  j <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(lon3<span class="sc">-</span>tmp_df03<span class="sc">$</span>lon[i]))</span>
+<span id="cb74-9"><a href="#cb74-9" tabindex="-1"></a>  k <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(lat3<span class="sc">-</span>tmp_df03<span class="sc">$</span>lat[i]))</span>
+<span id="cb74-10"><a href="#cb74-10" tabindex="-1"></a>  </span>
+<span id="cb74-11"><a href="#cb74-11" tabindex="-1"></a>  <span class="co"># copy data from the data frame to array</span></span>
+<span id="cb74-12"><a href="#cb74-12" tabindex="-1"></a>  tmp_array3[j,k,<span class="dv">1</span><span class="sc">:</span>nt] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03[i,<span class="dv">3</span><span class="sc">:</span>(nt<span class="sc">+</span><span class="dv">2</span>)])</span>
+<span id="cb74-13"><a href="#cb74-13" tabindex="-1"></a>  mtwa_array3[j,k] <span class="ot">&lt;-</span> tmp_df03<span class="sc">$</span>mtwa[i]</span>
+<span id="cb74-14"><a href="#cb74-14" tabindex="-1"></a>  mtco_array3[j,k] <span class="ot">&lt;-</span> tmp_df03<span class="sc">$</span>mtco[i]</span>
+<span id="cb74-15"><a href="#cb74-15" tabindex="-1"></a>  mat_array3[j,k] <span class="ot">&lt;-</span> tmp_df03<span class="sc">$</span>mat[i]</span>
+<span id="cb74-16"><a href="#cb74-16" tabindex="-1"></a>}</span>
+<span id="cb74-17"><a href="#cb74-17" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm <span class="co"># how long?</span></span></code></pre></div>
 <pre><code>##    user  system elapsed 
 ##   81.98   59.23  141.24</code></pre>
 </div>
@@ -1432,11 +1380,11 @@ function <code>function(x) which.min(abs(lon3-x))</code> finds the
 closest longitude of the full array (<code>lon3</code>) to the longitude
 of each row of the data frame (tmp_df03$lon, the <code>x</code> argument
 of the function).</p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" tabindex="-1"></a><span class="co"># loop-avoidance approaches </span></span>
-<span id="cb79-2"><a href="#cb79-2" tabindex="-1"></a><span class="co"># get vectors of the grid-cell indices for each row in the data frame</span></span>
-<span id="cb79-3"><a href="#cb79-3" tabindex="-1"></a>ptm <span class="ot">&lt;-</span> <span class="fu">proc.time</span>() </span>
-<span id="cb79-4"><a href="#cb79-4" tabindex="-1"></a>j2 <span class="ot">&lt;-</span> <span class="fu">sapply</span>(tmp_df03<span class="sc">$</span>lon, <span class="cf">function</span>(x) <span class="fu">which.min</span>(<span class="fu">abs</span>(lon3<span class="sc">-</span>x)))</span>
-<span id="cb79-5"><a href="#cb79-5" tabindex="-1"></a>k2 <span class="ot">&lt;-</span> <span class="fu">sapply</span>(tmp_df03<span class="sc">$</span>lat, <span class="cf">function</span>(x) <span class="fu">which.min</span>(<span class="fu">abs</span>(lat3<span class="sc">-</span>x)))</span></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" tabindex="-1"></a><span class="co"># loop-avoidance approaches </span></span>
+<span id="cb76-2"><a href="#cb76-2" tabindex="-1"></a><span class="co"># get vectors of the grid-cell indices for each row in the data frame</span></span>
+<span id="cb76-3"><a href="#cb76-3" tabindex="-1"></a>ptm <span class="ot">&lt;-</span> <span class="fu">proc.time</span>() </span>
+<span id="cb76-4"><a href="#cb76-4" tabindex="-1"></a>j2 <span class="ot">&lt;-</span> <span class="fu">sapply</span>(tmp_df03<span class="sc">$</span>lon, <span class="cf">function</span>(x) <span class="fu">which.min</span>(<span class="fu">abs</span>(lon3<span class="sc">-</span>x)))</span>
+<span id="cb76-5"><a href="#cb76-5" tabindex="-1"></a>k2 <span class="ot">&lt;-</span> <span class="fu">sapply</span>(tmp_df03<span class="sc">$</span>lat, <span class="cf">function</span>(x) <span class="fu">which.min</span>(<span class="fu">abs</span>(lat3<span class="sc">-</span>x)))</span></code></pre></div>
 <p>Then, the values are copied (one time at a time) by first reshaping
 the appropriate column in the data frame (using the
 <code>as.matrix()</code> function) into a temporary array
@@ -1446,22 +1394,22 @@ the appropriate column in the data frame (using the
 selection on the left side of the assignment
 (<code>[cbind(j2,k2)]</code>) puts each row of the data frame into the
 proper location in the array.</p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" tabindex="-1"></a>fillvalue <span class="ot">&lt;-</span> <span class="fl">1e32</span></span>
-<span id="cb80-2"><a href="#cb80-2" tabindex="-1"></a><span class="co"># partial loop avoidance for tmp_array3</span></span>
-<span id="cb80-3"><a href="#cb80-3" tabindex="-1"></a>temp_array <span class="ot">&lt;-</span> <span class="fu">array</span>(fillvalue, <span class="at">dim=</span><span class="fu">c</span>(nlon3,nlat3))</span>
-<span id="cb80-4"><a href="#cb80-4" tabindex="-1"></a>nobs <span class="ot">&lt;-</span> <span class="fu">dim</span>(tmp_df03)[<span class="dv">1</span>]</span>
-<span id="cb80-5"><a href="#cb80-5" tabindex="-1"></a><span class="cf">for</span> (l <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nt) {</span>
-<span id="cb80-6"><a href="#cb80-6" tabindex="-1"></a>  temp_array[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03[<span class="dv">1</span><span class="sc">:</span>nobs,l<span class="sc">+</span><span class="dv">2</span>]) </span>
-<span id="cb80-7"><a href="#cb80-7" tabindex="-1"></a>  tmp_array3[,,l] <span class="ot">&lt;-</span> temp_array</span>
-<span id="cb80-8"><a href="#cb80-8" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" tabindex="-1"></a>fillvalue <span class="ot">&lt;-</span> <span class="fl">1e32</span></span>
+<span id="cb77-2"><a href="#cb77-2" tabindex="-1"></a><span class="co"># partial loop avoidance for tmp_array3</span></span>
+<span id="cb77-3"><a href="#cb77-3" tabindex="-1"></a>temp_array <span class="ot">&lt;-</span> <span class="fu">array</span>(fillvalue, <span class="at">dim=</span><span class="fu">c</span>(nlon3,nlat3))</span>
+<span id="cb77-4"><a href="#cb77-4" tabindex="-1"></a>nobs <span class="ot">&lt;-</span> <span class="fu">dim</span>(tmp_df03)[<span class="dv">1</span>]</span>
+<span id="cb77-5"><a href="#cb77-5" tabindex="-1"></a><span class="cf">for</span> (l <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>nt) {</span>
+<span id="cb77-6"><a href="#cb77-6" tabindex="-1"></a>  temp_array[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03[<span class="dv">1</span><span class="sc">:</span>nobs,l<span class="sc">+</span><span class="dv">2</span>]) </span>
+<span id="cb77-7"><a href="#cb77-7" tabindex="-1"></a>  tmp_array3[,,l] <span class="ot">&lt;-</span> temp_array</span>
+<span id="cb77-8"><a href="#cb77-8" tabindex="-1"></a>}</span></code></pre></div>
 <p>The 2-D arrays can be copied directly:</p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" tabindex="-1"></a><span class="co"># copy 2-D arrays directly</span></span>
-<span id="cb81-2"><a href="#cb81-2" tabindex="-1"></a>mtwa_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03<span class="sc">$</span>mtwa)</span>
-<span id="cb81-3"><a href="#cb81-3" tabindex="-1"></a>mtco_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03<span class="sc">$</span>mtco) </span>
-<span id="cb81-4"><a href="#cb81-4" tabindex="-1"></a>mat_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03<span class="sc">$</span>mat) </span>
-<span id="cb81-5"><a href="#cb81-5" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm</span></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" tabindex="-1"></a><span class="co"># copy 2-D arrays directly</span></span>
+<span id="cb78-2"><a href="#cb78-2" tabindex="-1"></a>mtwa_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03<span class="sc">$</span>mtwa)</span>
+<span id="cb78-3"><a href="#cb78-3" tabindex="-1"></a>mtco_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03<span class="sc">$</span>mtco) </span>
+<span id="cb78-4"><a href="#cb78-4" tabindex="-1"></a>mat_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03<span class="sc">$</span>mat) </span>
+<span id="cb78-5"><a href="#cb78-5" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   1.121   0.153   1.283</code></pre>
+##   0.632   0.129   0.764</code></pre>
 </div>
 <div id="complete-loop-avoidance-approach" class="section level3"
 number="4.2.4">
@@ -1473,81 +1421,48 @@ loop-avoidance approach</h3>
 <code>3:(nt3+2)</code> implies that the data are in columns 3 through 14
 in the data frame (i.e. <code>lon</code> and <code>lat</code> are in the
 first two columns):</p>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" tabindex="-1"></a><span class="co"># loop avoidance for all of the variables</span></span>
-<span id="cb83-2"><a href="#cb83-2" tabindex="-1"></a>ptm <span class="ot">&lt;-</span> <span class="fu">proc.time</span>() </span>
-<span id="cb83-3"><a href="#cb83-3" tabindex="-1"></a>nobs <span class="ot">&lt;-</span> <span class="fu">dim</span>(tmp_df03)[<span class="dv">1</span>]</span>
-<span id="cb83-4"><a href="#cb83-4" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>nt3,<span class="at">each=</span>nobs)</span>
-<span id="cb83-5"><a href="#cb83-5" tabindex="-1"></a>tmp_array3[<span class="fu">cbind</span>(j2,k2,l)] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03[<span class="dv">1</span><span class="sc">:</span>nobs,<span class="dv">3</span><span class="sc">:</span>(nt3<span class="sc">+</span><span class="dv">2</span>)])</span>
-<span id="cb83-6"><a href="#cb83-6" tabindex="-1"></a>mtwa_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03<span class="sc">$</span>mtwa) </span>
-<span id="cb83-7"><a href="#cb83-7" tabindex="-1"></a>mtco_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp_df03<span class="sc">$</span>mtco) </span>
-<span id="cb83-8"><a href="#cb83-8" tabindex="-1"></a>mat_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp_df03<span class="sc">$</span>mat) </span>
-<span id="cb83-9"><a href="#cb83-9" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm</span></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" tabindex="-1"></a><span class="co"># loop avoidance for all of the variables</span></span>
+<span id="cb80-2"><a href="#cb80-2" tabindex="-1"></a>ptm <span class="ot">&lt;-</span> <span class="fu">proc.time</span>() </span>
+<span id="cb80-3"><a href="#cb80-3" tabindex="-1"></a>nobs <span class="ot">&lt;-</span> <span class="fu">dim</span>(tmp_df03)[<span class="dv">1</span>]</span>
+<span id="cb80-4"><a href="#cb80-4" tabindex="-1"></a>l <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">1</span><span class="sc">:</span>nt3,<span class="at">each=</span>nobs)</span>
+<span id="cb80-5"><a href="#cb80-5" tabindex="-1"></a>tmp_array3[<span class="fu">cbind</span>(j2,k2,l)] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03[<span class="dv">1</span><span class="sc">:</span>nobs,<span class="dv">3</span><span class="sc">:</span>(nt3<span class="sc">+</span><span class="dv">2</span>)])</span>
+<span id="cb80-6"><a href="#cb80-6" tabindex="-1"></a>mtwa_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03<span class="sc">$</span>mtwa) </span>
+<span id="cb80-7"><a href="#cb80-7" tabindex="-1"></a>mtco_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp_df03<span class="sc">$</span>mtco) </span>
+<span id="cb80-8"><a href="#cb80-8" tabindex="-1"></a>mat_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp_df03<span class="sc">$</span>mat) </span>
+<span id="cb80-9"><a href="#cb80-9" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.059   0.015   0.075</code></pre>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" tabindex="-1"></a><span class="co"># some plots to check creation of arrays</span></span>
-<span id="cb85-2"><a href="#cb85-2" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
-<span id="cb85-3"><a href="#cb85-3" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
-<span id="cb85-4"><a href="#cb85-4" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb85-5"><a href="#cb85-5" tabindex="-1"></a><span class="fu">levelplot</span>(tmp_array3[,,m] <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
-<span id="cb85-6"><a href="#cb85-6" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;Mean July Temperature (C)&quot;</span>)</span>
-<span id="cb85-7"><a href="#cb85-7" tabindex="-1"></a><span class="fu">levelplot</span>(mtwa_array3 <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
-<span id="cb85-8"><a href="#cb85-8" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;MTWA (C)&quot;</span>)</span>
-<span id="cb85-9"><a href="#cb85-9" tabindex="-1"></a><span class="fu">levelplot</span>(mtco_array3 <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
-<span id="cb85-10"><a href="#cb85-10" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;MTCO (C)&quot;</span>)</span>
-<span id="cb85-11"><a href="#cb85-11" tabindex="-1"></a><span class="fu">levelplot</span>(mat_array3 <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
-<span id="cb85-12"><a href="#cb85-12" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;MAT (C)&quot;</span>)</span></code></pre></div>
+##   0.035   0.001   0.036</code></pre>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" tabindex="-1"></a><span class="co"># some plots to check creation of arrays</span></span>
+<span id="cb82-2"><a href="#cb82-2" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
+<span id="cb82-3"><a href="#cb82-3" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb82-4"><a href="#cb82-4" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb82-5"><a href="#cb82-5" tabindex="-1"></a><span class="fu">levelplot</span>(tmp_array3[,,m] <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
+<span id="cb82-6"><a href="#cb82-6" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;Mean July Temperature (C)&quot;</span>)</span>
+<span id="cb82-7"><a href="#cb82-7" tabindex="-1"></a><span class="fu">levelplot</span>(mtwa_array3 <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
+<span id="cb82-8"><a href="#cb82-8" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;MTWA (C)&quot;</span>)</span>
+<span id="cb82-9"><a href="#cb82-9" tabindex="-1"></a><span class="fu">levelplot</span>(mtco_array3 <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
+<span id="cb82-10"><a href="#cb82-10" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;MTCO (C)&quot;</span>)</span>
+<span id="cb82-11"><a href="#cb82-11" tabindex="-1"></a><span class="fu">levelplot</span>(mat_array3 <span class="sc">~</span> lon <span class="sc">*</span> lat, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
+<span id="cb82-12"><a href="#cb82-12" tabindex="-1"></a>  <span class="at">col.regions=</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))), <span class="at">main=</span><span class="st">&quot;MAT (C)&quot;</span>)</span></code></pre></div>
 <p><img src="netCDF_files/figure-html/array16-1.png" width="75%" height="75%" /><img src="netCDF_files/figure-html/array16-2.png" width="75%" height="75%" /><img src="netCDF_files/figure-html/array16-3.png" width="75%" height="75%" /><img src="netCDF_files/figure-html/array16-4.png" width="75%" height="75%" /></p>
 <p>Check what’s in the current workspace:</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" tabindex="-1"></a><span class="fu">ls</span>()</span></code></pre></div>
-<pre><code>##   [1] &quot;alpha&quot;                        &quot;BF&quot;                           &quot;burn&quot;                        
-##   [4] &quot;burnf&quot;                        &quot;carp96t&quot;                      &quot;cirques&quot;                     
-##   [7] &quot;color_fun&quot;                    &quot;con&quot;                          &quot;conus_sf&quot;                    
-##  [10] &quot;Conventions&quot;                  &quot;csvfile&quot;                      &quot;csvname&quot;                     
-##  [13] &quot;csvpath&quot;                      &quot;cutpts&quot;                       &quot;cygage&quot;                      
-##  [16] &quot;cygdepths&quot;                    &quot;datasource&quot;                   &quot;dlname&quot;                      
-##  [19] &quot;dname&quot;                        &quot;dunits&quot;                       &quot;fillvalue&quot;                   
-##  [22] &quot;gfire2&quot;                       &quot;grid&quot;                         &quot;h2&quot;                          
-##  [25] &quot;hadcrut3&quot;                     &quot;hdf_file&quot;                     &quot;hdf_name&quot;                    
-##  [28] &quot;hdf_path&quot;                     &quot;history&quot;                      &quot;institution&quot;                 
-##  [31] &quot;IPCC_RF&quot;                      &quot;IPCC_RFtrans&quot;                 &quot;iris&quot;                        
-##  [34] &quot;island&quot;                       &quot;j2&quot;                           &quot;k2&quot;                          
-##  [37] &quot;l&quot;                            &quot;lat&quot;                          &quot;lat_array&quot;                   
-##  [40] &quot;lat2&quot;                         &quot;lat3&quot;                         &quot;lat4&quot;                        
-##  [43] &quot;layer&quot;                        &quot;logtrans&quot;                     &quot;lon&quot;                         
-##  [46] &quot;lon_array&quot;                    &quot;lon2&quot;                         &quot;lon3&quot;                        
-##  [49] &quot;lon4&quot;                         &quot;lonlat&quot;                       &quot;m&quot;                           
-##  [52] &quot;mat_array2&quot;                   &quot;mat_array3&quot;                   &quot;midwotl_sf&quot;                  
-##  [55] &quot;midwotl_study_area_sf&quot;        &quot;midwtf2&quot;                      &quot;mtco_array2&quot;                 
-##  [58] &quot;mtco_array3&quot;                  &quot;mtwa_array2&quot;                  &quot;mtwa_array3&quot;                 
-##  [61] &quot;na_sf&quot;                        &quot;na2_sf&quot;                       &quot;napol&quot;                       
-##  [64] &quot;ncfname&quot;                      &quot;ncin&quot;                         &quot;ncname&quot;                      
-##  [67] &quot;ncpath&quot;                       &quot;ne_110m_admin_0_countries_sf&quot; &quot;nlat&quot;                        
-##  [70] &quot;nlat2&quot;                        &quot;nlat3&quot;                        &quot;nlat4&quot;                       
-##  [73] &quot;nlon&quot;                         &quot;nlon2&quot;                        &quot;nlon3&quot;                       
-##  [76] &quot;nlon4&quot;                        &quot;nobs&quot;                         &quot;nt&quot;                          
-##  [79] &quot;nt2&quot;                          &quot;nt3&quot;                          &quot;nt4&quot;                         
-##  [82] &quot;orcounty_sf&quot;                  &quot;orcountyp&quot;                    &quot;orgrid&quot;                      
-##  [85] &quot;orotl_sf&quot;                     &quot;orsim&quot;                        &quot;orstationc&quot;                  
-##  [88] &quot;orstationc2&quot;                  &quot;orstations_sf&quot;                &quot;ortann&quot;                      
-##  [91] &quot;ozone_data&quot;                   &quot;picea_sf&quot;                     &quot;Pollute&quot;                     
-##  [94] &quot;ptm&quot;                          &quot;references&quot;                   &quot;shapefile&quot;                   
-##  [97] &quot;shp_file&quot;                     &quot;sierra&quot;                       &quot;specmap&quot;                     
-## [100] &quot;SST&quot;                          &quot;streams&quot;                      &quot;sumcr&quot;                       
-## [103] &quot;tday&quot;                         &quot;tdstr&quot;                        &quot;temp_array&quot;                  
-## [106] &quot;time&quot;                         &quot;time2&quot;                        &quot;time3&quot;                       
-## [109] &quot;time4&quot;                        &quot;title&quot;                        &quot;tmonth&quot;                      
-## [112] &quot;tmp_array&quot;                    &quot;tmp_array2&quot;                   &quot;tmp_array3&quot;                  
-## [115] &quot;tmp_df01&quot;                     &quot;tmp_df02&quot;                     &quot;tmp_df03&quot;                    
-## [118] &quot;tmp_mat&quot;                      &quot;tmp_mat2&quot;                     &quot;tmp_slice&quot;                   
-## [121] &quot;tmp_vec&quot;                      &quot;tmp_vec_long&quot;                 &quot;trecov_pts_sf&quot;               
-## [124] &quot;treecov&quot;                      &quot;tstreams&quot;                     &quot;tunits&quot;                      
-## [127] &quot;tunits2&quot;                      &quot;tunits3&quot;                      &quot;tunits4&quot;                     
-## [130] &quot;tustr&quot;                        &quot;tyear&quot;                        &quot;UVI&quot;                         
-## [133] &quot;vegkey&quot;                       &quot;vegtype&quot;                      &quot;world_otl&quot;                   
-## [136] &quot;world_outline&quot;                &quot;world_sf&quot;                     &quot;wus_alpha&quot;                   
-## [139] &quot;wus_map&quot;                      &quot;wus_pratio&quot;                   &quot;wus_pratio_sf&quot;               
-## [142] &quot;wus_sf&quot;                       &quot;yellpratio&quot;                   &quot;ynplk_sf&quot;                    
-## [145] &quot;ynprivers_sf&quot;                 &quot;ynpstate_sf&quot;                  &quot;ypolsqrt&quot;</code></pre>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" tabindex="-1"></a><span class="fu">ls</span>()</span></code></pre></div>
+<pre><code>##  [1] &quot;BF&quot;            &quot;color_fun&quot;     &quot;Conventions&quot;   &quot;csvfile&quot;       &quot;csvname&quot;       &quot;csvpath&quot;      
+##  [7] &quot;cutpts&quot;        &quot;datasource&quot;    &quot;dlname&quot;        &quot;dname&quot;         &quot;dunits&quot;        &quot;fillvalue&quot;    
+## [13] &quot;grid&quot;          &quot;h1&quot;            &quot;h2&quot;            &quot;hdf_file&quot;      &quot;hdf_name&quot;      &quot;hdf_path&quot;     
+## [19] &quot;history&quot;       &quot;institution&quot;   &quot;j2&quot;            &quot;k2&quot;            &quot;l&quot;             &quot;lat&quot;          
+## [25] &quot;lat_array&quot;     &quot;lat2&quot;          &quot;lat3&quot;          &quot;lat4&quot;          &quot;log10BF&quot;       &quot;lon&quot;          
+## [31] &quot;lon_array&quot;     &quot;lon2&quot;          &quot;lon3&quot;          &quot;lon4&quot;          &quot;lonlat&quot;        &quot;m&quot;            
+## [37] &quot;mat_array2&quot;    &quot;mat_array3&quot;    &quot;mtco_array2&quot;   &quot;mtco_array3&quot;   &quot;mtwa_array2&quot;   &quot;mtwa_array3&quot;  
+## [43] &quot;ncfname&quot;       &quot;ncin&quot;          &quot;ncname&quot;        &quot;ncpath&quot;        &quot;nlat&quot;          &quot;nlat2&quot;        
+## [49] &quot;nlat3&quot;         &quot;nlat4&quot;         &quot;nlon&quot;          &quot;nlon2&quot;         &quot;nlon3&quot;         &quot;nlon4&quot;        
+## [55] &quot;nobs&quot;          &quot;nt&quot;            &quot;nt2&quot;           &quot;nt3&quot;           &quot;nt4&quot;           &quot;ptm&quot;          
+## [61] &quot;references&quot;    &quot;shp_file&quot;      &quot;tday&quot;          &quot;tdstr&quot;         &quot;temp_array&quot;    &quot;time&quot;         
+## [67] &quot;time2&quot;         &quot;time3&quot;         &quot;time4&quot;         &quot;title&quot;         &quot;tmonth&quot;        &quot;tmp_array&quot;    
+## [73] &quot;tmp_array2&quot;    &quot;tmp_array3&quot;    &quot;tmp_df01&quot;      &quot;tmp_df02&quot;      &quot;tmp_df03&quot;      &quot;tmp_mat&quot;      
+## [79] &quot;tmp_mat2&quot;      &quot;tmp_slice&quot;     &quot;tmp_vec&quot;       &quot;tmp_vec_long&quot;  &quot;tunits&quot;        &quot;tunits2&quot;      
+## [85] &quot;tunits3&quot;       &quot;tunits4&quot;       &quot;tustr&quot;         &quot;tyear&quot;         &quot;UVI&quot;           &quot;UVI_in&quot;       
+## [91] &quot;world_otl&quot;     &quot;world_outline&quot;</code></pre>
 <p><a href="netCDF.html">[Back to top]</a></p>
 </div>
 </div>
@@ -1563,58 +1478,58 @@ variables and the individual variables, and the attrributes of each, and
 then creating the file and “putting” the data into the file, along with
 additional attributes or metadata.</p>
 <p>First, create the netCDF filename:</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" tabindex="-1"></a><span class="co"># path and file name, set dname</span></span>
-<span id="cb88-2"><a href="#cb88-2" tabindex="-1"></a>ncpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></span>
-<span id="cb88-3"><a href="#cb88-3" tabindex="-1"></a>ncname <span class="ot">&lt;-</span> <span class="st">&quot;cru10min30_ncdf4&quot;</span>  </span>
-<span id="cb88-4"><a href="#cb88-4" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="fu">paste</span>(ncpath, ncname, <span class="st">&quot;.nc&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb88-5"><a href="#cb88-5" tabindex="-1"></a>dname <span class="ot">&lt;-</span> <span class="st">&quot;tmp&quot;</span>  <span class="co"># note: tmp means temperature (not temporary)</span></span></code></pre></div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" tabindex="-1"></a><span class="co"># path and file name, set dname</span></span>
+<span id="cb85-2"><a href="#cb85-2" tabindex="-1"></a>ncpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/&quot;</span></span>
+<span id="cb85-3"><a href="#cb85-3" tabindex="-1"></a>ncname <span class="ot">&lt;-</span> <span class="st">&quot;cru10min30_ncdf4&quot;</span>  </span>
+<span id="cb85-4"><a href="#cb85-4" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="fu">paste</span>(ncpath, ncname, <span class="st">&quot;.nc&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb85-5"><a href="#cb85-5" tabindex="-1"></a>dname <span class="ot">&lt;-</span> <span class="st">&quot;tmp&quot;</span>  <span class="co"># note: tmp means temperature (not temporary)</span></span></code></pre></div>
 <p>Then define the contents of the file:</p>
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" tabindex="-1"></a><span class="co"># create and write the netCDF file -- ncdf4 version</span></span>
-<span id="cb89-2"><a href="#cb89-2" tabindex="-1"></a><span class="co"># define dimensions</span></span>
-<span id="cb89-3"><a href="#cb89-3" tabindex="-1"></a>londim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;degrees_east&quot;</span>,<span class="fu">as.double</span>(lon3)) </span>
-<span id="cb89-4"><a href="#cb89-4" tabindex="-1"></a>latdim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;degrees_north&quot;</span>,<span class="fu">as.double</span>(lat3)) </span>
-<span id="cb89-5"><a href="#cb89-5" tabindex="-1"></a>timedim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;time&quot;</span>,tunits3,<span class="fu">as.double</span>(time3))</span>
-<span id="cb89-6"><a href="#cb89-6" tabindex="-1"></a></span>
-<span id="cb89-7"><a href="#cb89-7" tabindex="-1"></a><span class="co"># define variables</span></span>
-<span id="cb89-8"><a href="#cb89-8" tabindex="-1"></a>fillvalue <span class="ot">&lt;-</span> <span class="fl">1e32</span></span>
-<span id="cb89-9"><a href="#cb89-9" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;2m air temperature&quot;</span></span>
-<span id="cb89-10"><a href="#cb89-10" tabindex="-1"></a>tmp_def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;tmp&quot;</span>,<span class="st">&quot;deg_C&quot;</span>,<span class="fu">list</span>(londim,latdim,timedim),fillvalue,dlname,<span class="at">prec=</span><span class="st">&quot;single&quot;</span>)</span>
-<span id="cb89-11"><a href="#cb89-11" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;mean_temperture_warmest_month&quot;</span></span>
-<span id="cb89-12"><a href="#cb89-12" tabindex="-1"></a>mtwa.def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;mtwa&quot;</span>,<span class="st">&quot;deg_C&quot;</span>,<span class="fu">list</span>(londim,latdim),fillvalue,dlname,<span class="at">prec=</span><span class="st">&quot;single&quot;</span>)</span>
-<span id="cb89-13"><a href="#cb89-13" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;mean_temperature_coldest_month&quot;</span></span>
-<span id="cb89-14"><a href="#cb89-14" tabindex="-1"></a>mtco.def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;mtco&quot;</span>,<span class="st">&quot;deg_C&quot;</span>,<span class="fu">list</span>(londim,latdim),fillvalue,dlname,<span class="at">prec=</span><span class="st">&quot;single&quot;</span>)</span>
-<span id="cb89-15"><a href="#cb89-15" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;mean_annual_temperature&quot;</span></span>
-<span id="cb89-16"><a href="#cb89-16" tabindex="-1"></a>mat.def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;mat&quot;</span>,<span class="st">&quot;deg_C&quot;</span>,<span class="fu">list</span>(londim,latdim),fillvalue,dlname,<span class="at">prec=</span><span class="st">&quot;single&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" tabindex="-1"></a><span class="co"># create and write the netCDF file -- ncdf4 version</span></span>
+<span id="cb86-2"><a href="#cb86-2" tabindex="-1"></a><span class="co"># define dimensions</span></span>
+<span id="cb86-3"><a href="#cb86-3" tabindex="-1"></a>londim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;degrees_east&quot;</span>,<span class="fu">as.double</span>(lon3)) </span>
+<span id="cb86-4"><a href="#cb86-4" tabindex="-1"></a>latdim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;degrees_north&quot;</span>,<span class="fu">as.double</span>(lat3)) </span>
+<span id="cb86-5"><a href="#cb86-5" tabindex="-1"></a>timedim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;time&quot;</span>,tunits3,<span class="fu">as.double</span>(time3))</span>
+<span id="cb86-6"><a href="#cb86-6" tabindex="-1"></a></span>
+<span id="cb86-7"><a href="#cb86-7" tabindex="-1"></a><span class="co"># define variables</span></span>
+<span id="cb86-8"><a href="#cb86-8" tabindex="-1"></a>fillvalue <span class="ot">&lt;-</span> <span class="fl">1e32</span></span>
+<span id="cb86-9"><a href="#cb86-9" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;2m air temperature&quot;</span></span>
+<span id="cb86-10"><a href="#cb86-10" tabindex="-1"></a>tmp_def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;tmp&quot;</span>,<span class="st">&quot;deg_C&quot;</span>,<span class="fu">list</span>(londim,latdim,timedim),fillvalue,dlname,<span class="at">prec=</span><span class="st">&quot;single&quot;</span>)</span>
+<span id="cb86-11"><a href="#cb86-11" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;mean_temperture_warmest_month&quot;</span></span>
+<span id="cb86-12"><a href="#cb86-12" tabindex="-1"></a>mtwa.def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;mtwa&quot;</span>,<span class="st">&quot;deg_C&quot;</span>,<span class="fu">list</span>(londim,latdim),fillvalue,dlname,<span class="at">prec=</span><span class="st">&quot;single&quot;</span>)</span>
+<span id="cb86-13"><a href="#cb86-13" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;mean_temperature_coldest_month&quot;</span></span>
+<span id="cb86-14"><a href="#cb86-14" tabindex="-1"></a>mtco.def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;mtco&quot;</span>,<span class="st">&quot;deg_C&quot;</span>,<span class="fu">list</span>(londim,latdim),fillvalue,dlname,<span class="at">prec=</span><span class="st">&quot;single&quot;</span>)</span>
+<span id="cb86-15"><a href="#cb86-15" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;mean_annual_temperature&quot;</span></span>
+<span id="cb86-16"><a href="#cb86-16" tabindex="-1"></a>mat.def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;mat&quot;</span>,<span class="st">&quot;deg_C&quot;</span>,<span class="fu">list</span>(londim,latdim),fillvalue,dlname,<span class="at">prec=</span><span class="st">&quot;single&quot;</span>)</span></code></pre></div>
 <p>Next, create the file, and put the variables into it, along with
 additional variable and “global” attributes (those that apply to the
 whole file). Note that the attributes are of key importance to the
 self-documenting properties of netCDF files.</p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" tabindex="-1"></a><span class="co"># create netCDF file and put arrays</span></span>
-<span id="cb90-2"><a href="#cb90-2" tabindex="-1"></a>ncout <span class="ot">&lt;-</span> <span class="fu">nc_create</span>(ncfname,<span class="fu">list</span>(tmp_def,mtco.def,mtwa.def,mat.def),<span class="at">force_v4=</span><span class="cn">TRUE</span>)</span>
-<span id="cb90-3"><a href="#cb90-3" tabindex="-1"></a></span>
-<span id="cb90-4"><a href="#cb90-4" tabindex="-1"></a><span class="co"># put variables</span></span>
-<span id="cb90-5"><a href="#cb90-5" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout,tmp_def,tmp_array3)</span>
-<span id="cb90-6"><a href="#cb90-6" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout,mtwa.def,mtwa_array3)</span>
-<span id="cb90-7"><a href="#cb90-7" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout,mtco.def,mtco_array3)</span>
-<span id="cb90-8"><a href="#cb90-8" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout,mat.def,mat_array3)</span>
-<span id="cb90-9"><a href="#cb90-9" tabindex="-1"></a></span>
-<span id="cb90-10"><a href="#cb90-10" tabindex="-1"></a><span class="co"># put additional attributes into dimension and data variables</span></span>
-<span id="cb90-11"><a href="#cb90-11" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;X&quot;</span>) <span class="co">#,verbose=FALSE) #,definemode=FALSE)</span></span>
-<span id="cb90-12"><a href="#cb90-12" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;Y&quot;</span>)</span>
-<span id="cb90-13"><a href="#cb90-13" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;time&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;T&quot;</span>)</span>
-<span id="cb90-14"><a href="#cb90-14" tabindex="-1"></a></span>
-<span id="cb90-15"><a href="#cb90-15" tabindex="-1"></a><span class="co"># add global attributes</span></span>
-<span id="cb90-16"><a href="#cb90-16" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;title&quot;</span>,title<span class="sc">$</span>value)</span>
-<span id="cb90-17"><a href="#cb90-17" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;institution&quot;</span>,institution<span class="sc">$</span>value)</span>
-<span id="cb90-18"><a href="#cb90-18" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;source&quot;</span>,datasource<span class="sc">$</span>value)</span>
-<span id="cb90-19"><a href="#cb90-19" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;references&quot;</span>,references<span class="sc">$</span>value)</span>
-<span id="cb90-20"><a href="#cb90-20" tabindex="-1"></a>history <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;P.J. Bartlein&quot;</span>, <span class="fu">date</span>(), <span class="at">sep=</span><span class="st">&quot;, &quot;</span>)</span>
-<span id="cb90-21"><a href="#cb90-21" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;history&quot;</span>,history)</span>
-<span id="cb90-22"><a href="#cb90-22" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;Conventions&quot;</span>,Conventions<span class="sc">$</span>value)</span>
-<span id="cb90-23"><a href="#cb90-23" tabindex="-1"></a></span>
-<span id="cb90-24"><a href="#cb90-24" tabindex="-1"></a><span class="co"># Get a summary of the created file:</span></span>
-<span id="cb90-25"><a href="#cb90-25" tabindex="-1"></a>ncout</span></code></pre></div>
-<pre><code>## File /Users/bartlein/Projects/ESSD/data/nc_files/cru10min30_ncdf4.nc (NC_FORMAT_NETCDF4):
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" tabindex="-1"></a><span class="co"># create netCDF file and put arrays</span></span>
+<span id="cb87-2"><a href="#cb87-2" tabindex="-1"></a>ncout <span class="ot">&lt;-</span> <span class="fu">nc_create</span>(ncfname,<span class="fu">list</span>(tmp_def,mtco.def,mtwa.def,mat.def),<span class="at">force_v4=</span><span class="cn">TRUE</span>)</span>
+<span id="cb87-3"><a href="#cb87-3" tabindex="-1"></a></span>
+<span id="cb87-4"><a href="#cb87-4" tabindex="-1"></a><span class="co"># put variables</span></span>
+<span id="cb87-5"><a href="#cb87-5" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout,tmp_def,tmp_array3)</span>
+<span id="cb87-6"><a href="#cb87-6" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout,mtwa.def,mtwa_array3)</span>
+<span id="cb87-7"><a href="#cb87-7" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout,mtco.def,mtco_array3)</span>
+<span id="cb87-8"><a href="#cb87-8" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout,mat.def,mat_array3)</span>
+<span id="cb87-9"><a href="#cb87-9" tabindex="-1"></a></span>
+<span id="cb87-10"><a href="#cb87-10" tabindex="-1"></a><span class="co"># put additional attributes into dimension and data variables</span></span>
+<span id="cb87-11"><a href="#cb87-11" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;X&quot;</span>) <span class="co">#,verbose=FALSE) #,definemode=FALSE)</span></span>
+<span id="cb87-12"><a href="#cb87-12" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;Y&quot;</span>)</span>
+<span id="cb87-13"><a href="#cb87-13" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;time&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;T&quot;</span>)</span>
+<span id="cb87-14"><a href="#cb87-14" tabindex="-1"></a></span>
+<span id="cb87-15"><a href="#cb87-15" tabindex="-1"></a><span class="co"># add global attributes</span></span>
+<span id="cb87-16"><a href="#cb87-16" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;title&quot;</span>,title<span class="sc">$</span>value)</span>
+<span id="cb87-17"><a href="#cb87-17" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;institution&quot;</span>,institution<span class="sc">$</span>value)</span>
+<span id="cb87-18"><a href="#cb87-18" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;source&quot;</span>,datasource<span class="sc">$</span>value)</span>
+<span id="cb87-19"><a href="#cb87-19" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;references&quot;</span>,references<span class="sc">$</span>value)</span>
+<span id="cb87-20"><a href="#cb87-20" tabindex="-1"></a>history <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;P.J. Bartlein&quot;</span>, <span class="fu">date</span>(), <span class="at">sep=</span><span class="st">&quot;, &quot;</span>)</span>
+<span id="cb87-21"><a href="#cb87-21" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;history&quot;</span>,history)</span>
+<span id="cb87-22"><a href="#cb87-22" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;Conventions&quot;</span>,Conventions<span class="sc">$</span>value)</span>
+<span id="cb87-23"><a href="#cb87-23" tabindex="-1"></a></span>
+<span id="cb87-24"><a href="#cb87-24" tabindex="-1"></a><span class="co"># Get a summary of the created file:</span></span>
+<span id="cb87-25"><a href="#cb87-25" tabindex="-1"></a>ncout</span></code></pre></div>
+<pre><code>## File /Users/bartlein/Projects/RESS/data/nc_files/cru10min30_ncdf4.nc (NC_FORMAT_NETCDF4):
 ## 
 ##      4 variables (excluding dimension variables):
 ##         float tmp[lon,lat,time]   (Contiguous storage)  
@@ -1653,11 +1568,11 @@ self-documenting properties of netCDF files.</p>
 ##         institution: http://www.cru.uea.ac.uk/
 ##         source: http://www.cru.uea.ac.uk/~markn/cru05/cru05_intro.html
 ##         references: New et al. (2002) Climate Res 21:1-25
-##         history: P.J. Bartlein, Sat Jan 20 14:38:40 2024
+##         history: P.J. Bartlein, Tue Jan 23 11:55:46 2024
 ##         Conventions: CF-1.0</code></pre>
 <p>Finally, close the file, which writes the data to disk.</p>
-<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" tabindex="-1"></a><span class="co"># close the file, writing data to disk</span></span>
-<span id="cb92-2"><a href="#cb92-2" tabindex="-1"></a><span class="fu">nc_close</span>(ncout)</span></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" tabindex="-1"></a><span class="co"># close the file, writing data to disk</span></span>
+<span id="cb89-2"><a href="#cb89-2" tabindex="-1"></a><span class="fu">nc_close</span>(ncout)</span></code></pre></div>
 <p><a href="netCDF.html">[Back to top]</a></p>
 </div>
 <div id="reading-and-writing-a-projected-netcdf-file"
@@ -1680,19 +1595,19 @@ netCDF file to a convenient folder.</p>
 file</h2>
 <p>Set up the path to a local copy of the NARR (North American Regional
 Reanalysis) soil-moisture file</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" tabindex="-1"></a><span class="co"># set path and filename</span></span>
-<span id="cb93-2"><a href="#cb93-2" tabindex="-1"></a>ncpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></span>
-<span id="cb93-3"><a href="#cb93-3" tabindex="-1"></a>ncname <span class="ot">&lt;-</span> <span class="st">&quot;NARR_soilm.mon.ltm.nc&quot;</span>  </span>
-<span id="cb93-4"><a href="#cb93-4" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="fu">paste</span>(ncpath, ncname, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb93-5"><a href="#cb93-5" tabindex="-1"></a>dname <span class="ot">&lt;-</span> <span class="st">&quot;soilm&quot;</span>  <span class="co"># soil moisture 1 kg m-2 = 1 mm</span></span></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" tabindex="-1"></a><span class="co"># set path and filename</span></span>
+<span id="cb90-2"><a href="#cb90-2" tabindex="-1"></a>ncpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/&quot;</span></span>
+<span id="cb90-3"><a href="#cb90-3" tabindex="-1"></a>ncname <span class="ot">&lt;-</span> <span class="st">&quot;NARR_soilm.mon.ltm.nc&quot;</span>  </span>
+<span id="cb90-4"><a href="#cb90-4" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="fu">paste</span>(ncpath, ncname, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb90-5"><a href="#cb90-5" tabindex="-1"></a>dname <span class="ot">&lt;-</span> <span class="st">&quot;soilm&quot;</span>  <span class="co"># soil moisture 1 kg m-2 = 1 mm</span></span></code></pre></div>
 <p>Open the NetCDF data set, and print some basic information. The
 <code>print()</code> function applied to the <code>ncin</code> object
 produces information similar to that produced by the command-line
 utility <code>ncdump</code>.</p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" tabindex="-1"></a><span class="co"># open a netCDF file</span></span>
-<span id="cb94-2"><a href="#cb94-2" tabindex="-1"></a>ncin <span class="ot">&lt;-</span> <span class="fu">nc_open</span>(ncfname)</span>
-<span id="cb94-3"><a href="#cb94-3" tabindex="-1"></a><span class="fu">print</span>(ncin)</span></code></pre></div>
-<pre><code>## File /Users/bartlein/Projects/ESSD/data/nc_files/NARR_soilm.mon.ltm.nc (NC_FORMAT_NETCDF4_CLASSIC):
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" tabindex="-1"></a><span class="co"># open a netCDF file</span></span>
+<span id="cb91-2"><a href="#cb91-2" tabindex="-1"></a>ncin <span class="ot">&lt;-</span> <span class="fu">nc_open</span>(ncfname)</span>
+<span id="cb91-3"><a href="#cb91-3" tabindex="-1"></a><span class="fu">print</span>(ncin)</span></code></pre></div>
+<pre><code>## File /Users/bartlein/Projects/RESS/data/nc_files/NARR_soilm.mon.ltm.nc (NC_FORMAT_NETCDF4_CLASSIC):
 ## 
 ##      5 variables (excluding dimension variables):
 ##         double climatological_bnds[nbnds,time]   (Chunking: [2,1])  
@@ -1801,36 +1716,34 @@ values of each are listed using the <code>head()</code> and
 <code>tail()</code> functions. The number of <code>x</code>’s (columns)
 and <code>y</code>’s (rows) values can be verified using the
 <code>dim()</code> function:</p>
-<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" tabindex="-1"></a><span class="co"># get x&#39;s and y&#39;s</span></span>
-<span id="cb96-2"><a href="#cb96-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin,<span class="st">&quot;x&quot;</span>)</span>
-<span id="cb96-3"><a href="#cb96-3" tabindex="-1"></a>xlname <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="st">&quot;x&quot;</span>,<span class="st">&quot;long_name&quot;</span>)</span>
-<span id="cb96-4"><a href="#cb96-4" tabindex="-1"></a>xunits <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="st">&quot;x&quot;</span>,<span class="st">&quot;units&quot;</span>)</span>
-<span id="cb96-5"><a href="#cb96-5" tabindex="-1"></a>nx <span class="ot">&lt;-</span> <span class="fu">dim</span>(x)</span>
-<span id="cb96-6"><a href="#cb96-6" tabindex="-1"></a><span class="fu">head</span>(x)</span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" tabindex="-1"></a><span class="co"># get x&#39;s and y&#39;s</span></span>
+<span id="cb93-2"><a href="#cb93-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin,<span class="st">&quot;x&quot;</span>)</span>
+<span id="cb93-3"><a href="#cb93-3" tabindex="-1"></a>xlname <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="st">&quot;x&quot;</span>,<span class="st">&quot;long_name&quot;</span>)</span>
+<span id="cb93-4"><a href="#cb93-4" tabindex="-1"></a>xunits <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="st">&quot;x&quot;</span>,<span class="st">&quot;units&quot;</span>)</span>
+<span id="cb93-5"><a href="#cb93-5" tabindex="-1"></a>nx <span class="ot">&lt;-</span> <span class="fu">dim</span>(x)</span>
+<span id="cb93-6"><a href="#cb93-6" tabindex="-1"></a><span class="fu">head</span>(x)</span></code></pre></div>
 <pre><code>## [1]      0  32463  64926  97389 129852 162315</code></pre>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin,<span class="st">&quot;y&quot;</span>)</span>
-<span id="cb98-2"><a href="#cb98-2" tabindex="-1"></a>ylname <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="st">&quot;y&quot;</span>,<span class="st">&quot;long_name&quot;</span>)</span>
-<span id="cb98-3"><a href="#cb98-3" tabindex="-1"></a>yunits <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="st">&quot;y&quot;</span>,<span class="st">&quot;units&quot;</span>)</span>
-<span id="cb98-4"><a href="#cb98-4" tabindex="-1"></a>ny <span class="ot">&lt;-</span> <span class="fu">dim</span>(y)</span>
-<span id="cb98-5"><a href="#cb98-5" tabindex="-1"></a><span class="fu">head</span>(y)</span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin,<span class="st">&quot;y&quot;</span>)</span>
+<span id="cb95-2"><a href="#cb95-2" tabindex="-1"></a>ylname <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="st">&quot;y&quot;</span>,<span class="st">&quot;long_name&quot;</span>)</span>
+<span id="cb95-3"><a href="#cb95-3" tabindex="-1"></a>yunits <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="st">&quot;y&quot;</span>,<span class="st">&quot;units&quot;</span>)</span>
+<span id="cb95-4"><a href="#cb95-4" tabindex="-1"></a>ny <span class="ot">&lt;-</span> <span class="fu">dim</span>(y)</span>
+<span id="cb95-5"><a href="#cb95-5" tabindex="-1"></a><span class="fu">head</span>(y)</span></code></pre></div>
 <pre><code>## [1]      0  32463  64926  97389 129852 162315</code></pre>
-<div class="sourceCode" id="cb100"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(nx,ny))</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(nx,ny))</span></code></pre></div>
 <pre><code>## [1] 349 277</code></pre>
 <p>Get the time variable and its attributes using the
 <code>ncvar_get()</code> and <code>ncatt_get()</code> functions, and
 list them, and also get the number of time steps using the
 <code>dim()</code> function.</p>
-<div class="sourceCode" id="cb102"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" tabindex="-1"></a><span class="co"># get time</span></span>
-<span id="cb102-2"><a href="#cb102-2" tabindex="-1"></a>time <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin,<span class="st">&quot;time&quot;</span>)</span>
-<span id="cb102-3"><a href="#cb102-3" tabindex="-1"></a>time</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" tabindex="-1"></a><span class="co"># get time</span></span>
+<span id="cb99-2"><a href="#cb99-2" tabindex="-1"></a>time <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin,<span class="st">&quot;time&quot;</span>)</span>
+<span id="cb99-3"><a href="#cb99-3" tabindex="-1"></a>time</span></code></pre></div>
 <pre><code>##  [1] -15769752 -15769008 -15768336 -15767592 -15766872 -15766128 -15765408 -15764664 -15763920 -15763200
 ## [11] -15762456 -15761736</code></pre>
-<div class="sourceCode" id="cb104"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" tabindex="-1"></a>tunits <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="st">&quot;time&quot;</span>,<span class="st">&quot;units&quot;</span>)</span>
-<span id="cb104-2"><a href="#cb104-2" tabindex="-1"></a>nt <span class="ot">&lt;-</span> <span class="fu">dim</span>(time)</span>
-<span id="cb104-3"><a href="#cb104-3" tabindex="-1"></a>nt</span></code></pre></div>
+<div class="sourceCode" id="cb101"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" tabindex="-1"></a>tunits <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="st">&quot;time&quot;</span>,<span class="st">&quot;units&quot;</span>)</span>
+<span id="cb101-2"><a href="#cb101-2" tabindex="-1"></a>nt <span class="ot">&lt;-</span> <span class="fu">dim</span>(time)</span>
+<span id="cb101-3"><a href="#cb101-3" tabindex="-1"></a>nt</span></code></pre></div>
 <pre><code>## [1] 12</code></pre>
 <p>Note that these are particularly bizzare time values, and were
 constructed just to represent 12 monthly mean values.</p>
@@ -1839,36 +1752,36 @@ constructed just to represent 12 monthly mean values.</p>
 <h2><span class="header-section-number">6.3</span> Get a variable</h2>
 <p>Get the the variable (<code>soilm</code>) and its attributes, and
 verify the size of the array.</p>
-<div class="sourceCode" id="cb106"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" tabindex="-1"></a><span class="co"># get soil moisture</span></span>
-<span id="cb106-2"><a href="#cb106-2" tabindex="-1"></a>soilm_array <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin,dname)</span>
-<span id="cb106-3"><a href="#cb106-3" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,dname,<span class="st">&quot;long_name&quot;</span>)</span>
-<span id="cb106-4"><a href="#cb106-4" tabindex="-1"></a>dunits <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,dname,<span class="st">&quot;units&quot;</span>)</span>
-<span id="cb106-5"><a href="#cb106-5" tabindex="-1"></a>fillvalue <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,dname,<span class="st">&quot;_FillValue&quot;</span>)</span>
-<span id="cb106-6"><a href="#cb106-6" tabindex="-1"></a><span class="fu">dim</span>(soilm_array)</span></code></pre></div>
+<div class="sourceCode" id="cb103"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="#cb103-1" tabindex="-1"></a><span class="co"># get soil moisture</span></span>
+<span id="cb103-2"><a href="#cb103-2" tabindex="-1"></a>soilm_array <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin,dname)</span>
+<span id="cb103-3"><a href="#cb103-3" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,dname,<span class="st">&quot;long_name&quot;</span>)</span>
+<span id="cb103-4"><a href="#cb103-4" tabindex="-1"></a>dunits <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,dname,<span class="st">&quot;units&quot;</span>)</span>
+<span id="cb103-5"><a href="#cb103-5" tabindex="-1"></a>fillvalue <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,dname,<span class="st">&quot;_FillValue&quot;</span>)</span>
+<span id="cb103-6"><a href="#cb103-6" tabindex="-1"></a><span class="fu">dim</span>(soilm_array)</span></code></pre></div>
 <pre><code>## [1] 349 277  12</code></pre>
 <p>Note that in a projected file, each grid point has a unique latitude
 and longitude value. We can read those in just like any other 2-d
 variable. Keep in mind, however, that these values aren’t used for
 plotting the data.</p>
-<div class="sourceCode" id="cb108"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin, <span class="st">&quot;lon&quot;</span>)</span>
-<span id="cb108-2"><a href="#cb108-2" tabindex="-1"></a><span class="fu">dim</span>(lon)</span></code></pre></div>
+<div class="sourceCode" id="cb105"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin, <span class="st">&quot;lon&quot;</span>)</span>
+<span id="cb105-2"><a href="#cb105-2" tabindex="-1"></a><span class="fu">dim</span>(lon)</span></code></pre></div>
 <pre><code>## [1] 349 277</code></pre>
-<div class="sourceCode" id="cb110"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin, <span class="st">&quot;lat&quot;</span>)</span>
-<span id="cb110-2"><a href="#cb110-2" tabindex="-1"></a><span class="fu">dim</span>(lat)</span></code></pre></div>
+<div class="sourceCode" id="cb107"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin, <span class="st">&quot;lat&quot;</span>)</span>
+<span id="cb107-2"><a href="#cb107-2" tabindex="-1"></a><span class="fu">dim</span>(lat)</span></code></pre></div>
 <pre><code>## [1] 349 277</code></pre>
 <p>The last thing to get is the coordinate reference system information,
 which is provided as the attributes of the variable
 <code>Lambert Conformal</code>.</p>
-<div class="sourceCode" id="cb112"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" tabindex="-1"></a>grid_mapping_name <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;grid_mappping_name&quot;</span>)</span>
-<span id="cb112-2"><a href="#cb112-2" tabindex="-1"></a>standard_parallel <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;standard_parallel&quot;</span>)</span>
-<span id="cb112-3"><a href="#cb112-3" tabindex="-1"></a>longitude_of_central_meridian <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;longitude_of_central_meridian&quot;</span>)</span>
-<span id="cb112-4"><a href="#cb112-4" tabindex="-1"></a>latitude_of_projection_origin <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;latitude_of_projection_origin&quot;</span>)</span>
-<span id="cb112-5"><a href="#cb112-5" tabindex="-1"></a>false_easting <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;false_easting&quot;</span>)</span>
-<span id="cb112-6"><a href="#cb112-6" tabindex="-1"></a>false_northing <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;false_northing&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb109"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" tabindex="-1"></a>grid_mapping_name <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;grid_mappping_name&quot;</span>)</span>
+<span id="cb109-2"><a href="#cb109-2" tabindex="-1"></a>standard_parallel <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;standard_parallel&quot;</span>)</span>
+<span id="cb109-3"><a href="#cb109-3" tabindex="-1"></a>longitude_of_central_meridian <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;longitude_of_central_meridian&quot;</span>)</span>
+<span id="cb109-4"><a href="#cb109-4" tabindex="-1"></a>latitude_of_projection_origin <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;latitude_of_projection_origin&quot;</span>)</span>
+<span id="cb109-5"><a href="#cb109-5" tabindex="-1"></a>false_easting <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;false_easting&quot;</span>)</span>
+<span id="cb109-6"><a href="#cb109-6" tabindex="-1"></a>false_northing <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin, <span class="st">&quot;Lambert_Conformal&quot;</span>, <span class="st">&quot;false_northing&quot;</span>)</span></code></pre></div>
 <p>Close the netCDF file using the <code>nc_close()</code> function.</p>
 <p><a href="netCDF.html">[Back to top]</a></p>
 </div>
@@ -1879,10 +1792,10 @@ class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="#cb1
 number="7.1">
 <h2><span class="header-section-number">7.1</span> Get a single slice of
 data</h2>
-<div class="sourceCode" id="cb113"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" tabindex="-1"></a><span class="co"># get a single slice or layer (e.g the January long-term mean)</span></span>
-<span id="cb113-2"><a href="#cb113-2" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb113-3"><a href="#cb113-3" tabindex="-1"></a>soilm_slice <span class="ot">&lt;-</span> soilm_array[,,m]</span></code></pre></div>
+<div class="sourceCode" id="cb110"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" tabindex="-1"></a><span class="co"># get a single slice or layer (e.g the January long-term mean)</span></span>
+<span id="cb110-2"><a href="#cb110-2" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb110-3"><a href="#cb110-3" tabindex="-1"></a>soilm_slice <span class="ot">&lt;-</span> soilm_array[,,m]</span></code></pre></div>
 <p>The dimensions of <code>soilm_slice</code>, e.g. 349, 277, can be
 verified using the <code>dim()</code> function.</p>
 </div>
@@ -1891,9 +1804,9 @@ verified using the <code>dim()</code> function.</p>
 <p>A quick look (map) of the extracted slice of data can be gotten using
 the <code>image()</code> function. Here is an <code>image()</code>
 function map.</p>
-<div class="sourceCode" id="cb114"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" tabindex="-1"></a><span class="co"># quick map</span></span>
-<span id="cb114-2"><a href="#cb114-2" tabindex="-1"></a><span class="fu">image</span>(x,y,soilm_slice, <span class="at">col=</span><span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>),<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Blues&quot;</span>)) )</span></code></pre></div>
+<div class="sourceCode" id="cb111"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" tabindex="-1"></a><span class="co"># quick map</span></span>
+<span id="cb111-2"><a href="#cb111-2" tabindex="-1"></a><span class="fu">image</span>(x,y,soilm_slice, <span class="at">col=</span><span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>),<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Blues&quot;</span>)) )</span></code></pre></div>
 <p><img src="netCDF_files/figure-html/image2-1.png" width="75%" height="75%" /></p>
 <p>A better map can be obtained using the <code>levelplot()</code>
 function from the <code>lattice</code> package. The
@@ -1903,12 +1816,12 @@ varying most rapidly), one for each element in the
 <code>soilm_slice</code> array. Specific values of the cutpoints of soil
 moisture categories are defined to cover the range of soil moisture
 values here.</p>
-<div class="sourceCode" id="cb115"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" tabindex="-1"></a><span class="co"># levelplot of the slice</span></span>
-<span id="cb115-2"><a href="#cb115-2" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">x=</span>x, <span class="at">y=</span>y)</span>
-<span id="cb115-3"><a href="#cb115-3" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">400</span>, <span class="dv">500</span>, <span class="dv">600</span>, <span class="dv">700</span>, <span class="dv">800</span>, <span class="dv">900</span>, <span class="dv">1000</span>)</span>
-<span id="cb115-4"><a href="#cb115-4" tabindex="-1"></a><span class="fu">levelplot</span>(soilm_slice <span class="sc">~</span> x <span class="sc">*</span> y, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
-<span id="cb115-5"><a href="#cb115-5" tabindex="-1"></a>  <span class="at">col.regions=</span><span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>),<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Blues&quot;</span>)) )</span></code></pre></div>
+<div class="sourceCode" id="cb112"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" tabindex="-1"></a><span class="co"># levelplot of the slice</span></span>
+<span id="cb112-2"><a href="#cb112-2" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(<span class="at">x=</span>x, <span class="at">y=</span>y)</span>
+<span id="cb112-3"><a href="#cb112-3" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>, <span class="dv">400</span>, <span class="dv">500</span>, <span class="dv">600</span>, <span class="dv">700</span>, <span class="dv">800</span>, <span class="dv">900</span>, <span class="dv">1000</span>)</span>
+<span id="cb112-4"><a href="#cb112-4" tabindex="-1"></a><span class="fu">levelplot</span>(soilm_slice <span class="sc">~</span> x <span class="sc">*</span> y, <span class="at">data=</span>grid, <span class="at">at=</span>cutpts, <span class="at">cuts=</span><span class="dv">11</span>, <span class="at">pretty=</span>T, </span>
+<span id="cb112-5"><a href="#cb112-5" tabindex="-1"></a>  <span class="at">col.regions=</span><span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="dv">1</span>),<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Blues&quot;</span>)) )</span></code></pre></div>
 <p><img src="netCDF_files/figure-html/levelplot2-1.png" width="75%" height="75%" /></p>
 <p><a href="netCDF.html">[Back to top]</a></p>
 </div>
@@ -1924,81 +1837,81 @@ variables and the individual variables, and the attrributes of each, and
 then creating the file and “putting” the data into the file, along with
 additional attributes or metadata.</p>
 <p>First, create the netCDF filename:</p>
-<div class="sourceCode" id="cb116"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" tabindex="-1"></a><span class="co"># path and file name, set dname</span></span>
-<span id="cb116-2"><a href="#cb116-2" tabindex="-1"></a>ncpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/nc_files/&quot;</span></span>
-<span id="cb116-3"><a href="#cb116-3" tabindex="-1"></a>ncname <span class="ot">&lt;-</span> <span class="st">&quot;soilm.mon.ltm_test&quot;</span>  </span>
-<span id="cb116-4"><a href="#cb116-4" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="fu">paste</span>(ncpath, ncname, <span class="st">&quot;.nc&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb116-5"><a href="#cb116-5" tabindex="-1"></a>dname <span class="ot">&lt;-</span> <span class="st">&quot;soilm&quot;</span>  </span></code></pre></div>
+<div class="sourceCode" id="cb113"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" tabindex="-1"></a><span class="co"># path and file name, set dname</span></span>
+<span id="cb113-2"><a href="#cb113-2" tabindex="-1"></a>ncpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/&quot;</span></span>
+<span id="cb113-3"><a href="#cb113-3" tabindex="-1"></a>ncname <span class="ot">&lt;-</span> <span class="st">&quot;soilm.mon.ltm_test&quot;</span>  </span>
+<span id="cb113-4"><a href="#cb113-4" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="fu">paste</span>(ncpath, ncname, <span class="st">&quot;.nc&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb113-5"><a href="#cb113-5" tabindex="-1"></a>dname <span class="ot">&lt;-</span> <span class="st">&quot;soilm&quot;</span>  </span></code></pre></div>
 <p>Then create the file:</p>
-<div class="sourceCode" id="cb117"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" tabindex="-1"></a><span class="co"># create and write the netCDF file -- ncdf4 version</span></span>
-<span id="cb117-2"><a href="#cb117-2" tabindex="-1"></a><span class="co"># define dimensions</span></span>
-<span id="cb117-3"><a href="#cb117-3" tabindex="-1"></a>xdim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;x&quot;</span>,<span class="at">units=</span><span class="st">&quot;m&quot;</span>,</span>
-<span id="cb117-4"><a href="#cb117-4" tabindex="-1"></a>  <span class="at">longname=</span><span class="st">&quot;eastward distance from southwest corner of domain in projection coordinates&quot;</span>,<span class="fu">as.double</span>(x))</span>
-<span id="cb117-5"><a href="#cb117-5" tabindex="-1"></a>ydim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;y&quot;</span>,<span class="at">units=</span><span class="st">&quot;m&quot;</span>,</span>
-<span id="cb117-6"><a href="#cb117-6" tabindex="-1"></a>  <span class="at">longname=</span><span class="st">&quot;northward distance from southwest corner of domain in projection coordinates&quot;</span>,<span class="fu">as.double</span>(y))</span>
-<span id="cb117-7"><a href="#cb117-7" tabindex="-1"></a>timedim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;time&quot;</span>,tunits<span class="sc">$</span>value,<span class="fu">as.double</span>(time))</span>
-<span id="cb117-8"><a href="#cb117-8" tabindex="-1"></a></span>
-<span id="cb117-9"><a href="#cb117-9" tabindex="-1"></a><span class="co"># define variables also include longitude and latitude and the CRS variable</span></span>
-<span id="cb117-10"><a href="#cb117-10" tabindex="-1"></a>fillvalue <span class="ot">&lt;-</span> <span class="fl">1e32</span></span>
-<span id="cb117-11"><a href="#cb117-11" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;soil moisture&quot;</span></span>
-<span id="cb117-12"><a href="#cb117-12" tabindex="-1"></a>soilm_def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;soilm&quot;</span>,dunits<span class="sc">$</span>value,<span class="fu">list</span>(xdim,ydim,timedim),fillvalue,dlname,<span class="at">prec=</span><span class="st">&quot;single&quot;</span>)</span>
-<span id="cb117-13"><a href="#cb117-13" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;Longitude of cell center&quot;</span></span>
-<span id="cb117-14"><a href="#cb117-14" tabindex="-1"></a>lon_def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;degrees_east&quot;</span>,<span class="fu">list</span>(xdim,ydim),<span class="cn">NULL</span>,dlname,<span class="at">prec=</span><span class="st">&quot;double&quot;</span>)</span>
-<span id="cb117-15"><a href="#cb117-15" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;Latitude of cell center&quot;</span></span>
-<span id="cb117-16"><a href="#cb117-16" tabindex="-1"></a>lat_def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;degrees_north&quot;</span>,<span class="fu">list</span>(xdim,ydim),<span class="cn">NULL</span>,dlname,<span class="at">prec=</span><span class="st">&quot;double&quot;</span>)</span>
-<span id="cb117-17"><a href="#cb117-17" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;Lambert_Conformal&quot;</span></span>
-<span id="cb117-18"><a href="#cb117-18" tabindex="-1"></a>proj_def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;1&quot;</span>,<span class="cn">NULL</span>,<span class="cn">NULL</span>,<span class="at">longname=</span>dlname,<span class="at">prec=</span><span class="st">&quot;char&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb114"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" tabindex="-1"></a><span class="co"># create and write the netCDF file -- ncdf4 version</span></span>
+<span id="cb114-2"><a href="#cb114-2" tabindex="-1"></a><span class="co"># define dimensions</span></span>
+<span id="cb114-3"><a href="#cb114-3" tabindex="-1"></a>xdim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;x&quot;</span>,<span class="at">units=</span><span class="st">&quot;m&quot;</span>,</span>
+<span id="cb114-4"><a href="#cb114-4" tabindex="-1"></a>  <span class="at">longname=</span><span class="st">&quot;eastward distance from southwest corner of domain in projection coordinates&quot;</span>,<span class="fu">as.double</span>(x))</span>
+<span id="cb114-5"><a href="#cb114-5" tabindex="-1"></a>ydim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;y&quot;</span>,<span class="at">units=</span><span class="st">&quot;m&quot;</span>,</span>
+<span id="cb114-6"><a href="#cb114-6" tabindex="-1"></a>  <span class="at">longname=</span><span class="st">&quot;northward distance from southwest corner of domain in projection coordinates&quot;</span>,<span class="fu">as.double</span>(y))</span>
+<span id="cb114-7"><a href="#cb114-7" tabindex="-1"></a>timedim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;time&quot;</span>,tunits<span class="sc">$</span>value,<span class="fu">as.double</span>(time))</span>
+<span id="cb114-8"><a href="#cb114-8" tabindex="-1"></a></span>
+<span id="cb114-9"><a href="#cb114-9" tabindex="-1"></a><span class="co"># define variables also include longitude and latitude and the CRS variable</span></span>
+<span id="cb114-10"><a href="#cb114-10" tabindex="-1"></a>fillvalue <span class="ot">&lt;-</span> <span class="fl">1e32</span></span>
+<span id="cb114-11"><a href="#cb114-11" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;soil moisture&quot;</span></span>
+<span id="cb114-12"><a href="#cb114-12" tabindex="-1"></a>soilm_def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;soilm&quot;</span>,dunits<span class="sc">$</span>value,<span class="fu">list</span>(xdim,ydim,timedim),fillvalue,dlname,<span class="at">prec=</span><span class="st">&quot;single&quot;</span>)</span>
+<span id="cb114-13"><a href="#cb114-13" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;Longitude of cell center&quot;</span></span>
+<span id="cb114-14"><a href="#cb114-14" tabindex="-1"></a>lon_def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;lon&quot;</span>,<span class="st">&quot;degrees_east&quot;</span>,<span class="fu">list</span>(xdim,ydim),<span class="cn">NULL</span>,dlname,<span class="at">prec=</span><span class="st">&quot;double&quot;</span>)</span>
+<span id="cb114-15"><a href="#cb114-15" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;Latitude of cell center&quot;</span></span>
+<span id="cb114-16"><a href="#cb114-16" tabindex="-1"></a>lat_def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;lat&quot;</span>,<span class="st">&quot;degrees_north&quot;</span>,<span class="fu">list</span>(xdim,ydim),<span class="cn">NULL</span>,dlname,<span class="at">prec=</span><span class="st">&quot;double&quot;</span>)</span>
+<span id="cb114-17"><a href="#cb114-17" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;Lambert_Conformal&quot;</span></span>
+<span id="cb114-18"><a href="#cb114-18" tabindex="-1"></a>proj_def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;1&quot;</span>,<span class="cn">NULL</span>,<span class="cn">NULL</span>,<span class="at">longname=</span>dlname,<span class="at">prec=</span><span class="st">&quot;char&quot;</span>)</span></code></pre></div>
 <p>Next, create the file, and put the variables into it, along with
 additional variable and “global” attributes (those that apply to the
 whole file). Note that the attributes are of key importance to the
 self-documenting properties of netCDF files.</p>
-<div class="sourceCode" id="cb118"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" tabindex="-1"></a><span class="co"># create netCDF file and put arrays</span></span>
-<span id="cb118-2"><a href="#cb118-2" tabindex="-1"></a>ncout <span class="ot">&lt;-</span> <span class="fu">nc_create</span>(ncfname,<span class="fu">list</span>(soilm_def,lon_def,lat_def,proj_def),<span class="at">force_v4=</span><span class="cn">TRUE</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb119"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" tabindex="-1"></a><span class="co"># put variables</span></span>
-<span id="cb119-2"><a href="#cb119-2" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout,soilm_def,soilm_array)</span>
-<span id="cb119-3"><a href="#cb119-3" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout,lon_def,lon)</span>
-<span id="cb119-4"><a href="#cb119-4" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout,lat_def,lat)</span>
-<span id="cb119-5"><a href="#cb119-5" tabindex="-1"></a></span>
-<span id="cb119-6"><a href="#cb119-6" tabindex="-1"></a><span class="co"># put additional attributes into dimension and data variables</span></span>
-<span id="cb119-7"><a href="#cb119-7" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;x&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;X&quot;</span>)</span>
-<span id="cb119-8"><a href="#cb119-8" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;x&quot;</span>,<span class="st">&quot;standard_name&quot;</span>,<span class="st">&quot;projection_x_coordinate&quot;</span>)</span>
-<span id="cb119-9"><a href="#cb119-9" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;x&quot;</span>,<span class="st">&quot;_CoordinateAxisType&quot;</span>,<span class="st">&quot;GeoX&quot;</span>)</span>
-<span id="cb119-10"><a href="#cb119-10" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;y&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;Y&quot;</span>)</span>
-<span id="cb119-11"><a href="#cb119-11" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;y&quot;</span>,<span class="st">&quot;standard_name&quot;</span>,<span class="st">&quot;projection_y_coordinate&quot;</span>)</span>
-<span id="cb119-12"><a href="#cb119-12" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;y&quot;</span>,<span class="st">&quot;_CoordinateAxisType&quot;</span>,<span class="st">&quot;GeoY&quot;</span>)</span>
-<span id="cb119-13"><a href="#cb119-13" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;soilm&quot;</span>,<span class="st">&quot;grid_mapping&quot;</span>, <span class="st">&quot;Lambert_Conformal&quot;</span>)</span>
-<span id="cb119-14"><a href="#cb119-14" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;soilm&quot;</span>,<span class="st">&quot;coordinates&quot;</span>, <span class="st">&quot;lat lon&quot;</span>)</span>
-<span id="cb119-15"><a href="#cb119-15" tabindex="-1"></a></span>
-<span id="cb119-16"><a href="#cb119-16" tabindex="-1"></a><span class="co"># put the CRS attributes</span></span>
-<span id="cb119-17"><a href="#cb119-17" tabindex="-1"></a>projname <span class="ot">&lt;-</span> <span class="st">&quot;lambert_conformal_conic&quot;</span></span>
-<span id="cb119-18"><a href="#cb119-18" tabindex="-1"></a>false_easting <span class="ot">&lt;-</span> <span class="fl">5632642.22547</span></span>
-<span id="cb119-19"><a href="#cb119-19" tabindex="-1"></a>false_northing <span class="ot">&lt;-</span> <span class="fl">4612545.65137</span></span>
-<span id="cb119-20"><a href="#cb119-20" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;name&quot;</span>,projname)</span>
-<span id="cb119-21"><a href="#cb119-21" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;long_name&quot;</span>,projname)</span>
-<span id="cb119-22"><a href="#cb119-22" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;grid_mapping_name&quot;</span>,projname)</span>
-<span id="cb119-23"><a href="#cb119-23" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;longitude_of_central_meridian&quot;</span>, <span class="fu">as.double</span>(longitude_of_central_meridian<span class="sc">$</span>value))</span>
-<span id="cb119-24"><a href="#cb119-24" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;latitude_of_projection_origin&quot;</span>, <span class="fu">as.double</span>(latitude_of_projection_origin<span class="sc">$</span>value))</span>
-<span id="cb119-25"><a href="#cb119-25" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;standard_parallel&quot;</span>, <span class="fu">c</span>(<span class="fl">50.0</span>, <span class="fl">50.0</span>))</span>
-<span id="cb119-26"><a href="#cb119-26" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;false_easting&quot;</span>,false_easting)</span>
-<span id="cb119-27"><a href="#cb119-27" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;false_northing&quot;</span>,false_northing)</span>
-<span id="cb119-28"><a href="#cb119-28" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;_CoordinateTransformType&quot;</span>,<span class="st">&quot;Projection&quot;</span>)</span>
-<span id="cb119-29"><a href="#cb119-29" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;_CoordinateAxisTypes&quot;</span>,<span class="st">&quot;GeoX GeoY&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb120"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" tabindex="-1"></a><span class="co"># add global attributes</span></span>
-<span id="cb120-2"><a href="#cb120-2" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;title&quot;</span>,<span class="st">&quot;test output of projected data&quot;</span>)</span>
-<span id="cb120-3"><a href="#cb120-3" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;institution&quot;</span>,<span class="st">&quot;NOAA ESRL PSD&quot;</span>)</span>
-<span id="cb120-4"><a href="#cb120-4" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;source&quot;</span>,<span class="st">&quot;soilm.mon.ltm.nc&quot;</span>)</span>
-<span id="cb120-5"><a href="#cb120-5" tabindex="-1"></a>history <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;P.J. Bartlein&quot;</span>, <span class="fu">date</span>(), <span class="at">sep=</span><span class="st">&quot;, &quot;</span>)</span>
-<span id="cb120-6"><a href="#cb120-6" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;history&quot;</span>,history)</span>
-<span id="cb120-7"><a href="#cb120-7" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;Conventions&quot;</span>,<span class="st">&quot;CF=1.6&quot;</span>)</span>
-<span id="cb120-8"><a href="#cb120-8" tabindex="-1"></a></span>
-<span id="cb120-9"><a href="#cb120-9" tabindex="-1"></a><span class="co"># Get a summary of the created file:</span></span>
-<span id="cb120-10"><a href="#cb120-10" tabindex="-1"></a>ncout</span></code></pre></div>
-<pre><code>## File /Users/bartlein/Projects/ESSD/data/nc_files/soilm.mon.ltm_test.nc (NC_FORMAT_NETCDF4):
+<div class="sourceCode" id="cb115"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" tabindex="-1"></a><span class="co"># create netCDF file and put arrays</span></span>
+<span id="cb115-2"><a href="#cb115-2" tabindex="-1"></a>ncout <span class="ot">&lt;-</span> <span class="fu">nc_create</span>(ncfname,<span class="fu">list</span>(soilm_def,lon_def,lat_def,proj_def),<span class="at">force_v4=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" tabindex="-1"></a><span class="co"># put variables</span></span>
+<span id="cb116-2"><a href="#cb116-2" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout,soilm_def,soilm_array)</span>
+<span id="cb116-3"><a href="#cb116-3" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout,lon_def,lon)</span>
+<span id="cb116-4"><a href="#cb116-4" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout,lat_def,lat)</span>
+<span id="cb116-5"><a href="#cb116-5" tabindex="-1"></a></span>
+<span id="cb116-6"><a href="#cb116-6" tabindex="-1"></a><span class="co"># put additional attributes into dimension and data variables</span></span>
+<span id="cb116-7"><a href="#cb116-7" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;x&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;X&quot;</span>)</span>
+<span id="cb116-8"><a href="#cb116-8" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;x&quot;</span>,<span class="st">&quot;standard_name&quot;</span>,<span class="st">&quot;projection_x_coordinate&quot;</span>)</span>
+<span id="cb116-9"><a href="#cb116-9" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;x&quot;</span>,<span class="st">&quot;_CoordinateAxisType&quot;</span>,<span class="st">&quot;GeoX&quot;</span>)</span>
+<span id="cb116-10"><a href="#cb116-10" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;y&quot;</span>,<span class="st">&quot;axis&quot;</span>,<span class="st">&quot;Y&quot;</span>)</span>
+<span id="cb116-11"><a href="#cb116-11" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;y&quot;</span>,<span class="st">&quot;standard_name&quot;</span>,<span class="st">&quot;projection_y_coordinate&quot;</span>)</span>
+<span id="cb116-12"><a href="#cb116-12" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;y&quot;</span>,<span class="st">&quot;_CoordinateAxisType&quot;</span>,<span class="st">&quot;GeoY&quot;</span>)</span>
+<span id="cb116-13"><a href="#cb116-13" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;soilm&quot;</span>,<span class="st">&quot;grid_mapping&quot;</span>, <span class="st">&quot;Lambert_Conformal&quot;</span>)</span>
+<span id="cb116-14"><a href="#cb116-14" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;soilm&quot;</span>,<span class="st">&quot;coordinates&quot;</span>, <span class="st">&quot;lat lon&quot;</span>)</span>
+<span id="cb116-15"><a href="#cb116-15" tabindex="-1"></a></span>
+<span id="cb116-16"><a href="#cb116-16" tabindex="-1"></a><span class="co"># put the CRS attributes</span></span>
+<span id="cb116-17"><a href="#cb116-17" tabindex="-1"></a>projname <span class="ot">&lt;-</span> <span class="st">&quot;lambert_conformal_conic&quot;</span></span>
+<span id="cb116-18"><a href="#cb116-18" tabindex="-1"></a>false_easting <span class="ot">&lt;-</span> <span class="fl">5632642.22547</span></span>
+<span id="cb116-19"><a href="#cb116-19" tabindex="-1"></a>false_northing <span class="ot">&lt;-</span> <span class="fl">4612545.65137</span></span>
+<span id="cb116-20"><a href="#cb116-20" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;name&quot;</span>,projname)</span>
+<span id="cb116-21"><a href="#cb116-21" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;long_name&quot;</span>,projname)</span>
+<span id="cb116-22"><a href="#cb116-22" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;grid_mapping_name&quot;</span>,projname)</span>
+<span id="cb116-23"><a href="#cb116-23" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;longitude_of_central_meridian&quot;</span>, <span class="fu">as.double</span>(longitude_of_central_meridian<span class="sc">$</span>value))</span>
+<span id="cb116-24"><a href="#cb116-24" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;latitude_of_projection_origin&quot;</span>, <span class="fu">as.double</span>(latitude_of_projection_origin<span class="sc">$</span>value))</span>
+<span id="cb116-25"><a href="#cb116-25" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;standard_parallel&quot;</span>, <span class="fu">c</span>(<span class="fl">50.0</span>, <span class="fl">50.0</span>))</span>
+<span id="cb116-26"><a href="#cb116-26" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;false_easting&quot;</span>,false_easting)</span>
+<span id="cb116-27"><a href="#cb116-27" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;false_northing&quot;</span>,false_northing)</span>
+<span id="cb116-28"><a href="#cb116-28" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;_CoordinateTransformType&quot;</span>,<span class="st">&quot;Projection&quot;</span>)</span>
+<span id="cb116-29"><a href="#cb116-29" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="st">&quot;Lambert_Conformal&quot;</span>,<span class="st">&quot;_CoordinateAxisTypes&quot;</span>,<span class="st">&quot;GeoX GeoY&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb117"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" tabindex="-1"></a><span class="co"># add global attributes</span></span>
+<span id="cb117-2"><a href="#cb117-2" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;title&quot;</span>,<span class="st">&quot;test output of projected data&quot;</span>)</span>
+<span id="cb117-3"><a href="#cb117-3" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;institution&quot;</span>,<span class="st">&quot;NOAA ESRL PSD&quot;</span>)</span>
+<span id="cb117-4"><a href="#cb117-4" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;source&quot;</span>,<span class="st">&quot;soilm.mon.ltm.nc&quot;</span>)</span>
+<span id="cb117-5"><a href="#cb117-5" tabindex="-1"></a>history <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;P.J. Bartlein&quot;</span>, <span class="fu">date</span>(), <span class="at">sep=</span><span class="st">&quot;, &quot;</span>)</span>
+<span id="cb117-6"><a href="#cb117-6" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;history&quot;</span>,history)</span>
+<span id="cb117-7"><a href="#cb117-7" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout,<span class="dv">0</span>,<span class="st">&quot;Conventions&quot;</span>,<span class="st">&quot;CF=1.6&quot;</span>)</span>
+<span id="cb117-8"><a href="#cb117-8" tabindex="-1"></a></span>
+<span id="cb117-9"><a href="#cb117-9" tabindex="-1"></a><span class="co"># Get a summary of the created file:</span></span>
+<span id="cb117-10"><a href="#cb117-10" tabindex="-1"></a>ncout</span></code></pre></div>
+<pre><code>## File /Users/bartlein/Projects/RESS/data/nc_files/soilm.mon.ltm_test.nc (NC_FORMAT_NETCDF4):
 ## 
 ##      4 variables (excluding dimension variables):
 ##         float soilm[x,y,time]   (Contiguous storage)  
@@ -2048,12 +1961,12 @@ class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="#cb1
 ##         title: test output of projected data
 ##         institution: NOAA ESRL PSD
 ##         source: soilm.mon.ltm.nc
-##         history: P.J. Bartlein, Sat Jan 20 14:38:42 2024
+##         history: P.J. Bartlein, Tue Jan 23 11:55:58 2024
 ##         Conventions: CF=1.6</code></pre>
 <p>Finally, close the file, which writes the data to disk.</p>
-<div class="sourceCode" id="cb122"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" tabindex="-1"></a><span class="co"># close the file, writing data to disk</span></span>
-<span id="cb122-2"><a href="#cb122-2" tabindex="-1"></a><span class="fu">nc_close</span>(ncout)</span></code></pre></div>
+<div class="sourceCode" id="cb119"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" tabindex="-1"></a><span class="co"># close the file, writing data to disk</span></span>
+<span id="cb119-2"><a href="#cb119-2" tabindex="-1"></a><span class="fu">nc_close</span>(ncout)</span></code></pre></div>
 <p><a href="netCDF.html">[Back to top]</a></p>
 </div>
 

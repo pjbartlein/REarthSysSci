@@ -356,7 +356,7 @@ $(document).ready(function () {
       <a href="netCDF.html">netCDF in R</a>
     </li>
     <li>
-      <a href="raster_intro.html">raster, terra, and netCDF in R</a>
+      <a href="terra_netCDF.html">terra, and netCDF in R</a>
     </li>
     <li>
       <a href="plots1.html">Plots (1)</a>
@@ -368,7 +368,7 @@ $(document).ready(function () {
       <a href="maps1.html">Maps (1)</a>
     </li>
     <li>
-      <a href="maps21.html">Maps (2)</a>
+      <a href="maps2.html">Maps (2)</a>
     </li>
     <li>
       <a href="geospatial.html">Geospatial analyses</a>
@@ -398,6 +398,9 @@ $(document).ready(function () {
       <a href="otherlang.html">Other Languages</a>
     </li>
     <li class="dropdown-header">Other topics</li>
+    <li>
+      <a href="sf_terra_starts">sf, terra, stars</a>
+    </li>
     <li>
       <a href="hdf5_intro.html">HDF in R</a>
     </li>
@@ -608,18 +611,31 @@ e.g. <code>/Users/bartlein/Projects/ESSD/data/shp_files/world2015/</code>,
 and plot the outlines.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># plot the world outline</span></span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>shp_file <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/shp_files/world2015/UIA_World_Countries_Boundaries.shp&quot;</span></span>
-<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>world_outline <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">st_geometry</span>(<span class="fu">read_sf</span>(shp_file)), <span class="at">Class =</span> <span class="st">&quot;Spatial&quot;</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="fu">plot</span>(world_outline, <span class="at">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">lwd=</span><span class="dv">1</span>)</span></code></pre></div>
-<p><img src="hdf5_intro_files/figure-html/hdf5-intro-1-1.png" width="75%" height="75%" /></p>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co"># world_outline_sf &lt;- st_read(shp_file)</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co"># world_outline_sf &lt;- st_geometry(world_outline_sf)</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co"># plot(world_outline_sf, col=&quot;lightblue&quot;, lwd=1)</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>world_outline <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">st_geometry</span>(<span class="fu">read_sf</span>(shp_file)), <span class="at">Class =</span> <span class="st">&quot;Spatial&quot;</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="fu">plot</span>(world_outline, <span class="at">col=</span><span class="st">&quot;lightblue&quot;</span>, <span class="at">lwd=</span><span class="dv">1</span>)</span></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/hdf5-intro-1-1.png" width="75%" height="75%" />
+Convert the <code>world_outline</code> to a spatial vector for adding to
+<code>terra</code> maps later.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># convert world_outline to a spatial vector</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>world_otl <span class="ot">&lt;-</span> <span class="fu">vect</span>(world_outline)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">class</span>(world_otl)</span></code></pre></div>
+<pre><code>## [1] &quot;SpatVector&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;terra&quot;</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">plot</span>(world_otl)</span></code></pre></div>
+<p><img src="hdf5_intro_files/figure-html/convert_outline-1.png" width="75%" height="75%" /></p>
+<div id="convert-an-hdf4-file-to-hdf5" class="section level2"
+number="2.1">
+<h2><span class="header-section-number">2.1</span> Convert an HDF4 file
+to HDF5</h2>
 <p>Here’s a link to the <code>.hdf</code> file: <a
 href="https://pages.uoregon.edu/bartlein/RESS/hdf_files/uvief20190423.hdf">[https://pages.uoregon.edu/bartlein/RESS/hdf_files/hdf_files/uvief20190423.hdf/]</a>.
 Download the file and copy the file a convenient places, say, a folder
 <code>/hdf_files</code> in your data folder
 (e.g. <code>/Users/bartlein/Projects/ESSD/data/hdf_files/</code>)</p>
-<div id="convert-an-hdf4-file-to-hdf5" class="section level2"
-number="2.1">
-<h2><span class="header-section-number">2.1</span> Convert an HDF4 file
-to HDF5</h2>
 <p>In this example, a data set of the “Clear-Sky UV Index”” from TEMIS
 was downloaded (i.e. <code>uvief20190423.hdf</code> – 2019-04-23) from
 the website listed above. This is an HDF4 file, which can be verified in
@@ -629,9 +645,9 @@ glance, and so getting a look at the contents of the file before
 attempting to read it is a good idea.</p>
 <p>The HDF4 file can be converted by typing in a terminal or command
 window (for example):</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>h4toh5convert uvief20190423.hdf</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co"># or, e.g.: /Users/bartlein/Downloads/hdf/HDF_Group/H4H5/2.2.5/bin/h4toh5convert GFED4.0_DQ_2015270_BA.hdf</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># if the h4toh5convert.exe program isn&#39;t in the PATH</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>h4toh5convert uvief20190423.hdf</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="co"># or, e.g.: /Users/bartlein/Downloads/hdf/HDF_Group/H4H5/2.2.5/bin/h4toh5convert GFED4.0_DQ_2015270_BA.hdf</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="co"># if the h4toh5convert.exe program isn&#39;t in the PATH</span></span></code></pre></div>
 <p>This will create the file <code>uvief20190423.h5</code>. (Note that
 an explicit output filename and path can be included. Not everything in
 the HDF4 file will be converted, and it’s likely that a number of error
@@ -644,14 +660,14 @@ has something in it (via Panoply).)</p>
 <h1><span class="header-section-number">3</span> Read a simple HDF5
 file</h1>
 <p>Begin by setting paths and filenames:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># set path and filename</span></span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>hdf_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD/data/hdf_files/&quot;</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>hdf_name <span class="ot">&lt;-</span> <span class="st">&quot;uvief20190423.h5&quot;</span></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>hdf_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(hdf_path, hdf_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># set path and filename</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>hdf_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/hdf_files/&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>hdf_name <span class="ot">&lt;-</span> <span class="st">&quot;uvief20190423.h5&quot;</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>hdf_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(hdf_path, hdf_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <p>List the contents of the file. (WARNING: This can produce a lot of
 output)</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># list the file content</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">h5ls</span>(hdf_file)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># list the file content</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">h5ls</span>(hdf_file)</span></code></pre></div>
 <pre><code>##   group         name       otype  dclass        dim
 ## 0     /    Latitudes H5I_DATASET   FLOAT        720
 ## 1     /   Longitudes H5I_DATASET   FLOAT       1440
@@ -662,8 +678,8 @@ output)</p>
 ## 6     /     fakeDim1 H5I_DATASET INTEGER       1440</code></pre>
 <p>Read the attributes of the <code>UVI_field</code> variable, the UV
 index:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># read the attributes of UVI_field</span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">h5readAttributes</span>(hdf_file, <span class="at">name =</span> <span class="st">&quot;UVI_field&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># read the attributes of UVI_field</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">h5readAttributes</span>(hdf_file, <span class="at">name =</span> <span class="st">&quot;UVI_field&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning in H5Aread(A, ...): Reading attribute data of type &#39;VLEN&#39; not yet implemented. Values replaced
 ## by NA&#39;s.</code></pre>
 <pre><code>## $DIMENSION_LIST
@@ -681,28 +697,28 @@ index:</p>
 ## $Units
 ## [1] &quot;1  [ 1 UV index unit equals 25 mW/m2 ]&quot;</code></pre>
 <p>Get the latitudes and longitudes of the grid:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># get lons and lats</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;/Longitudes&quot;</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>nlon <span class="ot">&lt;-</span> <span class="fu">length</span>(lon)</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>nlon</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># get lons and lats</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;/Longitudes&quot;</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>nlon <span class="ot">&lt;-</span> <span class="fu">length</span>(lon)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>nlon</span></code></pre></div>
 <pre><code>## [1] 1440</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">head</span>(lon); <span class="fu">tail</span>(lon)</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">head</span>(lon); <span class="fu">tail</span>(lon)</span></code></pre></div>
 <pre><code>## [1] -179.875 -179.625 -179.375 -179.125 -178.875 -178.625</code></pre>
 <pre><code>## [1] 178.625 178.875 179.125 179.375 179.625 179.875</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;/Latitudes&quot;</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>nlat <span class="ot">&lt;-</span> <span class="fu">length</span>(lat)</span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>nlat</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;/Latitudes&quot;</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>nlat <span class="ot">&lt;-</span> <span class="fu">length</span>(lat)</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>nlat</span></code></pre></div>
 <pre><code>## [1] 720</code></pre>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">head</span>(lat); <span class="fu">tail</span>(lat)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">head</span>(lat); <span class="fu">tail</span>(lat)</span></code></pre></div>
 <pre><code>## [1] -89.875 -89.625 -89.375 -89.125 -88.875 -88.625</code></pre>
 <pre><code>## [1] 88.625 88.875 89.125 89.375 89.625 89.875</code></pre>
 <p>Get the UV data, and convert it to a <code>SpatRaster</code> object,
 and get a short summary. Note that the UVI data is in layer 3 of the
 raster brick.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>hdf_file <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Dropbox/DataVis/working/data/hdf_files/uvief20190423.h5&quot;</span></span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>UVI_in <span class="ot">&lt;-</span> <span class="fu">rast</span>(hdf_file, <span class="at">lyrs =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>hdf_file <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/hdf_files/uvief20190423.h5&quot;</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>UVI_in <span class="ot">&lt;-</span> <span class="fu">rast</span>(hdf_file, <span class="at">lyrs =</span> <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## Warning: [rast] unknown extent</code></pre>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>UVI_in</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>UVI_in</span></code></pre></div>
 <pre><code>## class       : SpatRaster 
 ## dimensions  : 720, 1440, 1  (nrow, ncol, nlyr)
 ## resolution  : 1, 1  (x, y)
@@ -711,16 +727,16 @@ raster brick.</p>
 ## source      : uvief20190423.h5://UVI_field 
 ## varname     : UVI_field 
 ## name        : UVI_field</code></pre>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">plot</span>(UVI_in)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">plot</span>(UVI_in)</span></code></pre></div>
 <p><img src="hdf5_intro_files/figure-html/read_UVI1-1.png" width="75%" height="75%" /></p>
 <p>Notice that the raster has an unknown extent (i.e the range of
 longitudes and latitudes), and it also appears to be upside down. Flip
 the raster, and add the longitude and latitude extent.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># flip the raster</span></span>
-<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>UVI <span class="ot">&lt;-</span> <span class="fu">flip</span>(UVI_in, <span class="at">direction =</span> <span class="st">&quot;vertical&quot;</span>)</span>
-<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="co"># add the spatial extent</span></span>
-<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="fu">ext</span>(UVI) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">179.875</span>, <span class="fl">179.875</span>, <span class="sc">-</span><span class="fl">89.875</span>, <span class="fl">89.875</span>)</span>
-<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>UVI</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># flip the raster</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>UVI <span class="ot">&lt;-</span> <span class="fu">flip</span>(UVI_in, <span class="at">direction =</span> <span class="st">&quot;vertical&quot;</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="co"># add the spatial extent</span></span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a><span class="fu">ext</span>(UVI) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">179.875</span>, <span class="fl">179.875</span>, <span class="sc">-</span><span class="fl">89.875</span>, <span class="fl">89.875</span>)</span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a>UVI</span></code></pre></div>
 <pre><code>## class       : SpatRaster 
 ## dimensions  : 720, 1440, 1  (nrow, ncol, nlyr)
 ## resolution  : 0.2498264, 0.2496528  (x, y)
@@ -732,32 +748,22 @@ the raster, and add the longitude and latitude extent.</p>
 ## min value   :         0 
 ## max value   :     18342</code></pre>
 <p>Plot the raster:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">plot</span>(UVI)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="fu">plot</span>(UVI)</span></code></pre></div>
 <p><img src="hdf5_intro_files/figure-html/hdf5-intro-4-1.png" width="75%" height="75%" /></p>
 <p>Looks ok. Remove the input file:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># Remove the input file</span></span>
-<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="fu">remove</span>(UVI_in)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co"># Remove the input file</span></span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="fu">remove</span>(UVI_in)</span></code></pre></div>
 <p>Note that the data could also be read as an a matrix, or 2d array</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># read the UV data</span></span>
-<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>h1 <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;/UVI_field&quot;</span>)</span>
-<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a><span class="fu">class</span>(h1); <span class="fu">str</span>(h1)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># read the UV data</span></span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a>h1 <span class="ot">&lt;-</span> <span class="fu">h5read</span>(hdf_file, <span class="st">&quot;/UVI_field&quot;</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a><span class="fu">class</span>(h1); <span class="fu">str</span>(h1)</span></code></pre></div>
 <pre><code>## [1] &quot;matrix&quot; &quot;array&quot;</code></pre>
 <pre><code>##  int [1:1440, 1:720] 0 0 0 0 0 0 0 0 0 0 ...</code></pre>
 <p>Remove the array:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># Remove the input file</span></span>
-<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="fu">remove</span>(h1)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="co"># Remove the input file</span></span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a><span class="fu">remove</span>(h1)</span></code></pre></div>
 <div id="plot-the-uv-data" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Plot the UV data</h2>
-<p>Convert the <code>world_outline</code> to a spatial vector for adding
-to the map</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="co"># convert world_outline to a spatial vector</span></span>
-<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a>world_otl <span class="ot">&lt;-</span> <span class="fu">vect</span>(world_outline)</span>
-<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a><span class="fu">class</span>(world_otl)</span></code></pre></div>
-<pre><code>## [1] &quot;SpatVector&quot;
-## attr(,&quot;package&quot;)
-## [1] &quot;terra&quot;</code></pre>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">plot</span>(world_otl)</span></code></pre></div>
-<p><img src="hdf5_intro_files/figure-html/hdf5-intro-7-1.png" width="75%" height="75%" /></p>
 <p>A plot with overlain outlines can be produced as follows:</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a>color_fun <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;YlOrRd&quot;</span>))</span>
 <span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a><span class="fu">plot</span>(UVI, <span class="at">col =</span> <span class="fu">color_fun</span>(<span class="dv">50</span>), <span class="at">main =</span> <span class="st">&quot;UV Index&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Longitude&quot;</span>)</span>
@@ -784,7 +790,7 @@ set. Here’s a link to the file: <a
 href="https://pages.uoregon.edu/bartlein/RESS/hdf_files/GFED4.1s_2016.hdf5">[https://pages.uoregon.edu/bartlein/RESS/hdf_files/hdf_files/GFED4.1s_2016.hdf5]</a>.
 Dowload the file as usual. Begin by setting paths and file names.</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="co"># set path </span></span>
-<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>hdf_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/ESSD//data/hdf_files/&quot;</span></span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>hdf_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/hdf_files/&quot;</span></span>
 <span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a>hdf_name <span class="ot">&lt;-</span> <span class="st">&quot;GFED4.1s_2016.hdf5&quot;</span></span>
 <span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a>hdf_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(hdf_path, hdf_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
 <p>List the file contents, DOUBLE WARNING: This really does produce a
