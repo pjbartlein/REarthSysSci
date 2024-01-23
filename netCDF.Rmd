@@ -65,14 +65,14 @@ The file is assumed to be a CF-compliant netCDF file, in which the three main sp
 
 ```{r ncdf4 openMac, echo=TRUE, eval=TRUE, cache=FALSE}
 # set path and filename
-ncpath <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
+ncpath <- "/Users/bartlein/Projects/RESS/data/nc_files/"
 ncname <- "cru10min30_tmp"  
 ncfname <- paste(ncpath, ncname, ".nc", sep="")
 dname <- "tmp"  # note: tmp means temperature (not temporary)
 ```
 ```{r ncdf4 openWin, echo=FALSE, eval=FALSE}
 # set path and filename
-ncpath <- "e:/Projects/ESSD//data/nc_files/"
+ncpath <- "e:/Projects/RESS//data/nc_files/"
 ncname <- "cru10min30_tmp"  
 ncfname <- paste(ncpath, ncname, ".nc", sep="")
 dname <- "tmp"  # note: tmp means temperature (not temporary)
@@ -272,14 +272,14 @@ Finally the data frame is written out to the working directory as a .csv file, u
 
 ```{r csvfileWin, eval=FALSE, echo=FALSE}
 # write the dataframe as as a .csv file
-csvpath <- "e:/Projects/ESSD//data/csv_files/CRU/"
+csvpath <- "e:/Projects/RESS//data/csv_files/CRU/"
 csvname <- "cru_tmp_1.csv"
 csvfile <- paste(csvpath, csvname, sep="")
 write.table(na.omit(tmp_df01),csvfile, row.names=FALSE, sep=",")
 ```
 ```{r csvfileFake, eval=TRUE, echo=TRUE}
 # set path and filename
-csvpath <- "/Users/bartlein/Projects/ESSD/data/csv_files"
+csvpath <- "/Users/bartlein/Projects/RESS/data/csv_files"
 csvname <- "cru_tmp_1.csv"
 csvfile <- paste(csvpath, csvname, sep="")
 write.table(na.omit(tmp_df01),csvfile, row.names=FALSE, sep=",")
@@ -339,14 +339,14 @@ Write the second data frame out as a .csv file, dropping NAs.
 
 ```{r csvfile2Win, eval=FALSE, echo=FALSE}
 # write out the dataframe as a .csv file
-csvpath <- "e:/Projects/ESSD//data/csv_files/"
+csvpath <- "e:/Projects/RESS//data/csv_files/"
 csvname <- "cru_tmp_2.csv"
 csvfile <- paste(csvpath, csvname, sep="")
 write.table(na.omit(tmp_df02),csvfile, row.names=FALSE, sep=",")
 ```
 ```{r csvfile2Mac, eval=TRUE, echo=TRUE}
 # write out the dataframe as a .csv file
-csvpath <- "/Users/bartlein/Projects/ESSD/data/csv_files/"
+csvpath <- "/Users/bartlein/Projects/RESS/data/csv_files/"
 csvname <- "cru_tmp_2.csv"
 csvfile <- paste(csvpath, csvname, sep="")
 write.table(na.omit(tmp_df02),csvfile, row.names=FALSE, sep=",")
@@ -633,14 +633,14 @@ First, create the netCDF filename:
 
 ```{r ncdf4 createFileMac, echo=TRUE, eval=TRUE}
 # path and file name, set dname
-ncpath <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
+ncpath <- "/Users/bartlein/Projects/RESS/data/nc_files/"
 ncname <- "cru10min30_ncdf4"  
 ncfname <- paste(ncpath, ncname, ".nc", sep="")
 dname <- "tmp"  # note: tmp means temperature (not temporary)
 ```
 ```{r ncdf4 createFileWin, echo=FALSE, eval=FALSE}
 # path and file name, set dname
-ncpath <- "e:/Projects/ESSD//data/nc_files/"
+ncpath <- "e:/Projects/RESS//data/nc_files/"
 ncname <- "cru10min30_ncdf4"  
 ncfname <- paste(ncpath, ncname, ".nc", sep="")
 dname <- "tmp"  # note: tmp means temperature (not temporary)
@@ -718,14 +718,14 @@ Set up the path to a local copy of the NARR (North American Regional Reanalysis)
 
 ```{r ncdf4 openMac2, echo=TRUE, eval=TRUE, cache=TRUE}
 # set path and filename
-ncpath <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
+ncpath <- "/Users/bartlein/Projects/RESS/data/nc_files/"
 ncname <- "NARR_soilm.mon.ltm.nc"  
 ncfname <- paste(ncpath, ncname, sep="")
 dname <- "soilm"  # soil moisture 1 kg m-2 = 1 mm
 ```
 ```{r ncdf4 openWin2, echo=FALSE, eval=FALSE}
 # set path and filename
-ncpath <- "e:/Dropbox/DataVis/working/ESSD/data/nc_files/"
+ncpath <- "e:/Dropbox/DataVis/working/RESS/data/nc_files/"
 ncname <- "NARR_soilm.mon.ltm.nc"  
 ncfname <- paste(ncpath, ncname, sep="")
 dname <- "soilm"  # soil moisture 1 kg m-2 = 1 mm
@@ -854,7 +854,7 @@ First, create the netCDF filename:
 
 ```{r ncdf4 creaeFileMac2, echo=TRUE, eval=TRUE}
 # path and file name, set dname
-ncpath <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
+ncpath <- "/Users/bartlein/Projects/RESS/data/nc_files/"
 ncname <- "soilm.mon.ltm_test"  
 ncfname <- paste(ncpath, ncname, ".nc", sep="")
 dname <- "soilm"  

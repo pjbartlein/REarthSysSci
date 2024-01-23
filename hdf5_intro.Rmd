@@ -1,15 +1,13 @@
 ---
 title: "HDF"
 output:
-  pdf_document:
-    toc: true
   html_document:
     number_sections: true
     toc: true
     toc_float: false
     collapsed: false
 editor_options:
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ```{r set-options, echo=FALSE}
@@ -73,13 +71,24 @@ Move the download files to a convenient folder, e.g. `/Users/bartlein/Projects/E
 ```{r hdf5-intro-1}
 # plot the world outline
 shp_file <- "/Users/bartlein/Projects/RESS/data/shp_files/world2015/UIA_World_Countries_Boundaries.shp"
+# world_outline_sf <- st_read(shp_file)
+# world_outline_sf <- st_geometry(world_outline_sf)
+# plot(world_outline_sf, col="lightblue", lwd=1)
 world_outline <- as(st_geometry(read_sf(shp_file)), Class = "Spatial")
 plot(world_outline, col="lightblue", lwd=1)
 ```
+Convert the `world_outline` to a spatial vector for adding to `terra` maps later.
 
-Here's a link to the `.hdf` file: [[https://pages.uoregon.edu/bartlein/RESS/hdf_files/hdf_files/uvief20190423.hdf/]](https://pages.uoregon.edu/bartlein/RESS/hdf_files/uvief20190423.hdf). Download the file and copy the file a convenient places, say, a folder `/hdf_files` in your data folder (e.g. `/Users/bartlein/Projects/ESSD/data/hdf_files/`)
+```{r convert_outline}
+# convert world_outline to a spatial vector
+world_otl <- vect(world_outline)
+class(world_otl)
+plot(world_otl)
+```
 
 ## Convert an HDF4 file to HDF5
+
+Here's a link to the `.hdf` file: [[https://pages.uoregon.edu/bartlein/RESS/hdf_files/hdf_files/uvief20190423.hdf/]](https://pages.uoregon.edu/bartlein/RESS/hdf_files/uvief20190423.hdf). Download the file and copy the file a convenient places, say, a folder `/hdf_files` in your data folder (e.g. `/Users/bartlein/Projects/ESSD/data/hdf_files/`)
 
 In this example, a data set of the "Clear-Sky UV Index"" from TEMIS was downloaded (i.e. `uvief20190423.hdf` -- 2019-04-23) from the website listed above.  This is an HDF4 file, which can be verified in Panoply.  Viewing files in Panoply is always good practice--in this case the particular layout of the data in file is rather ambiguous at first glance, and so getting a look at the contents of the file before attempting to read it is a good idea.
 
@@ -99,7 +108,7 @@ Begin by setting paths and filenames:
 
 ```{r hdf5-intro-2, file1paths}
 # set path and filename
-hdf_path <- "/Users/bartlein/Projects/ESSD/data/hdf_files/"
+hdf_path <- "/Users/bartlein/Projects/RESS/data/hdf_files/"
 hdf_name <- "uvief20190423.h5"
 hdf_file <- paste(hdf_path, hdf_name, sep="")
 ```
@@ -136,7 +145,7 @@ head(lat); tail(lat)
 Get the UV data, and convert it to a `SpatRaster` object, and get a short summary. Note that the UVI data is in layer 3 of the raster brick.
 
 ```{r read_UVI1}
-hdf_file <- "/Users/bartlein/Dropbox/DataVis/working/data/hdf_files/uvief20190423.h5"
+hdf_file <- "/Users/bartlein/Projects/RESS/data/hdf_files/uvief20190423.h5"
 UVI_in <- rast(hdf_file, lyrs = 3)
 UVI_in
 plot(UVI_in)
@@ -182,14 +191,6 @@ remove(h1)
 
 ## Plot the UV data
 
-Convert the `world_outline` to a spatial vector for adding to the map
-```{r hdf5-intro-7 }
-# convert world_outline to a spatial vector
-world_otl <- vect(world_outline)
-class(world_otl)
-plot(world_otl)
-```
-
 A plot with overlain outlines can be produced as follows:
 
 ```{r rasterPlot}
@@ -213,7 +214,7 @@ A much more stuctured file that exploits the ability of HDF5 to store data in "g
 
 ```{r hdf5-intro-8}
 # set path 
-hdf_path <- "/Users/bartlein/Projects/ESSD//data/hdf_files/"
+hdf_path <- "/Users/bartlein/Projects/RESS/data/hdf_files/"
 hdf_name <- "GFED4.1s_2016.hdf5"
 hdf_file <- paste(hdf_path, hdf_name, sep="")
 ```

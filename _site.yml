@@ -15,8 +15,8 @@ navbar:
       href: ESSdata.html
     - text: "netCDF in R"
       href: netCDF.html
-    - text: "raster, terra, and netCDF in R"
-      href: raster_intro.html
+    - text: "terra, and netCDF in R"
+      href: terra_netCDF.html
     - text: "Plots (1)"
       href: plots1.html
     - text: "Plots (2)"
@@ -24,7 +24,7 @@ navbar:
     - text: "Maps (1)"
       href: maps1.html
     - text: "Maps (2)"
-      href: maps21.html
+      href: maps2.html
     - text: "Geospatial analyses"
       href: geospatial.html
     - text: "Correlation and regression"
@@ -44,6 +44,8 @@ navbar:
     - text: "Other Languages"
       href: otherlang.html
     - text: "Other topics"
+    - text: "sf, terra, stars"
+      href: sf_terra_starts
     - text: "HDF in R"
       href: hdf5_intro.html
     

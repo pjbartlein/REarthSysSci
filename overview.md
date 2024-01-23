@@ -37,8 +37,8 @@ Topic/Lecture                                      Tasks
    1:  Introduction and infrastructure               Install R, RStudio 
    2:  Using R for data visualization and analysis   Using R exercise
    3:  Earth-system science data                                     
-   4:  netCDF, HDF, etc.                             Install netCDF and Panoply      
-   5:  raster, terra & stars                         File transfer  
+   4:  netCDF in R                                   Install netCDF and Panoply      
+   5:  terra and netCDF in R                         File transfer  
    6:  Plots (1)                                     Text editor  
    7:  Plots (2)                                     Project dataset selection
    8:  Maps (1)                                      Markdown and Markdown
@@ -55,6 +55,7 @@ Topic/Lecture                                      Tasks
   19:  Project presentations  
   20:  Project presentations  
 Other Topics  
+       sf, terra, and stars
        HDF in R
 ```
 
