@@ -68,15 +68,19 @@ For latter plotting of the data, also read a world outline file. The file(s) can
 
 Move the download files to a convenient folder, e.g. `/Users/bartlein/Projects/ESSD/data/shp_files/world2015/`, and plot the outlines.
 
-```{r hdf5-intro-1}
-# plot the world outline
-shp_file <- "/Users/bartlein/Projects/RESS/data/shp_files/world2015/UIA_World_Countries_Boundaries.shp"
+```{r echo = FALSE, eval = FALSE
 # world_outline_sf <- st_read(shp_file)
 # world_outline_sf <- st_geometry(world_outline_sf)
 # plot(world_outline_sf, col="lightblue", lwd=1)
+```
+
+```{r hdf5-intro-1}
+# plot the world outline
+shp_file <- "/Users/bartlein/Projects/RESS/data/shp_files/world2015/UIA_World_Countries_Boundaries.shp"
 world_outline <- as(st_geometry(read_sf(shp_file)), Class = "Spatial")
 plot(world_outline, col="lightblue", lwd=1)
 ```
+
 Convert the `world_outline` to a spatial vector for adding to `terra` maps later.
 
 ```{r convert_outline}
