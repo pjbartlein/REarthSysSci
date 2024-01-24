@@ -525,13 +525,24 @@ href="http://www.geo.uni-bremen.de/Interdynamik/images/stories/pdf/visualizing_n
 <li>and here is the Panoply help page <a
 href="https://www.giss.nasa.gov/tools/panoply/help/">[https://www.giss.nasa.gov/tools/panoply/help/]</a></li>
 </ul>
-<p>Panoply is written in Java, and requires a Java runtime environment
-to be installed first.</p>
+<p>Panoply is written in Java, and requires a current Java runtime
+environment to be installed first. It will prompt you to do so if it
+can’t fine one, otherwise it should open as normal with a file-chooser
+window. But you can also check before attempting to install Panoply by
+opening a CMD/Terminal window and typing <code>java -version</code>. If
+you get a reply that looks like</p>
+<pre><code>    java version &quot;21.0.2&quot; 2024-01-16 LTS
+    Java(TM) SE Runtime Environment (build 21.0.2+13-LTS-58)
+    Java HotSpot(TM) 64-Bit Server VM (build 21.0.2+13-LTS-58, mixed mode, sharing)</code></pre>
+<p>you should be able to install Panoply and have it run. If not, here’s
+the Java download page: <a
+href="https://www.oracle.com/java/technologies/downloads/">[https://www.oracle.com/java/technologies/downloads/]</a></p>
 <div id="windows-1" class="section level2">
 <h2>Windows</h2>
 <p>Here’s a link to the Java installer for Windows <a
-href="https://www.java.com/download/ie_manual.jsp">[https://www.java.com/download/ie_manual.jsp]</a>.
-You can verify that Java has been installed by opening a CMD window
+href="https://www.oracle.com/java/technologies/downloads/#jdk21-windows">[https://www.oracle.com/java/technologies/downloads/#jdk21-windows]</a>.
+You’ll probably want to select the <code>x64 MSI Installer</code>. You
+can verify that Java has been installed by opening a CMD window
 (terminal) and typing <code>java -version</code>.</p>
 <p>Here’s a link to downloads page for Panoply: <a
 href="https://www.giss.nasa.gov/tools/panoply/download/">[https://www.giss.nasa.gov/tools/panoply/download/]</a>.
@@ -547,9 +558,12 @@ in that folder.</p>
 <div id="macos-1" class="section level2">
 <h2>MacOS</h2>
 <p>Here’s a link to the Java installer for MacOS <a
-href="https://www.java.com/en/download/">[https://www.java.com/en/download/]</a>.
-You can verify that Java has been installed by opening a terminal and
-typing <code>java -version</code>.</p>
+href="https://www.java.com/en/download/">[https://www.oracle.com/java/technologies/downloads/#jdk21-mac]</a>.
+For a new Apple Silicon Mac, you’ll want to select the
+<code>ARM64 DMG Installer</code> while for older Intel-based Macs,
+select <code>x64 DMG Installer</code>. You can verify that Java has been
+installed by opening a terminal and typing
+<code>java -version</code>.</p>
 <p>Here’s a link to downloads page for Panoply: <a
 href="https://www.giss.nasa.gov/tools/panoply/download/">[https://www.giss.nasa.gov/tools/panoply/download/]</a>.
 There are three choices for Panoply for MacOS:</p>

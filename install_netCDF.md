@@ -121,17 +121,24 @@ Panoply's help resources are not substantial (which is fine, because it is extra
 - [[http://www.geo.uni-bremen.de/Interdynamik/images/stories/pdf/visualizing_netcdf_panoply.pdf]](http://www.geo.uni-bremen.de/Interdynamik/images/stories/pdf/visualizing_netcdf_panoply.pdf)
 - and here is the Panoply help page [[https://www.giss.nasa.gov/tools/panoply/help/]](https://www.giss.nasa.gov/tools/panoply/help/)
 
-Panoply is written in Java, and requires a Java runtime environment to be installed first.
+Panoply is written in Java, and requires a current Java runtime environment to be installed first. It will prompt you to do so if it can't fine one, otherwise it should open as normal with a file-chooser window. But you can also check before attempting to install Panoply by opening a CMD/Terminal window and typing `java -version`. If you get a reply that looks like
+
+		java version "21.0.2" 2024-01-16 LTS
+		Java(TM) SE Runtime Environment (build 21.0.2+13-LTS-58)
+		Java HotSpot(TM) 64-Bit Server VM (build 21.0.2+13-LTS-58, mixed mode, sharing)
+
+you should be able to install Panoply and have it run.  If not, here's the Java download page: [[https://www.oracle.com/java/technologies/downloads/]](https://www.oracle.com/java/technologies/downloads/)
+
 
 ## Windows ##
 
-Here's a link to the Java installer for Windows [[https://www.java.com/download/ie_manual.jsp]](https://www.java.com/download/ie_manual.jsp). You can verify that Java has been installed by opening a CMD window (terminal) and typing `java -version`.
+Here's a link to the Java installer for Windows [[https://www.oracle.com/java/technologies/downloads/#jdk21-windows]](https://www.oracle.com/java/technologies/downloads/#jdk21-windows). You'll probably want to select the `x64 MSI Installer`. You can verify that Java has been installed by opening a CMD window (terminal) and typing `java -version`.
 
 Here's a link to downloads page for Panoply: [[https://www.giss.nasa.gov/tools/panoply/download/]](https://www.giss.nasa.gov/tools/panoply/download/). Click on the "`Download Panoply 5.3.1 for Windows, 41 MB ZIP`" link. After the file is downloaded, browse to the download folder, and click on the file `PanoplyWin-5.3.1.zip` to uncompress it. Next, copy or move the `PanoplyWin` folder to `C:/Program Files/PanoplyWin/`. It would be handy to create a shortcut on the desktop or taskbar to the file `panoply.exe` in that folder.
 
 ## MacOS ##
 
-Here's a link to the Java installer for MacOS [[https://www.java.com/en/download/]](https://www.java.com/en/download/). You can verify that Java has been installed by opening a terminal and typing `java -version`.
+Here's a link to the Java installer for MacOS [[https://www.oracle.com/java/technologies/downloads/#jdk21-mac]](https://www.java.com/en/download/). For a new Apple Silicon Mac, you'll want to select the `ARM64 DMG Installer` while for older Intel-based Macs, select `x64 DMG Installer`. You can verify that Java has been installed by opening a terminal and typing `java -version`. 
 
 Here's a link to downloads page for Panoply: [[https://www.giss.nasa.gov/tools/panoply/download/]](https://www.giss.nasa.gov/tools/panoply/download/). There are three choices for Panoply for MacOS: 
 
