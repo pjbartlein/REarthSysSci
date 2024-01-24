@@ -1,10 +1,8 @@
-options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE, out.width = "75%", out.height = "75%")
-pdf.options(useDingbats = TRUE)
-klippy::klippy(position = c('top', 'right'))
+
 
 # load the ncdf4 package
 library(ncdf4)
+library(CFtime)
 
 # set path and filename
 ncpath <- "/Users/bartlein/Projects/RESS/data/nc_files/"
@@ -34,6 +32,7 @@ print(c(nlon,nlat))
 time <- ncvar_get(ncin,"time")
 time
 tunits <- ncatt_get(ncin,"time","units")
+tunits
 nt <- dim(time)
 nt
 
@@ -67,13 +66,22 @@ library(chron)
 library(lattice)
 library(RColorBrewer)
 
-# convert time -- split the time units string into fields
-tustr <- strsplit(tunits$value, " ")
-tdstr <- strsplit(unlist(tustr)[3], "-")
-tmonth <- as.integer(unlist(tdstr)[2])
-tday <- as.integer(unlist(tdstr)[3])
-tyear <- as.integer(unlist(tdstr)[1])
-chron(time,origin=c(tmonth, tday, tyear))
+# # convert time -- split the time units string into fields
+# tustr <- strsplit(tunits$value, " ")
+# tdstr <- strsplit(unlist(tustr)[3], "-")
+# tmonth <- as.integer(unlist(tdstr)[2])
+# tday <- as.integer(unlist(tdstr)[3])
+# tyear <- as.integer(unlist(tdstr)[1])
+# chron(time,origin=c(tmonth, tday, tyear))
+
+# decode time
+cf <- CFtime(tunits$value, calendar = "proleptic_gregorian", time) # convert time to CFtime class
+timestamps <- CFtimestamp(cf) # get character-string times
+timestamps
+class(timestamps)
+time_cf <- CFparse(cf, timestamps) # parse the string into date components
+time_cf
+class(time_cf)
 
 # replace netCDF fill values with NA's
 tmp_array[tmp_array==fillvalue$value] <- NA

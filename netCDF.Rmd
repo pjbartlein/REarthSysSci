@@ -46,20 +46,23 @@ The examples provided here include
 
 The examples make use of a netCDF file of climate data from the Climate Research Unit [http://www.cru.uea.ac.uk/data](http://www.cru.uea.ac.uk/data), consisting of long-term mean values (1961-1990) of near-surface air temperature on a 0.5-degree grid (for land points). The dimensions of the array are 720 (longitudes) x 360 (latitudes) x 12 (months), thus forming a raster "stack" or "brick" consisting of 12 layers. 
 
-The data are available on `ClimateLab.uoregon.edu` (see File transfer on the Tasks tab), in the `/nc_files` folder, with the file name `cru10min30_tmp.nc`.  Download the netCDF file to a convenient folder.
+The data are available on `uoclimlab.uoregon.edu` (see File transfer on the Tasks tab), in the `/nc_files` folder, with the file name `cru10min30_tmp.nc`.  Download the netCDF file to a convenient folder.
 
 [[Back to top]](netCDF.html)
 
 # Reading a netCDF data set using the *ncdf4* package #
 
-To begin, load the `ncdf4` package.
+To begin, load the `ncdf4` and the `CFtime` packages, along with a couple of others.
 
 ```{r ncdf4 package, cache=FALSE}
-# load the ncdf4 package
+# load the `ncdf4` and the `CFtime` packages
 library(ncdf4)
+library(CFtime)
+library(lattice)
+library(RColorBrewer)
 ```
 
-The file is assumed to be a CF-compliant netCDF file, in which the three main spatiotemporal dimensions allear the the relative order of time (T-coordinate), height or depth (Z-coordinate), latitude (or Y-coordinate), and longitude (or X-coordinate). In this example, the file is a 3-D file with T, Y and X coordinates (month of the year, latitude, and longitude).  First, set the values for some temporary variables. `ncpath` is the path to where the file was downloaded, `ncname` is the name of the netCDF file, while `dname` is the name of the variable that will be read in. 
+The file is assumed to be a CF-compliant netCDF file, in which the spatiotemporal dimensions are time (T-coordinate), height or depth (Z-coordinate), latitude (or Y-coordinate), and longitude (or X-coordinate). In this example, the file is a 3-D file with T, Y and X coordinates (month of the year, latitude, and longitude).  First, set the values for some temporary variables. `ncpath` is the path to where the file was downloaded, `ncname` is the name of the netCDF file, while `dname` is the name of the variable that will be read in. 
 
 ## Open the netCDF file ##
 
@@ -110,15 +113,12 @@ Get the time variable and its attributes using the `ncvar_get()` and `ncatt_get(
 time <- ncvar_get(ncin,"time")
 time
 tunits <- ncatt_get(ncin,"time","units")
+tunits
 nt <- dim(time)
 nt
 ```
 
-Print the time units string.  Note the structure of the time units attribute.  The object `tunits` has two components `hasatt` (a logical variable), and `tunits$value`, the actual "time since" string.
-
-```{r ncdf4 print time units}
-tunits
-```
+Note the structure of the time units attribute.  The object `tunits` has two components `hasatt` (a logical variable), and `tunits$value`, the actual "time since" string.
 
 ## Get a variable ## 
 
@@ -133,7 +133,7 @@ fillvalue <- ncatt_get(ncin,dname,"_FillValue")
 dim(tmp_array)
 ```
 
-Get the global attributes.  The attributes can be listed, by simply typing an attribute name at the command line.
+Get the global attributes.  The attributes can be listed by simply typing an attribute name at the command line.
 
 ```{r ncdf4 get global attributes}
 # get global attributes
@@ -173,26 +173,29 @@ Load some necessary packages (install them if necessary)
 
 ```{r conv02, cache=FALSE}
 # load some packages
-library(chron)
+
 library(lattice)
 library(RColorBrewer)
 ```
 
 ## Convert the time variable ## 
 
-The time variable, in "time-since" units can be converted into "real" (or more easily readable) time values by splitting the time `tunits$value` string into its component parts, and then using the `chron()` function to determine the absolute value of each time value from the time origin.
+The time variable, in "time-since" units can be converted into "real" (or more easily readable) time values by applying some functions from the `CFtime` package. The first, `CFtime()`, converts time as stored as "time-since some origin", the second, `CFtimestamps`, gets character strings of the interpreted dates in ISO 8601 format, and the third, `CFparse()`, breaks the character strings into numeric data in a data frame, with columns `year`, `month`, `day`, `hour`, `minute`, `second`, and `tz`
+(time zone).
 
-```{r convert time}
-# convert time -- split the time units string into fields
-tustr <- strsplit(tunits$value, " ")
-tdstr <- strsplit(unlist(tustr)[3], "-")
-tmonth <- as.integer(unlist(tdstr)[2])
-tday <- as.integer(unlist(tdstr)[3])
-tyear <- as.integer(unlist(tdstr)[1])
-chron(time,origin=c(tmonth, tday, tyear))
+```{r}
+# decode time
+cf <- CFtime(tunits$value, calendar = "proleptic_gregorian", time) # convert time to CFtime class
+cf
+timestamps <- CFtimestamp(cf) # get character-string times
+timestamps
+class(timestamps)
+time_cf <- CFparse(cf, timestamps) # parse the string into date components
+time_cf
+class(time_cf)
 ```
 
-The "time-stamp" for this particular data set, which represents long-term means over the interal 1961-1990 is the mid-point of the interval for each month of the year, i.e. the middle of January, in the middle of the range of years (e.g. 1976).  This is somewhat arbitrary, and despite there being a convention for representing "climatological statistics" there are other ways in which the "time" associated with a long-term mean is represented.
+The "timestamps" for this particular data set, which represents long-term means over the interal 1961-1990 is the mid-point of the interval for each month of the year, i.e. the middle of January, in the middle of the range of years (e.g. 1976).  This is somewhat arbitrary, and despite there being a convention for representing "climatological statistics" there are other ways in which the "time" associated with a long-term mean is represented.
 
 ## Replace netCDF fillvalues with R NAs ##
 
