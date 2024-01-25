@@ -128,14 +128,15 @@ The NOAA Earth System Research Laboratory (formerly the Climate Diagnostics Cent
 	- Gridded climate data [[https://www.esrl.noaa.gov/psd/data/gridded/index.html]](https://www.esrl.noaa.gov/psd/data/gridded/index.html)
 	- THREDDS catalog:  [[http://www.esrl.noaa.gov/psd/thredds/catalog.html]](http://www.esrl.noaa.gov/psd/thredds/catalog.html)
 
-## UNIDATA Meteorological case studies ##
-
-UNIDATA provides a number of case-study data sets of "unique atmospheric phenomena" that can be accessed via their THREDDS server.  Here is a [[link]](https://www.unidata.ucar.edu/projects/#casestudies) to the information page, and to the 
-[[Case Studies Library]](http://atm.ucar.edu/repository/entry/show/RAMADDA/Case+Studies) 
-
 ## NCAR Climate Data Guide ##
 
 The NCAR Climate Data Guide [[https://climatedataguide.ucar.edu/]](https://climatedataguide.ucar.edu/) provides a range of datasets along with introductory material on each 
+
+
+## UNIDATA Meteorological case studies ##
+
+UNIDATA provides a number of case-study data sets of "unique atmospheric phenomena" that can be accessed via their THREDDS server.  Here is a [[link]](https://www.unidata.ucar.edu/projects/#casestudies) to the information page, and to the 
+[[Case Studies Library]](https://ramadda.unidata.ucar.edu/repository/entry/show?entryid=beafcb0a-48fd-4fe6-908a-eb1beda0b55c) 
 
 ## Paleoclimatic datasets ##
 

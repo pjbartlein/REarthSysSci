@@ -102,7 +102,7 @@ ncatt_put(ncout, "lon", "axis", "X")
 ncatt_put(ncout, "lat", "axis", "Y")
 
 # add global attributes
-title <- "small example netCDF file"
+title <- "small example netCDF file -- written using ncdf4"
 ncatt_put(ncout, 0, "title", title)
 
 # close the file, writing data to disk
@@ -139,21 +139,8 @@ lon
 -1.0 * lat
 
 # create a netCDF file 
-ncfname <- "test-netCDF-file.nc"
-ncout <- nc_create(ncfname, list(tmp.def), force_v4 = TRUE)
+ncfname <- "test-netCDF-terra.nc"
+writeCDF(tmat_sr, ncfname, overwrite = TRUE, varname = "tmp", unit = "degC",
+         longname="test variable -- terra to netCDF")
 
-# put the array
-ncvar_put(ncout, tmp.def, tmat)
-
-# put additional attributes into dimension and data variables
-ncatt_put(ncout, "lon", "axis", "X")  
-ncatt_put(ncout, "lat", "axis", "Y")
-
-# add global attributes
-title <- "small example netCDF file"
-ncatt_put(ncout, 0, "title", title)
-
-# close the file, writing data to disk
-nc_close(ncout)
-
-## cat(system("ncdump -c test-netCDF-file.nc"))
+## cat(system("ncdump -c test-netCDF-terra.nc"))

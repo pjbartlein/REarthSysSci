@@ -19,11 +19,20 @@ klippy::klippy(position = c('top', 'right'))
 # Introduction
 
 There are three semi-related R packages for visualizing and analyzing spatial and temporal data: 
+
 - `sf` (Simple Features for R [[https://r-spatial.github.io/sf/]](https://r-spatial.github.io/sf/)), which might be though of as main vehicle for managing the diverse kinds of geospatial data, automaticaly linking to the main packages for geospatial-type analyses (`GEOS`, `s2geometry`, `PROJ`, and `GDAL`);
 - `stars` (Spatiotemporal Arrays [[https://r-spatial.github.io/stars/index.html]](https://r-spatial.github.io/stars/index.html)) with supports the analysis of spatiotemporal data; and 
 - `terra` ([[https://rspatial.org/index.html]](https://rspatial.org/index.html)) which focuses mainly on raster data (such as satellite remote-sensing data), but can also manage spatial vector data.
 
-Each of these packages has functions for reading and writing data sets in a number of formats (like netCDF or HDF), and for storing and manipulating the data internally. Because all nicely support netCDF, and netCDF has its own functions for reading or writing arrays, it can be viewed as the glue that links the packages, both to one-another as will as to the "outside" world.
+Each of these packages has functions for reading and writing data sets in a number of formats (like netCDF or HDF), and for storing and manipulating the data internally. Because all nicely support netCDF, and netCDF has its own functions for reading or writing arrays, it can be viewed as the glue that links the packages, both to one-another as will as to the "outside" world. Here's a summary of some of the packages and functions involved
+
+```
+                read netCDF                 write netCDF
+  base R        ncdf, RNetCDF packages      ncdf, RNetCDF packages
+  sf            sf_read()                   sf_write()
+  terra         rast()                      writeCDF()
+  stars.        read_netcdf()               write_stars()
+```  
 
 # The terra package 
 
