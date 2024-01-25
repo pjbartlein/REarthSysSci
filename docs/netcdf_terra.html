@@ -759,7 +759,8 @@ centers</p>
 <span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Test Variable&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Longitude&quot;</span>)</span>
 <span id="cb30-6"><a href="#cb30-6" tabindex="-1"></a><span class="fu">plot</span>(world_otl, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <p><img src="netcdf_terra_files/figure-html/plotmat-1.png" width="75%" height="75%" /></p>
-<p>Write the generated data to a netCDF file.</p>
+<p>Write the generated data to a netCDF file using <code>ncdf4</code>
+functions.</p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># create a netCDF file </span></span>
 <span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="st">&quot;test-netCDF-file.nc&quot;</span></span>
 <span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>ncout <span class="ot">&lt;-</span> <span class="fu">nc_create</span>(ncfname, <span class="fu">list</span>(tmp.def), <span class="at">force_v4 =</span> <span class="cn">TRUE</span>)</span>
@@ -772,7 +773,7 @@ centers</p>
 <span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;Y&quot;</span>)</span>
 <span id="cb31-11"><a href="#cb31-11" tabindex="-1"></a></span>
 <span id="cb31-12"><a href="#cb31-12" tabindex="-1"></a><span class="co"># add global attributes</span></span>
-<span id="cb31-13"><a href="#cb31-13" tabindex="-1"></a>title <span class="ot">&lt;-</span> <span class="st">&quot;small example netCDF file&quot;</span></span>
+<span id="cb31-13"><a href="#cb31-13" tabindex="-1"></a>title <span class="ot">&lt;-</span> <span class="st">&quot;small example netCDF file -- written using ncdf4&quot;</span></span>
 <span id="cb31-14"><a href="#cb31-14" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;title&quot;</span>, title)</span>
 <span id="cb31-15"><a href="#cb31-15" tabindex="-1"></a></span>
 <span id="cb31-16"><a href="#cb31-16" tabindex="-1"></a><span class="co"># close the file, writing data to disk</span></span>
@@ -868,30 +869,20 @@ no information on the layout of the grid was lost.</p>
 number="3.4">
 <h2><span class="header-section-number">3.4</span> Write the raster
 layer as a netCDF file</h2>
-<p>Write the generated data to a netCDF file.</p>
+<p>Write the generated data (as <code>tmat_sr</code>, a
+<code>SpatRaster</code> object with coordinates/spatial extent data) to
+a netCDF file, this time using <code>writeCDF()</code> from the
+<code>terra</code> package:</p>
 <div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="co"># create a netCDF file </span></span>
-<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="st">&quot;test-netCDF-file.nc&quot;</span></span>
-<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a>ncout <span class="ot">&lt;-</span> <span class="fu">nc_create</span>(ncfname, <span class="fu">list</span>(tmp.def), <span class="at">force_v4 =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a></span>
-<span id="cb49-5"><a href="#cb49-5" tabindex="-1"></a><span class="co"># put the array</span></span>
-<span id="cb49-6"><a href="#cb49-6" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout, tmp.def, tmat)</span>
-<span id="cb49-7"><a href="#cb49-7" tabindex="-1"></a></span>
-<span id="cb49-8"><a href="#cb49-8" tabindex="-1"></a><span class="co"># put additional attributes into dimension and data variables</span></span>
-<span id="cb49-9"><a href="#cb49-9" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="st">&quot;lon&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;X&quot;</span>)  </span>
-<span id="cb49-10"><a href="#cb49-10" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;Y&quot;</span>)</span>
-<span id="cb49-11"><a href="#cb49-11" tabindex="-1"></a></span>
-<span id="cb49-12"><a href="#cb49-12" tabindex="-1"></a><span class="co"># add global attributes</span></span>
-<span id="cb49-13"><a href="#cb49-13" tabindex="-1"></a>title <span class="ot">&lt;-</span> <span class="st">&quot;small example netCDF file&quot;</span></span>
-<span id="cb49-14"><a href="#cb49-14" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;title&quot;</span>, title)</span>
-<span id="cb49-15"><a href="#cb49-15" tabindex="-1"></a></span>
-<span id="cb49-16"><a href="#cb49-16" tabindex="-1"></a><span class="co"># close the file, writing data to disk</span></span>
-<span id="cb49-17"><a href="#cb49-17" tabindex="-1"></a><span class="fu">nc_close</span>(ncout)</span></code></pre></div>
-<p>Here’s what the netCDF file looks like, as plotted in Panoply:</p>
-<p><img src="images/tmp_in_test_netCDF_file.png" alt="Drawing" style="width: 500px;"/></p>
+<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="st">&quot;test-netCDF-terra.nc&quot;</span></span>
+<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a><span class="fu">writeCDF</span>(tmat_sr, ncfname, <span class="at">overwrite =</span> <span class="cn">TRUE</span>, <span class="at">varname =</span> <span class="st">&quot;tmp&quot;</span>, <span class="at">unit =</span> <span class="st">&quot;degC&quot;</span>,</span>
+<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a>         <span class="at">longname=</span><span class="st">&quot;test variable -- terra to netCDF&quot;</span>)</span></code></pre></div>
+<p>Here’s what that netCDF file looks like, as plotted in Panoply:</p>
+<p><img src="images/tmp_in_test-netCDF-terra.png" alt="Drawing" style="width: 500px;"/></p>
 <p>The <code>ncdump</code> command-line utility can be used to verify
 the contents of the file. At the Console in RStudio, the following code
 would do that:</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">system</span>(<span class="st">&quot;ncdump -c test-netCDF-file.nc&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">system</span>(<span class="st">&quot;ncdump -c test-netCDF-terra.nc&quot;</span>))</span></code></pre></div>
 </div>
 </div>
 
