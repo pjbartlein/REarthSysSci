@@ -7,4 +7,4 @@ Department of Geography, University of Oregon
 Web page:
 https://pjbartlein.github.io/REarthSysSci/index.html
 
-<span style="color: red;">**NOTE:&nbsp; This is the web page for a previous version of the course. The web page for the Winter 2024 version of the course will be posted the first week of January 2024.** &nbsp; <br>
+<span style="color: green;">**NOTE:&nbsp; This repository is currently being revised for the Winter 2024 version of the course.** &nbsp; <br>
