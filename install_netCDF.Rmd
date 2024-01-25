@@ -16,5 +16,5 @@ pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
 
-```{r child="install_netCDF.md"}
+```{r child="md/install_netCDF.md"}
 ```

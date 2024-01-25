@@ -18,5 +18,5 @@ pdf.options(useDingbats = TRUE)
 ```
 
 <p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2024, but may undergo further edits.</span></p>
-```{r child="packages-and-data.md"}
+```{r child="md/packages-and-data.md"}
 ```

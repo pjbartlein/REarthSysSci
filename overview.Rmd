@@ -15,7 +15,7 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
 pdf.options(useDingbats = TRUE)
 ```
 
-```{r child="overview.md"}
+```{r child="md/overview.md"}
 ```
 
 
