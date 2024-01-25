@@ -1,8 +1,10 @@
 
 
-# load the ncdf4 package
+# load the ncdf4 package, plus some others
 library(ncdf4)
 library(CFtime)
+library(lattice)
+library(RColorBrewer)
 
 # set path and filename
 ncpath <- "/Users/bartlein/Projects/RESS/data/nc_files/"
@@ -60,11 +62,6 @@ ls()
 
 ## outworkspace="netCDF01.RData"
 ## save.image(file=outworkspace)
-
-# load some packages
-library(chron)
-library(lattice)
-library(RColorBrewer)
 
 # # convert time -- split the time units string into fields
 # tustr <- strsplit(tunits$value, " ")

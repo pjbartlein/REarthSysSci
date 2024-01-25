@@ -1,0 +1,307 @@
+---
+title: "netCDF and terra"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: False
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "75%", out.height = "75%")
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+
+# Introduction
+
+There are three semi-related R packages for visualizing and analyzing spatial and temporal data: 
+- `sf` (Simple Features for R [[https://r-spatial.github.io/sf/]](https://r-spatial.github.io/sf/)), which might be though of as main vehicle for managing the diverse kinds of geospatial data, automaticaly linking to the main packages for geospatial-type analyses (`GEOS`, `s2geometry`, `PROJ`, and `GDAL`);
+- `stars` (Spatiotemporal Arrays [[https://r-spatial.github.io/stars/index.html]](https://r-spatial.github.io/stars/index.html)) with supports the analysis of spatiotemporal data; and 
+- `terra` ([[https://rspatial.org/index.html]](https://rspatial.org/index.html)) which focuses mainly on raster data (such as satellite remote-sensing data), but can also manage spatial vector data.
+
+Each of these packages has functions for reading and writing data sets in a number of formats (like netCDF or HDF), and for storing and manipulating the data internally. Because all nicely support netCDF, and netCDF has its own functions for reading or writing arrays, it can be viewed as the glue that links the packages, both to one-another as will as to the "outside" world.
+
+# The terra package 
+
+The `terra` package is large library of functions and methods for dealing with raster data sets, including many geospatial formats, including netCDF.  It is a rapidly deloping package, replacing the old `raster` package. The functions support many different kinds of geospatial procedures applied to raster data, like regridding and interpolation, hillslope shading calculations, logical and mathematical manipulations and so on, but it also can efficiently read and manipulate large data sets.  In particular `terra` is designed to only read into memory those parts of a data set that are necessary for some analysis, raising the possibility of analyzing data sets that are much larger than the availble machine memory.  In addition, some of the "flatting" and "reshaping" maneuvers that are required to get netCDF data sets into "tidy" formats are supported by individual functions. Below are some simple examples of reading and writing netCDF data sets.
+
+To illustrate the `terra` approach to reading and displaying the CRU temperature data, first load the required packages:
+
+```{r start, message=FALSE}
+# load packages  
+library(sf) 
+library(ncdf4)
+library(terra)
+library(RColorBrewer)
+```
+
+Also read a world outline shape file for plotting:
+
+```{r readWorldShape}
+# read a shape file
+shp_file <- "/Users/bartlein/Projects/RESS/data/shp_files/world2015/UIA_World_Countries_Boundaries.shp"
+world_outline <- as(st_geometry(read_sf(shp_file)), Class = "Spatial")
+plot(world_outline, col="lightgreen", lwd=1)
+```
+
+Convert the world_outline to a spatial vector
+
+```{r convertoutline}
+# convert world_outline to a spatial vector
+world_otl <- vect(world_outline)
+class(world_otl)
+```
+
+## Read a netCDF file
+
+Next, set the path, filename, and variable name for the CRU long-term mean temperature data
+
+```{r setpath}
+# set path and filename
+nc_path <- "/Users/bartlein/Projects/RESS/data/nc_files/"
+nc_name <- "cru10min30_tmp"  
+nc_fname <- paste(nc_path, nc_name, ".nc", sep="")
+dname <- "tmp"  # note: tmp means temperature (not temporary)
+```
+
+Read the 3-D array from the netCDF file using the `rast()` function:
+
+```{r readCRU}
+# read the netCDF file
+tmp_raster <- rast(nc_fname)
+tmp_raster
+class(tmp_raster)
+```
+
+Typing the name of the object `tmp_raster` produces a short summary of the contents of the file.  Note that the class of the object just created is `SpatRaster` as opposed to `array`.
+
+Next, plot the data, using the `terra` package default plotting function.
+
+```{r plotCRU}
+plot(tmp_raster)
+```
+
+Plot just the January data, using the `subset()` function to get the data:
+
+```{r plot jan}
+# select just the January data
+tjan_raster <- subset(tmp_raster, s = 1)
+plot(tjan_raster)
+```
+
+Here's a nicer plot:
+
+```{r plotjan}
+# plot January temperature
+breaks <- c(-50,-40,-30,-20,-10,0,10,20,30,40,50)
+color_fun <- colorRampPalette(rev(brewer.pal(10,"RdBu")))
+plot(tjan_raster, col = color_fun(10), type = "continuous", breaks = breaks, 
+     main = "January Temperature", ylab = "Latitude", xlab = "Longitude")
+plot(world_otl, add = TRUE)
+```
+
+
+So it looks like the `raster` package can read a netCDF file with fewer lines of code than `ncdf`.  
+
+## "Flatting" a raster brick
+
+The `values()` function in `terra` reshapes a raster object; if the argument of the function is a raster layer, the function returns a vector, while if the argument is a raster stack or raster brick (e.g. a 3-D array), the function returns a matrix, with each row representing an individual cell (or location in the grid), and the columns representing layers (which in the case of the CRU data are times (months)).  The replicates the reshaping described earlier for netCDF files.
+
+```{r values}
+tmp_array <- values(tmp_raster)
+class(tmp_array); dim(tmp_array)
+```
+
+The class and diminsions of `tmp_array` describe the result of the reshaping -- the nlon x nlat x 12 brick is now a rectangular data set.
+
+# NetCDF and the terra package #
+
+The `terra` package evidently has the capability of reading and writing netCDF files.  There are several issues that could arise in such transformations (i.e. from the netCDF format to the `terra` `SpatRaster` format) related to such things as the indexing of grid-cell locations:  netCDF coordinates refer to the center of grid cells, while `terra` coordinates refer to cell corners.
+
+In practice, the `terra` package seems to "do the right thing" in reading and writing netCDF, as can be demonstrated using a "toy" data set.  In the examples below, a simple netCDF data set will be generated and written out using the `ncdf4` package.  Then that netCDF data set will be read in as a raster "layer" and plotted, and finally the raster layer will be written again as a netCDF file.  As can be seen, the coordiate systems are appropriately adjusted going back and forth between netCDF and the `raster` "native" format.
+
+## Generate and write a simple netCDF file ##
+
+Generate a small `nlon` = 8, `nlat` = 4 2-d netCDF data set, filled with normally distributed random numbers
+
+```{r ncrast01}
+# create a small netCDF file
+# generate lons and lats
+nlon <- 8; nlat <- 4
+dlon <- 360.0/nlon; dlat <- 180.0/nlat
+lon <- seq(-180.0+(dlon/2),+180.0-(dlon/2),by=dlon)
+lon
+lat <- seq(-90.0+(dlat/2),+90.0-(dlat/2),by=dlat)
+lat
+
+# define dimensions
+londim <- ncdim_def("lon", "degrees_east", as.double(lon))
+latdim <- ncdim_def("lat", "degrees_north", as.double(lat))
+
+# generate some data
+set.seed(5) # to generate the same stream of random numbers each time the code is run
+tmp <- rnorm(nlon*nlat)
+tmat <- array(tmp, dim = c(nlon, nlat))
+dim(tmat)
+
+# define variables
+varname="tmp"
+units="z-scores"
+dlname <- "test variable -- original"
+fillvalue <- 1e20
+tmp.def <- ncvar_def(varname, units, list(londim, latdim), fillvalue, 
+                     dlname, prec = "single")
+```
+As can be seen, the longitudes run from -157.5 to +157.5, while the latitudes run from -67.5 to +67.5, and they define the centers of the netCDF grid cells.
+
+Here's what the data looks like:
+
+```{r printdata}
+# print the data
+print(t(tmat)[(nlat:1),])
+```
+
+The `t()` function transposes the matrix by flipping it along the principal diagonal, while the selection `[(nlat:1),]` flips the data top to bottom, so it will be consistent with the maps below. Notice the two extreme values, `-2.18` (second row, second column) and `1.71` (fourth row, fifth column); these will help in the comparison of the maps later.
+
+Convert `tmat` to a `terra` `SpatRast` for plotting. Also add the spatial extent of the raster, which extends from the cell edges, as opposed to the cell centers
+
+```{r rasttmat}
+tmat_sr <- rast(tmat)
+tmat_sr <- t(tmat_sr) # transpose
+tmat_sr <- flip(tmat_sr, direction = "vertical")
+ext(tmat_sr) <- c(-180.0, 180.0, -90.0, 90.0)
+```
+
+Here's what the generated data look like:
+
+```{r plotmat}
+# plot tmpin, the test raster read back in
+breaks <- c(-2.5, -2.0, -1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 2.5)
+color_fun <- colorRampPalette(rev(brewer.pal(10,"RdBu")))
+plot(tmat_sr, col = color_fun(10), type = "continuous", breaks = breaks, 
+     main = "Test Variable", ylab = "Latitude", xlab = "Longitude")
+plot(world_otl, add = TRUE)
+```
+
+Write the generated data to a netCDF file.
+
+```{r ncrast02, fig.width=6, fig.height=4}
+# create a netCDF file 
+ncfname <- "test-netCDF-file.nc"
+ncout <- nc_create(ncfname, list(tmp.def), force_v4 = TRUE)
+
+# put the array
+ncvar_put(ncout, tmp.def, tmat)
+
+# put additional attributes into dimension and data variables
+ncatt_put(ncout, "lon", "axis", "X")  
+ncatt_put(ncout, "lat", "axis", "Y")
+
+# add global attributes
+title <- "small example netCDF file"
+ncatt_put(ncout, 0, "title", title)
+
+# close the file, writing data to disk
+nc_close(ncout)
+```
+
+Here's what the netCDF file looks like, as plotted in Panoply:
+  
+  <img src="images/tmp_in_test_netCDF_file.png" alt="Drawing" style="width: 500px;"/>
+  
+The `ncdump` command-line utility can be used to verify the contents of the file.  At the Console in RStudio, the following code would do that:
+  
+```{r ncdump1b, echo=TRUE, eval=FALSE}
+cat(system("ncdump -c test-netCDF-file.nc"))
+```
+
+## Read the simple netCDF file back in as a raster layer ##
+
+Now read the newly created netCDF data set back in as a `SpatRast` object.  (Load the packages if not already loaded.)
+
+```{r ncrast03, message=FALSE, cache=FALSE}
+# load packages  
+library(sf) 
+library(ncdf4)
+library(terra)
+library(RColorBrewer)
+```
+```{r ncrast04}
+# read the netCDF file as a SpatRaster
+tmpin <- rast(ncfname)
+tmpin
+class(tmpin)
+```
+
+Listing the object as above, provides its internal `terra` attributes, while the `print()` function provides the characteristics of the source netCDF file.
+
+```{r ncrast05}
+# source file characteristics
+print(tmpin)
+```
+
+Here's what the generated data look like after being read back in:
+
+```{r plotmat2}
+# plot tmpin, the test raster read back in
+breaks <- c(-2.5, -2.0, -1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5, 2.0, 2.5)
+color_fun <- colorRampPalette(rev(brewer.pal(10,"RdBu")))
+plot(tmpin, col = color_fun(10), type = "continuous", breaks = breaks, 
+     main = "Test Variable -- as Raster Layer", ylab = "Latitude", xlab = "Longitude")
+plot(world_otl, add = TRUE)
+```
+
+## Check the coordinates of the raster
+
+The actual coordinate values of the cell centers can be gotten as follows
+```{r get raster coords}
+# get raster coordinates
+xFromCol(tmpin)
+yFromRow(tmpin)
+```
+
+These can be compared with the original `lon' and 'lat' values defined above:
+```{r list lonlat}
+# original lon and lat
+lon
+-1.0 * lat
+```
+
+## Write the raster layer as a netCDF file ##
+
+Write the generated data to a netCDF file.
+
+```{r ncrast0x, fig.width=6, fig.height=4}
+# create a netCDF file 
+ncfname <- "test-netCDF-file.nc"
+ncout <- nc_create(ncfname, list(tmp.def), force_v4 = TRUE)
+
+# put the array
+ncvar_put(ncout, tmp.def, tmat)
+
+# put additional attributes into dimension and data variables
+ncatt_put(ncout, "lon", "axis", "X")  
+ncatt_put(ncout, "lat", "axis", "Y")
+
+# add global attributes
+title <- "small example netCDF file"
+ncatt_put(ncout, 0, "title", title)
+
+# close the file, writing data to disk
+nc_close(ncout)
+```
+
+Here's what the netCDF file looks like, as plotted in Panoply:
+  
+  <img src="images/tmp_in_test_netCDF_file.png" alt="Drawing" style="width: 500px;"/>
+  
+  The `ncdump` command-line utility can be used to verify the contents of the file.  At the Console in RStudio, the following code would do that:
+  
+```{r ncdump1c, echo=TRUE, eval=FALSE}
+cat(system("ncdump -c test-netCDF-file.nc"))
+```
+

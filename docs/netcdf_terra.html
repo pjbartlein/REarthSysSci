@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>netCDF and terra</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Earth-System Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="intro.html">Introduction: R, RStudio, and other infrastructure</a>
+    </li>
+    <li>
+      <a href="usingR.html">Using R</a>
+    </li>
+    <li>
+      <a href="ESSdata.html">Earth-system science data</a>
+    </li>
+    <li>
+      <a href="netCDF.html">netCDF in R</a>
+    </li>
+    <li>
+      <a href="terra_netCDF.html">terra, and netCDF in R</a>
+    </li>
+    <li>
+      <a href="plots1.html">Plots (1)</a>
+    </li>
+    <li>
+      <a href="plots1.html">Plots (2)</a>
+    </li>
+    <li>
+      <a href="maps1.html">Maps (1)</a>
+    </li>
+    <li>
+      <a href="maps2.html">Maps (2)</a>
+    </li>
+    <li>
+      <a href="geospatial.html">Geospatial analyses</a>
+    </li>
+    <li>
+      <a href="correlation.html">Correlation and regression</a>
+    </li>
+    <li>
+      <a href="prediction.html">Prediction</a>
+    </li>
+    <li>
+      <a href="pca.html">PCA</a>
+    </li>
+    <li>
+      <a href="svd.html">Singular Value Decomposistion</a>
+    </li>
+    <li>
+      <a href="highdim.html">High-resolution &amp; high-dimensional data</a>
+    </li>
+    <li>
+      <a href="multivariate.html">Multivariate methods</a>
+    </li>
+    <li>
+      <a href="timeseries.html">Time-series analysis</a>
+    </li>
+    <li>
+      <a href="otherlang.html">Other Languages</a>
+    </li>
+    <li class="dropdown-header">Other topics</li>
+    <li>
+      <a href="sf_terra_starts">sf, terra, stars</a>
+    </li>
+    <li>
+      <a href="hdf5_intro.html">HDF in R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Tasks
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Tasks</li>
+    <li>
+      <a href="installR.html">Install R and RStudio</a>
+    </li>
+    <li>
+      <a href="Ex_UsingR.html">Using R exercise</a>
+    </li>
+    <li>
+      <a href="install_netCDF.html">Install netCDF &amp; Panoply</a>
+    </li>
+    <li>
+      <a href="transfer.html">File transfer</a>
+    </li>
+    <li>
+      <a href="texteditor.html">Install a text editor</a>
+    </li>
+    <li>
+      <a href="dataselection.html">Project data set selection</a>
+    </li>
+    <li>
+      <a href="markdown.html">Markdown and RMarkdown</a>
+    </li>
+    <li>
+      <a href="pandoc.html">Pandoc</a>
+    </li>
+    <li>
+      <a href="GitHub.html">GitHub and UO pages.uoregon.edu</a>
+    </li>
+    <li>
+      <a href="localweb.html">Local websites</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="websites.html">Old course web pages</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">netCDF and terra</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction" id="toc-introduction"><span
+class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#the-terra-package" id="toc-the-terra-package"><span
+class="toc-section-number">2</span> The terra package</a>
+<ul>
+<li><a href="#read-a-netcdf-file" id="toc-read-a-netcdf-file"><span
+class="toc-section-number">2.1</span> Read a netCDF file</a></li>
+<li><a href="#flatting-a-raster-brick"
+id="toc-flatting-a-raster-brick"><span
+class="toc-section-number">2.2</span> “Flatting” a raster brick</a></li>
+</ul></li>
+<li><a href="#netcdf-and-the-terra-package"
+id="toc-netcdf-and-the-terra-package"><span
+class="toc-section-number">3</span> NetCDF and the terra package</a>
+<ul>
+<li><a href="#generate-and-write-a-simple-netcdf-file"
+id="toc-generate-and-write-a-simple-netcdf-file"><span
+class="toc-section-number">3.1</span> Generate and write a simple netCDF
+file</a></li>
+<li><a href="#read-the-simple-netcdf-file-back-in-as-a-raster-layer"
+id="toc-read-the-simple-netcdf-file-back-in-as-a-raster-layer"><span
+class="toc-section-number">3.2</span> Read the simple netCDF file back
+in as a raster layer</a></li>
+<li><a href="#check-the-coordinates-of-the-raster"
+id="toc-check-the-coordinates-of-the-raster"><span
+class="toc-section-number">3.3</span> Check the coordinates of the
+raster</a></li>
+<li><a href="#write-the-raster-layer-as-a-netcdf-file"
+id="toc-write-the-raster-layer-as-a-netcdf-file"><span
+class="toc-section-number">3.4</span> Write the raster layer as a netCDF
+file</a></li>
+</ul></li>
+</ul>
+</div>
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<div id="introduction" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>There are three semi-related R packages for visualizing and analyzing
+spatial and temporal data: - <code>sf</code> (Simple Features for R <a
+href="https://r-spatial.github.io/sf/">[https://r-spatial.github.io/sf/]</a>),
+which might be though of as main vehicle for managing the diverse kinds
+of geospatial data, automaticaly linking to the main packages for
+geospatial-type analyses (<code>GEOS</code>, <code>s2geometry</code>,
+<code>PROJ</code>, and <code>GDAL</code>); - <code>stars</code>
+(Spatiotemporal Arrays <a
+href="https://r-spatial.github.io/stars/index.html">[https://r-spatial.github.io/stars/index.html]</a>)
+with supports the analysis of spatiotemporal data; and -
+<code>terra</code> (<a
+href="https://rspatial.org/index.html">[https://rspatial.org/index.html]</a>)
+which focuses mainly on raster data (such as satellite remote-sensing
+data), but can also manage spatial vector data.</p>
+<p>Each of these packages has functions for reading and writing data
+sets in a number of formats (like netCDF or HDF), and for storing and
+manipulating the data internally. Because all nicely support netCDF, and
+netCDF has its own functions for reading or writing arrays, it can be
+viewed as the glue that links the packages, both to one-another as will
+as to the “outside” world.</p>
+</div>
+<div id="the-terra-package" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> The terra package</h1>
+<p>The <code>terra</code> package is large library of functions and
+methods for dealing with raster data sets, including many geospatial
+formats, including netCDF. It is a rapidly deloping package, replacing
+the old <code>raster</code> package. The functions support many
+different kinds of geospatial procedures applied to raster data, like
+regridding and interpolation, hillslope shading calculations, logical
+and mathematical manipulations and so on, but it also can efficiently
+read and manipulate large data sets. In particular <code>terra</code> is
+designed to only read into memory those parts of a data set that are
+necessary for some analysis, raising the possibility of analyzing data
+sets that are much larger than the availble machine memory. In addition,
+some of the “flatting” and “reshaping” maneuvers that are required to
+get netCDF data sets into “tidy” formats are supported by individual
+functions. Below are some simple examples of reading and writing netCDF
+data sets.</p>
+<p>To illustrate the <code>terra</code> approach to reading and
+displaying the CRU temperature data, first load the required
+packages:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># load packages  </span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(sf) </span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(ncdf4)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
+<p>Also read a world outline shape file for plotting:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># read a shape file</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>shp_file <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/shp_files/world2015/UIA_World_Countries_Boundaries.shp&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>world_outline <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">st_geometry</span>(<span class="fu">read_sf</span>(shp_file)), <span class="at">Class =</span> <span class="st">&quot;Spatial&quot;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">plot</span>(world_outline, <span class="at">col=</span><span class="st">&quot;lightgreen&quot;</span>, <span class="at">lwd=</span><span class="dv">1</span>)</span></code></pre></div>
+<p><img src="netcdf_terra_files/figure-html/readWorldShape-1.png" width="75%" height="75%" /></p>
+<p>Convert the world_outline to a spatial vector</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># convert world_outline to a spatial vector</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>world_otl <span class="ot">&lt;-</span> <span class="fu">vect</span>(world_outline)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">class</span>(world_otl)</span></code></pre></div>
+<pre><code>## [1] &quot;SpatVector&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;terra&quot;</code></pre>
+<div id="read-a-netcdf-file" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Read a netCDF
+file</h2>
+<p>Next, set the path, filename, and variable name for the CRU long-term
+mean temperature data</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># set path and filename</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>nc_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>nc_name <span class="ot">&lt;-</span> <span class="st">&quot;cru10min30_tmp&quot;</span>  </span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>nc_fname <span class="ot">&lt;-</span> <span class="fu">paste</span>(nc_path, nc_name, <span class="st">&quot;.nc&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>dname <span class="ot">&lt;-</span> <span class="st">&quot;tmp&quot;</span>  <span class="co"># note: tmp means temperature (not temporary)</span></span></code></pre></div>
+<p>Read the 3-D array from the netCDF file using the <code>rast()</code>
+function:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># read the netCDF file</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>tmp_raster <span class="ot">&lt;-</span> <span class="fu">rast</span>(nc_fname)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>tmp_raster</span></code></pre></div>
+<pre><code>## class       : SpatRaster 
+## dimensions  : 360, 720, 12  (nrow, ncol, nlyr)
+## resolution  : 0.5, 0.5  (x, y)
+## extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+## coord. ref. : lon/lat WGS 84 
+## source      : cru10min30_tmp.nc:tmp 
+## varname     : tmp (air_temperature) 
+## names       : tmp_1, tmp_2, tmp_3, tmp_4, tmp_5, tmp_6, ... 
+## unit        :  degC,  degC,  degC,  degC,  degC,  degC, ... 
+## time (days) : 1976-01-16 to 1976-12-16</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">class</span>(tmp_raster)</span></code></pre></div>
+<pre><code>## [1] &quot;SpatRaster&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;terra&quot;</code></pre>
+<p>Typing the name of the object <code>tmp_raster</code> produces a
+short summary of the contents of the file. Note that the class of the
+object just created is <code>SpatRaster</code> as opposed to
+<code>array</code>.</p>
+<p>Next, plot the data, using the <code>terra</code> package default
+plotting function.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">plot</span>(tmp_raster)</span></code></pre></div>
+<p><img src="netcdf_terra_files/figure-html/plotCRU-1.png" width="75%" height="75%" /></p>
+<p>Plot just the January data, using the <code>subset()</code> function
+to get the data:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># select just the January data</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>tjan_raster <span class="ot">&lt;-</span> <span class="fu">subset</span>(tmp_raster, <span class="at">s =</span> <span class="dv">1</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">plot</span>(tjan_raster)</span></code></pre></div>
+<p><img src="netcdf_terra_files/figure-html/plot%20jan-1.png" width="75%" height="75%" /></p>
+<p>Here’s a nicer plot:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># plot January temperature</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">50</span>,<span class="sc">-</span><span class="dv">40</span>,<span class="sc">-</span><span class="dv">30</span>,<span class="sc">-</span><span class="dv">20</span>,<span class="sc">-</span><span class="dv">10</span>,<span class="dv">0</span>,<span class="dv">10</span>,<span class="dv">20</span>,<span class="dv">30</span>,<span class="dv">40</span>,<span class="dv">50</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>color_fun <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>)))</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">plot</span>(tjan_raster, <span class="at">col =</span> <span class="fu">color_fun</span>(<span class="dv">10</span>), <span class="at">type =</span> <span class="st">&quot;continuous&quot;</span>, <span class="at">breaks =</span> breaks, </span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;January Temperature&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Longitude&quot;</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="fu">plot</span>(world_otl, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="netcdf_terra_files/figure-html/plotjan-1.png" width="75%" height="75%" /></p>
+<p>So it looks like the <code>raster</code> package can read a netCDF
+file with fewer lines of code than <code>ncdf</code>.</p>
+</div>
+<div id="flatting-a-raster-brick" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> “Flatting” a raster
+brick</h2>
+<p>The <code>values()</code> function in <code>terra</code> reshapes a
+raster object; if the argument of the function is a raster layer, the
+function returns a vector, while if the argument is a raster stack or
+raster brick (e.g. a 3-D array), the function returns a matrix, with
+each row representing an individual cell (or location in the grid), and
+the columns representing layers (which in the case of the CRU data are
+times (months)). The replicates the reshaping described earlier for
+netCDF files.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>tmp_array <span class="ot">&lt;-</span> <span class="fu">values</span>(tmp_raster)</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">class</span>(tmp_array); <span class="fu">dim</span>(tmp_array)</span></code></pre></div>
+<pre><code>## [1] &quot;matrix&quot; &quot;array&quot;</code></pre>
+<pre><code>## [1] 259200     12</code></pre>
+<p>The class and diminsions of <code>tmp_array</code> describe the
+result of the reshaping – the nlon x nlat x 12 brick is now a
+rectangular data set.</p>
+</div>
+</div>
+<div id="netcdf-and-the-terra-package" class="section level1"
+number="3">
+<h1><span class="header-section-number">3</span> NetCDF and the terra
+package</h1>
+<p>The <code>terra</code> package evidently has the capability of
+reading and writing netCDF files. There are several issues that could
+arise in such transformations (i.e. from the netCDF format to the
+<code>terra</code> <code>SpatRaster</code> format) related to such
+things as the indexing of grid-cell locations: netCDF coordinates refer
+to the center of grid cells, while <code>terra</code> coordinates refer
+to cell corners.</p>
+<p>In practice, the <code>terra</code> package seems to “do the right
+thing” in reading and writing netCDF, as can be demonstrated using a
+“toy” data set. In the examples below, a simple netCDF data set will be
+generated and written out using the <code>ncdf4</code> package. Then
+that netCDF data set will be read in as a raster “layer” and plotted,
+and finally the raster layer will be written again as a netCDF file. As
+can be seen, the coordiate systems are appropriately adjusted going back
+and forth between netCDF and the <code>raster</code> “native”
+format.</p>
+<div id="generate-and-write-a-simple-netcdf-file" class="section level2"
+number="3.1">
+<h2><span class="header-section-number">3.1</span> Generate and write a
+simple netCDF file</h2>
+<p>Generate a small <code>nlon</code> = 8, <code>nlat</code> = 4 2-d
+netCDF data set, filled with normally distributed random numbers</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># create a small netCDF file</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co"># generate lons and lats</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>nlon <span class="ot">&lt;-</span> <span class="dv">8</span>; nlat <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>dlon <span class="ot">&lt;-</span> <span class="fl">360.0</span><span class="sc">/</span>nlon; dlat <span class="ot">&lt;-</span> <span class="fl">180.0</span><span class="sc">/</span>nlat</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">180.0</span><span class="sc">+</span>(dlon<span class="sc">/</span><span class="dv">2</span>),<span class="sc">+</span><span class="fl">180.0</span><span class="sc">-</span>(dlon<span class="sc">/</span><span class="dv">2</span>),<span class="at">by=</span>dlon)</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>lon</span></code></pre></div>
+<pre><code>## [1] -157.5 -112.5  -67.5  -22.5   22.5   67.5  112.5  157.5</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">90.0</span><span class="sc">+</span>(dlat<span class="sc">/</span><span class="dv">2</span>),<span class="sc">+</span><span class="fl">90.0</span><span class="sc">-</span>(dlat<span class="sc">/</span><span class="dv">2</span>),<span class="at">by=</span>dlat)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>lat</span></code></pre></div>
+<pre><code>## [1] -67.5 -22.5  22.5  67.5</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># define dimensions</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>londim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;degrees_east&quot;</span>, <span class="fu">as.double</span>(lon))</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>latdim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;lat&quot;</span>, <span class="st">&quot;degrees_north&quot;</span>, <span class="fu">as.double</span>(lat))</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="co"># generate some data</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">5</span>) <span class="co"># to generate the same stream of random numbers each time the code is run</span></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>tmp <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(nlon<span class="sc">*</span>nlat)</span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>tmat <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp, <span class="at">dim =</span> <span class="fu">c</span>(nlon, nlat))</span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a><span class="fu">dim</span>(tmat)</span></code></pre></div>
+<pre><code>## [1] 8 4</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># define variables</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>varname<span class="ot">=</span><span class="st">&quot;tmp&quot;</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>units<span class="ot">=</span><span class="st">&quot;z-scores&quot;</span></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;test variable -- original&quot;</span></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>fillvalue <span class="ot">&lt;-</span> <span class="fl">1e20</span></span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>tmp.def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(varname, units, <span class="fu">list</span>(londim, latdim), fillvalue, </span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>                     dlname, <span class="at">prec =</span> <span class="st">&quot;single&quot;</span>)</span></code></pre></div>
+<p>As can be seen, the longitudes run from -157.5 to +157.5, while the
+latitudes run from -67.5 to +67.5, and they define the centers of the
+netCDF grid cells.</p>
+<p>Here’s what the data looks like:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co"># print the data</span></span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">t</span>(tmat)[(nlat<span class="sc">:</span><span class="dv">1</span>),])</span></code></pre></div>
+<pre><code>##            [,1]       [,2]       [,3]        [,4]       [,5]       [,6]       [,7]       [,8]
+## [1,]  0.8190089 -0.2934818  1.4185891  1.49877383 -0.6570821 -0.8527954  0.3159150  1.1096942
+## [2,] -0.5973131 -2.1839668  0.2408173 -0.25935541  0.9005119  0.9418694  1.4679619  0.7067611
+## [3,] -0.2857736  0.1381082  1.2276303 -0.80177945 -1.0803926 -0.1575344 -1.0717600 -0.1389861
+## [4,] -0.8408555  1.3843593 -1.2554919  0.07014277  1.7114409 -0.6029080 -0.4721664 -0.6353713</code></pre>
+<p>The <code>t()</code> function transposes the matrix by flipping it
+along the principal diagonal, while the selection
+<code>[(nlat:1),]</code> flips the data top to bottom, so it will be
+consistent with the maps below. Notice the two extreme values,
+<code>-2.18</code> (second row, second column) and <code>1.71</code>
+(fourth row, fifth column); these will help in the comparison of the
+maps later.</p>
+<p>Convert <code>tmat</code> to a <code>terra</code>
+<code>SpatRast</code> for plotting. Also add the spatial extent of the
+raster, which extends from the cell edges, as opposed to the cell
+centers</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>tmat_sr <span class="ot">&lt;-</span> <span class="fu">rast</span>(tmat)</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>tmat_sr <span class="ot">&lt;-</span> <span class="fu">t</span>(tmat_sr) <span class="co"># transpose</span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>tmat_sr <span class="ot">&lt;-</span> <span class="fu">flip</span>(tmat_sr, <span class="at">direction =</span> <span class="st">&quot;vertical&quot;</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="fu">ext</span>(tmat_sr) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">180.0</span>, <span class="fl">180.0</span>, <span class="sc">-</span><span class="fl">90.0</span>, <span class="fl">90.0</span>)</span></code></pre></div>
+<p>Here’s what the generated data look like:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># plot tmpin, the test raster read back in</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">2.5</span>, <span class="sc">-</span><span class="fl">2.0</span>, <span class="sc">-</span><span class="fl">1.5</span>, <span class="sc">-</span><span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">0.0</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">1.5</span>, <span class="fl">2.0</span>, <span class="fl">2.5</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>color_fun <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>)))</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="fu">plot</span>(tmat_sr, <span class="at">col =</span> <span class="fu">color_fun</span>(<span class="dv">10</span>), <span class="at">type =</span> <span class="st">&quot;continuous&quot;</span>, <span class="at">breaks =</span> breaks, </span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Test Variable&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Longitude&quot;</span>)</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a><span class="fu">plot</span>(world_otl, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="netcdf_terra_files/figure-html/plotmat-1.png" width="75%" height="75%" /></p>
+<p>Write the generated data to a netCDF file.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co"># create a netCDF file </span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="st">&quot;test-netCDF-file.nc&quot;</span></span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a>ncout <span class="ot">&lt;-</span> <span class="fu">nc_create</span>(ncfname, <span class="fu">list</span>(tmp.def), <span class="at">force_v4 =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a><span class="co"># put the array</span></span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout, tmp.def, tmat)</span>
+<span id="cb27-7"><a href="#cb27-7" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" tabindex="-1"></a><span class="co"># put additional attributes into dimension and data variables</span></span>
+<span id="cb27-9"><a href="#cb27-9" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="st">&quot;lon&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;X&quot;</span>)  </span>
+<span id="cb27-10"><a href="#cb27-10" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;Y&quot;</span>)</span>
+<span id="cb27-11"><a href="#cb27-11" tabindex="-1"></a></span>
+<span id="cb27-12"><a href="#cb27-12" tabindex="-1"></a><span class="co"># add global attributes</span></span>
+<span id="cb27-13"><a href="#cb27-13" tabindex="-1"></a>title <span class="ot">&lt;-</span> <span class="st">&quot;small example netCDF file&quot;</span></span>
+<span id="cb27-14"><a href="#cb27-14" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;title&quot;</span>, title)</span>
+<span id="cb27-15"><a href="#cb27-15" tabindex="-1"></a></span>
+<span id="cb27-16"><a href="#cb27-16" tabindex="-1"></a><span class="co"># close the file, writing data to disk</span></span>
+<span id="cb27-17"><a href="#cb27-17" tabindex="-1"></a><span class="fu">nc_close</span>(ncout)</span></code></pre></div>
+<p>Here’s what the netCDF file looks like, as plotted in Panoply:</p>
+<p><img src="images/tmp_in_test_netCDF_file.png" alt="Drawing" style="width: 500px;"/></p>
+<p>The <code>ncdump</code> command-line utility can be used to verify
+the contents of the file. At the Console in RStudio, the following code
+would do that:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">system</span>(<span class="st">&quot;ncdump -c test-netCDF-file.nc&quot;</span>))</span></code></pre></div>
+</div>
+<div id="read-the-simple-netcdf-file-back-in-as-a-raster-layer"
+class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Read the simple
+netCDF file back in as a raster layer</h2>
+<p>Now read the newly created netCDF data set back in as a
+<code>SpatRast</code> object. (Load the packages if not already
+loaded.)</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># load packages  </span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="fu">library</span>(sf) </span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="fu">library</span>(ncdf4)</span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># read the netCDF file as a SpatRaster</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>tmpin <span class="ot">&lt;-</span> <span class="fu">rast</span>(ncfname)</span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>tmpin</span></code></pre></div>
+<pre><code>## class       : SpatRaster 
+## dimensions  : 4, 8, 1  (nrow, ncol, nlyr)
+## resolution  : 45, 45  (x, y)
+## extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+## coord. ref. : lon/lat WGS 84 
+## source      : test-netCDF-file.nc 
+## varname     : tmp (test variable -- original) 
+## name        :      tmp 
+## unit        : z-scores</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="fu">class</span>(tmpin)</span></code></pre></div>
+<pre><code>## [1] &quot;SpatRaster&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;terra&quot;</code></pre>
+<p>Listing the object as above, provides its internal <code>terra</code>
+attributes, while the <code>print()</code> function provides the
+characteristics of the source netCDF file.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="co"># source file characteristics</span></span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a><span class="fu">print</span>(tmpin)</span></code></pre></div>
+<pre><code>## class       : SpatRaster 
+## dimensions  : 4, 8, 1  (nrow, ncol, nlyr)
+## resolution  : 45, 45  (x, y)
+## extent      : -180, 180, -90, 90  (xmin, xmax, ymin, ymax)
+## coord. ref. : lon/lat WGS 84 
+## source      : test-netCDF-file.nc 
+## varname     : tmp (test variable -- original) 
+## name        :      tmp 
+## unit        : z-scores</code></pre>
+<p>Here’s what the generated data look like after being read back
+in:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="co"># plot tmpin, the test raster read back in</span></span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>breaks <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">2.5</span>, <span class="sc">-</span><span class="fl">2.0</span>, <span class="sc">-</span><span class="fl">1.5</span>, <span class="sc">-</span><span class="fl">1.0</span>, <span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">0.0</span>, <span class="fl">0.5</span>, <span class="fl">1.0</span>, <span class="fl">1.5</span>, <span class="fl">2.0</span>, <span class="fl">2.5</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a>color_fun <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>)))</span>
+<span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a><span class="fu">plot</span>(tmpin, <span class="at">col =</span> <span class="fu">color_fun</span>(<span class="dv">10</span>), <span class="at">type =</span> <span class="st">&quot;continuous&quot;</span>, <span class="at">breaks =</span> breaks, </span>
+<span id="cb36-5"><a href="#cb36-5" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">&quot;Test Variable -- as Raster Layer&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">xlab =</span> <span class="st">&quot;Longitude&quot;</span>)</span>
+<span id="cb36-6"><a href="#cb36-6" tabindex="-1"></a><span class="fu">plot</span>(world_otl, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="netcdf_terra_files/figure-html/plotmat2-1.png" width="75%" height="75%" /></p>
+</div>
+<div id="check-the-coordinates-of-the-raster" class="section level2"
+number="3.3">
+<h2><span class="header-section-number">3.3</span> Check the coordinates
+of the raster</h2>
+<p>The actual coordinate values of the cell centers can be gotten as
+follows</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="co"># get raster coordinates</span></span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a><span class="fu">xFromCol</span>(tmpin)</span></code></pre></div>
+<pre><code>## [1] -157.5 -112.5  -67.5  -22.5   22.5   67.5  112.5  157.5</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="fu">yFromRow</span>(tmpin)</span></code></pre></div>
+<pre><code>## [1]  67.5  22.5 -22.5 -67.5</code></pre>
+<p>These can be compared with the original `lon’ and ‘lat’ values
+defined above:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="co"># original lon and lat</span></span>
+<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a>lon</span></code></pre></div>
+<pre><code>## [1] -157.5 -112.5  -67.5  -22.5   22.5   67.5  112.5  157.5</code></pre>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="sc">-</span><span class="fl">1.0</span> <span class="sc">*</span> lat</span></code></pre></div>
+<pre><code>## [1]  67.5  22.5 -22.5 -67.5</code></pre>
+</div>
+<div id="write-the-raster-layer-as-a-netcdf-file" class="section level2"
+number="3.4">
+<h2><span class="header-section-number">3.4</span> Write the raster
+layer as a netCDF file</h2>
+<p>Write the generated data to a netCDF file.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="co"># create a netCDF file </span></span>
+<span id="cb45-2"><a href="#cb45-2" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="st">&quot;test-netCDF-file.nc&quot;</span></span>
+<span id="cb45-3"><a href="#cb45-3" tabindex="-1"></a>ncout <span class="ot">&lt;-</span> <span class="fu">nc_create</span>(ncfname, <span class="fu">list</span>(tmp.def), <span class="at">force_v4 =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb45-4"><a href="#cb45-4" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="#cb45-5" tabindex="-1"></a><span class="co"># put the array</span></span>
+<span id="cb45-6"><a href="#cb45-6" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout, tmp.def, tmat)</span>
+<span id="cb45-7"><a href="#cb45-7" tabindex="-1"></a></span>
+<span id="cb45-8"><a href="#cb45-8" tabindex="-1"></a><span class="co"># put additional attributes into dimension and data variables</span></span>
+<span id="cb45-9"><a href="#cb45-9" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="st">&quot;lon&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;X&quot;</span>)  </span>
+<span id="cb45-10"><a href="#cb45-10" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;Y&quot;</span>)</span>
+<span id="cb45-11"><a href="#cb45-11" tabindex="-1"></a></span>
+<span id="cb45-12"><a href="#cb45-12" tabindex="-1"></a><span class="co"># add global attributes</span></span>
+<span id="cb45-13"><a href="#cb45-13" tabindex="-1"></a>title <span class="ot">&lt;-</span> <span class="st">&quot;small example netCDF file&quot;</span></span>
+<span id="cb45-14"><a href="#cb45-14" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;title&quot;</span>, title)</span>
+<span id="cb45-15"><a href="#cb45-15" tabindex="-1"></a></span>
+<span id="cb45-16"><a href="#cb45-16" tabindex="-1"></a><span class="co"># close the file, writing data to disk</span></span>
+<span id="cb45-17"><a href="#cb45-17" tabindex="-1"></a><span class="fu">nc_close</span>(ncout)</span></code></pre></div>
+<p>Here’s what the netCDF file looks like, as plotted in Panoply:</p>
+<p><img src="images/tmp_in_test_netCDF_file.png" alt="Drawing" style="width: 500px;"/></p>
+<p>The <code>ncdump</code> command-line utility can be used to verify
+the contents of the file. At the Console in RStudio, the following code
+would do that:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">system</span>(<span class="st">&quot;ncdump -c test-netCDF-file.nc&quot;</span>))</span></code></pre></div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

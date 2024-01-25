@@ -658,13 +658,12 @@ href="http://www.giss.nasa.gov/tools/panoply/">http://www.giss.nasa.gov/tools/pa
 <p>There are two versions of netCDF; netCDF3, which is widely used, but
 has some size and performance limitations, and netCDF4, which supports
 larger data sets and includes additional capabilities like file
-compression.</p>
+compression. (netCDF4 actually uses the HDF5 format for storage)</p>
 <p>R has the capability of reading and writing (and hence analyzing)
 netCDF files, using the <code>ncdf</code> and <code>ncdf4</code>
 packages provided by David Pierce, and through other packages like
-<code>raster</code>, <code>metR1</code>, and <code>RNetCDF</code>. The
-<code>ncdf4.helpers</code> and <code>easyNCDF</code> packages provide
-some additional tools.</p>
+<code>terr</code>, <code>metR1</code>, and <code>RNetCDF</code>. Other
+R`packages provide some additional tools.</p>
 <p>The <code>ncdf4</code> package is available on both Windows and Mac
 OS X (and Linux), and supports both the older NetCDF3 format as well as
 netCDF4. (See the <code>ncdf/ncdf4</code> web page at <a
@@ -679,7 +678,7 @@ netCDF, HDF or in the native format of the <code>raster</code> package,
 that includes</p>
 <ol style="list-style-type: decimal">
 <li>data input (using, for example, <code>ncdf4</code>,
-<code>rhdf5</code> <code>raster</code>);</li>
+<code>rhdf5</code> <code>terra</code>);</li>
 <li>recasting/reshaping the raster brick input data into a rectangular
 data frame;</li>
 <li>analysis and visualization;</li>
@@ -1291,7 +1290,7 @@ a 3-d array.</p>
 <pre><code>## [1] 720 360</code></pre>
 <div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm <span class="co"># how long?</span></span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.046   0.011   0.058</code></pre>
+##   0.047   0.011   0.059</code></pre>
 </div>
 <div id="check-the-conversion" class="section level3" number="4.1.3">
 <h3><span class="header-section-number">4.1.3</span> Check the
@@ -1435,7 +1434,7 @@ proper location in the array.</p>
 <span id="cb86-4"><a href="#cb86-4" tabindex="-1"></a>mat_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03<span class="sc">$</span>mat) </span>
 <span id="cb86-5"><a href="#cb86-5" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.418   0.122   0.542</code></pre>
+##   0.437   0.124   0.564</code></pre>
 </div>
 <div id="complete-loop-avoidance-approach" class="section level3"
 number="4.2.4">
@@ -1457,7 +1456,7 @@ first two columns):</p>
 <span id="cb88-8"><a href="#cb88-8" tabindex="-1"></a>mat_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp_df03<span class="sc">$</span>mat) </span>
 <span id="cb88-9"><a href="#cb88-9" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.036   0.002   0.039</code></pre>
+##   0.039   0.006   0.044</code></pre>
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" tabindex="-1"></a><span class="co"># some plots to check creation of arrays</span></span>
 <span id="cb90-2"><a href="#cb90-2" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
 <span id="cb90-3"><a href="#cb90-3" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
@@ -1591,7 +1590,7 @@ self-documenting properties of netCDF files.</p>
 ##         institution: http://www.cru.uea.ac.uk/
 ##         source: http://www.cru.uea.ac.uk/~markn/cru05/cru05_intro.html
 ##         references: New et al. (2002) Climate Res 21:1-25
-##         history: P.J. Bartlein, Wed Jan 24 14:39:43 2024
+##         history: P.J. Bartlein, Wed Jan 24 17:09:52 2024
 ##         Conventions: CF-1.0</code></pre>
 <p>Finally, close the file, which writes the data to disk.</p>
 <div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" tabindex="-1"></a><span class="co"># close the file, writing data to disk</span></span>
@@ -1988,7 +1987,7 @@ class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="#cb1
 ##         title: test output of projected data
 ##         institution: NOAA ESRL PSD
 ##         source: soilm.mon.ltm.nc
-##         history: P.J. Bartlein, Wed Jan 24 14:39:45 2024
+##         history: P.J. Bartlein, Wed Jan 24 17:09:53 2024
 ##         Conventions: CF=1.6</code></pre>
 <p>Finally, close the file, which writes the data to disk.</p>
 <div class="sourceCode" id="cb127"><pre
