@@ -609,7 +609,6 @@ be downloaded.</p>
 <p>Move the download files to a convenient folder,
 e.g. <code>/Users/bartlein/Projects/ESSD/data/shp_files/world2015/</code>,
 and plot the outlines.</p>
-<p><code>{r echo = FALSE, eval = FALSE # world_outline_sf &lt;- st_read(shp_file) # world_outline_sf &lt;- st_geometry(world_outline_sf) # plot(world_outline_sf, col="lightblue", lwd=1)</code></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># plot the world outline</span></span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>shp_file <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/shp_files/world2015/UIA_World_Countries_Boundaries.shp&quot;</span></span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>world_outline <span class="ot">&lt;-</span> <span class="fu">as</span>(<span class="fu">st_geometry</span>(<span class="fu">read_sf</span>(shp_file)), <span class="at">Class =</span> <span class="st">&quot;Spatial&quot;</span>)</span>
