@@ -29,7 +29,7 @@ Compared to netCDF files, HDF files can be messy:  they can contain images as we
 
 # Preliminary set up #
 
-The `rhdf5` package can be retrieved from Bioconductor, and installed as follows.  Generally, a lot of dependent packages will also need to be installed, as well, but the process is usually straightforward.a
+The `rhdf5` package can be retrieved from Bioconductor, and installed as follows.  Generally, a lot of dependent packages will also need to be installed as well, but the process is usually straightforward.
 
 ```{r install_rhdf5, eval=FALSE, echo=TRUE, message=FALSE}
 # install rhdf5
