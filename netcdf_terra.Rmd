@@ -50,7 +50,7 @@ library(RColorBrewer)
 
 Also read a world outline shape file for plotting:
 
-```{r readWorldShape}
+```{r readWorldShape, cache = TRUE}
 # read a shape file
 shp_file <- "/Users/bartlein/Projects/RESS/data/shp_files/world2015/UIA_World_Countries_Boundaries.shp"
 world_outline <- as(st_geometry(read_sf(shp_file)), Class = "Spatial")
@@ -59,7 +59,7 @@ plot(world_outline, col="lightgreen", lwd=1)
 
 Convert the world_outline to a spatial vector (`SpatVector`), one of the classes of objects familiar to the `terra` package (the other being `SpatRaster`).
 
-```{r convertoutline}
+```{r convertoutline, cache = TRUE}
 # convert world_outline to a spatial vector
 world_otl <- vect(world_outline)
 class(world_otl)
@@ -79,7 +79,7 @@ dname <- "tmp"  # note: tmp means temperature (not temporary)
 
 Read the 3-D array from the netCDF file using the `rast()` function:
 
-```{r readCRU}
+```{r readCRU, cache=TRUE}
 # read the netCDF file
 tmp_raster <- rast(nc_fname)
 tmp_raster
@@ -208,7 +208,7 @@ plot(world_otl, add = TRUE)
 
 Write the generated data to a netCDF file using `ncdf4` functions.
 
-```{r ncrast02, fig.width=6, fig.height=4}
+```{r ncrast02}
 # create a netCDF file 
 ncfname <- "test-netCDF-file.nc"
 ncout <- nc_create(ncfname, list(tmp.def), force_v4 = TRUE)
