@@ -547,10 +547,10 @@ viewed as the glue that links the packages, both to one-another as will
 as to the “outside” world. Here’s a summary of some of the packages and
 functions involved</p>
 <pre><code>                read netCDF                 write netCDF
-  base R        ncdf, RNetCDF packages      ncdf, RNetCDF packages
+  base R        ncdf4, RNetCDF packages     ncdf4, RNetCDF packages
   sf            sf_read()                   sf_write()
   terra         rast()                      writeCDF()
-  stars.        read_netcdf()               write_stars()</code></pre>
+  stars         read_netcdf()               write_stars()</code></pre>
 </div>
 <div id="the-terra-package" class="section level1" number="2">
 <h1><span class="header-section-number">2</span> The terra package</h1>
@@ -884,8 +884,7 @@ a netCDF file, this time using <code>writeCDF()</code> from the
 <code>terra</code> package:</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="co"># create a netCDF file </span></span>
 <span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="st">&quot;test-netCDF-terra.nc&quot;</span></span>
-<span id="cb50-3"><a href="#cb50-3" tabindex="-1"></a><span class="fu">writeCDF</span>(tmat_sr, ncfname, <span class="at">overwrite =</span> <span class="cn">TRUE</span>, <span class="at">varname =</span> <span class="st">&quot;tmp&quot;</span>, <span class="at">unit =</span> <span class="st">&quot;degC&quot;</span>,</span>
-<span id="cb50-4"><a href="#cb50-4" tabindex="-1"></a>         <span class="at">longname=</span><span class="st">&quot;test variable -- terra to netCDF&quot;</span>)</span></code></pre></div>
+<span id="cb50-3"><a href="#cb50-3" tabindex="-1"></a><span class="fu">writeCDF</span>(tmat_sr, ncfname, <span class="at">overwrite =</span> <span class="cn">TRUE</span>, <span class="at">varname =</span> <span class="st">&quot;z-scores&quot;</span>, <span class="at">unit =</span> <span class="st">&quot;z&quot;</span>, <span class="at">longname =</span> <span class="st">&quot;random values&quot;</span>)</span></code></pre></div>
 <p>Here’s what that netCDF file looks like, as plotted in Panoply:</p>
 <p><img src="images/tmp_in_test-netCDF-terra.png" alt="Drawing" style="width: 500px;"/></p>
 <p>The <code>ncdump</code> command-line utility can be used to verify
