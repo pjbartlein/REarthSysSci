@@ -138,6 +138,17 @@ The NCAR Climate Data Guide [[https://climatedataguide.ucar.edu/]](https://clima
 UNIDATA provides a number of case-study data sets of "unique atmospheric phenomena" that can be accessed via their THREDDS server.  Here is a [[link]](https://www.unidata.ucar.edu/projects/#casestudies) to the information page, and to the 
 [[Case Studies Library]](https://ramadda.unidata.ucar.edu/repository/entry/show?entryid=beafcb0a-48fd-4fe6-908a-eb1beda0b55c) 
 
+## NASA and USGS land-cover and land-surface data sets ##
+
+There are a large number of land-cover and land-surface data sets provided by NASA and the USGS, including satellite remote-sensing products, and digital elevation models (DEMs). The web interfaces can sometimes be a little cumbersome, but eventually will provide downloadable data.  Here are some links:
+
+- NASA EarthData Gateway [[https://www.earthdata.nasa.gov]](https://www.earthdata.nasa.gov)
+- NASA LAADS (Level-1 and Atmosphere Archive & Distribution System [[https://ladsweb.modaps.eosdis.nasa.gov/]](https://ladsweb.modaps.eosdis.nasa.gov/)
+- USGS National Land Cover Database [[https://www.usgs.gov/centers/eros/science/national-land-cover-database]](https://www.usgs.gov/centers/eros/science/national-land-cover-database)
+- USGS Landsat [[https://www.usgs.gov/landsat-missions]](https://www.usgs.gov/landsat-missions)
+- USGS EarthExplorer [[https://earthexplorer.usgs.gov/]](https://earthexplorer.usgs.gov/)
+- USGS National Map [[https://apps.nationalmap.gov/viewer/]](https://apps.nationalmap.gov/viewer/)
+
 ## Paleoclimatic datasets ##
 
 There are two main repositories of paleoclimatic data, Pangaea (European) and NOAA Paleoclimatology:
