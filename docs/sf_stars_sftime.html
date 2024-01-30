@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>sf / stars / sftime</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Earth-System Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="intro.html">Introduction: R, RStudio, and other infrastructure</a>
+    </li>
+    <li>
+      <a href="usingR.html">Using R</a>
+    </li>
+    <li>
+      <a href="ESSdata.html">Earth-system science data</a>
+    </li>
+    <li>
+      <a href="netCDF.html">netCDF in R</a>
+    </li>
+    <li>
+      <a href="netcdf_terra.html">netCDF and terra</a>
+    </li>
+    <li>
+      <a href="plots1.html">Plots (1)</a>
+    </li>
+    <li>
+      <a href="plots1.html">Plots (2)</a>
+    </li>
+    <li>
+      <a href="maps1.html">Maps (1)</a>
+    </li>
+    <li>
+      <a href="maps2.html">Maps (2)</a>
+    </li>
+    <li>
+      <a href="geospatial.html">Geospatial analyses</a>
+    </li>
+    <li>
+      <a href="correlation.html">Correlation and regression</a>
+    </li>
+    <li>
+      <a href="prediction.html">Prediction</a>
+    </li>
+    <li>
+      <a href="pca.html">PCA</a>
+    </li>
+    <li>
+      <a href="svd.html">Singular Value Decomposistion</a>
+    </li>
+    <li>
+      <a href="highdim.html">High-resolution &amp; high-dimensional data</a>
+    </li>
+    <li>
+      <a href="multivariate.html">Multivariate methods</a>
+    </li>
+    <li>
+      <a href="timeseries.html">Time-series analysis</a>
+    </li>
+    <li>
+      <a href="otherlang.html">Other Languages</a>
+    </li>
+    <li class="dropdown-header">Other topics</li>
+    <li>
+      <a href="sf_stars_sftime.html">sf / stars / sftime</a>
+    </li>
+    <li>
+      <a href="hdf5_intro.html">HDF in R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Tasks
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Tasks</li>
+    <li>
+      <a href="installR.html">Install R and RStudio</a>
+    </li>
+    <li>
+      <a href="Ex_UsingR.html">Using R exercise</a>
+    </li>
+    <li>
+      <a href="install_netCDF.html">Install netCDF &amp; Panoply</a>
+    </li>
+    <li>
+      <a href="transfer.html">File transfer</a>
+    </li>
+    <li>
+      <a href="texteditor.html">Install a text editor</a>
+    </li>
+    <li>
+      <a href="dataselection.html">Project data set selection</a>
+    </li>
+    <li>
+      <a href="markdown.html">Markdown and RMarkdown</a>
+    </li>
+    <li>
+      <a href="pandoc.html">Pandoc</a>
+    </li>
+    <li>
+      <a href="GitHub.html">GitHub and UO pages.uoregon.edu</a>
+    </li>
+    <li>
+      <a href="localweb.html">Local websites</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="websites.html">Old course web pages</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">sf / stars / sftime</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction" id="toc-introduction"><span
+class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#stars" id="toc-stars"><span
+class="toc-section-number">2</span> stars</a>
+<ul>
+<li><a href="#read-some-data" id="toc-read-some-data"><span
+class="toc-section-number">2.1</span> Read some data</a></li>
+<li><a href="#ggplot2-maps" id="toc-ggplot2-maps"><span
+class="toc-section-number">2.2</span> ggplot2 maps</a></li>
+</ul></li>
+</ul>
+</div>
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<p><span style="color: green;"><strong>NOTE:  This page has been revised
+for the 2024 version of the course, but there may be some additional
+edits.</strong>   <br></p>
+<div id="introduction" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>In addition to the <code>terra</code> package, there are three other
+packages that are able to manage and analyze explicitly spatial and
+spatiotemporal data in R. These include</p>
+<ul>
+<li><code>sf</code> (“simple features”) – the replacement for the
+original spatial <code>sp</code> package in R, that links directly with
+the <code>GEOS</code>, <code>GDAL</code>, and <code>PROJ</code>
+libraies, and thus enables a broad range of mapping (including
+projection and coordinate transformations), and the application of
+geospatial analyses to spatial data <a
+href="https://r-spatial.github.io/sf/index.html">[https://r-spatial.github.io/sf/index.html]</a>;</li>
+<li><code>stars</code> – an extension to <code>sf</code>, which
+explicity handles space-time data on regular grids (data cubes) (and is
+a replacement for the older <code>spacetime</code> package) <a
+href="https://r-spatial.github.io/stars/index.html">[https://r-spatial.github.io/stars/index.html]</a>;
+and</li>
+<li><code>sftime</code> also an extension to the <code>sf</code>
+package, which explicity includes a “time” variable <a
+href="https://r-spatial.org/r/2022/04/12/sftime-1.html">[https://r-spatial.org/r/2022/04/12/sftime-1.html]</a>.</li>
+</ul>
+<p>Each of these packages has a typical application: for
+<code>sf</code>, general mapping and geospatial analyses, for
+<code>stars</code>, the analysis of data cubes like those generated by
+climate models, and for <code>sftime</code>, the analysis of data that
+are not necessarily on regular grids in time or space, like earthquake
+or paleoecological data. This is a really short introduction, the main
+reference is Pebesma, E. and R. Bivand, 2023, <em>Spatial Data Science
+with Applications in R</em> (CRC Press) <a
+href="https://r-spatial.org/book/">[https://r-spatial.org/book/]</a>.</p>
+<p>The <code>sf</code> package supports well the reading and writing of
+“traditional” geospatial data formats, such as ESRI Shapefiles, which is
+demonstrated here by reading a shape file from the NaturalEarth
+collection <a
+href="https://www.naturalearthdata.com">[https://www.naturalearthdata.com]</a>.
+Load the libraries:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(stars)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
+<p>Read a previously downloade shape file:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># world_sf</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>shapefile <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Dropbox/DataVis/working/data/shp_files/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>world_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(shapefile)</span></code></pre></div>
+<pre><code>## Reading layer `ne_110m_admin_0_countries&#39; from data source 
+##   `/Users/bartlein/Dropbox/DataVis/working/data/shp_files/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp&#39; 
+##   using driver `ESRI Shapefile&#39;
+## Simple feature collection with 177 features and 94 fields
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -180 ymin: -90 xmax: 180 ymax: 83.64513
+## Geodetic CRS:  WGS 84</code></pre>
+<p>Get the outline and plot it, and note the class of the
+<code>world_otl_sf</code> object</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># get the just the outline (i.e. the st_geometry)</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>world_otl_sf <span class="ot">&lt;-</span> <span class="fu">st_geometry</span>(world_sf)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">plot</span>(world_otl_sf) </span></code></pre></div>
+<p><img src="sf_stars_sftime_files/figure-html/unnamed-chunk-3-1.png" width="80%" height="80%" /></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">class</span>(world_otl_sf)</span></code></pre></div>
+<pre><code>## [1] &quot;sfc_MULTIPOLYGON&quot; &quot;sfc&quot;</code></pre>
+<p>Here’s a <code>ggplot2()</code> version of the world outline:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># ggplot map of world_outline</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="sf_stars_sftime_files/figure-html/unnamed-chunk-4-1.png" width="80%" height="80%" /></p>
+<p><code>ggplot2</code> allows fine control of such things as graticule
+labeling, color scales, and so on.</p>
+</div>
+<div id="stars" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> stars</h1>
+<p>The <code>stars</code> package, like <code>terra</code> and
+<code>sf</code> can easily read and write netCDF files. Here, we’ll look
+at a couple of “reanalysis” datasets consisting of 4-dimensional cubes
+of retrospective long-term means of climate data generated by
+observations and a reanalysis climate model, where the dimensions are
+<em>longitude by latitude by level by time</em> (and level refers to
+elevation in the atmosphere as represented by pressure, e.g. level 1 is
+at1000 hPa (i.e., the surface), level 6 is at 500 hPa (upper air)).</p>
+<div id="read-some-data" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Read some data</h2>
+<p>Read the pressure-surface heights:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># stars</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>nc_file <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/NCEP2_hgt.mon.ltm.1991-2020.nc&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>hgt <span class="ot">&lt;-</span> <span class="fu">read_ncdf</span>(nc_file, <span class="at">var =</span> <span class="st">&quot;hgt&quot;</span>, <span class="at">proxy =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="co"># list some info</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>hgt</span></code></pre></div>
+<pre><code>## stars object with 4 dimensions and 1 attribute
+## attribute(s), summary of first 1e+05 cells:
+##              Min.  1st Qu. Median     Mean  3rd Qu.    Max.
+## hgt [m] -133.7667 1339.558 4405.3 5014.268 8540.267 12480.2
+## dimension(s):
+##       from  to offset delta  refsys                    values x/y
+## lon      1 143 -181.2   2.5  WGS 84                      NULL [x]
+## lat      1  73  91.25  -2.5  WGS 84                      NULL [y]
+## level    1  17     NA    NA      NA          [17] 10,...,1000    
+## time     1  12     NA    NA POSIXct 0000-12-30,...,0001-11-29</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">dim</span>(hgt)</span></code></pre></div>
+<pre><code>##   lon   lat level  time 
+##   143    73    17    12</code></pre>
+<p>The time-dimension values in this data set are in the “time-since”
+format, which <code>read_ncdf()</code> interprets in a somewhat awkward
+year-month-day format. They can be replaced by text labels:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># replace time dimension values</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">attr</span>(hgt, <span class="st">&quot;dimensions&quot;</span>)<span class="sc">$</span>time<span class="sc">$</span>values <span class="ot">&lt;-</span> </span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;Jan&quot;</span>, <span class="st">&quot;Feb&quot;</span>, <span class="st">&quot;Mar&quot;</span>, <span class="st">&quot;Apr&quot;</span>, <span class="st">&quot;May&quot;</span>, <span class="st">&quot;Jun&quot;</span>, <span class="st">&quot;Jul&quot;</span>, <span class="st">&quot;Aug&quot;</span>, <span class="st">&quot;Sep&quot;</span>, <span class="st">&quot;Oct&quot;</span>, <span class="st">&quot;Nov&quot;</span>, <span class="st">&quot;Dec&quot;</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">attr</span>(hgt, <span class="st">&quot;dimensions&quot;</span>)<span class="sc">$</span>time<span class="sc">$</span>refsys <span class="ot">&lt;-</span> <span class="st">&quot;Name&quot;</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>hgt</span></code></pre></div>
+<pre><code>## stars object with 4 dimensions and 1 attribute
+## attribute(s), summary of first 1e+05 cells:
+##              Min.  1st Qu. Median     Mean  3rd Qu.    Max.
+## hgt [m] -133.7667 1339.558 4405.3 5014.268 8540.267 12480.2
+## dimension(s):
+##       from  to offset delta refsys           values x/y
+## lon      1 143 -181.2   2.5 WGS 84             NULL [x]
+## lat      1  73  91.25  -2.5 WGS 84             NULL [y]
+## level    1  17     NA    NA     NA [17] 10,...,1000    
+## time     1  12     NA    NA   Name      Jan,...,Dec</code></pre>
+<p>Plot the pressure-surface heights. Ignore the bounding-box
+warning.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">plot</span>(hgt)</span></code></pre></div>
+<p><img src="sf_stars_sftime_files/figure-html/unnamed-chunk-7-1.png" width="80%" height="80%" /></p>
+<p>What seems to get plotted is the long-term means of one month at the
+different levels. Plot a single level, here level 6, or the 500 hPa
+level.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">slice</span>(hgt, level,  <span class="dv">6</span>)) <span class="co"># level = 6 is 500 hPa</span></span></code></pre></div>
+<p><img src="sf_stars_sftime_files/figure-html/unnamed-chunk-8-1.png" width="80%" height="80%" /></p>
+<p>Repeat for air temperature (<code>air</code> in this data set):</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>nc_file <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/NCEP2_air.mon.ltm.1991-2020.nc&quot;</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>air <span class="ot">&lt;-</span> <span class="fu">read_ncdf</span>(nc_file, <span class="at">var =</span> <span class="st">&quot;air&quot;</span>, <span class="at">proxy =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>air</span></code></pre></div>
+<pre><code>## stars object with 4 dimensions and 1 attribute
+## attribute(s), summary of first 1e+05 cells:
+##            Min. 1st Qu.   Median    Mean  3rd Qu.     Max.
+## air [K] 209.071 232.305 253.0591 253.473 273.3577 308.6734
+## dimension(s):
+##       from  to offset delta  refsys                    values x/y
+## lon      1 143 -181.2   2.5  WGS 84                      NULL [x]
+## lat      1  73  91.25  -2.5  WGS 84                      NULL [y]
+## level    1  17     NA    NA      NA          [17] 10,...,1000    
+## time     1  12     NA    NA POSIXct 0000-12-30,...,0001-11-29</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">dim</span>(air)</span></code></pre></div>
+<pre><code>##   lon   lat level  time 
+##   143    73    17    12</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># replace time dimension values</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="fu">attr</span>(air, <span class="st">&quot;dimensions&quot;</span>)<span class="sc">$</span>time<span class="sc">$</span>values <span class="ot">&lt;-</span> </span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;Jan&quot;</span>, <span class="st">&quot;Feb&quot;</span>, <span class="st">&quot;Mar&quot;</span>, <span class="st">&quot;Apr&quot;</span>, <span class="st">&quot;May&quot;</span>, <span class="st">&quot;Jun&quot;</span>, <span class="st">&quot;Jul&quot;</span>, <span class="st">&quot;Aug&quot;</span>, <span class="st">&quot;Sep&quot;</span>, <span class="st">&quot;Oct&quot;</span>, <span class="st">&quot;Nov&quot;</span>, <span class="st">&quot;Dec&quot;</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="fu">attr</span>(air, <span class="st">&quot;dimensions&quot;</span>)<span class="sc">$</span>time<span class="sc">$</span>refsys <span class="ot">&lt;-</span> <span class="st">&quot;Name&quot;</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>air</span></code></pre></div>
+<pre><code>## stars object with 4 dimensions and 1 attribute
+## attribute(s), summary of first 1e+05 cells:
+##            Min. 1st Qu.   Median    Mean  3rd Qu.     Max.
+## air [K] 209.071 232.305 253.0591 253.473 273.3577 308.6734
+## dimension(s):
+##       from  to offset delta refsys           values x/y
+## lon      1 143 -181.2   2.5 WGS 84             NULL [x]
+## lat      1  73  91.25  -2.5 WGS 84             NULL [y]
+## level    1  17     NA    NA     NA [17] 10,...,1000    
+## time     1  12     NA    NA   Name      Jan,...,Dec</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">plot</span>(air)</span></code></pre></div>
+<p><img src="sf_stars_sftime_files/figure-html/unnamed-chunk-9-1.png" width="80%" height="80%" /></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">slice</span>(air, level,  <span class="dv">1</span>)) <span class="co"># level 1 is 1000 hPa (surface)</span></span></code></pre></div>
+<p><img src="sf_stars_sftime_files/figure-html/unnamed-chunk-9-2.png" width="80%" height="80%" /></p>
+</div>
+<div id="ggplot2-maps" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> ggplot2 maps</h2>
+<p><code>ggplot2</code> has a function <code>geom_stars()</code> that
+“knows” how to plot <code>stars</code> data objects: Here’s a plot of
+500 hPa (level 6) heights:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># stars ggplots</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>  <span class="fu">geom_stars</span>(<span class="at">data =</span> <span class="fu">slice</span>(hgt, level, <span class="dv">6</span>)) <span class="sc">+</span></span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> time, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;PuOr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>))</span></code></pre></div>
+<p><img src="sf_stars_sftime_files/figure-html/unnamed-chunk-10-1.png" width="80%" height="80%" /></p>
+<p>Here, the <code>stars</code> object was plotted first, followed by
+the world world outline. The <code>facet_wrap()</code> function controls
+the paneling, and the <code>expand = FALSE</code> argument of the
+<code>coord_sf()</code> function removes some of the white space between
+panels. The <code>theme(strip.text = element_text(size = 6))</code>
+function makes the “header” boxes and fonts a little smaller.</p>
+<p>Here’s the plot for near-surface air temperature:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>  <span class="fu">geom_stars</span>(<span class="at">data =</span> <span class="fu">slice</span>(air, level, <span class="dv">1</span>)) <span class="sc">+</span> </span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> time, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>))</span></code></pre></div>
+<p><img src="sf_stars_sftime_files/figure-html/unnamed-chunk-11-1.png" width="80%" height="80%" /></p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -6,7 +6,10 @@ Pebesma, E. and R. Bivand, 2023, *Spatial Data Science with Applications in R* (
 
 Hijmans, R., 2016, *Spatial Data Analysis and Modeling with R* [[http://rspatial.org]](http://rspatial.org) 
 
-Davis, J., 2024, *Introduction to Environmental Data Science* [[https://bookdown.org/igisc/EnvDataSci/]](https://bookdown.org/igisc/EnvDataSci/)
+Davis, J., 2024, *Introduction to Environmental Data Science* [[https://bookdown.org/igisc/EnvDataSci/]]
+(https://bookdown.org/igisc/EnvDataSci/)
+
+Mieno, T, 2023, *R as GIS for Economists* [[https://tmieno2.github.io/R-as-GIS-for-Economists/]](https://tmieno2.github.io/R-as-GIS-for-Economists/) 
 
 # Other online books and documents #
 
