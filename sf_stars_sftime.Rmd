@@ -42,7 +42,8 @@ Read a previously downloade shape file:
 
 ```{r}
 # world_sf
-shapefile <- "/Users/bartlein/Dropbox/DataVis/working/data/shp_files/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp"
+shapefile <- 
+  "/Users/bartlein/Dropbox/DataVis/working/data/shp_files/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp"
 world_sf <- st_read(shapefile)
 ```
 
@@ -130,7 +131,7 @@ plot(slice(air, level,  1)) # level 1 is 1000 hPa (surface)
 
 `ggplot2` has a function `geom_stars()` that "knows" how to plot `stars` data objects: Here's a plot of 500 hPa (level 6) heights:
 
-```{r}
+```{r out.width = "100%", out.height = "100%"}
 # stars ggplots
 ggplot() +
   geom_stars(data = slice(hgt, level, 6)) +
@@ -145,7 +146,7 @@ Here, the `stars` object was plotted first, followed by the world world outline.
 
 Here's the plot for near-surface air temperature:
 
-```{r}
+```{r out.width = "100%", out.height = "100%"}
 ggplot() +
   geom_stars(data = slice(air, level, 1)) + 
   geom_sf(data = world_otl_sf, fill = NA) +
@@ -153,6 +154,45 @@ ggplot() +
   coord_sf(xlim = c(-180, +180), ylim = c(-90, 90), expand = FALSE) +
   scale_fill_distiller(palette = "RdBu") +
   theme_bw() + theme(strip.text = element_text(size = 6))
+```
+
+## Converting stars objects to terra and sf objects ##
+
+`stars` objects, in particular 3-dimensional data cubes, can be easily converted to `terra` and `sf` objects (i.e. raster stacks, or `SpatRaster` objects in `terra` and in `sf`). To demonstrate this, get a single 3-d "slice" of air temperature from the 4-d cube:
+
+```{r}
+# get a single slice
+class(air)
+dim(air)
+```
+So `air` is a 4-d object.  Now get the slice (at 1000 hPa):
+
+```{r}
+air_1000 <- slice(air, level,  1)
+class(air_1000)
+air_1000
+dim(air_1000)
+```
+Now convert that 3-d slice to `terra`
+
+```{r}
+# convert to SpatRaster
+air_1000_sr <- as(air_1000, "SpatRaster") 
+class(air_1000_sr)
+air_1000_sr
+```
+
+Notice that the spatial extent is a little odd. We know from the original netCDF file that the western edge of the grid is at -180.0E, and the southern edge at -90.0N. The correct spatial exent can be restored like this:
+
+```{r}
+# restore spatial extent
+ext(air_1000_sr) <- c(-180, 175, -90, 90)
+```
+
+The dataset, which is now a `terra` object, can be plotted as usual:
+
+```{r}
+panel(air_1000_sr, nc = 3, nr = 4)
 ```
 
 

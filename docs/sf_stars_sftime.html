@@ -490,6 +490,10 @@ class="toc-section-number">2</span> stars</a>
 class="toc-section-number">2.1</span> Read some data</a></li>
 <li><a href="#ggplot2-maps" id="toc-ggplot2-maps"><span
 class="toc-section-number">2.2</span> ggplot2 maps</a></li>
+<li><a href="#converting-stars-objects-to-terra-and-sf"
+id="toc-converting-stars-objects-to-terra-and-sf"><span
+class="toc-section-number">2.3</span> Converting stars objects to terra
+and sf</a></li>
 </ul></li>
 </ul>
 </div>
@@ -546,8 +550,9 @@ Load the libraries:</p>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
 <p>Read a previously downloade shape file:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># world_sf</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>shapefile <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Dropbox/DataVis/working/data/shp_files/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp&quot;</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>world_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(shapefile)</span></code></pre></div>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>shapefile <span class="ot">&lt;-</span> </span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="st">&quot;/Users/bartlein/Dropbox/DataVis/working/data/shp_files/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>world_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(shapefile)</span></code></pre></div>
 <pre><code>## Reading layer `ne_110m_admin_0_countries&#39; from data source 
 ##   `/Users/bartlein/Dropbox/DataVis/working/data/shp_files/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp&#39; 
 ##   using driver `ESRI Shapefile&#39;
@@ -685,7 +690,7 @@ level.</p>
 <span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
 <span id="cb24-7"><a href="#cb24-7" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;PuOr&quot;</span>) <span class="sc">+</span></span>
 <span id="cb24-8"><a href="#cb24-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>))</span></code></pre></div>
-<p><img src="sf_stars_sftime_files/figure-html/unnamed-chunk-10-1.png" width="80%" height="80%" /></p>
+<p><img src="sf_stars_sftime_files/figure-html/unnamed-chunk-10-1.png" width="100%" height="100%" /></p>
 <p>Here, the <code>stars</code> object was plotted first, followed by
 the world world outline. The <code>facet_wrap()</code> function controls
 the paneling, and the <code>expand = FALSE</code> argument of the
@@ -700,7 +705,68 @@ function makes the “header” boxes and fonts a little smaller.</p>
 <span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
 <span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>) <span class="sc">+</span></span>
 <span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>))</span></code></pre></div>
-<p><img src="sf_stars_sftime_files/figure-html/unnamed-chunk-11-1.png" width="80%" height="80%" /></p>
+<p><img src="sf_stars_sftime_files/figure-html/unnamed-chunk-11-1.png" width="100%" height="100%" /></p>
+</div>
+<div id="converting-stars-objects-to-terra-and-sf"
+class="section level2" number="2.3">
+<h2><span class="header-section-number">2.3</span> Converting stars
+objects to terra and sf</h2>
+<p><code>stars</code> objects, in particular 3-dimensional data cubes,
+can be easily converted to <code>terra</code> and <code>sf</code>
+objects (i.e. raster stacks, or <code>SpatRaster</code> objects in
+<code>terra</code> and in <code>sf</code>). To demonstrate this, get a
+single 3-d “slice” of air temperature from the 4-d cube:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># get a single slice</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="fu">class</span>(air)</span></code></pre></div>
+<pre><code>## [1] &quot;stars&quot;</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">dim</span>(air)</span></code></pre></div>
+<pre><code>##   lon   lat level  time 
+##   143    73    17    12</code></pre>
+<p>So <code>air</code> is a 4-d object. Now get the slice (at 1000
+hPa):</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>air_1000 <span class="ot">&lt;-</span> <span class="fu">slice</span>(air, level,  <span class="dv">1</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="fu">class</span>(air_1000)</span></code></pre></div>
+<pre><code>## [1] &quot;stars&quot;</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a>air_1000</span></code></pre></div>
+<pre><code>## stars object with 3 dimensions and 1 attribute
+## attribute(s):
+##             Min.  1st Qu.   Median     Mean 3rd Qu.    Max.
+## air [K] 239.9924 269.3894 284.1218 281.2621  296.84 314.302
+## dimension(s):
+##      from  to offset delta refsys      values x/y
+## lon     1 143 -181.2   2.5 WGS 84        NULL [x]
+## lat     1  73  91.25  -2.5 WGS 84        NULL [y]
+## time    1  12     NA    NA   Name Jan,...,Dec</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="fu">dim</span>(air_1000)</span></code></pre></div>
+<pre><code>##  lon  lat time 
+##  143   73   12</code></pre>
+<p>Now convert that 3-d slice to <code>terra</code></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="co"># convert to SpatRaster</span></span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>air_1000_sr <span class="ot">&lt;-</span> <span class="fu">as</span>(air_1000, <span class="st">&quot;SpatRaster&quot;</span>) </span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a><span class="fu">class</span>(air_1000_sr)</span></code></pre></div>
+<pre><code>## [1] &quot;SpatRaster&quot;
+## attr(,&quot;package&quot;)
+## [1] &quot;terra&quot;</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a>air_1000_sr</span></code></pre></div>
+<pre><code>## class       : SpatRaster 
+## dimensions  : 73, 143, 12  (nrow, ncol, nlyr)
+## resolution  : 2.5, 2.5  (x, y)
+## extent      : -181.25, 176.25, -91.25, 91.25  (xmin, xmax, ymin, ymax)
+## coord. ref. : lon/lat WGS 84 
+## source(s)   : memory
+## names       :      Jan,      Feb,      Mar,      Apr,      May,      Jun, ... 
+## min values  : 244.2550, 244.2596, 245.4530, 241.4906, 239.9924, 240.1938, ... 
+## max values  : 308.6734, 307.2127, 307.9087, 309.1877, 311.3960, 313.2636, ...</code></pre>
+<p>Notice that the spatial extent is a little odd. We know from the
+original netCDF file that the western edge of the grid is at -180.0E,
+and the southern edge at -90.0N. The correct spatial exent can be
+restored like this:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="co"># restore spatial extent</span></span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a><span class="fu">ext</span>(air_1000_sr) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">175</span>, <span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>)</span></code></pre></div>
+<p>The dataset, which is now a <code>terra</code> object can be plotted
+as usual:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="fu">panel</span>(air_1000_sr, <span class="at">nc =</span> <span class="dv">3</span>, <span class="at">nr =</span> <span class="dv">4</span>)</span></code></pre></div>
+<p><img src="sf_stars_sftime_files/figure-html/unnamed-chunk-16-1.png" width="80%" height="80%" /></p>
 </div>
 </div>
 
