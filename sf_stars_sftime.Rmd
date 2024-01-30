@@ -29,18 +29,24 @@ Each of these packages has a typical application: for `sf`, general mapping and 
 
 The `sf` package supports well the reading and writing of "traditional" geospatial data formats, such as ESRI Shapefiles, which is demonstrated here by reading a shape file from the NaturalEarth collection [[https://www.naturalearthdata.com]](https://www.naturalearthdata.com). Load the libraries:
 
-```{r}
+```{r sf-stars-sftime-1}
 library(sf)
 library(stars)
+library(sftime)
 library(terra)
 library(tidyverse)
 library(ggplot2)
 library(RColorBrewer)
 ```
-
-Read a previously downloade shape file:
-
 ```{r}
+# load data from a saved .RData file
+con <- url("https://pages.uoregon.edu/bartlein/RESS/RData/geog490.RData")
+load(file=con) 
+```
+
+Read a previously downloaded shape file:
+
+```{r sf-stars-sftime-2}
 # world_sf
 shapefile <- 
   "/Users/bartlein/Dropbox/DataVis/working/data/shp_files/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp"
@@ -49,7 +55,7 @@ world_sf <- st_read(shapefile)
 
 Get the outline and plot it, and note the class of the `world_otl_sf` object
 
-```{r}
+```{r sf-stars-sftime-3}
 # get the just the outline (i.e. the st_geometry)
 world_otl_sf <- st_geometry(world_sf)
 plot(world_otl_sf) 
@@ -58,7 +64,7 @@ class(world_otl_sf)
 
 Here's a `ggplot2()` version of the world outline:
 
-```{r}
+```{r sf-stars-sftime-4}
 # ggplot map of world_outline
 ggplot() + 
   geom_sf(data = world_otl_sf, fill = NA, col = "black") + 
@@ -78,7 +84,7 @@ The `stars` package, like `terra` and `sf` can easily read and write netCDF file
 
 Read the pressure-surface heights:
 
-```{r cache = TRUE, message=FALSE, warning=FALSE}
+```{r sf-stars-sftime-5, cache = TRUE, message=FALSE, warning=FALSE}
 # stars
 nc_file <- "/Users/bartlein/Projects/RESS/data/nc_files/NCEP2_hgt.mon.ltm.1991-2020.nc"
 hgt <- read_ncdf(nc_file, var = "hgt", proxy = FALSE)
@@ -90,7 +96,7 @@ dim(hgt)
 
 The time-dimension values in this data set are in the "time-since" format, which `read_ncdf()` interprets in a somewhat awkward year-month-day format. They can be replaced by text labels:
 
-```{r}
+```{r sf-stars-sftime-6}
 # replace time dimension values
 attr(hgt, "dimensions")$time$values <- 
   c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
@@ -99,19 +105,19 @@ hgt
 ```
 Plot the pressure-surface heights. Ignore the bounding-box warning.
 
-```{r message=FALSE, warning=FALSE}
+```{r sf-stars-sftime-7, message=FALSE, warning=FALSE}
 plot(hgt)
 ```
 
 What seems to get plotted is the long-term means of one month at the different levels. Plot a single level, here level 6, or the 500 hPa level.
 
-```{r message=FALSE, warning=FALSE}
+```{r sf-stars-sftime-8, message=FALSE, warning=FALSE}
 plot(slice(hgt, level,  6)) # level = 6 is 500 hPa
 ```
 
 Repeat for air temperature (`air` in this data set): 
 
-```{r cache=TRUE, message=FALSE, warning=FALSE}
+```{r sf-stars-sftime-9, cache=TRUE, message=FALSE, warning=FALSE}
 nc_file <- "/Users/bartlein/Projects/RESS/data/nc_files/NCEP2_air.mon.ltm.1991-2020.nc"
 air <- read_ncdf(nc_file, var = "air", proxy = FALSE)
 air
@@ -131,7 +137,7 @@ plot(slice(air, level,  1)) # level 1 is 1000 hPa (surface)
 
 `ggplot2` has a function `geom_stars()` that "knows" how to plot `stars` data objects: Here's a plot of 500 hPa (level 6) heights:
 
-```{r out.width = "100%", out.height = "100%"}
+```{r sf-stars-sftime-10, out.width = "100%", out.height = "100%"}
 # stars ggplots
 ggplot() +
   geom_stars(data = slice(hgt, level, 6)) +
@@ -146,7 +152,7 @@ Here, the `stars` object was plotted first, followed by the world world outline.
 
 Here's the plot for near-surface air temperature:
 
-```{r out.width = "100%", out.height = "100%"}
+```{r sf-stars-sftime-11, out.width = "100%", out.height = "100%"}
 ggplot() +
   geom_stars(data = slice(air, level, 1)) + 
   geom_sf(data = world_otl_sf, fill = NA) +
@@ -160,14 +166,14 @@ ggplot() +
 
 `stars` objects, in particular 3-dimensional data cubes, can be easily converted to `terra` and `sf` objects (i.e. raster stacks, or `SpatRaster` objects in `terra` and in `sf`). To demonstrate this, get a single 3-d "slice" of air temperature from the 4-d cube:
 
-```{r}
+```{r sf-stars-sftime-12}
 # get a single slice
 class(air)
 dim(air)
 ```
 So `air` is a 4-d object.  Now get the slice (at 1000 hPa):
 
-```{r}
+```{r sf-stars-sftime-13}
 air_1000 <- slice(air, level,  1)
 class(air_1000)
 air_1000
@@ -175,7 +181,7 @@ dim(air_1000)
 ```
 Now convert that 3-d slice to `terra`
 
-```{r}
+```{r sf-stars-sftime-14}
 # convert to SpatRaster
 air_1000_sr <- as(air_1000, "SpatRaster") 
 class(air_1000_sr)
@@ -184,16 +190,228 @@ air_1000_sr
 
 Notice that the spatial extent is a little odd. We know from the original netCDF file that the western edge of the grid is at -180.0E, and the southern edge at -90.0N. The correct spatial exent can be restored like this:
 
-```{r}
+```{r sf-stars-sftime-15}
 # restore spatial extent
 ext(air_1000_sr) <- c(-180, 175, -90, 90)
 ```
 
 The dataset, which is now a `terra` object, can be plotted as usual:
 
-```{r}
+```{r sf-stars-sftime-16}
 panel(air_1000_sr, nc = 3, nr = 4)
 ```
 
+Similarly, the `stars` object, `air_1000`, can be converted to an `sf` object:
+
+```{r sf-stars-sftime-17}
+# convert stars to sf
+air_1000_sf <- st_as_sf(air_1000, as_points = TRUE)
+air_1000_sf
+class(air_1000_sf)
+```
+The argument `as_points = TRUE` indicates that we would like to convert to an `sf` `POINT` geometry type. Setting `as_points = FALSE` will yield, in this case, an `sf` geometry type of `POLYGON`, which would be less efficent for storing the data.
+
+# sf #
+
+Plot the `sf` object just created, first as a set of panels, one for each month, then as a single map for January:
+
+```{r sf-stars-sftime-18, message=FALSE, warning=FALSE}
+plot(air_1000_sf, max.plot = 12)
+plot(air_1000_sf[,1])
+```
+
+The January map clearly shows that the data consist of individual points.
+
+## ggplot2 maps ##
+
+To produce ggplot2 maps of the `air1000_sf` object, there are several strategies. One is to first convert the raster brick here to a data.frame, which could subsequently analyzed. Extract the coordinates and data, in this case for January, from the `air1000_sf` object:
+
+```{r sf-stars-sftime-19}
+# make a data.frame
+lon <- st_coordinates(air_1000_sf)[,1]
+lat <- st_coordinates(air_1000_sf)[,2]
+air <- as.vector((air_1000_sf[,1]$Jan))
+air_1000_df <- data.frame(lon, lat, air)
+dim(air_1000_df)
+```
+
+A little more set-up. Create a set of axis labels:
+
+```{r sf-stars-sftime-20}
+# axis labels (breaks)
+breaks_x <- c(seq(-180, 180, by = 60)) 
+breaks_y <- c(seq(-90, 90, by = 30)) 
+labels_x <- as.character(breaks_x) 
+labels_y <- as.character(breaks_y) 
+```
+
+Make a graticule.
+
+```{r sf-stars-sftime-21}
+# make a graticule 
+grat = st_graticule(air_1000_sf, lon = breaks_x, lat = breaks_y)
+grat
+grat_otl <- st_geometry(grat)
+plot(grat_otl)
+```
+
+Now a `ggplot2` map:
+
+```{r sf-stars-sftime-22}
+# ggplot2 map of air
+ggplot() +
+  geom_tile(data = air_1000_df[,,1], aes(x = lon, y = lat, fill = air)) +
+  scale_fill_gradient2(low = "darkblue", mid="white", high = "darkred", midpoint = 273.15) +
+  geom_sf(data = world_otl_sf, col = "black", fill = NA) +
+  geom_sf(data = grat_otl, col = "gray80", lwd = 0.5, lty = 3) +
+  coord_sf(xlim = c(-180, +175.0), ylim = c(-90, 90), expand = FALSE) +
+  scale_x_continuous(breaks = breaks_x) +
+  scale_y_continuous(breaks = breaks_y) +
+  labs(x = "Longitude", y = "Latitude", title="NCEP2 Reanalysis 2m Air Temperature", fill="K") +
+  theme_bw()
+```
+The `geom_tile()` function is an alternative to `geom_point()`, which fills in the spaces between points (plotting the data a tiles as opposed to round symbols). The two `geom_sf()` functions plot the world outline and graticule, and the `coord_sf()` function sets the ranges of the axes.
+
+To make a multipanel map, create a second, long, data.frame, stacking the individual blocks of data for each month, and adding a month-name column. Begin by coverting the `air_1000_sr` `SpatRaster` object to a plain array:
+
+```{r sf-stars-sftime-23}
+# convert SpatRaster to a plain array
+air_1000_sr
+dim(air_1000_sr)
+air_array <- as.array(air_1000_sr)
+class(air_array)
+dim(air_array)
+```
+
+```{r sf-stars-sftime-24}
+# unwrap the array to a long vector, stacking the months
+air_1000_vector <- as.vector(air_array)
+class(air_1000_vector)
+length(air_1000_vector)
+head(air_1000_vector)
+tail(air_1000_vector)
+```
+ Get the total lenght of one month's worth of data in the stacked vector:
+ 
+```{r sf-stars-sftime-25}
+nt <- dim(air_array)[1] * dim(air_array)[2]
+nt
+```
+ 
+ 
+ Generate a new set of lons and lats for stacked vector:
+ 
+```{r sf-stars-sftime-26}
+# generate a "long" vector of lons and lats
+lon2 <- seq(-180.0, 175.0, by = 2.5)
+lat2 <- seq( 90.0,  -90.0, by = -2.5) # reverse the order
+length(lon2); length(lat2)
+
+lonlat <- (as.matrix(expand.grid(lat2, lon2)))
+dim(lonlat)
+```
+ Generate the month-names
+ 
+```{r sf-stars-sftime-27}
+# month names
+month <- c(rep("Jan", nt), rep("Feb", nt), rep("Mar", nt), rep("Apr", nt), rep("May", nt), rep("Jun", nt),
+  rep("Jul", nt), rep("Aug", nt), rep("Sep", nt), rep("Oct", nt), rep("Nov", nt), rep("Dec", nt))
+length(month)
+head(month); tail(month)
+```
+ 
+ Make the data.frame. Note that the length of `month` is shorter than the lengths of the other columns, but it is replicated when building the data.frame:
+ 
+```{r sf-stars-sftime-28}
+# make the second data.frame
+air_1000_df2 <- data.frame(lonlat[,2], lonlat[,1], air_1000_vector, month)
+head(air_1000_df2)
+tail(air_1000_df2)
+names(air_1000_df2) <- c("lon", "lat", "air", "month")
+dim(air_1000_df2)
+```
+ 
+ Make the map:
+ 
+```{r sf-stars-sftime-29}
+# ggplot2 map of air
+ggplot() + 
+  geom_tile(data = air_1000_df2, aes(x = lon, y = lat, fill = air)) +
+  geom_sf(data = world_otl_sf, col = "black", fill = NA) +
+  geom_sf(data = grat_otl, col = "gray80", lwd = 0.5, lty = 3) +
+  coord_sf(xlim = c(-180, +175), ylim = c(-90, 90), expand = FALSE) +
+  facet_wrap(~factor(month, levels = 
+    c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")), nrow = 4, ncol = 3) +
+  scale_fill_gradient2(low = "darkblue", mid="white", high = "darkred", midpoint = 273.15) +
+  # scale_y_continuous(breaks = seq(-90, 90, 90), expand = c(0,0)) +  # removes whitespace within panels
+  # scale_x_continuous(breaks = seq(-180, 180, 90), expand = c(0,0)) +
+  scale_x_continuous(breaks = breaks_x) +
+  scale_y_continuous(breaks = breaks_y) +
+  labs(title="NCEP2 Reanalysis 2m Air Temperature", fill="K") + 
+  theme_bw() + theme(strip.text = element_text(size = 5))
+```
+ 
+# sftime #
+ 
+The `sftime` package is an extension of `st` to accomodate a time variable. Unlike `stars` the time are not expected to be regular, which can accomodate such data as earthquakes, fires, trajectories, etc. Here's an example using a data set of paleo charcoal from the western U.S., used in Marlon et al. (2012) Long-term perspective on wildfires in the western USA. *Proceedings of the National Academy of Sciences* 109:E535-E543. [[https://doi.org/10.1073/pnas.1112839109]](https://doi.org/10.1073/pnas.1112839109). The data consist of z-scores of transformed charcoal-influx values (CHAR) for the past 3000 years, which record fire activity.
+
+Read the data:
+
+```{r sf-stars-sftime-30}
+csv_path <- "/Users/bartlein/Dropbox/DataVis/working/data/csv_files/"
+csv_file <- "wus_lat_trans.csv"
+wus_char_csv <- read.csv((paste(csv_path, csv_file, sep = "")))
+class(wus_char_csv)
+head(wus_char_csv)
+```
+
+Convert to a `sftime` object:
+
+```{r sf-stars-sftime-31}
+wus_char_sftime <- st_as_sftime(wus_char_csv, time_column_name = "age", coords = c("lon", "lat"),
+        remove = FALSE, time_column_last = FALSE)
+class(wus_char_sftime)
+wus_char_sftime
+```
+Note that data.frame is now an `sf` "POINT" object with explicit geometry (as well as a "time column"). Here's a simple latitude by age plot (
+Hovmöller diagram):
+
+```{r sf-stars-sftime-32}
+plot(wus_char_sftime$lat ~ wus_char_sftime$age, xlim = c(3200, 0), pch = 16, cex = 0.5)
+```
+
+Plot the locations of the sites.
+
+```{r sf-stars-sftime-33}
+# ggplot2 map of wus_char_sftime
+ggplot()  +
+  geom_sf(data = na2_sf, fill=NA) +
+  geom_sf(data = wus_sf, fill=NA) +
+  geom_point(aes(x = wus_char_sftime$lon, y = wus_char_sftime$lat), color = "red") +
+  coord_sf(xlim = c(-130, -100), ylim = c(30, 50), expand = FALSE) +
+  labs(title="Western U.S. High-Resolution Charcoal Records", x = "Longitude", y = "Latitude") + 
+  theme_bw() + theme(legend.position="bottom")
+```
+
+And here's a better Hovmöller diagram:
+
+```{r sf-stars-sftime-34}
+# ggplot2 Hovmöller plots -- Year x Latitude
+
+cutpts <- c(-99, -5, -2, -1, -0.5, 0.0, 0.5, 1, 2, 5, 99)
+ztinflux_factor <- factor(findInterval(wus_char_sftime$ztinflux, cutpts))
+
+ggplot() +
+  scale_color_brewer(type = "div", palette = "RdBu", aesthetics = "color", direction = 0,
+                     labels = c("< -5", "-5 to -2", "-2 to -1", "-1 to -0.5", "-0.5 to 0.0",
+                                "0.0 to 0.5", "0.5 to 1", "1 to 2", "2 to 5", "> 5"),
+                     name = "Z-Score") +
+  geom_point(aes(x = wus_char_sftime$age, y = wus_char_sftime$lat, color = ztinflux_factor), size = 1) +
+  scale_x_continuous(breaks = seq(3200, -100, -500), trans = "reverse") +
+  scale_y_continuous(breaks = seq(30, 50, 5)) +
+  labs(title="Western U.S. High-Resolution Charcoal Records", y = "Latitude", x = "Age", fill="Z-Scores Charcoal Influx") + 
+  guides(color = guide_legend(override.aes = list(size=3))) +
+  theme_bw() + theme(legend.position="bottom") + theme(aspect.ratio = 2/4)
+```
 
 

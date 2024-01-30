@@ -71,6 +71,7 @@ ggplot() +
 
 # get a single slice
 class(air)
+dim(air)
 air_1000 <- slice(air, level,  1)
 class(air_1000)
 air_1000
