@@ -33,11 +33,17 @@ To set up the netCDF command-line utilities in Windows,
 
 You can check that the utilities have been installed by opening a Command (cmd) window and typing `ncdump`. This should produce a listing of the options.
 
-To use `ncdump` to view the contents of netCDF files, open a new Command (cmd window in the folder with the netCDF file. 
+To use `ncdump` to view the contents of netCDF files, open a new Command (cmd) window in the folder with the netCDF file. 
 
 - browse to the folder with the netCDF file;
-- type "cmd" (no quotes) in the address bar and hit enter,
+- type "`cmd`" (no quotes) in the address bar and hit enter,
 - a cmd window should open up.
+
+Then, in the Command window, typing: 
+
+- `ncdump filename.nc` will show a brief listing of the dimensions variables and attributes;
+- `ncdump -c filename.nc` will show the above, plus the explicit values of the dimension variables;
+- `nccump -ct filename.nc` will show the above, with the time variable recoded into some kind of human-readable form.
 
 On Windows, the CDO and NCO utilities can be installed in the "Windows Subsystem for Linux (WSL 2) [[https://learn.microsoft.com/en-us/windows/wsl/about]](https://learn.microsoft.com/en-us/windows/wsl/about)
 
@@ -71,9 +77,9 @@ To use `ncdump` to view the contents of netCDF files, open a new Terminal window
 
 (If you don't see the path bar in the bottom of the Finder window, click on View > Show Path Bar.)
 
-Then, in the terminal window, typing 
+Then, in the terminal window, typing: 
 
-- `ncdump filename.nc`` will show a brief listing of the dimensions variables and attributes;
+- `ncdump filename.nc` will show a brief listing of the dimensions variables and attributes;
 - `ncdump -c filename.nc` will show the above, plus the explicit values of the dimension variables;
 - `nccump -ct filename.nc` will show the above, with the time variable recoded into some kind of human-readable form.
 

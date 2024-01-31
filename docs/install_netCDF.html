@@ -451,11 +451,21 @@ Variables Pane, Click on Path, and add the following if not present:
 Command (cmd) window and typing <code>ncdump</code>. This should produce
 a listing of the options.</p>
 <p>To use <code>ncdump</code> to view the contents of netCDF files, open
-a new Command (cmd window in the folder with the netCDF file.</p>
+a new Command (cmd) window in the folder with the netCDF file.</p>
 <ul>
 <li>browse to the folder with the netCDF file;</li>
-<li>type “cmd” (no quotes) in the address bar and hit enter,</li>
+<li>type “<code>cmd</code>” (no quotes) in the address bar and hit
+enter,</li>
 <li>a cmd window should open up.</li>
+</ul>
+<p>Then, in the Command window, typing:</p>
+<ul>
+<li><code>ncdump filename.nc</code> will show a brief listing of the
+dimensions variables and attributes;</li>
+<li><code>ncdump -c filename.nc</code> will show the above, plus the
+explicit values of the dimension variables;</li>
+<li><code>nccump -ct filename.nc</code> will show the above, with the
+time variable recoded into some kind of human-readable form.</li>
 </ul>
 <p>On Windows, the CDO and NCO utilities can be installed in the
 “Windows Subsystem for Linux (WSL 2) <a
@@ -487,10 +497,10 @@ the bottom of the file list in Finder;</li>
 </ul>
 <p>(If you don’t see the path bar in the bottom of the Finder window,
 click on View &gt; Show Path Bar.)</p>
-<p>Then, in the terminal window, typing</p>
+<p>Then, in the terminal window, typing:</p>
 <ul>
-<li>`ncdump filename.nc`` will show a brief listing of the dimensions
-variables and attributes;</li>
+<li><code>ncdump filename.nc</code> will show a brief listing of the
+dimensions variables and attributes;</li>
 <li><code>ncdump -c filename.nc</code> will show the above, plus the
 explicit values of the dimension variables;</li>
 <li><code>nccump -ct filename.nc</code> will show the above, with the
