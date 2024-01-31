@@ -13,6 +13,13 @@ In addition to `ncdump`, there are two sets of command line utilities, `CDO` and
 - CDO:  https://code.zmaw.de/projects/cdo
 - NCO:  http://nco.sourceforge.net/
 
+## Example files ##
+
+To test that you've installed netCDF and Panoply correctly, you'll want to look at some example files. There are a number of files in the SFTP server on `uoclimlab.uoregon.edu` (which can be retrieved via FileZilla, or from [[https://pages.uoregon.edu/bartlein/RESS/nc_files/]](https://pages.uoregon.edu/bartlein/RESS/nc_files/). 
+
+Here's a link to a good one: [[cru10min30_tmp.nc]](https://pages.uoregon.edu/bartlein/RESS/nc_files/cru10min30_tmp.nc). Right-click or ctrl-click to download it to a convenient place.
+
+
 ## Windows ##
 
 To set up the netCDF command-line utilities in Windows, 
@@ -23,15 +30,14 @@ To set up the netCDF command-line utilities in Windows,
 3. When prompted, select "Add netCDF to the system PATH for all users" 
 4. Check to make sure the `PATH` environment variable has been set:
 	Control Panel > All Control Panel Items > System > Advanced System Settings > Environment Variables > System Variables Pane, Click on Path, and add the following if not present:  `"c:/Program Files/netCDF 4.9.2/"`; `"c:/Program Files/netCDF 4.9.2/bin/"`; `"c:/Program Files/netCDF 4.9.2/lib/"`
-3. create a `.bat` (batch) file named `ncd.bat` in the netCDF folder created in the second step, with the following contents: 
- 
-```
-	"c:/Program Files/netCDF 4.9.2/bin/ncdump" -c %1
-	rem netCDF_4.9.2
-	pause
-```
 
-Then, double-clicking on a .nc file, or in a command window, typing `ncd ncfile.nc` (where `ncfile.nc` is a netCDF file), should produce a listing of the headers and dimension variables in a netCDF file.
+You can check that the utilities have been installed by opening a Command (cmd) window and typing `ncdump`. This should produce a listing of the options.
+
+To use `ncdump` to view the contents of netCDF files, open a new Command (cmd window in the folder with the netCDF file. 
+
+- browse to the folder with the netCDF file;
+- type "cmd" (no quotes) in the address bar and hit enter,
+- a cmd window should open up.
 
 On Windows, the CDO and NCO utilities can be installed in the "Windows Subsystem for Linux (WSL 2) [[https://learn.microsoft.com/en-us/windows/wsl/about]](https://learn.microsoft.com/en-us/windows/wsl/about)
 
@@ -55,25 +61,21 @@ Then install netCDF by pasting the following into a terminal window
 	brew install netcdf	
 ```
 
-Make a text file simply named `ncd`, with following contents, and place in the folder `/usr/local/bin/`
+You can check that the utilities have been installed by typing `ncdump` in a terminal window
 
-```
-	#! /bin/bash
-	pwd
-	/usr/local/Cellar/netcdf/4.9.2_1/bin/ncdump -c $1
-```
+To use `ncdump` to view the contents of netCDF files, open a new Terminal window in the folder with the netCDF file. In Finder, 
 
-(Note that the folder path may need to be adjusted; at the time of this writing the current version of netCDF on Homebrew was `4.9.2_1`.  The appropriate path can be found by typing `locate ncdump` at the command prompt, which should yield a reply like `/usr/local/Cellar/netcdf/4.9.2_1/bin/ncdump`)
+- browse to the folder with the netCDF file;
+- Control-click or right click on the folder name in the path bar at the bottom of the file list in Finder;
+- choose Open in Terminal.
 
-Make the file executable by opening a Terminal window in `/usr/local/bin/` and typing:
+(If you don't see the path bar in the bottom of the Finder window, click on View > Show Path Bar.)
 
-```
-	chmod +x ncd
-```
+Then, in the terminal window, typing 
 
-Then opening a Terminal window in the folder with the netCDF file in it and typing `ncd ncfile.nc` (where "`ncfile.nc`" is the name of the netCDF file) should should produce a listing of the headers and dimension variables in a netCDF file.
-
-Note that `ncdump` (as opposed to `ncd`) can also be used directly in a command/Terminal window. Typing `ncdump -ct ncfile.nc` produces a standard listing of the headers, but prints the Time variable in human-interpretable form.
+- `ncdump filename.nc`` will show a brief listing of the dimensions variables and attributes;
+- `ncdump -c filename.nc` will show the above, plus the explicit values of the dimension variables;
+- `nccump -ct filename.nc` will show the above, with the time variable recoded into some kind of human-readable form.
 
 Install the CDO and NCO utilities as follows:
 
