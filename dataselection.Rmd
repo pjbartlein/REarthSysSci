@@ -1,0 +1,41 @@
+---
+title: "Project data set selection"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r plots1-1, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "80%", out.height = "80%", verbose=TRUE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2021, but may undergo further edits.</span></p>
+
+**Finish by the end of Week 5 (Friday, Feb 9th)**
+
+This is a superficially simple, but possibly fraught task -- identifying a data set to work on. Recall that the goal of the project is a description and analysis of a data set, posted on a web page. Some points:
+
+- The final product should have at least four parts:
+	- a desciption of the data set (what it is, where it's from, etc.);
+	- the code used to input or open the data set in R;
+	- some analyses of the data, which could range from simple visualizations to a statisical analysis;
+	- a discussion
+- The final product can range from a simple one-page `.html` file, to an RMarkdown Notebook, to an RMarkdown web site.
+- The product should be posted on a web site, either
+	- on `pages.uoregon.edu`, or
+	- as a GitHub Pages web page/web site associated with a repository.
+
+The aim should be to tell a simple story well, as opposed to a complicated story badly.
+
+Data sources:
+
+- See the Topic: Earth-system science data on the course web page
+- Browse the `nc_files` folder on [[http://pages.uoregon.edu/bartlein/RESS/nc_files/]](http://pages.uoregon.edu/bartlein/RESS/nc_files/) or on `uoclimlab.uoregon.edu` via SFTP in FileZilla.
+
+Email us a short description of the data set and a URL.

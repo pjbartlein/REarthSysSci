@@ -3,12 +3,12 @@ knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "80%", out.hei
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 
+# ggplot2 versions of plots
+library(ggplot2)
+
 # load data from a saved .RData file
 con <- url("https://pages.uoregon.edu/bartlein/RESS/RData/geog490.RData")
 load(file=con) 
-
-# ggplot2 versions of plots
-library(ggplot2)
 
 # index plot
 attach(sumcr)
@@ -36,6 +36,7 @@ dotchart(WidthWS, labels=as.character(Location), cex=0.5)
 ggplot(sumcr, aes(x=WidthWS, y=Location)) + geom_point(size=1) 
 ggplot(sumcr, aes(x=WidthWS, y=Location)) + geom_point(size=1) + theme_bw()
 
+# sorted dotchart
 index <- order(WidthWS)
 dotchart(WidthWS[index], labels=as.character(Location[index]), cex=0.5)
 
@@ -170,3 +171,129 @@ ggplot() +
   coord_sf(xlim = c(-125, -116), ylim = c(41, 47), expand = FALSE) +
   theme_bw()
 
+
+library(lattice)
+cloud(orstationc$elev ~ orstationc$lon*orstationc$lat)
+
+library(scatterplot3d)
+library(RColorBrewer)
+
+# get colors for labeling the points
+plotvar <- orstationc$pann # pick a variable to plot
+nclr <- 8 # number of colors
+plotclr <- brewer.pal(nclr,"PuBu") # get the colors
+colornum <- cut(rank(plotvar), nclr, labels=FALSE)
+colcode <- plotclr[colornum] # assign color
+
+# scatter plot
+plot.angle <- 45
+scatterplot3d(orstationc$lon, orstationc$lat, plotvar, type="h", angle=plot.angle, color=colcode, pch=20, cex.symbols=2, 
+  col.axis="gray", col.grid="gray")
+
+library(maps)
+
+# get points that define Oregon county outlines
+or_map <- map("county", "oregon", xlim=c(-125,-114), ylim=c(42,47), plot=FALSE)
+
+# get colors for labeling the points
+plotvar <- orstationc$pann # pick a variable to plot
+nclr <- 8 # number of colors
+plotclr <- brewer.pal(nclr,"PuBu") # get the colors
+colornum <- cut(rank(plotvar), nclr, labels=FALSE)
+colcode <- plotclr[colornum] # assign color
+
+# scatterplot and map
+plot.angle <- 135
+s3d <- scatterplot3d(orstationc$lon, orstationc$lat, plotvar, type="h", angle=plot.angle, color=colcode, 
+            pch=20, cex.symbols=2, col.axis="gray", col.grid="gray")
+s3d$points3d(or_map$x,or_map$y,rep(0,length(or_map$x)), type="l")
+
+attach(sumcr)
+coplot(WidthWS ~ DepthWS | Reach, pch=14+as.integer(Reach), cex=1.5, 
+       number=3, columns=3, overlap=0,
+       panel=function(x,y,...) {
+         panel.smooth(x,y,span=.8,iter=5,...)
+         abline(lm(y ~ x), col="blue")
+       } )
+
+ggplot(sumcr, aes(x=DepthWS, y=WidthWS)) +
+  stat_smooth(method = "lm") + 
+  geom_point() + 
+  facet_wrap(~ Reach) + 
+  theme(aspect.ratio = 1)
+
+detach(sumcr)
+
+library(sf)
+attach(yellpratio)
+
+# simple map
+# read and plot shapefiles
+ynp_state_sf <- st_read("/Users/bartlein/Documents/geog495/data/shp/ynpstate.shp")
+plot(st_geometry(ynp_state_sf))
+ynprivers_sf <- st_read("/Users/bartlein/Documents/geog495/data/shp/ynprivers.shp")
+plot(st_geometry(ynprivers_sf), add = TRUE)
+ynplk_sf <- st_read("/Users/bartlein/Documents/geog495/data/shp/ynplk.shp")
+plot(st_geometry(ynplk_sf), add = TRUE)
+points(Lon, Lat, pch=3, cex=0.6)
+
+# stars plot for precipitation ratios
+col.red <- rep("red",length(orstationc[,1]))
+stars(yellpratio[,4:15], locations=as.matrix(cbind(Lon, Lat)),
+col.stars=col.red, len=0.2, lwd=1, key.loc=c(-111.5,42.5), labels=NULL, add=T)
+
+# create some conditioning variables
+Elevation <- equal.count(Elev,4,.25)
+Latitude <- equal.count(Lat,2,.25)
+Longitude <- equal.count(Lon,2,.25)
+
+# January vs July Precipitation Ratios by Elevation
+plot2 <- xyplot(APJan ~ APJul | Elevation,
+    layout = c(2, 2),
+    panel = function(x, y) {
+        panel.grid(v=2)
+        panel.xyplot(x, y)
+        panel.loess(x, y, span = 1.0, degree = 1, family="symmetric")
+        panel.abline(lm(y~x))
+    },
+    xlab = "APJul",
+    ylab = "APJan")
+print(plot2, position=c(0,.375,1,1), more=T)
+print(plot(Elevation), position=c(.1,0.0,.9,.4))
+
+# create an elevation zones factor
+yellpratio$Elev_zones <- cut(Elevation, 4, labels=c("Elev1 (lowest)", "Elev2", "Elev3", "Elev4 (highest)"))
+
+ggplot(yellpratio, aes(x=APJul, y=APJan)) +
+  stat_smooth(method = "lm") + 
+  geom_point() + 
+  facet_wrap( ~ Elev_zones)
+
+# January vs July Precipitation Ratios by Latitude and Longitude
+plot3 <- xyplot(APJan ~ APJul | Latitude*Longitude,
+    layout = c(2, 2),
+    panel = function(x, y) {
+        panel.grid(v=2)
+        panel.xyplot(x, y)
+        panel.loess(x, y, span = .8, degree = 1, family="gaussian")
+        panel.abline(lm(y~x))
+    },
+    xlab = "APJul",
+    ylab = "APJan")
+print(plot3)
+
+# create conditioning variables
+Loc_factor <- rep(0, length(yellpratio$Lat))
+Loc_factor[(yellpratio$Lat >= median(yellpratio$Lat) & yellpratio$Lon < median(yellpratio$Lon))] <- 1
+Loc_factor[(yellpratio$Lat >= median(yellpratio$Lat) & yellpratio$Lon >= median(yellpratio$Lon))] <- 2
+Loc_factor[(yellpratio$Lat < median(yellpratio$Lat) & yellpratio$Lon < median(yellpratio$Lon))] <- 3
+Loc_factor[(yellpratio$Lat < median(yellpratio$Lat) & yellpratio$Lon >= median(yellpratio$Lon))] <- 4
+# convert to factor, and add level lables
+yellpratio$Loc_factor <- as.factor(Loc_factor)
+levels(yellpratio$Loc_factor) = c("Low Lon/High Lat", "High Lon/High Lat", "Low Lon/Low Lat", "High Lon/Low Lat")
+
+ggplot(yellpratio, aes(x=APJul, y=APJan)) +
+  stat_smooth(method = "loess", span = 0.9, col="red") + 
+  stat_smooth(method = "lm") + 
+  geom_point() + 
+  facet_wrap(~Loc_factor)
