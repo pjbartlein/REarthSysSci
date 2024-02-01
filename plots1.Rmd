@@ -64,7 +64,7 @@ There are two basic kinds of univariate, or one-variable-at-a-time plots,
 
 ## Simple plots ##
 
-Load the `ggplot2` package:
+Load the `{ggplot2}` package:
 
 ```{r plots1-2 }
 # ggplot2 versions of plots
@@ -72,7 +72,6 @@ library(ggplot2)
 ```
 
 Also load some data to reproduce the examples here:
-
 
 ```{r plots1-3 }
 # load data from a saved .RData file
@@ -109,7 +108,7 @@ stripchart(Length)
 stripchart(Length, method="stack")
 ```
 
-The full `ggplot2()` almost reproduces the base-graphics version.  Note the use of the `aes()` (aesthetic) function for describing the basic plot, which then has the dotplot added using the `geom_dotplot()` function.  The `theme_bw()` term specifies the simple black-and-white theme.  As in the case of a histogram, the `binwidth` parameter controls the granularity of the plot, and `coord_fixed()` function changes the aspect ratio of the plot.  (The white space can be cropped when saving the image.)
+The full `{ggplot2}` version almost reproduces the base-graphics version.  Note the use of the `aes()` (aesthetic) function for describing the basic plot, which then has the dotplot added using the `geom_dotplot()` function.  The `theme_bw()` term specifies the simple black-and-white theme.  As in the case of a histogram, the `binwidth` parameter controls the granularity of the plot, and `coord_fixed()` function changes the aspect ratio of the plot.  (The white space can be cropped when saving the image.)
 
 ```{r plots1-7 }
 # ggplot stripchart
@@ -129,7 +128,7 @@ Note that the whitespace could be removed after saving the figure.
 dotchart(WidthWS, labels=as.character(Location), cex=0.5)
 ```
 
-... and the `ggplot2` equivalent:
+... and the `{ggplot2}` equivalent:
 
 ```{r plots1-9 }
 ggplot(sumcr, aes(x=WidthWS, y=Location)) + geom_point(size=1) 
@@ -148,7 +147,7 @@ index <- order(WidthWS)
 dotchart(WidthWS[index], labels=as.character(Location[index]), cex=0.5)
 ```
 
-... and the `ggplot2` equivalent--note the use of the `theme()` term to modify the label size:
+... and the `{ggplot2}` equivalent--note the use of the `theme()` term to modify the label size:
 
 ```{r plots1-11 }
 ggplot(sumcr, aes(x=WidthWS, y=reorder(Location, WidthWS))) + 
@@ -198,7 +197,7 @@ Histograms are a type of bar chart that displays the counts or relative frequenc
 hist(specmap$O18, breaks=20)
 ```
 
-Here's the `ggplot2` version, with the biwidth specified explicitly (e.g., 1.0)
+Here's the `{ggplot2}` version, with the biwidth specified explicitly (e.g., 1.0)
 
 ```{r plots1-17 }
 ggplot(specmap, aes(x = O18)) + 
@@ -214,7 +213,7 @@ plot(O18_density)
 ```
 Note that in this example, an object `O18.density` is created by the `density()` function, and then plotted using the `plot()` function.
 
-Here's a version the `ggplot2` density plot:
+Here's a version the `{ggplot2}` density plot:
 
 ```{r plots1-19 }
 ggplot(specmap, aes(x = O18)) + geom_density() + ylim(0.0, 0.5)
@@ -270,7 +269,7 @@ ggplot(orstationc, aes(x = elev, y = tann)) + geom_point()
 ggplot(orstationc, aes(x = elev, y = pann)) + geom_point()
 ```
 
-It might make sense to compare the plots side-by-side. That can be done for the `ggplot2` versions of those plots cby generating the plots, saving them as objects (`plot1` and `plot2`), and then using a function `grid.arrange()` from the `gridExtra` package to plot the two objects:
+It might make sense to compare the plots side-by-side. That can be done for the `{ggplot2}` versions of those plots cby generating the plots, saving them as objects (`plot1` and `plot2`), and then using a function `grid.arrange()` from the `gridExtra` package to plot the two objects:
 
 ```{r plots1-24 }
 library(gridExtra)
@@ -279,7 +278,7 @@ plot2 <- ggplot(orstationc, aes(x = elev, y = pann)) + geom_point()
 grid.arrange(plot1, plot2, ncol=2)
 ```
 
-Note that `ggplot2` allows one to transform the coordinate system as well as the values of the individual variables.  Here a square-root scaling of the y-axis is done, to examine the relationship between precipitation and elevation, when the precipitation values have been transformed in an attempt to make the relationship more linear.  Note that the overall appearance of the plots is identical--it's the y-axes that differ.
+Note that `{ggplot2}` allows one to transform the coordinate system as well as the values of the individual variables.  Here a square-root scaling of the y-axis is done, to examine the relationship between precipitation and elevation, when the precipitation values have been transformed in an attempt to make the relationship more linear.  Note that the overall appearance of the plots is identical--it's the y-axes that differ.
 
 ```{r plots1-25 }
 plot1 <- ggplot(orstationc, aes(x = elev, y = tann)) + geom_point()
@@ -287,7 +286,7 @@ plot2 <- ggplot(orstationc, aes(x = elev, y = pann)) + coord_trans(y="sqrt") + g
 grid.arrange(plot1, plot2, ncol=2)
 ```
 
-Labeling of points using `ggplot` is possible, and again `ggplot2()` offers more fine control, such as some ability to deal with text overlap.
+Labeling of points using `ggplot` is possible, and again `{ggplot2}` offers more fine control, such as some ability to deal with text overlap.
 
 Here is the base plotting version of a text-labelled scatter plot:
 
@@ -333,7 +332,7 @@ plot(elevation, tann)
 lines(lowess(elevation,tann))
 ```
 
-The `ggplot2` version uses `stat_smooth()` to get the lowess curve (and confidence band):
+The `{ggplot2}` version uses `stat_smooth()` to get the lowess curve (and confidence band):
 
 ```{r plots1-31 }
 # ggplot scatter plot plus smooth
@@ -349,6 +348,12 @@ detach(ortann)
 [[Back to top]](plots1.html)
 
 # Multivariate plots #
+
+Multivariate descriptive displays or plots are designed to reveal the relationship among several variables simulataneously..  As was the case when examining relationships among pairs of variables, there are several basic characteristics of the relationship among sets of variables that are of interest.  These include:
+
+- the *forms* of the relationships
+- the *strength* of the relationships, and 
+- the *dependence* of the relationships on external (usually to the pairs of variables being examined) circumstances.
 
 ## Labelled scatter plots #
 
@@ -380,7 +385,7 @@ plot(O18 ~ Age, ylim=c(2.5,-2.5), type="l")
 points(O18 ~ Age, pch=16, col=colcode, cex=1.5)
 ```
 
-Here's a `ggplot2` version, where the colorization is extended to the lines as well as the symbols.
+Here's a `{ggplot2}` version, where the colorization is extended to the lines as well as the symbols.
 
 ```{r plots1-35 }
 ggplot() + 
@@ -405,7 +410,7 @@ legend(25, 2, c("Reach A", "Reach B", "Reach C"), pch=c(1,2,3), col=1)
 legend(650, 2, c("Glide", "Pool", "Riffle"), pch=1, col=c(1,2,3))
 ```
 
-Here is the `ggplot2` version:
+Here is the `{ggplot2}` version:
 
 ```{r plots1-38 }
 # ggplot2 version
@@ -424,7 +429,7 @@ plot(orstationc$lon, orstationc$lat, type="n")
 symbols(orstationc$lon, orstationc$lat, circles=orstationc$elev, inches=0.1, add=T)
 ```
 
-Here's the equivalent plot using `ggplot2`
+Here's the equivalent plot using `{ggplot2}`
 
 ```{r plots1-41 }
 # ggplot version
@@ -434,6 +439,207 @@ ggplot() +
   coord_sf(xlim = c(-125, -116), ylim = c(41, 47), expand = FALSE) +
   theme_bw()
 
+```
+
+## 3-D Scatter plots ##
+
+3-D scatter plots (as distinct from scatter plot matrices involving three variables), illustrate the relationship among three variables by plotting them in a three-dimensional "workbox".  There are a number of basic enhancements of the basic 3-D scatter plot, such as the addition of drop lines, lines connecting points, symbol modification and so on.
+
+A 3-D point-cloud plot displays the values of three variables at a time by plotting them in a 3-D "workbox" where the value of one variable determines the relative position of the symbol along the X-axis and the value of a second variable determines the relative position of the symbol along the Y-axis, and the value of the third variable is used to determine the relative position along the Z-axis.  This plot makes use of the `lattice` package.
+
+```{r plots1-42 }
+library(lattice)
+cloud(orstationc$elev ~ orstationc$lon*orstationc$lat)
+```
+
+Notice that you can still see the outline of the state, because elevation is a fairly well behaved variable.
+
+The `scatterplot3d` package (by Ligges and Mächler) provides a way of constructing a 3-point cloud display with some nice embellishments.  The first part of the code, like in making maps, does some setup like determining the number of colors to plot and getting their definitions.  The second block produces the plot.
+
+```{r plots1-43 }
+library(scatterplot3d)
+library(RColorBrewer)
+
+# get colors for labeling the points
+plotvar <- orstationc$pann # pick a variable to plot
+nclr <- 8 # number of colors
+plotclr <- brewer.pal(nclr,"PuBu") # get the colors
+colornum <- cut(rank(plotvar), nclr, labels=FALSE)
+colcode <- plotclr[colornum] # assign color
+
+# scatter plot
+plot.angle <- 45
+scatterplot3d(orstationc$lon, orstationc$lat, plotvar, type="h", angle=plot.angle, color=colcode, pch=20, cex.symbols=2, 
+  col.axis="gray", col.grid="gray")
+```
+
+The z-variable, in this case, annual precipitation, is plotted as a dot, and for interpretability a drop line is plotted below the dot.  This simple addition facilitates finding the location of each point (where it hits the x-y, or latitude-longitude plane), as well as the value of annual precipitation.
+
+Maps can be added to the 3-D scatter plot to improve interpretab:
+
+```{r plots1-44 }
+library(maps)
+
+# get points that define Oregon county outlines
+or_map <- map("county", "oregon", xlim=c(-125,-114), ylim=c(42,47), plot=FALSE)
+
+# get colors for labeling the points
+plotvar <- orstationc$pann # pick a variable to plot
+nclr <- 8 # number of colors
+plotclr <- brewer.pal(nclr,"PuBu") # get the colors
+colornum <- cut(rank(plotvar), nclr, labels=FALSE)
+colcode <- plotclr[colornum] # assign color
+
+# scatterplot and map
+plot.angle <- 135
+s3d <- scatterplot3d(orstationc$lon, orstationc$lat, plotvar, type="h", angle=plot.angle, color=colcode, 
+            pch=20, cex.symbols=2, col.axis="gray", col.grid="gray")
+s3d$points3d(or_map$x,or_map$y,rep(0,length(or_map$x)), type="l")
+```
+
+The `map()` function generates the outlines of a map of Oregon counties, and stores them in `or.map`, then the colors are figured out, and finally a 3-D scatter plot is made (using the `scatterplot3d()` function, and  finally a 3-D scatter plot is made (using the scatterplot3d() function, and the points and droplines are added. 
+
+[[Back to top]](plots1.html)
+
+# Trellis/Lattice graphics #
+
+Many data sets include a mixture of both "continuous" (ordinal-, interval- or ratio-scale variables) and "discrete" (nominal-scale variables).  Often, the issue might arise of how a particular relationship between variables might differ among groups.  Information of that nature can be gained using conditioning plots (or coplots).  Such plots are part of a general scheme of visual data analysis, known as Trellis Graphics that has been created by the developers of the S language.  Trellis Graphics are implemented in R using the package Lattice.
+
+## Coplots (conditioning scatter plots) ##
+
+Conditioning scatter plots involves creating a multipanel display, where each panel contains a subset of the data.  This subset can be either a) those observations that fall in a particular group, or b) they may represent a the values that fall within a particular range of the values of a variable.  The idea is that the individual panels should illustrate the relationship between a pair of variables, over part of the range of the two marginal "conditioning" variables (i.e. the relationship "conditional on one marginal variable lying in one particular interval, and the other lying in a different interval.")
+
+Here is a coplot that describes the relationship between water-surface width and depth, as it varies among reaches along Summit Cr.
+
+
+```{r plots1-45 }
+attach(sumcr)
+coplot(WidthWS ~ DepthWS | Reach, pch=14+as.integer(Reach), cex=1.5, 
+       number=3, columns=3, overlap=0,
+       panel=function(x,y,...) {
+         panel.smooth(x,y,span=.8,iter=5,...)
+         abline(lm(y ~ x), col="blue")
+       } )
+```
+
+And here's a `{ggplot2}` version:
+
+```{r plots1-46}
+ggplot(sumcr, aes(x=DepthWS, y=WidthWS)) +
+  stat_smooth(method = "lm") + 
+  geom_point() + 
+  facet_wrap(~ Reach) + 
+  theme(aspect.ratio = 1)
+```
+
+```{r plots1-47}
+detach(sumcr)
+```
+
+# More Lattice Plots #
+
+"Trellis" plots are the R version of Lattice plots that were originally implemented in the S language at Bell Labs.  The aim of these plots is to extend the usual kind of univariate and bivariate plots, like histograms or scatter plots, to situations where some external variables, possibly categorical or "factor" variables, may influence the distribution of the data or form of a relationship.  They do this by generating a trellis or lattice of plots that consist of an array of simple plots, arranged according to the values of some "conditioning" variables.
+
+## Multipanel plots ##
+
+The following plots explore the seasonality of precipitation in the Yellowstone region.  This first plot uses glyphs to show the values of twelve monthly precipitation variables as "spokes" of a wheel, where each variable is plotted relative to its overall range.  The first block of code below sets things up, and the `stars()` function does the plotting.
+
+```{r plots1-48 }
+library(sf)
+attach(yellpratio)
+
+# simple map
+# read and plot shapefiles
+ynp_state_sf <- st_read("/Users/bartlein/Documents/geog495/data/shp/ynpstate.shp")
+plot(st_geometry(ynp_state_sf))
+ynprivers_sf <- st_read("/Users/bartlein/Documents/geog495/data/shp/ynprivers.shp")
+plot(st_geometry(ynprivers_sf), add = TRUE)
+ynplk_sf <- st_read("/Users/bartlein/Documents/geog495/data/shp/ynplk.shp")
+plot(st_geometry(ynplk_sf), add = TRUE)
+points(Lon, Lat, pch=3, cex=0.6)
+
+# stars plot for precipitation ratios
+col.red <- rep("red",length(orstationc[,1]))
+stars(yellpratio[,4:15], locations=as.matrix(cbind(Lon, Lat)),
+col.stars=col.red, len=0.2, lwd=1, key.loc=c(-111.5,42.5), labels=NULL, add=T)
+```
+
+Here the stars wind up looking more like fans.  The legend indicates that stations with fans that open out to the right are stations with winter precipitation maxima (like in the southwestern portion of the region) while those that open toward the left have summer precipitation maxima (like in the southeastern portion of the region).
+
+The next examples show a couple of conditioning plots (coplots), that illustrate the relationship between January and July precipitation, as varies (is conditioned on) with elevation.  The first block of code does some set up.
+
+```{r plots1-49 }
+# create some conditioning variables
+Elevation <- equal.count(Elev,4,.25)
+Latitude <- equal.count(Lat,2,.25)
+Longitude <- equal.count(Lon,2,.25)
+
+# January vs July Precipitation Ratios by Elevation
+plot2 <- xyplot(APJan ~ APJul | Elevation,
+    layout = c(2, 2),
+    panel = function(x, y) {
+        panel.grid(v=2)
+        panel.xyplot(x, y)
+        panel.loess(x, y, span = 1.0, degree = 1, family="symmetric")
+        panel.abline(lm(y~x))
+    },
+    xlab = "APJul",
+    ylab = "APJan")
+print(plot2, position=c(0,.375,1,1), more=T)
+print(plot(Elevation), position=c(.1,0.0,.9,.4))
+```
+
+The plot shows that the relationship between January and July precipitation indeed varies with elevation.  At low elevations, there is proportionally lower January precipitation for the same July values (lower two panels on the lattice plot), but at higher elevations, there is proportionally more (top two panels).  This relationship points to some orographic (i.e. related to the elevation of the mountains) amplification of the winter precipitation.
+
+Here's a `{ggplot2}` version:
+
+```{r plots1-50}
+# create an elevation zones factor
+yellpratio$Elev_zones <- cut(Elevation, 4, labels=c("Elev1 (lowest)", "Elev2", "Elev3", "Elev4 (highest)"))
+
+ggplot(yellpratio, aes(x=APJul, y=APJan)) +
+  stat_smooth(method = "lm") + 
+  geom_point() + 
+  facet_wrap( ~ Elev_zones)
+```
+
+The next plot shows the variation of the relationship between January and July precipitation as it varies spatially.
+
+```{r plots1-51 }
+# January vs July Precipitation Ratios by Latitude and Longitude
+plot3 <- xyplot(APJan ~ APJul | Latitude*Longitude,
+    layout = c(2, 2),
+    panel = function(x, y) {
+        panel.grid(v=2)
+        panel.xyplot(x, y)
+        panel.loess(x, y, span = .8, degree = 1, family="gaussian")
+        panel.abline(lm(y~x))
+    },
+    xlab = "APJul",
+    ylab = "APJan")
+print(plot3)
+```
+
+Notice that the steepest curve lies in the panel representing the southwestern part of the region (low latitude and low longitude, i.e. the bottom left panel), which suggests that winter (January) precipitation is relatively more import there, which is also apparent on the stars plot above.
+
+Here's the `{ggplot2}` version:
+
+```{r plots1-52}
+# create conditioning variables
+Loc_factor <- rep(0, length(yellpratio$Lat))
+Loc_factor[(yellpratio$Lat >= median(yellpratio$Lat) & yellpratio$Lon < median(yellpratio$Lon))] <- 1
+Loc_factor[(yellpratio$Lat >= median(yellpratio$Lat) & yellpratio$Lon >= median(yellpratio$Lon))] <- 2
+Loc_factor[(yellpratio$Lat < median(yellpratio$Lat) & yellpratio$Lon < median(yellpratio$Lon))] <- 3
+Loc_factor[(yellpratio$Lat < median(yellpratio$Lat) & yellpratio$Lon >= median(yellpratio$Lon))] <- 4
+# convert to factor, and add level lables
+yellpratio$Loc_factor <- as.factor(Loc_factor)
+levels(yellpratio$Loc_factor) = c("Low Lon/High Lat", "High Lon/High Lat", "Low Lon/Low Lat", "High Lon/Low Lat")
+
+ggplot(yellpratio, aes(x=APJul, y=APJan)) +
+  stat_smooth(method = "loess", span = 0.9, col="red") + 
+  stat_smooth(method = "lm") + 
+  geom_point() + 
+  facet_wrap(~Loc_factor)
 ```
 
 [[Back to top]](plots1.html)

@@ -513,6 +513,23 @@ class="toc-section-number">4</span> Multivariate plots</a>
 <li><a href="#labelled-scatter-plots"
 id="toc-labelled-scatter-plots"><span
 class="toc-section-number">4.1</span> Labelled scatter plots</a></li>
+<li><a href="#d-scatter-plots" id="toc-d-scatter-plots"><span
+class="toc-section-number">4.2</span> 3-D Scatter plots</a></li>
+</ul></li>
+<li><a href="#trellislattice-graphics"
+id="toc-trellislattice-graphics"><span
+class="toc-section-number">5</span> Trellis/Lattice graphics</a>
+<ul>
+<li><a href="#coplots-conditioning-scatter-plots"
+id="toc-coplots-conditioning-scatter-plots"><span
+class="toc-section-number">5.1</span> Coplots (conditioning scatter
+plots)</a></li>
+</ul></li>
+<li><a href="#more-lattice-plots" id="toc-more-lattice-plots"><span
+class="toc-section-number">6</span> More Lattice Plots</a>
+<ul>
+<li><a href="#multipanel-plots" id="toc-multipanel-plots"><span
+class="toc-section-number">6.1</span> Multipanel plots</a></li>
 </ul></li>
 </ul>
 </div>
@@ -622,7 +639,7 @@ representation.</li>
 </ol>
 <div id="simple-plots" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Simple plots</h2>
-<p>Load the <code>ggplot2</code> package:</p>
+<p>Load the <code>{ggplot2}</code> package:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># ggplot2 versions of plots</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
 <p>Also load some data to reproduce the examples here:</p>
@@ -670,15 +687,15 @@ chart, plain and stacked:</p>
 <p><img src="plots1_files/figure-html/plots1-6-1.png" width="80%" height="80%" /></p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">stripchart</span>(Length, <span class="at">method=</span><span class="st">&quot;stack&quot;</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-6-2.png" width="80%" height="80%" /></p>
-<p>The full <code>ggplot2()</code> almost reproduces the base-graphics
-version. Note the use of the <code>aes()</code> (aesthetic) function for
-describing the basic plot, which then has the dotplot added using the
-<code>geom_dotplot()</code> function. The <code>theme_bw()</code> term
-specifies the simple black-and-white theme. As in the case of a
-histogram, the <code>binwidth</code> parameter controls the granularity
-of the plot, and <code>coord_fixed()</code> function changes the aspect
-ratio of the plot. (The white space can be cropped when saving the
-image.)</p>
+<p>The full <code>{ggplot2}</code> version almost reproduces the
+base-graphics version. Note the use of the <code>aes()</code>
+(aesthetic) function for describing the basic plot, which then has the
+dotplot added using the <code>geom_dotplot()</code> function. The
+<code>theme_bw()</code> term specifies the simple black-and-white theme.
+As in the case of a histogram, the <code>binwidth</code> parameter
+controls the granularity of the plot, and <code>coord_fixed()</code>
+function changes the aspect ratio of the plot. (The white space can be
+cropped when saving the image.)</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># ggplot stripchart</span></span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>sumcr, <span class="fu">aes</span>(<span class="at">x =</span> Length)) <span class="sc">+</span> </span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>  <span class="fu">geom_dotplot</span>(<span class="at">binwidth =</span> <span class="fl">0.25</span>, <span class="at">method =</span> <span class="st">&quot;histodot&quot;</span>) <span class="sc">+</span> </span>
@@ -699,7 +716,7 @@ base-graphics Cleveland-style dotchart.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># Cleveland-style dot charts</span></span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">dotchart</span>(WidthWS, <span class="at">labels=</span><span class="fu">as.character</span>(Location), <span class="at">cex=</span><span class="fl">0.5</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-8-1.png" width="80%" height="80%" /></p>
-<p>… and the <code>ggplot2</code> equivalent:</p>
+<p>… and the <code>{ggplot2}</code> equivalent:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>WidthWS, <span class="at">y=</span>Location)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>) </span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-9-1.png" width="80%" height="80%" /></p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>WidthWS, <span class="at">y=</span>Location)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
@@ -724,7 +741,7 @@ values:</p>
 <span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">order</span>(WidthWS)</span>
 <span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">dotchart</span>(WidthWS[index], <span class="at">labels=</span><span class="fu">as.character</span>(Location[index]), <span class="at">cex=</span><span class="fl">0.5</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-10-1.png" width="80%" height="80%" /></p>
-<p>… and the <code>ggplot2</code> equivalent–note the use of the
+<p>… and the <code>{ggplot2}</code> equivalent–note the use of the
 <code>theme()</code> term to modify the label size:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>WidthWS, <span class="at">y=</span><span class="fu">reorder</span>(Location, WidthWS))) <span class="sc">+</span> </span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>) <span class="sc">+</span> </span>
@@ -775,7 +792,7 @@ while more may not generalize enough.</p>
 <span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co"># attach(specmap)</span></span>
 <span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="fu">hist</span>(specmap<span class="sc">$</span>O18, <span class="at">breaks=</span><span class="dv">20</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-16-1.png" width="80%" height="80%" /></p>
-<p>Here’s the <code>ggplot2</code> version, with the biwidth specified
+<p>Here’s the <code>{ggplot2}</code> version, with the biwidth specified
 explicitly (e.g., 1.0)</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">ggplot</span>(specmap, <span class="fu">aes</span>(<span class="at">x =</span> O18)) <span class="sc">+</span> </span>
 <span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.1</span>, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">boundary =</span> <span class="fl">0.05</span>)</span></code></pre></div>
@@ -797,7 +814,7 @@ base-graphics density plot:</p>
 Note that in this example, an object <code>O18.density</code> is created
 by the <code>density()</code> function, and then plotted using the
 <code>plot()</code> function.</p>
-<p>Here’s a version the <code>ggplot2</code> density plot:</p>
+<p>Here’s a version the <code>{ggplot2}</code> density plot:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">ggplot</span>(specmap, <span class="fu">aes</span>(<span class="at">x =</span> O18)) <span class="sc">+</span> <span class="fu">geom_density</span>() <span class="sc">+</span> <span class="fu">ylim</span>(<span class="fl">0.0</span>, <span class="fl">0.5</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-19-1.png" width="80%" height="80%" /></p>
 <p>A combined histogram, density and rug plot via the base graphics:</p>
@@ -858,8 +875,8 @@ temperature and annual precipitation vs. elevation:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> pann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-23-2.png" width="80%" height="80%" /></p>
 <p>It might make sense to compare the plots side-by-side. That can be
-done for the <code>ggplot2</code> versions of those plots cby generating
-the plots, saving them as objects (<code>plot1</code> and
+done for the <code>{ggplot2}</code> versions of those plots cby
+generating the plots, saving them as objects (<code>plot1</code> and
 <code>plot2</code>), and then using a function
 <code>grid.arrange()</code> from the <code>gridExtra</code> package to
 plot the two objects:</p>
@@ -868,19 +885,19 @@ plot the two objects:</p>
 <span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> pann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
 <span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="fu">grid.arrange</span>(plot1, plot2, <span class="at">ncol=</span><span class="dv">2</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-24-1.png" width="80%" height="80%" /></p>
-<p>Note that <code>ggplot2</code> allows one to transform the coordinate
-system as well as the values of the individual variables. Here a
-square-root scaling of the y-axis is done, to examine the relationship
-between precipitation and elevation, when the precipitation values have
-been transformed in an attempt to make the relationship more linear.
-Note that the overall appearance of the plots is identical–it’s the
-y-axes that differ.</p>
+<p>Note that <code>{ggplot2}</code> allows one to transform the
+coordinate system as well as the values of the individual variables.
+Here a square-root scaling of the y-axis is done, to examine the
+relationship between precipitation and elevation, when the precipitation
+values have been transformed in an attempt to make the relationship more
+linear. Note that the overall appearance of the plots is identical–it’s
+the y-axes that differ.</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> tann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
 <span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> pann)) <span class="sc">+</span> <span class="fu">coord_trans</span>(<span class="at">y=</span><span class="st">&quot;sqrt&quot;</span>) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
 <span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="fu">grid.arrange</span>(plot1, plot2, <span class="at">ncol=</span><span class="dv">2</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-25-1.png" width="80%" height="80%" /></p>
 <p>Labeling of points using <code>ggplot</code> is possible, and again
-<code>ggplot2()</code> offers more fine control, such as some ability to
+<code>{ggplot2}</code> offers more fine control, such as some ability to
 deal with text overlap.</p>
 <p>Here is the base plotting version of a text-labelled scatter
 plot:</p>
@@ -928,7 +945,7 @@ discussed in more detail later.</p>
 <span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a><span class="fu">plot</span>(elevation, tann)</span>
 <span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">lowess</span>(elevation,tann))</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-30-1.png" width="80%" height="80%" /></p>
-<p>The <code>ggplot2</code> version uses <code>stat_smooth()</code> to
+<p>The <code>{ggplot2}</code> version uses <code>stat_smooth()</code> to
 get the lowess curve (and confidence band):</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># ggplot scatter plot plus smooth</span></span>
 <span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ortann, <span class="fu">aes</span>(<span class="at">x =</span> elevation, <span class="at">y =</span> tann)) <span class="sc">+</span> </span>
@@ -943,6 +960,17 @@ get the lowess curve (and confidence band):</p>
 </div>
 <div id="multivariate-plots" class="section level1" number="4">
 <h1><span class="header-section-number">4</span> Multivariate plots</h1>
+<p>Multivariate descriptive displays or plots are designed to reveal the
+relationship among several variables simulataneously.. As was the case
+when examining relationships among pairs of variables, there are several
+basic characteristics of the relationship among sets of variables that
+are of interest. These include:</p>
+<ul>
+<li>the <em>forms</em> of the relationships</li>
+<li>the <em>strength</em> of the relationships, and</li>
+<li>the <em>dependence</em> of the relationships on external (usually to
+the pairs of variables being examined) circumstances.</li>
+</ul>
 <div id="labelled-scatter-plots" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Labelled scatter
 plots</h2>
@@ -979,7 +1007,7 @@ O18 values, and use insolation to colorize the individual points.</p>
 <span id="cb39-12"><a href="#cb39-12" tabindex="-1"></a><span class="fu">plot</span>(O18 <span class="sc">~</span> Age, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fl">2.5</span>,<span class="sc">-</span><span class="fl">2.5</span>), <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span>
 <span id="cb39-13"><a href="#cb39-13" tabindex="-1"></a><span class="fu">points</span>(O18 <span class="sc">~</span> Age, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span>colcode, <span class="at">cex=</span><span class="fl">1.5</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-34-1.png" width="80%" height="80%" /></p>
-<p>Here’s a <code>ggplot2</code> version, where the colorization is
+<p>Here’s a <code>{ggplot2}</code> version, where the colorization is
 extended to the lines as well as the symbols.</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
 <span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> specmap, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>O18, <span class="at">color=</span>Insol)) <span class="sc">+</span></span>
@@ -998,7 +1026,7 @@ additional variables, as demonstrated using the Summit Cr. data:</p>
 <span id="cb42-3"><a href="#cb42-3" tabindex="-1"></a><span class="fu">legend</span>(<span class="dv">25</span>, <span class="dv">2</span>, <span class="fu">c</span>(<span class="st">&quot;Reach A&quot;</span>, <span class="st">&quot;Reach B&quot;</span>, <span class="st">&quot;Reach C&quot;</span>), <span class="at">pch=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), <span class="at">col=</span><span class="dv">1</span>)</span>
 <span id="cb42-4"><a href="#cb42-4" tabindex="-1"></a><span class="fu">legend</span>(<span class="dv">650</span>, <span class="dv">2</span>, <span class="fu">c</span>(<span class="st">&quot;Glide&quot;</span>, <span class="st">&quot;Pool&quot;</span>, <span class="st">&quot;Riffle&quot;</span>), <span class="at">pch=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>))</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-37-1.png" width="80%" height="80%" /></p>
-<p>Here is the <code>ggplot2</code> version:</p>
+<p>Here is the <code>{ggplot2}</code> version:</p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="co"># ggplot2 version</span></span>
 <span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>CumLen, <span class="at">y=</span>WidthWS, <span class="at">shape=</span>Reach, <span class="at">color=</span>HU)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-38-1.png" width="80%" height="80%" /></p>
@@ -1011,7 +1039,7 @@ climate-station data:</p>
 <span id="cb45-2"><a href="#cb45-2" tabindex="-1"></a><span class="fu">plot</span>(orstationc<span class="sc">$</span>lon, orstationc<span class="sc">$</span>lat, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
 <span id="cb45-3"><a href="#cb45-3" tabindex="-1"></a><span class="fu">symbols</span>(orstationc<span class="sc">$</span>lon, orstationc<span class="sc">$</span>lat, <span class="at">circles=</span>orstationc<span class="sc">$</span>elev, <span class="at">inches=</span><span class="fl">0.1</span>, <span class="at">add=</span>T)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-40-1.png" width="80%" height="80%" /></p>
-<p>Here’s the equivalent plot using <code>ggplot2</code></p>
+<p>Here’s the equivalent plot using <code>{ggplot2}</code></p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="co"># ggplot version</span></span>
 <span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
 <span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> orcounty_sf, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
@@ -1019,6 +1047,268 @@ climate-station data:</p>
 <span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">125</span>, <span class="sc">-</span><span class="dv">116</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">41</span>, <span class="dv">47</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
 <span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-41-1.png" width="80%" height="80%" /></p>
+</div>
+<div id="d-scatter-plots" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> 3-D Scatter
+plots</h2>
+<p>3-D scatter plots (as distinct from scatter plot matrices involving
+three variables), illustrate the relationship among three variables by
+plotting them in a three-dimensional “workbox”. There are a number of
+basic enhancements of the basic 3-D scatter plot, such as the addition
+of drop lines, lines connecting points, symbol modification and so
+on.</p>
+<p>A 3-D point-cloud plot displays the values of three variables at a
+time by plotting them in a 3-D “workbox” where the value of one variable
+determines the relative position of the symbol along the X-axis and the
+value of a second variable determines the relative position of the
+symbol along the Y-axis, and the value of the third variable is used to
+determine the relative position along the Z-axis. This plot makes use of
+the <code>lattice</code> package.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
+<span id="cb47-2"><a href="#cb47-2" tabindex="-1"></a><span class="fu">cloud</span>(orstationc<span class="sc">$</span>elev <span class="sc">~</span> orstationc<span class="sc">$</span>lon<span class="sc">*</span>orstationc<span class="sc">$</span>lat)</span></code></pre></div>
+<p><img src="plots1_files/figure-html/plots1-42-1.png" width="80%" height="80%" /></p>
+<p>Notice that you can still see the outline of the state, because
+elevation is a fairly well behaved variable.</p>
+<p>The <code>scatterplot3d</code> package (by Ligges and Mächler)
+provides a way of constructing a 3-point cloud display with some nice
+embellishments. The first part of the code, like in making maps, does
+some setup like determining the number of colors to plot and getting
+their definitions. The second block produces the plot.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="fu">library</span>(scatterplot3d)</span>
+<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb48-3"><a href="#cb48-3" tabindex="-1"></a></span>
+<span id="cb48-4"><a href="#cb48-4" tabindex="-1"></a><span class="co"># get colors for labeling the points</span></span>
+<span id="cb48-5"><a href="#cb48-5" tabindex="-1"></a>plotvar <span class="ot">&lt;-</span> orstationc<span class="sc">$</span>pann <span class="co"># pick a variable to plot</span></span>
+<span id="cb48-6"><a href="#cb48-6" tabindex="-1"></a>nclr <span class="ot">&lt;-</span> <span class="dv">8</span> <span class="co"># number of colors</span></span>
+<span id="cb48-7"><a href="#cb48-7" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(nclr,<span class="st">&quot;PuBu&quot;</span>) <span class="co"># get the colors</span></span>
+<span id="cb48-8"><a href="#cb48-8" tabindex="-1"></a>colornum <span class="ot">&lt;-</span> <span class="fu">cut</span>(<span class="fu">rank</span>(plotvar), nclr, <span class="at">labels=</span><span class="cn">FALSE</span>)</span>
+<span id="cb48-9"><a href="#cb48-9" tabindex="-1"></a>colcode <span class="ot">&lt;-</span> plotclr[colornum] <span class="co"># assign color</span></span>
+<span id="cb48-10"><a href="#cb48-10" tabindex="-1"></a></span>
+<span id="cb48-11"><a href="#cb48-11" tabindex="-1"></a><span class="co"># scatter plot</span></span>
+<span id="cb48-12"><a href="#cb48-12" tabindex="-1"></a>plot.angle <span class="ot">&lt;-</span> <span class="dv">45</span></span>
+<span id="cb48-13"><a href="#cb48-13" tabindex="-1"></a><span class="fu">scatterplot3d</span>(orstationc<span class="sc">$</span>lon, orstationc<span class="sc">$</span>lat, plotvar, <span class="at">type=</span><span class="st">&quot;h&quot;</span>, <span class="at">angle=</span>plot.angle, <span class="at">color=</span>colcode, <span class="at">pch=</span><span class="dv">20</span>, <span class="at">cex.symbols=</span><span class="dv">2</span>, </span>
+<span id="cb48-14"><a href="#cb48-14" tabindex="-1"></a>  <span class="at">col.axis=</span><span class="st">&quot;gray&quot;</span>, <span class="at">col.grid=</span><span class="st">&quot;gray&quot;</span>)</span></code></pre></div>
+<p><img src="plots1_files/figure-html/plots1-43-1.png" width="80%" height="80%" /></p>
+<p>The z-variable, in this case, annual precipitation, is plotted as a
+dot, and for interpretability a drop line is plotted below the dot. This
+simple addition facilitates finding the location of each point (where it
+hits the x-y, or latitude-longitude plane), as well as the value of
+annual precipitation.</p>
+<p>Maps can be added to the 3-D scatter plot to improve interpretab:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="fu">library</span>(maps)</span>
+<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a><span class="co"># get points that define Oregon county outlines</span></span>
+<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a>or_map <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="st">&quot;county&quot;</span>, <span class="st">&quot;oregon&quot;</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">125</span>,<span class="sc">-</span><span class="dv">114</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">42</span>,<span class="dv">47</span>), <span class="at">plot=</span><span class="cn">FALSE</span>)</span>
+<span id="cb49-5"><a href="#cb49-5" tabindex="-1"></a></span>
+<span id="cb49-6"><a href="#cb49-6" tabindex="-1"></a><span class="co"># get colors for labeling the points</span></span>
+<span id="cb49-7"><a href="#cb49-7" tabindex="-1"></a>plotvar <span class="ot">&lt;-</span> orstationc<span class="sc">$</span>pann <span class="co"># pick a variable to plot</span></span>
+<span id="cb49-8"><a href="#cb49-8" tabindex="-1"></a>nclr <span class="ot">&lt;-</span> <span class="dv">8</span> <span class="co"># number of colors</span></span>
+<span id="cb49-9"><a href="#cb49-9" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(nclr,<span class="st">&quot;PuBu&quot;</span>) <span class="co"># get the colors</span></span>
+<span id="cb49-10"><a href="#cb49-10" tabindex="-1"></a>colornum <span class="ot">&lt;-</span> <span class="fu">cut</span>(<span class="fu">rank</span>(plotvar), nclr, <span class="at">labels=</span><span class="cn">FALSE</span>)</span>
+<span id="cb49-11"><a href="#cb49-11" tabindex="-1"></a>colcode <span class="ot">&lt;-</span> plotclr[colornum] <span class="co"># assign color</span></span>
+<span id="cb49-12"><a href="#cb49-12" tabindex="-1"></a></span>
+<span id="cb49-13"><a href="#cb49-13" tabindex="-1"></a><span class="co"># scatterplot and map</span></span>
+<span id="cb49-14"><a href="#cb49-14" tabindex="-1"></a>plot.angle <span class="ot">&lt;-</span> <span class="dv">135</span></span>
+<span id="cb49-15"><a href="#cb49-15" tabindex="-1"></a>s3d <span class="ot">&lt;-</span> <span class="fu">scatterplot3d</span>(orstationc<span class="sc">$</span>lon, orstationc<span class="sc">$</span>lat, plotvar, <span class="at">type=</span><span class="st">&quot;h&quot;</span>, <span class="at">angle=</span>plot.angle, <span class="at">color=</span>colcode, </span>
+<span id="cb49-16"><a href="#cb49-16" tabindex="-1"></a>            <span class="at">pch=</span><span class="dv">20</span>, <span class="at">cex.symbols=</span><span class="dv">2</span>, <span class="at">col.axis=</span><span class="st">&quot;gray&quot;</span>, <span class="at">col.grid=</span><span class="st">&quot;gray&quot;</span>)</span>
+<span id="cb49-17"><a href="#cb49-17" tabindex="-1"></a>s3d<span class="sc">$</span><span class="fu">points3d</span>(or_map<span class="sc">$</span>x,or_map<span class="sc">$</span>y,<span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">length</span>(or_map<span class="sc">$</span>x)), <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
+<p><img src="plots1_files/figure-html/plots1-44-1.png" width="80%" height="80%" /></p>
+<p>The <code>map()</code> function generates the outlines of a map of
+Oregon counties, and stores them in <code>or.map</code>, then the colors
+are figured out, and finally a 3-D scatter plot is made (using the
+<code>scatterplot3d()</code> function, and finally a 3-D scatter plot is
+made (using the scatterplot3d() function, and the points and droplines
+are added.</p>
+<p><a href="plots1.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="trellislattice-graphics" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Trellis/Lattice
+graphics</h1>
+<p>Many data sets include a mixture of both “continuous” (ordinal-,
+interval- or ratio-scale variables) and “discrete” (nominal-scale
+variables). Often, the issue might arise of how a particular
+relationship between variables might differ among groups. Information of
+that nature can be gained using conditioning plots (or coplots). Such
+plots are part of a general scheme of visual data analysis, known as
+Trellis Graphics that has been created by the developers of the S
+language. Trellis Graphics are implemented in R using the package
+Lattice.</p>
+<div id="coplots-conditioning-scatter-plots" class="section level2"
+number="5.1">
+<h2><span class="header-section-number">5.1</span> Coplots (conditioning
+scatter plots)</h2>
+<p>Conditioning scatter plots involves creating a multipanel display,
+where each panel contains a subset of the data. This subset can be
+either a) those observations that fall in a particular group, or b) they
+may represent a the values that fall within a particular range of the
+values of a variable. The idea is that the individual panels should
+illustrate the relationship between a pair of variables, over part of
+the range of the two marginal “conditioning” variables (i.e. the
+relationship “conditional on one marginal variable lying in one
+particular interval, and the other lying in a different interval.”)</p>
+<p>Here is a coplot that describes the relationship between
+water-surface width and depth, as it varies among reaches along Summit
+Cr.</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="fu">attach</span>(sumcr)</span>
+<span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a><span class="fu">coplot</span>(WidthWS <span class="sc">~</span> DepthWS <span class="sc">|</span> Reach, <span class="at">pch=</span><span class="dv">14</span><span class="sc">+</span><span class="fu">as.integer</span>(Reach), <span class="at">cex=</span><span class="fl">1.5</span>, </span>
+<span id="cb50-3"><a href="#cb50-3" tabindex="-1"></a>       <span class="at">number=</span><span class="dv">3</span>, <span class="at">columns=</span><span class="dv">3</span>, <span class="at">overlap=</span><span class="dv">0</span>,</span>
+<span id="cb50-4"><a href="#cb50-4" tabindex="-1"></a>       <span class="at">panel=</span><span class="cf">function</span>(x,y,...) {</span>
+<span id="cb50-5"><a href="#cb50-5" tabindex="-1"></a>         <span class="fu">panel.smooth</span>(x,y,<span class="at">span=</span>.<span class="dv">8</span>,<span class="at">iter=</span><span class="dv">5</span>,...)</span>
+<span id="cb50-6"><a href="#cb50-6" tabindex="-1"></a>         <span class="fu">abline</span>(<span class="fu">lm</span>(y <span class="sc">~</span> x), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb50-7"><a href="#cb50-7" tabindex="-1"></a>       } )</span></code></pre></div>
+<p><img src="plots1_files/figure-html/plots1-45-1.png" width="80%" height="80%" /></p>
+<p>And here’s a <code>{ggplot2}</code> version:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>DepthWS, <span class="at">y=</span>WidthWS)) <span class="sc">+</span></span>
+<span id="cb51-2"><a href="#cb51-2" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb51-3"><a href="#cb51-3" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb51-4"><a href="#cb51-4" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Reach) <span class="sc">+</span> </span>
+<span id="cb51-5"><a href="#cb51-5" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">aspect.ratio =</span> <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="plots1_files/figure-html/plots1-46-1.png" width="80%" height="80%" /></p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
+</div>
+</div>
+<div id="more-lattice-plots" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> More Lattice Plots</h1>
+<p>“Trellis” plots are the R version of Lattice plots that were
+originally implemented in the S language at Bell Labs. The aim of these
+plots is to extend the usual kind of univariate and bivariate plots,
+like histograms or scatter plots, to situations where some external
+variables, possibly categorical or “factor” variables, may influence the
+distribution of the data or form of a relationship. They do this by
+generating a trellis or lattice of plots that consist of an array of
+simple plots, arranged according to the values of some “conditioning”
+variables.</p>
+<div id="multipanel-plots" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Multipanel plots</h2>
+<p>The following plots explore the seasonality of precipitation in the
+Yellowstone region. This first plot uses glyphs to show the values of
+twelve monthly precipitation variables as “spokes” of a wheel, where
+each variable is plotted relative to its overall range. The first block
+of code below sets things up, and the <code>stars()</code> function does
+the plotting.</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code></pre></div>
+<pre><code>## Linking to GEOS 3.11.0, GDAL 3.5.3, PROJ 9.1.0; sf_use_s2() is TRUE</code></pre>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="fu">attach</span>(yellpratio)</span>
+<span id="cb56-2"><a href="#cb56-2" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" tabindex="-1"></a><span class="co"># simple map</span></span>
+<span id="cb56-4"><a href="#cb56-4" tabindex="-1"></a><span class="co"># read and plot shapefiles</span></span>
+<span id="cb56-5"><a href="#cb56-5" tabindex="-1"></a>ynp_state_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/ynpstate.shp&quot;</span>)</span></code></pre></div>
+<pre><code>## Reading layer `ynpstate&#39; from data source `/Users/bartlein/Documents/geog495/data/shp/ynpstate.shp&#39; using driver `ESRI Shapefile&#39;
+## Simple feature collection with 3 features and 1 field
+## Geometry type: LINESTRING
+## Dimension:     XY
+## Bounding box:  xmin: -112.2967 ymin: 42.69208 xmax: -107.7095 ymax: 46.22544
+## Geodetic CRS:  WGS 84</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(ynp_state_sf))</span>
+<span id="cb58-2"><a href="#cb58-2" tabindex="-1"></a>ynprivers_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/ynprivers.shp&quot;</span>)</span></code></pre></div>
+<pre><code>## Reading layer `ynprivers&#39; from data source `/Users/bartlein/Documents/geog495/data/shp/ynprivers.shp&#39; using driver `ESRI Shapefile&#39;
+## Simple feature collection with 4 features and 1 field
+## Geometry type: LINESTRING
+## Dimension:     XY
+## Bounding box:  xmin: -112.2967 ymin: 42.69208 xmax: -107.7095 ymax: 46.22544
+## Geodetic CRS:  WGS 84</code></pre>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(ynprivers_sf), <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb60-2"><a href="#cb60-2" tabindex="-1"></a>ynplk_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/ynplk.shp&quot;</span>)</span></code></pre></div>
+<pre><code>## Reading layer `ynplk&#39; from data source `/Users/bartlein/Documents/geog495/data/shp/ynplk.shp&#39; using driver `ESRI Shapefile&#39;
+## Simple feature collection with 1 feature and 1 field
+## Geometry type: LINESTRING
+## Dimension:     XY
+## Bounding box:  xmin: -110.566 ymin: 44.29883 xmax: -110.1902 ymax: 44.56021
+## Geodetic CRS:  WGS 84</code></pre>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(ynplk_sf), <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb62-2"><a href="#cb62-2" tabindex="-1"></a><span class="fu">points</span>(Lon, Lat, <span class="at">pch=</span><span class="dv">3</span>, <span class="at">cex=</span><span class="fl">0.6</span>)</span>
+<span id="cb62-3"><a href="#cb62-3" tabindex="-1"></a></span>
+<span id="cb62-4"><a href="#cb62-4" tabindex="-1"></a><span class="co"># stars plot for precipitation ratios</span></span>
+<span id="cb62-5"><a href="#cb62-5" tabindex="-1"></a>col.red <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">&quot;red&quot;</span>,<span class="fu">length</span>(orstationc[,<span class="dv">1</span>]))</span>
+<span id="cb62-6"><a href="#cb62-6" tabindex="-1"></a><span class="fu">stars</span>(yellpratio[,<span class="dv">4</span><span class="sc">:</span><span class="dv">15</span>], <span class="at">locations=</span><span class="fu">as.matrix</span>(<span class="fu">cbind</span>(Lon, Lat)),</span>
+<span id="cb62-7"><a href="#cb62-7" tabindex="-1"></a><span class="at">col.stars=</span>col.red, <span class="at">len=</span><span class="fl">0.2</span>, <span class="at">lwd=</span><span class="dv">1</span>, <span class="at">key.loc=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">111.5</span>,<span class="fl">42.5</span>), <span class="at">labels=</span><span class="cn">NULL</span>, <span class="at">add=</span>T)</span></code></pre></div>
+<p><img src="plots1_files/figure-html/plots1-48-1.png" width="80%" height="80%" /></p>
+<p>Here the stars wind up looking more like fans. The legend indicates
+that stations with fans that open out to the right are stations with
+winter precipitation maxima (like in the southwestern portion of the
+region) while those that open toward the left have summer precipitation
+maxima (like in the southeastern portion of the region).</p>
+<p>The next examples show a couple of conditioning plots (coplots), that
+illustrate the relationship between January and July precipitation, as
+varies (is conditioned on) with elevation. The first block of code does
+some set up.</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a><span class="co"># create some conditioning variables</span></span>
+<span id="cb63-2"><a href="#cb63-2" tabindex="-1"></a>Elevation <span class="ot">&lt;-</span> <span class="fu">equal.count</span>(Elev,<span class="dv">4</span>,.<span class="dv">25</span>)</span>
+<span id="cb63-3"><a href="#cb63-3" tabindex="-1"></a>Latitude <span class="ot">&lt;-</span> <span class="fu">equal.count</span>(Lat,<span class="dv">2</span>,.<span class="dv">25</span>)</span>
+<span id="cb63-4"><a href="#cb63-4" tabindex="-1"></a>Longitude <span class="ot">&lt;-</span> <span class="fu">equal.count</span>(Lon,<span class="dv">2</span>,.<span class="dv">25</span>)</span>
+<span id="cb63-5"><a href="#cb63-5" tabindex="-1"></a></span>
+<span id="cb63-6"><a href="#cb63-6" tabindex="-1"></a><span class="co"># January vs July Precipitation Ratios by Elevation</span></span>
+<span id="cb63-7"><a href="#cb63-7" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">xyplot</span>(APJan <span class="sc">~</span> APJul <span class="sc">|</span> Elevation,</span>
+<span id="cb63-8"><a href="#cb63-8" tabindex="-1"></a>    <span class="at">layout =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),</span>
+<span id="cb63-9"><a href="#cb63-9" tabindex="-1"></a>    <span class="at">panel =</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb63-10"><a href="#cb63-10" tabindex="-1"></a>        <span class="fu">panel.grid</span>(<span class="at">v=</span><span class="dv">2</span>)</span>
+<span id="cb63-11"><a href="#cb63-11" tabindex="-1"></a>        <span class="fu">panel.xyplot</span>(x, y)</span>
+<span id="cb63-12"><a href="#cb63-12" tabindex="-1"></a>        <span class="fu">panel.loess</span>(x, y, <span class="at">span =</span> <span class="fl">1.0</span>, <span class="at">degree =</span> <span class="dv">1</span>, <span class="at">family=</span><span class="st">&quot;symmetric&quot;</span>)</span>
+<span id="cb63-13"><a href="#cb63-13" tabindex="-1"></a>        <span class="fu">panel.abline</span>(<span class="fu">lm</span>(y<span class="sc">~</span>x))</span>
+<span id="cb63-14"><a href="#cb63-14" tabindex="-1"></a>    },</span>
+<span id="cb63-15"><a href="#cb63-15" tabindex="-1"></a>    <span class="at">xlab =</span> <span class="st">&quot;APJul&quot;</span>,</span>
+<span id="cb63-16"><a href="#cb63-16" tabindex="-1"></a>    <span class="at">ylab =</span> <span class="st">&quot;APJan&quot;</span>)</span>
+<span id="cb63-17"><a href="#cb63-17" tabindex="-1"></a><span class="fu">print</span>(plot2, <span class="at">position=</span><span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">375</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">more=</span>T)</span>
+<span id="cb63-18"><a href="#cb63-18" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">plot</span>(Elevation), <span class="at">position=</span><span class="fu">c</span>(.<span class="dv">1</span>,<span class="fl">0.0</span>,.<span class="dv">9</span>,.<span class="dv">4</span>))</span></code></pre></div>
+<p><img src="plots1_files/figure-html/plots1-49-1.png" width="80%" height="80%" /></p>
+<p>The plot shows that the relationship between January and July
+precipitation indeed varies with elevation. At low elevations, there is
+proportionally lower January precipitation for the same July values
+(lower two panels on the lattice plot), but at higher elevations, there
+is proportionally more (top two panels). This relationship points to
+some orographic (i.e. related to the elevation of the mountains)
+amplification of the winter precipitation.</p>
+<p>Here’s a <code>{ggplot2}</code> version:</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" tabindex="-1"></a><span class="co"># create an elevation zones factor</span></span>
+<span id="cb64-2"><a href="#cb64-2" tabindex="-1"></a>yellpratio<span class="sc">$</span>Elev_zones <span class="ot">&lt;-</span> <span class="fu">cut</span>(Elevation, <span class="dv">4</span>, <span class="at">labels=</span><span class="fu">c</span>(<span class="st">&quot;Elev1 (lowest)&quot;</span>, <span class="st">&quot;Elev2&quot;</span>, <span class="st">&quot;Elev3&quot;</span>, <span class="st">&quot;Elev4 (highest)&quot;</span>))</span>
+<span id="cb64-3"><a href="#cb64-3" tabindex="-1"></a></span>
+<span id="cb64-4"><a href="#cb64-4" tabindex="-1"></a><span class="fu">ggplot</span>(yellpratio, <span class="fu">aes</span>(<span class="at">x=</span>APJul, <span class="at">y=</span>APJan)) <span class="sc">+</span></span>
+<span id="cb64-5"><a href="#cb64-5" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb64-6"><a href="#cb64-6" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb64-7"><a href="#cb64-7" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span> Elev_zones)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="plots1_files/figure-html/plots1-50-1.png" width="80%" height="80%" /></p>
+<p>The next plot shows the variation of the relationship between January
+and July precipitation as it varies spatially.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" tabindex="-1"></a><span class="co"># January vs July Precipitation Ratios by Latitude and Longitude</span></span>
+<span id="cb66-2"><a href="#cb66-2" tabindex="-1"></a>plot3 <span class="ot">&lt;-</span> <span class="fu">xyplot</span>(APJan <span class="sc">~</span> APJul <span class="sc">|</span> Latitude<span class="sc">*</span>Longitude,</span>
+<span id="cb66-3"><a href="#cb66-3" tabindex="-1"></a>    <span class="at">layout =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),</span>
+<span id="cb66-4"><a href="#cb66-4" tabindex="-1"></a>    <span class="at">panel =</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb66-5"><a href="#cb66-5" tabindex="-1"></a>        <span class="fu">panel.grid</span>(<span class="at">v=</span><span class="dv">2</span>)</span>
+<span id="cb66-6"><a href="#cb66-6" tabindex="-1"></a>        <span class="fu">panel.xyplot</span>(x, y)</span>
+<span id="cb66-7"><a href="#cb66-7" tabindex="-1"></a>        <span class="fu">panel.loess</span>(x, y, <span class="at">span =</span> .<span class="dv">8</span>, <span class="at">degree =</span> <span class="dv">1</span>, <span class="at">family=</span><span class="st">&quot;gaussian&quot;</span>)</span>
+<span id="cb66-8"><a href="#cb66-8" tabindex="-1"></a>        <span class="fu">panel.abline</span>(<span class="fu">lm</span>(y<span class="sc">~</span>x))</span>
+<span id="cb66-9"><a href="#cb66-9" tabindex="-1"></a>    },</span>
+<span id="cb66-10"><a href="#cb66-10" tabindex="-1"></a>    <span class="at">xlab =</span> <span class="st">&quot;APJul&quot;</span>,</span>
+<span id="cb66-11"><a href="#cb66-11" tabindex="-1"></a>    <span class="at">ylab =</span> <span class="st">&quot;APJan&quot;</span>)</span>
+<span id="cb66-12"><a href="#cb66-12" tabindex="-1"></a><span class="fu">print</span>(plot3)</span></code></pre></div>
+<p><img src="plots1_files/figure-html/plots1-51-1.png" width="80%" height="80%" /></p>
+<p>Notice that the steepest curve lies in the panel representing the
+southwestern part of the region (low latitude and low longitude,
+i.e. the bottom left panel), which suggests that winter (January)
+precipitation is relatively more import there, which is also apparent on
+the stars plot above.</p>
+<p>Here’s the <code>{ggplot2}</code> version:</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="co"># create conditioning variables</span></span>
+<span id="cb67-2"><a href="#cb67-2" tabindex="-1"></a>Loc_factor <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">length</span>(yellpratio<span class="sc">$</span>Lat))</span>
+<span id="cb67-3"><a href="#cb67-3" tabindex="-1"></a>Loc_factor[(yellpratio<span class="sc">$</span>Lat <span class="sc">&gt;=</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lat) <span class="sc">&amp;</span> yellpratio<span class="sc">$</span>Lon <span class="sc">&lt;</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lon))] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb67-4"><a href="#cb67-4" tabindex="-1"></a>Loc_factor[(yellpratio<span class="sc">$</span>Lat <span class="sc">&gt;=</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lat) <span class="sc">&amp;</span> yellpratio<span class="sc">$</span>Lon <span class="sc">&gt;=</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lon))] <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb67-5"><a href="#cb67-5" tabindex="-1"></a>Loc_factor[(yellpratio<span class="sc">$</span>Lat <span class="sc">&lt;</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lat) <span class="sc">&amp;</span> yellpratio<span class="sc">$</span>Lon <span class="sc">&lt;</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lon))] <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb67-6"><a href="#cb67-6" tabindex="-1"></a>Loc_factor[(yellpratio<span class="sc">$</span>Lat <span class="sc">&lt;</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lat) <span class="sc">&amp;</span> yellpratio<span class="sc">$</span>Lon <span class="sc">&gt;=</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lon))] <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb67-7"><a href="#cb67-7" tabindex="-1"></a><span class="co"># convert to factor, and add level lables</span></span>
+<span id="cb67-8"><a href="#cb67-8" tabindex="-1"></a>yellpratio<span class="sc">$</span>Loc_factor <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(Loc_factor)</span>
+<span id="cb67-9"><a href="#cb67-9" tabindex="-1"></a><span class="fu">levels</span>(yellpratio<span class="sc">$</span>Loc_factor) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Low Lon/High Lat&quot;</span>, <span class="st">&quot;High Lon/High Lat&quot;</span>, <span class="st">&quot;Low Lon/Low Lat&quot;</span>, <span class="st">&quot;High Lon/Low Lat&quot;</span>)</span>
+<span id="cb67-10"><a href="#cb67-10" tabindex="-1"></a></span>
+<span id="cb67-11"><a href="#cb67-11" tabindex="-1"></a><span class="fu">ggplot</span>(yellpratio, <span class="fu">aes</span>(<span class="at">x=</span>APJul, <span class="at">y=</span>APJan)) <span class="sc">+</span></span>
+<span id="cb67-12"><a href="#cb67-12" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">span =</span> <span class="fl">0.9</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb67-13"><a href="#cb67-13" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb67-14"><a href="#cb67-14" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb67-15"><a href="#cb67-15" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Loc_factor)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;
+## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="plots1_files/figure-html/plots1-52-1.png" width="80%" height="80%" /></p>
 <p><a href="plots1.html">[Back to top]</a></p>
 </div>
 </div>
