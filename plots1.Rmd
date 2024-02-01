@@ -9,7 +9,7 @@ output:
     collapsed: no
 ---
 
-````{r plots1-1, echo=FALSE}
+```{r plots1-1, echo=FALSE}
 options(width = 105)
 knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "80%", out.height = "80%", verbose=TRUE)
 pdf.options(useDingbats = TRUE)
@@ -66,7 +66,7 @@ There are two basic kinds of univariate, or one-variable-at-a-time plots,
 
 Load the `ggplot2` package:
 
-````{r plots1-3 }
+```{r plots1-2 }
 # ggplot2 versions of plots
 library(ggplot2)
 ```
@@ -74,7 +74,7 @@ library(ggplot2)
 Also load some data to reproduce the examples here:
 
 
-````{r plots1-2}
+```{r plots1-3 }
 # load data from a saved .RData file
 con <- url("https://pages.uoregon.edu/bartlein/RESS/RData/geog490.RData")
 load(file=con) 
@@ -84,7 +84,7 @@ We'll start with plots that are *univariate* (one variable) *enumerative* (all d
 
 Here is the **R** base graphics simple index plot, with the value of the variable being plotted on the y axis, and the row number in the data.frame on the x-axis (and note the use of the `attach()` function to make the variables available using just their names, as opposed ot "full names" (e.g. `Length` as opposed to `sumcr$Length`):
 
-````{r plots1-4 }
+```{r plots1-4 }
 # index plot
 attach(sumcr)
 plot(Length)
@@ -92,7 +92,7 @@ plot(Length)
 
 Here's the `{ggplot2}` version of the same plot. The code is longer, but the additions allow for greater control, with the plot being built up in layers. The easiest way to see how the plots work is to comment out one or more lines (after the first) to see how the plots work.
 
-````{r plots1-5 }
+```{r plots1-5 }
 # ggplot version
 ggplot() + 
   geom_point(data = sumcr, aes(x = 1:nrow(sumcr), y = Length)) +
@@ -103,7 +103,7 @@ ggplot() +
 
 Another common univariate enumerative plot is the the strip plot / chart, plain and stacked:
 
-````{r plots1-6 }
+```{r plots1-6 }
 # stripchart
 stripchart(Length)
 stripchart(Length, method="stack")
@@ -111,7 +111,7 @@ stripchart(Length, method="stack")
 
 The full `ggplot2()` almost reproduces the base-graphics version.  Note the use of the `aes()` (aesthetic) function for describing the basic plot, which then has the dotplot added using the `geom_dotplot()` function.  The `theme_bw()` term specifies the simple black-and-white theme.  As in the case of a histogram, the `binwidth` parameter controls the granularity of the plot, and `coord_fixed()` function changes the aspect ratio of the plot.  (The white space can be cropped when saving the image.)
 
-````{r plots1-7}
+```{r plots1-7 }
 # ggplot stripchart
 ggplot(data=sumcr, aes(x = Length)) + 
   geom_dotplot(binwidth = 0.25, method = "histodot") + 
@@ -124,14 +124,14 @@ Note that the whitespace could be removed after saving the figure.
 
 "Cleveland-style" dot charts are named after their inventor, William S. Cleveland, who wrote a couple of influential books on datea visualization, and participated in the development of S at Bell Labs. They were designed as an antidote to bar and pie charts, which are notorious for their poor performance in delivering information. Here's a base-graphics Cleveland-style dotchart.
 
-````{r plots1-8}
+```{r plots1-8 }
 # Cleveland-style dot charts
 dotchart(WidthWS, labels=as.character(Location), cex=0.5)
 ```
 
 ... and the `ggplot2` equivalent:
 
-````{r plots1-9}
+```{r plots1-9 }
 ggplot(sumcr, aes(x=WidthWS, y=Location)) + geom_point(size=1) 
 ggplot(sumcr, aes(x=WidthWS, y=Location)) + geom_point(size=1) + theme_bw()
 ```
@@ -142,7 +142,7 @@ An alternative version of this plot, and the one most frequently used, can be co
 
 Here's the dotchart, with rows ordered by the `WidthWS` values:
 
-````{r plots1-10 }
+```{r plots1-10 }
 # sorted dotchart
 index <- order(WidthWS)
 dotchart(WidthWS[index], labels=as.character(Location[index]), cex=0.5)
@@ -150,7 +150,7 @@ dotchart(WidthWS[index], labels=as.character(Location[index]), cex=0.5)
 
 ... and the `ggplot2` equivalent--note the use of the `theme()` term to modify the label size:
 
-````{r plots1-11 }
+```{r plots1-11 }
 ggplot(sumcr, aes(x=WidthWS, y=reorder(Location, WidthWS))) + 
   geom_point(size=1) + 
   theme(axis.text.y = element_text(size=4, face="italic"))
@@ -162,7 +162,7 @@ Summary plots display an object or a graph that gives a more concise expression 
 
 Boxplots are an example of a *univariate* and *summary* plot. Here is the standard boxplot:
 
-````{r plots1-12 }
+```{r plots1-12 }
 # Boxplot
 boxplot(WidthWS ~ HU, range=0)
 ```
@@ -170,13 +170,13 @@ boxplot(WidthWS ~ HU, range=0)
 ... and the `{ggplot2}` version:
 
 
-````{r plots1-14 }
+```{r plots1-13 }
 ggplot(data = sumcr, aes(x=HU, y=WidthWS)) + geom_boxplot() + theme_bw()
 ```
 
 The actual data points can be added to the boxplot, by specifying an additional graphical element using the `geom_point()` function
 
-````{r plots1-15 }
+```{r plots1-14 }
 # ggplot box and points
 ggplot(sumcr, aes(x=HU, y=WidthWS)) + 
   geom_boxplot() +
@@ -184,7 +184,7 @@ ggplot(sumcr, aes(x=HU, y=WidthWS)) +
 ```
 Detach the `sumcr` dataframe.
 
-````{r plots1-16 }
+```{r plots1-15 }
 detach(sumcr)
 ```
 
@@ -192,7 +192,7 @@ detach(sumcr)
 
 Histograms are a type of bar chart that displays the counts or relative frequencies of values falling in different class intervals or ranges.  The overall impression one gets about the distribution of a variable depends somewhat on the way the histogram is constructed:  fewer bars give a more generalized view, but may obscure details of the distribution (the existence of a bimodal distribution, for example), while more may not generalize enough.  
 
-````{r plots1-17 }
+```{r plots1-16 }
 # histograms
 # attach(specmap)
 hist(specmap$O18, breaks=20)
@@ -200,14 +200,14 @@ hist(specmap$O18, breaks=20)
 
 Here's the `ggplot2` version, with the biwidth specified explicitly (e.g., 1.0)
 
-````{r plots1-18 }
+```{r plots1-17 }
 ggplot(specmap, aes(x = O18)) + 
   geom_histogram(binwidth = 0.1, fill = "white", color = "red", boundary = 0.05)
 ```
 
 The look of a histogram depends a lot on the choice of bin-widths, and the impression one may have about the distribution of the data is influenced by the "spikiness" of the data. An alternative is the density plot -- a plot of the local relative frequency or density of points along the number line or x-axis of a plot.  The local density is determined by summing the individual "kernel" densities for each point.  Where points occur more frequently, this sum, and consequently the local density, will be greater.  Density plots get around some of the problems that histograms have, but still require some choices to be made. Here's a base-graphics density plot:
 
-````{r plots1-21 }
+```{r plots1-18 }
 # density plots
 O18_density <- density(specmap$O18)
 plot(O18_density)
@@ -216,13 +216,13 @@ Note that in this example, an object `O18.density` is created by the `density()`
 
 Here's a version the `ggplot2` density plot:
 
-````{r plots1-22 }
+```{r plots1-19 }
 ggplot(specmap, aes(x = O18)) + geom_density() + ylim(0.0, 0.5)
 ```
 
 A combined histogram, density and rug plot via the base graphics:
 
-````{r plots1-23 }
+```{r plots1-20 }
 hist(specmap$O18, breaks=20, probability=TRUE)
 lines(O18_density)
 rug(specmap$O18)
@@ -230,7 +230,7 @@ rug(specmap$O18)
 
 And here's a `ggplot` version, with three distinct layers:
 
-````{r plots1-24 }
+```{r plots1-21 }
 ggplot(specmap, aes(x = O18)) + 
   geom_histogram(binwidth = 0.1, fill = "white", color = "red", boundary = 0.05) + 
   geom_line(stat = "density") +
@@ -255,7 +255,7 @@ The scatter diagram is *the* workhourse diagram for looking at relationships bet
 
 Here's the base plot version of a scatter diagram:
 
-````{r plots1-26 }
+```{r plots1-22 }
 # scatter plots
 # use Oregon climate-station data 
 attach(orstationc)
@@ -264,7 +264,7 @@ plot(elev,tann)
 
 ... and here are two `{ggplot2}` scatter plots of annual temperature and annual precipitation vs. elevation:
 
-````{r plots1-29 }
+```{r plots1-23 }
 # ggplot2 scatter diagrams
 ggplot(orstationc, aes(x = elev, y = tann)) + geom_point()
 ggplot(orstationc, aes(x = elev, y = pann)) + geom_point()
@@ -272,7 +272,7 @@ ggplot(orstationc, aes(x = elev, y = pann)) + geom_point()
 
 It might make sense to compare the plots side-by-side. That can be done for the `ggplot2` versions of those plots cby generating the plots, saving them as objects (`plot1` and `plot2`), and then using a function `grid.arrange()` from the `gridExtra` package to plot the two objects:
 
-````{r plots1-30 }
+```{r plots1-24 }
 library(gridExtra)
 plot1 <- ggplot(orstationc, aes(x = elev, y = tann)) + geom_point()
 plot2 <- ggplot(orstationc, aes(x = elev, y = pann)) + geom_point()
@@ -281,7 +281,7 @@ grid.arrange(plot1, plot2, ncol=2)
 
 Note that `ggplot2` allows one to transform the coordinate system as well as the values of the individual variables.  Here a square-root scaling of the y-axis is done, to examine the relationship between precipitation and elevation, when the precipitation values have been transformed in an attempt to make the relationship more linear.  Note that the overall appearance of the plots is identical--it's the y-axes that differ.
 
-````{r plots1-31 }
+```{r plots1-25 }
 plot1 <- ggplot(orstationc, aes(x = elev, y = tann)) + geom_point()
 plot2 <- ggplot(orstationc, aes(x = elev, y = pann)) + coord_trans(y="sqrt") + geom_point()
 grid.arrange(plot1, plot2, ncol=2)
@@ -291,14 +291,14 @@ Labeling of points using `ggplot` is possible, and again `ggplot2()` offers more
 
 Here is the base plotting version of a text-labelled scatter plot:
 
-````{r plots1-33 }
+```{r plots1-26 }
 plot(orstationc$tann ~ orstationc$elev, type="n")
 text(orstationc$tann ~ orstationc$elev, labels=as.character(orstationc$station), cex = 0.8) # text
 ```
 
 A `ggplot` version of the same ia shown below.  The `check_overlap()` function attempts to move the labels to avoid overplotting.  To see where the datapoints actualy lie, they are added as dots.
 
-````{r plots1-34 }
+```{r plots1-27 }
 ggplot(orstationc, aes(x= elev, y = tann, label=as.character(station))) +
   geom_text(check_overlap = TRUE, size = 3) +
   geom_point(size = 0.5) + 
@@ -307,7 +307,7 @@ ggplot(orstationc, aes(x= elev, y = tann, label=as.character(station))) +
 
 Here's another approach to point-labeling:
 
-````{r plots1-35 }
+```{r plots1-28 }
 ggplot(orstationc, aes(x= elev, y = tann, label=as.character(station))) +
   geom_label(size = 3) + 
   # geom_point(size = 1, color = "red") +
@@ -316,7 +316,7 @@ ggplot(orstationc, aes(x= elev, y = tann, label=as.character(station))) +
 
 Note the difference between the plots--the first plots a simple text string using `geom_text()` while the second plots a more formal label using `geom_label()`.
 
-````{r plots1-36}
+```{r plots1-29 }
 detach(orstationc)
 ```
 
@@ -326,7 +326,7 @@ Although the visual inspection of a scatter plot generally reveals the nature of
 
 Scatter plot smoothing involves fitting a smoothed curve through the cloud of points to describe the general relationship between variables.  This technique is very generalizable, and a variety of smoothers can be used.  The most common is the "lowess" or "loess" smoother, which will be discussed in more detail later.
 
-````{r plots1-39 }
+```{r plots1-30 }
 # use Oregon climate station annual temperature data 
 attach(ortann)
 plot(elevation, tann)
@@ -335,7 +335,7 @@ lines(lowess(elevation,tann))
 
 The `ggplot2` version uses `stat_smooth()` to get the lowess curve (and confidence band):
 
-````{r plots1-40 }
+```{r plots1-31 }
 # ggplot scatter plot plus smooth
 ggplot(data = ortann, aes(x = elevation, y = tann)) + 
   geom_point() + 
@@ -343,7 +343,7 @@ ggplot(data = ortann, aes(x = elevation, y = tann)) +
   theme_bw()
 ```
 
-````{r plots1-41}
+```{r plots1-32 }
 detach(ortann)
 ```
 [[Back to top]](plots1.html)
@@ -356,7 +356,7 @@ In addition to the simple catagorial (or factor) labelling of plots, the `{ggplo
 
 Here's the base R version of the specmap data.  Recall that the relationship between ice volume and insolation anomalies (or differences from the present day, which are considered to be the pacemake of the ice ages) is weak when examined superficially. 
 
-````{r plots1-42 }
+```{r plots1-33 }
 attach(specmap)
 plot(O18 ~ Insol, pch=16, cex=0.6)
 cor(O18, Insol)
@@ -364,7 +364,7 @@ cor(O18, Insol)
 
  As we saw earlier, on approach is to look at the time series plot of O18 values, and use insolation to colorize the individual points.
  
-````{r plots1-43 }
+```{r plots1-34 }
 library(RColorBrewer)
 library(classInt) # class-interval recoding library
 # first block -- setup
@@ -382,7 +382,7 @@ points(O18 ~ Age, pch=16, col=colcode, cex=1.5)
 
 Here's a `ggplot2` version, where the colorization is extended to the lines as well as the symbols.
 
-````{r plots1-44 }
+```{r plots1-35 }
 ggplot() + 
   geom_line(data = specmap, aes(x=Age, y=O18, color=Insol)) +
   geom_point(data = specmap, aes(x=Age, y=O18, color=Insol), size = 3) +  
@@ -392,13 +392,13 @@ ggplot() +
 
 As we saw earlier, positive insolation anomalies are associated with trends toward lower ice volume (negative O18 values, note the y-axis labelling), and negative anomalies with increasing ice volume.
 
-````{r plots1-45}
+```{r plots1-36 }
 detach(specmap)
 ```
 
 Symbol color and shape can be used to encode the values of two additional variables, as demonstrated using the Summit Cr. data:
 
-````{r plots1-46 }
+```{r plots1-37 }
 attach(sumcr)
 plot(WidthWS ~ CumLen, pch=as.integer(Reach), col=as.integer(HU))
 legend(25, 2, c("Reach A", "Reach B", "Reach C"), pch=c(1,2,3), col=1)
@@ -407,18 +407,18 @@ legend(650, 2, c("Glide", "Pool", "Riffle"), pch=1, col=c(1,2,3))
 
 Here is the `ggplot2` version:
 
-````{r plots1-47 }
+```{r plots1-38 }
 # ggplot2 version
 ggplot(sumcr, aes(x=CumLen, y=WidthWS, shape=Reach, color=HU)) + geom_point(size = 3)
 ```
 
-````{r plots1-48}
+```{r plots1-39 }
 detach(sumcr)
 ```
 
 Symbol size can be used to indicate the value of a third variable, forming a "bubble" or "balloon" plot, to indicate the value of station elevation on a simple longitude by latitude plot of the Oregon climate-station data:
 
-````{r plots1-49 }
+```{r plots1-40 }
 # bubble plot
 plot(orstationc$lon, orstationc$lat, type="n")
 symbols(orstationc$lon, orstationc$lat, circles=orstationc$elev, inches=0.1, add=T)
@@ -426,7 +426,7 @@ symbols(orstationc$lon, orstationc$lat, circles=orstationc$elev, inches=0.1, add
 
 Here's the equivalent plot using `ggplot2`
 
-````{r plots1-50 }
+```{r plots1-41 }
 # ggplot version
 ggplot() + 
   geom_sf(data = orcounty_sf, fill = NA) +

@@ -748,7 +748,7 @@ plot. Here is the standard boxplot:</p>
 <p><img src="plots1_files/figure-html/plots1-12-1.png" width="80%" height="80%" /></p>
 <p>… and the <code>{ggplot2}</code> version:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> sumcr, <span class="fu">aes</span>(<span class="at">x=</span>HU, <span class="at">y=</span>WidthWS)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-14-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-13-1.png" width="80%" height="80%" /></p>
 <p>The actual data points can be added to the boxplot, by specifying an
 additional graphical element using the <code>geom_point()</code>
 function</p>
@@ -756,7 +756,7 @@ function</p>
 <span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>HU, <span class="at">y=</span>WidthWS)) <span class="sc">+</span> </span>
 <span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
 <span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">&quot;blue&quot;</span>) </span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-15-1.png" width="80%" height="80%" />
+<p><img src="plots1_files/figure-html/plots1-14-1.png" width="80%" height="80%" />
 Detach the <code>sumcr</code> dataframe.</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
 </div>
@@ -774,12 +774,12 @@ while more may not generalize enough.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># histograms</span></span>
 <span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co"># attach(specmap)</span></span>
 <span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="fu">hist</span>(specmap<span class="sc">$</span>O18, <span class="at">breaks=</span><span class="dv">20</span>)</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-17-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-16-1.png" width="80%" height="80%" /></p>
 <p>Here’s the <code>ggplot2</code> version, with the biwidth specified
 explicitly (e.g., 1.0)</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">ggplot</span>(specmap, <span class="fu">aes</span>(<span class="at">x =</span> O18)) <span class="sc">+</span> </span>
 <span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.1</span>, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">boundary =</span> <span class="fl">0.05</span>)</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-18-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-17-1.png" width="80%" height="80%" /></p>
 <p>The look of a histogram depends a lot on the choice of bin-widths,
 and the impression one may have about the distribution of the data is
 influenced by the “spikiness” of the data. An alternative is the density
@@ -793,25 +793,25 @@ base-graphics density plot:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># density plots</span></span>
 <span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>O18_density <span class="ot">&lt;-</span> <span class="fu">density</span>(specmap<span class="sc">$</span>O18)</span>
 <span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="fu">plot</span>(O18_density)</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-21-1.png" width="80%" height="80%" />
+<p><img src="plots1_files/figure-html/plots1-18-1.png" width="80%" height="80%" />
 Note that in this example, an object <code>O18.density</code> is created
 by the <code>density()</code> function, and then plotted using the
 <code>plot()</code> function.</p>
 <p>Here’s a version the <code>ggplot2</code> density plot:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">ggplot</span>(specmap, <span class="fu">aes</span>(<span class="at">x =</span> O18)) <span class="sc">+</span> <span class="fu">geom_density</span>() <span class="sc">+</span> <span class="fu">ylim</span>(<span class="fl">0.0</span>, <span class="fl">0.5</span>)</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-22-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-19-1.png" width="80%" height="80%" /></p>
 <p>A combined histogram, density and rug plot via the base graphics:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">hist</span>(specmap<span class="sc">$</span>O18, <span class="at">breaks=</span><span class="dv">20</span>, <span class="at">probability=</span><span class="cn">TRUE</span>)</span>
 <span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">lines</span>(O18_density)</span>
 <span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="fu">rug</span>(specmap<span class="sc">$</span>O18)</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-23-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-20-1.png" width="80%" height="80%" /></p>
 <p>And here’s a <code>ggplot</code> version, with three distinct
 layers:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">ggplot</span>(specmap, <span class="fu">aes</span>(<span class="at">x =</span> O18)) <span class="sc">+</span> </span>
 <span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.1</span>, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">boundary =</span> <span class="fl">0.05</span>) <span class="sc">+</span> </span>
 <span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">stat =</span> <span class="st">&quot;density&quot;</span>) <span class="sc">+</span></span>
 <span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>  <span class="fu">geom_rug</span>(<span class="at">data =</span> specmap, <span class="fu">aes</span>(<span class="at">x =</span> O18)) </span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-24-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-21-1.png" width="80%" height="80%" /></p>
 <p><a href="plots1.html">[Back to top]</a></p>
 </div>
 </div>
@@ -849,14 +849,14 @@ variable second (i.e., an X-Y plots).</p>
 <span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="co"># use Oregon climate-station data </span></span>
 <span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="fu">attach</span>(orstationc)</span>
 <span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="fu">plot</span>(elev,tann)</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-26-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-22-1.png" width="80%" height="80%" /></p>
 <p>… and here are two <code>{ggplot2}</code> scatter plots of annual
 temperature and annual precipitation vs. elevation:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># ggplot2 scatter diagrams</span></span>
 <span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> tann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-29-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-23-1.png" width="80%" height="80%" /></p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> pann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-29-2.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-23-2.png" width="80%" height="80%" /></p>
 <p>It might make sense to compare the plots side-by-side. That can be
 done for the <code>ggplot2</code> versions of those plots cby generating
 the plots, saving them as objects (<code>plot1</code> and
@@ -867,7 +867,7 @@ plot the two objects:</p>
 <span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> tann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
 <span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> pann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
 <span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="fu">grid.arrange</span>(plot1, plot2, <span class="at">ncol=</span><span class="dv">2</span>)</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-30-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-24-1.png" width="80%" height="80%" /></p>
 <p>Note that <code>ggplot2</code> allows one to transform the coordinate
 system as well as the values of the individual variables. Here a
 square-root scaling of the y-axis is done, to examine the relationship
@@ -878,7 +878,7 @@ y-axes that differ.</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> tann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
 <span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> pann)) <span class="sc">+</span> <span class="fu">coord_trans</span>(<span class="at">y=</span><span class="st">&quot;sqrt&quot;</span>) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
 <span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="fu">grid.arrange</span>(plot1, plot2, <span class="at">ncol=</span><span class="dv">2</span>)</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-31-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-25-1.png" width="80%" height="80%" /></p>
 <p>Labeling of points using <code>ggplot</code> is possible, and again
 <code>ggplot2()</code> offers more fine control, such as some ability to
 deal with text overlap.</p>
@@ -886,7 +886,7 @@ deal with text overlap.</p>
 plot:</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">plot</span>(orstationc<span class="sc">$</span>tann <span class="sc">~</span> orstationc<span class="sc">$</span>elev, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
 <span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="fu">text</span>(orstationc<span class="sc">$</span>tann <span class="sc">~</span> orstationc<span class="sc">$</span>elev, <span class="at">labels=</span><span class="fu">as.character</span>(orstationc<span class="sc">$</span>station), <span class="at">cex =</span> <span class="fl">0.8</span>) <span class="co"># text</span></span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-33-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-26-1.png" width="80%" height="80%" /></p>
 <p>A <code>ggplot</code> version of the same ia shown below. The
 <code>check_overlap()</code> function attempts to move the labels to
 avoid overplotting. To see where the datapoints actualy lie, they are
@@ -895,13 +895,13 @@ added as dots.</p>
 <span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">check_overlap =</span> <span class="cn">TRUE</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
 <span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
 <span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a>  <span class="fu">theme_gray</span>()</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-34-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-27-1.png" width="80%" height="80%" /></p>
 <p>Here’s another approach to point-labeling:</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x=</span> elev, <span class="at">y =</span> tann, <span class="at">label=</span><span class="fu">as.character</span>(station))) <span class="sc">+</span></span>
 <span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>  <span class="fu">geom_label</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
 <span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>  <span class="co"># geom_point(size = 1, color = &quot;red&quot;) +</span></span>
 <span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>  <span class="fu">theme_gray</span>()</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-35-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-28-1.png" width="80%" height="80%" /></p>
 <p>Note the difference between the plots–the first plots a simple text
 string using <code>geom_text()</code> while the second plots a more
 formal label using <code>geom_label()</code>.</p>
@@ -927,7 +927,7 @@ discussed in more detail later.</p>
 <span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="fu">attach</span>(ortann)</span>
 <span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a><span class="fu">plot</span>(elevation, tann)</span>
 <span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">lowess</span>(elevation,tann))</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-39-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-30-1.png" width="80%" height="80%" /></p>
 <p>The <code>ggplot2</code> version uses <code>stat_smooth()</code> to
 get the lowess curve (and confidence band):</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># ggplot scatter plot plus smooth</span></span>
@@ -936,7 +936,7 @@ get the lowess curve (and confidence band):</p>
 <span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">span =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
 <span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
-<p><img src="plots1_files/figure-html/plots1-40-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-31-1.png" width="80%" height="80%" /></p>
 <div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="fu">detach</span>(ortann)</span></code></pre></div>
 <p><a href="plots1.html">[Back to top]</a></p>
 </div>
@@ -960,7 +960,7 @@ from the present day, which are considered to be the pacemake of the ice
 ages) is weak when examined superficially.</p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">attach</span>(specmap)</span>
 <span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a><span class="fu">plot</span>(O18 <span class="sc">~</span> Insol, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">0.6</span>)</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-42-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-33-1.png" width="80%" height="80%" /></p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="fu">cor</span>(O18, Insol)</span></code></pre></div>
 <pre><code>## [1] -0.2415094</code></pre>
 <p>As we saw earlier, on approach is to look at the time series plot of
@@ -978,7 +978,7 @@ O18 values, and use insolation to colorize the individual points.</p>
 <span id="cb39-11"><a href="#cb39-11" tabindex="-1"></a><span class="co"># second block -- plot</span></span>
 <span id="cb39-12"><a href="#cb39-12" tabindex="-1"></a><span class="fu">plot</span>(O18 <span class="sc">~</span> Age, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fl">2.5</span>,<span class="sc">-</span><span class="fl">2.5</span>), <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span>
 <span id="cb39-13"><a href="#cb39-13" tabindex="-1"></a><span class="fu">points</span>(O18 <span class="sc">~</span> Age, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span>colcode, <span class="at">cex=</span><span class="fl">1.5</span>)</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-43-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-34-1.png" width="80%" height="80%" /></p>
 <p>Here’s a <code>ggplot2</code> version, where the colorization is
 extended to the lines as well as the symbols.</p>
 <div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
@@ -986,7 +986,7 @@ extended to the lines as well as the symbols.</p>
 <span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> specmap, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>O18, <span class="at">color=</span>Insol), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span>  </span>
 <span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span> </span>
 <span id="cb40-5"><a href="#cb40-5" tabindex="-1"></a>  <span class="fu">scale_colour_gradientn</span>(<span class="at">colours=</span><span class="fu">rev</span>(<span class="fu">brewer.pal</span>(nclr,<span class="st">&quot;PuOr&quot;</span>)))</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-44-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-35-1.png" width="80%" height="80%" /></p>
 <p>As we saw earlier, positive insolation anomalies are associated with
 trends toward lower ice volume (negative O18 values, note the y-axis
 labelling), and negative anomalies with increasing ice volume.</p>
@@ -997,11 +997,11 @@ additional variables, as demonstrated using the Summit Cr. data:</p>
 <span id="cb42-2"><a href="#cb42-2" tabindex="-1"></a><span class="fu">plot</span>(WidthWS <span class="sc">~</span> CumLen, <span class="at">pch=</span><span class="fu">as.integer</span>(Reach), <span class="at">col=</span><span class="fu">as.integer</span>(HU))</span>
 <span id="cb42-3"><a href="#cb42-3" tabindex="-1"></a><span class="fu">legend</span>(<span class="dv">25</span>, <span class="dv">2</span>, <span class="fu">c</span>(<span class="st">&quot;Reach A&quot;</span>, <span class="st">&quot;Reach B&quot;</span>, <span class="st">&quot;Reach C&quot;</span>), <span class="at">pch=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), <span class="at">col=</span><span class="dv">1</span>)</span>
 <span id="cb42-4"><a href="#cb42-4" tabindex="-1"></a><span class="fu">legend</span>(<span class="dv">650</span>, <span class="dv">2</span>, <span class="fu">c</span>(<span class="st">&quot;Glide&quot;</span>, <span class="st">&quot;Pool&quot;</span>, <span class="st">&quot;Riffle&quot;</span>), <span class="at">pch=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>))</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-46-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-37-1.png" width="80%" height="80%" /></p>
 <p>Here is the <code>ggplot2</code> version:</p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="co"># ggplot2 version</span></span>
 <span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>CumLen, <span class="at">y=</span>WidthWS, <span class="at">shape=</span>Reach, <span class="at">color=</span>HU)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>)</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-47-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-38-1.png" width="80%" height="80%" /></p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
 <p>Symbol size can be used to indicate the value of a third variable,
 forming a “bubble” or “balloon” plot, to indicate the value of station
@@ -1010,7 +1010,7 @@ climate-station data:</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="co"># bubble plot</span></span>
 <span id="cb45-2"><a href="#cb45-2" tabindex="-1"></a><span class="fu">plot</span>(orstationc<span class="sc">$</span>lon, orstationc<span class="sc">$</span>lat, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
 <span id="cb45-3"><a href="#cb45-3" tabindex="-1"></a><span class="fu">symbols</span>(orstationc<span class="sc">$</span>lon, orstationc<span class="sc">$</span>lat, <span class="at">circles=</span>orstationc<span class="sc">$</span>elev, <span class="at">inches=</span><span class="fl">0.1</span>, <span class="at">add=</span>T)</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-49-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-40-1.png" width="80%" height="80%" /></p>
 <p>Here’s the equivalent plot using <code>ggplot2</code></p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="co"># ggplot version</span></span>
 <span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
@@ -1018,7 +1018,7 @@ climate-station data:</p>
 <span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> orstationc, <span class="fu">aes</span>(<span class="at">x=</span>lon, <span class="at">y=</span>lat, <span class="at">size=</span>elev), <span class="at">shape=</span><span class="dv">21</span>, <span class="at">color=</span><span class="st">&quot;black&quot;</span>, <span class="at">fill=</span><span class="st">&quot;lightblue&quot;</span>) <span class="sc">+</span></span>
 <span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">125</span>, <span class="sc">-</span><span class="dv">116</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">41</span>, <span class="dv">47</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
 <span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-50-1.png" width="80%" height="80%" /></p>
+<p><img src="plots1_files/figure-html/plots1-41-1.png" width="80%" height="80%" /></p>
 <p><a href="plots1.html">[Back to top]</a></p>
 </div>
 </div>
