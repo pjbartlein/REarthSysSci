@@ -9,7 +9,6 @@ library(ggplot2)
 attach(sumcr)
 plot(Length)
 
-qplot(seq(1:length(Length)), Length)
 ggplot(data=sumcr, aes(x = Length)) + 
   geom_point(aes(x = 1:nrow(sumcr), y = Length)) + 
   geom_line(aes(x = 1:nrow(sumcr), y = Length)) +
@@ -68,6 +67,7 @@ ggplot(specmap, aes(x = O18)) +
   geom_histogram(binwidth = 0.1, fill = "white", color = "red", boundary = 0.05) + 
   geom_line(stat = "density") +
   geom_rug(data = specmap, aes(x = O18)) 
+
 
 # scatter plots
 # use Oregon climate-station data 
@@ -147,7 +147,11 @@ detach(sumcr)
 plot(orstationc$lon, orstationc$lat, type="n")
 symbols(orstationc$lon, orstationc$lat, circles=orstationc$elev, inches=0.1, add=T)
 
-ggplot(orstationc, aes(x=lon, y=lat, size=elev)) + geom_point(shape=21, color="black", fill="lightblue")
+ggplot() + 
+  geom_sf(data = orcounty_sf, fill = NA) +
+  geom_point(data = orstationc, aes(x=lon, y=lat, size=elev), shape=21, color="black", fill="lightblue") +
+  coord_sf(xlim = c(-125, -116), ylim = c(41, 47), expand = FALSE) +
+  theme_bw()
 
 library(lattice)
 
