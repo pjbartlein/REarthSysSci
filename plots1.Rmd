@@ -131,6 +131,7 @@ dotchart(WidthWS, labels=as.character(Location), cex=0.5)
 ... and the `{ggplot2}` equivalent:
 
 ```{r plots1-9 }
+# Cleveland-stype dot chart
 ggplot(sumcr, aes(x=WidthWS, y=Location)) + geom_point(size=1) 
 ggplot(sumcr, aes(x=WidthWS, y=Location)) + geom_point(size=1) + theme_bw()
 ```
@@ -150,6 +151,7 @@ dotchart(WidthWS[index], labels=as.character(Location[index]), cex=0.5)
 ... and the `{ggplot2}` equivalent--note the use of the `theme()` term to modify the label size:
 
 ```{r plots1-11 }
+# Cleveland-style dot chart, reordered y variable
 ggplot(sumcr, aes(x=WidthWS, y=reorder(Location, WidthWS))) + 
   geom_point(size=1) + 
   theme(axis.text.y = element_text(size=4, face="italic"))
@@ -168,8 +170,8 @@ boxplot(WidthWS ~ HU, range=0)
 
 ... and the `{ggplot2}` version:
 
-
 ```{r plots1-13 }
+# boxplot
 ggplot(data = sumcr, aes(x=HU, y=WidthWS)) + geom_boxplot() + theme_bw()
 ```
 
@@ -181,9 +183,11 @@ ggplot(sumcr, aes(x=HU, y=WidthWS)) +
   geom_boxplot() +
   geom_point(colour = "blue") 
 ```
+
 Detach the `sumcr` dataframe.
 
 ```{r plots1-15 }
+# detach sumcr
 detach(sumcr)
 ```
 
@@ -211,6 +215,7 @@ The look of a histogram depends a lot on the choice of bin-widths, and the impre
 O18_density <- density(specmap$O18)
 plot(O18_density)
 ```
+
 Note that in this example, an object `O18.density` is created by the `density()` function, and then plotted using the `plot()` function.
 
 Here's a version the `{ggplot2}` density plot:
@@ -222,6 +227,7 @@ ggplot(specmap, aes(x = O18)) + geom_density() + ylim(0.0, 0.5)
 A combined histogram, density and rug plot via the base graphics:
 
 ```{r plots1-20 }
+# histogram, density, rug
 hist(specmap$O18, breaks=20, probability=TRUE)
 lines(O18_density)
 rug(specmap$O18)
@@ -230,8 +236,9 @@ rug(specmap$O18)
 And here's a `ggplot` version, with three distinct layers:
 
 ```{r plots1-21 }
+# histogram, density, rug
 ggplot(specmap, aes(x = O18)) + 
-  geom_histogram(binwidth = 0.1, fill = "white", color = "red", boundary = 0.05) + 
+  geom_histogram(aes(y = ..density..), binwidth = 0.1, fill = "white", color = "red", boundary = 0.05) + 
   geom_line(stat = "density") +
   geom_rug(data = specmap, aes(x = O18)) 
 ```
@@ -272,6 +279,7 @@ ggplot(orstationc, aes(x = elev, y = pann)) + geom_point()
 It might make sense to compare the plots side-by-side. That can be done for the `{ggplot2}` versions of those plots cby generating the plots, saving them as objects (`plot1` and `plot2`), and then using a function `grid.arrange()` from the `gridExtra` package to plot the two objects:
 
 ```{r plots1-24 }
+# side-by-side plots
 library(gridExtra)
 plot1 <- ggplot(orstationc, aes(x = elev, y = tann)) + geom_point()
 plot2 <- ggplot(orstationc, aes(x = elev, y = pann)) + geom_point()
@@ -281,6 +289,7 @@ grid.arrange(plot1, plot2, ncol=2)
 Note that `{ggplot2}` allows one to transform the coordinate system as well as the values of the individual variables.  Here a square-root scaling of the y-axis is done, to examine the relationship between precipitation and elevation, when the precipitation values have been transformed in an attempt to make the relationship more linear.  Note that the overall appearance of the plots is identical--it's the y-axes that differ.
 
 ```{r plots1-25 }
+# transformed y-axis
 plot1 <- ggplot(orstationc, aes(x = elev, y = tann)) + geom_point()
 plot2 <- ggplot(orstationc, aes(x = elev, y = pann)) + coord_trans(y="sqrt") + geom_point()
 grid.arrange(plot1, plot2, ncol=2)
@@ -291,6 +300,7 @@ Labeling of points using `ggplot` is possible, and again `{ggplot2}` offers more
 Here is the base plotting version of a text-labelled scatter plot:
 
 ```{r plots1-26 }
+# text labels
 plot(orstationc$tann ~ orstationc$elev, type="n")
 text(orstationc$tann ~ orstationc$elev, labels=as.character(orstationc$station), cex = 0.8) # text
 ```
@@ -298,6 +308,7 @@ text(orstationc$tann ~ orstationc$elev, labels=as.character(orstationc$station),
 A `ggplot` version of the same ia shown below.  The `check_overlap()` function attempts to move the labels to avoid overplotting.  To see where the datapoints actualy lie, they are added as dots.
 
 ```{r plots1-27 }
+# text labels
 ggplot(orstationc, aes(x= elev, y = tann, label=as.character(station))) +
   geom_text(check_overlap = TRUE, size = 3) +
   geom_point(size = 0.5) + 
@@ -307,6 +318,7 @@ ggplot(orstationc, aes(x= elev, y = tann, label=as.character(station))) +
 Here's another approach to point-labeling:
 
 ```{r plots1-28 }
+# text-label boxes
 ggplot(orstationc, aes(x= elev, y = tann, label=as.character(station))) +
   geom_label(size = 3) + 
   # geom_point(size = 1, color = "red") +
@@ -316,6 +328,7 @@ ggplot(orstationc, aes(x= elev, y = tann, label=as.character(station))) +
 Note the difference between the plots--the first plots a simple text string using `geom_text()` while the second plots a more formal label using `geom_label()`.
 
 ```{r plots1-29 }
+# detach orstationc
 detach(orstationc)
 ```
 
@@ -355,13 +368,14 @@ Multivariate descriptive displays or plots are designed to reveal the relationsh
 - the *strength* of the relationships, and 
 - the *dependence* of the relationships on external (usually to the pairs of variables being examined) circumstances.
 
-## Labelled scatter plots #
+## Labeled scatter plots #
 
 In addition to the simple catagorial (or factor) labelling of plots, the `{ggplot2}` package supports more elaborate, or computed, decoration or coloring of plots, in order to examine the role of additional variables on bivariate relationships. Annotation of points involves adding information to a plot for individual points, that include such things as the observation number or other information, to "explain" individual points that may be unusual, or to simply identify the point for a key observation or set of observations.
 
 Here's the base R version of the specmap data.  Recall that the relationship between ice volume and insolation anomalies (or differences from the present day, which are considered to be the pacemake of the ice ages) is weak when examined superficially. 
 
 ```{r plots1-33 }
+# scatter plot
 attach(specmap)
 plot(O18 ~ Insol, pch=16, cex=0.6)
 cor(O18, Insol)
@@ -370,6 +384,7 @@ cor(O18, Insol)
  As we saw earlier, on approach is to look at the time series plot of O18 values, and use insolation to colorize the individual points.
  
 ```{r plots1-34 }
+# points decorated by color
 library(RColorBrewer)
 library(classInt) # class-interval recoding library
 # first block -- setup
@@ -388,6 +403,7 @@ points(O18 ~ Age, pch=16, col=colcode, cex=1.5)
 Here's a `{ggplot2}` version, where the colorization is extended to the lines as well as the symbols.
 
 ```{r plots1-35 }
+# points decoreated by color
 ggplot() + 
   geom_line(data = specmap, aes(x=Age, y=O18, color=Insol)) +
   geom_point(data = specmap, aes(x=Age, y=O18, color=Insol), size = 3) +  
@@ -404,6 +420,7 @@ detach(specmap)
 Symbol color and shape can be used to encode the values of two additional variables, as demonstrated using the Summit Cr. data:
 
 ```{r plots1-37 }
+# points labeled by Reach and HU
 attach(sumcr)
 plot(WidthWS ~ CumLen, pch=as.integer(Reach), col=as.integer(HU))
 legend(25, 2, c("Reach A", "Reach B", "Reach C"), pch=c(1,2,3), col=1)
@@ -418,6 +435,7 @@ ggplot(sumcr, aes(x=CumLen, y=WidthWS, shape=Reach, color=HU)) + geom_point(size
 ```
 
 ```{r plots1-39 }
+# detach sumcr
 detach(sumcr)
 ```
 
@@ -448,6 +466,7 @@ ggplot() +
 A 3-D point-cloud plot displays the values of three variables at a time by plotting them in a 3-D "workbox" where the value of one variable determines the relative position of the symbol along the X-axis and the value of a second variable determines the relative position of the symbol along the Y-axis, and the value of the third variable is used to determine the relative position along the Z-axis.  This plot makes use of the `lattice` package.
 
 ```{r plots1-42 }
+# lattice 3-D cloud plot
 library(lattice)
 cloud(orstationc$elev ~ orstationc$lon*orstationc$lat)
 ```
@@ -457,6 +476,7 @@ Notice that you can still see the outline of the state, because elevation is a f
 The `scatterplot3d` package (by Ligges and Mächler) provides a way of constructing a 3-point cloud display with some nice embellishments.  The first part of the code, like in making maps, does some setup like determining the number of colors to plot and getting their definitions.  The second block produces the plot.
 
 ```{r plots1-43 }
+# scatterplot3d
 library(scatterplot3d)
 library(RColorBrewer)
 
@@ -481,6 +501,7 @@ Maps can be added to the 3-D scatter plot to improve interpretab:
 library(maps)
 
 # get points that define Oregon county outlines
+# oregon county outlines from {maps} package
 or_map <- map("county", "oregon", xlim=c(-125,-114), ylim=c(42,47), plot=FALSE)
 
 # get colors for labeling the points
@@ -513,6 +534,7 @@ Here is a coplot that describes the relationship between water-surface width and
 
 
 ```{r plots1-45 }
+# coplot by Reach
 attach(sumcr)
 coplot(WidthWS ~ DepthWS | Reach, pch=14+as.integer(Reach), cex=1.5, 
        number=3, columns=3, overlap=0,
@@ -525,6 +547,7 @@ coplot(WidthWS ~ DepthWS | Reach, pch=14+as.integer(Reach), cex=1.5,
 And here's a `{ggplot2}` version:
 
 ```{r plots1-46}
+# ggplot coplot
 ggplot(sumcr, aes(x=DepthWS, y=WidthWS)) +
   stat_smooth(method = "lm") + 
   geom_point() + 
@@ -533,6 +556,7 @@ ggplot(sumcr, aes(x=DepthWS, y=WidthWS)) +
 ```
 
 ```{r plots1-47}
+# detach sumcr
 detach(sumcr)
 ```
 

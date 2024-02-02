@@ -510,9 +510,9 @@ class="toc-section-number">3.2</span> Summarizing scatter plots</a></li>
 <li><a href="#multivariate-plots" id="toc-multivariate-plots"><span
 class="toc-section-number">4</span> Multivariate plots</a>
 <ul>
-<li><a href="#labelled-scatter-plots"
-id="toc-labelled-scatter-plots"><span
-class="toc-section-number">4.1</span> Labelled scatter plots</a></li>
+<li><a href="#labeled-scatter-plots"
+id="toc-labeled-scatter-plots"><span
+class="toc-section-number">4.1</span> Labeled scatter plots</a></li>
 <li><a href="#d-scatter-plots" id="toc-d-scatter-plots"><span
 class="toc-section-number">4.2</span> 3-D Scatter plots</a></li>
 </ul></li>
@@ -717,7 +717,8 @@ base-graphics Cleveland-style dotchart.</p>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">dotchart</span>(WidthWS, <span class="at">labels=</span><span class="fu">as.character</span>(Location), <span class="at">cex=</span><span class="fl">0.5</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-8-1.png" width="80%" height="80%" /></p>
 <p>… and the <code>{ggplot2}</code> equivalent:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>WidthWS, <span class="at">y=</span>Location)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># Cleveland-stype dot chart</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>WidthWS, <span class="at">y=</span>Location)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>) </span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-9-1.png" width="80%" height="80%" /></p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>WidthWS, <span class="at">y=</span>Location)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-9-2.png" width="80%" height="80%" /></p>
@@ -743,9 +744,10 @@ values:</p>
 <p><img src="plots1_files/figure-html/plots1-10-1.png" width="80%" height="80%" /></p>
 <p>… and the <code>{ggplot2}</code> equivalent–note the use of the
 <code>theme()</code> term to modify the label size:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>WidthWS, <span class="at">y=</span><span class="fu">reorder</span>(Location, WidthWS))) <span class="sc">+</span> </span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>) <span class="sc">+</span> </span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">4</span>, <span class="at">face=</span><span class="st">&quot;italic&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># Cleveland-style dot chart, reordered y variable</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>WidthWS, <span class="at">y=</span><span class="fu">reorder</span>(Location, WidthWS))) <span class="sc">+</span> </span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>) <span class="sc">+</span> </span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">4</span>, <span class="at">face=</span><span class="st">&quot;italic&quot;</span>))</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-11-1.png" width="80%" height="80%" /></p>
 </div>
 <div id="boxplots" class="section level2" number="2.3">
@@ -764,7 +766,8 @@ plot. Here is the standard boxplot:</p>
 <span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">boxplot</span>(WidthWS <span class="sc">~</span> HU, <span class="at">range=</span><span class="dv">0</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-12-1.png" width="80%" height="80%" /></p>
 <p>… and the <code>{ggplot2}</code> version:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> sumcr, <span class="fu">aes</span>(<span class="at">x=</span>HU, <span class="at">y=</span>WidthWS)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># boxplot</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> sumcr, <span class="fu">aes</span>(<span class="at">x=</span>HU, <span class="at">y=</span>WidthWS)) <span class="sc">+</span> <span class="fu">geom_boxplot</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-13-1.png" width="80%" height="80%" /></p>
 <p>The actual data points can be added to the boxplot, by specifying an
 additional graphical element using the <code>geom_point()</code>
@@ -773,9 +776,10 @@ function</p>
 <span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>HU, <span class="at">y=</span>WidthWS)) <span class="sc">+</span> </span>
 <span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
 <span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">colour =</span> <span class="st">&quot;blue&quot;</span>) </span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-14-1.png" width="80%" height="80%" />
-Detach the <code>sumcr</code> dataframe.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
+<p><img src="plots1_files/figure-html/plots1-14-1.png" width="80%" height="80%" /></p>
+<p>Detach the <code>sumcr</code> dataframe.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># detach sumcr</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
 </div>
 <div id="histograms-and-density-plots" class="section level2"
 number="2.4">
@@ -810,24 +814,30 @@ base-graphics density plot:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># density plots</span></span>
 <span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>O18_density <span class="ot">&lt;-</span> <span class="fu">density</span>(specmap<span class="sc">$</span>O18)</span>
 <span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="fu">plot</span>(O18_density)</span></code></pre></div>
-<p><img src="plots1_files/figure-html/plots1-18-1.png" width="80%" height="80%" />
-Note that in this example, an object <code>O18.density</code> is created
-by the <code>density()</code> function, and then plotted using the
-<code>plot()</code> function.</p>
+<p><img src="plots1_files/figure-html/plots1-18-1.png" width="80%" height="80%" /></p>
+<p>Note that in this example, an object <code>O18.density</code> is
+created by the <code>density()</code> function, and then plotted using
+the <code>plot()</code> function.</p>
 <p>Here’s a version the <code>{ggplot2}</code> density plot:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">ggplot</span>(specmap, <span class="fu">aes</span>(<span class="at">x =</span> O18)) <span class="sc">+</span> <span class="fu">geom_density</span>() <span class="sc">+</span> <span class="fu">ylim</span>(<span class="fl">0.0</span>, <span class="fl">0.5</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-19-1.png" width="80%" height="80%" /></p>
 <p>A combined histogram, density and rug plot via the base graphics:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">hist</span>(specmap<span class="sc">$</span>O18, <span class="at">breaks=</span><span class="dv">20</span>, <span class="at">probability=</span><span class="cn">TRUE</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">lines</span>(O18_density)</span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="fu">rug</span>(specmap<span class="sc">$</span>O18)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># histogram, density, rug</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">hist</span>(specmap<span class="sc">$</span>O18, <span class="at">breaks=</span><span class="dv">20</span>, <span class="at">probability=</span><span class="cn">TRUE</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="fu">lines</span>(O18_density)</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="fu">rug</span>(specmap<span class="sc">$</span>O18)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-20-1.png" width="80%" height="80%" /></p>
 <p>And here’s a <code>ggplot</code> version, with three distinct
 layers:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">ggplot</span>(specmap, <span class="fu">aes</span>(<span class="at">x =</span> O18)) <span class="sc">+</span> </span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.1</span>, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">boundary =</span> <span class="fl">0.05</span>) <span class="sc">+</span> </span>
-<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">stat =</span> <span class="st">&quot;density&quot;</span>) <span class="sc">+</span></span>
-<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>  <span class="fu">geom_rug</span>(<span class="at">data =</span> specmap, <span class="fu">aes</span>(<span class="at">x =</span> O18)) </span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># histogram, density, rug</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="fu">ggplot</span>(specmap, <span class="fu">aes</span>(<span class="at">x =</span> O18)) <span class="sc">+</span> </span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="fu">aes</span>(<span class="at">y =</span> ..density..), <span class="at">binwidth =</span> <span class="fl">0.1</span>, <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>, <span class="at">boundary =</span> <span class="fl">0.05</span>) <span class="sc">+</span> </span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">stat =</span> <span class="st">&quot;density&quot;</span>) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>  <span class="fu">geom_rug</span>(<span class="at">data =</span> specmap, <span class="fu">aes</span>(<span class="at">x =</span> O18)) </span></code></pre></div>
+<pre><code>## Warning: The dot-dot notation (`..density..`) was deprecated in ggplot2 3.4.0.
+## ℹ Please use `after_stat(density)` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
 <p><img src="plots1_files/figure-html/plots1-21-1.png" width="80%" height="80%" /></p>
 <p><a href="plots1.html">[Back to top]</a></p>
 </div>
@@ -862,17 +872,17 @@ plotted on the horizontal or X-axis. The convention can be imposed on
 plots in by listing the horizontal or X-axis variable first, and Y-axis
 variable second (i.e., an X-Y plots).</p>
 <p>Here’s the base plot version of a scatter diagram:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="co"># scatter plots</span></span>
-<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="co"># use Oregon climate-station data </span></span>
-<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="fu">attach</span>(orstationc)</span>
-<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="fu">plot</span>(elev,tann)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># scatter plots</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="co"># use Oregon climate-station data </span></span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="fu">attach</span>(orstationc)</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="fu">plot</span>(elev,tann)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-22-1.png" width="80%" height="80%" /></p>
 <p>… and here are two <code>{ggplot2}</code> scatter plots of annual
 temperature and annual precipitation vs. elevation:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="co"># ggplot2 scatter diagrams</span></span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> tann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co"># ggplot2 scatter diagrams</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> tann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-23-1.png" width="80%" height="80%" /></p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> pann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> pann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-23-2.png" width="80%" height="80%" /></p>
 <p>It might make sense to compare the plots side-by-side. That can be
 done for the <code>{ggplot2}</code> versions of those plots cby
@@ -880,10 +890,11 @@ generating the plots, saving them as objects (<code>plot1</code> and
 <code>plot2</code>), and then using a function
 <code>grid.arrange()</code> from the <code>gridExtra</code> package to
 plot the two objects:</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
-<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> tann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
-<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> pann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
-<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="fu">grid.arrange</span>(plot1, plot2, <span class="at">ncol=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co"># side-by-side plots</span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> tann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> pann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a><span class="fu">grid.arrange</span>(plot1, plot2, <span class="at">ncol=</span><span class="dv">2</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-24-1.png" width="80%" height="80%" /></p>
 <p>Note that <code>{ggplot2}</code> allows one to transform the
 coordinate system as well as the values of the individual variables.
@@ -892,37 +903,42 @@ relationship between precipitation and elevation, when the precipitation
 values have been transformed in an attempt to make the relationship more
 linear. Note that the overall appearance of the plots is identical–it’s
 the y-axes that differ.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> tann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
-<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> pann)) <span class="sc">+</span> <span class="fu">coord_trans</span>(<span class="at">y=</span><span class="st">&quot;sqrt&quot;</span>) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
-<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="fu">grid.arrange</span>(plot1, plot2, <span class="at">ncol=</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="co"># transformed y-axis</span></span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>plot1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> tann)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x =</span> elev, <span class="at">y =</span> pann)) <span class="sc">+</span> <span class="fu">coord_trans</span>(<span class="at">y=</span><span class="st">&quot;sqrt&quot;</span>) <span class="sc">+</span> <span class="fu">geom_point</span>()</span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a><span class="fu">grid.arrange</span>(plot1, plot2, <span class="at">ncol=</span><span class="dv">2</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-25-1.png" width="80%" height="80%" /></p>
 <p>Labeling of points using <code>ggplot</code> is possible, and again
 <code>{ggplot2}</code> offers more fine control, such as some ability to
 deal with text overlap.</p>
 <p>Here is the base plotting version of a text-labelled scatter
 plot:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">plot</span>(orstationc<span class="sc">$</span>tann <span class="sc">~</span> orstationc<span class="sc">$</span>elev, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
-<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="fu">text</span>(orstationc<span class="sc">$</span>tann <span class="sc">~</span> orstationc<span class="sc">$</span>elev, <span class="at">labels=</span><span class="fu">as.character</span>(orstationc<span class="sc">$</span>station), <span class="at">cex =</span> <span class="fl">0.8</span>) <span class="co"># text</span></span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># text labels</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="fu">plot</span>(orstationc<span class="sc">$</span>tann <span class="sc">~</span> orstationc<span class="sc">$</span>elev, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="fu">text</span>(orstationc<span class="sc">$</span>tann <span class="sc">~</span> orstationc<span class="sc">$</span>elev, <span class="at">labels=</span><span class="fu">as.character</span>(orstationc<span class="sc">$</span>station), <span class="at">cex =</span> <span class="fl">0.8</span>) <span class="co"># text</span></span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-26-1.png" width="80%" height="80%" /></p>
 <p>A <code>ggplot</code> version of the same ia shown below. The
 <code>check_overlap()</code> function attempts to move the labels to
 avoid overplotting. To see where the datapoints actualy lie, they are
 added as dots.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x=</span> elev, <span class="at">y =</span> tann, <span class="at">label=</span><span class="fu">as.character</span>(station))) <span class="sc">+</span></span>
-<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">check_overlap =</span> <span class="cn">TRUE</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
-<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a>  <span class="fu">theme_gray</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># text labels</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x=</span> elev, <span class="at">y =</span> tann, <span class="at">label=</span><span class="fu">as.character</span>(station))) <span class="sc">+</span></span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="at">check_overlap =</span> <span class="cn">TRUE</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.5</span>) <span class="sc">+</span> </span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a>  <span class="fu">theme_gray</span>()</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-27-1.png" width="80%" height="80%" /></p>
 <p>Here’s another approach to point-labeling:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x=</span> elev, <span class="at">y =</span> tann, <span class="at">label=</span><span class="fu">as.character</span>(station))) <span class="sc">+</span></span>
-<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>  <span class="fu">geom_label</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
-<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>  <span class="co"># geom_point(size = 1, color = &quot;red&quot;) +</span></span>
-<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>  <span class="fu">theme_gray</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># text-label boxes</span></span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="fu">ggplot</span>(orstationc, <span class="fu">aes</span>(<span class="at">x=</span> elev, <span class="at">y =</span> tann, <span class="at">label=</span><span class="fu">as.character</span>(station))) <span class="sc">+</span></span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>  <span class="fu">geom_label</span>(<span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span> </span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a>  <span class="co"># geom_point(size = 1, color = &quot;red&quot;) +</span></span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a>  <span class="fu">theme_gray</span>()</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-28-1.png" width="80%" height="80%" /></p>
 <p>Note the difference between the plots–the first plots a simple text
 string using <code>geom_text()</code> while the second plots a more
 formal label using <code>geom_label()</code>.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="fu">detach</span>(orstationc)</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co"># detach orstationc</span></span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="fu">detach</span>(orstationc)</span></code></pre></div>
 </div>
 <div id="summarizing-scatter-plots" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> Summarizing scatter
@@ -940,21 +956,21 @@ cloud of points to describe the general relationship between variables.
 This technique is very generalizable, and a variety of smoothers can be
 used. The most common is the “lowess” or “loess” smoother, which will be
 discussed in more detail later.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co"># use Oregon climate station annual temperature data </span></span>
-<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="fu">attach</span>(ortann)</span>
-<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a><span class="fu">plot</span>(elevation, tann)</span>
-<span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">lowess</span>(elevation,tann))</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># use Oregon climate station annual temperature data </span></span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="fu">attach</span>(ortann)</span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a><span class="fu">plot</span>(elevation, tann)</span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">lowess</span>(elevation,tann))</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-30-1.png" width="80%" height="80%" /></p>
 <p>The <code>{ggplot2}</code> version uses <code>stat_smooth()</code> to
 get the lowess curve (and confidence band):</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># ggplot scatter plot plus smooth</span></span>
-<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ortann, <span class="fu">aes</span>(<span class="at">x =</span> elevation, <span class="at">y =</span> tann)) <span class="sc">+</span> </span>
-<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">span =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
-<span id="cb33-5"><a href="#cb33-5" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="co"># ggplot scatter plot plus smooth</span></span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> ortann, <span class="fu">aes</span>(<span class="at">x =</span> elevation, <span class="at">y =</span> tann)) <span class="sc">+</span> </span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">span =</span> <span class="fl">0.9</span>) <span class="sc">+</span></span>
+<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="plots1_files/figure-html/plots1-31-1.png" width="80%" height="80%" /></p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="fu">detach</span>(ortann)</span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">detach</span>(ortann)</span></code></pre></div>
 <p><a href="plots1.html">[Back to top]</a></p>
 </div>
 </div>
@@ -971,8 +987,8 @@ are of interest. These include:</p>
 <li>the <em>dependence</em> of the relationships on external (usually to
 the pairs of variables being examined) circumstances.</li>
 </ul>
-<div id="labelled-scatter-plots" class="section level2" number="4.1">
-<h2><span class="header-section-number">4.1</span> Labelled scatter
+<div id="labeled-scatter-plots" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Labeled scatter
 plots</h2>
 <p>In addition to the simple catagorial (or factor) labelling of plots,
 the <code>{ggplot2}</code> package supports more elaborate, or computed,
@@ -986,66 +1002,71 @@ the point for a key observation or set of observations.</p>
 relationship between ice volume and insolation anomalies (or differences
 from the present day, which are considered to be the pacemake of the ice
 ages) is weak when examined superficially.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">attach</span>(specmap)</span>
-<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a><span class="fu">plot</span>(O18 <span class="sc">~</span> Insol, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">0.6</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="co"># scatter plot</span></span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a><span class="fu">attach</span>(specmap)</span>
+<span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a><span class="fu">plot</span>(O18 <span class="sc">~</span> Insol, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">0.6</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-33-1.png" width="80%" height="80%" /></p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="fu">cor</span>(O18, Insol)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="fu">cor</span>(O18, Insol)</span></code></pre></div>
 <pre><code>## [1] -0.2415094</code></pre>
 <p>As we saw earlier, on approach is to look at the time series plot of
 O18 values, and use insolation to colorize the individual points.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
-<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a><span class="fu">library</span>(classInt) <span class="co"># class-interval recoding library</span></span>
-<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a><span class="co"># first block -- setup</span></span>
-<span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a>plotvals <span class="ot">&lt;-</span> Insol</span>
-<span id="cb39-5"><a href="#cb39-5" tabindex="-1"></a>nclr <span class="ot">&lt;-</span> <span class="dv">8</span></span>
-<span id="cb39-6"><a href="#cb39-6" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(nclr,<span class="st">&quot;PuOr&quot;</span>)</span>
-<span id="cb39-7"><a href="#cb39-7" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> plotclr[nclr<span class="sc">:</span><span class="dv">1</span>] <span class="co"># reorder colors</span></span>
-<span id="cb39-8"><a href="#cb39-8" tabindex="-1"></a>class <span class="ot">&lt;-</span> <span class="fu">classIntervals</span>(plotvals, nclr, <span class="at">style=</span><span class="st">&quot;quantile&quot;</span>)</span>
-<span id="cb39-9"><a href="#cb39-9" tabindex="-1"></a>colcode <span class="ot">&lt;-</span> <span class="fu">findColours</span>(class, plotclr)</span>
-<span id="cb39-10"><a href="#cb39-10" tabindex="-1"></a></span>
-<span id="cb39-11"><a href="#cb39-11" tabindex="-1"></a><span class="co"># second block -- plot</span></span>
-<span id="cb39-12"><a href="#cb39-12" tabindex="-1"></a><span class="fu">plot</span>(O18 <span class="sc">~</span> Age, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fl">2.5</span>,<span class="sc">-</span><span class="fl">2.5</span>), <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span>
-<span id="cb39-13"><a href="#cb39-13" tabindex="-1"></a><span class="fu">points</span>(O18 <span class="sc">~</span> Age, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span>colcode, <span class="at">cex=</span><span class="fl">1.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="co"># points decorated by color</span></span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a><span class="fu">library</span>(classInt) <span class="co"># class-interval recoding library</span></span>
+<span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a><span class="co"># first block -- setup</span></span>
+<span id="cb40-5"><a href="#cb40-5" tabindex="-1"></a>plotvals <span class="ot">&lt;-</span> Insol</span>
+<span id="cb40-6"><a href="#cb40-6" tabindex="-1"></a>nclr <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb40-7"><a href="#cb40-7" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(nclr,<span class="st">&quot;PuOr&quot;</span>)</span>
+<span id="cb40-8"><a href="#cb40-8" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> plotclr[nclr<span class="sc">:</span><span class="dv">1</span>] <span class="co"># reorder colors</span></span>
+<span id="cb40-9"><a href="#cb40-9" tabindex="-1"></a>class <span class="ot">&lt;-</span> <span class="fu">classIntervals</span>(plotvals, nclr, <span class="at">style=</span><span class="st">&quot;quantile&quot;</span>)</span>
+<span id="cb40-10"><a href="#cb40-10" tabindex="-1"></a>colcode <span class="ot">&lt;-</span> <span class="fu">findColours</span>(class, plotclr)</span>
+<span id="cb40-11"><a href="#cb40-11" tabindex="-1"></a></span>
+<span id="cb40-12"><a href="#cb40-12" tabindex="-1"></a><span class="co"># second block -- plot</span></span>
+<span id="cb40-13"><a href="#cb40-13" tabindex="-1"></a><span class="fu">plot</span>(O18 <span class="sc">~</span> Age, <span class="at">ylim=</span><span class="fu">c</span>(<span class="fl">2.5</span>,<span class="sc">-</span><span class="fl">2.5</span>), <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span>
+<span id="cb40-14"><a href="#cb40-14" tabindex="-1"></a><span class="fu">points</span>(O18 <span class="sc">~</span> Age, <span class="at">pch=</span><span class="dv">16</span>, <span class="at">col=</span>colcode, <span class="at">cex=</span><span class="fl">1.5</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-34-1.png" width="80%" height="80%" /></p>
 <p>Here’s a <code>{ggplot2}</code> version, where the colorization is
 extended to the lines as well as the symbols.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> specmap, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>O18, <span class="at">color=</span>Insol)) <span class="sc">+</span></span>
-<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> specmap, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>O18, <span class="at">color=</span>Insol), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span>  </span>
-<span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span> </span>
-<span id="cb40-5"><a href="#cb40-5" tabindex="-1"></a>  <span class="fu">scale_colour_gradientn</span>(<span class="at">colours=</span><span class="fu">rev</span>(<span class="fu">brewer.pal</span>(nclr,<span class="st">&quot;PuOr&quot;</span>)))</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="co"># points decoreated by color</span></span>
+<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb41-3"><a href="#cb41-3" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> specmap, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>O18, <span class="at">color=</span>Insol)) <span class="sc">+</span></span>
+<span id="cb41-4"><a href="#cb41-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> specmap, <span class="fu">aes</span>(<span class="at">x=</span>Age, <span class="at">y=</span>O18, <span class="at">color=</span>Insol), <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span>  </span>
+<span id="cb41-5"><a href="#cb41-5" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span> </span>
+<span id="cb41-6"><a href="#cb41-6" tabindex="-1"></a>  <span class="fu">scale_colour_gradientn</span>(<span class="at">colours=</span><span class="fu">rev</span>(<span class="fu">brewer.pal</span>(nclr,<span class="st">&quot;PuOr&quot;</span>)))</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-35-1.png" width="80%" height="80%" /></p>
 <p>As we saw earlier, positive insolation anomalies are associated with
 trends toward lower ice volume (negative O18 values, note the y-axis
 labelling), and negative anomalies with increasing ice volume.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="fu">detach</span>(specmap)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="fu">detach</span>(specmap)</span></code></pre></div>
 <p>Symbol color and shape can be used to encode the values of two
 additional variables, as demonstrated using the Summit Cr. data:</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="fu">attach</span>(sumcr)</span>
-<span id="cb42-2"><a href="#cb42-2" tabindex="-1"></a><span class="fu">plot</span>(WidthWS <span class="sc">~</span> CumLen, <span class="at">pch=</span><span class="fu">as.integer</span>(Reach), <span class="at">col=</span><span class="fu">as.integer</span>(HU))</span>
-<span id="cb42-3"><a href="#cb42-3" tabindex="-1"></a><span class="fu">legend</span>(<span class="dv">25</span>, <span class="dv">2</span>, <span class="fu">c</span>(<span class="st">&quot;Reach A&quot;</span>, <span class="st">&quot;Reach B&quot;</span>, <span class="st">&quot;Reach C&quot;</span>), <span class="at">pch=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), <span class="at">col=</span><span class="dv">1</span>)</span>
-<span id="cb42-4"><a href="#cb42-4" tabindex="-1"></a><span class="fu">legend</span>(<span class="dv">650</span>, <span class="dv">2</span>, <span class="fu">c</span>(<span class="st">&quot;Glide&quot;</span>, <span class="st">&quot;Pool&quot;</span>, <span class="st">&quot;Riffle&quot;</span>), <span class="at">pch=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="co"># points labeled by Reach and HU</span></span>
+<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a><span class="fu">attach</span>(sumcr)</span>
+<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a><span class="fu">plot</span>(WidthWS <span class="sc">~</span> CumLen, <span class="at">pch=</span><span class="fu">as.integer</span>(Reach), <span class="at">col=</span><span class="fu">as.integer</span>(HU))</span>
+<span id="cb43-4"><a href="#cb43-4" tabindex="-1"></a><span class="fu">legend</span>(<span class="dv">25</span>, <span class="dv">2</span>, <span class="fu">c</span>(<span class="st">&quot;Reach A&quot;</span>, <span class="st">&quot;Reach B&quot;</span>, <span class="st">&quot;Reach C&quot;</span>), <span class="at">pch=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>), <span class="at">col=</span><span class="dv">1</span>)</span>
+<span id="cb43-5"><a href="#cb43-5" tabindex="-1"></a><span class="fu">legend</span>(<span class="dv">650</span>, <span class="dv">2</span>, <span class="fu">c</span>(<span class="st">&quot;Glide&quot;</span>, <span class="st">&quot;Pool&quot;</span>, <span class="st">&quot;Riffle&quot;</span>), <span class="at">pch=</span><span class="dv">1</span>, <span class="at">col=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>))</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-37-1.png" width="80%" height="80%" /></p>
 <p>Here is the <code>{ggplot2}</code> version:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="co"># ggplot2 version</span></span>
-<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>CumLen, <span class="at">y=</span>WidthWS, <span class="at">shape=</span>Reach, <span class="at">color=</span>HU)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="co"># ggplot2 version</span></span>
+<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>CumLen, <span class="at">y=</span>WidthWS, <span class="at">shape=</span>Reach, <span class="at">color=</span>HU)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">3</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-38-1.png" width="80%" height="80%" /></p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="co"># detach sumcr</span></span>
+<span id="cb45-2"><a href="#cb45-2" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
 <p>Symbol size can be used to indicate the value of a third variable,
 forming a “bubble” or “balloon” plot, to indicate the value of station
 elevation on a simple longitude by latitude plot of the Oregon
 climate-station data:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="co"># bubble plot</span></span>
-<span id="cb45-2"><a href="#cb45-2" tabindex="-1"></a><span class="fu">plot</span>(orstationc<span class="sc">$</span>lon, orstationc<span class="sc">$</span>lat, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
-<span id="cb45-3"><a href="#cb45-3" tabindex="-1"></a><span class="fu">symbols</span>(orstationc<span class="sc">$</span>lon, orstationc<span class="sc">$</span>lat, <span class="at">circles=</span>orstationc<span class="sc">$</span>elev, <span class="at">inches=</span><span class="fl">0.1</span>, <span class="at">add=</span>T)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="co"># bubble plot</span></span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="fu">plot</span>(orstationc<span class="sc">$</span>lon, orstationc<span class="sc">$</span>lat, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
+<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a><span class="fu">symbols</span>(orstationc<span class="sc">$</span>lon, orstationc<span class="sc">$</span>lat, <span class="at">circles=</span>orstationc<span class="sc">$</span>elev, <span class="at">inches=</span><span class="fl">0.1</span>, <span class="at">add=</span>T)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-40-1.png" width="80%" height="80%" /></p>
 <p>Here’s the equivalent plot using <code>{ggplot2}</code></p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="co"># ggplot version</span></span>
-<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> orcounty_sf, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> orstationc, <span class="fu">aes</span>(<span class="at">x=</span>lon, <span class="at">y=</span>lat, <span class="at">size=</span>elev), <span class="at">shape=</span><span class="dv">21</span>, <span class="at">color=</span><span class="st">&quot;black&quot;</span>, <span class="at">fill=</span><span class="st">&quot;lightblue&quot;</span>) <span class="sc">+</span></span>
-<span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">125</span>, <span class="sc">-</span><span class="dv">116</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">41</span>, <span class="dv">47</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="co"># ggplot version</span></span>
+<span id="cb47-2"><a href="#cb47-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb47-3"><a href="#cb47-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> orcounty_sf, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb47-4"><a href="#cb47-4" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> orstationc, <span class="fu">aes</span>(<span class="at">x=</span>lon, <span class="at">y=</span>lat, <span class="at">size=</span>elev), <span class="at">shape=</span><span class="dv">21</span>, <span class="at">color=</span><span class="st">&quot;black&quot;</span>, <span class="at">fill=</span><span class="st">&quot;lightblue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb47-5"><a href="#cb47-5" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">125</span>, <span class="sc">-</span><span class="dv">116</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">41</span>, <span class="dv">47</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb47-6"><a href="#cb47-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-41-1.png" width="80%" height="80%" /></p>
 </div>
 <div id="d-scatter-plots" class="section level2" number="4.2">
@@ -1064,8 +1085,9 @@ value of a second variable determines the relative position of the
 symbol along the Y-axis, and the value of the third variable is used to
 determine the relative position along the Z-axis. This plot makes use of
 the <code>lattice</code> package.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
-<span id="cb47-2"><a href="#cb47-2" tabindex="-1"></a><span class="fu">cloud</span>(orstationc<span class="sc">$</span>elev <span class="sc">~</span> orstationc<span class="sc">$</span>lon<span class="sc">*</span>orstationc<span class="sc">$</span>lat)</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="co"># lattice 3-D cloud plot</span></span>
+<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
+<span id="cb48-3"><a href="#cb48-3" tabindex="-1"></a><span class="fu">cloud</span>(orstationc<span class="sc">$</span>elev <span class="sc">~</span> orstationc<span class="sc">$</span>lon<span class="sc">*</span>orstationc<span class="sc">$</span>lat)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-42-1.png" width="80%" height="80%" /></p>
 <p>Notice that you can still see the outline of the state, because
 elevation is a fairly well behaved variable.</p>
@@ -1074,20 +1096,21 @@ provides a way of constructing a 3-point cloud display with some nice
 embellishments. The first part of the code, like in making maps, does
 some setup like determining the number of colors to plot and getting
 their definitions. The second block produces the plot.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="fu">library</span>(scatterplot3d)</span>
-<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
-<span id="cb48-3"><a href="#cb48-3" tabindex="-1"></a></span>
-<span id="cb48-4"><a href="#cb48-4" tabindex="-1"></a><span class="co"># get colors for labeling the points</span></span>
-<span id="cb48-5"><a href="#cb48-5" tabindex="-1"></a>plotvar <span class="ot">&lt;-</span> orstationc<span class="sc">$</span>pann <span class="co"># pick a variable to plot</span></span>
-<span id="cb48-6"><a href="#cb48-6" tabindex="-1"></a>nclr <span class="ot">&lt;-</span> <span class="dv">8</span> <span class="co"># number of colors</span></span>
-<span id="cb48-7"><a href="#cb48-7" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(nclr,<span class="st">&quot;PuBu&quot;</span>) <span class="co"># get the colors</span></span>
-<span id="cb48-8"><a href="#cb48-8" tabindex="-1"></a>colornum <span class="ot">&lt;-</span> <span class="fu">cut</span>(<span class="fu">rank</span>(plotvar), nclr, <span class="at">labels=</span><span class="cn">FALSE</span>)</span>
-<span id="cb48-9"><a href="#cb48-9" tabindex="-1"></a>colcode <span class="ot">&lt;-</span> plotclr[colornum] <span class="co"># assign color</span></span>
-<span id="cb48-10"><a href="#cb48-10" tabindex="-1"></a></span>
-<span id="cb48-11"><a href="#cb48-11" tabindex="-1"></a><span class="co"># scatter plot</span></span>
-<span id="cb48-12"><a href="#cb48-12" tabindex="-1"></a>plot.angle <span class="ot">&lt;-</span> <span class="dv">45</span></span>
-<span id="cb48-13"><a href="#cb48-13" tabindex="-1"></a><span class="fu">scatterplot3d</span>(orstationc<span class="sc">$</span>lon, orstationc<span class="sc">$</span>lat, plotvar, <span class="at">type=</span><span class="st">&quot;h&quot;</span>, <span class="at">angle=</span>plot.angle, <span class="at">color=</span>colcode, <span class="at">pch=</span><span class="dv">20</span>, <span class="at">cex.symbols=</span><span class="dv">2</span>, </span>
-<span id="cb48-14"><a href="#cb48-14" tabindex="-1"></a>  <span class="at">col.axis=</span><span class="st">&quot;gray&quot;</span>, <span class="at">col.grid=</span><span class="st">&quot;gray&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="co"># scatterplot3d</span></span>
+<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a><span class="fu">library</span>(scatterplot3d)</span>
+<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a></span>
+<span id="cb49-5"><a href="#cb49-5" tabindex="-1"></a><span class="co"># get colors for labeling the points</span></span>
+<span id="cb49-6"><a href="#cb49-6" tabindex="-1"></a>plotvar <span class="ot">&lt;-</span> orstationc<span class="sc">$</span>pann <span class="co"># pick a variable to plot</span></span>
+<span id="cb49-7"><a href="#cb49-7" tabindex="-1"></a>nclr <span class="ot">&lt;-</span> <span class="dv">8</span> <span class="co"># number of colors</span></span>
+<span id="cb49-8"><a href="#cb49-8" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(nclr,<span class="st">&quot;PuBu&quot;</span>) <span class="co"># get the colors</span></span>
+<span id="cb49-9"><a href="#cb49-9" tabindex="-1"></a>colornum <span class="ot">&lt;-</span> <span class="fu">cut</span>(<span class="fu">rank</span>(plotvar), nclr, <span class="at">labels=</span><span class="cn">FALSE</span>)</span>
+<span id="cb49-10"><a href="#cb49-10" tabindex="-1"></a>colcode <span class="ot">&lt;-</span> plotclr[colornum] <span class="co"># assign color</span></span>
+<span id="cb49-11"><a href="#cb49-11" tabindex="-1"></a></span>
+<span id="cb49-12"><a href="#cb49-12" tabindex="-1"></a><span class="co"># scatter plot</span></span>
+<span id="cb49-13"><a href="#cb49-13" tabindex="-1"></a>plot.angle <span class="ot">&lt;-</span> <span class="dv">45</span></span>
+<span id="cb49-14"><a href="#cb49-14" tabindex="-1"></a><span class="fu">scatterplot3d</span>(orstationc<span class="sc">$</span>lon, orstationc<span class="sc">$</span>lat, plotvar, <span class="at">type=</span><span class="st">&quot;h&quot;</span>, <span class="at">angle=</span>plot.angle, <span class="at">color=</span>colcode, <span class="at">pch=</span><span class="dv">20</span>, <span class="at">cex.symbols=</span><span class="dv">2</span>, </span>
+<span id="cb49-15"><a href="#cb49-15" tabindex="-1"></a>  <span class="at">col.axis=</span><span class="st">&quot;gray&quot;</span>, <span class="at">col.grid=</span><span class="st">&quot;gray&quot;</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-43-1.png" width="80%" height="80%" /></p>
 <p>The z-variable, in this case, annual precipitation, is plotted as a
 dot, and for interpretability a drop line is plotted below the dot. This
@@ -1095,23 +1118,24 @@ simple addition facilitates finding the location of each point (where it
 hits the x-y, or latitude-longitude plane), as well as the value of
 annual precipitation.</p>
 <p>Maps can be added to the 3-D scatter plot to improve interpretab:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="fu">library</span>(maps)</span>
-<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a></span>
-<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a><span class="co"># get points that define Oregon county outlines</span></span>
-<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a>or_map <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="st">&quot;county&quot;</span>, <span class="st">&quot;oregon&quot;</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">125</span>,<span class="sc">-</span><span class="dv">114</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">42</span>,<span class="dv">47</span>), <span class="at">plot=</span><span class="cn">FALSE</span>)</span>
-<span id="cb49-5"><a href="#cb49-5" tabindex="-1"></a></span>
-<span id="cb49-6"><a href="#cb49-6" tabindex="-1"></a><span class="co"># get colors for labeling the points</span></span>
-<span id="cb49-7"><a href="#cb49-7" tabindex="-1"></a>plotvar <span class="ot">&lt;-</span> orstationc<span class="sc">$</span>pann <span class="co"># pick a variable to plot</span></span>
-<span id="cb49-8"><a href="#cb49-8" tabindex="-1"></a>nclr <span class="ot">&lt;-</span> <span class="dv">8</span> <span class="co"># number of colors</span></span>
-<span id="cb49-9"><a href="#cb49-9" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(nclr,<span class="st">&quot;PuBu&quot;</span>) <span class="co"># get the colors</span></span>
-<span id="cb49-10"><a href="#cb49-10" tabindex="-1"></a>colornum <span class="ot">&lt;-</span> <span class="fu">cut</span>(<span class="fu">rank</span>(plotvar), nclr, <span class="at">labels=</span><span class="cn">FALSE</span>)</span>
-<span id="cb49-11"><a href="#cb49-11" tabindex="-1"></a>colcode <span class="ot">&lt;-</span> plotclr[colornum] <span class="co"># assign color</span></span>
-<span id="cb49-12"><a href="#cb49-12" tabindex="-1"></a></span>
-<span id="cb49-13"><a href="#cb49-13" tabindex="-1"></a><span class="co"># scatterplot and map</span></span>
-<span id="cb49-14"><a href="#cb49-14" tabindex="-1"></a>plot.angle <span class="ot">&lt;-</span> <span class="dv">135</span></span>
-<span id="cb49-15"><a href="#cb49-15" tabindex="-1"></a>s3d <span class="ot">&lt;-</span> <span class="fu">scatterplot3d</span>(orstationc<span class="sc">$</span>lon, orstationc<span class="sc">$</span>lat, plotvar, <span class="at">type=</span><span class="st">&quot;h&quot;</span>, <span class="at">angle=</span>plot.angle, <span class="at">color=</span>colcode, </span>
-<span id="cb49-16"><a href="#cb49-16" tabindex="-1"></a>            <span class="at">pch=</span><span class="dv">20</span>, <span class="at">cex.symbols=</span><span class="dv">2</span>, <span class="at">col.axis=</span><span class="st">&quot;gray&quot;</span>, <span class="at">col.grid=</span><span class="st">&quot;gray&quot;</span>)</span>
-<span id="cb49-17"><a href="#cb49-17" tabindex="-1"></a>s3d<span class="sc">$</span><span class="fu">points3d</span>(or_map<span class="sc">$</span>x,or_map<span class="sc">$</span>y,<span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">length</span>(or_map<span class="sc">$</span>x)), <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="fu">library</span>(maps)</span>
+<span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" tabindex="-1"></a><span class="co"># get points that define Oregon county outlines</span></span>
+<span id="cb50-4"><a href="#cb50-4" tabindex="-1"></a><span class="co"># oregon county outlines from {maps} package</span></span>
+<span id="cb50-5"><a href="#cb50-5" tabindex="-1"></a>or_map <span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="st">&quot;county&quot;</span>, <span class="st">&quot;oregon&quot;</span>, <span class="at">xlim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">125</span>,<span class="sc">-</span><span class="dv">114</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">42</span>,<span class="dv">47</span>), <span class="at">plot=</span><span class="cn">FALSE</span>)</span>
+<span id="cb50-6"><a href="#cb50-6" tabindex="-1"></a></span>
+<span id="cb50-7"><a href="#cb50-7" tabindex="-1"></a><span class="co"># get colors for labeling the points</span></span>
+<span id="cb50-8"><a href="#cb50-8" tabindex="-1"></a>plotvar <span class="ot">&lt;-</span> orstationc<span class="sc">$</span>pann <span class="co"># pick a variable to plot</span></span>
+<span id="cb50-9"><a href="#cb50-9" tabindex="-1"></a>nclr <span class="ot">&lt;-</span> <span class="dv">8</span> <span class="co"># number of colors</span></span>
+<span id="cb50-10"><a href="#cb50-10" tabindex="-1"></a>plotclr <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(nclr,<span class="st">&quot;PuBu&quot;</span>) <span class="co"># get the colors</span></span>
+<span id="cb50-11"><a href="#cb50-11" tabindex="-1"></a>colornum <span class="ot">&lt;-</span> <span class="fu">cut</span>(<span class="fu">rank</span>(plotvar), nclr, <span class="at">labels=</span><span class="cn">FALSE</span>)</span>
+<span id="cb50-12"><a href="#cb50-12" tabindex="-1"></a>colcode <span class="ot">&lt;-</span> plotclr[colornum] <span class="co"># assign color</span></span>
+<span id="cb50-13"><a href="#cb50-13" tabindex="-1"></a></span>
+<span id="cb50-14"><a href="#cb50-14" tabindex="-1"></a><span class="co"># scatterplot and map</span></span>
+<span id="cb50-15"><a href="#cb50-15" tabindex="-1"></a>plot.angle <span class="ot">&lt;-</span> <span class="dv">135</span></span>
+<span id="cb50-16"><a href="#cb50-16" tabindex="-1"></a>s3d <span class="ot">&lt;-</span> <span class="fu">scatterplot3d</span>(orstationc<span class="sc">$</span>lon, orstationc<span class="sc">$</span>lat, plotvar, <span class="at">type=</span><span class="st">&quot;h&quot;</span>, <span class="at">angle=</span>plot.angle, <span class="at">color=</span>colcode, </span>
+<span id="cb50-17"><a href="#cb50-17" tabindex="-1"></a>            <span class="at">pch=</span><span class="dv">20</span>, <span class="at">cex.symbols=</span><span class="dv">2</span>, <span class="at">col.axis=</span><span class="st">&quot;gray&quot;</span>, <span class="at">col.grid=</span><span class="st">&quot;gray&quot;</span>)</span>
+<span id="cb50-18"><a href="#cb50-18" tabindex="-1"></a>s3d<span class="sc">$</span><span class="fu">points3d</span>(or_map<span class="sc">$</span>x,or_map<span class="sc">$</span>y,<span class="fu">rep</span>(<span class="dv">0</span>,<span class="fu">length</span>(or_map<span class="sc">$</span>x)), <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-44-1.png" width="80%" height="80%" /></p>
 <p>The <code>map()</code> function generates the outlines of a map of
 Oregon counties, and stores them in <code>or.map</code>, then the colors
@@ -1150,23 +1174,26 @@ particular interval, and the other lying in a different interval.”)</p>
 <p>Here is a coplot that describes the relationship between
 water-surface width and depth, as it varies among reaches along Summit
 Cr.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="fu">attach</span>(sumcr)</span>
-<span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a><span class="fu">coplot</span>(WidthWS <span class="sc">~</span> DepthWS <span class="sc">|</span> Reach, <span class="at">pch=</span><span class="dv">14</span><span class="sc">+</span><span class="fu">as.integer</span>(Reach), <span class="at">cex=</span><span class="fl">1.5</span>, </span>
-<span id="cb50-3"><a href="#cb50-3" tabindex="-1"></a>       <span class="at">number=</span><span class="dv">3</span>, <span class="at">columns=</span><span class="dv">3</span>, <span class="at">overlap=</span><span class="dv">0</span>,</span>
-<span id="cb50-4"><a href="#cb50-4" tabindex="-1"></a>       <span class="at">panel=</span><span class="cf">function</span>(x,y,...) {</span>
-<span id="cb50-5"><a href="#cb50-5" tabindex="-1"></a>         <span class="fu">panel.smooth</span>(x,y,<span class="at">span=</span>.<span class="dv">8</span>,<span class="at">iter=</span><span class="dv">5</span>,...)</span>
-<span id="cb50-6"><a href="#cb50-6" tabindex="-1"></a>         <span class="fu">abline</span>(<span class="fu">lm</span>(y <span class="sc">~</span> x), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span>
-<span id="cb50-7"><a href="#cb50-7" tabindex="-1"></a>       } )</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="co"># coplot by Reach</span></span>
+<span id="cb51-2"><a href="#cb51-2" tabindex="-1"></a><span class="fu">attach</span>(sumcr)</span>
+<span id="cb51-3"><a href="#cb51-3" tabindex="-1"></a><span class="fu">coplot</span>(WidthWS <span class="sc">~</span> DepthWS <span class="sc">|</span> Reach, <span class="at">pch=</span><span class="dv">14</span><span class="sc">+</span><span class="fu">as.integer</span>(Reach), <span class="at">cex=</span><span class="fl">1.5</span>, </span>
+<span id="cb51-4"><a href="#cb51-4" tabindex="-1"></a>       <span class="at">number=</span><span class="dv">3</span>, <span class="at">columns=</span><span class="dv">3</span>, <span class="at">overlap=</span><span class="dv">0</span>,</span>
+<span id="cb51-5"><a href="#cb51-5" tabindex="-1"></a>       <span class="at">panel=</span><span class="cf">function</span>(x,y,...) {</span>
+<span id="cb51-6"><a href="#cb51-6" tabindex="-1"></a>         <span class="fu">panel.smooth</span>(x,y,<span class="at">span=</span>.<span class="dv">8</span>,<span class="at">iter=</span><span class="dv">5</span>,...)</span>
+<span id="cb51-7"><a href="#cb51-7" tabindex="-1"></a>         <span class="fu">abline</span>(<span class="fu">lm</span>(y <span class="sc">~</span> x), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb51-8"><a href="#cb51-8" tabindex="-1"></a>       } )</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-45-1.png" width="80%" height="80%" /></p>
 <p>And here’s a <code>{ggplot2}</code> version:</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>DepthWS, <span class="at">y=</span>WidthWS)) <span class="sc">+</span></span>
-<span id="cb51-2"><a href="#cb51-2" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb51-3"><a href="#cb51-3" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb51-4"><a href="#cb51-4" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Reach) <span class="sc">+</span> </span>
-<span id="cb51-5"><a href="#cb51-5" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">aspect.ratio =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="co"># ggplot coplot</span></span>
+<span id="cb52-2"><a href="#cb52-2" tabindex="-1"></a><span class="fu">ggplot</span>(sumcr, <span class="fu">aes</span>(<span class="at">x=</span>DepthWS, <span class="at">y=</span>WidthWS)) <span class="sc">+</span></span>
+<span id="cb52-3"><a href="#cb52-3" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb52-4"><a href="#cb52-4" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb52-5"><a href="#cb52-5" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Reach) <span class="sc">+</span> </span>
+<span id="cb52-6"><a href="#cb52-6" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">aspect.ratio =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="plots1_files/figure-html/plots1-46-1.png" width="80%" height="80%" /></p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="co"># detach sumcr</span></span>
+<span id="cb54-2"><a href="#cb54-2" tabindex="-1"></a><span class="fu">detach</span>(sumcr)</span></code></pre></div>
 </div>
 </div>
 <div id="more-lattice-plots" class="section level1" number="6">
@@ -1188,42 +1215,42 @@ twelve monthly precipitation variables as “spokes” of a wheel, where
 each variable is plotted relative to its overall range. The first block
 of code below sets things up, and the <code>stars()</code> function does
 the plotting.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code></pre></div>
 <pre><code>## Linking to GEOS 3.11.0, GDAL 3.5.3, PROJ 9.1.0; sf_use_s2() is TRUE</code></pre>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="fu">attach</span>(yellpratio)</span>
-<span id="cb56-2"><a href="#cb56-2" tabindex="-1"></a></span>
-<span id="cb56-3"><a href="#cb56-3" tabindex="-1"></a><span class="co"># simple map</span></span>
-<span id="cb56-4"><a href="#cb56-4" tabindex="-1"></a><span class="co"># read and plot shapefiles</span></span>
-<span id="cb56-5"><a href="#cb56-5" tabindex="-1"></a>ynp_state_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/ynpstate.shp&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a><span class="fu">attach</span>(yellpratio)</span>
+<span id="cb57-2"><a href="#cb57-2" tabindex="-1"></a></span>
+<span id="cb57-3"><a href="#cb57-3" tabindex="-1"></a><span class="co"># simple map</span></span>
+<span id="cb57-4"><a href="#cb57-4" tabindex="-1"></a><span class="co"># read and plot shapefiles</span></span>
+<span id="cb57-5"><a href="#cb57-5" tabindex="-1"></a>ynp_state_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/ynpstate.shp&quot;</span>)</span></code></pre></div>
 <pre><code>## Reading layer `ynpstate&#39; from data source `/Users/bartlein/Documents/geog495/data/shp/ynpstate.shp&#39; using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 3 features and 1 field
 ## Geometry type: LINESTRING
 ## Dimension:     XY
 ## Bounding box:  xmin: -112.2967 ymin: 42.69208 xmax: -107.7095 ymax: 46.22544
 ## Geodetic CRS:  WGS 84</code></pre>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(ynp_state_sf))</span>
-<span id="cb58-2"><a href="#cb58-2" tabindex="-1"></a>ynprivers_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/ynprivers.shp&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(ynp_state_sf))</span>
+<span id="cb59-2"><a href="#cb59-2" tabindex="-1"></a>ynprivers_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/ynprivers.shp&quot;</span>)</span></code></pre></div>
 <pre><code>## Reading layer `ynprivers&#39; from data source `/Users/bartlein/Documents/geog495/data/shp/ynprivers.shp&#39; using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 4 features and 1 field
 ## Geometry type: LINESTRING
 ## Dimension:     XY
 ## Bounding box:  xmin: -112.2967 ymin: 42.69208 xmax: -107.7095 ymax: 46.22544
 ## Geodetic CRS:  WGS 84</code></pre>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(ynprivers_sf), <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb60-2"><a href="#cb60-2" tabindex="-1"></a>ynplk_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/ynplk.shp&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(ynprivers_sf), <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a>ynplk_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="st">&quot;/Users/bartlein/Documents/geog495/data/shp/ynplk.shp&quot;</span>)</span></code></pre></div>
 <pre><code>## Reading layer `ynplk&#39; from data source `/Users/bartlein/Documents/geog495/data/shp/ynplk.shp&#39; using driver `ESRI Shapefile&#39;
 ## Simple feature collection with 1 feature and 1 field
 ## Geometry type: LINESTRING
 ## Dimension:     XY
 ## Bounding box:  xmin: -110.566 ymin: 44.29883 xmax: -110.1902 ymax: 44.56021
 ## Geodetic CRS:  WGS 84</code></pre>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(ynplk_sf), <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb62-2"><a href="#cb62-2" tabindex="-1"></a><span class="fu">points</span>(Lon, Lat, <span class="at">pch=</span><span class="dv">3</span>, <span class="at">cex=</span><span class="fl">0.6</span>)</span>
-<span id="cb62-3"><a href="#cb62-3" tabindex="-1"></a></span>
-<span id="cb62-4"><a href="#cb62-4" tabindex="-1"></a><span class="co"># stars plot for precipitation ratios</span></span>
-<span id="cb62-5"><a href="#cb62-5" tabindex="-1"></a>col.red <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">&quot;red&quot;</span>,<span class="fu">length</span>(orstationc[,<span class="dv">1</span>]))</span>
-<span id="cb62-6"><a href="#cb62-6" tabindex="-1"></a><span class="fu">stars</span>(yellpratio[,<span class="dv">4</span><span class="sc">:</span><span class="dv">15</span>], <span class="at">locations=</span><span class="fu">as.matrix</span>(<span class="fu">cbind</span>(Lon, Lat)),</span>
-<span id="cb62-7"><a href="#cb62-7" tabindex="-1"></a><span class="at">col.stars=</span>col.red, <span class="at">len=</span><span class="fl">0.2</span>, <span class="at">lwd=</span><span class="dv">1</span>, <span class="at">key.loc=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">111.5</span>,<span class="fl">42.5</span>), <span class="at">labels=</span><span class="cn">NULL</span>, <span class="at">add=</span>T)</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(ynplk_sf), <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb63-2"><a href="#cb63-2" tabindex="-1"></a><span class="fu">points</span>(Lon, Lat, <span class="at">pch=</span><span class="dv">3</span>, <span class="at">cex=</span><span class="fl">0.6</span>)</span>
+<span id="cb63-3"><a href="#cb63-3" tabindex="-1"></a></span>
+<span id="cb63-4"><a href="#cb63-4" tabindex="-1"></a><span class="co"># stars plot for precipitation ratios</span></span>
+<span id="cb63-5"><a href="#cb63-5" tabindex="-1"></a>col.red <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="st">&quot;red&quot;</span>,<span class="fu">length</span>(orstationc[,<span class="dv">1</span>]))</span>
+<span id="cb63-6"><a href="#cb63-6" tabindex="-1"></a><span class="fu">stars</span>(yellpratio[,<span class="dv">4</span><span class="sc">:</span><span class="dv">15</span>], <span class="at">locations=</span><span class="fu">as.matrix</span>(<span class="fu">cbind</span>(Lon, Lat)),</span>
+<span id="cb63-7"><a href="#cb63-7" tabindex="-1"></a><span class="at">col.stars=</span>col.red, <span class="at">len=</span><span class="fl">0.2</span>, <span class="at">lwd=</span><span class="dv">1</span>, <span class="at">key.loc=</span><span class="fu">c</span>(<span class="sc">-</span><span class="fl">111.5</span>,<span class="fl">42.5</span>), <span class="at">labels=</span><span class="cn">NULL</span>, <span class="at">add=</span>T)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-48-1.png" width="80%" height="80%" /></p>
 <p>Here the stars wind up looking more like fans. The legend indicates
 that stations with fans that open out to the right are stations with
@@ -1234,24 +1261,24 @@ maxima (like in the southeastern portion of the region).</p>
 illustrate the relationship between January and July precipitation, as
 varies (is conditioned on) with elevation. The first block of code does
 some set up.</p>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a><span class="co"># create some conditioning variables</span></span>
-<span id="cb63-2"><a href="#cb63-2" tabindex="-1"></a>Elevation <span class="ot">&lt;-</span> <span class="fu">equal.count</span>(Elev,<span class="dv">4</span>,.<span class="dv">25</span>)</span>
-<span id="cb63-3"><a href="#cb63-3" tabindex="-1"></a>Latitude <span class="ot">&lt;-</span> <span class="fu">equal.count</span>(Lat,<span class="dv">2</span>,.<span class="dv">25</span>)</span>
-<span id="cb63-4"><a href="#cb63-4" tabindex="-1"></a>Longitude <span class="ot">&lt;-</span> <span class="fu">equal.count</span>(Lon,<span class="dv">2</span>,.<span class="dv">25</span>)</span>
-<span id="cb63-5"><a href="#cb63-5" tabindex="-1"></a></span>
-<span id="cb63-6"><a href="#cb63-6" tabindex="-1"></a><span class="co"># January vs July Precipitation Ratios by Elevation</span></span>
-<span id="cb63-7"><a href="#cb63-7" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">xyplot</span>(APJan <span class="sc">~</span> APJul <span class="sc">|</span> Elevation,</span>
-<span id="cb63-8"><a href="#cb63-8" tabindex="-1"></a>    <span class="at">layout =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),</span>
-<span id="cb63-9"><a href="#cb63-9" tabindex="-1"></a>    <span class="at">panel =</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb63-10"><a href="#cb63-10" tabindex="-1"></a>        <span class="fu">panel.grid</span>(<span class="at">v=</span><span class="dv">2</span>)</span>
-<span id="cb63-11"><a href="#cb63-11" tabindex="-1"></a>        <span class="fu">panel.xyplot</span>(x, y)</span>
-<span id="cb63-12"><a href="#cb63-12" tabindex="-1"></a>        <span class="fu">panel.loess</span>(x, y, <span class="at">span =</span> <span class="fl">1.0</span>, <span class="at">degree =</span> <span class="dv">1</span>, <span class="at">family=</span><span class="st">&quot;symmetric&quot;</span>)</span>
-<span id="cb63-13"><a href="#cb63-13" tabindex="-1"></a>        <span class="fu">panel.abline</span>(<span class="fu">lm</span>(y<span class="sc">~</span>x))</span>
-<span id="cb63-14"><a href="#cb63-14" tabindex="-1"></a>    },</span>
-<span id="cb63-15"><a href="#cb63-15" tabindex="-1"></a>    <span class="at">xlab =</span> <span class="st">&quot;APJul&quot;</span>,</span>
-<span id="cb63-16"><a href="#cb63-16" tabindex="-1"></a>    <span class="at">ylab =</span> <span class="st">&quot;APJan&quot;</span>)</span>
-<span id="cb63-17"><a href="#cb63-17" tabindex="-1"></a><span class="fu">print</span>(plot2, <span class="at">position=</span><span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">375</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">more=</span>T)</span>
-<span id="cb63-18"><a href="#cb63-18" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">plot</span>(Elevation), <span class="at">position=</span><span class="fu">c</span>(.<span class="dv">1</span>,<span class="fl">0.0</span>,.<span class="dv">9</span>,.<span class="dv">4</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" tabindex="-1"></a><span class="co"># create some conditioning variables</span></span>
+<span id="cb64-2"><a href="#cb64-2" tabindex="-1"></a>Elevation <span class="ot">&lt;-</span> <span class="fu">equal.count</span>(Elev,<span class="dv">4</span>,.<span class="dv">25</span>)</span>
+<span id="cb64-3"><a href="#cb64-3" tabindex="-1"></a>Latitude <span class="ot">&lt;-</span> <span class="fu">equal.count</span>(Lat,<span class="dv">2</span>,.<span class="dv">25</span>)</span>
+<span id="cb64-4"><a href="#cb64-4" tabindex="-1"></a>Longitude <span class="ot">&lt;-</span> <span class="fu">equal.count</span>(Lon,<span class="dv">2</span>,.<span class="dv">25</span>)</span>
+<span id="cb64-5"><a href="#cb64-5" tabindex="-1"></a></span>
+<span id="cb64-6"><a href="#cb64-6" tabindex="-1"></a><span class="co"># January vs July Precipitation Ratios by Elevation</span></span>
+<span id="cb64-7"><a href="#cb64-7" tabindex="-1"></a>plot2 <span class="ot">&lt;-</span> <span class="fu">xyplot</span>(APJan <span class="sc">~</span> APJul <span class="sc">|</span> Elevation,</span>
+<span id="cb64-8"><a href="#cb64-8" tabindex="-1"></a>    <span class="at">layout =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),</span>
+<span id="cb64-9"><a href="#cb64-9" tabindex="-1"></a>    <span class="at">panel =</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb64-10"><a href="#cb64-10" tabindex="-1"></a>        <span class="fu">panel.grid</span>(<span class="at">v=</span><span class="dv">2</span>)</span>
+<span id="cb64-11"><a href="#cb64-11" tabindex="-1"></a>        <span class="fu">panel.xyplot</span>(x, y)</span>
+<span id="cb64-12"><a href="#cb64-12" tabindex="-1"></a>        <span class="fu">panel.loess</span>(x, y, <span class="at">span =</span> <span class="fl">1.0</span>, <span class="at">degree =</span> <span class="dv">1</span>, <span class="at">family=</span><span class="st">&quot;symmetric&quot;</span>)</span>
+<span id="cb64-13"><a href="#cb64-13" tabindex="-1"></a>        <span class="fu">panel.abline</span>(<span class="fu">lm</span>(y<span class="sc">~</span>x))</span>
+<span id="cb64-14"><a href="#cb64-14" tabindex="-1"></a>    },</span>
+<span id="cb64-15"><a href="#cb64-15" tabindex="-1"></a>    <span class="at">xlab =</span> <span class="st">&quot;APJul&quot;</span>,</span>
+<span id="cb64-16"><a href="#cb64-16" tabindex="-1"></a>    <span class="at">ylab =</span> <span class="st">&quot;APJan&quot;</span>)</span>
+<span id="cb64-17"><a href="#cb64-17" tabindex="-1"></a><span class="fu">print</span>(plot2, <span class="at">position=</span><span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">375</span>,<span class="dv">1</span>,<span class="dv">1</span>), <span class="at">more=</span>T)</span>
+<span id="cb64-18"><a href="#cb64-18" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">plot</span>(Elevation), <span class="at">position=</span><span class="fu">c</span>(.<span class="dv">1</span>,<span class="fl">0.0</span>,.<span class="dv">9</span>,.<span class="dv">4</span>))</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-49-1.png" width="80%" height="80%" /></p>
 <p>The plot shows that the relationship between January and July
 precipitation indeed varies with elevation. At low elevations, there is
@@ -1261,29 +1288,29 @@ is proportionally more (top two panels). This relationship points to
 some orographic (i.e. related to the elevation of the mountains)
 amplification of the winter precipitation.</p>
 <p>Here’s a <code>{ggplot2}</code> version:</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" tabindex="-1"></a><span class="co"># create an elevation zones factor</span></span>
-<span id="cb64-2"><a href="#cb64-2" tabindex="-1"></a>yellpratio<span class="sc">$</span>Elev_zones <span class="ot">&lt;-</span> <span class="fu">cut</span>(Elevation, <span class="dv">4</span>, <span class="at">labels=</span><span class="fu">c</span>(<span class="st">&quot;Elev1 (lowest)&quot;</span>, <span class="st">&quot;Elev2&quot;</span>, <span class="st">&quot;Elev3&quot;</span>, <span class="st">&quot;Elev4 (highest)&quot;</span>))</span>
-<span id="cb64-3"><a href="#cb64-3" tabindex="-1"></a></span>
-<span id="cb64-4"><a href="#cb64-4" tabindex="-1"></a><span class="fu">ggplot</span>(yellpratio, <span class="fu">aes</span>(<span class="at">x=</span>APJul, <span class="at">y=</span>APJan)) <span class="sc">+</span></span>
-<span id="cb64-5"><a href="#cb64-5" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb64-6"><a href="#cb64-6" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb64-7"><a href="#cb64-7" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span> Elev_zones)</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a><span class="co"># create an elevation zones factor</span></span>
+<span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a>yellpratio<span class="sc">$</span>Elev_zones <span class="ot">&lt;-</span> <span class="fu">cut</span>(Elevation, <span class="dv">4</span>, <span class="at">labels=</span><span class="fu">c</span>(<span class="st">&quot;Elev1 (lowest)&quot;</span>, <span class="st">&quot;Elev2&quot;</span>, <span class="st">&quot;Elev3&quot;</span>, <span class="st">&quot;Elev4 (highest)&quot;</span>))</span>
+<span id="cb65-3"><a href="#cb65-3" tabindex="-1"></a></span>
+<span id="cb65-4"><a href="#cb65-4" tabindex="-1"></a><span class="fu">ggplot</span>(yellpratio, <span class="fu">aes</span>(<span class="at">x=</span>APJul, <span class="at">y=</span>APJan)) <span class="sc">+</span></span>
+<span id="cb65-5"><a href="#cb65-5" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb65-6"><a href="#cb65-6" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb65-7"><a href="#cb65-7" tabindex="-1"></a>  <span class="fu">facet_wrap</span>( <span class="sc">~</span> Elev_zones)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="plots1_files/figure-html/plots1-50-1.png" width="80%" height="80%" /></p>
 <p>The next plot shows the variation of the relationship between January
 and July precipitation as it varies spatially.</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" tabindex="-1"></a><span class="co"># January vs July Precipitation Ratios by Latitude and Longitude</span></span>
-<span id="cb66-2"><a href="#cb66-2" tabindex="-1"></a>plot3 <span class="ot">&lt;-</span> <span class="fu">xyplot</span>(APJan <span class="sc">~</span> APJul <span class="sc">|</span> Latitude<span class="sc">*</span>Longitude,</span>
-<span id="cb66-3"><a href="#cb66-3" tabindex="-1"></a>    <span class="at">layout =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),</span>
-<span id="cb66-4"><a href="#cb66-4" tabindex="-1"></a>    <span class="at">panel =</span> <span class="cf">function</span>(x, y) {</span>
-<span id="cb66-5"><a href="#cb66-5" tabindex="-1"></a>        <span class="fu">panel.grid</span>(<span class="at">v=</span><span class="dv">2</span>)</span>
-<span id="cb66-6"><a href="#cb66-6" tabindex="-1"></a>        <span class="fu">panel.xyplot</span>(x, y)</span>
-<span id="cb66-7"><a href="#cb66-7" tabindex="-1"></a>        <span class="fu">panel.loess</span>(x, y, <span class="at">span =</span> .<span class="dv">8</span>, <span class="at">degree =</span> <span class="dv">1</span>, <span class="at">family=</span><span class="st">&quot;gaussian&quot;</span>)</span>
-<span id="cb66-8"><a href="#cb66-8" tabindex="-1"></a>        <span class="fu">panel.abline</span>(<span class="fu">lm</span>(y<span class="sc">~</span>x))</span>
-<span id="cb66-9"><a href="#cb66-9" tabindex="-1"></a>    },</span>
-<span id="cb66-10"><a href="#cb66-10" tabindex="-1"></a>    <span class="at">xlab =</span> <span class="st">&quot;APJul&quot;</span>,</span>
-<span id="cb66-11"><a href="#cb66-11" tabindex="-1"></a>    <span class="at">ylab =</span> <span class="st">&quot;APJan&quot;</span>)</span>
-<span id="cb66-12"><a href="#cb66-12" tabindex="-1"></a><span class="fu">print</span>(plot3)</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="co"># January vs July Precipitation Ratios by Latitude and Longitude</span></span>
+<span id="cb67-2"><a href="#cb67-2" tabindex="-1"></a>plot3 <span class="ot">&lt;-</span> <span class="fu">xyplot</span>(APJan <span class="sc">~</span> APJul <span class="sc">|</span> Latitude<span class="sc">*</span>Longitude,</span>
+<span id="cb67-3"><a href="#cb67-3" tabindex="-1"></a>    <span class="at">layout =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>),</span>
+<span id="cb67-4"><a href="#cb67-4" tabindex="-1"></a>    <span class="at">panel =</span> <span class="cf">function</span>(x, y) {</span>
+<span id="cb67-5"><a href="#cb67-5" tabindex="-1"></a>        <span class="fu">panel.grid</span>(<span class="at">v=</span><span class="dv">2</span>)</span>
+<span id="cb67-6"><a href="#cb67-6" tabindex="-1"></a>        <span class="fu">panel.xyplot</span>(x, y)</span>
+<span id="cb67-7"><a href="#cb67-7" tabindex="-1"></a>        <span class="fu">panel.loess</span>(x, y, <span class="at">span =</span> .<span class="dv">8</span>, <span class="at">degree =</span> <span class="dv">1</span>, <span class="at">family=</span><span class="st">&quot;gaussian&quot;</span>)</span>
+<span id="cb67-8"><a href="#cb67-8" tabindex="-1"></a>        <span class="fu">panel.abline</span>(<span class="fu">lm</span>(y<span class="sc">~</span>x))</span>
+<span id="cb67-9"><a href="#cb67-9" tabindex="-1"></a>    },</span>
+<span id="cb67-10"><a href="#cb67-10" tabindex="-1"></a>    <span class="at">xlab =</span> <span class="st">&quot;APJul&quot;</span>,</span>
+<span id="cb67-11"><a href="#cb67-11" tabindex="-1"></a>    <span class="at">ylab =</span> <span class="st">&quot;APJan&quot;</span>)</span>
+<span id="cb67-12"><a href="#cb67-12" tabindex="-1"></a><span class="fu">print</span>(plot3)</span></code></pre></div>
 <p><img src="plots1_files/figure-html/plots1-51-1.png" width="80%" height="80%" /></p>
 <p>Notice that the steepest curve lies in the panel representing the
 southwestern part of the region (low latitude and low longitude,
@@ -1291,21 +1318,21 @@ i.e. the bottom left panel), which suggests that winter (January)
 precipitation is relatively more import there, which is also apparent on
 the stars plot above.</p>
 <p>Here’s the <code>{ggplot2}</code> version:</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="co"># create conditioning variables</span></span>
-<span id="cb67-2"><a href="#cb67-2" tabindex="-1"></a>Loc_factor <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">length</span>(yellpratio<span class="sc">$</span>Lat))</span>
-<span id="cb67-3"><a href="#cb67-3" tabindex="-1"></a>Loc_factor[(yellpratio<span class="sc">$</span>Lat <span class="sc">&gt;=</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lat) <span class="sc">&amp;</span> yellpratio<span class="sc">$</span>Lon <span class="sc">&lt;</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lon))] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb67-4"><a href="#cb67-4" tabindex="-1"></a>Loc_factor[(yellpratio<span class="sc">$</span>Lat <span class="sc">&gt;=</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lat) <span class="sc">&amp;</span> yellpratio<span class="sc">$</span>Lon <span class="sc">&gt;=</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lon))] <span class="ot">&lt;-</span> <span class="dv">2</span></span>
-<span id="cb67-5"><a href="#cb67-5" tabindex="-1"></a>Loc_factor[(yellpratio<span class="sc">$</span>Lat <span class="sc">&lt;</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lat) <span class="sc">&amp;</span> yellpratio<span class="sc">$</span>Lon <span class="sc">&lt;</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lon))] <span class="ot">&lt;-</span> <span class="dv">3</span></span>
-<span id="cb67-6"><a href="#cb67-6" tabindex="-1"></a>Loc_factor[(yellpratio<span class="sc">$</span>Lat <span class="sc">&lt;</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lat) <span class="sc">&amp;</span> yellpratio<span class="sc">$</span>Lon <span class="sc">&gt;=</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lon))] <span class="ot">&lt;-</span> <span class="dv">4</span></span>
-<span id="cb67-7"><a href="#cb67-7" tabindex="-1"></a><span class="co"># convert to factor, and add level lables</span></span>
-<span id="cb67-8"><a href="#cb67-8" tabindex="-1"></a>yellpratio<span class="sc">$</span>Loc_factor <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(Loc_factor)</span>
-<span id="cb67-9"><a href="#cb67-9" tabindex="-1"></a><span class="fu">levels</span>(yellpratio<span class="sc">$</span>Loc_factor) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Low Lon/High Lat&quot;</span>, <span class="st">&quot;High Lon/High Lat&quot;</span>, <span class="st">&quot;Low Lon/Low Lat&quot;</span>, <span class="st">&quot;High Lon/Low Lat&quot;</span>)</span>
-<span id="cb67-10"><a href="#cb67-10" tabindex="-1"></a></span>
-<span id="cb67-11"><a href="#cb67-11" tabindex="-1"></a><span class="fu">ggplot</span>(yellpratio, <span class="fu">aes</span>(<span class="at">x=</span>APJul, <span class="at">y=</span>APJan)) <span class="sc">+</span></span>
-<span id="cb67-12"><a href="#cb67-12" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">span =</span> <span class="fl">0.9</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb67-13"><a href="#cb67-13" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb67-14"><a href="#cb67-14" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb67-15"><a href="#cb67-15" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Loc_factor)</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" tabindex="-1"></a><span class="co"># create conditioning variables</span></span>
+<span id="cb68-2"><a href="#cb68-2" tabindex="-1"></a>Loc_factor <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">length</span>(yellpratio<span class="sc">$</span>Lat))</span>
+<span id="cb68-3"><a href="#cb68-3" tabindex="-1"></a>Loc_factor[(yellpratio<span class="sc">$</span>Lat <span class="sc">&gt;=</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lat) <span class="sc">&amp;</span> yellpratio<span class="sc">$</span>Lon <span class="sc">&lt;</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lon))] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb68-4"><a href="#cb68-4" tabindex="-1"></a>Loc_factor[(yellpratio<span class="sc">$</span>Lat <span class="sc">&gt;=</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lat) <span class="sc">&amp;</span> yellpratio<span class="sc">$</span>Lon <span class="sc">&gt;=</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lon))] <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb68-5"><a href="#cb68-5" tabindex="-1"></a>Loc_factor[(yellpratio<span class="sc">$</span>Lat <span class="sc">&lt;</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lat) <span class="sc">&amp;</span> yellpratio<span class="sc">$</span>Lon <span class="sc">&lt;</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lon))] <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb68-6"><a href="#cb68-6" tabindex="-1"></a>Loc_factor[(yellpratio<span class="sc">$</span>Lat <span class="sc">&lt;</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lat) <span class="sc">&amp;</span> yellpratio<span class="sc">$</span>Lon <span class="sc">&gt;=</span> <span class="fu">median</span>(yellpratio<span class="sc">$</span>Lon))] <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb68-7"><a href="#cb68-7" tabindex="-1"></a><span class="co"># convert to factor, and add level lables</span></span>
+<span id="cb68-8"><a href="#cb68-8" tabindex="-1"></a>yellpratio<span class="sc">$</span>Loc_factor <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(Loc_factor)</span>
+<span id="cb68-9"><a href="#cb68-9" tabindex="-1"></a><span class="fu">levels</span>(yellpratio<span class="sc">$</span>Loc_factor) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Low Lon/High Lat&quot;</span>, <span class="st">&quot;High Lon/High Lat&quot;</span>, <span class="st">&quot;Low Lon/Low Lat&quot;</span>, <span class="st">&quot;High Lon/Low Lat&quot;</span>)</span>
+<span id="cb68-10"><a href="#cb68-10" tabindex="-1"></a></span>
+<span id="cb68-11"><a href="#cb68-11" tabindex="-1"></a><span class="fu">ggplot</span>(yellpratio, <span class="fu">aes</span>(<span class="at">x=</span>APJul, <span class="at">y=</span>APJan)) <span class="sc">+</span></span>
+<span id="cb68-12"><a href="#cb68-12" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">span =</span> <span class="fl">0.9</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb68-13"><a href="#cb68-13" tabindex="-1"></a>  <span class="fu">stat_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb68-14"><a href="#cb68-14" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
+<span id="cb68-15"><a href="#cb68-15" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>Loc_factor)</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;
 ## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="plots1_files/figure-html/plots1-52-1.png" width="80%" height="80%" /></p>
