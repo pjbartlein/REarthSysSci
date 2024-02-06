@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Plots (2)</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Earth-System Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="intro.html">Introduction: R, RStudio, and other infrastructure</a>
+    </li>
+    <li>
+      <a href="usingR.html">Using R</a>
+    </li>
+    <li>
+      <a href="ESSdata.html">Earth-system science data</a>
+    </li>
+    <li>
+      <a href="netCDF.html">netCDF in R</a>
+    </li>
+    <li>
+      <a href="netcdf_terra.html">netCDF and terra</a>
+    </li>
+    <li>
+      <a href="plots1.html">Plots (1)</a>
+    </li>
+    <li>
+      <a href="plots2.html">Plots (2)</a>
+    </li>
+    <li>
+      <a href="maps1.html">Maps (1)</a>
+    </li>
+    <li>
+      <a href="maps2.html">Maps (2)</a>
+    </li>
+    <li>
+      <a href="geospatial.html">Geospatial analyses</a>
+    </li>
+    <li>
+      <a href="correlation.html">Correlation and regression</a>
+    </li>
+    <li>
+      <a href="prediction.html">Prediction</a>
+    </li>
+    <li>
+      <a href="pca.html">PCA</a>
+    </li>
+    <li>
+      <a href="svd.html">Singular Value Decomposistion</a>
+    </li>
+    <li>
+      <a href="highdim.html">High-resolution &amp; high-dimensional data</a>
+    </li>
+    <li>
+      <a href="multivariate.html">Multivariate methods</a>
+    </li>
+    <li>
+      <a href="timeseries.html">Time-series analysis</a>
+    </li>
+    <li>
+      <a href="otherlang.html">Other Languages</a>
+    </li>
+    <li class="dropdown-header">Other topics</li>
+    <li>
+      <a href="sf_stars_sftime.html">sf / stars / sftime</a>
+    </li>
+    <li>
+      <a href="hdf5_intro.html">HDF in R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Tasks
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Tasks</li>
+    <li>
+      <a href="installR.html">Install R and RStudio</a>
+    </li>
+    <li>
+      <a href="Ex_UsingR.html">Using R exercise</a>
+    </li>
+    <li>
+      <a href="install_netCDF.html">Install netCDF &amp; Panoply</a>
+    </li>
+    <li>
+      <a href="transfer.html">File transfer</a>
+    </li>
+    <li>
+      <a href="texteditor.html">Install a text editor</a>
+    </li>
+    <li>
+      <a href="dataselection.html">Project data set selection</a>
+    </li>
+    <li>
+      <a href="markdown.html">Markdown and RMarkdown</a>
+    </li>
+    <li>
+      <a href="pandoc.html">Pandoc</a>
+    </li>
+    <li>
+      <a href="GitHub.html">GitHub and UO pages.uoregon.edu</a>
+    </li>
+    <li>
+      <a href="localweb.html">Local websites</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="websites.html">Old course web pages</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Plots (2)</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction" id="toc-introduction"><span
+class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#more-examples" id="toc-more-examples"><span
+class="toc-section-number">2</span> More examples</a></li>
+<li><a href="#hovmöller-diagrams" id="toc-hovmöller-diagrams"><span
+class="toc-section-number">3</span> Hovmöller diagrams</a>
+<ul>
+<li><a href="#a-simple-example" id="toc-a-simple-example"><span
+class="toc-section-number">3.1</span> A simple example</a></li>
+<li><a href="#test-reshaping" id="toc-test-reshaping"><span
+class="toc-section-number">3.2</span> Test reshaping</a></li>
+<li><a href="#a-more-complicated-example-hadcrutv5-temperature-data"
+id="toc-a-more-complicated-example-hadcrutv5-temperature-data"><span
+class="toc-section-number">3.3</span> A more complicated example –
+HadCRUTv5 temperature data</a>
+<ul>
+<li><a href="#get-and-read-the-hadcrutv5-data"
+id="toc-get-and-read-the-hadcrutv5-data"><span
+class="toc-section-number">3.3.1</span> Get and read the HadCRUTv5
+data</a></li>
+<li><a href="#plot-a-single-month" id="toc-plot-a-single-month"><span
+class="toc-section-number">3.3.2</span> Plot a single month</a></li>
+<li><a href="#shift-longitudes" id="toc-shift-longitudes"><span
+class="toc-section-number">3.3.3</span> Shift longitudes</a></li>
+<li><a href="#hovmöller-diagrams-1" id="toc-hovmöller-diagrams-1"><span
+class="toc-section-number">3.3.4</span> Hovmöller diagrams</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<p>
+<span style="color: #00cc00;">NOTE: This page has been revised for
+Winter 2021, but may undergo further edits.</span>
+</p>
+<div id="introduction" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>As was shown in Plots (1), there is a wide variety of plots available
+in the base R <code>{graphics}</code> package, that are also possible in
+<code>{ggplot2}</code>, which permits elaboration well beyond what’s
+available in base R. In addition, there is a growing number of
+extensions of <code>{ggplot2}</code> itself: <a
+href="https://exts.ggplot2.tidyverse.org">[https://exts.ggplot2.tidyverse.org]</a>,
+see the Gallery.</p>
+<p>This topic illustrates a few more <code>{ggplot2}</code> examples,
+and then goes on to describe the development of “Hovmöller” diagram, or
+time-space diagrams for surface air temperature. While rather
+specialized (there are only a few published functions for constructing
+them in one go), the steps in their construction are typical of the data
+preparation/visualization necessary for making non-standard
+visualizations.</p>
+</div>
+<div id="more-examples" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> More examples</h1>
+<p>To begin, load the libraries, and some of the data that will be used
+here:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code></pre></div>
+<pre><code>## Linking to GEOS 3.11.0, GDAL 3.5.3, PROJ 9.1.0; sf_use_s2() is TRUE</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(stars)</span></code></pre></div>
+<pre><code>## Loading required package: abind</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">library</span>(ncdf4)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">library</span>(CFtime)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
+<p>… and the data:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># load data from a saved .RData file</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">url</span>(<span class="st">&quot;https://pages.uoregon.edu/bartlein/RESS/RData/geog490.RData&quot;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">load</span>(<span class="at">file=</span>con)</span></code></pre></div>
+<p>Also extract a world map from the <code>{maps}</code> package to use
+as a basemap:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># world_sf</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>world_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(maps<span class="sc">::</span><span class="fu">map</span>(<span class="st">&quot;world&quot;</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>, <span class="at">fill =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>world_sf</span></code></pre></div>
+<pre><code>## Simple feature collection with 253 features and 1 field
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: -180 ymin: -85.19218 xmax: 190.2708 ymax: 83.59961
+## Geodetic CRS:  +proj=longlat +ellps=clrk66 +no_defs +type=crs
+## First 10 features:
+##                                        ID                           geom
+## Aruba                               Aruba MULTIPOLYGON (((-69.89912 1...
+## Afghanistan                   Afghanistan MULTIPOLYGON (((74.89131 37...
+## Angola                             Angola MULTIPOLYGON (((23.9665 -10...
+## Anguilla                         Anguilla MULTIPOLYGON (((-63.00122 1...
+## Albania                           Albania MULTIPOLYGON (((20.06396 42...
+## Finland                           Finland MULTIPOLYGON (((20.61133 60...
+## Andorra                           Andorra MULTIPOLYGON (((1.706055 42...
+## United Arab Emirates United Arab Emirates MULTIPOLYGON (((53.92783 24...
+## Argentina                       Argentina MULTIPOLYGON (((-64.54916 -...
+## Armenia                           Armenia MULTIPOLYGON (((45.55235 40...</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>world_otl_sf <span class="ot">&lt;-</span> <span class="fu">st_geometry</span>(world_sf)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">plot</span>(world_otl_sf) <span class="co"># simple plot.sf() plot</span></span></code></pre></div>
+<p><img src="plots2_files/figure-html/unnamed-chunk-3-1.png" width="80%" height="80%" /></p>
+<p>Here’s a <code>{ggplot2}</code> plot of the outlines</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># ggplot map of world_outline</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span>  </span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="plots2_files/figure-html/unnamed-chunk-4-1.png" width="80%" height="80%" /></p>
+<p>Here’ a plot of some global tree-cover data that will be used later.
+First, read in the data, using <code>read_stars()</code> from the
+<code>{stars}</code> package to read the netCDF file.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># tree data</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>tree_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/&quot;</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>tree_name <span class="ot">&lt;-</span> <span class="st">&quot;treecov.nc&quot;</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>tree_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(tree_path, tree_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>tree <span class="ot">&lt;-</span> <span class="fu">read_stars</span>(tree_file)</span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>tree</span></code></pre></div>
+<pre><code>## stars object with 2 dimensions and 1 attribute
+## attribute(s):
+##                Min. 1st Qu. Median    Mean 3rd Qu. Max.   NA&#39;s
+## treecov.nc [1]   -2      -1     -1 20.2204      42   80 198720
+## dimension(s):
+##   from  to offset delta x/y
+## x    1 720   -180   0.5 [x]
+## y    1 360     90  -0.5 [y]</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">plot</span>(tree) <span class="co">#</span></span></code></pre></div>
+<p><img src="plots2_files/figure-html/unnamed-chunk-5-1.png" width="80%" height="80%" /></p>
+<p>Here’s a <code>{ggplot2}</code> plot of the tree-cover data:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># ggplot2 map of tree</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">ggplot</span>()  <span class="sc">+</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>  <span class="fu">geom_stars</span>(<span class="at">data =</span> tree) <span class="sc">+</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">na.value =</span> <span class="st">&quot;transparent&quot;</span> ) <span class="sc">+</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">title=</span><span class="st">&quot;Tree Cover&quot;</span>, <span class="at">fill=</span><span class="st">&quot;%&quot;</span>) <span class="sc">+</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="plots2_files/figure-html/unnamed-chunk-6-1.png" width="80%" height="80%" /></p>
+<p>Note that there is a lot going on in the plot, despite the fact that
+it’s just a single variable and a basemap. As always, the way to see
+what contribution each function makes to the overall map is to comment
+it out, and see what happens.</p>
+<p><a href="plots2.html">[Back to top]</a></p>
+</div>
+<div id="hovmöller-diagrams" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Hovmöller diagrams</h1>
+<p>Hovmöller plots/diagrams, also known as “a climate scientist’s best
+friend” <a
+href="https://www.climate.gov/news-features/understanding-climate/hovmöller-diagram-climate-scientist’s-best-friend">[Climate.gov]</a>,
+are, as was mentioned, time-space type diagrams, but they are actually
+just maps of another kind. For example, a (longitude-by-latitude) map of
+average temperature around the globe is constructed from a raster brick,
+with dimensions longitude by latitude by time by averaging the data at a
+particular grid point over time, and then plotting the average at that
+grid point’s location. A latitude-by-time Hovmöller diagram is
+constructed by averaging the data over all longitudes at for a
+particular time and latitude. In practice, Hovmöller diagrams are able
+to reveal large-scale features in the atmosphere that evolve slowly over
+time. They are most frequently applied to atmospheric circulation data,
+or to surface temperature or sea-surface temperature (SSTs). A typical
+example is the longitude-by-time diagram of tropical SST anomalies
+(differences from the long-term aveage) used to “diagnose” El Niños and
+La Niñas <a
+href="https://psl.noaa.gov/map/images/sst/sst.month.anom.hov.io.gif">[https://psl.noaa.gov/map/images/sst/sst.month.anom.hov.io.gif]</a>.</p>
+<div id="a-simple-example" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> A simple example</h2>
+<p>When constructing a map, say, of average temperatures, it’s
+relatively easy to imagine what the map should look like, but it’s
+harder to anticipate what a Hovmöller diagram should look like. (If
+fact, if a Hovmöller diagram shows <em>any</em> kind of pattern, it
+signals that there is some systematic variation worth exploring.) So we
+begin with a simple example.</p>
+<p>Read the CRU 0.5-degree 1961-1990 long-term average temperature
+data.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># set path and filename</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>ncpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/&quot;</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>ncname <span class="ot">&lt;-</span> <span class="st">&quot;cru10min30_tmp&quot;</span>  </span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="fu">paste</span>(ncpath, ncname, <span class="st">&quot;.nc&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>dname <span class="ot">&lt;-</span> <span class="st">&quot;tmp&quot;</span>  <span class="co"># note: tmp means temperature (not temporary)</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a><span class="co"># stars read of netCDF</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>tmp_stars <span class="ot">&lt;-</span> <span class="fu">read_ncdf</span>(ncfname, <span class="at">var=</span>dname)</span></code></pre></div>
+<pre><code>## Will return stars object with 3110400 cells.</code></pre>
+<pre><code>## No projection information found in nc file. 
+##  Coordinate variable units found to be degrees, 
+##  assuming WGS84 Lat/Lon.</code></pre>
+<p>Replace the time stamps:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># replace times</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co">#attr(tmp_stars, &quot;dimensions&quot;)$time$values &lt;- c(1:12)</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">attr</span>(tmp_stars, <span class="st">&quot;dimensions&quot;</span>)<span class="sc">$</span>time<span class="sc">$</span>values <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Jan&quot;</span>,<span class="st">&quot;Feb&quot;</span>,<span class="st">&quot;Mar&quot;</span>,<span class="st">&quot;Apr&quot;</span>,<span class="st">&quot;May&quot;</span>,<span class="st">&quot;Jun&quot;</span>,</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>                <span class="st">&quot;Jul&quot;</span>,<span class="st">&quot;Aug&quot;</span>,<span class="st">&quot;Sep&quot;</span>,<span class="st">&quot;Oct&quot;</span>,<span class="st">&quot;Nov&quot;</span>,<span class="st">&quot;Dec&quot;</span>)</span></code></pre></div>
+<p>Quick plot of the data:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># quick plot of the data</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">plot</span>(tmp_stars)</span></code></pre></div>
+<pre><code>## downsample set to 3</code></pre>
+<p><img src="plots2_files/figure-html/unnamed-chunk-9-1.png" width="80%" height="80%" /></p>
+<p><code>{ggplot2}</code> map of tmp:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># ggplot2 map of tmp</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">ggplot</span>()  <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>  <span class="fu">geom_stars</span>(<span class="at">data =</span> tmp_stars) <span class="sc">+</span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">mid=</span><span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkred&quot;</span>, <span class="at">midpoint =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="st">&quot;time&quot;</span>, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">175</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>)) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">4</span>))  </span></code></pre></div>
+<p><img src="plots2_files/figure-html/unnamed-chunk-10-1.png" width="80%" height="80%" /></p>
+</div>
+<div id="test-reshaping" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Test reshaping</h2>
+<p>Next, we’ll reread the netCDF file to explicitly get the dimension
+variables, and the data as a 3-D array:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># get the netCDF file</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>ncin <span class="ot">&lt;-</span> <span class="fu">nc_open</span>(ncfname)</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin, <span class="st">&quot;lon&quot;</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin, <span class="st">&quot;lat&quot;</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>tmp_array <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin, dname)</span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="fu">dim</span>(tmp_array)</span></code></pre></div>
+<pre><code>## [1] 720 360  12</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">nc_close</span>(ncin)</span></code></pre></div>
+<p>Next, use the <code>apply()</code> function to get the
+longitude-by-time and latitude-by-time averages. The
+<code>apply()</code> function, as its name implies, applies some
+function to the “margins” of a matrix or array. The arguments of the
+<code>apply()</code> function are the name of the array
+(<code>tmp_array</code> here), the <code>MARGIN</code> or the subscripts
+of the array over which the function will be applied, and the function
+(<code>mean</code> in this case, with <code>na.rm = TRUE</code>
+indicating that values with missing data should be dropped).</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co"># latitude by time averaging</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>tmp_hovlat <span class="ot">&lt;-</span> <span class="fu">apply</span>(tmp_array, <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), mean, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="fu">dim</span>(tmp_hovlat)</span></code></pre></div>
+<pre><code>## [1] 360  12</code></pre>
+<p>Here’s a quick map of the resulting 2-D array or matrix:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co"># quick plot of latitude by time data</span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">image</span>(<span class="fu">t</span>(tmp_hovlat))</span></code></pre></div>
+<p><img src="plots2_files/figure-html/unnamed-chunk-13-1.png" width="80%" height="80%" /></p>
+<p>The transpose function (<code>t()</code>) puts time on the x-axis and
+latitude on the y-axis. The plot looks like what might be expected.
+Here’s longitude by time:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="co"># longitude by time</span></span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>tmp_hovlon <span class="ot">&lt;-</span> <span class="fu">apply</span>(tmp_array, <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), mean, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="fu">dim</span>(tmp_hovlon)</span></code></pre></div>
+<pre><code>## [1] 720  12</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># quick plot of longitude by time data</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="fu">image</span>(tmp_hovlon)</span></code></pre></div>
+<p><img src="plots2_files/figure-html/unnamed-chunk-15-1.png" width="80%" height="80%" /></p>
+<p>Recalling that this is land data only, and that the longitudes range
+from -180 to + 180 this plot makes sense–the western margins of the
+continents are cooler, and the warmest blob in the middle is N. Africa
+and the Middle East.</p>
+<p><a href="plots2.html">[Back to top]</a></p>
+</div>
+<div id="a-more-complicated-example-hadcrutv5-temperature-data"
+class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> A more complicated
+example – HadCRUTv5 temperature data</h2>
+<p>The “HadCRUTv5” data set is one of the four data sets used to
+describe global and regional temperature variations over the
+“instrumental period” – since the mid 1800s. The data consist of monthly
+anomalies (differences from the 1961 to 1990 long-term mean) on a
+5-degree grid. The particular data set used here is the statistically
+“infilled” version, designed to increase the spatial coverage. The data
+are a combination of the U.K. Met Office Hadley Centre SST data set and
+the University of East Anglia Climate Research Unit surface
+air-temperature data. Here are the reference and data-download
+pages:</p>
+<ul>
+<li><a
+href="https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.0.2.0/download.html">[https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.0.2.0/download.html]</a></li>
+<li><a
+href="https://crudata.uea.ac.uk/cru/data/temperature/">[https://crudata.uea.ac.uk/cru/data/temperature/]</a></li>
+</ul>
+<div id="get-and-read-the-hadcrutv5-data" class="section level3"
+number="3.3.1">
+<h3><span class="header-section-number">3.3.1</span> Get and read the
+HadCRUTv5 data</h3>
+<p>Get the data:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># get the long-term mean temperature data</span></span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="co"># set path and filename</span></span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>ncpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/&quot;</span></span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a>ncname <span class="ot">&lt;-</span> <span class="st">&quot;HadCRUT.5.0.2.0.nc&quot;</span>  </span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="fu">paste</span>(ncpath, ncname, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb31-6"><a href="#cb31-6" tabindex="-1"></a>dname <span class="ot">&lt;-</span> <span class="st">&quot;tas_mean&quot;</span>  <span class="co"># note: tmp means temperature (not temporary), and ...</span></span>
+<span id="cb31-7"><a href="#cb31-7" tabindex="-1"></a><span class="co"># we know the data are actually anomalies, not means</span></span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co"># get the dimensions from the netCDF file</span></span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a>ncin <span class="ot">&lt;-</span> <span class="fu">nc_open</span>(ncfname)</span>
+<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin, <span class="st">&quot;longitude&quot;</span>)</span>
+<span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a>nlon <span class="ot">&lt;-</span> <span class="fu">dim</span>(lon)</span>
+<span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin, <span class="st">&quot;latitude&quot;</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a>nlat <span class="ot">&lt;-</span> <span class="fu">dim</span>(lat)</span>
+<span id="cb32-7"><a href="#cb32-7" tabindex="-1"></a>time <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin,<span class="st">&quot;time&quot;</span>)</span>
+<span id="cb32-8"><a href="#cb32-8" tabindex="-1"></a>tunits <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="st">&quot;time&quot;</span>,<span class="st">&quot;units&quot;</span>)</span>
+<span id="cb32-9"><a href="#cb32-9" tabindex="-1"></a>nt <span class="ot">&lt;-</span> <span class="fu">dim</span>(time)</span>
+<span id="cb32-10"><a href="#cb32-10" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(nlon, nlat, nt))</span></code></pre></div>
+<pre><code>## [1]   72   36 2088</code></pre>
+<p>Decode the time variable:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="co"># decode time</span></span>
+<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a>cf <span class="ot">&lt;-</span> <span class="fu">CFtime</span>(tunits<span class="sc">$</span>value, <span class="at">calendar =</span> <span class="st">&quot;proleptic_gregorian&quot;</span>, time) <span class="co"># convert time to CFtime class</span></span>
+<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a>timestamps <span class="ot">&lt;-</span> <span class="fu">CFtimestamp</span>(cf) <span class="co"># get character-string times</span></span>
+<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a>time_cf <span class="ot">&lt;-</span> <span class="fu">CFparse</span>(cf, timestamps) <span class="co"># parse the string into date components</span></span>
+<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a><span class="fu">head</span>(time_cf); <span class="fu">tail</span>(time_cf)</span></code></pre></div>
+<pre><code>##   year month day hour minute second    tz offset
+## 1 1850     1  16   12      0      0 00:00   15.5
+## 2 1850     2  15    0      0      0 00:00   45.0
+## 3 1850     3  16   12      0      0 00:00   74.5
+## 4 1850     4  16    0      0      0 00:00  105.0
+## 5 1850     5  16   12      0      0 00:00  135.5
+## 6 1850     6  16    0      0      0 00:00  166.0</code></pre>
+<pre><code>##      year month day hour minute second    tz  offset
+## 2083 2023     7  16   12      0      0 00:00 63383.5
+## 2084 2023     8  16   12      0      0 00:00 63414.5
+## 2085 2023     9  16    0      0      0 00:00 63445.0
+## 2086 2023    10  16   12      0      0 00:00 63475.5
+## 2087 2023    11  16    0      0      0 00:00 63506.0
+## 2088 2023    12  16   12      0      0 00:00 63536.5</code></pre>
+<p>Get the temperature-anomaly data:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="co"># data</span></span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a>tmp_anm_array <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin, dname)</span></code></pre></div>
+<p>Close the input netCDF file</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="co"># close the netCDF file</span></span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a><span class="fu">nc_close</span>(ncin)</span></code></pre></div>
+<p>Get the beginning and ending year, and the “decimal” year value for
+each monthly time step:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="co"># get begining year and ending year</span></span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>beg_yr <span class="ot">&lt;-</span> time_cf<span class="sc">$</span>year[<span class="dv">1</span>]</span>
+<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a>end_yr <span class="ot">&lt;-</span> time_cf<span class="sc">$</span>year[nt]</span>
+<span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a></span>
+<span id="cb39-5"><a href="#cb39-5" tabindex="-1"></a><span class="co"># &quot;decimal&quot; year for each month</span></span>
+<span id="cb39-6"><a href="#cb39-6" tabindex="-1"></a>Year <span class="ot">&lt;-</span> <span class="fu">seq</span>(beg_yr, end_yr<span class="sc">+</span><span class="dv">1</span><span class="sc">-</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">12</span>), <span class="at">by=</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">12</span>))</span>
+<span id="cb39-7"><a href="#cb39-7" tabindex="-1"></a><span class="fu">length</span>(Year)</span></code></pre></div>
+<pre><code>## [1] 2088</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="fu">head</span>(Year); <span class="fu">tail</span>(Year)</span></code></pre></div>
+<pre><code>## [1] 1850.000 1850.083 1850.167 1850.250 1850.333 1850.417</code></pre>
+<pre><code>## [1] 2023.500 2023.583 2023.667 2023.750 2023.833 2023.917</code></pre>
+<p>Expand and reshape the lons and lats into a vector</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="co"># vector of lons and lats</span></span>
+<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a>lonlat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lon,lat))</span>
+<span id="cb44-3"><a href="#cb44-3" tabindex="-1"></a><span class="fu">dim</span>(lonlat)</span></code></pre></div>
+<pre><code>## [1] 2592    2</code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="fu">head</span>(lonlat); <span class="fu">tail</span>(lonlat)</span></code></pre></div>
+<pre><code>##        Var1  Var2
+## [1,] -177.5 -87.5
+## [2,] -172.5 -87.5
+## [3,] -167.5 -87.5
+## [4,] -162.5 -87.5
+## [5,] -157.5 -87.5
+## [6,] -152.5 -87.5</code></pre>
+<pre><code>##          Var1 Var2
+## [2587,] 152.5 87.5
+## [2588,] 157.5 87.5
+## [2589,] 162.5 87.5
+## [2590,] 167.5 87.5
+## [2591,] 172.5 87.5
+## [2592,] 177.5 87.5</code></pre>
+</div>
+<div id="plot-a-single-month" class="section level3" number="3.3.2">
+<h3><span class="header-section-number">3.3.2</span> Plot a single
+month</h3>
+<p>Extract a single month of temperature values, and turn it into a
+vector:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="co"># vector of `tmp` values</span></span>
+<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1957</span> <span class="co"># should be jan 2013</span></span>
+<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a>tmp_vec <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(tmp_anm_array[,,n])</span>
+<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a><span class="fu">length</span>(tmp_vec)</span></code></pre></div>
+<pre><code>## [1] 2592</code></pre>
+<p>Create a vector of temperature-anomaly values;</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="co"># vector of `tmp` values</span></span>
+<span id="cb51-2"><a href="#cb51-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1957</span> <span class="co"># should be jan 2013</span></span>
+<span id="cb51-3"><a href="#cb51-3" tabindex="-1"></a>tmp_vec <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(tmp_anm_array[,,n])</span>
+<span id="cb51-4"><a href="#cb51-4" tabindex="-1"></a><span class="fu">length</span>(tmp_vec)</span></code></pre></div>
+<pre><code>## [1] 2592</code></pre>
+<p>Creat a dataframe, and add names:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="co"># create dataframe and add names</span></span>
+<span id="cb53-2"><a href="#cb53-2" tabindex="-1"></a>tmp_df01 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(lonlat,tmp_vec))</span>
+<span id="cb53-3"><a href="#cb53-3" tabindex="-1"></a><span class="fu">names</span>(tmp_df01) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;tmp_anm&quot;</span>)</span></code></pre></div>
+<p>Get a date label, and set a title for the plot:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a>pt1 <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">as.character</span>(time_cf<span class="sc">$</span>year[n]), <span class="fu">as.character</span>(time_cf<span class="sc">$</span>month[n]), <span class="at">sep =</span> <span class="st">&quot;-&quot;</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" tabindex="-1"></a>title <span class="ot">&lt;-</span> <span class="fu">paste</span> (<span class="st">&quot;HadCRUTv5 -- 2m Air Temperature Anomalies&quot;</span>)</span></code></pre></div>
+<p>Plot the single-month data:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" tabindex="-1"></a><span class="co"># ggplot2 map of tmp</span></span>
+<span id="cb55-2"><a href="#cb55-2" tabindex="-1"></a><span class="fu">ggplot</span>()  <span class="sc">+</span></span>
+<span id="cb55-3"><a href="#cb55-3" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">data =</span> tmp_df01, <span class="fu">aes</span>(<span class="at">x =</span> lon, <span class="at">y =</span> lat, <span class="at">fill =</span> tmp_anm)) <span class="sc">+</span></span>
+<span id="cb55-4"><a href="#cb55-4" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">mid=</span><span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkred&quot;</span>, <span class="at">midpoint =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb55-5"><a href="#cb55-5" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb55-6"><a href="#cb55-6" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb55-7"><a href="#cb55-7" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb55-8"><a href="#cb55-8" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb55-9"><a href="#cb55-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span>title, <span class="at">subtitle=</span>pt1, <span class="at">fill=</span><span class="st">&quot;Anomalies&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb55-10"><a href="#cb55-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
+<p><img src="plots2_files/figure-html/unnamed-chunk-27-1.png" width="80%" height="80%" /></p>
+<p>Compare this map to one generated in Panoply for Jan 2013.</p>
+</div>
+<div id="shift-longitudes" class="section level3" number="3.3.3">
+<h3><span class="header-section-number">3.3.3</span> Shift
+longitudes</h3>
+<p>The longitudes of HadCRUTv5 data as read in range from -180 to + 180,
+sometimes called the “Atlantic perspective” (as can be verified by
+inspection of the longitude minimum and maximum
+(e.g. <code>min(lon)</code> and <code>max(lon)</code>). However, in many
+applications, longitude-by-time Hovmöller diagrams with the longitude
+origin at the Prime Meridian are preferred, to place the Pacific in the
+center (i.e. the “Pacific perspective). There are two ways to shift
+(sometimes called”rotate”) the longitudes (and the data). One way is to
+do it externally to R, using for example the Climate Data Operators. The
+CDO code for doing so in this case is</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="do">## run in a Terminal/CMD window, not in R</span></span>
+<span id="cb56-2"><a href="#cb56-2" tabindex="-1"></a><span class="do">## cdo sellonlatbox,0,360,-90,90 HadCRUT.5.0.2.0.nc HadCRUT.5.0.2.0_pac.nc</span></span></code></pre></div>
+<p>where <code>HadCRUT.5.0.2.0_pac.nc</code> is the shifted data
+set.</p>
+<p>Alternatively, the data can be shifted “internally”:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a><span class="co"># old values of lon</span></span>
+<span id="cb57-2"><a href="#cb57-2" tabindex="-1"></a>lon</span></code></pre></div>
+<pre><code>##  [1] -177.5 -172.5 -167.5 -162.5 -157.5 -152.5 -147.5 -142.5 -137.5 -132.5 -127.5 -122.5 -117.5 -112.5
+## [15] -107.5 -102.5  -97.5  -92.5  -87.5  -82.5  -77.5  -72.5  -67.5  -62.5  -57.5  -52.5  -47.5  -42.5
+## [29]  -37.5  -32.5  -27.5  -22.5  -17.5  -12.5   -7.5   -2.5    2.5    7.5   12.5   17.5   22.5   27.5
+## [43]   32.5   37.5   42.5   47.5   52.5   57.5   62.5   67.5   72.5   77.5   82.5   87.5   92.5   97.5
+## [57]  102.5  107.5  112.5  117.5  122.5  127.5  132.5  137.5  142.5  147.5  152.5  157.5  162.5  167.5
+## [71]  172.5  177.5</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" tabindex="-1"></a><span class="co"># shift lons</span></span>
+<span id="cb59-2"><a href="#cb59-2" tabindex="-1"></a>lontemp <span class="ot">&lt;-</span> lon</span>
+<span id="cb59-3"><a href="#cb59-3" tabindex="-1"></a>lon[<span class="dv">1</span><span class="sc">:</span>(nlon<span class="sc">/</span><span class="dv">2</span>)] <span class="ot">&lt;-</span> lontemp[((nlon<span class="sc">/</span><span class="dv">2</span>)<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>nlon] <span class="co"># new 0 to + 180 values</span></span>
+<span id="cb59-4"><a href="#cb59-4" tabindex="-1"></a>lon[((nlon<span class="sc">/</span><span class="dv">2</span>)<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>nlon] <span class="ot">&lt;-</span> lontemp[<span class="dv">1</span><span class="sc">:</span>(nlon<span class="sc">/</span><span class="dv">2</span>)] <span class="sc">+</span> <span class="fl">360.0</span> <span class="co"># new 180 to 360 values</span></span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a><span class="co"># shifted values of lon</span></span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a><span class="co"># shift data</span></span>
+<span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a>temp_array <span class="ot">&lt;-</span> tmp_anm_array <span class="co"># note &quot;temp&quot; means temporary, &quot;tmp&quot; means temperature</span></span>
+<span id="cb61-3"><a href="#cb61-3" tabindex="-1"></a>tmp_anm_array[<span class="dv">1</span><span class="sc">:</span>(nlon<span class="sc">/</span><span class="dv">2</span>),,] <span class="ot">&lt;-</span> temp_array[((nlon<span class="sc">/</span><span class="dv">2</span>)<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>nlon,,]</span>
+<span id="cb61-4"><a href="#cb61-4" tabindex="-1"></a>tmp_anm_array[((nlon<span class="sc">/</span><span class="dv">2</span>)<span class="sc">+</span><span class="dv">1</span>)<span class="sc">:</span>nlon,,] <span class="ot">&lt;-</span> temp_array[<span class="dv">1</span><span class="sc">:</span>(nlon<span class="sc">/</span><span class="dv">2</span>),,]</span></code></pre></div>
+<p>For very large data sets, it may be prohibitive to create the
+temporary arrays, but the same strategy for shifting the data can be
+applied while reading the data in:</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a><span class="co"># # rotate data while reading...</span></span>
+<span id="cb62-2"><a href="#cb62-2" tabindex="-1"></a><span class="co"># # get the west half of the new array</span></span>
+<span id="cb62-3"><a href="#cb62-3" tabindex="-1"></a><span class="co"># tmp_anm_array &lt;- array(NA, c(nlon, nlat, nt))</span></span>
+<span id="cb62-4"><a href="#cb62-4" tabindex="-1"></a><span class="co"># tmp_anm_array[1:(nlon/2),,] &lt;- ncvar_get(ncin, dname, start = c(((nlon/2)+1), 1, 1), count = c(nlon/2, nlat, nt))</span></span>
+<span id="cb62-5"><a href="#cb62-5" tabindex="-1"></a><span class="co"># # get the east half</span></span>
+<span id="cb62-6"><a href="#cb62-6" tabindex="-1"></a><span class="co"># tmp_anm_array[((nlon/2)+1):nlon,,] &lt;- ncvar_get(ncin, dname, start = c(1, 1, 1), count = c(nlon/2, nlat, nt))</span></span></code></pre></div>
+<p>Make a second dataframe with the shifted longitudes and data:</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a><span class="co"># vector of lons and lats</span></span>
+<span id="cb63-2"><a href="#cb63-2" tabindex="-1"></a>lonlat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lon,lat))</span>
+<span id="cb63-3"><a href="#cb63-3" tabindex="-1"></a><span class="fu">dim</span>(lonlat)</span></code></pre></div>
+<pre><code>## [1] 2592    2</code></pre>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a><span class="fu">head</span>(lonlat); <span class="fu">tail</span>(lonlat)</span></code></pre></div>
+<pre><code>##      Var1  Var2
+## [1,]  2.5 -87.5
+## [2,]  7.5 -87.5
+## [3,] 12.5 -87.5
+## [4,] 17.5 -87.5
+## [5,] 22.5 -87.5
+## [6,] 27.5 -87.5</code></pre>
+<pre><code>##          Var1 Var2
+## [2587,] 332.5 87.5
+## [2588,] 337.5 87.5
+## [2589,] 342.5 87.5
+## [2590,] 347.5 87.5
+## [2591,] 352.5 87.5
+## [2592,] 357.5 87.5</code></pre>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" tabindex="-1"></a><span class="co"># vector of `tmp` values</span></span>
+<span id="cb68-2"><a href="#cb68-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1957</span> <span class="co"># should be jan 2013</span></span>
+<span id="cb68-3"><a href="#cb68-3" tabindex="-1"></a>tmp_vec <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(tmp_anm_array[,,n])</span>
+<span id="cb68-4"><a href="#cb68-4" tabindex="-1"></a><span class="fu">length</span>(tmp_vec)</span></code></pre></div>
+<pre><code>## [1] 2592</code></pre>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" tabindex="-1"></a><span class="co"># create a dataframe and add names</span></span>
+<span id="cb70-2"><a href="#cb70-2" tabindex="-1"></a>tmp_df02 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(lonlat,tmp_vec))</span>
+<span id="cb70-3"><a href="#cb70-3" tabindex="-1"></a><span class="fu">names</span>(tmp_df02) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;tmp_anm&quot;</span>)</span></code></pre></div>
+<p>Get a shifted world outline map using the <code>{maps}</code> package
+and its <code>world2</code> database:</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" tabindex="-1"></a>world2_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(maps<span class="sc">::</span><span class="fu">map</span>(<span class="st">&quot;world2&quot;</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>, <span class="at">fill =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb71-2"><a href="#cb71-2" tabindex="-1"></a>world2_sf</span></code></pre></div>
+<pre><code>## Simple feature collection with 253 features and 1 field
+## Geometry type: MULTIPOLYGON
+## Dimension:     XY
+## Bounding box:  xmin: 0 ymin: -89.99001 xmax: 360 ymax: 83.59961
+## Geodetic CRS:  +proj=longlat +ellps=clrk66 +no_defs +type=crs
+## First 10 features:
+##                                        ID                           geom
+## Aruba                               Aruba MULTIPOLYGON (((290.1009 12...
+## Afghanistan                   Afghanistan MULTIPOLYGON (((74.89131 37...
+## Angola                             Angola MULTIPOLYGON (((23.9665 -10...
+## Anguilla                         Anguilla MULTIPOLYGON (((296.9988 18...
+## Albania                           Albania MULTIPOLYGON (((20.06396 42...
+## Finland                           Finland MULTIPOLYGON (((20.61133 60...
+## Andorra                           Andorra MULTIPOLYGON (((1.706055 42...
+## United Arab Emirates United Arab Emirates MULTIPOLYGON (((53.92783 24...
+## Argentina                       Argentina MULTIPOLYGON (((295.4508 -5...
+## Armenia                           Armenia MULTIPOLYGON (((45.55235 40...</code></pre>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" tabindex="-1"></a>world2_otl_sf <span class="ot">&lt;-</span> <span class="fu">st_geometry</span>(world2_sf)</span>
+<span id="cb73-2"><a href="#cb73-2" tabindex="-1"></a><span class="fu">plot</span>(world2_otl_sf)</span></code></pre></div>
+<p><img src="plots2_files/figure-html/unnamed-chunk-35-1.png" width="80%" height="80%" /></p>
+<p><code>{ggplot2}</code> map of the longitudinally shifted data:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" tabindex="-1"></a><span class="co"># ggplot2 map of tmp</span></span>
+<span id="cb74-2"><a href="#cb74-2" tabindex="-1"></a><span class="fu">ggplot</span>()  <span class="sc">+</span></span>
+<span id="cb74-3"><a href="#cb74-3" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">data =</span> tmp_df02, <span class="fu">aes</span>(<span class="at">x =</span> lon, <span class="at">y =</span> lat, <span class="at">fill =</span> tmp_anm)) <span class="sc">+</span></span>
+<span id="cb74-4"><a href="#cb74-4" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">mid=</span><span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkred&quot;</span>, <span class="at">midpoint =</span> <span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb74-5"><a href="#cb74-5" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world2_otl_sf, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb74-6"><a href="#cb74-6" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">360</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb74-7"><a href="#cb74-7" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb74-8"><a href="#cb74-8" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">360</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb74-9"><a href="#cb74-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span>title, <span class="at">subtitle=</span>pt1, <span class="at">fill=</span><span class="st">&quot;Anomalies&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb74-10"><a href="#cb74-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
+<p><img src="plots2_files/figure-html/unnamed-chunk-36-1.png" width="80%" height="80%" /></p>
+<p><a href="plots2.html">[Back to top]</a></p>
+</div>
+<div id="hovmöller-diagrams-1" class="section level3" number="3.3.4">
+<h3><span class="header-section-number">3.3.4</span> Hovmöller
+diagrams</h3>
+<p>Get the latitude by time matrix, as before</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" tabindex="-1"></a><span class="co"># latitude by time array of means</span></span>
+<span id="cb75-2"><a href="#cb75-2" tabindex="-1"></a>tmp_hovlat <span class="ot">&lt;-</span> <span class="fu">apply</span>(tmp_anm_array, <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), mean, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb75-3"><a href="#cb75-3" tabindex="-1"></a><span class="fu">dim</span>(tmp_hovlat)</span></code></pre></div>
+<pre><code>## [1]   36 2088</code></pre>
+<p>Make a dataframe:</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" tabindex="-1"></a><span class="co"># vector of times and lats</span></span>
+<span id="cb77-2"><a href="#cb77-2" tabindex="-1"></a>lattime <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(Year,lat))</span>
+<span id="cb77-3"><a href="#cb77-3" tabindex="-1"></a><span class="fu">dim</span>(lattime)</span></code></pre></div>
+<pre><code>## [1] 75168     2</code></pre>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" tabindex="-1"></a><span class="fu">head</span>(lattime); <span class="fu">tail</span>(lattime)</span></code></pre></div>
+<pre><code>##          Var1  Var2
+## [1,] 1850.000 -87.5
+## [2,] 1850.083 -87.5
+## [3,] 1850.167 -87.5
+## [4,] 1850.250 -87.5
+## [5,] 1850.333 -87.5
+## [6,] 1850.417 -87.5</code></pre>
+<pre><code>##              Var1 Var2
+## [75163,] 2023.500 87.5
+## [75164,] 2023.583 87.5
+## [75165,] 2023.667 87.5
+## [75166,] 2023.750 87.5
+## [75167,] 2023.833 87.5
+## [75168,] 2023.917 87.5</code></pre>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" tabindex="-1"></a><span class="co"># vector of matrix` values</span></span>
+<span id="cb82-2"><a href="#cb82-2" tabindex="-1"></a>hovlat_vec <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">t</span>(tmp_hovlat))</span>
+<span id="cb82-3"><a href="#cb82-3" tabindex="-1"></a><span class="fu">length</span>(hovlat_vec)</span></code></pre></div>
+<pre><code>## [1] 75168</code></pre>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" tabindex="-1"></a><span class="co"># create dataframe and add names</span></span>
+<span id="cb84-2"><a href="#cb84-2" tabindex="-1"></a>hovlat_df01 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(lattime,hovlat_vec))</span>
+<span id="cb84-3"><a href="#cb84-3" tabindex="-1"></a><span class="fu">names</span>(hovlat_df01) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;lat&quot;</span>,<span class="st">&quot;tmp_anm&quot;</span>)</span>
+<span id="cb84-4"><a href="#cb84-4" tabindex="-1"></a><span class="fu">head</span>(hovlat_df01); <span class="fu">tail</span>(hovlat_df01)</span></code></pre></div>
+<pre><code>##       Year   lat tmp_anm
+## 1 1850.000 -87.5     NaN
+## 2 1850.083 -87.5     NaN
+## 3 1850.167 -87.5     NaN
+## 4 1850.250 -87.5     NaN
+## 5 1850.333 -87.5     NaN
+## 6 1850.417 -87.5     NaN</code></pre>
+<pre><code>##           Year  lat   tmp_anm
+## 75163 2023.500 87.5 0.2319301
+## 75164 2023.583 87.5 1.5546526
+## 75165 2023.667 87.5 3.3831206
+## 75166 2023.750 87.5 5.4075364
+## 75167 2023.833 87.5 4.6620130
+## 75168 2023.917 87.5 6.4446236</code></pre>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" tabindex="-1"></a><span class="fu">summary</span>(hovlat_df01)</span></code></pre></div>
+<pre><code>##       Year           lat            tmp_anm      
+##  Min.   :1850   Min.   :-87.50   Min.   :-6.391  
+##  1st Qu.:1893   1st Qu.:-43.75   1st Qu.:-0.411  
+##  Median :1937   Median :  0.00   Median :-0.118  
+##  Mean   :1937   Mean   :  0.00   Mean   :-0.030  
+##  3rd Qu.:1980   3rd Qu.: 43.75   3rd Qu.: 0.260  
+##  Max.   :2024   Max.   : 87.50   Max.   : 8.959  
+##                                  NA&#39;s   :5713</code></pre>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" tabindex="-1"></a><span class="co"># vector of times and lats</span></span>
+<span id="cb89-2"><a href="#cb89-2" tabindex="-1"></a>lattime <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(Year,lat))</span>
+<span id="cb89-3"><a href="#cb89-3" tabindex="-1"></a><span class="fu">dim</span>(lattime)</span></code></pre></div>
+<pre><code>## [1] 75168     2</code></pre>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" tabindex="-1"></a><span class="fu">head</span>(lattime); <span class="fu">tail</span>(lattime)</span></code></pre></div>
+<pre><code>##          Var1  Var2
+## [1,] 1850.000 -87.5
+## [2,] 1850.083 -87.5
+## [3,] 1850.167 -87.5
+## [4,] 1850.250 -87.5
+## [5,] 1850.333 -87.5
+## [6,] 1850.417 -87.5</code></pre>
+<pre><code>##              Var1 Var2
+## [75163,] 2023.500 87.5
+## [75164,] 2023.583 87.5
+## [75165,] 2023.667 87.5
+## [75166,] 2023.750 87.5
+## [75167,] 2023.833 87.5
+## [75168,] 2023.917 87.5</code></pre>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="#cb94-1" tabindex="-1"></a><span class="co"># vector of matrix` values</span></span>
+<span id="cb94-2"><a href="#cb94-2" tabindex="-1"></a>hovlat_vec <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">t</span>(tmp_hovlat))</span>
+<span id="cb94-3"><a href="#cb94-3" tabindex="-1"></a><span class="fu">length</span>(hovlat_vec)</span></code></pre></div>
+<pre><code>## [1] 75168</code></pre>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" tabindex="-1"></a><span class="co"># create dataframe and add names</span></span>
+<span id="cb96-2"><a href="#cb96-2" tabindex="-1"></a>hovlat_df01 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(lattime,hovlat_vec))</span>
+<span id="cb96-3"><a href="#cb96-3" tabindex="-1"></a><span class="fu">names</span>(hovlat_df01) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;lat&quot;</span>,<span class="st">&quot;tmp_anm&quot;</span>)</span>
+<span id="cb96-4"><a href="#cb96-4" tabindex="-1"></a><span class="fu">head</span>(hovlat_df01); <span class="fu">tail</span>(hovlat_df01)</span></code></pre></div>
+<pre><code>##       Year   lat tmp_anm
+## 1 1850.000 -87.5     NaN
+## 2 1850.083 -87.5     NaN
+## 3 1850.167 -87.5     NaN
+## 4 1850.250 -87.5     NaN
+## 5 1850.333 -87.5     NaN
+## 6 1850.417 -87.5     NaN</code></pre>
+<pre><code>##           Year  lat   tmp_anm
+## 75163 2023.500 87.5 0.2319301
+## 75164 2023.583 87.5 1.5546526
+## 75165 2023.667 87.5 3.3831206
+## 75166 2023.750 87.5 5.4075364
+## 75167 2023.833 87.5 4.6620130
+## 75168 2023.917 87.5 6.4446236</code></pre>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" tabindex="-1"></a><span class="fu">summary</span>(hovlat_df01)</span></code></pre></div>
+<pre><code>##       Year           lat            tmp_anm      
+##  Min.   :1850   Min.   :-87.50   Min.   :-6.391  
+##  1st Qu.:1893   1st Qu.:-43.75   1st Qu.:-0.411  
+##  Median :1937   Median :  0.00   Median :-0.118  
+##  Mean   :1937   Mean   :  0.00   Mean   :-0.030  
+##  3rd Qu.:1980   3rd Qu.: 43.75   3rd Qu.: 0.260  
+##  Max.   :2024   Max.   : 87.50   Max.   : 8.959  
+##                                  NA&#39;s   :5713</code></pre>
+<p><code>{ggplot2}</code> version of the Hovmöller diagram</p>
+<div class="sourceCode" id="cb101"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" tabindex="-1"></a><span class="co"># ggplot2 Hovmöller plots -- Year x Latitude</span></span>
+<span id="cb101-2"><a href="#cb101-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb101-3"><a href="#cb101-3" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">data =</span> hovlat_df01, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> lat, <span class="at">fill =</span> tmp_anm)) <span class="sc">+</span></span>
+<span id="cb101-4"><a href="#cb101-4" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">1850</span>, <span class="dv">2025</span>, <span class="dv">25</span>)) <span class="sc">+</span></span>
+<span id="cb101-5"><a href="#cb101-5" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb101-6"><a href="#cb101-6" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>)) <span class="sc">+</span></span>
+<span id="cb101-7"><a href="#cb101-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span>title, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">fill=</span><span class="st">&quot;Anomalies&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb101-8"><a href="#cb101-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;bottom&quot;</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">aspect.ratio =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">4</span>)</span></code></pre></div>
+<p><img src="plots2_files/figure-html/unnamed-chunk-40-1.png" width="80%" height="80%" /></p>
+<p>The <code>theme(aspect.ratio = 2/4)</code> function changes the
+aspect ratio of the plot to more of “landscape” orientation.</p>
+<p>Here’s the longitude by time array:</p>
+<div class="sourceCode" id="cb102"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" tabindex="-1"></a><span class="co"># longitude by time array of means</span></span>
+<span id="cb102-2"><a href="#cb102-2" tabindex="-1"></a>tmp_hovlon <span class="ot">&lt;-</span> <span class="fu">apply</span>(tmp_anm_array, <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>), mean, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span>
+<span id="cb102-3"><a href="#cb102-3" tabindex="-1"></a><span class="fu">dim</span>(tmp_hovlon)</span></code></pre></div>
+<pre><code>## [1]   72 2088</code></pre>
+<p>Make a dataframe:</p>
+<div class="sourceCode" id="cb104"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" tabindex="-1"></a><span class="co"># vector of times and lons</span></span>
+<span id="cb104-2"><a href="#cb104-2" tabindex="-1"></a>lontime <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(Year,lon))</span>
+<span id="cb104-3"><a href="#cb104-3" tabindex="-1"></a><span class="fu">dim</span>(lontime)</span></code></pre></div>
+<pre><code>## [1] 150336      2</code></pre>
+<div class="sourceCode" id="cb106"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" tabindex="-1"></a><span class="fu">head</span>(lontime); <span class="fu">tail</span>(lontime)</span></code></pre></div>
+<pre><code>##          Var1 Var2
+## [1,] 1850.000  2.5
+## [2,] 1850.083  2.5
+## [3,] 1850.167  2.5
+## [4,] 1850.250  2.5
+## [5,] 1850.333  2.5
+## [6,] 1850.417  2.5</code></pre>
+<pre><code>##               Var1  Var2
+## [150331,] 2023.500 357.5
+## [150332,] 2023.583 357.5
+## [150333,] 2023.667 357.5
+## [150334,] 2023.750 357.5
+## [150335,] 2023.833 357.5
+## [150336,] 2023.917 357.5</code></pre>
+<div class="sourceCode" id="cb109"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" tabindex="-1"></a><span class="co"># vector of matrix` values</span></span>
+<span id="cb109-2"><a href="#cb109-2" tabindex="-1"></a>hovlon_vec <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(<span class="fu">t</span>(tmp_hovlon))</span>
+<span id="cb109-3"><a href="#cb109-3" tabindex="-1"></a><span class="fu">length</span>(hovlon_vec)</span></code></pre></div>
+<pre><code>## [1] 150336</code></pre>
+<div class="sourceCode" id="cb111"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" tabindex="-1"></a><span class="co"># create dataframe and add names</span></span>
+<span id="cb111-2"><a href="#cb111-2" tabindex="-1"></a>hovlon_df01 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">cbind</span>(lontime,hovlon_vec))</span>
+<span id="cb111-3"><a href="#cb111-3" tabindex="-1"></a><span class="fu">names</span>(hovlon_df01) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;lon&quot;</span>,<span class="st">&quot;tmp_anm&quot;</span>)</span>
+<span id="cb111-4"><a href="#cb111-4" tabindex="-1"></a><span class="fu">head</span>(hovlon_df01); <span class="fu">tail</span>(hovlon_df01)</span></code></pre></div>
+<pre><code>##       Year lon      tmp_anm
+## 1 1850.000 2.5 -0.950341235
+## 2 1850.083 2.5 -0.390168492
+## 3 1850.167 2.5 -0.761444672
+## 4 1850.250 2.5  0.005601682
+## 5 1850.333 2.5 -0.498775441
+## 6 1850.417 2.5 -0.440165867</code></pre>
+<pre><code>##            Year   lon  tmp_anm
+## 150331 2023.500 357.5 1.434794
+## 150332 2023.583 357.5 1.243911
+## 150333 2023.667 357.5 1.381988
+## 150334 2023.750 357.5 1.366564
+## 150335 2023.833 357.5 1.372685
+## 150336 2023.917 357.5 1.214881</code></pre>
+<div class="sourceCode" id="cb114"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" tabindex="-1"></a><span class="fu">summary</span>(hovlon_df01)</span></code></pre></div>
+<pre><code>##       Year           lon            tmp_anm        
+##  Min.   :1850   Min.   :  2.50   Min.   :-3.97863  
+##  1st Qu.:1893   1st Qu.: 91.25   1st Qu.:-0.43266  
+##  Median :1937   Median :180.00   Median :-0.08804  
+##  Mean   :1937   Mean   :180.00   Mean   :-0.04036  
+##  3rd Qu.:1980   3rd Qu.:268.75   3rd Qu.: 0.32450  
+##  Max.   :2024   Max.   :357.50   Max.   : 2.90718  
+##                                  NA&#39;s   :297</code></pre>
+<p>And the Hovmöller diagram:</p>
+<div class="sourceCode" id="cb116"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" tabindex="-1"></a><span class="co"># ggplot2 Hovmöller plots -- Year x Longitude</span></span>
+<span id="cb116-2"><a href="#cb116-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb116-3"><a href="#cb116-3" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">data =</span> hovlon_df01, <span class="fu">aes</span>(<span class="at">x =</span> lon, <span class="at">y =</span> Year, <span class="at">fill =</span> tmp_anm)) <span class="sc">+</span></span>
+<span id="cb116-4"><a href="#cb116-4" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">360</span>, <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb116-5"><a href="#cb116-5" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">1850</span>, <span class="dv">2025</span>, <span class="dv">25</span>), <span class="at">trans =</span> <span class="st">&quot;reverse&quot;</span>) <span class="sc">+</span></span>
+<span id="cb116-6"><a href="#cb116-6" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>)) <span class="sc">+</span></span>
+<span id="cb116-7"><a href="#cb116-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span>title, <span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">fill=</span><span class="st">&quot;Anomalies&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb116-8"><a href="#cb116-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">aspect.ratio =</span> <span class="dv">4</span><span class="sc">/</span><span class="dv">3</span>)</span></code></pre></div>
+<p><img src="plots2_files/figure-html/unnamed-chunk-43-1.png" width="80%" height="80%" /></p>
+<p><a href="plots2.html">[Back to top]</a></p>
+<p><code>{ggplot2}</code> Hovmöller diagrams</p>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
