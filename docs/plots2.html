@@ -577,7 +577,7 @@ as a basemap:</p>
 ## Armenia                           Armenia MULTIPOLYGON (((45.55235 40...</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>world_otl_sf <span class="ot">&lt;-</span> <span class="fu">st_geometry</span>(world_sf)</span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">plot</span>(world_otl_sf) <span class="co"># simple plot.sf() plot</span></span></code></pre></div>
-<p><img src="plots2_files/figure-html/unnamed-chunk-3-1.png" width="80%" height="80%" /></p>
+<p><img src="plots2_files/figure-html/plots2-4-1.png" width="80%" height="80%" /></p>
 <p>Here’s a <code>{ggplot2}</code> plot of the outlines</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># ggplot map of world_outline</span></span>
 <span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span>  </span>
@@ -586,7 +586,7 @@ as a basemap:</p>
 <span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
 <span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
 <span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="plots2_files/figure-html/unnamed-chunk-4-1.png" width="80%" height="80%" /></p>
+<p><img src="plots2_files/figure-html/plots2-5-1.png" width="80%" height="80%" /></p>
 <p>Here’ a plot of some global tree-cover data that will be used later.
 First, read in the data, using <code>read_stars()</code> from the
 <code>{stars}</code> package to read the netCDF file.</p>
@@ -606,7 +606,7 @@ First, read in the data, using <code>read_stars()</code> from the
 ## x    1 720   -180   0.5 [x]
 ## y    1 360     90  -0.5 [y]</code></pre>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">plot</span>(tree) <span class="co">#</span></span></code></pre></div>
-<p><img src="plots2_files/figure-html/unnamed-chunk-5-1.png" width="80%" height="80%" /></p>
+<p><img src="plots2_files/figure-html/plots2-6-1.png" width="80%" height="80%" /></p>
 <p>Here’s a <code>{ggplot2}</code> plot of the tree-cover data:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># ggplot2 map of tree</span></span>
 <span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">ggplot</span>()  <span class="sc">+</span></span>
@@ -618,7 +618,7 @@ First, read in the data, using <code>read_stars()</code> from the
 <span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
 <span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">title=</span><span class="st">&quot;Tree Cover&quot;</span>, <span class="at">fill=</span><span class="st">&quot;%&quot;</span>) <span class="sc">+</span></span>
 <span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="plots2_files/figure-html/unnamed-chunk-6-1.png" width="80%" height="80%" /></p>
+<p><img src="plots2_files/figure-html/plots2-7-1.png" width="80%" height="80%" /></p>
 <p>Note that there is a lot going on in the plot, despite the fact that
 it’s just a single variable and a basemap. As always, the way to see
 what contribution each function makes to the overall map is to comment
@@ -676,7 +676,7 @@ data.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="co"># quick plot of the data</span></span>
 <span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="fu">plot</span>(tmp_stars)</span></code></pre></div>
 <pre><code>## downsample set to 3</code></pre>
-<p><img src="plots2_files/figure-html/unnamed-chunk-9-1.png" width="80%" height="80%" /></p>
+<p><img src="plots2_files/figure-html/plots2-10-1.png" width="80%" height="80%" /></p>
 <p><code>{ggplot2}</code> map of tmp:</p>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># ggplot2 map of tmp</span></span>
 <span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">ggplot</span>()  <span class="sc">+</span></span>
@@ -689,7 +689,7 @@ data.</p>
 <span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">175</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
 <span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
 <span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>)) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">4</span>))  </span></code></pre></div>
-<p><img src="plots2_files/figure-html/unnamed-chunk-10-1.png" width="80%" height="80%" /></p>
+<p><img src="plots2_files/figure-html/plots2-11-1.png" width="80%" height="80%" /></p>
 </div>
 <div id="test-reshaping" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> Test reshaping</h2>
@@ -719,7 +719,7 @@ indicating that values with missing data should be dropped).</p>
 <p>Here’s a quick map of the resulting 2-D array or matrix:</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co"># quick plot of latitude by time data</span></span>
 <span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">image</span>(<span class="fu">t</span>(tmp_hovlat))</span></code></pre></div>
-<p><img src="plots2_files/figure-html/unnamed-chunk-13-1.png" width="80%" height="80%" /></p>
+<p><img src="plots2_files/figure-html/plots2-14-1.png" width="80%" height="80%" /></p>
 <p>The transpose function (<code>t()</code>) puts time on the x-axis and
 latitude on the y-axis. The plot looks like what might be expected.
 Here’s longitude by time:</p>
@@ -729,7 +729,7 @@ Here’s longitude by time:</p>
 <pre><code>## [1] 720  12</code></pre>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># quick plot of longitude by time data</span></span>
 <span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="fu">image</span>(tmp_hovlon)</span></code></pre></div>
-<p><img src="plots2_files/figure-html/unnamed-chunk-15-1.png" width="80%" height="80%" /></p>
+<p><img src="plots2_files/figure-html/plots2-16-1.png" width="80%" height="80%" /></p>
 <p>Recalling that this is land data only, and that the longitudes range
 from -180 to + 180 this plot makes sense–the western margins of the
 continents are cooler, and the warmest blob in the middle is N. Africa
@@ -861,7 +861,7 @@ vector:</p>
 <span id="cb53-3"><a href="#cb53-3" tabindex="-1"></a><span class="fu">names</span>(tmp_df01) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;tmp_anm&quot;</span>)</span></code></pre></div>
 <p>Get a date label, and set a title for the plot:</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a>pt1 <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="fu">as.character</span>(time_cf<span class="sc">$</span>year[n]), <span class="fu">as.character</span>(time_cf<span class="sc">$</span>month[n]), <span class="at">sep =</span> <span class="st">&quot;-&quot;</span>)</span>
-<span id="cb54-2"><a href="#cb54-2" tabindex="-1"></a>title <span class="ot">&lt;-</span> <span class="fu">paste</span> (<span class="st">&quot;HadCRUTv5 -- 2m Air Temperature Anomalies&quot;</span>)</span></code></pre></div>
+<span id="cb54-2"><a href="#cb54-2" tabindex="-1"></a>title <span class="ot">&lt;-</span> <span class="st">&quot;HadCRUTv5 -- Temperature Anomalies (℃)&quot;</span></span></code></pre></div>
 <p>Plot the single-month data:</p>
 <div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" tabindex="-1"></a><span class="co"># ggplot2 map of tmp</span></span>
 <span id="cb55-2"><a href="#cb55-2" tabindex="-1"></a><span class="fu">ggplot</span>()  <span class="sc">+</span></span>
@@ -873,7 +873,7 @@ vector:</p>
 <span id="cb55-8"><a href="#cb55-8" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
 <span id="cb55-9"><a href="#cb55-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span>title, <span class="at">subtitle=</span>pt1, <span class="at">fill=</span><span class="st">&quot;Anomalies&quot;</span>) <span class="sc">+</span> </span>
 <span id="cb55-10"><a href="#cb55-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
-<p><img src="plots2_files/figure-html/unnamed-chunk-27-1.png" width="80%" height="80%" /></p>
+<p><img src="plots2_files/figure-html/plots2-28-1.png" width="80%" height="80%" /></p>
 <p>Compare this map to one generated in Panoply for Jan 2013.</p>
 </div>
 <div id="shift-longitudes" class="section level3" number="3.3.3">
@@ -971,7 +971,7 @@ and its <code>world2</code> database:</p>
 ## Armenia                           Armenia MULTIPOLYGON (((45.55235 40...</code></pre>
 <div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" tabindex="-1"></a>world2_otl_sf <span class="ot">&lt;-</span> <span class="fu">st_geometry</span>(world2_sf)</span>
 <span id="cb73-2"><a href="#cb73-2" tabindex="-1"></a><span class="fu">plot</span>(world2_otl_sf)</span></code></pre></div>
-<p><img src="plots2_files/figure-html/unnamed-chunk-35-1.png" width="80%" height="80%" /></p>
+<p><img src="plots2_files/figure-html/plots2-36-1.png" width="80%" height="80%" /></p>
 <p><code>{ggplot2}</code> map of the longitudinally shifted data:</p>
 <div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" tabindex="-1"></a><span class="co"># ggplot2 map of tmp</span></span>
 <span id="cb74-2"><a href="#cb74-2" tabindex="-1"></a><span class="fu">ggplot</span>()  <span class="sc">+</span></span>
@@ -983,7 +983,7 @@ and its <code>world2</code> database:</p>
 <span id="cb74-8"><a href="#cb74-8" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">360</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
 <span id="cb74-9"><a href="#cb74-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span>title, <span class="at">subtitle=</span>pt1, <span class="at">fill=</span><span class="st">&quot;Anomalies&quot;</span>) <span class="sc">+</span> </span>
 <span id="cb74-10"><a href="#cb74-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
-<p><img src="plots2_files/figure-html/unnamed-chunk-36-1.png" width="80%" height="80%" /></p>
+<p><img src="plots2_files/figure-html/plots2-37-1.png" width="80%" height="80%" /></p>
 <p><a href="plots2.html">[Back to top]</a></p>
 </div>
 <div id="hovmöller-diagrams-1" class="section level3" number="3.3.4">
@@ -1104,8 +1104,8 @@ class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="#cb1
 <span id="cb101-5"><a href="#cb101-5" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="dv">30</span>)) <span class="sc">+</span></span>
 <span id="cb101-6"><a href="#cb101-6" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>)) <span class="sc">+</span></span>
 <span id="cb101-7"><a href="#cb101-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span>title, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">fill=</span><span class="st">&quot;Anomalies&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb101-8"><a href="#cb101-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;bottom&quot;</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">aspect.ratio =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">4</span>)</span></code></pre></div>
-<p><img src="plots2_files/figure-html/unnamed-chunk-40-1.png" width="80%" height="80%" /></p>
+<span id="cb101-8"><a href="#cb101-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">aspect.ratio =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">4</span>)</span></code></pre></div>
+<p><img src="plots2_files/figure-html/plots2-42-1.png" width="80%" height="80%" /></p>
 <p>The <code>theme(aspect.ratio = 2/4)</code> function changes the
 aspect ratio of the plot to more of “landscape” orientation.</p>
 <p>Here’s the longitude by time array:</p>
@@ -1180,7 +1180,7 @@ class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="#cb1
 <span id="cb116-6"><a href="#cb116-6" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">4</span>, <span class="dv">4</span>)) <span class="sc">+</span></span>
 <span id="cb116-7"><a href="#cb116-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span>title, <span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">fill=</span><span class="st">&quot;Anomalies&quot;</span>) <span class="sc">+</span> </span>
 <span id="cb116-8"><a href="#cb116-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">aspect.ratio =</span> <span class="dv">4</span><span class="sc">/</span><span class="dv">3</span>)</span></code></pre></div>
-<p><img src="plots2_files/figure-html/unnamed-chunk-43-1.png" width="80%" height="80%" /></p>
+<p><img src="plots2_files/figure-html/plots2-45-1.png" width="80%" height="80%" /></p>
 <p><a href="plots2.html">[Back to top]</a></p>
 <p><code>{ggplot2}</code> Hovmöller diagrams</p>
 </div>

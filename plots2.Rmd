@@ -27,7 +27,7 @@ This topic illustrates a few more `{ggplot2}` examples, and then goes on to desc
 
 To begin, load the libraries, and some of the data that will be used here:
 
-```{r plots2-2}
+```{r plots2-2 }
 library(sf)
 library(stars)
 library(ggplot2)
@@ -46,7 +46,7 @@ load(file=con)
 
 Also extract a world map from the `{maps}` package to use as a basemap:
 
-```{r plots2-4}
+```{r plots2-4 }
 # world_sf
 world_sf <- st_as_sf(maps::map("world", plot = FALSE, fill = TRUE))
 world_sf
@@ -56,7 +56,7 @@ plot(world_otl_sf) # simple plot.sf() plot
 
 Here's a `{ggplot2}` plot of the outlines
 
-```{r plots2-5}
+```{r plots2-5 }
 # ggplot map of world_outline
 ggplot() +  
   geom_sf(data = world_otl_sf, fill = NA, col = "black") + 
@@ -68,7 +68,7 @@ ggplot() +
 
 Here' a plot of some global tree-cover data that will be used later. First, read in the data, using `read_stars()` from the `{stars}` package to read the netCDF file.
 
-```{r plots2-6}
+```{r plots2-6 }
 # tree data
 tree_path <- "/Users/bartlein/Projects/RESS/data/nc_files/"
 tree_name <- "treecov.nc"
@@ -81,7 +81,7 @@ plot(tree) #
 
 Here's a `{ggplot2}` plot of the tree-cover data:
 
-```{r plots2-7}
+```{r plots2-7 }
 # ggplot2 map of tree
 ggplot()  +
   geom_stars(data = tree) +
@@ -108,7 +108,7 @@ When constructing a map, say, of average temperatures, it's relatively easy to i
 
 Read the CRU 0.5-degree 1961-1990 long-term average temperature data.
 
-```{r plots2-8}
+```{r plots2-8 }
 # set path and filename
 ncpath <- "/Users/bartlein/Projects/RESS/data/nc_files/"
 ncname <- "cru10min30_tmp"  
@@ -121,7 +121,7 @@ tmp_stars <- read_ncdf(ncfname, var=dname)
 
 Replace the time stamps:
 
-```{r plots2-9}
+```{r plots2-9 }
 # replace times
 #attr(tmp_stars, "dimensions")$time$values <- c(1:12)
 attr(tmp_stars, "dimensions")$time$values <- c("Jan","Feb","Mar","Apr","May","Jun",
@@ -155,7 +155,7 @@ ggplot()  +
 
 Next, we'll reread the netCDF file to explicitly get the dimension variables, and the data as a 3-D array:
 
-```{r plots2-12}
+```{r plots2-12 }
 # get the netCDF file
 ncin <- nc_open(ncfname)
 lon <- ncvar_get(ncin, "lon")
@@ -167,7 +167,7 @@ nc_close(ncin)
 
 Next, use the `apply()` function to get the longitude-by-time and latitude-by-time averages. The `apply()` function, as its name implies, applies some function to the "margins" of a matrix or array. The arguments of the `apply()` function are the name of the array (`tmp_array` here), the `MARGIN` or the subscripts of the array over which the function will be applied, and the function (`mean` in this case, with `na.rm = TRUE` indicating that values with missing data should be dropped).
 
-```{r plots2-13}
+```{r plots2-13 }
 # latitude by time averaging
 tmp_hovlat <- apply(tmp_array, c(2,3), mean, na.rm=TRUE)
 dim(tmp_hovlat)
@@ -175,20 +175,20 @@ dim(tmp_hovlat)
 
 Here's a quick map of the resulting 2-D array or matrix:
 
-```{r plots2-14}
+```{r plots2-14 }
 # quick plot of latitude by time data
 image(t(tmp_hovlat))
 ```
 
 The transpose function (`t()`) puts time on the x-axis and latitude on the y-axis. The plot looks like what might be expected. Here's longitude by time:
 
-```{r plots2-15}
+```{r plots2-15 }
 # longitude by time
 tmp_hovlon <- apply(tmp_array, c(1,3), mean, na.rm=TRUE)
 dim(tmp_hovlon)
 ```
 
-```{r plots2-16}
+```{r plots2-16 }
 # quick plot of longitude by time data
 image(tmp_hovlon)
 ```
@@ -208,7 +208,7 @@ The "HadCRUTv5" data set is one of the four data sets used to describe global an
 
 Get the data:
 
-```{r plots2-17}
+```{r plots2-17 }
 # get the long-term mean temperature data
 # set path and filename
 ncpath <- "/Users/bartlein/Projects/RESS/data/nc_files/"
@@ -218,7 +218,7 @@ dname <- "tas_mean"  # note: tmp means temperature (not temporary), and ...
 # we know the data are actually anomalies, not means
 ```
 
-```{r plots2-18}
+```{r plots2-18 }
 # get the dimensions from the netCDF file
 ncin <- nc_open(ncfname)
 lon <- ncvar_get(ncin, "longitude")
@@ -233,7 +233,7 @@ print(c(nlon, nlat, nt))
 
 Decode the time variable:
 
-```{r plots2-19}
+```{r plots2-19 }
 # decode time
 cf <- CFtime(tunits$value, calendar = "proleptic_gregorian", time) # convert time to CFtime class
 timestamps <- CFtimestamp(cf) # get character-string times
@@ -243,21 +243,21 @@ head(time_cf); tail(time_cf)
 
 Get the temperature-anomaly data:
 
-```{r plots2-20}
+```{r plots2-20 }
 # data
 tmp_anm_array <- ncvar_get(ncin, dname)
 ```
 
 Close the input netCDF file
 
-```{r plots2-21}
+```{r plots2-21 }
 # close the netCDF file
 nc_close(ncin)
 ```
 
 Get the beginning and ending year, and the "decimal" year value for each monthly time step:
 
-```{r plots2-22}
+```{r plots2-22 }
 # get begining year and ending year
 beg_yr <- time_cf$year[1]
 end_yr <- time_cf$year[nt]
@@ -270,7 +270,7 @@ head(Year); tail(Year)
 
 Expand and reshape the lons and lats into a vector
 
-```{r plots2-23}
+```{r plots2-23 }
 # vector of lons and lats
 lonlat <- as.matrix(expand.grid(lon,lat))
 dim(lonlat)
@@ -281,7 +281,7 @@ head(lonlat); tail(lonlat)
 
 Extract a single month of temperature values, and turn it into a vector:
 
-```{r plots2-24}
+```{r plots2-24 }
 # vector of `tmp` values
 n <- 1957 # should be jan 2013
 tmp_vec <- as.vector(tmp_anm_array[,,n])
@@ -290,7 +290,7 @@ length(tmp_vec)
 
 Create a vector of temperature-anomaly values;
 
-```{r plots2-25}
+```{r plots2-25 }
 # vector of `tmp` values
 n <- 1957 # should be jan 2013
 tmp_vec <- as.vector(tmp_anm_array[,,n])
@@ -298,7 +298,7 @@ length(tmp_vec)
 ```
 Creat a dataframe, and add names:
 
-```{r plots2-26}
+```{r plots2-26 }
 # create dataframe and add names
 tmp_df01 <- data.frame(cbind(lonlat,tmp_vec))
 names(tmp_df01) <- c("lon", "lat", "tmp_anm")
@@ -306,14 +306,14 @@ names(tmp_df01) <- c("lon", "lat", "tmp_anm")
 
 Get a date label, and set a title for the plot:
 
-```{r plots2-27}
+```{r plots2-27 }
 pt1 <- paste(as.character(time_cf$year[n]), as.character(time_cf$month[n]), sep = "-")
-title <- paste ("HadCRUTv5 -- 2m Air Temperature Anomalies")
+title <- "HadCRUTv5 -- Temperature Anomalies (℃)"
 ```
 
 Plot the single-month data:
 
-```{r plots2-28}
+```{r plots2-28 }
 # ggplot2 map of tmp
 ggplot()  +
   geom_tile(data = tmp_df01, aes(x = lon, y = lat, fill = tmp_anm)) +
@@ -341,20 +341,20 @@ where `HadCRUT.5.0.2.0_pac.nc` is the shifted data set.
  
 Alternatively, the data can be shifted "internally":
 
-```{r plots2-30}
+```{r plots2-30 }
 # old values of lon
 lon
 ```
 
 
-```{r plots2-31}
+```{r plots2-31 }
 # shift lons
 lontemp <- lon
 lon[1:(nlon/2)] <- lontemp[((nlon/2)+1):nlon] # new 0 to + 180 values
 lon[((nlon/2)+1):nlon] <- lontemp[1:(nlon/2)] + 360.0 # new 180 to 360 values
 ```
 
-```{r plots2-32}
+```{r plots2-32 }
 # shifted values of lon
 ```
 
@@ -367,7 +367,7 @@ tmp_anm_array[((nlon/2)+1):nlon,,] <- temp_array[1:(nlon/2),,]
 
 For very large data sets, it may be prohibitive to create the temporary arrays, but the same strategy for shifting the data can be applied while reading the data in:
 
-```{r plots2-34}
+```{r plots2-34 }
 # # rotate data while reading...
 # # get the west half of the new array
 # tmp_anm_array <- array(NA, c(nlon, nlat, nt))
@@ -378,7 +378,7 @@ For very large data sets, it may be prohibitive to create the temporary arrays, 
 
 Make a second dataframe with the shifted longitudes and data:
 
-```{r plots2-35}
+```{r plots2-35 }
 # vector of lons and lats
 lonlat <- as.matrix(expand.grid(lon,lat))
 dim(lonlat)
@@ -396,7 +396,7 @@ names(tmp_df02) <- c("lon", "lat", "tmp_anm")
 
 Get a shifted world outline map using the `{maps}` package and its `world2` database:
 
-```{r plots2-36}
+```{r plots2-36 }
 world2_sf <- st_as_sf(maps::map("world2", plot = FALSE, fill = TRUE))
 world2_sf
 world2_otl_sf <- st_geometry(world2_sf)
@@ -405,7 +405,7 @@ plot(world2_otl_sf)
 
 `{ggplot2}` map of the longitudinally shifted data:
 
-```{r plots2-37}
+```{r plots2-37 }
 # ggplot2 map of tmp
 ggplot()  +
   geom_tile(data = tmp_df02, aes(x = lon, y = lat, fill = tmp_anm)) +
@@ -424,7 +424,7 @@ ggplot()  +
 
 Get the latitude by time matrix, as before
 
-```{r plots2-38}
+```{r plots2-38 }
 # latitude by time array of means
 tmp_hovlat <- apply(tmp_anm_array, c(2,3), mean, na.rm=TRUE)
 dim(tmp_hovlat)
@@ -432,7 +432,7 @@ dim(tmp_hovlat)
 
 Make a dataframe:
 
-```{r plots2-39}
+```{r plots2-39 }
 # vector of times and lats
 lattime <- as.matrix(expand.grid(Year,lat))
 dim(lattime)
@@ -449,7 +449,7 @@ head(hovlat_df01); tail(hovlat_df01)
 summary(hovlat_df01)
 ```
 
-```{r plots2-40}
+```{r plots2-40 }
 # vector of times and lats
 lattime <- as.matrix(expand.grid(Year,lat))
 dim(lattime)
@@ -465,10 +465,15 @@ names(hovlat_df01) <- c("Year", "lat","tmp_anm")
 head(hovlat_df01); tail(hovlat_df01)
 summary(hovlat_df01)
 ```
+```{r plots2-41, eval=TRUE, echo=FALSE}
+hovlat_df01$tmp_anm[hovlat_df01$tmp_anm >= 4.0] <- 4.0
+hovlat_df01$tmp_anm[hovlat_df01$tmp_anm <= -4.0] <- -4.0
+```
+
 
 `{ggplot2}` version of the Hovmöller diagram
 
-```{r plots2-41}
+```{r plots2-42 }
 # ggplot2 Hovmöller plots -- Year x Latitude
 ggplot() +
   geom_tile(data = hovlat_df01, aes(x = Year, y = lat, fill = tmp_anm)) +
@@ -476,14 +481,14 @@ ggplot() +
   scale_y_continuous(breaks = seq(-90, 90, 30)) +
   scale_fill_distiller(palette = "RdBu", limits = c(-4, 4)) +
   labs(title=title, y = "Latitude", fill="Anomalies") + 
-  theme_bw() + theme(legend.position="bottom") + theme(aspect.ratio = 2/4)
+  theme_bw() + theme(aspect.ratio = 2/4)
 ```
 
 The `theme(aspect.ratio = 2/4)` function changes the aspect ratio of the plot to more of "landscape" orientation.
 
 Here's the longitude by time array:
 
-```{r plots2-42}
+```{r plots2-43 }
 # longitude by time array of means
 tmp_hovlon <- apply(tmp_anm_array, c(1,3), mean, na.rm=TRUE)
 dim(tmp_hovlon)
@@ -491,7 +496,7 @@ dim(tmp_hovlon)
 
 Make a dataframe:
 
-```{r plots2-43}
+```{r plots2-44 }
 # vector of times and lons
 lontime <- as.matrix(expand.grid(Year,lon))
 dim(lontime)
@@ -510,7 +515,7 @@ summary(hovlon_df01)
 
 And the Hovmöller diagram:
 
-```{r plots2-44}
+```{r plots2-45 }
 # ggplot2 Hovmöller plots -- Year x Longitude
 ggplot() +
   geom_tile(data = hovlon_df01, aes(x = lon, y = Year, fill = tmp_anm)) +
