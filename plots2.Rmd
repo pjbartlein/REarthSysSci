@@ -1,25 +1,62 @@
+---
+title: "Plots (2)"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r plots2-1, echo=FALSE}
 options(width = 105)
 knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "80%", out.height = "80%", verbose=TRUE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
+```
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2021, but may undergo further edits.</span></p>
 
+# Introduction #
+
+As was shown in Plots (1), there is a wide variety of plots available in the base R `{graphics}` package, that are also possible in `{ggplot2}`, which  permits elaboration well beyond what's available in base R. In addition, there is a growing number of extensions of `{ggplot2}` itself: [[https://exts.ggplot2.tidyverse.org]](https://exts.ggplot2.tidyverse.org), see the Gallery. 
+
+This topic illustrates a few more `{ggplot2}` examples, and then goes on to describe the development of "Hovmöller" diagram, or time-space diagrams for surface air temperature. While rather specialized (there are only a few published functions for constructing them in one go), the steps in their construction are typical of the data preparation/visualization necessary for making non-standard visualizations.
+
+# More examples #
+
+To begin, load the libraries, and some of the data that will be used here:
+
+```{r plots2-2}
 library(sf)
 library(stars)
 library(ggplot2)
 library(ncdf4)
 library(CFtime)
 library(RColorBrewer)
+```
 
+... and the data:
+
+```{r plots2-3, cache = TRUE}
 # load data from a saved .RData file
 con <- url("https://pages.uoregon.edu/bartlein/RESS/RData/geog490.RData")
 load(file=con)
+```
 
+Also extract a world map from the `{maps}` package to use as a basemap:
+
+```{r plots2-4}
 # world_sf
 world_sf <- st_as_sf(maps::map("world", plot = FALSE, fill = TRUE))
 world_sf
 world_otl_sf <- st_geometry(world_sf)
 plot(world_otl_sf) # simple plot.sf() plot
+```
 
+Here's a `{ggplot2}` plot of the outlines
+
+```{r plots2-5}
 # ggplot map of world_outline
 ggplot() +  
   geom_sf(data = world_otl_sf, fill = NA, col = "black") + 
@@ -27,7 +64,11 @@ ggplot() +
   scale_y_continuous(breaks = seq(-90, 90, by = 30)) +
   coord_sf(xlim = c(-180, +180), ylim = c(-90, 90), expand = FALSE) +
   theme_bw()
+```
 
+Here' a plot of some global tree-cover data that will be used later. First, read in the data, using `read_stars()` from the `{stars}` package to read the netCDF file.
+
+```{r plots2-6}
 # tree data
 tree_path <- "/Users/bartlein/Projects/RESS/data/nc_files/"
 tree_name <- "treecov.nc"
@@ -36,7 +77,11 @@ tree_file <- paste(tree_path, tree_name, sep="")
 tree <- read_stars(tree_file)
 tree
 plot(tree) #
+```
 
+Here's a `{ggplot2}` plot of the tree-cover data:
+
+```{r plots2-7}
 # ggplot2 map of tree
 ggplot()  +
   geom_stars(data = tree) +
@@ -47,7 +92,23 @@ ggplot()  +
   coord_sf(xlim = c(-180, +180), ylim = c(-90, 90), expand = FALSE) +
   labs(x = "Longitude", y = "Latitude", title="Tree Cover", fill="%") +
   theme_bw()
+```
 
+Note that there is a lot going on in the plot, despite the fact that it's just a single variable and a basemap. As always, the way to see what contribution each function makes to the overall map is to comment it out, and see what happens.
+
+[[Back to top]](plots2.html)
+
+# Hovmöller diagrams #
+
+Hovmöller plots/diagrams, also known as "a climate scientist's best friend" [[Climate.gov]](https://www.climate.gov/news-features/understanding-climate/hovmöller-diagram-climate-scientist’s-best-friend), are, as was mentioned, time-space type diagrams, but they are actually just maps of another kind. For example, a (longitude-by-latitude) map of average temperature around the globe is constructed from a raster brick, with dimensions longitude by latitude by time by averaging the data at a particular grid point over time, and then plotting the average at that grid point's location. A latitude-by-time Hovmöller diagram is constructed by averaging the data over all longitudes at for a particular time and latitude. In practice, Hovmöller diagrams are able to reveal large-scale features in the atmosphere that evolve slowly over time. They are most frequently applied to atmospheric circulation data, or to surface temperature or sea-surface temperature (SSTs). A typical example is the longitude-by-time diagram of tropical SST anomalies (differences from the long-term aveage) used to "diagnose" El Niños and La Niñas [[https://psl.noaa.gov/map/images/sst/sst.month.anom.hov.io.gif]](https://psl.noaa.gov/map/images/sst/sst.month.anom.hov.io.gif).
+
+## A simple example ##
+
+When constructing a map, say, of average temperatures, it's relatively easy to imagine what the map should look like, but it's harder to anticipate what a Hovmöller diagram should look like. (If fact, if a Hovmöller diagram shows *any* kind of pattern, it signals that there is some systematic variation worth exploring.) So we begin with a simple example.
+
+Read the CRU 0.5-degree 1961-1990 long-term average temperature data.
+
+```{r plots2-8}
 # set path and filename
 ncpath <- "/Users/bartlein/Projects/RESS/data/nc_files/"
 ncname <- "cru10min30_tmp"  
@@ -56,15 +117,27 @@ dname <- "tmp"  # note: tmp means temperature (not temporary)
 
 # stars read of netCDF
 tmp_stars <- read_ncdf(ncfname, var=dname)
+```
 
+Replace the time stamps:
+
+```{r plots2-9}
 # replace times
 #attr(tmp_stars, "dimensions")$time$values <- c(1:12)
 attr(tmp_stars, "dimensions")$time$values <- c("Jan","Feb","Mar","Apr","May","Jun",
                 "Jul","Aug","Sep","Oct","Nov","Dec")
+```
 
+Quick plot of the data:
+
+```{r plots2-10, messages = FALSE, cache = TRUE}
 # quick plot of the data
 plot(tmp_stars)
+```
 
+`{ggplot2}` map of tmp:
+
+```{r plots2-11, cache = TRUE}
 # ggplot2 map of tmp
 ggplot()  +
   geom_stars(data = tmp_stars) +
@@ -76,7 +149,13 @@ ggplot()  +
   coord_sf(xlim = c(-180, +175), ylim = c(-90, 90), expand = FALSE) +
   theme_bw() + 
   theme(strip.text = element_text(size = 6)) + theme(axis.text = element_text(size = 4))  
+```
 
+## Test reshaping ##
+
+Next, we'll reread the netCDF file to explicitly get the dimension variables, and the data as a 3-D array:
+
+```{r plots2-12}
 # get the netCDF file
 ncin <- nc_open(ncfname)
 lon <- ncvar_get(ncin, "lon")
@@ -84,21 +163,52 @@ lat <- ncvar_get(ncin, "lat")
 tmp_array <- ncvar_get(ncin, dname)
 dim(tmp_array)
 nc_close(ncin)
+```
 
+Next, use the `apply()` function to get the longitude-by-time and latitude-by-time averages. The `apply()` function, as its name implies, applies some function to the "margins" of a matrix or array. The arguments of the `apply()` function are the name of the array (`tmp_array` here), the `MARGIN` or the subscripts of the array over which the function will be applied, and the function (`mean` in this case, with `na.rm = TRUE` indicating that values with missing data should be dropped).
+
+```{r plots2-13}
 # latitude by time averaging
 tmp_hovlat <- apply(tmp_array, c(2,3), mean, na.rm=TRUE)
 dim(tmp_hovlat)
+```
 
+Here's a quick map of the resulting 2-D array or matrix:
+
+```{r plots2-14}
 # quick plot of latitude by time data
 image(t(tmp_hovlat))
+```
 
+The transpose function (`t()`) puts time on the x-axis and latitude on the y-axis. The plot looks like what might be expected. Here's longitude by time:
+
+```{r plots2-15}
 # longitude by time
 tmp_hovlon <- apply(tmp_array, c(1,3), mean, na.rm=TRUE)
 dim(tmp_hovlon)
+```
 
+```{r plots2-16}
 # quick plot of longitude by time data
 image(tmp_hovlon)
+```
 
+Recalling that this is land data only, and that the longitudes range from -180 to + 180 this plot makes sense--the western margins of the continents are cooler, and the warmest blob in the middle is N. Africa and the Middle East.
+
+[[Back to top]](plots2.html)
+
+## A more complicated example -- HadCRUTv5 temperature data
+
+The "HadCRUTv5" data set is one of the four data sets used to describe global and regional temperature variations over the "instrumental period" -- since the mid 1800s. The data consist of monthly anomalies (differences from the 1961 to 1990 long-term mean) on a 5-degree grid. The particular data set used here is the statistically "infilled" version, designed to increase the spatial coverage. The data are a combination of the U.K. Met Office Hadley Centre SST data set and the University of East Anglia Climate Research Unit surface air-temperature data. Here are the reference and data-download pages:
+
+- [[https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.0.2.0/download.html]](https://www.metoffice.gov.uk/hadobs/hadcrut5/data/HadCRUT.5.0.2.0/download.html)
+- [[https://crudata.uea.ac.uk/cru/data/temperature/]](https://crudata.uea.ac.uk/cru/data/temperature/)
+
+### Get and read the HadCRUTv5 data ###
+
+Get the data:
+
+```{r plots2-17}
 # get the long-term mean temperature data
 # set path and filename
 ncpath <- "/Users/bartlein/Projects/RESS/data/nc_files/"
@@ -106,7 +216,9 @@ ncname <- "HadCRUT.5.0.2.0.nc"
 ncfname <- paste(ncpath, ncname, sep="")
 dname <- "tas_mean"  # note: tmp means temperature (not temporary), and ...
 # we know the data are actually anomalies, not means
+```
 
+```{r plots2-18}
 # get the dimensions from the netCDF file
 ncin <- nc_open(ncfname)
 lon <- ncvar_get(ncin, "longitude")
@@ -117,19 +229,35 @@ time <- ncvar_get(ncin,"time")
 tunits <- ncatt_get(ncin,"time","units")
 nt <- dim(time)
 print(c(nlon, nlat, nt))
+```
 
+Decode the time variable:
+
+```{r plots2-19}
 # decode time
 cf <- CFtime(tunits$value, calendar = "proleptic_gregorian", time) # convert time to CFtime class
 timestamps <- CFtimestamp(cf) # get character-string times
 time_cf <- CFparse(cf, timestamps) # parse the string into date components
 head(time_cf); tail(time_cf)
+```
 
+Get the temperature-anomaly data:
+
+```{r plots2-20}
 # data
 tmp_anm_array <- ncvar_get(ncin, dname)
+```
 
+Close the input netCDF file
+
+```{r plots2-21}
 # close the netCDF file
 nc_close(ncin)
+```
 
+Get the beginning and ending year, and the "decimal" year value for each monthly time step:
+
+```{r plots2-22}
 # get begining year and ending year
 beg_yr <- time_cf$year[1]
 end_yr <- time_cf$year[nt]
@@ -138,29 +266,54 @@ end_yr <- time_cf$year[nt]
 Year <- seq(beg_yr, end_yr+1-(1/12), by=(1/12))
 length(Year)
 head(Year); tail(Year)
+```
 
+Expand and reshape the lons and lats into a vector
+
+```{r plots2-23}
 # vector of lons and lats
 lonlat <- as.matrix(expand.grid(lon,lat))
 dim(lonlat)
 head(lonlat); tail(lonlat)
+```
 
+### Plot a single month ###
+
+Extract a single month of temperature values, and turn it into a vector:
+
+```{r plots2-24}
 # vector of `tmp` values
 n <- 1957 # should be jan 2013
 tmp_vec <- as.vector(tmp_anm_array[,,n])
 length(tmp_vec)
+```
 
+Create a vector of temperature-anomaly values;
+
+```{r plots2-25}
 # vector of `tmp` values
 n <- 1957 # should be jan 2013
 tmp_vec <- as.vector(tmp_anm_array[,,n])
 length(tmp_vec)
+```
+Creat a dataframe, and add names:
 
+```{r plots2-26}
 # create dataframe and add names
 tmp_df01 <- data.frame(cbind(lonlat,tmp_vec))
 names(tmp_df01) <- c("lon", "lat", "tmp_anm")
+```
 
+Get a date label, and set a title for the plot:
+
+```{r plots2-27}
 pt1 <- paste(as.character(time_cf$year[n]), as.character(time_cf$month[n]), sep = "-")
 title <- paste ("HadCRUTv5 -- 2m Air Temperature Anomalies")
+```
 
+Plot the single-month data:
+
+```{r plots2-28}
 # ggplot2 map of tmp
 ggplot()  +
   geom_tile(data = tmp_df01, aes(x = lon, y = lat, fill = tmp_anm)) +
@@ -171,32 +324,61 @@ ggplot()  +
   coord_sf(xlim = c(-180, 180), ylim = c(-90, 90), expand = FALSE) +
   labs(title=title, subtitle=pt1, fill="Anomalies") + 
   theme_bw() + theme(legend.position="bottom")
+```
 
-## ## run in a Terminal/CMD window, not in R
-## ## cdo sellonlatbox,0,360,-90,90 HadCRUT.5.0.2.0.nc HadCRUT.5.0.2.0_pac.nc
+Compare this map to one generated in Panoply for Jan 2013.
 
+### Shift longitudes ###
+
+The longitudes of HadCRUTv5 data as read in range from -180 to + 180, sometimes called the "Atlantic perspective" (as can be verified by inspection of the longitude minimum and maximum (e.g. `min(lon)` and `max(lon)`). However, in many applications, longitude-by-time Hovmöller diagrams with the longitude origin at the Prime Meridian are preferred, to place the Pacific in the center (i.e. the "Pacific perspective). There are two ways to shift (sometimes called "rotate") the longitudes (and the data). One way is to do it externally to R, using for example the Climate Data Operators. The CDO code for doing so in this case is 
+ 
+```{r plots2-29, echo=TRUE, eval=FALSE}
+## run in a Terminal/CMD window, not in R
+## cdo sellonlatbox,0,360,-90,90 HadCRUT.5.0.2.0.nc HadCRUT.5.0.2.0_pac.nc
+``` 
+
+where `HadCRUT.5.0.2.0_pac.nc` is the shifted data set. 
+ 
+Alternatively, the data can be shifted "internally":
+
+```{r plots2-30}
 # old values of lon
 lon
+```
 
+
+```{r plots2-31}
 # shift lons
 lontemp <- lon
 lon[1:(nlon/2)] <- lontemp[((nlon/2)+1):nlon] # new 0 to + 180 values
 lon[((nlon/2)+1):nlon] <- lontemp[1:(nlon/2)] + 360.0 # new 180 to 360 values
+```
 
+```{r plots2-32}
 # shifted values of lon
+```
 
+```{r plots2-33 }
 # shift data
 temp_array <- tmp_anm_array # note "temp" means temporary, "tmp" means temperature
 tmp_anm_array[1:(nlon/2),,] <- temp_array[((nlon/2)+1):nlon,,]
 tmp_anm_array[((nlon/2)+1):nlon,,] <- temp_array[1:(nlon/2),,]
+```
 
+For very large data sets, it may be prohibitive to create the temporary arrays, but the same strategy for shifting the data can be applied while reading the data in:
+
+```{r plots2-34}
 # # rotate data while reading...
 # # get the west half of the new array
 # tmp_anm_array <- array(NA, c(nlon, nlat, nt))
 # tmp_anm_array[1:(nlon/2),,] <- ncvar_get(ncin, dname, start = c(((nlon/2)+1), 1, 1), count = c(nlon/2, nlat, nt))
 # # get the east half
 # tmp_anm_array[((nlon/2)+1):nlon,,] <- ncvar_get(ncin, dname, start = c(1, 1, 1), count = c(nlon/2, nlat, nt))
+```
 
+Make a second dataframe with the shifted longitudes and data:
+
+```{r plots2-35}
 # vector of lons and lats
 lonlat <- as.matrix(expand.grid(lon,lat))
 dim(lonlat)
@@ -210,12 +392,20 @@ length(tmp_vec)
 # create a dataframe and add names
 tmp_df02 <- data.frame(cbind(lonlat,tmp_vec))
 names(tmp_df02) <- c("lon", "lat", "tmp_anm")
+```
 
+Get a shifted world outline map using the `{maps}` package and its `world2` database:
+
+```{r plots2-36}
 world2_sf <- st_as_sf(maps::map("world2", plot = FALSE, fill = TRUE))
 world2_sf
 world2_otl_sf <- st_geometry(world2_sf)
 plot(world2_otl_sf)
+```
 
+`{ggplot2}` map of the longitudinally shifted data:
+
+```{r plots2-37}
 # ggplot2 map of tmp
 ggplot()  +
   geom_tile(data = tmp_df02, aes(x = lon, y = lat, fill = tmp_anm)) +
@@ -226,11 +416,23 @@ ggplot()  +
   coord_sf(xlim = c(0, 360), ylim = c(-90, 90), expand = FALSE) +
   labs(title=title, subtitle=pt1, fill="Anomalies") + 
   theme_bw() + theme(legend.position="bottom")
+```
 
+[[Back to top]](plots2.html)
+
+### Hovmöller diagrams ###
+
+Get the latitude by time matrix, as before
+
+```{r plots2-38}
 # latitude by time array of means
 tmp_hovlat <- apply(tmp_anm_array, c(2,3), mean, na.rm=TRUE)
 dim(tmp_hovlat)
+```
 
+Make a dataframe:
+
+```{r plots2-39}
 # vector of times and lats
 lattime <- as.matrix(expand.grid(Year,lat))
 dim(lattime)
@@ -245,7 +447,9 @@ hovlat_df01 <- data.frame(cbind(lattime,hovlat_vec))
 names(hovlat_df01) <- c("Year", "lat","tmp_anm")
 head(hovlat_df01); tail(hovlat_df01)
 summary(hovlat_df01)
+```
 
+```{r plots2-40}
 # vector of times and lats
 lattime <- as.matrix(expand.grid(Year,lat))
 dim(lattime)
@@ -260,7 +464,11 @@ hovlat_df01 <- data.frame(cbind(lattime,hovlat_vec))
 names(hovlat_df01) <- c("Year", "lat","tmp_anm")
 head(hovlat_df01); tail(hovlat_df01)
 summary(hovlat_df01)
+```
 
+`{ggplot2}` version of the Hovmöller diagram
+
+```{r plots2-41}
 # ggplot2 Hovmöller plots -- Year x Latitude
 ggplot() +
   geom_tile(data = hovlat_df01, aes(x = Year, y = lat, fill = tmp_anm)) +
@@ -269,11 +477,21 @@ ggplot() +
   scale_fill_distiller(palette = "RdBu", limits = c(-4, 4)) +
   labs(title=title, y = "Latitude", fill="Anomalies") + 
   theme_bw() + theme(legend.position="bottom") + theme(aspect.ratio = 2/4)
+```
 
+The `theme(aspect.ratio = 2/4)` function changes the aspect ratio of the plot to more of "landscape" orientation.
+
+Here's the longitude by time array:
+
+```{r plots2-42}
 # longitude by time array of means
 tmp_hovlon <- apply(tmp_anm_array, c(1,3), mean, na.rm=TRUE)
 dim(tmp_hovlon)
+```
 
+Make a dataframe:
+
+```{r plots2-43}
 # vector of times and lons
 lontime <- as.matrix(expand.grid(Year,lon))
 dim(lontime)
@@ -288,7 +506,11 @@ hovlon_df01 <- data.frame(cbind(lontime,hovlon_vec))
 names(hovlon_df01) <- c("Year", "lon","tmp_anm")
 head(hovlon_df01); tail(hovlon_df01)
 summary(hovlon_df01)
+```
 
+And the Hovmöller diagram:
+
+```{r plots2-44}
 # ggplot2 Hovmöller plots -- Year x Longitude
 ggplot() +
   geom_tile(data = hovlon_df01, aes(x = lon, y = Year, fill = tmp_anm)) +
@@ -297,3 +519,8 @@ ggplot() +
   scale_fill_distiller(palette = "RdBu", limits = c(-4, 4)) +
   labs(title=title, x = "Longitude", fill="Anomalies") + 
   theme_bw() + theme(aspect.ratio = 4/3)
+```
+
+[[Back to top]](plots2.html)
+
+`{ggplot2}` Hovmöller diagrams
