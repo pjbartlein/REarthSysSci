@@ -356,6 +356,7 @@ lon[((nlon/2)+1):nlon] <- lontemp[1:(nlon/2)] + 360.0 # new 180 to 360 values
 
 ```{r plots2-32 }
 # shifted values of lon
+lon
 ```
 
 ```{r plots2-33 }

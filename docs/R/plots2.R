@@ -159,7 +159,7 @@ tmp_df01 <- data.frame(cbind(lonlat,tmp_vec))
 names(tmp_df01) <- c("lon", "lat", "tmp_anm")
 
 pt1 <- paste(as.character(time_cf$year[n]), as.character(time_cf$month[n]), sep = "-")
-title <- paste ("HadCRUTv5 -- 2m Air Temperature Anomalies")
+title <- "HadCRUTv5 -- Temperature Anomalies (℃)"
 
 # ggplot2 map of tmp
 ggplot()  +
@@ -260,6 +260,8 @@ hovlat_df01 <- data.frame(cbind(lattime,hovlat_vec))
 names(hovlat_df01) <- c("Year", "lat","tmp_anm")
 head(hovlat_df01); tail(hovlat_df01)
 summary(hovlat_df01)
+hovlat_df01$tmp_anm[hovlat_df01$tmp_anm >= 4.0] <- 4.0
+hovlat_df01$tmp_anm[hovlat_df01$tmp_anm <= -4.0] <- -4.0
 
 # ggplot2 Hovmöller plots -- Year x Latitude
 ggplot() +
@@ -268,7 +270,7 @@ ggplot() +
   scale_y_continuous(breaks = seq(-90, 90, 30)) +
   scale_fill_distiller(palette = "RdBu", limits = c(-4, 4)) +
   labs(title=title, y = "Latitude", fill="Anomalies") + 
-  theme_bw() + theme(legend.position="bottom") + theme(aspect.ratio = 2/4)
+  theme_bw() + theme(aspect.ratio = 2/4)
 
 # longitude by time array of means
 tmp_hovlon <- apply(tmp_anm_array, c(1,3), mean, na.rm=TRUE)
