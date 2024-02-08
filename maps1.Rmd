@@ -9,7 +9,7 @@ output:
     collapsed: no
 ---
 
-```{r plots2-1, echo=FALSE}
+```{r maps1-1, echo=FALSE}
 options(width = 105)
 knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "80%", out.height = "80%", verbose=TRUE)
 pdf.options(useDingbats = TRUE)
@@ -33,7 +33,7 @@ The first step is to read a set of shapefiles downloaded from the Natural Earth 
 
 Begin by loading the appropriate packages:
 
-```{r load packages, message=FALSE}
+```{r maps1-2, message=FALSE}
 library(sf)
 library(stars)
 library(ggplot2)
@@ -43,7 +43,7 @@ library(classInt)
 
 Now read the shape files, including those for global coastlines, adminstrative units (borders), large lakes, and a graticule.  Set the filenames:
 
-```{r read NE shapefiles}
+```{r maps1-3 }
 # Natural Earth shape files -- global (Robinson) projections
 # get shapefiles from http://www.naturalearthdata.com
 shape_path <- "/Users/bartlein/Projects/RESS/data/RMaps/source/"
@@ -51,7 +51,8 @@ coast_shapefile <- paste(shape_path, "ne_50m_coastline/ne_50m_coastline.shp", se
 ocean_shapefile <- paste(shape_path, "ne_50m_ocean/ne_50m_ocean.shp", sep="")
 land_shapefile <- paste(shape_path, "ne_50m_land/ne_50m_land.shp", sep="")
 admin0_shapefile <- paste(shape_path, "ne_50m_admin_0_countries/ne_50m_admin_0_countries.shp", sep="")
-admin1_shapefile <- paste(shape_path, "ne_50m_admin_1_states_provinces_lakes/ne_50m_admin_1_states_provinces_lakes.shp", sep="")
+admin1_shapefile <- paste(shape_path, 
+      "ne_50m_admin_1_states_provinces_lakes/ne_50m_admin_1_states_provinces_lakes.shp", sep="")
 lakes_shapefile <- paste(shape_path, "ne_50m_lakes/ne_50m_lakes.shp", sep="")
 bb_shapefile <- paste(shape_path, "ne_50m_graticules_all/ne_50m_wgs84_bounding_box.shp", sep="")
 grat30_shapefile <- paste(shape_path, "ne_50m_graticules_all/ne_50m_graticules_30.shp", sep="")
@@ -59,17 +60,17 @@ grat30_shapefile <- paste(shape_path, "ne_50m_graticules_all/ne_50m_graticules_3
 
 Before reading each file, determine what kind it is (e.g. lines vs. polygons). This information will be used to (manually, but it could be coded) to name the `sf` objects. read and plot it. As an example:
 
-```{r read coast}
+```{r maps1-4 }
 # query geometry type
 coast_geometry <- as.character(st_geometry_type(st_read(coast_shapefile), by_geometry = FALSE))
 coast_geometry
 ```
 
-So the `coast_shapefile` has a "MULTILINESTRING" geometry type, so we'll call the input 'sf' object "'coast_lines_sf'"
+So the `coast_shapefile` has a "MULTILINESTRING" geometry type, so we'll call the input `sf` object "`coast_lines_sf`"
 
 In the 'plot()' functions below, use the `col` argument for lines, `border` for polygon border colors. Read and plot the shapefiles:
 
-```{r}
+```{r maps1-5}
 # read coastline
 coast_lines_sf <- st_read(coast_shapefile) # note geometry type MULTILINESTRING
 plot(st_geometry(coast_lines_sf), col="gray50")
@@ -77,7 +78,7 @@ plot(st_geometry(coast_lines_sf), col="gray50")
 
 Read and plot the other shapefiles. (Note that the summary output is suppressed.)
 
-```{r results="hide", message=FALSE, cache=TRUE}
+```{r maps1-6, results="hide", message=FALSE, cache=TRUE}
 # read and plot other shape files, noting geometry types
 ocean_poly_sf <- st_read(ocean_shapefile) # note:  geometry type MULTIPOLYGON
 plot(st_geometry(ocean_poly_sf), col="gray80")
@@ -97,7 +98,7 @@ plot(st_geometry(grat30_lines_sf), col="black")
 
 Filter the `lakes_poly_sf` object to the the largest lakes only:
 
-```{r }
+```{r maps1-7 }
 # get large lakes only
 lrglakes_poly_sf <- lakes_poly_sf[as.numeric(lakes_poly_sf$scalerank) <= 2 ,]
 plot(st_geometry(lrglakes_poly_sf), col="lightblue")
@@ -107,8 +108,7 @@ plot(st_geometry(lrglakes_poly_sf), col="lightblue")
 Plot everything.
 
 
-```{r plot input shapefiles, cache=TRUE}
-# plot everything
+```{r maps1-8, cache=TRUE}
 # plot everything
 plot(st_geometry(coast_lines_sf), col="black")
 plot(st_geometry(ocean_poly_sf), col="skyblue1", add=TRUE)
@@ -126,14 +126,14 @@ plot(st_geometry(coast_lines_sf), col="purple", add=TRUE)
 
 Next, transform (project) the individual shapefiles into the Robinson projection using `st_transform()`.  Get the current coordinate reference system (i.e. the `PROJ4` string).
 
-```{r get CRS}
+```{r maps1-9 }
 # get CRS and projstring
 unproj_projstring <- st_crs(coast_lines_sf)
 unproj_projstring
 ```
 Set the `PROJ` string for the projected (Robinson) `sf` objects:
 
-```{r}
+```{r maps1-10}
 # set new projstring
 robinson_projstring <- "+proj=robin +lon_0=0w"
 robinson_projstring
@@ -141,7 +141,7 @@ robinson_projstring
 
 Now do the projections.
 
-```{r projections}
+```{r maps1-11 }
 # do projections
 coast_lines_proj <- st_transform(coast_lines_sf, crs = st_crs(robinson_projstring))
 ocean_poly_proj <- st_transform(ocean_poly_sf, crs = st_crs(robinson_projstring))
@@ -156,7 +156,7 @@ bb_poly_proj <- st_transform(bb_poly_sf, crs = st_crs(robinson_projstring))
 
 Plot the projected shapefiles.
 
-```{r plot projected}
+```{r maps1-12 }
 # plot projected files
 plot(st_geometry(bb_poly_proj), col="gray90", border="black", lwd=2)
 plot(st_geometry(coast_lines_proj), col="black", add=TRUE)
@@ -173,7 +173,7 @@ plot(st_geometry(bb_poly_proj), border="black", lwd=2, add=TRUE)
 
 Because the map we're creating will use the borders and lakes only as outlines (as opposed to polygons that might be filled with a specific color), those polygons can be converted to `MULTILINESTRING` objects.
 
-```{r convert to SpatialLines}
+```{r maps1-13 }
 # convert MULTIPOLYGON to MULTILINESTRING
 admin0_lines_proj <- st_cast(admin0_poly_proj, "MULTILINESTRING")
 admin1_lines_proj <- st_cast(admin1_poly_proj, "MULTILINESTRING")
@@ -184,7 +184,7 @@ bb_lines_proj <- st_cast(bb_poly_proj, "MULTILINESTRING")
 
 Plot the new `MULTILINESTRING` objects
 
-```{r plot spatial lines}
+```{r maps1-14 }
 # test the MULTILINESTRING objects
 plot(st_geometry(bb_lines_proj), col="black")
 plot(st_geometry(coast_lines_proj), col="green", add=TRUE)
@@ -201,14 +201,14 @@ plot(st_geometry(bb_lines_proj), border="black", lwd = 2, add=TRUE)
 
 Next, write out the projected shapefiles, first setting the output path.
 
-```{r}
+```{r maps1-15}
 # write out the various projected shapefiles 
 outpath <- "/Users/bartlein/Projects/RESS/data/RMaps/derived/glRob_50m/"
 ```
 
 Write out the projected coastlines.
 
-```{r write coast shapes}
+```{r maps1-16}
 # coast lines 
 outshape <- coast_lines_proj
 outfile <- "glRob_50m_coast_lines/"
@@ -217,7 +217,7 @@ st_write(coast_lines_proj, outshapefile, driver = "ESRI Shapefile", append = FAL
 ```
 It's always good practice to test whether the shapefile has indeed been written out correctly.  Read it back in and plot it.
 
-```{r test shape}
+```{r maps1-17 }
 # test
 test_sf <- st_read(outshapefile)
 test_outline <- st_geometry(test_sf)
@@ -226,7 +226,7 @@ plot(test_outline, col="gray")
 
 Write out the other shapefiles.
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r maps1-18, eval=TRUE, results = "hide", message=FALSE, warning=FALSE}
 # write out the other objects as shapefiles
 outshape <- bb_poly_proj
 outfile <- "glRob_50m_bb_poly/"
@@ -300,13 +300,13 @@ Another setup step, and again one that creates some reusable files, is to make a
 
 The first step is to creat a "bounding box" that surrouds the Caspian.
 
-```{r Caspian bounding box}
+```{r maps1-19 }
 # Caspian
 caspian_bb <- st_bbox(c(xmin = 45, ymin = 35, xmax = 56, ymax = 50), crs = unproj_projstring)
 caspian_bb <- st_as_sfc(caspian_bb)
 ```
 
-```{r Caspian outline}
+```{r maps1-20 }
 # get the points that define the ouline of the Caspian
 # get the points that define the outline of the Caspian
 caspian_lines <- st_intersection(coast_lines_sf, caspian_bb )
@@ -315,20 +315,20 @@ caspian_lines
 
 "Recast" into a polygon:
 
-```{r}
+```{r maps1-21}
 caspian_poly <- st_cast(caspian_lines, "POLYGON")
 caspian_poly
 ```
 
 Plot the Caspian polygon
 
-```{r}
+```{r maps1-22}
 plot(st_geometry(caspian_poly), col = "skyblue")
 ```
 
 Project and plot the Caspian polygon:
 
-```{r project polygon}
+```{r maps1-23 }
 # project the Caspian outline
 caspian_poly_proj <- st_transform(caspian_poly, crs = st_crs(robinson_projstring))
 plot(st_geometry(caspian_poly_proj), col = "skyblue")
@@ -336,7 +336,7 @@ plot(st_geometry(caspian_poly_proj), col = "skyblue")
 
 Write out the Caspian polygon.
 
-```{r write Caspian poly}
+```{r maps1-24 }
 # save the Caspian outlines
 outshape <- caspian_poly
 outfile <- "glRob_50m_caspian_poly/"
@@ -358,7 +358,7 @@ One version of Fig. 1 in Marlon et al. (2016) includes a gray-shade "layer" of t
 
 ## Read the tree-cover data ##
 
-```{r read treeMac, eval=TRUE, echo=TRUE}
+```{r maps1-25, eval=TRUE, echo=TRUE}
 # read a single-variable netCDF dataset using stars to read_ncdf
 tree_path <- "/Users/bartlein/Projects/RESS/data/nc_files/"
 tree_name <- "treecov.nc"
@@ -369,7 +369,7 @@ tree
 
 Convert to points:
 
-```{r}
+```{r maps1-26}
 # convert stars object to sf POINTS
 treecov_pts <- st_as_sf(tree, as_points = TRUE)
 plot(treecov_pts, pch = 16, cex = 0.5)
@@ -379,7 +379,7 @@ plot(treecov_pts, xlim = c(-125, -100), ylim = c(30, 50), pch = 16, main = "tree
 ```
 
 Convert to polygons, and plot a zoomed-in look at the western U.S:
-```{r cache=TRUE}
+```{r maps1-27, cache=TRUE}
 # convert stars object to sf POLYGONS
 treecov_poly <- st_as_sf(tree, as_points = FALSE)
 treecov_poly
@@ -390,7 +390,7 @@ plot(treecov_poly, xlim = c(-125, -100), ylim = c(30, 50), main = "treecov_poly"
 
 Write out the shapefiles.
 
-```{r write tree shapefiles}
+```{r maps1-28 }
 # write out the unprojected points
 outpath <- "/Users/bartlein/Projects/RESS/data/RMaps/derived/treecov/"
 outfile <- "treecov_pts/"
@@ -398,7 +398,7 @@ outshapefile <- paste(outpath,outfile,sep="")
 st_write(treecov_pts, outshapefile, driver = "ESRI Shapefile", append = FALSE)
 ```
 
-```{r}
+```{r maps1-29}
 # write out the unprojected polygons
 outshape <- treecov_poly
 outfile <- "treecov_poly/"
@@ -410,7 +410,7 @@ st_write(treecov_poly, outshapefile, driver = "ESRI Shapefile", append = FALSE)
  
 Project the tree-cover data:
 
-```{r project treecov points}
+```{r maps1-30 }
 # project the treecover data
 treecov_pts_proj <- st_transform(treecov_pts, crs = st_crs(robinson_projstring))
 treecov_poly_proj <- st_transform(treecov_poly, crs = st_crs(robinson_projstring))
@@ -418,14 +418,14 @@ treecov_poly_proj <- st_transform(treecov_poly, crs = st_crs(robinson_projstring
 
 Write out the projected points and polygons:
 
-```{r}
+```{r maps1-31}
 # write out the projected points
 outshape <- treecov_pts_proj
 outfile <- "treecov_pts_proj/"
 outshapefile <- paste(outpath,outfile,sep="")
 st_write(treecov_pts_proj, outshapefile, driver = "ESRI Shapefile", append = FALSE)
 ```
-```{r}
+```{r maps1-32}
 # write out the projected polygons
 outshape <- treecov_poly_proj
 outfile <- "treecov_poly_proj/"
@@ -449,7 +449,7 @@ Set cutpoints and gray-scale color numbers for plotting the tree-cover data.  Th
 
 Read the GCDv3 charcoal site-location data.  
 
-```{r read GCDv3 data}
+```{r maps1-33 }
 # read the data
 csvpath <- "/Users/bartlein/Projects/RESS/data/csv_files/"
 csvname <- "GCDv3_MapData_Fig1.csv"
@@ -461,21 +461,21 @@ head(gcdv3_csv)
 
 Convert to POINTS:
 
-```{r}
+```{r maps1-34}
 # convert to sf POINTS
 gcdv3_pts <- st_as_sf(gcdv3_csv, coords = c("lon", "lat"))
 gcdv3_pts <- st_set_crs(gcdv3_pts, unproj_projstring)
 gcdv3_pts
 ```
 
-```{r}
+```{r maps1-35}
 # project the gcdv3 data
 gcdv3_pts_proj <- st_transform(gcdv3_pts, crs = st_crs(robinson_projstring))
 ```
 
 Set colors for tree cover data:
 
-```{r}
+```{r maps1-36}
 # colors for tree cover
 treecov_clr_upper <- c(   1,    15,    20,    25,    30,    35,    40,    45,    50,    55,    60,    65,    70,    75,   999)
 treecov_clr_gray <- c(1.000, 0.979, 0.954, 0.926, 0.894, 0.859, 0.820, 0.778, 0.733, 0.684, 0.632, 0.576, 0.517, 0.455, 0.389)
@@ -485,7 +485,7 @@ clr <- gray(treecov_clr_gray[colnum], alpha=NULL)
 
 Set colors and symbol sizes for characoal data:
 
-```{r}
+```{r maps1-37}
 # set symbol size and colors gcdv3
 nsamp_cutpts <- c(10,100,1000,10000)
 nsamp_colors <- c("green3","deepskyblue2","slateblue4","purple")
@@ -497,7 +497,7 @@ nsamp_num <- findInterval(gcdv3_pts$samples22k, nsamp_cutpts)+1
 
 First, plot the sites with no background.  The code below creates a .pdf file in the working directory.  
 
-```{r plot charcoal points, echo=TRUE, eval=FALSE}
+```{r maps1-38, echo=TRUE, eval=FALSE}
 # version with no background
 pdffile <- "gcdv3_nsamp.pdf"
 pdf(paste(pdffile,sep=""), paper="letter", width=8, height=8)
@@ -525,7 +525,7 @@ The resulting plot will look like this:
 
 Now plot the version with the version with the tree cover background data:
 
-```{r plot charcoal and treecov, echo=TRUE, eval=FALSE}
+```{r maps1-39, echo=TRUE, eval=FALSE}
 # version with treecover background
 pdffile <- "gcdv3_nsamp_treecov.pdf"
 pdf(pdffile, paper="letter", width=8, height=8)
@@ -550,6 +550,7 @@ dev.off()
 ```
 
 The resulting plot will look like this:
+
 ![](images/gcdv3_nsamp_treecov.png)
 
 
