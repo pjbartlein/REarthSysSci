@@ -184,7 +184,6 @@ lon[1:(nlon/2)] <- lontemp[((nlon/2)+1):nlon] # new 0 to + 180 values
 lon[((nlon/2)+1):nlon] <- lontemp[1:(nlon/2)] + 360.0 # new 180 to 360 values
 
 # shifted values of lon
-lon
 
 # shift data
 temp_array <- tmp_anm_array # note "temp" means temporary, "tmp" means temperature

@@ -1,0 +1,512 @@
+grat = st_graticule(air_1000_sf, lon = breaks_x, lat = breaks_y)
+grat
+grat_otl <- st_geometry(grat)
+plot(grat_otl)
+# ggplot2 map of air
+ggplot() +
+geom_tile(data = air_1000_df, aes(x = lon, y = lat, fill = air)) +
+scale_fill_gradient2(low = "darkblue", mid="white", high = "darkred", midpoint = 273.15) +
+geom_sf(data = world_otl_sf, col = "black", fill = NA) +
+geom_sf(data = grat_otl, col = "gray80", lwd = 0.5, lty = 3) +
+scale_x_continuous(breaks = breaks_x) +
+scale_y_continuous(breaks = breaks_y) +
+coord_sf(xlim = c(-180, +175.0), ylim = c(-90, 90), expand = FALSE) +
+labs(x = "Longitude", y = "Latitude", title="NCEP2 Reanalysis 2m Air Temperature", fill="K") +
+theme_bw()
+# ggplot2 map of air
+ggplot() +
+geom_tile(data = air_1000_df[,,1], aes(x = lon, y = lat, fill = air)) +
+scale_fill_gradient2(low = "darkblue", mid="white", high = "darkred", midpoint = 273.15) +
+geom_sf(data = world_otl_sf, col = "black", fill = NA) +
+geom_sf(data = grat_otl, col = "gray80", lwd = 0.5, lty = 3) +
+scale_x_continuous(breaks = breaks_x) +
+scale_y_continuous(breaks = breaks_y) +
+coord_sf(xlim = c(-180, +175.0), ylim = c(-90, 90), expand = FALSE) +
+labs(x = "Longitude", y = "Latitude", title="NCEP2 Reanalysis 2m Air Temperature", fill="K") +
+theme_bw()
+# make a data.frame
+lon <- st_coordinates(air_1000_sf)[,1]
+lat <- st_coordinates(air_1000_sf)[,2]
+air <- as.vector((air_1000_sf[,1]$Jan))
+air_1000_df <- data.frame(lon, lat, air)
+dim(air_1000_df)
+# make a data.frame
+lon <- st_coordinates(air_1000_sf)[,1]
+lat <- st_coordinates(air_1000_sf)[,2]
+air <- as.vector((air_1000_sf[,1]$Jan))
+air_1000_df <- data.frame(lon, lat, air)
+length(lon); length(lat); length(air)
+dim(air_1000_df)
+# make a data.frame
+lon <- st_coordinates(air_1000_sf)[,1]
+lat <- st_coordinates(air_1000_sf)[,2]
+air <- as.vector((air_1000_sf[,1]$Jan))
+air_1000_df <- data.frame(lon, lat, air)
+length(lon); length(lat); length(air)
+dim(air_1000_df)
+air_1000_sf
+# convert stars to sf
+air_1000_sf <- st_as_sf(air_1000, as_points = TRUE)
+air_1000_sf
+class(air_1000_sf)
+plot(air_1000_sf, max.plot = 12)
+plot(air_1000_sf[,1])
+# make a data.frame
+lon <- st_coordinates(air_1000_sf)[,1]
+lat <- st_coordinates(air_1000_sf)[,2]
+air <- as.vector((air_1000_sf[,1]$Jan))
+air_1000_df <- data.frame(lon, lat, air)
+length(lon); length(lat); length(air)
+dim(air_1000_df)
+# ggplot2 map of air
+ggplot() +
+geom_tile(data = air_1000_df[,,1], aes(x = lon, y = lat, fill = air)) +
+scale_fill_gradient2(low = "darkblue", mid="white", high = "darkred", midpoint = 273.15) +
+geom_sf(data = world_otl_sf, col = "black", fill = NA) +
+geom_sf(data = grat_otl, col = "gray80", lwd = 0.5, lty = 3) +
+scale_x_continuous(breaks = breaks_x) +
+scale_y_continuous(breaks = breaks_y) +
+coord_sf(xlim = c(-180, +175.0), ylim = c(-90, 90), expand = FALSE) +
+labs(x = "Longitude", y = "Latitude", title="NCEP2 Reanalysis 2m Air Temperature", fill="K") +
+theme_bw()
+# convert SpatRaster to a plain array
+air_1000_sr
+dim(air_1000_sr)
+air_array <- as.array(air_1000_sr)
+class(air_array)
+dim(air_array)
+# unwrap the array to a long vector, stacking the months
+air_1000_vector <- as.vector(air_array)
+class(air_1000_vector)
+length(air_1000_vector)
+head(air_1000_vector)
+tail(air_1000_vector)
+# convert SpatRaster to a plain array
+air_1000_sr
+dim(air_1000_sr)
+air_array <- as.array(air_1000_sr)
+class(air_array)
+dim(air_array)
+# unwrap the array to a long vector, stacking the months
+air_1000_vector <- as.vector(air_array)
+class(air_1000_vector)
+length(air_1000_vector)
+head(air_1000_vector)
+tail(air_1000_vector)
+lon2 <- seq(-180.0, 175.0, by = 2.5)
+lat2 <- seq( 90.0,  -90.0, by = -2.5) # reverse the order
+length(lon2); length(lat2)
+lonlat <- (as.matrix(expand.grid(lat2, lon2)))
+length(lonlat)
+dim(lonlat)
+month <- c(rep("Jan", nt), rep("Feb", nt), rep("Mar", nt), rep("Apr", nt), rep("May", nt), rep("Jun", nt),
+rep("Jul", nt), rep("Aug", nt), rep("Sep", nt), rep("Oct", nt), rep("Nov", nt), rep("Dec", nt))
+length(month)
+head(month)
+month <- c(rep("Jan", nt), rep("Feb", nt), rep("Mar", nt), rep("Apr", nt), rep("May", nt), rep("Jun", nt),
+rep("Jul", nt), rep("Aug", nt), rep("Sep", nt), rep("Oct", nt), rep("Nov", nt), rep("Dec", nt))
+length(month)
+head(month); tail(month)
+# make the second data.frame
+air_1000_df2 <- data.frame(lonlat[,2], lonlat[,1], air_1000_vector, month)
+# generate a "long" vector of lons and lats
+lon2 <- seq(-180.0, 175.0, by = 2.5)
+lat2 <- seq( 90.0,  -90.0, by = -2.5) # reverse the order
+length(lon2); length(lat2)
+lonlat <- (as.matrix(expand.grid(lat2, lon2)))
+dim(lonlat)
+nt <- dim(air_array)[1] * dim(air_array)[2]
+nt
+nt <- dim(air_array)[1] * dim(air_array)[2]
+nt
+nt <- dim(air_array)[1] * dim(air_array)[2]
+nt
+# generate a "long" vector of lons and lats
+lon2 <- seq(-180.0, 175.0, by = 2.5)
+lat2 <- seq( 90.0,  -90.0, by = -2.5) # reverse the order
+length(lon2); length(lat2)
+lonlat <- (as.matrix(expand.grid(lat2, lon2)))
+dim(lonlat)
+# month names
+month <- c(rep("Jan", nt), rep("Feb", nt), rep("Mar", nt), rep("Apr", nt), rep("May", nt), rep("Jun", nt),
+rep("Jul", nt), rep("Aug", nt), rep("Sep", nt), rep("Oct", nt), rep("Nov", nt), rep("Dec", nt))
+length(month)
+head(month); tail(month)
+# month names
+month <- c(rep("Jan", nt), rep("Feb", nt), rep("Mar", nt), rep("Apr", nt), rep("May", nt), rep("Jun", nt),
+rep("Jul", nt), rep("Aug", nt), rep("Sep", nt), rep("Oct", nt), rep("Nov", nt), rep("Dec", nt))
+length(month)
+head(month); tail(month)
+# make the second data.frame
+air_1000_df2 <- data.frame(lonlat[,2], lonlat[,1], air_1000_vector, month)
+head(air_1000_df2)
+tail(air_1000_df2)
+names(air_1000_df2) <- c("lon", "lat", "air", "month")
+dim(air_1000_df2)
+# ggplot2 map of air
+ggplot() +
+geom_tile(data = air_1000_df2, aes(x = lon, y = lat, fill = air)) +
+geom_sf(data = world_otl_sf, col = "black", fill = NA) +
+geom_sf(data = grat_otl, col = "gray80", lwd = 0.5, lty = 3) +
+coord_sf(xlim = c(-180, +175), ylim = c(-90, 90), expand = FALSE) +
+facet_wrap(~factor(month, levels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")), nrow = 4, ncol = 3) +
+scale_fill_gradient2(low = "darkblue", mid="white", high = "darkred", midpoint = 273.15) +
+# scale_y_continuous(breaks = seq(-90, 90, 90), expand = c(0,0)) +  # removes whitespace within panels
+# scale_x_continuous(breaks = seq(-180, 180, 90), expand = c(0,0)) +
+scale_x_continuous(breaks = breaks_x) +
+scale_y_continuous(breaks = breaks_y) +
+labs(title="NCEP2 Reanalysis 2m Air Temperature", fill="K") +
+theme_bw()
+unlink("sf_stars_sftime_cache", recursive = TRUE)
+# ggplot2 map of air
+ggplot() +
+geom_tile(data = air_1000_df2, aes(x = lon, y = lat, fill = air)) +
+geom_sf(data = world_otl_sf, col = "black", fill = NA) +
+geom_sf(data = grat_otl, col = "gray80", lwd = 0.5, lty = 3) +
+coord_sf(xlim = c(-180, +175), ylim = c(-90, 90), expand = FALSE) +
+facet_wrap(~factor(month, levels =
+c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")), nrow = 4, ncol = 3) +
+scale_fill_gradient2(low = "darkblue", mid="white", high = "darkred", midpoint = 273.15) +
+# scale_y_continuous(breaks = seq(-90, 90, 90), expand = c(0,0)) +  # removes whitespace within panels
+# scale_x_continuous(breaks = seq(-180, 180, 90), expand = c(0,0)) +
+scale_x_continuous(breaks = breaks_x) +
+scale_y_continuous(breaks = breaks_y) +
+labs(title="NCEP2 Reanalysis 2m Air Temperature", fill="K") +
+theme_bw() + theme(strip.text = element_text(size = 5))
+library(sf)
+library(stars)
+library(sftime)
+library(terra)
+library(tidyverse)
+library(ggplot2)
+library(RColorBrewer)
+csv_path <- "/Users/bartlein/Dropbox/DataVis/working/data/csv_files/"
+csv_file <- "wus_lat_trans.csv"
+wus_char_csv <- read.csv((paste(csv_path, csv_file, sep = "")))
+class(wus_char_csv)
+head(wus_char_csv)
+wus_char_sftime <- st_as_sftime(wus_char_csv, time_column_name = "age", coords = c("lon", "lat"),
+remove = FALSE, time_column_last = FALSE)
+class(wus_char_sftime)
+wus_char_sftime
+plot(wus_char_sftime)
+max(wus_char_sftime$age)
+min(wus_char_sftime$age)
+summary(wus_char_sftime)
+plot(wus_char_sftime$lat ~ wus_char_sftime$age, xlim = c(3200, 0), pch = 16, cex = 0.5)
+# ggplot2 map of wus_char_sftime
+ggplot()  +
+geom_sf(data = wus_sf, fill=NA) +
+geom_sf(data = na2_sf, fill=NA) +
+geom_point(aes(x = wus_char_sftime$lon, y = wus_char_sftime$lat), color = "red") +
+coord_sf(xlim = c(-130, -100), ylim = c(30, 50), expand = FALSE) +
+labs(title="Western U.S. High-Resolution Charcoal Records", x = "Longitude", y = "Latitude") +
+theme_bw() + theme(legend.position="bottom")
+# load data from a saved .RData file
+con <- url("https://pages.uoregon.edu/bartlein/RESS/RData/geog490.RData")
+load(file=con)
+# ggplot2 map of wus_char_sftime
+ggplot()  +
+geom_sf(data = wus_sf, fill=NA) +
+geom_sf(data = na2_sf, fill=NA) +
+geom_point(aes(x = wus_char_sftime$lon, y = wus_char_sftime$lat), color = "red") +
+coord_sf(xlim = c(-130, -100), ylim = c(30, 50), expand = FALSE) +
+labs(title="Western U.S. High-Resolution Charcoal Records", x = "Longitude", y = "Latitude") +
+theme_bw() + theme(legend.position="bottom")
+# ggplot2 Hovmöller plots -- Year x Latitude
+cutpts <- c(-99, -5, -2, -1, -0.5, 0.0, 0.5, 1, 2, 5, 99)
+ztinflux_factor <- factor(findInterval(wus_char_sftime$ztinflux, cutpts))
+ggplot() +
+scale_color_brewer(type = "div", palette = "RdBu", aesthetics = "color", direction = 0,
+labels = c("< -5", "-5 to -2", "-2 to -1", "-1 to -0.5", "-0.5 to 0.0",
+"0.0 to 0.5", "0.5 to 1", "1 to 2", "2 to 5", "> 5"),
+name = "Z-Score") +
+geom_point(aes(x = wus_char_sftime$age, y = wus_char_sftime$lat, color = ztinflux_factor), size = 1) +
+scale_x_continuous(breaks = seq(3200, -100, -500), trans = "reverse") +
+scale_y_continuous(breaks = seq(30, 50, 5)) +
+labs(title="Western U.S. High-Resolution Charcoal Records", y = "Latitude", x = "Age", fill="Z-Scores Charcoal Influx") +
+guides(color = guide_legend(override.aes = list(size=3))) +
+theme_bw() + theme(legend.position="bottom") + theme(aspect.ratio = 2/4)
+unlink("sf_stars_sftime_cache", recursive = TRUE)
+# load data from a saved .RData file
+con <- url("https://pages.uoregon.edu/bartlein/RESS/RData/geog490.RData")
+load(file=con)
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "80%", out.height = "80%")
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+library(sf)
+library(stars)
+library(sftime)
+library(terra)
+library(tidyverse)
+library(ggplot2)
+library(RColorBrewer)
+# world_sf
+shapefile <-
+"/Users/bartlein/Dropbox/DataVis/working/data/shp_files/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp"
+world_sf <- st_read(shapefile)
+# get the just the outline (i.e. the st_geometry)
+world_otl_sf <- st_geometry(world_sf)
+plot(world_otl_sf)
+class(world_otl_sf)
+# ggplot map of world_outline
+ggplot() +
+geom_sf(data = world_otl_sf, fill = NA, col = "black") +
+scale_x_continuous(breaks = seq(-180, 180, 30)) +
+scale_y_continuous(breaks = seq(-90, 90, 30)) +
+coord_sf(xlim = c(-180, +180), ylim = c(-90, 90), expand = FALSE) +
+theme_bw()
+# stars
+nc_file <- "/Users/bartlein/Projects/RESS/data/nc_files/NCEP2_hgt.mon.ltm.1991-2020.nc"
+hgt <- read_ncdf(nc_file, var = "hgt", proxy = FALSE)
+# list some info
+hgt
+dim(hgt)
+# replace time dimension values
+attr(hgt, "dimensions")$time$values <-
+c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+attr(hgt, "dimensions")$time$refsys <- "Name"
+hgt
+plot(hgt)
+plot(slice(hgt, level,  6)) # level = 6 is 500 hPa
+nc_file <- "/Users/bartlein/Projects/RESS/data/nc_files/NCEP2_air.mon.ltm.1991-2020.nc"
+air <- read_ncdf(nc_file, var = "air", proxy = FALSE)
+air
+dim(air)
+# replace time dimension values
+attr(air, "dimensions")$time$values <-
+c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+attr(air, "dimensions")$time$refsys <- "Name"
+air
+plot(air)
+plot(slice(air, level,  1)) # level 1 is 1000 hPa (surface)
+# stars ggplots
+ggplot() +
+geom_stars(data = slice(hgt, level, 6)) +
+geom_sf(data = world_otl_sf, fill = NA) +
+facet_wrap(~ time, nrow = 4, ncol = 3) +
+coord_sf(xlim = c(-180, +180), ylim = c(-90, 90), expand = FALSE) +
+scale_fill_distiller(palette = "PuOr") +
+theme_bw() + theme(strip.text = element_text(size = 6))
+ggplot() +
+geom_stars(data = slice(air, level, 1)) +
+geom_sf(data = world_otl_sf, fill = NA) +
+facet_wrap(~ time, nrow = 4, ncol = 3) +
+coord_sf(xlim = c(-180, +180), ylim = c(-90, 90), expand = FALSE) +
+scale_fill_distiller(palette = "RdBu") +
+theme_bw() + theme(strip.text = element_text(size = 6))
+# get a single slice
+class(air)
+dim(air)
+air_1000 <- slice(air, level,  1)
+class(air_1000)
+air_1000
+dim(air_1000)
+# convert to SpatRaster
+air_1000_sr <- as(air_1000, "SpatRaster")
+class(air_1000_sr)
+air_1000_sr
+# restore spatial extent
+ext(air_1000_sr) <- c(-180, 175, -90, 90)
+panel(air_1000_sr, nc = 3, nr = 4)
+# convert stars to sf
+air_1000_sf <- st_as_sf(air_1000, as_points = TRUE)
+air_1000_sf
+class(air_1000_sf)
+plot(air_1000_sf, max.plot = 12)
+plot(air_1000_sf[,1])
+# make a data.frame
+lon <- st_coordinates(air_1000_sf)[,1]
+lat <- st_coordinates(air_1000_sf)[,2]
+air <- as.vector((air_1000_sf[,1]$Jan))
+air_1000_df <- data.frame(lon, lat, air)
+dim(air_1000_df)
+# axis labels (breaks)
+breaks_x <- c(seq(-180, 180, by = 60))
+breaks_y <- c(seq(-90, 90, by = 30))
+labels_x <- as.character(breaks_x)
+labels_y <- as.character(breaks_y)
+# make a graticule
+grat = st_graticule(air_1000_sf, lon = breaks_x, lat = breaks_y)
+grat
+grat_otl <- st_geometry(grat)
+plot(grat_otl)
+# ggplot2 map of air
+ggplot() +
+geom_tile(data = air_1000_df[,,1], aes(x = lon, y = lat, fill = air)) +
+scale_fill_gradient2(low = "darkblue", mid="white", high = "darkred", midpoint = 273.15) +
+geom_sf(data = world_otl_sf, col = "black", fill = NA) +
+geom_sf(data = grat_otl, col = "gray80", lwd = 0.5, lty = 3) +
+coord_sf(xlim = c(-180, +175.0), ylim = c(-90, 90), expand = FALSE) +
+scale_x_continuous(breaks = breaks_x) +
+scale_y_continuous(breaks = breaks_y) +
+labs(x = "Longitude", y = "Latitude", title="NCEP2 Reanalysis 2m Air Temperature", fill="K") +
+theme_bw()
+# convert SpatRaster to a plain array
+air_1000_sr
+dim(air_1000_sr)
+air_array <- as.array(air_1000_sr)
+class(air_array)
+dim(air_array)
+# unwrap the array to a long vector, stacking the months
+air_1000_vector <- as.vector(air_array)
+class(air_1000_vector)
+length(air_1000_vector)
+head(air_1000_vector)
+tail(air_1000_vector)
+nt <- dim(air_array)[1] * dim(air_array)[2]
+nt
+# generate a "long" vector of lons and lats
+lon2 <- seq(-180.0, 175.0, by = 2.5)
+lat2 <- seq( 90.0,  -90.0, by = -2.5) # reverse the order
+length(lon2); length(lat2)
+lonlat <- (as.matrix(expand.grid(lat2, lon2)))
+dim(lonlat)
+# month names
+month <- c(rep("Jan", nt), rep("Feb", nt), rep("Mar", nt), rep("Apr", nt), rep("May", nt), rep("Jun", nt),
+rep("Jul", nt), rep("Aug", nt), rep("Sep", nt), rep("Oct", nt), rep("Nov", nt), rep("Dec", nt))
+length(month)
+head(month); tail(month)
+# make the second data.frame
+air_1000_df2 <- data.frame(lonlat[,2], lonlat[,1], air_1000_vector, month)
+head(air_1000_df2)
+tail(air_1000_df2)
+names(air_1000_df2) <- c("lon", "lat", "air", "month")
+dim(air_1000_df2)
+# ggplot2 map of air
+ggplot() +
+geom_tile(data = air_1000_df2, aes(x = lon, y = lat, fill = air)) +
+geom_sf(data = world_otl_sf, col = "black", fill = NA) +
+geom_sf(data = grat_otl, col = "gray80", lwd = 0.5, lty = 3) +
+coord_sf(xlim = c(-180, +175), ylim = c(-90, 90), expand = FALSE) +
+facet_wrap(~factor(month, levels =
+c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")), nrow = 4, ncol = 3) +
+scale_fill_gradient2(low = "darkblue", mid="white", high = "darkred", midpoint = 273.15) +
+# scale_y_continuous(breaks = seq(-90, 90, 90), expand = c(0,0)) +  # removes whitespace within panels
+# scale_x_continuous(breaks = seq(-180, 180, 90), expand = c(0,0)) +
+scale_x_continuous(breaks = breaks_x) +
+scale_y_continuous(breaks = breaks_y) +
+labs(title="NCEP2 Reanalysis 2m Air Temperature", fill="K") +
+theme_bw() + theme(strip.text = element_text(size = 5))
+csv_path <- "/Users/bartlein/Dropbox/DataVis/working/data/csv_files/"
+csv_file <- "wus_lat_trans.csv"
+wus_char_csv <- read.csv((paste(csv_path, csv_file, sep = "")))
+class(wus_char_csv)
+head(wus_char_csv)
+wus_char_sftime <- st_as_sftime(wus_char_csv, time_column_name = "age", coords = c("lon", "lat"),
+remove = FALSE, time_column_last = FALSE)
+class(wus_char_sftime)
+wus_char_sftime
+plot(wus_char_sftime$lat ~ wus_char_sftime$age, xlim = c(3200, 0), pch = 16, cex = 0.5)
+# ggplot2 map of wus_char_sftime
+ggplot()  +
+geom_sf(data = wus_sf, fill=NA) +
+geom_sf(data = na2_sf, fill=NA) +
+geom_point(aes(x = wus_char_sftime$lon, y = wus_char_sftime$lat), color = "red") +
+coord_sf(xlim = c(-130, -100), ylim = c(30, 50), expand = FALSE) +
+labs(title="Western U.S. High-Resolution Charcoal Records", x = "Longitude", y = "Latitude") +
+theme_bw() + theme(legend.position="bottom")
+# ggplot2 Hovmöller plots -- Year x Latitude
+cutpts <- c(-99, -5, -2, -1, -0.5, 0.0, 0.5, 1, 2, 5, 99)
+ztinflux_factor <- factor(findInterval(wus_char_sftime$ztinflux, cutpts))
+ggplot() +
+scale_color_brewer(type = "div", palette = "RdBu", aesthetics = "color", direction = 0,
+labels = c("< -5", "-5 to -2", "-2 to -1", "-1 to -0.5", "-0.5 to 0.0",
+"0.0 to 0.5", "0.5 to 1", "1 to 2", "2 to 5", "> 5"),
+name = "Z-Score") +
+geom_point(aes(x = wus_char_sftime$age, y = wus_char_sftime$lat, color = ztinflux_factor), size = 1) +
+scale_x_continuous(breaks = seq(3200, -100, -500), trans = "reverse") +
+scale_y_continuous(breaks = seq(30, 50, 5)) +
+labs(title="Western U.S. High-Resolution Charcoal Records", y = "Latitude", x = "Age", fill="Z-Scores Charcoal Influx") +
+guides(color = guide_legend(override.aes = list(size=3))) +
+theme_bw() + theme(legend.position="bottom") + theme(aspect.ratio = 2/4)
+unlink("sf_stars_sftime_cache", recursive = TRUE)
+plot(wus_sf)
+plot(ua2_sf)
+plot(na2_sf)
+unlink("sf_stars_sftime_cache", recursive = TRUE)
+install.packages(c("data.table", "DBI", "digest", "glue", "MASS", "Matrix", "patchwork", "ps", "Rcpp", "readr", "reprex", "rlang", "sp", "terra", "tidyr", "timechange", "uuid", "withr"))
+# ggplot2 versions of plots
+library(ggplot2)
+plot(Length)
+# index plot
+attach(sumcr)
+plot(Length)
+head(sumcr)
+# ggplot version
+ggplot() +
+geom_point(data = sumcr, aes(x = 1:nrow(sumcr), y = Length)) +
+geom_line(aes(x = 1:nrow(sumcr), y = Length)) +
+labs(title="Summit Cr.", x = "Observation", y = "Length (m)") +
+theme_bw()
+# ggplot version
+ggplot() #+
+1:nrow(sumcr)
+ggplot() +
+geom_point(data = sumcr, aes(x = 1:nrow(sumcr), y = Length))
+ggplot() +
+geom_point(data = sumcr, aes(x = 1:nrow(sumcr), y = Length)) +
+geom_line(aes(x = 1:nrow(sumcr), y = Length))
+ggplot() +
+geom_point(data = sumcr, aes(x = 1:nrow(sumcr), y = Length)) +
+geom_line(aes(x = 1:nrow(sumcr), y = Length)) +
+labs(title="Summit Cr.", x = "Observation", y = "Length (m)")
+ggplot() +
+geom_point(data = sumcr, aes(x = 1:nrow(sumcr), y = Length)) +
+geom_line(aes(x = 1:nrow(sumcr), y = Length)) +
+labs(title="Summit Cr.", x = "Observation", y = "Length (m)") +
+theme_bw()
+# ggplot version
+ggplot() +
+# ggplot stripchart
+ggplot(data=sumcr, aes(x = Length)) +
+geom_dotplot(binwidth = 0.25, method = "histodot") +
+coord_fixed(ratio = 4.0)
+# ggplot version
+ggplot() +
+# geom_point(data = sumcr, aes(x = 1:nrow(sumcr), y = Length)) +
+# geom_line(aes(x = 1:nrow(sumcr), y = Length)) +
+# labs(title="Summit Cr.", x = "Observation", y = "Length (m)") +
+# theme_bw()
+# ggplot stripchart
+ggplot(data=sumcr, aes(x = Length)) +
+geom_dotplot(binwidth = 0.25, method = "histodot") +
+coord_fixed(ratio = 1.0)
+# ggplot version
+ggplot() +
+# geom_point(data = sumcr, aes(x = 1:nrow(sumcr), y = Length)) +
+# geom_line(aes(x = 1:nrow(sumcr), y = Length)) +
+# labs(title="Summit Cr.", x = "Observation", y = "Length (m)") +
+# theme_bw()
+# ggplot stripchart
+ggplot(data=sumcr, aes(x = Length)) +
+geom_dotplot(binwidth = 0.25, method = "histodot")
+4
+# ggplot version
+ggplot() +
+# geom_point(data = sumcr, aes(x = 1:nrow(sumcr), y = Length)) +
+# geom_line(aes(x = 1:nrow(sumcr), y = Length)) +
+# labs(title="Summit Cr.", x = "Observation", y = "Length (m)") +
+# theme_bw()
+# ggplot stripchart
+ggplot(data=sumcr, aes(x = Length)) +
+geom_dotplot(binwidth = 0.25, method = "histodot") +
+coord_fixed(ratio = 4.0)
+# ggplot stripchart
+ggplot(data=sumcr, aes(x = Length)) +
+geom_dotplot(binwidth = 0.25, method = "histodot") +
+coord_fixed(ratio = 4.0)
+# ggplot version
+ggplot() +
+# geom_point(data = sumcr, aes(x = 1:nrow(sumcr), y = Length)) +
+# geom_line(aes(x = 1:nrow(sumcr), y = Length)) +
+# labs(title="Summit Cr.", x = "Observation", y = "Length (m)") +
+# theme_bw()
+# ggplot stripchart
+ggplot(data=sumcr, aes(x = Length)) +
+geom_dotplot(binwidth = 0.25, method = "histodot") +
+coord_fixed(ratio = 1.0)
+attach(specmap)
+hist(specmap$O18, breaks=20)
+hist(specmap$O18, breaks=40)

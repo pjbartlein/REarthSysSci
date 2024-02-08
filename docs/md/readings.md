@@ -6,8 +6,6 @@ Pebesma, E. and R. Bivand, 2023, *Spatial Data Science with Applications in R* (
 
 Hijmans, R., 2016, *Spatial Data Analysis and Modeling with R* [[http://rspatial.org]](http://rspatial.org) 
 
-Lovelace, R., J. Novosad, and J. Muenchow, 2024, *Geocomputation with R* [[https://r.geocompx.org/]](https://r.geocompx.org/)
-
 Davis, J., 2024, *Introduction to Environmental Data Science* [[https://bookdown.org/igisc/EnvDataSci/]]
 (https://bookdown.org/igisc/EnvDataSci/)
 
@@ -38,9 +36,11 @@ Simple features (`sf`) web site [[https://r-spatial.github.io/sf/index.html]](ht
 
 Stars project (`stars`) web site [[http://r-spatial.org/]](http://r-spatial.org/)
 
+Lovelace, R., J. Nowosad, and J. Muenchow, 2021, *Geocomputation with R* [[https://bookdown.org/robinlovelace/geocompr/]](https://bookdown.org/robinlovelace/geocompr/)
+
 # RMarkdown guides #
 
-Xie, Y., J.J.Allaire, G. Grolemund, 2023, *R Markdown: The Definitive Guide* (CRC Press) [[https://bookdown.org/yihui/rmarkdown/]](https://bookdown.org/yihui/rmarkdown/)
+Xie, Y., J.J.Allaire, G. Grolemund, 2023, *R Markdown: The Definitive Guide* (CRC Press) [[https://bookdown.org/yihui/rmarkdown/]](https://bookdown.org/yihui/rmarkdown/)(https://bookdown.org/yihui/rmarkdown/)
 
 Xie, Y., C. Devieux, and E. Riederer, 2023, *R Markdown Cookbook* (CRC Press) [[https://bookdown.org/yihui/rmarkdown-cookbook/]](https://bookdown.org/yihui/rmarkdown-cookbook/)
 
