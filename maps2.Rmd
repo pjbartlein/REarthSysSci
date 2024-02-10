@@ -263,11 +263,12 @@ st_write(outshape, outshapefile, driver = "ESRI Shapefile", append = FALSE)
 ```
 [[Back to top]](Rmaps2.html)
 
+
 # Map of North American shaded relief #
 
-## Read the projected and trimmed shapefiles ##
+## PlotØ the projected and trimmed shapefiles ##
 
-Plot the projected and trimmed shapefiles: 
+If necessary (i.e. if starting here), read the projected shapefiles: 
 
 ```{r maps2-20, cache=TRUE}
 # plot the basemap (note different order than before)
@@ -342,5 +343,210 @@ dev.off()
 
 The resulting plot will look like this:  
 ![](images/na_shade01b.png)
+
+[[Back to top]](Rmaps2.html)
+
+# Mapping the western U.S. precipitation-ratio data #
+
+A final example describes mapping the western U.S. precipitation data via the `{ggplot2}` package, as seen in the [[Using R: Examples]](https://pjbartlein.github.io/REarthSysSci/usingR.html#ggplot2-maps). Here, the basemap will be extracted from the `{maps}` package (and later compared with the Natural Earth shapefiles basemap versions).
+
+## Get and project basemap outlies ##
+
+Get oulines for the western states. the `map()` function retrieves the outlines from the `maps()` package database, and `st_as_sf()`, converts those to and (unprojected) MULTIPOLYGONS `sf` object:
+
+```{r}
+library(maps)
+
+# get outlines of western states from {maps} package
+wus_sf <- st_as_sf(map("state", regions=c("washington", "oregon", "california", "idaho", "nevada",
+    "montana", "utah", "arizona", "wyoming", "colorado", "new mexico", "north dakota", "south dakota",
+    "nebraska", "kansas", "oklahoma", "texas"), plot = FALSE, fill = TRUE))
+head(wus_sf); tail(wus_sf)
+class(wus_sf)
+plot(wus_sf)
+```
+
+Here's a quick `ggplot2` map of the outlines:
+
+```{r}
+ggplot() + geom_sf(data = wus_sf) + theme_bw()
+```
+
+Project the outlines and a graticule (extracted from the `wus_sf` object using `st_graticule()`):
+
+```{r}
+# projection
+laea = st_crs("+proj=laea +lat_0=30 +lon_0=-110") # Lambert Azimuthal Equal Area
+wus_sf_proj = st_transform(wus_sf, laea)
+plot(st_geometry(wus_sf_proj), axes = TRUE)
+plot(st_geometry(st_graticule(wus_sf_proj)), axes = TRUE, add = TRUE)
+```
+
+Note the coordinates are now in meters.
+
+Here's a `ggplot2` version:
+
+```{r}
+ggplot() + geom_sf(data = wus_sf_proj) + theme_bw()
+```
+
+Get two other outlines from the `maps` database, one for all of North America, and the other for the U.S."
+
+```{r}
+# get two other outlines
+na_sf <- st_as_sf(map("world", regions=c("usa", "canada", "mexico"), plot = FALSE, fill = TRUE))
+conus_sf <- st_as_sf(map("state", plot = FALSE, fill = TRUE))
+```
+
+Because `sf` objects are basically dataframes, they can be manipulated using some of the common R functions, like `rbind` (row bind). Combine the `na_sf` and `conus_sf` objects, and plot them out:
+
+```{r}
+# na2_df merged sf's
+na2_sf <- rbind(na_sf, conus_sf)
+head(na2_sf)
+plot(st_geometry(na2_sf))
+```
+
+Note that the map is slightly strange--the Aleutians cross the dateline (180W), so the map wraps around.
+
+```{r}
+# plot again, with longitude limited
+plot(st_geometry(na2_sf), xlim = c(-180, -40))
+```
+
+Project the additional outlines:
+
+```{r}
+# project the other outlines
+na_sf_proj = st_transform(na_sf, laea)
+conus_sf_proj = st_transform(conus_sf, laea)
+na2_sf_proj = st_transform(na2_sf, laea)
+```
+
+```{r}
+# plot everthing so far
+plot(st_geometry(na_sf_proj), col = "red", axes = TRUE)
+plot(st_geometry(wus_sf_proj), axes = TRUE, add = TRUE)
+plot(st_geometry(st_graticule(wus_sf_proj)), add = TRUE)
+```
+
+## Get and project the *pratio* data ##
+
+```{r}
+# pratios
+csv_path <- "/Users/bartlein/Projects/RESS/data/csv_files/"
+csv_file <- "wus_pratio.csv"
+wus_pratio <- read.csv(paste(csv_path, csv_file, sep = ""))
+```
+
+Make an `sf` object:
+
+```{r}
+# make an sf object
+wus_pratio_sf <- st_as_sf(wus_pratio, coords = c("lon", "lat"))
+plot(st_geometry(wus_pratio_sf), pch=16, cex = 0.5)
+```
+
+Recode the the `pjulpann` ratio to a factor:
+
+```{r}
+# recode pjulpjan to a factor
+library(classInt)
+wus_pratio$pjulpjan <- wus_pratio$pjulpann/wus_pratio$pjanpann  # pann values cancel out
+cutpts <- c(0.0, .100, .200, .500, .800, 1.0, 1.25, 2.0, 5.0, 10.0, 9999.0)
+pjulpjan_factor <- factor(findInterval(wus_pratio$pjulpjan, cutpts))
+head(cbind(wus_pratio$pjulpjan, pjulpjan_factor, cutpts[pjulpjan_factor]))
+```
+
+Here's an (unprojected) map of the precipitation ratio:
+
+```{r}
+## ggplot2 map of pjulpjan
+ggplot() +
+  geom_sf(data = wus_sf, fill=NA) +
+  scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
+                    labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
+                                "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
+                    name = "Jul:Jan Ppt. Ratio") +
+  labs(title = "Precipitation Seasonality", x = "Longitude", y = "Latitude") +
+  geom_point(aes(wus_pratio$lon, wus_pratio$lat, color = pjulpjan_factor), size = 1.5 ) +
+  theme_bw()
+```
+
+Project the precipitation ratio point
+
+```{r}
+# projection
+st_crs(wus_pratio_sf) <- st_crs("+proj=longlat")
+laea = st_crs("+proj=laea +lat_0=30 +lon_0=-110") # Lambert equal area
+wus_pratio_sf_proj = st_transform(wus_pratio_sf, laea)
+```
+
+Plot the projected points:
+
+```{r}
+# plot the projected points
+plot(st_geometry(wus_pratio_sf_proj), pch=16, cex=0.5, axes = TRUE)
+plot(st_geometry(st_graticule(wus_pratio_sf_proj)), axes = TRUE, add = TRUE)
+```
+Plot everything
+
+```{r}
+# ggplot2 map of pjulpman projected
+ggplot() +
+  geom_sf(data = na2_sf_proj, fill=NA, color="gray") +
+  geom_sf(data = wus_sf_proj, fill=NA) +
+  geom_sf(data = wus_pratio_sf_proj, aes(color = pjulpjan_factor), size = 1.0 ) +
+  scale_color_brewer(type = "div", palette = "PRGn", aesthetics = "color", direction = 1,
+              labels = c("0.0 - 0.1", "0.1 - 0.2", "0.2 - 0.5", "0.5 - 0.8", "0.8 - 1.0",
+                        "1.0 - 1.25", "1.25 - 2.0", "2.0 - 5.0", "5.0 - 10.0", "> 10.0"),
+              name = "Jul:Jan Ppt. Ratio") +
+              labs(x = "Longitude", y = "Latitude") +
+  guides(color = guide_legend(override.aes = list(size = 3))) +
+  coord_sf(crs = st_crs(wus_sf_proj), xlim = c(-1400000, 1500000), ylim = c(-400000, 2150000)) +
+  labs(title = "Precipitation Seasonality", x = "Longitude", y = "Latitude") +
+  theme_bw()
+```
+
+The `guides()` function expands the size (diameter) of the legend key (`size = 3`) leaving the points at their original size.
+
+# Compare shapefiles
+
+While we have two differnet sources of shapefiles in the environment (if all of the code chunks have been run), it would be useful to compare them. Copy the following code into a script window. Then run the script a line at a time. The first line will just set up a plotting region. Then the next three lines will plot in turn the Natural Earth outlines of the coastlines and the U.S. and Canada. Note that the outlines overlay one another *exactly* (there's no black visible). Then run the next two lines, one at a time to plot `{maps}` package outlines. Notice what happens along the coast, and in particular around Vancouver Is. and the Puget Sound. The fact that the Natural Earth outlines are still visible, as are the separate `{maps}` package outlines implies that the various shape files are not coregisterd.
+
+```{r echo =TRUE, eval=FALSE}
+# outlines 
+# from the Natural Earth shapefile collection
+plot(NULL, NULL, xlim = c(-130.0, -110), ylim = c(40.0, 50.0), 
+     xlab = "Longitude", ylab = "Latitude")
+plot(st_geometry(coast_lines_sf), border = "black", add = TRUE)
+plot(st_geometry(can_poly_sf), border = "purple", add = TRUE)
+plot(st_geometry(us_poly_sf), border = "magenta", add = TRUE)
+
+# from the maps package
+plot(st_geometry(na_sf), border = "red", add = TRUE)
+plot(st_geometry(wus_sf), border = "blue", add = TRUE)
+```
+
+![](images/outlines.png)
+Do the same thing for the following code, which plots the vertices along the MULTILINESTRINGS. 
+
+```{r echo = TRUE, eval = FALSE}
+# verticies (points) 
+# from the Natural Earth shapefile collection
+plot(NULL, NULL, xlim = c(-130.0, -110), ylim = c(40.0, 50.0), 
+     xlab = "Longitude", ylab = "Latitude")
+points(st_coordinates(coast_lines_sf), col = "black", pch = 16, cex = 0.4)
+points(st_coordinates(can_poly_sf), col = "purple", pch = 16, cex = 0.5)
+points(st_coordinates(us_poly_sf), col = "magenta", pch = 16, cex = 0.5)
+
+# from the maps package
+points(st_coordinates(na_sf), col = "red", pch = 16, cex = 0.5)
+points(st_coordinates(wus_sf), col = "blue", pch = 16, cex = 0.5)
+```
+
+![](images/points.png)
+
+Ugh!
 
 [[Back to top]](Rmaps2.html)
