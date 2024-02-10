@@ -36,7 +36,7 @@ library(classInt)
 
 Set the shapefile names, including those for global coastlines, adminstrative units (borders).  (Note that these are smaller-spatial/larger-cartrographic resolution shapefiles, more appropriate for continental-scale as opposed to global-scale mapping.)  Set the filenames:
 
-```{r maps2-3}
+```{r maps2-3 }
 # read Natural Earth shapefiles
 shape_path <- "/Users/bartlein/Projects/RESS/data/RMaps/source/"
 coast_shapefile <- paste(shape_path, "ne_10m_coastline/ne_10m_coastline.shp", sep="")
@@ -49,7 +49,7 @@ grat15_shapefile <- paste(shape_path, "ne_10m_graticules_all/ne_10m_graticules_1
 
 As before, query geometry types to compose object names:
 
-```{r maps2-4}
+```{r maps2-4 }
 # query geometry type
 coast_geometry <- as.character(st_geometry_type(st_read(coast_shapefile), by_geometry = FALSE))
 coast_geometry
@@ -144,7 +144,7 @@ na10km_bb <- st_as_sfc(na10km_bb)
 
 Clip or trim the coastlines to the `na10km_bb` boundary-box object, using the `st_intersection()` function:
 
-```{r maps2-13}
+```{r maps2-13 }
 # clip the projected objects to the na10km_bb
 na10km_coast_lines_proj <- st_intersection(coast_lines_proj, na10km_bb)
 plot(st_geometry(na10km_coast_lines_proj))
@@ -187,7 +187,7 @@ Next, write out the projected shapefiles, first setting the output path.
 outpath <- "/Users/bartlein/Projects/RESS/data/RMaps/derived/na10km_10m/"
 ```
 
-```{r maps2-17}
+```{r maps2-17 }
 # coast lines 
 outshape <- na10km_coast_lines_proj
 outfile <- "na10km_10m_coast_lines/"
@@ -354,7 +354,7 @@ A final example describes mapping the western U.S. precipitation data via the `{
 
 Get oulines for the western states. the `map()` function retrieves the outlines from the `maps()` package database, and `st_as_sf()`, converts those to and (unprojected) MULTIPOLYGONS `sf` object:
 
-```{r}
+```{r maps2-26}
 library(maps)
 
 # get outlines of western states from {maps} package
@@ -368,13 +368,13 @@ plot(wus_sf)
 
 Here's a quick `ggplot2` map of the outlines:
 
-```{r}
+```{r maps2-27}
 ggplot() + geom_sf(data = wus_sf) + theme_bw()
 ```
 
 Project the outlines and a graticule (extracted from the `wus_sf` object using `st_graticule()`):
 
-```{r}
+```{r maps2-28}
 # projection
 laea = st_crs("+proj=laea +lat_0=30 +lon_0=-110") # Lambert Azimuthal Equal Area
 wus_sf_proj = st_transform(wus_sf, laea)
@@ -386,13 +386,13 @@ Note the coordinates are now in meters.
 
 Here's a `ggplot2` version:
 
-```{r}
+```{r maps2-29}
 ggplot() + geom_sf(data = wus_sf_proj) + theme_bw()
 ```
 
 Get two other outlines from the `maps` database, one for all of North America, and the other for the U.S."
 
-```{r}
+```{r maps2-30}
 # get two other outlines
 na_sf <- st_as_sf(map("world", regions=c("usa", "canada", "mexico"), plot = FALSE, fill = TRUE))
 conus_sf <- st_as_sf(map("state", plot = FALSE, fill = TRUE))
@@ -400,7 +400,7 @@ conus_sf <- st_as_sf(map("state", plot = FALSE, fill = TRUE))
 
 Because `sf` objects are basically dataframes, they can be manipulated using some of the common R functions, like `rbind` (row bind). Combine the `na_sf` and `conus_sf` objects, and plot them out:
 
-```{r}
+```{r maps2-31}
 # na2_df merged sf's
 na2_sf <- rbind(na_sf, conus_sf)
 head(na2_sf)
@@ -409,21 +409,21 @@ plot(st_geometry(na2_sf))
 
 Note that the map is slightly strange--the Aleutians cross the dateline (180W), so the map wraps around.
 
-```{r}
+```{r maps2-32}
 # plot again, with longitude limited
 plot(st_geometry(na2_sf), xlim = c(-180, -40))
 ```
 
 Project the additional outlines:
 
-```{r}
+```{r maps2-33}
 # project the other outlines
 na_sf_proj = st_transform(na_sf, laea)
 conus_sf_proj = st_transform(conus_sf, laea)
 na2_sf_proj = st_transform(na2_sf, laea)
 ```
 
-```{r}
+```{r maps2-34}
 # plot everthing so far
 plot(st_geometry(na_sf_proj), col = "red", axes = TRUE)
 plot(st_geometry(wus_sf_proj), axes = TRUE, add = TRUE)
@@ -432,7 +432,7 @@ plot(st_geometry(st_graticule(wus_sf_proj)), add = TRUE)
 
 ## Get and project the *pratio* data ##
 
-```{r}
+```{r maps2-35}
 # pratios
 csv_path <- "/Users/bartlein/Projects/RESS/data/csv_files/"
 csv_file <- "wus_pratio.csv"
@@ -441,7 +441,7 @@ wus_pratio <- read.csv(paste(csv_path, csv_file, sep = ""))
 
 Make an `sf` object:
 
-```{r}
+```{r maps2-36}
 # make an sf object
 wus_pratio_sf <- st_as_sf(wus_pratio, coords = c("lon", "lat"))
 plot(st_geometry(wus_pratio_sf), pch=16, cex = 0.5)
@@ -449,7 +449,7 @@ plot(st_geometry(wus_pratio_sf), pch=16, cex = 0.5)
 
 Recode the the `pjulpann` ratio to a factor:
 
-```{r}
+```{r maps2-37}
 # recode pjulpjan to a factor
 library(classInt)
 wus_pratio$pjulpjan <- wus_pratio$pjulpann/wus_pratio$pjanpann  # pann values cancel out
@@ -460,7 +460,7 @@ head(cbind(wus_pratio$pjulpjan, pjulpjan_factor, cutpts[pjulpjan_factor]))
 
 Here's an (unprojected) map of the precipitation ratio:
 
-```{r}
+```{r maps2-38}
 ## ggplot2 map of pjulpjan
 ggplot() +
   geom_sf(data = wus_sf, fill=NA) +
@@ -475,7 +475,7 @@ ggplot() +
 
 Project the precipitation ratio point
 
-```{r}
+```{r maps2-39}
 # projection
 st_crs(wus_pratio_sf) <- st_crs("+proj=longlat")
 laea = st_crs("+proj=laea +lat_0=30 +lon_0=-110") # Lambert equal area
@@ -484,14 +484,14 @@ wus_pratio_sf_proj = st_transform(wus_pratio_sf, laea)
 
 Plot the projected points:
 
-```{r}
+```{r maps2-40}
 # plot the projected points
 plot(st_geometry(wus_pratio_sf_proj), pch=16, cex=0.5, axes = TRUE)
 plot(st_geometry(st_graticule(wus_pratio_sf_proj)), axes = TRUE, add = TRUE)
 ```
 Plot everything
 
-```{r}
+```{r maps2-41}
 # ggplot2 map of pjulpman projected
 ggplot() +
   geom_sf(data = na2_sf_proj, fill=NA, color="gray") +
@@ -514,7 +514,7 @@ The `guides()` function expands the size (diameter) of the legend key (`size = 3
 
 While we have two differnet sources of shapefiles in the environment (if all of the code chunks have been run), it would be useful to compare them. Copy the following code into a script window. Then run the script a line at a time. The first line will just set up a plotting region. Then the next three lines will plot in turn the Natural Earth outlines of the coastlines and the U.S. and Canada. Note that the outlines overlay one another *exactly* (there's no black visible). Then run the next two lines, one at a time to plot `{maps}` package outlines. Notice what happens along the coast, and in particular around Vancouver Is. and the Puget Sound. The fact that the Natural Earth outlines are still visible, as are the separate `{maps}` package outlines implies that the various shape files are not coregisterd.
 
-```{r echo =TRUE, eval=FALSE}
+```{r maps2-42, echo =TRUE, eval=FALSE}
 # outlines 
 # from the Natural Earth shapefile collection
 plot(NULL, NULL, xlim = c(-130.0, -110), ylim = c(40.0, 50.0), 
@@ -531,7 +531,7 @@ plot(st_geometry(wus_sf), border = "blue", add = TRUE)
 ![](images/outlines.png)
 Do the same thing for the following code, which plots the vertices along the MULTILINESTRINGS. 
 
-```{r echo = TRUE, eval = FALSE}
+```{r maps2-43, echo = TRUE, eval = FALSE}
 # verticies (points) 
 # from the Natural Earth shapefile collection
 plot(NULL, NULL, xlim = c(-130.0, -110), ylim = c(40.0, 50.0), 
