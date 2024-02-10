@@ -270,6 +270,7 @@ ggplot() +
   labs(x = "Longitude", y = "Latitude", title="NCEP2 Reanalysis 2m Air Temperature", fill="K") +
   theme_bw()
 ```
+
 The `geom_tile()` function is an alternative to `geom_point()`, which fills in the spaces between points (plotting the data a tiles as opposed to round symbols). The two `geom_sf()` functions plot the world outline and graticule, and the `coord_sf()` function sets the ranges of the axes.
 
 To make a multipanel map, create a second, long, data.frame, stacking the individual blocks of data for each month, and adding a month-name column. Begin by coverting the `air_1000_sr` `SpatRaster` object to a plain array:
