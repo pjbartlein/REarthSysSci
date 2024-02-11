@@ -48,6 +48,10 @@ navbar:
       href: sf_stars_sftime.html
     - text: "HDF in R"
       href: hdf5_intro.html
+    - text: "Long-term means and anomalies"
+      href: anomalies.html
+    - text: "Time-series plots"
+      href: tsplots.html
     
   - text: Tasks 
     menu:

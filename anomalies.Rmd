@@ -9,32 +9,37 @@ output:
     collapsed: no
 ---
 
-```{r set-options_all, echo=FALSE}
+```{r anomalies-1, echo=FALSE}
 options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE, out.width = "75%", out.height = "75%")
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, cache.lazy = FALSE, out.width = "80%", out.height = "80%", verbose=TRUE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2024, but may undergo further edits.</span></p>
+
 
 # Calculate long-term means and anomalies #
 
-A common task in analyzing Earth-system science data is the calculation of "anomalies" or differences between individual months or years and some long-term average.  This produces two new data sets:  1) the long-term means ("ltm's") and 2) the anomalies ("anm's").  The example here gets the long-term means and anomlies for the CRU TS 4.02 near-surface air temperature data set `cru_ts4.02.1901.2017.tmp.dat.nc`.  The data include monthly values for the interval 1901 - 2017, and the long-term means will be calculated for one of the commonly used base periods, 1961 - 1990.
+A common task in analyzing Earth-system science data is the calculation of "anomalies" or differences between individual months or years and some long-term average.  This will produce two new data sets:  1) the long-term means ("ltm") and 2) the anomalies ("anm").  The example here gets the long-term means and anomlies for the CRU TS 4.07 near-surface air temperature data set `cru_ts4.07.1901.2022.tmp.dat`.  The data include monthly values for the interval 1901 - 2022, and the long-term means will be calculated for one of the commonly used base periods, 1961 - 1990.
 
 # Read the data #
 
 Load the necessary packages, and set paths and filenames:
 
-```{r}
+```{r anomalies-2, messages=FALSE, results="hide"}
 # load the ncdf4 package
 library(ncdf4)
-library(ncdf.tools)
+library(CFtime)
 library(lattice)
+library(sf)
+library(ggplot2)
 library(RColorBrewer)
-#library(chron)
+```
 
+```{r anomalies-3 }
 # set path and filename
-ncpath <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
-ncname <- "cru_ts4.02.1901.2017.tmp.dat.nc"  
+ncpath <- "/Users/bartlein/Dropbox/DataVis/working/data/nc_files/"
+ncname <- "cru_ts4.07.1901.2022.tmp.dat.nc"  
 ncfname <- paste(ncpath, ncname, sep="")
 dname <- "tmp"  # note: tmp means temperature (not temporary)
 ```
@@ -43,13 +48,14 @@ dname <- "tmp"  # note: tmp means temperature (not temporary)
 
 Open the netCDF file (and list its contents), and read longitudes, latitudes and times:
 
-```{r}
+```{r anomalies-4 }
 # open a netCDF file
 ncin <- nc_open(ncfname)
 print(ncin)
 ```
+Read latitude, longituide and time:
 
-```{r}
+```{r anomalies-5, cache = TRUE}
 # get longitude and latitude
 lon <- ncvar_get(ncin,"lon")
 nlon <- dim(lon)
@@ -66,32 +72,26 @@ nt <- dim(time)
 
 nm <- 12
 ny <- nt/nm
-
-# convert time -- split the time units string into fields
-print(tunits)
-tustr <- strsplit(tunits$value, " ")
-ptime <- convertDateNcdf2R(time, unlist(tustr)[1], origin = as.POSIXct(unlist(tustr)[3], 
-            tz = "UTC"), time.format = "%Y-%m-%d")
-head(time); tail(time)
-head(ptime); tail(ptime)
 ```
 
-Get the years from `ptime` and also generate a sequence of index values for months.
+Decode the time variable (but don't overwrite anything):
 
-```{r}
-# get years from ptime & generate months
-year <- as.numeric(unlist(strsplit(as.character(ptime),"-"))[seq(1, nt*3, by=3)])
-head(year); tail(year)
-month <- rep(seq(1:12), ny)
-head(month); tail(month)
-head(ptime); tail(ptime)
+```{r anomalies-6 }
+# decode time
+cf <- CFtime(tunits$value, calendar = "proleptic_gregorian", time) # convert time to CFtime class
+timestamps <- CFtimestamp(cf) # get character-string times
+time_cf <- CFparse(cf, timestamps) # parse the string into date components
+# list a few values
+head(time_cf)
 ```
+
+Note that the `day` variable value is 16, the middle day of each month.
 
 ## Read the array ##
 
 Read the data, and get variable and global attributes:
 
-```{r}
+```{r anomalies-7, cache = FALSE}
 # get temperature
 tmp_array <- ncvar_get(ncin,dname)
 dlname <- ncatt_get(ncin,dname,"long_name")
@@ -106,12 +106,11 @@ datasource <- ncatt_get(ncin,0,"source")
 references <- ncatt_get(ncin,0,"references")
 history <- ncatt_get(ncin,0,"history")
 Conventions <- ncatt_get(ncin,0,"Conventions")
-head(ptime); tail(ptime)
 ```
 
 Close the netCDF data set.
 
-```{r}
+```{r anomalies-8 }
 # close the netCDF file
 nc_close(ncin)
 ```
@@ -122,17 +121,16 @@ nc_close(ncin)
 
 Replace netCDF fill values with R NA's
 
-```{r}
+```{r anomalies-9, cache = FALSE}
 # replace netCDF fill values with NA's
 tmp_array[tmp_array==fillvalue$value] <- NA
 length(na.omit(as.vector(tmp_array[,,1])))
 ```
+Get a single slice of the array, say, December 2022 (n = 1464), and make a quick levelplot.
 
-Get a levelplot of a slice of the array to check.
-
-```{r}
+```{r anomalies-10 }
 # levelplot of the slice
-n <- 1
+n <- 1464
 grid <- expand.grid(lon=lon, lat=lat)
 cutpts <- c(-50,-40,-30,-20,-10,0,10,20,30,40,50)
 levelplot(tmp_array[,, n] ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T, 
@@ -140,18 +138,18 @@ levelplot(tmp_array[,, n] ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T,
 ```
 
 Get the indices for the beginning and end of the base period, and save them as a string.
-```{r}
+```{r anomalies-11 }
 # get beginning obs of base period
 begyr <- 1961; endyr <- 1990; nyrs <- endyr - begyr + 1
-begobs <- ((begyr - year[1]) * nm) + 1
-endobs <- ((endyr - year[1] + 1) * nm)
+begobs <- ((begyr - time_cf$year[1]) * nm) + 1
+endobs <- ((endyr - time_cf$year[1] + 1) * nm)
 base_period <- paste(as.character(begyr)," - ", as.character(endyr), sep="")
 print(c(begyr, endyr, begobs, endobs, base_period))
 ```
 
 Get a levelplot of the first observation in the base period.
 
-```{r}
+```{r anomalies-12 }
 # levelplot of begobs
 tmp_slice <- tmp_array[,, begobs]
 grid <- expand.grid(lon=lon, lat=lat)
@@ -161,16 +159,16 @@ levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T,
 ```
 
 Create a new array with just the base period data in it.
-```{r}
+```{r anomalies-13 }
 # base-period array
 tmp_array_base <- array(dim = c(nlon, nlat, nyrs * nm))
 dim(tmp_array_base)
 tmp_array_base <- tmp_array[,, begobs:endobs]
 ```
 
-Get a levelplot of that, which should match the previous plot
+Get a levelplot of the first time-slice of that, which should match the previous plot
 
-```{r}
+```{r anomalies-14 }
 # levelplot of tmp_array_base
 tmp_slice <- tmp_array_base[,, 1]
 grid <- expand.grid(lon=lon, lat=lat)
@@ -183,7 +181,7 @@ levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T,
 
 The long-term means are calculated by looping over the grid cells and months.
 
-```{r}
+```{r anomalies-15 }
 # long-term means
 tmp_ltm <- array(NA, dim = c(nlon, nlat, nm))
 dim(tmp_ltm)
@@ -197,9 +195,9 @@ for (j in 1:nlon) {
 }
 ```
 
-Levelplot of the long-term means:
+Levelplot of the January long-term means:
 
-```{r}
+```{r anomalies-16 }
 # levelplot of tmp_ltm
 tmp_slice <- tmp_ltm[,, 1]
 grid <- expand.grid(lon=lon, lat=lat)
@@ -208,20 +206,70 @@ levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T,
           col.regions=(rev(brewer.pal(10,"RdBu"))))
 ```
 
+A `{ggplot2}` multi-panel maps of the long-term means can be made by turning the `tmp_ltm` array into a dataframe as follow:
+
+```{r anomalies-17 }
+# unwrap the array to a long vector, stacking the months
+tmp_ltm_vector <- as.vector(tmp_ltm)
+lonlat <- as.matrix(expand.grid(lon, lat))
+# month names
+np <- dim(tmp_ltm)[1] * dim(tmp_ltm)[2]
+month <- c(rep("Jan", np), rep("Feb", np), rep("Mar", np), rep("Apr", np), rep("May", np), rep("Jun", np),
+  rep("Jul", np), rep("Aug", np), rep("Sep", np), rep("Oct", np), rep("Nov", np), rep("Dec", np))
+# make the dataframe
+tmp_ltm_df <- data.frame(lonlat[,1], lonlat[,2], tmp_ltm_vector, month)
+names(tmp_ltm_df) <- c("lon", "lat", "tmp_ltm", "month")
+```
+
+Get a world outline:
+
+```{r anomalies-18 }
+# world_sf
+world_sf <- st_as_sf(maps::map("world", plot = FALSE, fill = TRUE))
+world_otl_sf <- st_geometry(world_sf)
+```
+
+Make the map.
+
+```{r anomalies-19, cache = TRUE}
+# ggplot2 map of tmp_ltm
+ggplot() + 
+  geom_tile(data = tmp_ltm_df, aes(x = lon, y = lat, fill = tmp_ltm)) +
+  geom_sf(data = world_otl_sf, col = "black", fill = NA) +
+  # geom_sf(data = grat_otl, col = "gray80", lwd = 0.5, lty = 3) +
+  coord_sf(xlim = c(-180, +180), ylim = c(-90, 90), expand = FALSE) +
+  facet_wrap(~factor(month, levels = 
+    c("Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov")), nrow = 4, ncol = 3) +
+  scale_fill_gradient2(low = "darkblue", mid="white", high = "darkred", midpoint = 0.0) +
+  # scale_y_continuous(breaks = seq(-90, 90, 90), expand = c(0,0)) +  # removes whitespace within panels
+  # scale_x_continuous(breaks = seq(-180, 180, 90), expand = c(0,0)) +
+  scale_y_continuous(breaks = seq(-90, 90, 30)) +
+  scale_x_continuous(breaks = seq(-180, 180, 60)) +
+  labs(title="CRU TS 4.07 Long-term mean temperature", fill="K") + 
+  theme_bw() + theme(strip.text = element_text(size = 6))
+```
+
+Note the rearrangement of the months ("Dec", ..., "Nov") in the `factor()` function. This places the standard meteorological seasons, DJF (December, January, February), MAM, JJA, SON on each row of the plot.
 
 # Get anomalies #
 
-The anomalies are gotten for each grid point by simply expanding the twelve ltm values (one for each month of the year) over the `ny` year of the record, and differencing.  In this way, the anomaly for each January in the record is the difference between the "absolute" (but not "absolute value" (`abs()`)) or observed value, and the January long-term mean.
+The anomalies are obtaimed for each grid point by simply expanding the twelve ltm values (one for each month of the year) over the `ny` years of the record, and then differencing.  In this way, the anomaly for each January in the record is the difference between the "absolute" (but not "absolute value" (`abs()`)) or observed value, and the January long-term mean.
 
-```{r}
+```{r anomalies-20, eval = FALSE, echo = FALSE}
+library(usethis) 
+usethis::edit_r_environ()
+```
+
+
+```{r anomalies-21 }
 # anomalies
 tmp_anm <- array(NA, dim = c(nlon, nlat, nt))
 tmp_anm <- tmp_array - rep(tmp_ltm, ny)
 ```
 
-Get a levelplot of an anomoly.  Note the different cutpoints.
+Get a levelplot of an anomaly.  Note the different cutpoints.
 
-```{r}
+```{r anomalies-22 }
 # levelplot of tmp_ltm
 tmp_slice <- tmp_anm[,, 1]
 grid <- expand.grid(lon=lon, lat=lat)
@@ -234,12 +282,12 @@ levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T,
 
 Write out netCDF files of the long-term means and anomalies in the usual way.
 
-```{r, echo=TRUE, eval=FALSE}
+```{r anomalies-23, echo=TRUE, eval=FALSE}
 # netCDF file of ltm's
 
 # path and file name, set dname
-ncpath <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
-ncname <- "cru_ts4.02.1961.1990.tmp.ltm.nc"   
+ncpath <- "/Users/bartlein/Projects/RESS/data/nc_files/"
+ncname <- "cru_ts4.07.1961.1990.tmp.ltm.nc"   
 ncfname <- paste(ncpath, ncname, sep="")
 dname <- "tmp_ltm"  # note: tmp means temperature (not temporary)
 
@@ -287,13 +335,13 @@ ncout
 nc_close(ncout)
 ```
 
-```{r, echo=TRUE, eval=FALSE}
+```{r anomalies-24, echo=TRUE, eval=FALSE}
 
 # netCDF file of anomalies
 
 # path and file name, set dname
-ncpath <- "/Users/bartlein/Projects/ESSD/data/nc_files/"
-ncname <- "cru_ts4.02.1901.2017.tmp.anm.nc"   
+ncpath <- "/Users/bartlein/Projects/RESS/data/nc_files/"
+ncname <- "cru_ts4.07.1901.2022.tmp.anm.nc"   
 ncfname <- paste(ncpath, ncname, sep="")
 dname <- "tmp_anm"  # note: tmp means temperature (not temporary)
 
