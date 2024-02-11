@@ -404,6 +404,12 @@ $(document).ready(function () {
     <li>
       <a href="hdf5_intro.html">HDF in R</a>
     </li>
+    <li>
+      <a href="anomalies.html">Long-term means and anomalies</a>
+    </li>
+    <li>
+      <a href="tsplots.html">Time-series plots</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -852,49 +858,73 @@ typing an attribute name at the command line.</p>
 <p>Close the netCDF file using the <code>nc_close()</code> function.</p>
 <p>Check what’s in the current workspace:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">ls</span>()</span></code></pre></div>
-<pre><code>##   [1] &quot;BF&quot;                           &quot;breaks&quot;                       &quot;burn&quot;                        
-##   [4] &quot;carp96t&quot;                      &quot;cirques&quot;                      &quot;class&quot;                       
-##   [7] &quot;col.red&quot;                      &quot;colcode&quot;                      &quot;color_fun&quot;                   
-##  [10] &quot;colornum&quot;                     &quot;con&quot;                          &quot;conus_sf&quot;                    
-##  [13] &quot;Conventions&quot;                  &quot;cygage&quot;                       &quot;cygdepths&quot;                   
-##  [16] &quot;datasource&quot;                   &quot;dlat&quot;                         &quot;dlname&quot;                      
-##  [19] &quot;dlon&quot;                         &quot;dname&quot;                        &quot;dunits&quot;                      
-##  [22] &quot;Elevation&quot;                    &quot;filename&quot;                     &quot;fillvalue&quot;                   
-##  [25] &quot;gfire2&quot;                       &quot;h1&quot;                           &quot;h2&quot;                          
-##  [28] &quot;hdf_file&quot;                     &quot;hdf_name&quot;                     &quot;hdf_path&quot;                    
-##  [31] &quot;history&quot;                      &quot;index&quot;                        &quot;institution&quot;                 
-##  [34] &quot;IPCC_RF&quot;                      &quot;IPCC_RFtrans&quot;                 &quot;iris&quot;                        
-##  [37] &quot;island&quot;                       &quot;lat&quot;                          &quot;lat_array&quot;                   
-##  [40] &quot;latdim&quot;                       &quot;Latitude&quot;                     &quot;layer&quot;                       
-##  [43] &quot;Loc_factor&quot;                   &quot;logtrans&quot;                     &quot;lon&quot;                         
-##  [46] &quot;lon_array&quot;                    &quot;londim&quot;                       &quot;Longitude&quot;                   
-##  [49] &quot;midwotl_sf&quot;                   &quot;midwotl_study_area_sf&quot;        &quot;midwtf2&quot;                     
-##  [52] &quot;na_sf&quot;                        &quot;na2_sf&quot;                       &quot;napol&quot;                       
-##  [55] &quot;nc_fname&quot;                     &quot;nc_name&quot;                      &quot;nc_path&quot;                     
-##  [58] &quot;ncfname&quot;                      &quot;ncin&quot;                         &quot;nclr&quot;                        
-##  [61] &quot;ncname&quot;                       &quot;ncout&quot;                        &quot;ncpath&quot;                      
-##  [64] &quot;ne_110m_admin_0_countries_sf&quot; &quot;nlat&quot;                         &quot;nlon&quot;                        
-##  [67] &quot;nt&quot;                           &quot;O18_density&quot;                  &quot;or_map&quot;                      
-##  [70] &quot;orcounty_sf&quot;                  &quot;orcountyp&quot;                    &quot;orgrid&quot;                      
-##  [73] &quot;orotl_sf&quot;                     &quot;orsim&quot;                        &quot;orstationc&quot;                  
-##  [76] &quot;orstationc2&quot;                  &quot;orstations_sf&quot;                &quot;ortann&quot;                      
-##  [79] &quot;ozone_data&quot;                   &quot;picea_sf&quot;                     &quot;plot.angle&quot;                  
-##  [82] &quot;plot1&quot;                        &quot;plot2&quot;                        &quot;plot3&quot;                       
-##  [85] &quot;plotclr&quot;                      &quot;plotvals&quot;                     &quot;plotvar&quot;                     
-##  [88] &quot;Pollute&quot;                      &quot;references&quot;                   &quot;s3d&quot;                         
-##  [91] &quot;shp_file&quot;                     &quot;sierra&quot;                       &quot;specmap&quot;                     
-##  [94] &quot;streams&quot;                      &quot;sumcr&quot;                        &quot;time&quot;                        
-##  [97] &quot;title&quot;                        &quot;tjan_raster&quot;                  &quot;tmat&quot;                        
-## [100] &quot;tmat_sr&quot;                      &quot;tmp&quot;                          &quot;tmp_array&quot;                   
-## [103] &quot;tmp_raster&quot;                   &quot;tmp.def&quot;                      &quot;tmpin&quot;                       
-## [106] &quot;trecov_pts_sf&quot;                &quot;tstreams&quot;                     &quot;tunits&quot;                      
-## [109] &quot;units&quot;                        &quot;UVI&quot;                          &quot;UVI_in&quot;                      
-## [112] &quot;varname&quot;                      &quot;vegkey&quot;                       &quot;world_otl&quot;                   
-## [115] &quot;world_outline&quot;                &quot;world_sf&quot;                     &quot;wus_alpha&quot;                   
-## [118] &quot;wus_map&quot;                      &quot;wus_pratio&quot;                   &quot;wus_pratio_sf&quot;               
-## [121] &quot;wus_sf&quot;                       &quot;yellpratio&quot;                   &quot;ynp_state_sf&quot;                
-## [124] &quot;ynplk_sf&quot;                     &quot;ynprivers_sf&quot;                 &quot;ynpstate_sf&quot;                 
-## [127] &quot;ypolsqrt&quot;</code></pre>
+<pre><code>##   [1] &quot;admin0_lines_proj&quot;         &quot;admin0_lines_sf&quot;           &quot;admin0_poly_proj&quot;         
+##   [4] &quot;admin0_poly_sf&quot;            &quot;admin0_shapefile&quot;          &quot;admin1_lines_proj&quot;        
+##   [7] &quot;admin1_poly_proj&quot;          &quot;admin1_poly_sf&quot;            &quot;admin1_shapefile&quot;         
+##  [10] &quot;base_period&quot;               &quot;bb_lines_proj&quot;             &quot;bb_poly_proj&quot;             
+##  [13] &quot;bb_poly_sf&quot;                &quot;bb_shapefile&quot;              &quot;begobs&quot;                   
+##  [16] &quot;begyr&quot;                     &quot;BF&quot;                        &quot;breaks&quot;                   
+##  [19] &quot;can_lines_proj&quot;            &quot;can_lines_sf&quot;              &quot;can_poly_proj&quot;            
+##  [22] &quot;can_poly_sf&quot;               &quot;caspian_bb&quot;                &quot;caspian_lines&quot;            
+##  [25] &quot;caspian_poly&quot;              &quot;caspian_poly_proj&quot;         &quot;cf&quot;                       
+##  [28] &quot;clr&quot;                       &quot;coast_geometry&quot;            &quot;coast_lines_proj&quot;         
+##  [31] &quot;coast_lines_sf&quot;            &quot;coast_shapefile&quot;           &quot;colnum&quot;                   
+##  [34] &quot;color_fun&quot;                 &quot;colorfile&quot;                 &quot;conus_sf&quot;                 
+##  [37] &quot;conus_sf_proj&quot;             &quot;Conventions&quot;               &quot;csv_file&quot;                 
+##  [40] &quot;csv_path&quot;                  &quot;csvname&quot;                   &quot;csvpath&quot;                  
+##  [43] &quot;cutpts&quot;                    &quot;datafile&quot;                  &quot;datapath&quot;                 
+##  [46] &quot;datasource&quot;                &quot;dlat&quot;                      &quot;dlname&quot;                   
+##  [49] &quot;dlon&quot;                      &quot;dname&quot;                     &quot;dunits&quot;                   
+##  [52] &quot;endobs&quot;                    &quot;endyr&quot;                     &quot;filename&quot;                 
+##  [55] &quot;fillvalue&quot;                 &quot;gcdv3_csv&quot;                 &quot;gcdv3_pts&quot;                
+##  [58] &quot;gcdv3_pts_proj&quot;            &quot;grat15_lines_proj&quot;         &quot;grat15_lines_sf&quot;          
+##  [61] &quot;grat15_shapefile&quot;          &quot;grat30_lines_proj&quot;         &quot;grat30_lines_sf&quot;          
+##  [64] &quot;grat30_shapefile&quot;          &quot;grid&quot;                      &quot;h2&quot;                       
+##  [67] &quot;hdf_file&quot;                  &quot;hdf_name&quot;                  &quot;hdf_path&quot;                 
+##  [70] &quot;history&quot;                   &quot;institution&quot;               &quot;j&quot;                        
+##  [73] &quot;k&quot;                         &quot;laea&quot;                      &quot;lakes_lines_proj&quot;         
+##  [76] &quot;lakes_poly_proj&quot;           &quot;lakes_poly_sf&quot;             &quot;lakes_shapefile&quot;          
+##  [79] &quot;land_poly_proj&quot;            &quot;land_poly_sf&quot;              &quot;land_shapefile&quot;           
+##  [82] &quot;lat&quot;                       &quot;lat_array&quot;                 &quot;latdim&quot;                   
+##  [85] &quot;lon&quot;                       &quot;lon_array&quot;                 &quot;londim&quot;                   
+##  [88] &quot;lonlat&quot;                    &quot;lrglakes_lines_proj&quot;       &quot;lrglakes_poly_proj&quot;       
+##  [91] &quot;lrglakes_poly_sf&quot;          &quot;m&quot;                         &quot;month&quot;                    
+##  [94] &quot;n&quot;                         &quot;na_crs&quot;                    &quot;na_proj4string&quot;           
+##  [97] &quot;na_sf&quot;                     &quot;na_sf_proj&quot;                &quot;na10km_admin0_poly_proj&quot;  
+## [100] &quot;na10km_admin1_poly_proj&quot;   &quot;na10km_bb&quot;                 &quot;na10km_can_lines_proj&quot;    
+## [103] &quot;na10km_can_poly_proj&quot;      &quot;na10km_coast_lines_proj&quot;   &quot;na10km_grat15_lines_proj&quot; 
+## [106] &quot;na10km_lakes_poly_proj&quot;    &quot;na10km_lrglakes_poly_proj&quot; &quot;na10km_us_lines_proj&quot;     
+## [109] &quot;na10km_us_poly_proj&quot;       &quot;na2_sf&quot;                    &quot;na2_sf_proj&quot;              
+## [112] &quot;nc_fname&quot;                  &quot;nc_name&quot;                   &quot;nc_path&quot;                  
+## [115] &quot;ncfname&quot;                   &quot;ncin&quot;                      &quot;ncname&quot;                   
+## [118] &quot;ncout&quot;                     &quot;ncpath&quot;                    &quot;nlat&quot;                     
+## [121] &quot;nlon&quot;                      &quot;nm&quot;                        &quot;np&quot;                       
+## [124] &quot;nsamp_cex&quot;                 &quot;nsamp_colors&quot;              &quot;nsamp_cutpts&quot;             
+## [127] &quot;nsamp_num&quot;                 &quot;nt&quot;                        &quot;ny&quot;                       
+## [130] &quot;nyrs&quot;                      &quot;ocean_poly_proj&quot;           &quot;ocean_poly_sf&quot;            
+## [133] &quot;ocean_shapefile&quot;           &quot;outfile&quot;                   &quot;outpath&quot;                  
+## [136] &quot;outshape&quot;                  &quot;outshapefile&quot;              &quot;pjulpjan_factor&quot;          
+## [139] &quot;references&quot;                &quot;robinson_projstring&quot;       &quot;shade&quot;                    
+## [142] &quot;shade_clr&quot;                 &quot;shade_colnum&quot;              &quot;shade_int&quot;                
+## [145] &quot;shade_pixels&quot;              &quot;shade_rgb&quot;                 &quot;shape_path&quot;               
+## [148] &quot;shp_file&quot;                  &quot;test_outline&quot;              &quot;test_sf&quot;                  
+## [151] &quot;time&quot;                      &quot;time_cf&quot;                   &quot;time_out&quot;                 
+## [154] &quot;timedim&quot;                   &quot;timestamps&quot;                &quot;title&quot;                    
+## [157] &quot;tjan_raster&quot;               &quot;tmat&quot;                      &quot;tmat_sr&quot;                  
+## [160] &quot;tmp&quot;                       &quot;tmp_anm&quot;                   &quot;tmp_array&quot;                
+## [163] &quot;tmp_array_base&quot;            &quot;tmp_def&quot;                   &quot;tmp_ltm&quot;                  
+## [166] &quot;tmp_ltm_df&quot;                &quot;tmp_ltm_vector&quot;            &quot;tmp_raster&quot;               
+## [169] &quot;tmp_slice&quot;                 &quot;tmp.def&quot;                   &quot;tmpin&quot;                    
+## [172] &quot;tree&quot;                      &quot;tree_file&quot;                 &quot;tree_name&quot;                
+## [175] &quot;tree_path&quot;                 &quot;treecov_clr_gray&quot;          &quot;treecov_clr_upper&quot;        
+## [178] &quot;treecov_poly&quot;              &quot;treecov_poly_proj&quot;         &quot;treecov_pts&quot;              
+## [181] &quot;treecov_pts_proj&quot;          &quot;tunits&quot;                    &quot;units&quot;                    
+## [184] &quot;unproj_projstring&quot;         &quot;us_lines_proj&quot;             &quot;us_lines_sf&quot;              
+## [187] &quot;us_poly_proj&quot;              &quot;us_poly_sf&quot;                &quot;UVI&quot;                      
+## [190] &quot;varname&quot;                   &quot;world_otl&quot;                 &quot;world_otl_sf&quot;             
+## [193] &quot;world_outline&quot;             &quot;world_sf&quot;                  &quot;wus_pratio&quot;               
+## [196] &quot;wus_pratio_sf&quot;             &quot;wus_pratio_sf_proj&quot;        &quot;wus_sf&quot;                   
+## [199] &quot;wus_sf_proj&quot;               &quot;wus_sf_pts&quot;</code></pre>
 <p><a href="netCDF.html">[Back to top]</a></p>
 </div>
 </div>
@@ -1218,54 +1248,75 @@ matrix or array for writing out as a netCDF file.</p>
 ## 49905  9.1  1.3 5.416667</code></pre>
 <p>Check what’s in the current workspace now:</p>
 <div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a><span class="fu">ls</span>()</span></code></pre></div>
-<pre><code>##   [1] &quot;BF&quot;                           &quot;breaks&quot;                       &quot;burn&quot;                        
-##   [4] &quot;carp96t&quot;                      &quot;cf&quot;                           &quot;cirques&quot;                     
-##   [7] &quot;class&quot;                        &quot;col.red&quot;                      &quot;colcode&quot;                     
-##  [10] &quot;color_fun&quot;                    &quot;colornum&quot;                     &quot;con&quot;                         
-##  [13] &quot;conus_sf&quot;                     &quot;Conventions&quot;                  &quot;csvfile&quot;                     
-##  [16] &quot;csvname&quot;                      &quot;csvpath&quot;                      &quot;cutpts&quot;                      
-##  [19] &quot;cygage&quot;                       &quot;cygdepths&quot;                    &quot;datasource&quot;                  
-##  [22] &quot;dlat&quot;                         &quot;dlname&quot;                       &quot;dlon&quot;                        
-##  [25] &quot;dname&quot;                        &quot;dunits&quot;                       &quot;Elevation&quot;                   
-##  [28] &quot;filename&quot;                     &quot;fillvalue&quot;                    &quot;gfire2&quot;                      
-##  [31] &quot;grid&quot;                         &quot;h1&quot;                           &quot;h2&quot;                          
-##  [34] &quot;hdf_file&quot;                     &quot;hdf_name&quot;                     &quot;hdf_path&quot;                    
-##  [37] &quot;history&quot;                      &quot;index&quot;                        &quot;institution&quot;                 
-##  [40] &quot;IPCC_RF&quot;                      &quot;IPCC_RFtrans&quot;                 &quot;iris&quot;                        
-##  [43] &quot;island&quot;                       &quot;lat&quot;                          &quot;lat_array&quot;                   
-##  [46] &quot;latdim&quot;                       &quot;Latitude&quot;                     &quot;layer&quot;                       
-##  [49] &quot;Loc_factor&quot;                   &quot;logtrans&quot;                     &quot;lon&quot;                         
-##  [52] &quot;lon_array&quot;                    &quot;londim&quot;                       &quot;Longitude&quot;                   
-##  [55] &quot;lonlat&quot;                       &quot;m&quot;                            &quot;midwotl_sf&quot;                  
-##  [58] &quot;midwotl_study_area_sf&quot;        &quot;midwtf2&quot;                      &quot;na_sf&quot;                       
-##  [61] &quot;na2_sf&quot;                       &quot;napol&quot;                        &quot;nc_fname&quot;                    
-##  [64] &quot;nc_name&quot;                      &quot;nc_path&quot;                      &quot;ncfname&quot;                     
-##  [67] &quot;ncin&quot;                         &quot;nclr&quot;                         &quot;ncname&quot;                      
-##  [70] &quot;ncout&quot;                        &quot;ncpath&quot;                       &quot;ne_110m_admin_0_countries_sf&quot;
-##  [73] &quot;nlat&quot;                         &quot;nlon&quot;                         &quot;nt&quot;                          
-##  [76] &quot;O18_density&quot;                  &quot;or_map&quot;                       &quot;orcounty_sf&quot;                 
-##  [79] &quot;orcountyp&quot;                    &quot;orgrid&quot;                       &quot;orotl_sf&quot;                    
-##  [82] &quot;orsim&quot;                        &quot;orstationc&quot;                   &quot;orstationc2&quot;                 
-##  [85] &quot;orstations_sf&quot;                &quot;ortann&quot;                       &quot;ozone_data&quot;                  
-##  [88] &quot;picea_sf&quot;                     &quot;plot.angle&quot;                   &quot;plot1&quot;                       
-##  [91] &quot;plot2&quot;                        &quot;plot3&quot;                        &quot;plotclr&quot;                     
-##  [94] &quot;plotvals&quot;                     &quot;plotvar&quot;                      &quot;Pollute&quot;                     
-##  [97] &quot;references&quot;                   &quot;s3d&quot;                          &quot;shp_file&quot;                    
-## [100] &quot;sierra&quot;                       &quot;specmap&quot;                      &quot;streams&quot;                     
-## [103] &quot;sumcr&quot;                        &quot;time&quot;                         &quot;time_cf&quot;                     
-## [106] &quot;timestamps&quot;                   &quot;title&quot;                        &quot;tjan_raster&quot;                 
-## [109] &quot;tmat&quot;                         &quot;tmat_sr&quot;                      &quot;tmp&quot;                         
-## [112] &quot;tmp_array&quot;                    &quot;tmp_df01&quot;                     &quot;tmp_df02&quot;                    
-## [115] &quot;tmp_df03&quot;                     &quot;tmp_mat&quot;                      &quot;tmp_raster&quot;                  
-## [118] &quot;tmp_slice&quot;                    &quot;tmp_vec&quot;                      &quot;tmp_vec_long&quot;                
-## [121] &quot;tmp.def&quot;                      &quot;tmpin&quot;                        &quot;trecov_pts_sf&quot;               
-## [124] &quot;tstreams&quot;                     &quot;tunits&quot;                       &quot;units&quot;                       
-## [127] &quot;UVI&quot;                          &quot;UVI_in&quot;                       &quot;varname&quot;                     
-## [130] &quot;vegkey&quot;                       &quot;world_otl&quot;                    &quot;world_outline&quot;               
-## [133] &quot;world_sf&quot;                     &quot;wus_alpha&quot;                    &quot;wus_map&quot;                     
-## [136] &quot;wus_pratio&quot;                   &quot;wus_pratio_sf&quot;                &quot;wus_sf&quot;                      
-## [139] &quot;yellpratio&quot;                   &quot;ynp_state_sf&quot;                 &quot;ynplk_sf&quot;                    
-## [142] &quot;ynprivers_sf&quot;                 &quot;ynpstate_sf&quot;                  &quot;ypolsqrt&quot;</code></pre>
+<pre><code>##   [1] &quot;admin0_lines_proj&quot;         &quot;admin0_lines_sf&quot;           &quot;admin0_poly_proj&quot;         
+##   [4] &quot;admin0_poly_sf&quot;            &quot;admin0_shapefile&quot;          &quot;admin1_lines_proj&quot;        
+##   [7] &quot;admin1_poly_proj&quot;          &quot;admin1_poly_sf&quot;            &quot;admin1_shapefile&quot;         
+##  [10] &quot;base_period&quot;               &quot;bb_lines_proj&quot;             &quot;bb_poly_proj&quot;             
+##  [13] &quot;bb_poly_sf&quot;                &quot;bb_shapefile&quot;              &quot;begobs&quot;                   
+##  [16] &quot;begyr&quot;                     &quot;BF&quot;                        &quot;breaks&quot;                   
+##  [19] &quot;can_lines_proj&quot;            &quot;can_lines_sf&quot;              &quot;can_poly_proj&quot;            
+##  [22] &quot;can_poly_sf&quot;               &quot;caspian_bb&quot;                &quot;caspian_lines&quot;            
+##  [25] &quot;caspian_poly&quot;              &quot;caspian_poly_proj&quot;         &quot;cf&quot;                       
+##  [28] &quot;clr&quot;                       &quot;coast_geometry&quot;            &quot;coast_lines_proj&quot;         
+##  [31] &quot;coast_lines_sf&quot;            &quot;coast_shapefile&quot;           &quot;colnum&quot;                   
+##  [34] &quot;color_fun&quot;                 &quot;colorfile&quot;                 &quot;conus_sf&quot;                 
+##  [37] &quot;conus_sf_proj&quot;             &quot;Conventions&quot;               &quot;csv_file&quot;                 
+##  [40] &quot;csv_path&quot;                  &quot;csvfile&quot;                   &quot;csvname&quot;                  
+##  [43] &quot;csvpath&quot;                   &quot;cutpts&quot;                    &quot;datafile&quot;                 
+##  [46] &quot;datapath&quot;                  &quot;datasource&quot;                &quot;dlat&quot;                     
+##  [49] &quot;dlname&quot;                    &quot;dlon&quot;                      &quot;dname&quot;                    
+##  [52] &quot;dunits&quot;                    &quot;endobs&quot;                    &quot;endyr&quot;                    
+##  [55] &quot;filename&quot;                  &quot;fillvalue&quot;                 &quot;gcdv3_csv&quot;                
+##  [58] &quot;gcdv3_pts&quot;                 &quot;gcdv3_pts_proj&quot;            &quot;grat15_lines_proj&quot;        
+##  [61] &quot;grat15_lines_sf&quot;           &quot;grat15_shapefile&quot;          &quot;grat30_lines_proj&quot;        
+##  [64] &quot;grat30_lines_sf&quot;           &quot;grat30_shapefile&quot;          &quot;grid&quot;                     
+##  [67] &quot;h2&quot;                        &quot;hdf_file&quot;                  &quot;hdf_name&quot;                 
+##  [70] &quot;hdf_path&quot;                  &quot;history&quot;                   &quot;institution&quot;              
+##  [73] &quot;j&quot;                         &quot;k&quot;                         &quot;laea&quot;                     
+##  [76] &quot;lakes_lines_proj&quot;          &quot;lakes_poly_proj&quot;           &quot;lakes_poly_sf&quot;            
+##  [79] &quot;lakes_shapefile&quot;           &quot;land_poly_proj&quot;            &quot;land_poly_sf&quot;             
+##  [82] &quot;land_shapefile&quot;            &quot;lat&quot;                       &quot;lat_array&quot;                
+##  [85] &quot;latdim&quot;                    &quot;lon&quot;                       &quot;lon_array&quot;                
+##  [88] &quot;londim&quot;                    &quot;lonlat&quot;                    &quot;lrglakes_lines_proj&quot;      
+##  [91] &quot;lrglakes_poly_proj&quot;        &quot;lrglakes_poly_sf&quot;          &quot;m&quot;                        
+##  [94] &quot;month&quot;                     &quot;n&quot;                         &quot;na_crs&quot;                   
+##  [97] &quot;na_proj4string&quot;            &quot;na_sf&quot;                     &quot;na_sf_proj&quot;               
+## [100] &quot;na10km_admin0_poly_proj&quot;   &quot;na10km_admin1_poly_proj&quot;   &quot;na10km_bb&quot;                
+## [103] &quot;na10km_can_lines_proj&quot;     &quot;na10km_can_poly_proj&quot;      &quot;na10km_coast_lines_proj&quot;  
+## [106] &quot;na10km_grat15_lines_proj&quot;  &quot;na10km_lakes_poly_proj&quot;    &quot;na10km_lrglakes_poly_proj&quot;
+## [109] &quot;na10km_us_lines_proj&quot;      &quot;na10km_us_poly_proj&quot;       &quot;na2_sf&quot;                   
+## [112] &quot;na2_sf_proj&quot;               &quot;nc_fname&quot;                  &quot;nc_name&quot;                  
+## [115] &quot;nc_path&quot;                   &quot;ncfname&quot;                   &quot;ncin&quot;                     
+## [118] &quot;ncname&quot;                    &quot;ncout&quot;                     &quot;ncpath&quot;                   
+## [121] &quot;nlat&quot;                      &quot;nlon&quot;                      &quot;nm&quot;                       
+## [124] &quot;np&quot;                        &quot;nsamp_cex&quot;                 &quot;nsamp_colors&quot;             
+## [127] &quot;nsamp_cutpts&quot;              &quot;nsamp_num&quot;                 &quot;nt&quot;                       
+## [130] &quot;ny&quot;                        &quot;nyrs&quot;                      &quot;ocean_poly_proj&quot;          
+## [133] &quot;ocean_poly_sf&quot;             &quot;ocean_shapefile&quot;           &quot;outfile&quot;                  
+## [136] &quot;outpath&quot;                   &quot;outshape&quot;                  &quot;outshapefile&quot;             
+## [139] &quot;pjulpjan_factor&quot;           &quot;references&quot;                &quot;robinson_projstring&quot;      
+## [142] &quot;shade&quot;                     &quot;shade_clr&quot;                 &quot;shade_colnum&quot;             
+## [145] &quot;shade_int&quot;                 &quot;shade_pixels&quot;              &quot;shade_rgb&quot;                
+## [148] &quot;shape_path&quot;                &quot;shp_file&quot;                  &quot;test_outline&quot;             
+## [151] &quot;test_sf&quot;                   &quot;time&quot;                      &quot;time_cf&quot;                  
+## [154] &quot;time_out&quot;                  &quot;timedim&quot;                   &quot;timestamps&quot;               
+## [157] &quot;title&quot;                     &quot;tjan_raster&quot;               &quot;tmat&quot;                     
+## [160] &quot;tmat_sr&quot;                   &quot;tmp&quot;                       &quot;tmp_anm&quot;                  
+## [163] &quot;tmp_array&quot;                 &quot;tmp_array_base&quot;            &quot;tmp_def&quot;                  
+## [166] &quot;tmp_df01&quot;                  &quot;tmp_df02&quot;                  &quot;tmp_df03&quot;                 
+## [169] &quot;tmp_ltm&quot;                   &quot;tmp_ltm_df&quot;                &quot;tmp_ltm_vector&quot;           
+## [172] &quot;tmp_mat&quot;                   &quot;tmp_raster&quot;                &quot;tmp_slice&quot;                
+## [175] &quot;tmp_vec&quot;                   &quot;tmp_vec_long&quot;              &quot;tmp.def&quot;                  
+## [178] &quot;tmpin&quot;                     &quot;tree&quot;                      &quot;tree_file&quot;                
+## [181] &quot;tree_name&quot;                 &quot;tree_path&quot;                 &quot;treecov_clr_gray&quot;         
+## [184] &quot;treecov_clr_upper&quot;         &quot;treecov_poly&quot;              &quot;treecov_poly_proj&quot;        
+## [187] &quot;treecov_pts&quot;               &quot;treecov_pts_proj&quot;          &quot;tunits&quot;                   
+## [190] &quot;units&quot;                     &quot;unproj_projstring&quot;         &quot;us_lines_proj&quot;            
+## [193] &quot;us_lines_sf&quot;               &quot;us_poly_proj&quot;              &quot;us_poly_sf&quot;               
+## [196] &quot;UVI&quot;                       &quot;varname&quot;                   &quot;world_otl&quot;                
+## [199] &quot;world_otl_sf&quot;              &quot;world_outline&quot;             &quot;world_sf&quot;                 
+## [202] &quot;wus_pratio&quot;                &quot;wus_pratio_sf&quot;             &quot;wus_pratio_sf_proj&quot;       
+## [205] &quot;wus_sf&quot;                    &quot;wus_sf_proj&quot;               &quot;wus_sf_pts&quot;</code></pre>
 <p><a href="netCDF.html">[Back to top]</a></p>
 <p><a href="netCDF.html">[Back to top]</a></p>
 </div>
@@ -1370,7 +1421,7 @@ a 3-d array.</p>
 <pre><code>## [1] 720 360</code></pre>
 <div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm <span class="co"># how long?</span></span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.125   0.108   0.268</code></pre>
+##   0.051   0.021   0.071</code></pre>
 </div>
 <div id="check-the-conversion" class="section level3" number="4.1.3">
 <h3><span class="header-section-number">4.1.3</span> Check the
@@ -1514,7 +1565,7 @@ proper location in the array.</p>
 <span id="cb86-4"><a href="#cb86-4" tabindex="-1"></a>mat_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03<span class="sc">$</span>mat) </span>
 <span id="cb86-5"><a href="#cb86-5" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.925   0.271   1.207</code></pre>
+##   0.822   0.299   1.116</code></pre>
 </div>
 <div id="complete-loop-avoidance-approach" class="section level3"
 number="4.2.4">
@@ -1536,7 +1587,7 @@ first two columns):</p>
 <span id="cb88-8"><a href="#cb88-8" tabindex="-1"></a>mat_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp_df03<span class="sc">$</span>mat) </span>
 <span id="cb88-9"><a href="#cb88-9" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.035   0.003   0.037</code></pre>
+##   0.040   0.005   0.046</code></pre>
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" tabindex="-1"></a><span class="co"># some plots to check creation of arrays</span></span>
 <span id="cb90-2"><a href="#cb90-2" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
 <span id="cb90-3"><a href="#cb90-3" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
@@ -1552,66 +1603,87 @@ first two columns):</p>
 <p><img src="netCDF_files/figure-html/array16-1.png" width="75%" height="75%" /><img src="netCDF_files/figure-html/array16-2.png" width="75%" height="75%" /><img src="netCDF_files/figure-html/array16-3.png" width="75%" height="75%" /><img src="netCDF_files/figure-html/array16-4.png" width="75%" height="75%" /></p>
 <p>Check what’s in the current workspace:</p>
 <div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" tabindex="-1"></a><span class="fu">ls</span>()</span></code></pre></div>
-<pre><code>##   [1] &quot;BF&quot;                           &quot;breaks&quot;                       &quot;burn&quot;                        
-##   [4] &quot;carp96t&quot;                      &quot;cf&quot;                           &quot;cirques&quot;                     
-##   [7] &quot;class&quot;                        &quot;col.red&quot;                      &quot;colcode&quot;                     
-##  [10] &quot;color_fun&quot;                    &quot;colornum&quot;                     &quot;con&quot;                         
-##  [13] &quot;conus_sf&quot;                     &quot;Conventions&quot;                  &quot;csvfile&quot;                     
-##  [16] &quot;csvname&quot;                      &quot;csvpath&quot;                      &quot;cutpts&quot;                      
-##  [19] &quot;cygage&quot;                       &quot;cygdepths&quot;                    &quot;datasource&quot;                  
-##  [22] &quot;dlat&quot;                         &quot;dlname&quot;                       &quot;dlon&quot;                        
-##  [25] &quot;dname&quot;                        &quot;dunits&quot;                       &quot;Elevation&quot;                   
-##  [28] &quot;filename&quot;                     &quot;fillvalue&quot;                    &quot;gfire2&quot;                      
-##  [31] &quot;grid&quot;                         &quot;h1&quot;                           &quot;h2&quot;                          
-##  [34] &quot;hdf_file&quot;                     &quot;hdf_name&quot;                     &quot;hdf_path&quot;                    
-##  [37] &quot;history&quot;                      &quot;index&quot;                        &quot;institution&quot;                 
-##  [40] &quot;IPCC_RF&quot;                      &quot;IPCC_RFtrans&quot;                 &quot;iris&quot;                        
-##  [43] &quot;island&quot;                       &quot;j2&quot;                           &quot;k2&quot;                          
-##  [46] &quot;l&quot;                            &quot;lat&quot;                          &quot;lat_array&quot;                   
-##  [49] &quot;lat2&quot;                         &quot;lat3&quot;                         &quot;lat4&quot;                        
-##  [52] &quot;latdim&quot;                       &quot;Latitude&quot;                     &quot;layer&quot;                       
-##  [55] &quot;Loc_factor&quot;                   &quot;logtrans&quot;                     &quot;lon&quot;                         
-##  [58] &quot;lon_array&quot;                    &quot;lon2&quot;                         &quot;lon3&quot;                        
-##  [61] &quot;lon4&quot;                         &quot;londim&quot;                       &quot;Longitude&quot;                   
-##  [64] &quot;lonlat&quot;                       &quot;m&quot;                            &quot;mat_array2&quot;                  
-##  [67] &quot;mat_array3&quot;                   &quot;midwotl_sf&quot;                   &quot;midwotl_study_area_sf&quot;       
-##  [70] &quot;midwtf2&quot;                      &quot;mtco_array2&quot;                  &quot;mtco_array3&quot;                 
-##  [73] &quot;mtwa_array2&quot;                  &quot;mtwa_array3&quot;                  &quot;na_sf&quot;                       
-##  [76] &quot;na2_sf&quot;                       &quot;napol&quot;                        &quot;nc_fname&quot;                    
-##  [79] &quot;nc_name&quot;                      &quot;nc_path&quot;                      &quot;ncfname&quot;                     
-##  [82] &quot;ncin&quot;                         &quot;nclr&quot;                         &quot;ncname&quot;                      
-##  [85] &quot;ncout&quot;                        &quot;ncpath&quot;                       &quot;ne_110m_admin_0_countries_sf&quot;
-##  [88] &quot;nlat&quot;                         &quot;nlat2&quot;                        &quot;nlat3&quot;                       
-##  [91] &quot;nlat4&quot;                        &quot;nlon&quot;                         &quot;nlon2&quot;                       
-##  [94] &quot;nlon3&quot;                        &quot;nlon4&quot;                        &quot;nobs&quot;                        
-##  [97] &quot;nt&quot;                           &quot;nt2&quot;                          &quot;nt3&quot;                         
-## [100] &quot;nt4&quot;                          &quot;O18_density&quot;                  &quot;or_map&quot;                      
-## [103] &quot;orcounty_sf&quot;                  &quot;orcountyp&quot;                    &quot;orgrid&quot;                      
-## [106] &quot;orotl_sf&quot;                     &quot;orsim&quot;                        &quot;orstationc&quot;                  
-## [109] &quot;orstationc2&quot;                  &quot;orstations_sf&quot;                &quot;ortann&quot;                      
-## [112] &quot;ozone_data&quot;                   &quot;picea_sf&quot;                     &quot;plot.angle&quot;                  
-## [115] &quot;plot1&quot;                        &quot;plot2&quot;                        &quot;plot3&quot;                       
-## [118] &quot;plotclr&quot;                      &quot;plotvals&quot;                     &quot;plotvar&quot;                     
-## [121] &quot;Pollute&quot;                      &quot;ptm&quot;                          &quot;references&quot;                  
-## [124] &quot;s3d&quot;                          &quot;shp_file&quot;                     &quot;sierra&quot;                      
-## [127] &quot;specmap&quot;                      &quot;streams&quot;                      &quot;sumcr&quot;                       
-## [130] &quot;temp_array&quot;                   &quot;time&quot;                         &quot;time_cf&quot;                     
-## [133] &quot;time2&quot;                        &quot;time3&quot;                        &quot;time4&quot;                       
-## [136] &quot;timestamps&quot;                   &quot;title&quot;                        &quot;tjan_raster&quot;                 
-## [139] &quot;tmat&quot;                         &quot;tmat_sr&quot;                      &quot;tmp&quot;                         
-## [142] &quot;tmp_array&quot;                    &quot;tmp_array2&quot;                   &quot;tmp_array3&quot;                  
-## [145] &quot;tmp_df01&quot;                     &quot;tmp_df02&quot;                     &quot;tmp_df03&quot;                    
-## [148] &quot;tmp_mat&quot;                      &quot;tmp_mat2&quot;                     &quot;tmp_raster&quot;                  
-## [151] &quot;tmp_slice&quot;                    &quot;tmp_vec&quot;                      &quot;tmp_vec_long&quot;                
-## [154] &quot;tmp.def&quot;                      &quot;tmpin&quot;                        &quot;trecov_pts_sf&quot;               
-## [157] &quot;tstreams&quot;                     &quot;tunits&quot;                       &quot;tunits2&quot;                     
-## [160] &quot;tunits3&quot;                      &quot;tunits4&quot;                      &quot;units&quot;                       
-## [163] &quot;UVI&quot;                          &quot;UVI_in&quot;                       &quot;varname&quot;                     
-## [166] &quot;vegkey&quot;                       &quot;world_otl&quot;                    &quot;world_outline&quot;               
-## [169] &quot;world_sf&quot;                     &quot;wus_alpha&quot;                    &quot;wus_map&quot;                     
-## [172] &quot;wus_pratio&quot;                   &quot;wus_pratio_sf&quot;                &quot;wus_sf&quot;                      
-## [175] &quot;yellpratio&quot;                   &quot;ynp_state_sf&quot;                 &quot;ynplk_sf&quot;                    
-## [178] &quot;ynprivers_sf&quot;                 &quot;ynpstate_sf&quot;                  &quot;ypolsqrt&quot;</code></pre>
+<pre><code>##   [1] &quot;admin0_lines_proj&quot;         &quot;admin0_lines_sf&quot;           &quot;admin0_poly_proj&quot;         
+##   [4] &quot;admin0_poly_sf&quot;            &quot;admin0_shapefile&quot;          &quot;admin1_lines_proj&quot;        
+##   [7] &quot;admin1_poly_proj&quot;          &quot;admin1_poly_sf&quot;            &quot;admin1_shapefile&quot;         
+##  [10] &quot;base_period&quot;               &quot;bb_lines_proj&quot;             &quot;bb_poly_proj&quot;             
+##  [13] &quot;bb_poly_sf&quot;                &quot;bb_shapefile&quot;              &quot;begobs&quot;                   
+##  [16] &quot;begyr&quot;                     &quot;BF&quot;                        &quot;breaks&quot;                   
+##  [19] &quot;can_lines_proj&quot;            &quot;can_lines_sf&quot;              &quot;can_poly_proj&quot;            
+##  [22] &quot;can_poly_sf&quot;               &quot;caspian_bb&quot;                &quot;caspian_lines&quot;            
+##  [25] &quot;caspian_poly&quot;              &quot;caspian_poly_proj&quot;         &quot;cf&quot;                       
+##  [28] &quot;clr&quot;                       &quot;coast_geometry&quot;            &quot;coast_lines_proj&quot;         
+##  [31] &quot;coast_lines_sf&quot;            &quot;coast_shapefile&quot;           &quot;colnum&quot;                   
+##  [34] &quot;color_fun&quot;                 &quot;colorfile&quot;                 &quot;conus_sf&quot;                 
+##  [37] &quot;conus_sf_proj&quot;             &quot;Conventions&quot;               &quot;csv_file&quot;                 
+##  [40] &quot;csv_path&quot;                  &quot;csvfile&quot;                   &quot;csvname&quot;                  
+##  [43] &quot;csvpath&quot;                   &quot;cutpts&quot;                    &quot;datafile&quot;                 
+##  [46] &quot;datapath&quot;                  &quot;datasource&quot;                &quot;dlat&quot;                     
+##  [49] &quot;dlname&quot;                    &quot;dlon&quot;                      &quot;dname&quot;                    
+##  [52] &quot;dunits&quot;                    &quot;endobs&quot;                    &quot;endyr&quot;                    
+##  [55] &quot;filename&quot;                  &quot;fillvalue&quot;                 &quot;gcdv3_csv&quot;                
+##  [58] &quot;gcdv3_pts&quot;                 &quot;gcdv3_pts_proj&quot;            &quot;grat15_lines_proj&quot;        
+##  [61] &quot;grat15_lines_sf&quot;           &quot;grat15_shapefile&quot;          &quot;grat30_lines_proj&quot;        
+##  [64] &quot;grat30_lines_sf&quot;           &quot;grat30_shapefile&quot;          &quot;grid&quot;                     
+##  [67] &quot;h2&quot;                        &quot;hdf_file&quot;                  &quot;hdf_name&quot;                 
+##  [70] &quot;hdf_path&quot;                  &quot;history&quot;                   &quot;institution&quot;              
+##  [73] &quot;j&quot;                         &quot;j2&quot;                        &quot;k&quot;                        
+##  [76] &quot;k2&quot;                        &quot;l&quot;                         &quot;laea&quot;                     
+##  [79] &quot;lakes_lines_proj&quot;          &quot;lakes_poly_proj&quot;           &quot;lakes_poly_sf&quot;            
+##  [82] &quot;lakes_shapefile&quot;           &quot;land_poly_proj&quot;            &quot;land_poly_sf&quot;             
+##  [85] &quot;land_shapefile&quot;            &quot;lat&quot;                       &quot;lat_array&quot;                
+##  [88] &quot;lat2&quot;                      &quot;lat3&quot;                      &quot;lat4&quot;                     
+##  [91] &quot;latdim&quot;                    &quot;lon&quot;                       &quot;lon_array&quot;                
+##  [94] &quot;lon2&quot;                      &quot;lon3&quot;                      &quot;lon4&quot;                     
+##  [97] &quot;londim&quot;                    &quot;lonlat&quot;                    &quot;lrglakes_lines_proj&quot;      
+## [100] &quot;lrglakes_poly_proj&quot;        &quot;lrglakes_poly_sf&quot;          &quot;m&quot;                        
+## [103] &quot;mat_array2&quot;                &quot;mat_array3&quot;                &quot;month&quot;                    
+## [106] &quot;mtco_array2&quot;               &quot;mtco_array3&quot;               &quot;mtwa_array2&quot;              
+## [109] &quot;mtwa_array3&quot;               &quot;n&quot;                         &quot;na_crs&quot;                   
+## [112] &quot;na_proj4string&quot;            &quot;na_sf&quot;                     &quot;na_sf_proj&quot;               
+## [115] &quot;na10km_admin0_poly_proj&quot;   &quot;na10km_admin1_poly_proj&quot;   &quot;na10km_bb&quot;                
+## [118] &quot;na10km_can_lines_proj&quot;     &quot;na10km_can_poly_proj&quot;      &quot;na10km_coast_lines_proj&quot;  
+## [121] &quot;na10km_grat15_lines_proj&quot;  &quot;na10km_lakes_poly_proj&quot;    &quot;na10km_lrglakes_poly_proj&quot;
+## [124] &quot;na10km_us_lines_proj&quot;      &quot;na10km_us_poly_proj&quot;       &quot;na2_sf&quot;                   
+## [127] &quot;na2_sf_proj&quot;               &quot;nc_fname&quot;                  &quot;nc_name&quot;                  
+## [130] &quot;nc_path&quot;                   &quot;ncfname&quot;                   &quot;ncin&quot;                     
+## [133] &quot;ncname&quot;                    &quot;ncout&quot;                     &quot;ncpath&quot;                   
+## [136] &quot;nlat&quot;                      &quot;nlat2&quot;                     &quot;nlat3&quot;                    
+## [139] &quot;nlat4&quot;                     &quot;nlon&quot;                      &quot;nlon2&quot;                    
+## [142] &quot;nlon3&quot;                     &quot;nlon4&quot;                     &quot;nm&quot;                       
+## [145] &quot;nobs&quot;                      &quot;np&quot;                        &quot;nsamp_cex&quot;                
+## [148] &quot;nsamp_colors&quot;              &quot;nsamp_cutpts&quot;              &quot;nsamp_num&quot;                
+## [151] &quot;nt&quot;                        &quot;nt2&quot;                       &quot;nt3&quot;                      
+## [154] &quot;nt4&quot;                       &quot;ny&quot;                        &quot;nyrs&quot;                     
+## [157] &quot;ocean_poly_proj&quot;           &quot;ocean_poly_sf&quot;             &quot;ocean_shapefile&quot;          
+## [160] &quot;outfile&quot;                   &quot;outpath&quot;                   &quot;outshape&quot;                 
+## [163] &quot;outshapefile&quot;              &quot;pjulpjan_factor&quot;           &quot;ptm&quot;                      
+## [166] &quot;references&quot;                &quot;robinson_projstring&quot;       &quot;shade&quot;                    
+## [169] &quot;shade_clr&quot;                 &quot;shade_colnum&quot;              &quot;shade_int&quot;                
+## [172] &quot;shade_pixels&quot;              &quot;shade_rgb&quot;                 &quot;shape_path&quot;               
+## [175] &quot;shp_file&quot;                  &quot;temp_array&quot;                &quot;test_outline&quot;             
+## [178] &quot;test_sf&quot;                   &quot;time&quot;                      &quot;time_cf&quot;                  
+## [181] &quot;time_out&quot;                  &quot;time2&quot;                     &quot;time3&quot;                    
+## [184] &quot;time4&quot;                     &quot;timedim&quot;                   &quot;timestamps&quot;               
+## [187] &quot;title&quot;                     &quot;tjan_raster&quot;               &quot;tmat&quot;                     
+## [190] &quot;tmat_sr&quot;                   &quot;tmp&quot;                       &quot;tmp_anm&quot;                  
+## [193] &quot;tmp_array&quot;                 &quot;tmp_array_base&quot;            &quot;tmp_array2&quot;               
+## [196] &quot;tmp_array3&quot;                &quot;tmp_def&quot;                   &quot;tmp_df01&quot;                 
+## [199] &quot;tmp_df02&quot;                  &quot;tmp_df03&quot;                  &quot;tmp_ltm&quot;                  
+## [202] &quot;tmp_ltm_df&quot;                &quot;tmp_ltm_vector&quot;            &quot;tmp_mat&quot;                  
+## [205] &quot;tmp_mat2&quot;                  &quot;tmp_raster&quot;                &quot;tmp_slice&quot;                
+## [208] &quot;tmp_vec&quot;                   &quot;tmp_vec_long&quot;              &quot;tmp.def&quot;                  
+## [211] &quot;tmpin&quot;                     &quot;tree&quot;                      &quot;tree_file&quot;                
+## [214] &quot;tree_name&quot;                 &quot;tree_path&quot;                 &quot;treecov_clr_gray&quot;         
+## [217] &quot;treecov_clr_upper&quot;         &quot;treecov_poly&quot;              &quot;treecov_poly_proj&quot;        
+## [220] &quot;treecov_pts&quot;               &quot;treecov_pts_proj&quot;          &quot;tunits&quot;                   
+## [223] &quot;tunits2&quot;                   &quot;tunits3&quot;                   &quot;tunits4&quot;                  
+## [226] &quot;units&quot;                     &quot;unproj_projstring&quot;         &quot;us_lines_proj&quot;            
+## [229] &quot;us_lines_sf&quot;               &quot;us_poly_proj&quot;              &quot;us_poly_sf&quot;               
+## [232] &quot;UVI&quot;                       &quot;varname&quot;                   &quot;world_otl&quot;                
+## [235] &quot;world_otl_sf&quot;              &quot;world_outline&quot;             &quot;world_sf&quot;                 
+## [238] &quot;wus_pratio&quot;                &quot;wus_pratio_sf&quot;             &quot;wus_pratio_sf_proj&quot;       
+## [241] &quot;wus_sf&quot;                    &quot;wus_sf_proj&quot;               &quot;wus_sf_pts&quot;</code></pre>
 <p><a href="netCDF.html">[Back to top]</a></p>
 </div>
 </div>
@@ -1717,7 +1789,7 @@ self-documenting properties of netCDF files.</p>
 ##         institution: http://www.cru.uea.ac.uk/
 ##         source: http://www.cru.uea.ac.uk/~markn/cru05/cru05_intro.html
 ##         references: New et al. (2002) Climate Res 21:1-25
-##         history: P.J. Bartlein, Mon Feb  5 09:52:26 2024
+##         history: P.J. Bartlein, Sat Feb 10 18:37:32 2024
 ##         Conventions: CF-1.0</code></pre>
 <p>Finally, close the file, which writes the data to disk.</p>
 <div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" tabindex="-1"></a><span class="co"># close the file, writing data to disk</span></span>
@@ -2114,7 +2186,7 @@ class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="#cb1
 ##         title: test output of projected data
 ##         institution: NOAA ESRL PSD
 ##         source: soilm.mon.ltm.nc
-##         history: P.J. Bartlein, Mon Feb  5 09:52:27 2024
+##         history: P.J. Bartlein, Sat Feb 10 18:37:34 2024
 ##         Conventions: CF=1.6</code></pre>
 <p>Finally, close the file, which writes the data to disk.</p>
 <div class="sourceCode" id="cb127"><pre

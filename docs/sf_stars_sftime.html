@@ -404,6 +404,12 @@ $(document).ready(function () {
     <li>
       <a href="hdf5_intro.html">HDF in R</a>
     </li>
+    <li>
+      <a href="anomalies.html">Long-term means and anomalies</a>
+    </li>
+    <li>
+      <a href="tsplots.html">Time-series plots</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -550,35 +556,21 @@ demonstrated here by reading a shape file from the NaturalEarth
 collection <a
 href="https://www.naturalearthdata.com">[https://www.naturalearthdata.com]</a>.
 Load the libraries:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code></pre></div>
-<pre><code>## Linking to GEOS 3.11.0, GDAL 3.5.3, PROJ 9.1.0; sf_use_s2() is TRUE</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(stars)</span></code></pre></div>
-<pre><code>## Loading required package: abind</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(sftime)</span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">library</span>(terra)</span></code></pre></div>
-<pre><code>## terra 1.7.65</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
-<pre><code>## ── Attaching core tidyverse packages ───────────────────────────────────────────────── tidyverse 2.0.0 ──
-## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
-## ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
-## ✔ purrr     1.0.2</code></pre>
-<pre><code>## ── Conflicts ─────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-## ✖ tidyr::extract() masks terra::extract()
-## ✖ dplyr::filter()  masks stats::filter()
-## ✖ dplyr::lag()     masks stats::lag()
-## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># load data from a saved .RData file</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">url</span>(<span class="st">&quot;https://pages.uoregon.edu/bartlein/RESS/RData/geog490.RData&quot;</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">load</span>(<span class="at">file=</span>con) </span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(stars)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(sftime)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># load data from a saved .RData file</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>con <span class="ot">&lt;-</span> <span class="fu">url</span>(<span class="st">&quot;https://pages.uoregon.edu/bartlein/RESS/RData/geog490.RData&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">load</span>(<span class="at">file=</span>con) </span></code></pre></div>
 <p>Read a previously downloaded shape file:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># world_sf</span></span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>shapefile <span class="ot">&lt;-</span> </span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>  <span class="st">&quot;/Users/bartlein/Dropbox/DataVis/working/data/shp_files/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp&quot;</span></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>world_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(shapefile)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># world_sf</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>shapefile <span class="ot">&lt;-</span> </span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="st">&quot;/Users/bartlein/Dropbox/DataVis/working/data/shp_files/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>world_sf <span class="ot">&lt;-</span> <span class="fu">st_read</span>(shapefile)</span></code></pre></div>
 <pre><code>## Reading layer `ne_110m_admin_0_countries&#39; from data source 
 ##   `/Users/bartlein/Dropbox/DataVis/working/data/shp_files/ne_110m_admin_0_countries/ne_110m_admin_0_countries.shp&#39; 
 ##   using driver `ESRI Shapefile&#39;
@@ -589,20 +581,20 @@ Load the libraries:</p>
 ## Geodetic CRS:  WGS 84</code></pre>
 <p>Get the outline and plot it, and note the class of the
 <code>world_otl_sf</code> object</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># get the just the outline (i.e. the st_geometry)</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>world_otl_sf <span class="ot">&lt;-</span> <span class="fu">st_geometry</span>(world_sf)</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="fu">plot</span>(world_otl_sf) </span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># get the just the outline (i.e. the st_geometry)</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>world_otl_sf <span class="ot">&lt;-</span> <span class="fu">st_geometry</span>(world_sf)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">plot</span>(world_otl_sf) </span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-3-1.png" width="80%" height="80%" /></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">class</span>(world_otl_sf)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">class</span>(world_otl_sf)</span></code></pre></div>
 <pre><code>## [1] &quot;sfc_MULTIPOLYGON&quot; &quot;sfc&quot;</code></pre>
 <p>Here’s a <code>ggplot2()</code> version of the world outline:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># ggplot map of world_outline</span></span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">30</span>)) <span class="sc">+</span></span>
-<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="dv">30</span>)) <span class="sc">+</span></span>
-<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># ggplot map of world_outline</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-4-1.png" width="80%" height="80%" /></p>
 <p><code>ggplot2</code> allows fine control of such things as graticule
 labeling, color scales, and so on.</p>
@@ -620,12 +612,12 @@ at1000 hPa (i.e., the surface), level 6 is at 500 hPa (upper air)).</p>
 <div id="read-some-data" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> Read some data</h2>
 <p>Read the pressure-surface heights:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># stars</span></span>
-<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>nc_file <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/NCEP2_hgt.mon.ltm.1991-2020.nc&quot;</span></span>
-<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>hgt <span class="ot">&lt;-</span> <span class="fu">read_ncdf</span>(nc_file, <span class="at">var =</span> <span class="st">&quot;hgt&quot;</span>, <span class="at">proxy =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a></span>
-<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="co"># list some info</span></span>
-<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>hgt</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># stars</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>nc_file <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/NCEP2_hgt.mon.ltm.1991-2020.nc&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>hgt <span class="ot">&lt;-</span> <span class="fu">read_ncdf</span>(nc_file, <span class="at">var =</span> <span class="st">&quot;hgt&quot;</span>, <span class="at">proxy =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co"># list some info</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>hgt</span></code></pre></div>
 <pre><code>## stars object with 4 dimensions and 1 attribute
 ## attribute(s), summary of first 1e+05 cells:
 ##              Min.  1st Qu. Median     Mean  3rd Qu.    Max.
@@ -636,17 +628,17 @@ at1000 hPa (i.e., the surface), level 6 is at 500 hPa (upper air)).</p>
 ## lat      1  73  91.25  -2.5  WGS 84                      NULL [y]
 ## level    1  17     NA    NA      NA          [17] 10,...,1000    
 ## time     1  12     NA    NA POSIXct 0000-12-30,...,0001-11-29</code></pre>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">dim</span>(hgt)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">dim</span>(hgt)</span></code></pre></div>
 <pre><code>##   lon   lat level  time 
 ##   143    73    17    12</code></pre>
 <p>The time-dimension values in this data set are in the “time-since”
 format, which <code>read_ncdf()</code> interprets in a somewhat awkward
 year-month-day format. They can be replaced by text labels:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># replace time dimension values</span></span>
-<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="fu">attr</span>(hgt, <span class="st">&quot;dimensions&quot;</span>)<span class="sc">$</span>time<span class="sc">$</span>values <span class="ot">&lt;-</span> </span>
-<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;Jan&quot;</span>, <span class="st">&quot;Feb&quot;</span>, <span class="st">&quot;Mar&quot;</span>, <span class="st">&quot;Apr&quot;</span>, <span class="st">&quot;May&quot;</span>, <span class="st">&quot;Jun&quot;</span>, <span class="st">&quot;Jul&quot;</span>, <span class="st">&quot;Aug&quot;</span>, <span class="st">&quot;Sep&quot;</span>, <span class="st">&quot;Oct&quot;</span>, <span class="st">&quot;Nov&quot;</span>, <span class="st">&quot;Dec&quot;</span>)</span>
-<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="fu">attr</span>(hgt, <span class="st">&quot;dimensions&quot;</span>)<span class="sc">$</span>time<span class="sc">$</span>refsys <span class="ot">&lt;-</span> <span class="st">&quot;Name&quot;</span></span>
-<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>hgt</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># replace time dimension values</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">attr</span>(hgt, <span class="st">&quot;dimensions&quot;</span>)<span class="sc">$</span>time<span class="sc">$</span>values <span class="ot">&lt;-</span> </span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;Jan&quot;</span>, <span class="st">&quot;Feb&quot;</span>, <span class="st">&quot;Mar&quot;</span>, <span class="st">&quot;Apr&quot;</span>, <span class="st">&quot;May&quot;</span>, <span class="st">&quot;Jun&quot;</span>, <span class="st">&quot;Jul&quot;</span>, <span class="st">&quot;Aug&quot;</span>, <span class="st">&quot;Sep&quot;</span>, <span class="st">&quot;Oct&quot;</span>, <span class="st">&quot;Nov&quot;</span>, <span class="st">&quot;Dec&quot;</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="fu">attr</span>(hgt, <span class="st">&quot;dimensions&quot;</span>)<span class="sc">$</span>time<span class="sc">$</span>refsys <span class="ot">&lt;-</span> <span class="st">&quot;Name&quot;</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>hgt</span></code></pre></div>
 <pre><code>## stars object with 4 dimensions and 1 attribute
 ## attribute(s), summary of first 1e+05 cells:
 ##              Min.  1st Qu. Median     Mean  3rd Qu.    Max.
@@ -659,17 +651,17 @@ year-month-day format. They can be replaced by text labels:</p>
 ## time     1  12     NA    NA   Name      Jan,...,Dec</code></pre>
 <p>Plot the pressure-surface heights. Ignore the bounding-box
 warning.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">plot</span>(hgt)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">plot</span>(hgt)</span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-7-1.png" width="80%" height="80%" /></p>
 <p>What seems to get plotted is the long-term means of one month at the
 different levels. Plot a single level, here level 6, or the 500 hPa
 level.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">slice</span>(hgt, level,  <span class="dv">6</span>)) <span class="co"># level = 6 is 500 hPa</span></span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">slice</span>(hgt, level,  <span class="dv">6</span>)) <span class="co"># level = 6 is 500 hPa</span></span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-8-1.png" width="80%" height="80%" /></p>
 <p>Repeat for air temperature (<code>air</code> in this data set):</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a>nc_file <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/NCEP2_air.mon.ltm.1991-2020.nc&quot;</span></span>
-<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>air <span class="ot">&lt;-</span> <span class="fu">read_ncdf</span>(nc_file, <span class="at">var =</span> <span class="st">&quot;air&quot;</span>, <span class="at">proxy =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>air</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>nc_file <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/NCEP2_air.mon.ltm.1991-2020.nc&quot;</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>air <span class="ot">&lt;-</span> <span class="fu">read_ncdf</span>(nc_file, <span class="at">var =</span> <span class="st">&quot;air&quot;</span>, <span class="at">proxy =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>air</span></code></pre></div>
 <pre><code>## stars object with 4 dimensions and 1 attribute
 ## attribute(s), summary of first 1e+05 cells:
 ##            Min. 1st Qu.   Median    Mean  3rd Qu.     Max.
@@ -680,14 +672,14 @@ level.</p>
 ## lat      1  73  91.25  -2.5  WGS 84                      NULL [y]
 ## level    1  17     NA    NA      NA          [17] 10,...,1000    
 ## time     1  12     NA    NA POSIXct 0000-12-30,...,0001-11-29</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">dim</span>(air)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">dim</span>(air)</span></code></pre></div>
 <pre><code>##   lon   lat level  time 
 ##   143    73    17    12</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># replace time dimension values</span></span>
-<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a><span class="fu">attr</span>(air, <span class="st">&quot;dimensions&quot;</span>)<span class="sc">$</span>time<span class="sc">$</span>values <span class="ot">&lt;-</span> </span>
-<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;Jan&quot;</span>, <span class="st">&quot;Feb&quot;</span>, <span class="st">&quot;Mar&quot;</span>, <span class="st">&quot;Apr&quot;</span>, <span class="st">&quot;May&quot;</span>, <span class="st">&quot;Jun&quot;</span>, <span class="st">&quot;Jul&quot;</span>, <span class="st">&quot;Aug&quot;</span>, <span class="st">&quot;Sep&quot;</span>, <span class="st">&quot;Oct&quot;</span>, <span class="st">&quot;Nov&quot;</span>, <span class="st">&quot;Dec&quot;</span>)</span>
-<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a><span class="fu">attr</span>(air, <span class="st">&quot;dimensions&quot;</span>)<span class="sc">$</span>time<span class="sc">$</span>refsys <span class="ot">&lt;-</span> <span class="st">&quot;Name&quot;</span></span>
-<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a>air</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="co"># replace time dimension values</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">attr</span>(air, <span class="st">&quot;dimensions&quot;</span>)<span class="sc">$</span>time<span class="sc">$</span>values <span class="ot">&lt;-</span> </span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;Jan&quot;</span>, <span class="st">&quot;Feb&quot;</span>, <span class="st">&quot;Mar&quot;</span>, <span class="st">&quot;Apr&quot;</span>, <span class="st">&quot;May&quot;</span>, <span class="st">&quot;Jun&quot;</span>, <span class="st">&quot;Jul&quot;</span>, <span class="st">&quot;Aug&quot;</span>, <span class="st">&quot;Sep&quot;</span>, <span class="st">&quot;Oct&quot;</span>, <span class="st">&quot;Nov&quot;</span>, <span class="st">&quot;Dec&quot;</span>)</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="fu">attr</span>(air, <span class="st">&quot;dimensions&quot;</span>)<span class="sc">$</span>time<span class="sc">$</span>refsys <span class="ot">&lt;-</span> <span class="st">&quot;Name&quot;</span></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>air</span></code></pre></div>
 <pre><code>## stars object with 4 dimensions and 1 attribute
 ## attribute(s), summary of first 1e+05 cells:
 ##            Min. 1st Qu.   Median    Mean  3rd Qu.     Max.
@@ -698,9 +690,9 @@ level.</p>
 ## lat      1  73  91.25  -2.5 WGS 84             NULL [y]
 ## level    1  17     NA    NA     NA [17] 10,...,1000    
 ## time     1  12     NA    NA   Name      Jan,...,Dec</code></pre>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="fu">plot</span>(air)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">plot</span>(air)</span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-9-1.png" width="80%" height="80%" /></p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">slice</span>(air, level,  <span class="dv">1</span>)) <span class="co"># level 1 is 1000 hPa (surface)</span></span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">slice</span>(air, level,  <span class="dv">1</span>)) <span class="co"># level 1 is 1000 hPa (surface)</span></span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-9-2.png" width="80%" height="80%" /></p>
 </div>
 <div id="ggplot2-maps" class="section level2" number="2.2">
@@ -708,14 +700,14 @@ level.</p>
 <p><code>ggplot2</code> has a function <code>geom_stars()</code> that
 “knows” how to plot <code>stars</code> data objects: Here’s a plot of
 500 hPa (level 6) heights:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="co"># stars ggplots</span></span>
-<span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a>  <span class="fu">geom_stars</span>(<span class="at">data =</span> <span class="fu">slice</span>(hgt, level, <span class="dv">6</span>)) <span class="sc">+</span></span>
-<span id="cb34-4"><a href="#cb34-4" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb34-5"><a href="#cb34-5" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> time, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb34-6"><a href="#cb34-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb34-7"><a href="#cb34-7" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;PuOr&quot;</span>) <span class="sc">+</span></span>
-<span id="cb34-8"><a href="#cb34-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co"># stars ggplots</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  <span class="fu">geom_stars</span>(<span class="at">data =</span> <span class="fu">slice</span>(hgt, level, <span class="dv">6</span>)) <span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> time, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;PuOr&quot;</span>) <span class="sc">+</span></span>
+<span id="cb25-8"><a href="#cb25-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>))</span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-10-1.png" width="100%" height="100%" /></p>
 <p>Here, the <code>stars</code> object was plotted first, followed by
 the world world outline. The <code>facet_wrap()</code> function controls
@@ -724,13 +716,13 @@ the paneling, and the <code>expand = FALSE</code> argument of the
 panels. The <code>theme(strip.text = element_text(size = 6))</code>
 function makes the “header” boxes and fonts a little smaller.</p>
 <p>Here’s the plot for near-surface air temperature:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a>  <span class="fu">geom_stars</span>(<span class="at">data =</span> <span class="fu">slice</span>(air, level, <span class="dv">1</span>)) <span class="sc">+</span> </span>
-<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> time, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb35-5"><a href="#cb35-5" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb35-6"><a href="#cb35-6" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>) <span class="sc">+</span></span>
-<span id="cb35-7"><a href="#cb35-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>  <span class="fu">geom_stars</span>(<span class="at">data =</span> <span class="fu">slice</span>(air, level, <span class="dv">1</span>)) <span class="sc">+</span> </span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> time, <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>) <span class="sc">+</span></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">6</span>))</span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-11-1.png" width="100%" height="100%" /></p>
 </div>
 <div id="converting-stars-objects-to-terra-and-sf-objects"
@@ -742,18 +734,18 @@ can be easily converted to <code>terra</code> and <code>sf</code>
 objects (i.e. raster stacks, or <code>SpatRaster</code> objects in
 <code>terra</code> and in <code>sf</code>). To demonstrate this, get a
 single 3-d “slice” of air temperature from the 4-d cube:</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="co"># get a single slice</span></span>
-<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a><span class="fu">class</span>(air)</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="co"># get a single slice</span></span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">class</span>(air)</span></code></pre></div>
 <pre><code>## [1] &quot;stars&quot;</code></pre>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="fu">dim</span>(air)</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="fu">dim</span>(air)</span></code></pre></div>
 <pre><code>##   lon   lat level  time 
 ##   143    73    17    12</code></pre>
 <p>So <code>air</code> is a 4-d object. Now get the slice (at 1000
 hPa):</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a>air_1000 <span class="ot">&lt;-</span> <span class="fu">slice</span>(air, level,  <span class="dv">1</span>)</span>
-<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a><span class="fu">class</span>(air_1000)</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a>air_1000 <span class="ot">&lt;-</span> <span class="fu">slice</span>(air, level,  <span class="dv">1</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="fu">class</span>(air_1000)</span></code></pre></div>
 <pre><code>## [1] &quot;stars&quot;</code></pre>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a>air_1000</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a>air_1000</span></code></pre></div>
 <pre><code>## stars object with 3 dimensions and 1 attribute
 ## attribute(s):
 ##             Min.  1st Qu.   Median     Mean 3rd Qu.    Max.
@@ -763,17 +755,17 @@ hPa):</p>
 ## lon     1 143 -181.2   2.5 WGS 84        NULL [x]
 ## lat     1  73  91.25  -2.5 WGS 84        NULL [y]
 ## time    1  12     NA    NA   Name Jan,...,Dec</code></pre>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="fu">dim</span>(air_1000)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="fu">dim</span>(air_1000)</span></code></pre></div>
 <pre><code>##  lon  lat time 
 ##  143   73   12</code></pre>
 <p>Now convert that 3-d slice to <code>terra</code></p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="co"># convert to SpatRaster</span></span>
-<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a>air_1000_sr <span class="ot">&lt;-</span> <span class="fu">as</span>(air_1000, <span class="st">&quot;SpatRaster&quot;</span>) </span>
-<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a><span class="fu">class</span>(air_1000_sr)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="co"># convert to SpatRaster</span></span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a>air_1000_sr <span class="ot">&lt;-</span> <span class="fu">as</span>(air_1000, <span class="st">&quot;SpatRaster&quot;</span>) </span>
+<span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a><span class="fu">class</span>(air_1000_sr)</span></code></pre></div>
 <pre><code>## [1] &quot;SpatRaster&quot;
 ## attr(,&quot;package&quot;)
 ## [1] &quot;terra&quot;</code></pre>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a>air_1000_sr</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a>air_1000_sr</span></code></pre></div>
 <pre><code>## class       : SpatRaster 
 ## dimensions  : 73, 143, 12  (nrow, ncol, nlyr)
 ## resolution  : 2.5, 2.5  (x, y)
@@ -787,17 +779,17 @@ hPa):</p>
 original netCDF file that the western edge of the grid is at -180.0E,
 and the southern edge at -90.0N. The correct spatial exent can be
 restored like this:</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="co"># restore spatial extent</span></span>
-<span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a><span class="fu">ext</span>(air_1000_sr) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">175</span>, <span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="co"># restore spatial extent</span></span>
+<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a><span class="fu">ext</span>(air_1000_sr) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">175</span>, <span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>)</span></code></pre></div>
 <p>The dataset, which is now a <code>terra</code> object, can be plotted
 as usual:</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="fu">panel</span>(air_1000_sr, <span class="at">nc =</span> <span class="dv">3</span>, <span class="at">nr =</span> <span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="fu">panel</span>(air_1000_sr, <span class="at">nc =</span> <span class="dv">3</span>, <span class="at">nr =</span> <span class="dv">4</span>)</span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-16-1.png" width="80%" height="80%" /></p>
 <p>Similarly, the <code>stars</code> object, <code>air_1000</code>, can
 be converted to an <code>sf</code> object:</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="co"># convert stars to sf</span></span>
-<span id="cb52-2"><a href="#cb52-2" tabindex="-1"></a>air_1000_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(air_1000, <span class="at">as_points =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb52-3"><a href="#cb52-3" tabindex="-1"></a>air_1000_sf</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="co"># convert stars to sf</span></span>
+<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a>air_1000_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(air_1000, <span class="at">as_points =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a>air_1000_sf</span></code></pre></div>
 <pre><code>## Simple feature collection with 10439 features and 12 fields
 ## Geometry type: POINT
 ## Dimension:     XY
@@ -826,7 +818,7 @@ be converted to an <code>sf</code> object:</p>
 ## 8  267.3551 [K] 259.2516 [K] 252.7007 [K] 249.3092 [K] POINT (-162.5 90)
 ## 9  267.3551 [K] 259.2516 [K] 252.7007 [K] 249.3092 [K]   POINT (-160 90)
 ## 10 267.3551 [K] 259.2516 [K] 252.7007 [K] 249.3092 [K] POINT (-157.5 90)</code></pre>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="fu">class</span>(air_1000_sf)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="fu">class</span>(air_1000_sf)</span></code></pre></div>
 <pre><code>## [1] &quot;sf&quot;         &quot;data.frame&quot;</code></pre>
 <p>The argument <code>as_points = TRUE</code> indicates that we would
 like to convert to an <code>sf</code> <code>POINT</code> geometry type.
@@ -839,9 +831,9 @@ less efficent for storing the data.</p>
 <h1><span class="header-section-number">3</span> sf</h1>
 <p>Plot the <code>sf</code> object just created, first as a set of
 panels, one for each month, then as a single map for January:</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="fu">plot</span>(air_1000_sf, <span class="at">max.plot =</span> <span class="dv">12</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="fu">plot</span>(air_1000_sf, <span class="at">max.plot =</span> <span class="dv">12</span>)</span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-18-1.png" width="80%" height="80%" /></p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a><span class="fu">plot</span>(air_1000_sf[,<span class="dv">1</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="fu">plot</span>(air_1000_sf[,<span class="dv">1</span>])</span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-18-2.png" width="80%" height="80%" /></p>
 <p>The January map clearly shows that the data consist of individual
 points.</p>
@@ -852,23 +844,23 @@ are several strategies. One is to first convert the raster brick here to
 a data.frame, which could subsequently analyzed. Extract the coordinates
 and data, in this case for January, from the <code>air1000_sf</code>
 object:</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a><span class="co"># make a data.frame</span></span>
-<span id="cb58-2"><a href="#cb58-2" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(air_1000_sf)[,<span class="dv">1</span>]</span>
-<span id="cb58-3"><a href="#cb58-3" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(air_1000_sf)[,<span class="dv">2</span>]</span>
-<span id="cb58-4"><a href="#cb58-4" tabindex="-1"></a>air <span class="ot">&lt;-</span> <span class="fu">as.vector</span>((air_1000_sf[,<span class="dv">1</span>]<span class="sc">$</span>Jan))</span>
-<span id="cb58-5"><a href="#cb58-5" tabindex="-1"></a>air_1000_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(lon, lat, air)</span>
-<span id="cb58-6"><a href="#cb58-6" tabindex="-1"></a><span class="fu">dim</span>(air_1000_df)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="co"># make a data.frame</span></span>
+<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(air_1000_sf)[,<span class="dv">1</span>]</span>
+<span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">st_coordinates</span>(air_1000_sf)[,<span class="dv">2</span>]</span>
+<span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a>air <span class="ot">&lt;-</span> <span class="fu">as.vector</span>((air_1000_sf[,<span class="dv">1</span>]<span class="sc">$</span>Jan))</span>
+<span id="cb49-5"><a href="#cb49-5" tabindex="-1"></a>air_1000_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(lon, lat, air)</span>
+<span id="cb49-6"><a href="#cb49-6" tabindex="-1"></a><span class="fu">dim</span>(air_1000_df)</span></code></pre></div>
 <pre><code>## [1] 10439     3</code></pre>
 <p>A little more set-up. Create a set of axis labels:</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a><span class="co"># axis labels (breaks)</span></span>
-<span id="cb60-2"><a href="#cb60-2" tabindex="-1"></a>breaks_x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="at">by =</span> <span class="dv">60</span>)) </span>
-<span id="cb60-3"><a href="#cb60-3" tabindex="-1"></a>breaks_y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">30</span>)) </span>
-<span id="cb60-4"><a href="#cb60-4" tabindex="-1"></a>labels_x <span class="ot">&lt;-</span> <span class="fu">as.character</span>(breaks_x) </span>
-<span id="cb60-5"><a href="#cb60-5" tabindex="-1"></a>labels_y <span class="ot">&lt;-</span> <span class="fu">as.character</span>(breaks_y) </span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="co"># axis labels (breaks)</span></span>
+<span id="cb51-2"><a href="#cb51-2" tabindex="-1"></a>breaks_x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="at">by =</span> <span class="dv">60</span>)) </span>
+<span id="cb51-3"><a href="#cb51-3" tabindex="-1"></a>breaks_y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">30</span>)) </span>
+<span id="cb51-4"><a href="#cb51-4" tabindex="-1"></a>labels_x <span class="ot">&lt;-</span> <span class="fu">as.character</span>(breaks_x) </span>
+<span id="cb51-5"><a href="#cb51-5" tabindex="-1"></a>labels_y <span class="ot">&lt;-</span> <span class="fu">as.character</span>(breaks_y) </span></code></pre></div>
 <p>Make a graticule.</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a><span class="co"># make a graticule </span></span>
-<span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a>grat <span class="ot">=</span> <span class="fu">st_graticule</span>(air_1000_sf, <span class="at">lon =</span> breaks_x, <span class="at">lat =</span> breaks_y)</span>
-<span id="cb61-3"><a href="#cb61-3" tabindex="-1"></a>grat</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="co"># make a graticule </span></span>
+<span id="cb52-2"><a href="#cb52-2" tabindex="-1"></a>grat <span class="ot">=</span> <span class="fu">st_graticule</span>(air_1000_sf, <span class="at">lon =</span> breaks_x, <span class="at">lat =</span> breaks_y)</span>
+<span id="cb52-3"><a href="#cb52-3" tabindex="-1"></a>grat</span></code></pre></div>
 <pre><code>## Simple feature collection with 10 features and 10 fields
 ## Geometry type: LINESTRING
 ## Dimension:     XY
@@ -896,21 +888,21 @@ object:</p>
 ## 10         0   TRUE
 ## 11         0   TRUE
 ## 12         0   TRUE</code></pre>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a>grat_otl <span class="ot">&lt;-</span> <span class="fu">st_geometry</span>(grat)</span>
-<span id="cb63-2"><a href="#cb63-2" tabindex="-1"></a><span class="fu">plot</span>(grat_otl)</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a>grat_otl <span class="ot">&lt;-</span> <span class="fu">st_geometry</span>(grat)</span>
+<span id="cb54-2"><a href="#cb54-2" tabindex="-1"></a><span class="fu">plot</span>(grat_otl)</span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-21-1.png" width="80%" height="80%" /></p>
 <p>Now a <code>ggplot2</code> map:</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" tabindex="-1"></a><span class="co"># ggplot2 map of air</span></span>
-<span id="cb64-2"><a href="#cb64-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb64-3"><a href="#cb64-3" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">data =</span> air_1000_df[,,<span class="dv">1</span>], <span class="fu">aes</span>(<span class="at">x =</span> lon, <span class="at">y =</span> lat, <span class="at">fill =</span> air)) <span class="sc">+</span></span>
-<span id="cb64-4"><a href="#cb64-4" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">mid=</span><span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkred&quot;</span>, <span class="at">midpoint =</span> <span class="fl">273.15</span>) <span class="sc">+</span></span>
-<span id="cb64-5"><a href="#cb64-5" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb64-6"><a href="#cb64-6" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> grat_otl, <span class="at">col =</span> <span class="st">&quot;gray80&quot;</span>, <span class="at">lwd =</span> <span class="fl">0.5</span>, <span class="at">lty =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb64-7"><a href="#cb64-7" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="fl">175.0</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb64-8"><a href="#cb64-8" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> breaks_x) <span class="sc">+</span></span>
-<span id="cb64-9"><a href="#cb64-9" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> breaks_y) <span class="sc">+</span></span>
-<span id="cb64-10"><a href="#cb64-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">title=</span><span class="st">&quot;NCEP2 Reanalysis 2m Air Temperature&quot;</span>, <span class="at">fill=</span><span class="st">&quot;K&quot;</span>) <span class="sc">+</span></span>
-<span id="cb64-11"><a href="#cb64-11" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" tabindex="-1"></a><span class="co"># ggplot2 map of air</span></span>
+<span id="cb55-2"><a href="#cb55-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb55-3"><a href="#cb55-3" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">data =</span> air_1000_df[,,<span class="dv">1</span>], <span class="fu">aes</span>(<span class="at">x =</span> lon, <span class="at">y =</span> lat, <span class="at">fill =</span> air)) <span class="sc">+</span></span>
+<span id="cb55-4"><a href="#cb55-4" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">mid=</span><span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkred&quot;</span>, <span class="at">midpoint =</span> <span class="fl">273.15</span>) <span class="sc">+</span></span>
+<span id="cb55-5"><a href="#cb55-5" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb55-6"><a href="#cb55-6" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> grat_otl, <span class="at">col =</span> <span class="st">&quot;gray80&quot;</span>, <span class="at">lwd =</span> <span class="fl">0.5</span>, <span class="at">lty =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb55-7"><a href="#cb55-7" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="fl">175.0</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb55-8"><a href="#cb55-8" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> breaks_x) <span class="sc">+</span></span>
+<span id="cb55-9"><a href="#cb55-9" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> breaks_y) <span class="sc">+</span></span>
+<span id="cb55-10"><a href="#cb55-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">title=</span><span class="st">&quot;NCEP2 Reanalysis 2m Air Temperature&quot;</span>, <span class="at">fill=</span><span class="st">&quot;K&quot;</span>) <span class="sc">+</span></span>
+<span id="cb55-11"><a href="#cb55-11" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-22-1.png" width="80%" height="80%" /></p>
 <p>The <code>geom_tile()</code> function is an alternative to
 <code>geom_point()</code>, which fills in the spaces between points
@@ -922,8 +914,8 @@ axes.</p>
 the individual blocks of data for each month, and adding a month-name
 column. Begin by coverting the <code>air_1000_sr</code>
 <code>SpatRaster</code> object to a plain array:</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a><span class="co"># convert SpatRaster to a plain array</span></span>
-<span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a>air_1000_sr</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="co"># convert SpatRaster to a plain array</span></span>
+<span id="cb56-2"><a href="#cb56-2" tabindex="-1"></a>air_1000_sr</span></code></pre></div>
 <pre><code>## class       : SpatRaster 
 ## dimensions  : 73, 143, 12  (nrow, ncol, nlyr)
 ## resolution  : 2.482517, 2.465753  (x, y)
@@ -933,53 +925,53 @@ column. Begin by coverting the <code>air_1000_sr</code>
 ## names       :      Jan,      Feb,      Mar,      Apr,      May,      Jun, ... 
 ## min values  : 244.2550, 244.2596, 245.4530, 241.4906, 239.9924, 240.1938, ... 
 ## max values  : 308.6734, 307.2127, 307.9087, 309.1877, 311.3960, 313.2636, ...</code></pre>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="fu">dim</span>(air_1000_sr)</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a><span class="fu">dim</span>(air_1000_sr)</span></code></pre></div>
 <pre><code>## [1]  73 143  12</code></pre>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" tabindex="-1"></a>air_array <span class="ot">&lt;-</span> <span class="fu">as.array</span>(air_1000_sr)</span>
-<span id="cb69-2"><a href="#cb69-2" tabindex="-1"></a><span class="fu">class</span>(air_array)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a>air_array <span class="ot">&lt;-</span> <span class="fu">as.array</span>(air_1000_sr)</span>
+<span id="cb60-2"><a href="#cb60-2" tabindex="-1"></a><span class="fu">class</span>(air_array)</span></code></pre></div>
 <pre><code>## [1] &quot;array&quot;</code></pre>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" tabindex="-1"></a><span class="fu">dim</span>(air_array)</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a><span class="fu">dim</span>(air_array)</span></code></pre></div>
 <pre><code>## [1]  73 143  12</code></pre>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" tabindex="-1"></a><span class="co"># unwrap the array to a long vector, stacking the months</span></span>
-<span id="cb73-2"><a href="#cb73-2" tabindex="-1"></a>air_1000_vector <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(air_array)</span>
-<span id="cb73-3"><a href="#cb73-3" tabindex="-1"></a><span class="fu">class</span>(air_1000_vector)</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" tabindex="-1"></a><span class="co"># unwrap the array to a long vector, stacking the months</span></span>
+<span id="cb64-2"><a href="#cb64-2" tabindex="-1"></a>air_1000_vector <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(air_array)</span>
+<span id="cb64-3"><a href="#cb64-3" tabindex="-1"></a><span class="fu">class</span>(air_1000_vector)</span></code></pre></div>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" tabindex="-1"></a><span class="fu">length</span>(air_1000_vector)</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" tabindex="-1"></a><span class="fu">length</span>(air_1000_vector)</span></code></pre></div>
 <pre><code>## [1] 125268</code></pre>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" tabindex="-1"></a><span class="fu">head</span>(air_1000_vector)</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" tabindex="-1"></a><span class="fu">head</span>(air_1000_vector)</span></code></pre></div>
 <pre><code>## [1] 248.0430 247.4417 247.3460 247.8183 248.3500 248.9583</code></pre>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" tabindex="-1"></a><span class="fu">tail</span>(air_1000_vector)</span></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" tabindex="-1"></a><span class="fu">tail</span>(air_1000_vector)</span></code></pre></div>
 <pre><code>## [1] 269.5500 269.0778 269.3746 269.1017 267.7076 266.3626</code></pre>
 <p>Get the total lenght of one month’s worth of data in the stacked
 vector:</p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" tabindex="-1"></a>nt <span class="ot">&lt;-</span> <span class="fu">dim</span>(air_array)[<span class="dv">1</span>] <span class="sc">*</span> <span class="fu">dim</span>(air_array)[<span class="dv">2</span>]</span>
-<span id="cb81-2"><a href="#cb81-2" tabindex="-1"></a>nt</span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" tabindex="-1"></a>nt <span class="ot">&lt;-</span> <span class="fu">dim</span>(air_array)[<span class="dv">1</span>] <span class="sc">*</span> <span class="fu">dim</span>(air_array)[<span class="dv">2</span>]</span>
+<span id="cb72-2"><a href="#cb72-2" tabindex="-1"></a>nt</span></code></pre></div>
 <pre><code>## [1] 10439</code></pre>
 <p>Generate a new set of lons and lats for stacked vector:</p>
-<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" tabindex="-1"></a><span class="co"># generate a &quot;long&quot; vector of lons and lats</span></span>
-<span id="cb83-2"><a href="#cb83-2" tabindex="-1"></a>lon2 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">180.0</span>, <span class="fl">175.0</span>, <span class="at">by =</span> <span class="fl">2.5</span>)</span>
-<span id="cb83-3"><a href="#cb83-3" tabindex="-1"></a>lat2 <span class="ot">&lt;-</span> <span class="fu">seq</span>( <span class="fl">90.0</span>,  <span class="sc">-</span><span class="fl">90.0</span>, <span class="at">by =</span> <span class="sc">-</span><span class="fl">2.5</span>) <span class="co"># reverse the order</span></span>
-<span id="cb83-4"><a href="#cb83-4" tabindex="-1"></a><span class="fu">length</span>(lon2); <span class="fu">length</span>(lat2)</span></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" tabindex="-1"></a><span class="co"># generate a &quot;long&quot; vector of lons and lats</span></span>
+<span id="cb74-2"><a href="#cb74-2" tabindex="-1"></a>lon2 <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fl">180.0</span>, <span class="fl">175.0</span>, <span class="at">by =</span> <span class="fl">2.5</span>)</span>
+<span id="cb74-3"><a href="#cb74-3" tabindex="-1"></a>lat2 <span class="ot">&lt;-</span> <span class="fu">seq</span>( <span class="fl">90.0</span>,  <span class="sc">-</span><span class="fl">90.0</span>, <span class="at">by =</span> <span class="sc">-</span><span class="fl">2.5</span>) <span class="co"># reverse the order</span></span>
+<span id="cb74-4"><a href="#cb74-4" tabindex="-1"></a><span class="fu">length</span>(lon2); <span class="fu">length</span>(lat2)</span></code></pre></div>
 <pre><code>## [1] 143</code></pre>
 <pre><code>## [1] 73</code></pre>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" tabindex="-1"></a>lonlat <span class="ot">&lt;-</span> (<span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lat2, lon2)))</span>
-<span id="cb86-2"><a href="#cb86-2" tabindex="-1"></a><span class="fu">dim</span>(lonlat)</span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" tabindex="-1"></a>lonlat <span class="ot">&lt;-</span> (<span class="fu">as.matrix</span>(<span class="fu">expand.grid</span>(lat2, lon2)))</span>
+<span id="cb77-2"><a href="#cb77-2" tabindex="-1"></a><span class="fu">dim</span>(lonlat)</span></code></pre></div>
 <pre><code>## [1] 10439     2</code></pre>
 <p>Generate the month-names</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" tabindex="-1"></a><span class="co"># month names</span></span>
-<span id="cb88-2"><a href="#cb88-2" tabindex="-1"></a>month <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;Jan&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Feb&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Mar&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Apr&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;May&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Jun&quot;</span>, nt),</span>
-<span id="cb88-3"><a href="#cb88-3" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="st">&quot;Jul&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Aug&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Sep&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Oct&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Nov&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Dec&quot;</span>, nt))</span>
-<span id="cb88-4"><a href="#cb88-4" tabindex="-1"></a><span class="fu">length</span>(month)</span></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" tabindex="-1"></a><span class="co"># month names</span></span>
+<span id="cb79-2"><a href="#cb79-2" tabindex="-1"></a>month <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="st">&quot;Jan&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Feb&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Mar&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Apr&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;May&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Jun&quot;</span>, nt),</span>
+<span id="cb79-3"><a href="#cb79-3" tabindex="-1"></a>  <span class="fu">rep</span>(<span class="st">&quot;Jul&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Aug&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Sep&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Oct&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Nov&quot;</span>, nt), <span class="fu">rep</span>(<span class="st">&quot;Dec&quot;</span>, nt))</span>
+<span id="cb79-4"><a href="#cb79-4" tabindex="-1"></a><span class="fu">length</span>(month)</span></code></pre></div>
 <pre><code>## [1] 125268</code></pre>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" tabindex="-1"></a><span class="fu">head</span>(month); <span class="fu">tail</span>(month)</span></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" tabindex="-1"></a><span class="fu">head</span>(month); <span class="fu">tail</span>(month)</span></code></pre></div>
 <pre><code>## [1] &quot;Jan&quot; &quot;Jan&quot; &quot;Jan&quot; &quot;Jan&quot; &quot;Jan&quot; &quot;Jan&quot;</code></pre>
 <pre><code>## [1] &quot;Dec&quot; &quot;Dec&quot; &quot;Dec&quot; &quot;Dec&quot; &quot;Dec&quot; &quot;Dec&quot;</code></pre>
 <p>Make the data.frame. Note that the length of <code>month</code> is
 shorter than the lengths of the other columns, but it is replicated when
 building the data.frame:</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" tabindex="-1"></a><span class="co"># make the second data.frame</span></span>
-<span id="cb93-2"><a href="#cb93-2" tabindex="-1"></a>air_1000_df2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(lonlat[,<span class="dv">2</span>], lonlat[,<span class="dv">1</span>], air_1000_vector, month)</span>
-<span id="cb93-3"><a href="#cb93-3" tabindex="-1"></a><span class="fu">head</span>(air_1000_df2)</span></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" tabindex="-1"></a><span class="co"># make the second data.frame</span></span>
+<span id="cb84-2"><a href="#cb84-2" tabindex="-1"></a>air_1000_df2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(lonlat[,<span class="dv">2</span>], lonlat[,<span class="dv">1</span>], air_1000_vector, month)</span>
+<span id="cb84-3"><a href="#cb84-3" tabindex="-1"></a><span class="fu">head</span>(air_1000_df2)</span></code></pre></div>
 <pre><code>##   lonlat...2. lonlat...1. air_1000_vector month
 ## 1        -180        90.0        248.0430   Jan
 ## 2        -180        87.5        247.4417   Jan
@@ -987,7 +979,7 @@ building the data.frame:</p>
 ## 4        -180        82.5        247.8183   Jan
 ## 5        -180        80.0        248.3500   Jan
 ## 6        -180        77.5        248.9583   Jan</code></pre>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" tabindex="-1"></a><span class="fu">tail</span>(air_1000_df2)</span></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" tabindex="-1"></a><span class="fu">tail</span>(air_1000_df2)</span></code></pre></div>
 <pre><code>##        lonlat...2. lonlat...1. air_1000_vector month
 ## 125263         175       -77.5        269.5500   Dec
 ## 125264         175       -80.0        269.0778   Dec
@@ -995,25 +987,25 @@ building the data.frame:</p>
 ## 125266         175       -85.0        269.1017   Dec
 ## 125267         175       -87.5        267.7076   Dec
 ## 125268         175       -90.0        266.3626   Dec</code></pre>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" tabindex="-1"></a><span class="fu">names</span>(air_1000_df2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;air&quot;</span>, <span class="st">&quot;month&quot;</span>)</span>
-<span id="cb97-2"><a href="#cb97-2" tabindex="-1"></a><span class="fu">dim</span>(air_1000_df2)</span></code></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" tabindex="-1"></a><span class="fu">names</span>(air_1000_df2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;air&quot;</span>, <span class="st">&quot;month&quot;</span>)</span>
+<span id="cb88-2"><a href="#cb88-2" tabindex="-1"></a><span class="fu">dim</span>(air_1000_df2)</span></code></pre></div>
 <pre><code>## [1] 125268      4</code></pre>
 <p>Make the map:</p>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" tabindex="-1"></a><span class="co"># ggplot2 map of air</span></span>
-<span id="cb99-2"><a href="#cb99-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
-<span id="cb99-3"><a href="#cb99-3" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">data =</span> air_1000_df2, <span class="fu">aes</span>(<span class="at">x =</span> lon, <span class="at">y =</span> lat, <span class="at">fill =</span> air)) <span class="sc">+</span></span>
-<span id="cb99-4"><a href="#cb99-4" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb99-5"><a href="#cb99-5" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> grat_otl, <span class="at">col =</span> <span class="st">&quot;gray80&quot;</span>, <span class="at">lwd =</span> <span class="fl">0.5</span>, <span class="at">lty =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb99-6"><a href="#cb99-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">175</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb99-7"><a href="#cb99-7" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span><span class="fu">factor</span>(month, <span class="at">levels =</span> </span>
-<span id="cb99-8"><a href="#cb99-8" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;Jan&quot;</span>, <span class="st">&quot;Feb&quot;</span>, <span class="st">&quot;Mar&quot;</span>, <span class="st">&quot;Apr&quot;</span>, <span class="st">&quot;May&quot;</span>, <span class="st">&quot;Jun&quot;</span>, <span class="st">&quot;Jul&quot;</span>, <span class="st">&quot;Aug&quot;</span>, <span class="st">&quot;Sep&quot;</span>, <span class="st">&quot;Oct&quot;</span>, <span class="st">&quot;Nov&quot;</span>, <span class="st">&quot;Dec&quot;</span>)), <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb99-9"><a href="#cb99-9" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">mid=</span><span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkred&quot;</span>, <span class="at">midpoint =</span> <span class="fl">273.15</span>) <span class="sc">+</span></span>
-<span id="cb99-10"><a href="#cb99-10" tabindex="-1"></a>  <span class="co"># scale_y_continuous(breaks = seq(-90, 90, 90), expand = c(0,0)) +  # removes whitespace within panels</span></span>
-<span id="cb99-11"><a href="#cb99-11" tabindex="-1"></a>  <span class="co"># scale_x_continuous(breaks = seq(-180, 180, 90), expand = c(0,0)) +</span></span>
-<span id="cb99-12"><a href="#cb99-12" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> breaks_x) <span class="sc">+</span></span>
-<span id="cb99-13"><a href="#cb99-13" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> breaks_y) <span class="sc">+</span></span>
-<span id="cb99-14"><a href="#cb99-14" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">&quot;NCEP2 Reanalysis 2m Air Temperature&quot;</span>, <span class="at">fill=</span><span class="st">&quot;K&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb99-15"><a href="#cb99-15" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">5</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" tabindex="-1"></a><span class="co"># ggplot2 map of air</span></span>
+<span id="cb90-2"><a href="#cb90-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb90-3"><a href="#cb90-3" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">data =</span> air_1000_df2, <span class="fu">aes</span>(<span class="at">x =</span> lon, <span class="at">y =</span> lat, <span class="at">fill =</span> air)) <span class="sc">+</span></span>
+<span id="cb90-4"><a href="#cb90-4" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb90-5"><a href="#cb90-5" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> grat_otl, <span class="at">col =</span> <span class="st">&quot;gray80&quot;</span>, <span class="at">lwd =</span> <span class="fl">0.5</span>, <span class="at">lty =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb90-6"><a href="#cb90-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">175</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb90-7"><a href="#cb90-7" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span><span class="fu">factor</span>(month, <span class="at">levels =</span> </span>
+<span id="cb90-8"><a href="#cb90-8" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;Jan&quot;</span>, <span class="st">&quot;Feb&quot;</span>, <span class="st">&quot;Mar&quot;</span>, <span class="st">&quot;Apr&quot;</span>, <span class="st">&quot;May&quot;</span>, <span class="st">&quot;Jun&quot;</span>, <span class="st">&quot;Jul&quot;</span>, <span class="st">&quot;Aug&quot;</span>, <span class="st">&quot;Sep&quot;</span>, <span class="st">&quot;Oct&quot;</span>, <span class="st">&quot;Nov&quot;</span>, <span class="st">&quot;Dec&quot;</span>)), <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb90-9"><a href="#cb90-9" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">mid=</span><span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkred&quot;</span>, <span class="at">midpoint =</span> <span class="fl">273.15</span>) <span class="sc">+</span></span>
+<span id="cb90-10"><a href="#cb90-10" tabindex="-1"></a>  <span class="co"># scale_y_continuous(breaks = seq(-90, 90, 90), expand = c(0,0)) +  # removes whitespace within panels</span></span>
+<span id="cb90-11"><a href="#cb90-11" tabindex="-1"></a>  <span class="co"># scale_x_continuous(breaks = seq(-180, 180, 90), expand = c(0,0)) +</span></span>
+<span id="cb90-12"><a href="#cb90-12" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> breaks_x) <span class="sc">+</span></span>
+<span id="cb90-13"><a href="#cb90-13" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> breaks_y) <span class="sc">+</span></span>
+<span id="cb90-14"><a href="#cb90-14" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">&quot;NCEP2 Reanalysis 2m Air Temperature&quot;</span>, <span class="at">fill=</span><span class="st">&quot;K&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb90-15"><a href="#cb90-15" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">5</span>))</span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-29-1.png" width="80%" height="80%" /></p>
 </div>
 </div>
@@ -1030,14 +1022,12 @@ href="https://doi.org/10.1073/pnas.1112839109">[https://doi.org/10.1073/pnas.111
 The data consist of z-scores of transformed charcoal-influx values
 (CHAR) for the past 3000 years, which record fire activity.</p>
 <p>Read the data:</p>
-<div class="sourceCode" id="cb100"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" tabindex="-1"></a>csv_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Dropbox/DataVis/working/data/csv_files/&quot;</span></span>
-<span id="cb100-2"><a href="#cb100-2" tabindex="-1"></a>csv_file <span class="ot">&lt;-</span> <span class="st">&quot;wus_lat_trans.csv&quot;</span></span>
-<span id="cb100-3"><a href="#cb100-3" tabindex="-1"></a>wus_char_csv <span class="ot">&lt;-</span> <span class="fu">read.csv</span>((<span class="fu">paste</span>(csv_path, csv_file, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)))</span>
-<span id="cb100-4"><a href="#cb100-4" tabindex="-1"></a><span class="fu">class</span>(wus_char_csv)</span></code></pre></div>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" tabindex="-1"></a>csv_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Dropbox/DataVis/working/data/csv_files/&quot;</span></span>
+<span id="cb91-2"><a href="#cb91-2" tabindex="-1"></a>csv_file <span class="ot">&lt;-</span> <span class="st">&quot;wus_lat_trans.csv&quot;</span></span>
+<span id="cb91-3"><a href="#cb91-3" tabindex="-1"></a>wus_char_csv <span class="ot">&lt;-</span> <span class="fu">read.csv</span>((<span class="fu">paste</span>(csv_path, csv_file, <span class="at">sep =</span> <span class="st">&quot;&quot;</span>)))</span>
+<span id="cb91-4"><a href="#cb91-4" tabindex="-1"></a><span class="fu">class</span>(wus_char_csv)</span></code></pre></div>
 <pre><code>## [1] &quot;data.frame&quot;</code></pre>
-<div class="sourceCode" id="cb102"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" tabindex="-1"></a><span class="fu">head</span>(wus_char_csv)</span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" tabindex="-1"></a><span class="fu">head</span>(wus_char_csv)</span></code></pre></div>
 <pre><code>##   seqnum sitenum  age ztinflux      lat       lon
 ## 1      1      39 -8.3   0.1150 33.65833 -117.8583
 ## 2      1      39 21.1  -0.2459 33.65833 -117.8583
@@ -1046,13 +1036,11 @@ class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="#cb1
 ## 5      1      39 68.8   1.8991 33.65833 -117.8583
 ## 6      1      39 88.0   1.0188 33.65833 -117.8583</code></pre>
 <p>Convert to a <code>sftime</code> object:</p>
-<div class="sourceCode" id="cb104"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" tabindex="-1"></a>wus_char_sftime <span class="ot">&lt;-</span> <span class="fu">st_as_sftime</span>(wus_char_csv, <span class="at">time_column_name =</span> <span class="st">&quot;age&quot;</span>, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>),</span>
-<span id="cb104-2"><a href="#cb104-2" tabindex="-1"></a>        <span class="at">remove =</span> <span class="cn">FALSE</span>, <span class="at">time_column_last =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb104-3"><a href="#cb104-3" tabindex="-1"></a><span class="fu">class</span>(wus_char_sftime)</span></code></pre></div>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" tabindex="-1"></a>wus_char_sftime <span class="ot">&lt;-</span> <span class="fu">st_as_sftime</span>(wus_char_csv, <span class="at">time_column_name =</span> <span class="st">&quot;age&quot;</span>, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>),</span>
+<span id="cb95-2"><a href="#cb95-2" tabindex="-1"></a>        <span class="at">remove =</span> <span class="cn">FALSE</span>, <span class="at">time_column_last =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb95-3"><a href="#cb95-3" tabindex="-1"></a><span class="fu">class</span>(wus_char_sftime)</span></code></pre></div>
 <pre><code>## [1] &quot;sftime&quot;     &quot;sf&quot;         &quot;data.frame&quot;</code></pre>
-<div class="sourceCode" id="cb106"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" tabindex="-1"></a>wus_char_sftime</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" tabindex="-1"></a>wus_char_sftime</span></code></pre></div>
 <pre><code>## Spatiotemporal feature collection with 9999 features and 5 fields
 ## Geometry type: POINT
 ## Dimension:     XY
@@ -1075,38 +1063,37 @@ class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="#cb1
 <p>Note that data.frame is now an <code>sf</code> “POINT” object with
 explicit geometry (as well as a “time column”). Here’s a simple latitude
 by age plot ( Hovmöller diagram):</p>
-<div class="sourceCode" id="cb108"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" tabindex="-1"></a><span class="fu">plot</span>(wus_char_sftime<span class="sc">$</span>lat <span class="sc">~</span> wus_char_sftime<span class="sc">$</span>age, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">3200</span>, <span class="dv">0</span>), <span class="at">pch =</span> <span class="dv">16</span>, <span class="at">cex =</span> <span class="fl">0.5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" tabindex="-1"></a><span class="fu">plot</span>(wus_char_sftime<span class="sc">$</span>lat <span class="sc">~</span> wus_char_sftime<span class="sc">$</span>age, <span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">3200</span>, <span class="dv">0</span>), <span class="at">pch =</span> <span class="dv">16</span>, <span class="at">cex =</span> <span class="fl">0.5</span>)</span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-32-1.png" width="80%" height="80%" /></p>
 <p>Plot the locations of the sites.</p>
-<div class="sourceCode" id="cb109"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" tabindex="-1"></a><span class="co"># ggplot2 map of wus_char_sftime</span></span>
-<span id="cb109-2"><a href="#cb109-2" tabindex="-1"></a><span class="fu">ggplot</span>()  <span class="sc">+</span></span>
-<span id="cb109-3"><a href="#cb109-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> na2_sf, <span class="at">fill=</span><span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb109-4"><a href="#cb109-4" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> wus_sf, <span class="at">fill=</span><span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb109-5"><a href="#cb109-5" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> wus_char_sftime<span class="sc">$</span>lon, <span class="at">y =</span> wus_char_sftime<span class="sc">$</span>lat), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
-<span id="cb109-6"><a href="#cb109-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">130</span>, <span class="sc">-</span><span class="dv">100</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">50</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb109-7"><a href="#cb109-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">&quot;Western U.S. High-Resolution Charcoal Records&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb109-8"><a href="#cb109-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb100"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" tabindex="-1"></a><span class="co"># ggplot2 map of wus_char_sftime</span></span>
+<span id="cb100-2"><a href="#cb100-2" tabindex="-1"></a><span class="fu">ggplot</span>()  <span class="sc">+</span></span>
+<span id="cb100-3"><a href="#cb100-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> na2_sf, <span class="at">fill=</span><span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb100-4"><a href="#cb100-4" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> wus_sf, <span class="at">fill=</span><span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb100-5"><a href="#cb100-5" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> wus_char_sftime<span class="sc">$</span>lon, <span class="at">y =</span> wus_char_sftime<span class="sc">$</span>lat), <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb100-6"><a href="#cb100-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">130</span>, <span class="sc">-</span><span class="dv">100</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="dv">30</span>, <span class="dv">50</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb100-7"><a href="#cb100-7" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">&quot;Western U.S. High-Resolution Charcoal Records&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb100-8"><a href="#cb100-8" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-33-1.png" width="80%" height="80%" /></p>
 <p>And here’s a better Hovmöller diagram:</p>
-<div class="sourceCode" id="cb110"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" tabindex="-1"></a><span class="co"># ggplot2 Hovmöller plots -- Year x Latitude</span></span>
-<span id="cb110-2"><a href="#cb110-2" tabindex="-1"></a></span>
-<span id="cb110-3"><a href="#cb110-3" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">99</span>, <span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">2</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">0.0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">99</span>)</span>
-<span id="cb110-4"><a href="#cb110-4" tabindex="-1"></a>ztinflux_factor <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">findInterval</span>(wus_char_sftime<span class="sc">$</span>ztinflux, cutpts))</span>
-<span id="cb110-5"><a href="#cb110-5" tabindex="-1"></a></span>
-<span id="cb110-6"><a href="#cb110-6" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb110-7"><a href="#cb110-7" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">type =</span> <span class="st">&quot;div&quot;</span>, <span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>, <span class="at">aesthetics =</span> <span class="st">&quot;color&quot;</span>, <span class="at">direction =</span> <span class="dv">0</span>,</span>
-<span id="cb110-8"><a href="#cb110-8" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;&lt; -5&quot;</span>, <span class="st">&quot;-5 to -2&quot;</span>, <span class="st">&quot;-2 to -1&quot;</span>, <span class="st">&quot;-1 to -0.5&quot;</span>, <span class="st">&quot;-0.5 to 0.0&quot;</span>,</span>
-<span id="cb110-9"><a href="#cb110-9" tabindex="-1"></a>                                <span class="st">&quot;0.0 to 0.5&quot;</span>, <span class="st">&quot;0.5 to 1&quot;</span>, <span class="st">&quot;1 to 2&quot;</span>, <span class="st">&quot;2 to 5&quot;</span>, <span class="st">&quot;&gt; 5&quot;</span>),</span>
-<span id="cb110-10"><a href="#cb110-10" tabindex="-1"></a>                     <span class="at">name =</span> <span class="st">&quot;Z-Score&quot;</span>) <span class="sc">+</span></span>
-<span id="cb110-11"><a href="#cb110-11" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> wus_char_sftime<span class="sc">$</span>age, <span class="at">y =</span> wus_char_sftime<span class="sc">$</span>lat, <span class="at">color =</span> ztinflux_factor), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb110-12"><a href="#cb110-12" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">3200</span>, <span class="sc">-</span><span class="dv">100</span>, <span class="sc">-</span><span class="dv">500</span>), <span class="at">trans =</span> <span class="st">&quot;reverse&quot;</span>) <span class="sc">+</span></span>
-<span id="cb110-13"><a href="#cb110-13" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">50</span>, <span class="dv">5</span>)) <span class="sc">+</span></span>
-<span id="cb110-14"><a href="#cb110-14" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">&quot;Western U.S. High-Resolution Charcoal Records&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Age&quot;</span>, <span class="at">fill=</span><span class="st">&quot;Z-Scores Charcoal Influx&quot;</span>) <span class="sc">+</span> </span>
-<span id="cb110-15"><a href="#cb110-15" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size=</span><span class="dv">3</span>))) <span class="sc">+</span></span>
-<span id="cb110-16"><a href="#cb110-16" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;bottom&quot;</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">aspect.ratio =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb101"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" tabindex="-1"></a><span class="co"># ggplot2 Hovmöller plots -- Year x Latitude</span></span>
+<span id="cb101-2"><a href="#cb101-2" tabindex="-1"></a></span>
+<span id="cb101-3"><a href="#cb101-3" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">99</span>, <span class="sc">-</span><span class="dv">5</span>, <span class="sc">-</span><span class="dv">2</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="sc">-</span><span class="fl">0.5</span>, <span class="fl">0.0</span>, <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">99</span>)</span>
+<span id="cb101-4"><a href="#cb101-4" tabindex="-1"></a>ztinflux_factor <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">findInterval</span>(wus_char_sftime<span class="sc">$</span>ztinflux, cutpts))</span>
+<span id="cb101-5"><a href="#cb101-5" tabindex="-1"></a></span>
+<span id="cb101-6"><a href="#cb101-6" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb101-7"><a href="#cb101-7" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">type =</span> <span class="st">&quot;div&quot;</span>, <span class="at">palette =</span> <span class="st">&quot;RdBu&quot;</span>, <span class="at">aesthetics =</span> <span class="st">&quot;color&quot;</span>, <span class="at">direction =</span> <span class="dv">0</span>,</span>
+<span id="cb101-8"><a href="#cb101-8" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;&lt; -5&quot;</span>, <span class="st">&quot;-5 to -2&quot;</span>, <span class="st">&quot;-2 to -1&quot;</span>, <span class="st">&quot;-1 to -0.5&quot;</span>, <span class="st">&quot;-0.5 to 0.0&quot;</span>,</span>
+<span id="cb101-9"><a href="#cb101-9" tabindex="-1"></a>                                <span class="st">&quot;0.0 to 0.5&quot;</span>, <span class="st">&quot;0.5 to 1&quot;</span>, <span class="st">&quot;1 to 2&quot;</span>, <span class="st">&quot;2 to 5&quot;</span>, <span class="st">&quot;&gt; 5&quot;</span>),</span>
+<span id="cb101-10"><a href="#cb101-10" tabindex="-1"></a>                     <span class="at">name =</span> <span class="st">&quot;Z-Score&quot;</span>) <span class="sc">+</span></span>
+<span id="cb101-11"><a href="#cb101-11" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">x =</span> wus_char_sftime<span class="sc">$</span>age, <span class="at">y =</span> wus_char_sftime<span class="sc">$</span>lat, <span class="at">color =</span> ztinflux_factor), <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb101-12"><a href="#cb101-12" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">3200</span>, <span class="sc">-</span><span class="dv">100</span>, <span class="sc">-</span><span class="dv">500</span>), <span class="at">trans =</span> <span class="st">&quot;reverse&quot;</span>) <span class="sc">+</span></span>
+<span id="cb101-13"><a href="#cb101-13" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">30</span>, <span class="dv">50</span>, <span class="dv">5</span>)) <span class="sc">+</span></span>
+<span id="cb101-14"><a href="#cb101-14" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title=</span><span class="st">&quot;Western U.S. High-Resolution Charcoal Records&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Age&quot;</span>, <span class="at">fill=</span><span class="st">&quot;Z-Scores Charcoal Influx&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb101-15"><a href="#cb101-15" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">size=</span><span class="dv">3</span>))) <span class="sc">+</span></span>
+<span id="cb101-16"><a href="#cb101-16" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;bottom&quot;</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">aspect.ratio =</span> <span class="dv">2</span><span class="sc">/</span><span class="dv">4</span>)</span></code></pre></div>
 <p><img src="sf_stars_sftime_files/figure-html/sf-stars-sftime-34-1.png" width="80%" height="80%" /></p>
 </div>
 

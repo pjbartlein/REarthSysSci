@@ -404,6 +404,12 @@ $(document).ready(function () {
     <li>
       <a href="hdf5_intro.html">HDF in R</a>
     </li>
+    <li>
+      <a href="anomalies.html">Long-term means and anomalies</a>
+    </li>
+    <li>
+      <a href="tsplots.html">Time-series plots</a>
+    </li>
   </ul>
 </li>
 <li class="dropdown">
@@ -1000,10 +1006,10 @@ MULTIPOLYGONS <code>sf</code> object:</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="fu">class</span>(wus_sf)</span></code></pre></div>
 <pre><code>## [1] &quot;sf&quot;         &quot;data.frame&quot;</code></pre>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="fu">plot</span>(wus_sf)</span></code></pre></div>
-<p><img src="maps2_files/figure-html/unnamed-chunk-1-1.png" width="80%" height="80%" /></p>
+<p><img src="maps2_files/figure-html/maps2-26-1.png" width="80%" height="80%" /></p>
 <p>Here’s a quick <code>ggplot2</code> map of the outlines:</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_sf</span>(<span class="at">data =</span> wus_sf) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="maps2_files/figure-html/unnamed-chunk-2-1.png" width="80%" height="80%" /></p>
+<p><img src="maps2_files/figure-html/maps2-27-1.png" width="80%" height="80%" /></p>
 <p>Project the outlines and a graticule (extracted from the
 <code>wus_sf</code> object using <code>st_graticule()</code>):</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="co"># projection</span></span>
@@ -1011,11 +1017,11 @@ MULTIPOLYGONS <code>sf</code> object:</p>
 <span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a>wus_sf_proj <span class="ot">=</span> <span class="fu">st_transform</span>(wus_sf, laea)</span>
 <span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(wus_sf_proj), <span class="at">axes =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(<span class="fu">st_graticule</span>(wus_sf_proj)), <span class="at">axes =</span> <span class="cn">TRUE</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<p><img src="maps2_files/figure-html/unnamed-chunk-3-1.png" width="80%" height="80%" /></p>
+<p><img src="maps2_files/figure-html/maps2-28-1.png" width="80%" height="80%" /></p>
 <p>Note the coordinates are now in meters.</p>
 <p>Here’s a <code>ggplot2</code> version:</p>
 <div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> <span class="fu">geom_sf</span>(<span class="at">data =</span> wus_sf_proj) <span class="sc">+</span> <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="maps2_files/figure-html/unnamed-chunk-4-1.png" width="80%" height="80%" /></p>
+<p><img src="maps2_files/figure-html/maps2-29-1.png" width="80%" height="80%" /></p>
 <p>Get two other outlines from the <code>maps</code> database, one for
 all of North America, and the other for the U.S.”</p>
 <div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="co"># get two other outlines</span></span>
@@ -1041,12 +1047,12 @@ manipulated using some of the common R functions, like
 ## arizona   arizona MULTIPOLYGON (((-114.6374 3...
 ## arkansas arkansas MULTIPOLYGON (((-94.05103 3...</code></pre>
 <div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(na2_sf))</span></code></pre></div>
-<p><img src="maps2_files/figure-html/unnamed-chunk-6-1.png" width="80%" height="80%" /></p>
+<p><img src="maps2_files/figure-html/maps2-31-1.png" width="80%" height="80%" /></p>
 <p>Note that the map is slightly strange–the Aleutians cross the
 dateline (180W), so the map wraps around.</p>
 <div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="co"># plot again, with longitude limited</span></span>
 <span id="cb52-2"><a href="#cb52-2" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(na2_sf), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">-</span><span class="dv">40</span>))</span></code></pre></div>
-<p><img src="maps2_files/figure-html/unnamed-chunk-7-1.png" width="80%" height="80%" /></p>
+<p><img src="maps2_files/figure-html/maps2-32-1.png" width="80%" height="80%" /></p>
 <p>Project the additional outlines:</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="co"># project the other outlines</span></span>
 <span id="cb53-2"><a href="#cb53-2" tabindex="-1"></a>na_sf_proj <span class="ot">=</span> <span class="fu">st_transform</span>(na_sf, laea)</span>
@@ -1056,7 +1062,7 @@ dateline (180W), so the map wraps around.</p>
 <span id="cb54-2"><a href="#cb54-2" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(na_sf_proj), <span class="at">col =</span> <span class="st">&quot;red&quot;</span>, <span class="at">axes =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb54-3"><a href="#cb54-3" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(wus_sf_proj), <span class="at">axes =</span> <span class="cn">TRUE</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb54-4"><a href="#cb54-4" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(<span class="fu">st_graticule</span>(wus_sf_proj)), <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<p><img src="maps2_files/figure-html/unnamed-chunk-9-1.png" width="80%" height="80%" /></p>
+<p><img src="maps2_files/figure-html/maps2-34-1.png" width="80%" height="80%" /></p>
 </div>
 <div id="get-and-project-the-pratio-data" class="section level2"
 number="3.2">
@@ -1070,7 +1076,7 @@ number="3.2">
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="co"># make an sf object</span></span>
 <span id="cb56-2"><a href="#cb56-2" tabindex="-1"></a>wus_pratio_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(wus_pratio, <span class="at">coords =</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>))</span>
 <span id="cb56-3"><a href="#cb56-3" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(wus_pratio_sf), <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex =</span> <span class="fl">0.5</span>)</span></code></pre></div>
-<p><img src="maps2_files/figure-html/unnamed-chunk-11-1.png" width="80%" height="80%" /></p>
+<p><img src="maps2_files/figure-html/maps2-36-1.png" width="80%" height="80%" /></p>
 <p>Recode the the <code>pjulpann</code> ratio to a factor:</p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a><span class="co"># recode pjulpjan to a factor</span></span>
 <span id="cb57-2"><a href="#cb57-2" tabindex="-1"></a><span class="fu">library</span>(classInt)</span>
@@ -1096,7 +1102,7 @@ number="3.2">
 <span id="cb59-8"><a href="#cb59-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Precipitation Seasonality&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
 <span id="cb59-9"><a href="#cb59-9" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(wus_pratio<span class="sc">$</span>lon, wus_pratio<span class="sc">$</span>lat, <span class="at">color =</span> pjulpjan_factor), <span class="at">size =</span> <span class="fl">1.5</span> ) <span class="sc">+</span></span>
 <span id="cb59-10"><a href="#cb59-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="maps2_files/figure-html/unnamed-chunk-13-1.png" width="80%" height="80%" /></p>
+<p><img src="maps2_files/figure-html/maps2-38-1.png" width="80%" height="80%" /></p>
 <p>Project the precipitation ratio point</p>
 <div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a><span class="co"># projection</span></span>
 <span id="cb60-2"><a href="#cb60-2" tabindex="-1"></a><span class="fu">st_crs</span>(wus_pratio_sf) <span class="ot">&lt;-</span> <span class="fu">st_crs</span>(<span class="st">&quot;+proj=longlat&quot;</span>)</span>
@@ -1106,7 +1112,7 @@ number="3.2">
 <div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a><span class="co"># plot the projected points</span></span>
 <span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(wus_pratio_sf_proj), <span class="at">pch=</span><span class="dv">16</span>, <span class="at">cex=</span><span class="fl">0.5</span>, <span class="at">axes =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb61-3"><a href="#cb61-3" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">st_geometry</span>(<span class="fu">st_graticule</span>(wus_pratio_sf_proj)), <span class="at">axes =</span> <span class="cn">TRUE</span>, <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<p><img src="maps2_files/figure-html/unnamed-chunk-15-1.png" width="80%" height="80%" />
+<p><img src="maps2_files/figure-html/maps2-40-1.png" width="80%" height="80%" />
 Plot everything</p>
 <div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a><span class="co"># ggplot2 map of pjulpman projected</span></span>
 <span id="cb62-2"><a href="#cb62-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
@@ -1122,7 +1128,7 @@ Plot everything</p>
 <span id="cb62-12"><a href="#cb62-12" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">crs =</span> <span class="fu">st_crs</span>(wus_sf_proj), <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1400000</span>, <span class="dv">1500000</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">400000</span>, <span class="dv">2150000</span>)) <span class="sc">+</span></span>
 <span id="cb62-13"><a href="#cb62-13" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Precipitation Seasonality&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>) <span class="sc">+</span></span>
 <span id="cb62-14"><a href="#cb62-14" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="maps2_files/figure-html/unnamed-chunk-16-1.png" width="80%" height="80%" /></p>
+<p><img src="maps2_files/figure-html/maps2-41-1.png" width="80%" height="80%" /></p>
 <p>The <code>guides()</code> function expands the size (diameter) of the
 legend key (<code>size = 3</code>) leaving the points at their original
 size.</p>
