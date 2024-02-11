@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Time-series plots</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Earth-System Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="intro.html">Introduction: R, RStudio, and other infrastructure</a>
+    </li>
+    <li>
+      <a href="usingR.html">Using R</a>
+    </li>
+    <li>
+      <a href="ESSdata.html">Earth-system science data</a>
+    </li>
+    <li>
+      <a href="netCDF.html">netCDF in R</a>
+    </li>
+    <li>
+      <a href="netcdf_terra.html">netCDF and terra</a>
+    </li>
+    <li>
+      <a href="plots1.html">Plots (1)</a>
+    </li>
+    <li>
+      <a href="plots2.html">Plots (2)</a>
+    </li>
+    <li>
+      <a href="maps1.html">Maps (1)</a>
+    </li>
+    <li>
+      <a href="maps2.html">Maps (2)</a>
+    </li>
+    <li>
+      <a href="geospatial.html">Geospatial analyses</a>
+    </li>
+    <li>
+      <a href="correlation.html">Correlation and regression</a>
+    </li>
+    <li>
+      <a href="prediction.html">Prediction</a>
+    </li>
+    <li>
+      <a href="pca.html">PCA</a>
+    </li>
+    <li>
+      <a href="svd.html">Singular Value Decomposistion</a>
+    </li>
+    <li>
+      <a href="highdim.html">High-resolution &amp; high-dimensional data</a>
+    </li>
+    <li>
+      <a href="multivariate.html">Multivariate methods</a>
+    </li>
+    <li>
+      <a href="timeseries.html">Time-series analysis</a>
+    </li>
+    <li>
+      <a href="otherlang.html">Other Languages</a>
+    </li>
+    <li class="dropdown-header">Other topics</li>
+    <li>
+      <a href="sf_stars_sftime.html">sf / stars / sftime</a>
+    </li>
+    <li>
+      <a href="hdf5_intro.html">HDF in R</a>
+    </li>
+    <li>
+      <a href="anomalies.html">Long-term means and anomalies</a>
+    </li>
+    <li>
+      <a href="tsplots.html">Time-series plots</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Tasks
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Tasks</li>
+    <li>
+      <a href="installR.html">Install R and RStudio</a>
+    </li>
+    <li>
+      <a href="Ex_UsingR.html">Using R exercise</a>
+    </li>
+    <li>
+      <a href="install_netCDF.html">Install netCDF &amp; Panoply</a>
+    </li>
+    <li>
+      <a href="transfer.html">File transfer</a>
+    </li>
+    <li>
+      <a href="texteditor.html">Install a text editor</a>
+    </li>
+    <li>
+      <a href="dataselection.html">Project data set selection</a>
+    </li>
+    <li>
+      <a href="markdown.html">Markdown and RMarkdown</a>
+    </li>
+    <li>
+      <a href="pandoc.html">Pandoc</a>
+    </li>
+    <li>
+      <a href="GitHub.html">GitHub and UO pages.uoregon.edu</a>
+    </li>
+    <li>
+      <a href="localweb.html">Local websites</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="websites.html">Old course web pages</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Time-series plots</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#time-series-plots" id="toc-time-series-plots"><span
+class="toc-section-number">1</span> Time-Series plots</a></li>
+<li><a href="#read-the-data" id="toc-read-the-data"><span
+class="toc-section-number">2</span> Read the data</a>
+<ul>
+<li><a href="#read-dimensions-and-attributes-of-the-data-set"
+id="toc-read-dimensions-and-attributes-of-the-data-set"><span
+class="toc-section-number">2.1</span> Read dimensions and attributes of
+the data set</a></li>
+<li><a href="#read-the-array" id="toc-read-the-array"><span
+class="toc-section-number">2.2</span> Read the array</a></li>
+</ul></li>
+<li><a href="#time-series-plot-of-consecutive-values"
+id="toc-time-series-plot-of-consecutive-values"><span
+class="toc-section-number">3</span> Time-series plot of consecutive
+values</a></li>
+<li><a href="#multi-panel-plot-of-monthly-time-series-data"
+id="toc-multi-panel-plot-of-monthly-time-series-data"><span
+class="toc-section-number">4</span> Multi-panel plot of monthly time
+series data</a></li>
+</ul>
+</div>
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<p>
+<span style="color: #00cc00;">NOTE: This page has been revised for
+Winter 2024, but may undergo further edits.</span>
+</p>
+<div id="time-series-plots" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Time-Series plots</h1>
+<p>A basic way of visualizing data in, for example, a 3-D netCDF file,
+with time being the third dimension, is to plot time series of
+individual grid points or areal averages. Here we’ll plot the CRU
+temperature anomalies for the grid point closest to Eugene, both as a
+single time series with the monthly values in consecutive order, and in
+a multi-panel plot, with the data for each month of the year in a
+differnt panel.</p>
+</div>
+<div id="read-the-data" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Read the data</h1>
+<p>Load the necessary packages, and set paths and filenames:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># load the ncdf4 package</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ncdf4)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(CFtime)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(ggthemes)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># set path and filename</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>ncpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>ncname <span class="ot">&lt;-</span> <span class="st">&quot;cru_ts4.07.1901.2022.tmp.anm.nc&quot;</span>  </span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="fu">paste</span>(ncpath, ncname, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>dname <span class="ot">&lt;-</span> <span class="st">&quot;tmp_anm&quot;</span>  <span class="co"># note: tmp means temperature (not temporary)</span></span></code></pre></div>
+<div id="read-dimensions-and-attributes-of-the-data-set"
+class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Read dimensions and
+attributes of the data set</h2>
+<p>Open the netCDF file (and list its contents), and read dimension
+variables:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># open a netCDF file</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>ncin <span class="ot">&lt;-</span> <span class="fu">nc_open</span>(ncfname)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">print</span>(ncin)</span></code></pre></div>
+<pre><code>## File /Users/bartlein/Projects/RESS/data/nc_files/cru_ts4.07.1901.2022.tmp.anm.nc (NC_FORMAT_NETCDF4):
+## 
+##      1 variables (excluding dimension variables):
+##         float tmp_anm[lon,lat,time]   (Contiguous storage)  
+##             units: degrees Celsius
+##             _FillValue: 9.96920996838687e+36
+##             long_name: near-surface air temperature anomalies
+##             base_period: 1961 - 1990
+## 
+##      3 dimensions:
+##         lon  Size:720 
+##             units: degrees_east
+##             long_name: lon
+##             axis: X
+##         lat  Size:360 
+##             units: degrees_north
+##             long_name: lat
+##             axis: Y
+##         time  Size:1464 
+##             units: days since 1900-1-1
+##             long_name: time
+##             axis: T
+## 
+##     6 global attributes:
+##         title: CRU TS4.07 Mean Temperature
+##         institution: Data held at British Atmospheric Data Centre, RAL, UK.
+##         source: Run ID = 2304141047. Data generated from:tmp.2304141039.dtb
+##         references: Information on the data is available at http://badc.nerc.ac.uk/data/cru/
+##         history: P.J. Bartlein, Sat Feb 10 17:20:41 2024
+##         Conventions: CF-1.4</code></pre>
+<p>Read latitude, longitude, and time:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># get longitude and latitude</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin,<span class="st">&quot;lon&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>nlon <span class="ot">&lt;-</span> <span class="fu">dim</span>(lon)</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">head</span>(lon)</span></code></pre></div>
+<pre><code>## [1] -179.75 -179.25 -178.75 -178.25 -177.75 -177.25</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin,<span class="st">&quot;lat&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>nlat <span class="ot">&lt;-</span> <span class="fu">dim</span>(lat)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">head</span>(lat)</span></code></pre></div>
+<pre><code>## [1] -89.75 -89.25 -88.75 -88.25 -87.75 -87.25</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(nlon,nlat))</span></code></pre></div>
+<pre><code>## [1] 720 360</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># get time</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>time <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin,<span class="st">&quot;time&quot;</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>tunits <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="st">&quot;time&quot;</span>,<span class="st">&quot;units&quot;</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>nt <span class="ot">&lt;-</span> <span class="fu">dim</span>(time)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>nm <span class="ot">&lt;-</span> <span class="dv">12</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>ny <span class="ot">&lt;-</span> nt<span class="sc">/</span>nm</span></code></pre></div>
+<p>Decode the time variable (but don’t overwrite anything):</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># decode time</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>cf <span class="ot">&lt;-</span> <span class="fu">CFtime</span>(tunits<span class="sc">$</span>value, <span class="at">calendar =</span> <span class="st">&quot;proleptic_gregorian&quot;</span>, time) <span class="co"># convert time to CFtime class</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>timestamps <span class="ot">&lt;-</span> <span class="fu">CFtimestamp</span>(cf) <span class="co"># get character-string times</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>time_cf <span class="ot">&lt;-</span> <span class="fu">CFparse</span>(cf, timestamps) <span class="co"># parse the string into date components</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co"># list a few values</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="fu">head</span>(time_cf)</span></code></pre></div>
+<pre><code>##   year month day hour minute second    tz offset
+## 1 1901     1  16    0      0      0 00:00    380
+## 2 1901     2  15    0      0      0 00:00    410
+## 3 1901     3  16    0      0      0 00:00    439
+## 4 1901     4  16    0      0      0 00:00    470
+## 5 1901     5  16    0      0      0 00:00    500
+## 6 1901     6  16    0      0      0 00:00    531</code></pre>
+</div>
+<div id="read-the-array" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Read the array</h2>
+<p>Read the data, and get variable and global attributes:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># get temperature</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>tmp_array <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(ncin,dname)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,dname,<span class="st">&quot;long_name&quot;</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>dunits <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,dname,<span class="st">&quot;units&quot;</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>fillvalue <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,dname,<span class="st">&quot;_FillValue&quot;</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="fu">dim</span>(tmp_array)</span></code></pre></div>
+<pre><code>## [1]  720  360 1464</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># get global attributes</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>title <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;title&quot;</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>institution <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;institution&quot;</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>datasource <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;source&quot;</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>references <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;references&quot;</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>history <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;history&quot;</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>Conventions <span class="ot">&lt;-</span> <span class="fu">ncatt_get</span>(ncin,<span class="dv">0</span>,<span class="st">&quot;Conventions&quot;</span>)</span></code></pre></div>
+<p>Close the netCDF data set.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># close the netCDF file</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">nc_close</span>(ncin)</span></code></pre></div>
+<p>Replace netCDF fill values with R <code>NA</code>’s</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># replace netCDF fill values with NA&#39;s</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>tmp_array[tmp_array<span class="sc">==</span>fillvalue<span class="sc">$</span>value] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">length</span>(<span class="fu">na.omit</span>(<span class="fu">as.vector</span>(tmp_array[,,<span class="dv">1</span>])))</span></code></pre></div>
+<pre><code>## [1] 67420</code></pre>
+<p>Get the beginning and ending year of the time series:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="co"># get beginning year and ending year, number of years, and set nm)</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>beg_yr <span class="ot">&lt;-</span> time_cf<span class="sc">$</span>year[<span class="dv">1</span>]</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>end_yr <span class="ot">&lt;-</span> time_cf<span class="sc">$</span>year[nt]</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(beg_yr, end_yr, nt, ny, nm))</span></code></pre></div>
+<pre><code>## [1] 1901 2022 1464  122   12</code></pre>
+<p>Generate a decimal year value for plotting consecutive values:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="co"># generate a decimal year (&quot;YrMn&quot;) time coordinate</span></span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>YrMn <span class="ot">&lt;-</span> <span class="fu">seq</span>(beg_yr, end_yr<span class="sc">+</span><span class="dv">1</span><span class="sc">-</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">12</span>), <span class="at">by=</span>(<span class="dv">1</span><span class="sc">/</span><span class="dv">12</span>))</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">head</span>(YrMn); <span class="fu">tail</span>(YrMn)</span></code></pre></div>
+<pre><code>## [1] 1901.000 1901.083 1901.167 1901.250 1901.333 1901.417</code></pre>
+<pre><code>## [1] 2022.500 2022.583 2022.667 2022.750 2022.833 2022.917</code></pre>
+<p>Generate month names for creating the dataframe that will be used to
+get multi-panel plots:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="co"># month</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a>month_names <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Jan&quot;</span>,<span class="st">&quot;Feb&quot;</span>,<span class="st">&quot;Mar&quot;</span>,<span class="st">&quot;Apr&quot;</span>,<span class="st">&quot;May&quot;</span>,<span class="st">&quot;Jun&quot;</span>,<span class="st">&quot;Jul&quot;</span>,<span class="st">&quot;Aug&quot;</span>,<span class="st">&quot;Sep&quot;</span>,<span class="st">&quot;Oct&quot;</span>,<span class="st">&quot;Nov&quot;</span>,<span class="st">&quot;Dec&quot;</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>month <span class="ot">&lt;-</span> <span class="fu">rep</span>(month_names, ny)</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="fu">head</span>(month); <span class="fu">tail</span>(month)</span></code></pre></div>
+<pre><code>## [1] &quot;Jan&quot; &quot;Feb&quot; &quot;Mar&quot; &quot;Apr&quot; &quot;May&quot; &quot;Jun&quot;</code></pre>
+<pre><code>## [1] &quot;Jul&quot; &quot;Aug&quot; &quot;Sep&quot; &quot;Oct&quot; &quot;Nov&quot; &quot;Dec&quot;</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>month <span class="ot">&lt;-</span> <span class="fu">factor</span>(month, <span class="at">levels=</span>month_names)</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="fu">class</span>(month)</span></code></pre></div>
+<pre><code>## [1] &quot;factor&quot;</code></pre>
+<p>Note that <code>month</code> is a factor, and without intervention,
+the monthly panels will plot in the default order for a factor:
+alphabetical. This would be a little counterintuitive to interpret, but
+the factor order can be reset using the code fragment:<br />
+<code>month &lt;- factor(month, levels=month_names)</code>, as was done
+above.</p>
+<p>Now find the grid cell closest to Eugene (approximatly 123.1167 W and
+44.08333 N). This is done by using the <code>which.min()</code>
+function:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a><span class="co"># get indices of the grid cell closest to Eugene</span></span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>tlon <span class="ot">&lt;-</span> <span class="sc">-</span><span class="fl">123.1167</span>; tlat <span class="ot">&lt;-</span> <span class="fl">44.0833</span></span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>j <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(lon<span class="sc">-</span>tlon))</span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="fu">which.min</span>(<span class="fu">abs</span>(lat<span class="sc">-</span>tlat))</span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(j, lon[j], k, lat[k]))</span></code></pre></div>
+<pre><code>## [1]  114.00 -123.25  269.00   44.25</code></pre>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co"># get time series for the closest gridpoint</span></span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a>tmp_anm_ts <span class="ot">&lt;-</span> tmp_array[j, k, ]</span></code></pre></div>
+</div>
+</div>
+<div id="time-series-plot-of-consecutive-values" class="section level1"
+number="3">
+<h1><span class="header-section-number">3</span> Time-series plot of
+consecutive values</h1>
+<p>The data in the netCDF file are arranged in consecutive order, and so
+this is straightforward, using the decimal year value <code>YrMn</code>
+as the x-variable. Make a dataframe of the consecutive monthly data;</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a>tmp_anm_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(YrMn, tmp_anm_ts, month)</span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="fu">names</span>(tmp_anm_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;Anomaly&quot;</span>, <span class="st">&quot;Month&quot;</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a><span class="fu">head</span>(tmp_anm_df)</span></code></pre></div>
+<pre><code>##       Year    Anomaly Month
+## 1 1901.000 -0.7100001   Jan
+## 2 1901.083 -0.9033334   Feb
+## 3 1901.167 -0.6366668   Mar
+## 4 1901.250 -1.2700001   Apr
+## 5 1901.333 -0.2933331   May
+## 6 1901.417 -2.2999997   Jun</code></pre>
+<p>Now plot the data as a base R plot:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="co"># plot time series of grid point</span></span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a>plot_title <span class="ot">&lt;-</span> <span class="fu">paste</span>(dlname<span class="sc">$</span>value, <span class="fu">as.character</span>(tlon), <span class="fu">as.character</span>(tlat), <span class="at">sep =</span> <span class="st">&quot; &quot;</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a><span class="fu">plot</span>(tmp_anm_df<span class="sc">$</span>Year, tmp_anm_df<span class="sc">$</span>Anomaly, <span class="at">type=</span><span class="st">&quot;l&quot;</span>, <span class="at">xlab=</span><span class="st">&quot;Year&quot;</span>, <span class="at">ylab=</span>dname, <span class="at">main=</span>plot_title, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="tsplots_files/figure-html/tsplots-16-1.png" width="80%" height="80%" /></p>
+<p>Here’s a more elaborate <code>ggplot2()</code> version, with points
+and a straight line (<code>lm</code>) and a smooth curve
+(<code>loess</code>) added:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">ggplot</span>(tmp_anm_df, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Anomaly)) <span class="sc">+</span></span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">size=</span><span class="dv">1</span>, <span class="at">color=</span><span class="st">&quot;pink&quot;</span>) <span class="sc">+</span> <span class="co"># straight line</span></span>
+<span id="cb36-5"><a href="#cb36-5" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">size=</span><span class="dv">1</span>, <span class="at">color=</span><span class="st">&quot;purple&quot;</span>) <span class="co"># loess curve</span></span></code></pre></div>
+<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;
+## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="tsplots_files/figure-html/tsplots-17-1.png" width="80%" height="80%" /></p>
+</div>
+<div id="multi-panel-plot-of-monthly-time-series-data"
+class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Multi-panel plot of
+monthly time series data</h1>
+<p>Although the single-panel plot works fine for showing the overall
+trend, one question that usually comes up in looking at local, regional,
+and global tre3nds in temperatrure is whether or not the changes in
+individual months or seasons are consistent, or whether, say, winter
+months are warming more than summer. Multi-panel plots can help
+answering those questions.</p>
+<p>Make a second dataframe consisting of <code>nt</code> values of the
+temperature time series <code>tmp_ts</code>, and the <code>year</code>
+and the <code>month</code> variables generated above:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="co"># make dataframe</span></span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>tmp_anm_df2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(time_cf<span class="sc">$</span>year, month, tmp_anm_ts)</span>
+<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a><span class="fu">names</span>(tmp_anm_df2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;Month&quot;</span>, <span class="st">&quot;Anomaly&quot;</span>)</span>
+<span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a><span class="fu">str</span>(tmp_anm_df2)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    1464 obs. of  3 variables:
+##  $ Year   : int  1901 1901 1901 1901 1901 1901 1901 1901 1901 1901 ...
+##  $ Month  : Factor w/ 12 levels &quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
+##  $ Anomaly: num  -0.71 -0.903 -0.637 -1.27 -0.293 ...</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="fu">head</span>(tmp_anm_df2); <span class="fu">tail</span>(tmp_anm_df2)</span></code></pre></div>
+<pre><code>##   Year Month    Anomaly
+## 1 1901   Jan -0.7100001
+## 2 1901   Feb -0.9033334
+## 3 1901   Mar -0.6366668
+## 4 1901   Apr -1.2700001
+## 5 1901   May -0.2933331
+## 6 1901   Jun -2.2999997</code></pre>
+<pre><code>##      Year Month    Anomaly
+## 1459 2022   Jul  2.6066661
+## 1460 2022   Aug  3.0000000
+## 1461 2022   Sep  2.6066675
+## 1462 2022   Oct  3.0766668
+## 1463 2022   Nov -1.9166669
+## 1464 2022   Dec -0.4133334</code></pre>
+<p>Now, construct a <code>ggplot2</code> multi-panel (e.g. “faceted”)
+plot. The plot will be constructed with a lowess-smoother line in the
+background, overplotted by the yearly values of each month in a separate
+panel.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tmp_anm_df2, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Anomaly)) <span class="sc">+</span></span>
+<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a>  <span class="co"># geom_smooth(method = &quot;lm&quot;, size=2, color=&quot;pink&quot;) + # straight line</span></span>
+<span id="cb44-3"><a href="#cb44-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, <span class="at">color=</span><span class="st">&quot;purple&quot;</span>) <span class="sc">+</span> <span class="co"># loess curve</span></span>
+<span id="cb44-4"><a href="#cb44-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb44-5"><a href="#cb44-5" tabindex="-1"></a>  <span class="fu">facet_grid</span>(tmp_anm_df2<span class="sc">$</span>Month <span class="sc">~</span> .)  <span class="sc">+</span></span>
+<span id="cb44-6"><a href="#cb44-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="tsplots_files/figure-html/tsplots-19-1.png" width="80%" height="80%" /></p>
+<p>The months can be reorganized to put December at the top, by
+reorganizing the <code>Month</code> factor:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="co"># reorganize months</span></span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a>tmp_anm_df2<span class="sc">$</span>Month <span class="ot">&lt;-</span> <span class="fu">factor</span>(tmp_anm_df2<span class="sc">$</span>Month, <span class="at">levels =</span> </span>
+<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;Dec&quot;</span>, <span class="st">&quot;Jan&quot;</span>, <span class="st">&quot;Feb&quot;</span>, <span class="st">&quot;Mar&quot;</span>, <span class="st">&quot;Apr&quot;</span>, <span class="st">&quot;May&quot;</span>, <span class="st">&quot;Jun&quot;</span>, <span class="st">&quot;Jul&quot;</span>, <span class="st">&quot;Aug&quot;</span>, <span class="st">&quot;Sep&quot;</span>, <span class="st">&quot;Oct&quot;</span>, <span class="st">&quot;Nov&quot;</span>))</span>
+<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a><span class="fu">str</span>(tmp_anm_df2<span class="sc">$</span>Month)</span></code></pre></div>
+<pre><code>##  Factor w/ 12 levels &quot;Dec&quot;,&quot;Jan&quot;,&quot;Feb&quot;,..: 2 3 4 5 6 7 8 9 10 11 ...</code></pre>
+<p>Make the plot:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tmp_anm_df2, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Anomaly)) <span class="sc">+</span></span>
+<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a>  <span class="co"># geom_smooth(method = &quot;lm&quot;, size=2, color=&quot;pink&quot;) + # straight line</span></span>
+<span id="cb48-3"><a href="#cb48-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, <span class="at">color=</span><span class="st">&quot;purple&quot;</span>) <span class="sc">+</span> <span class="co"># loess curve</span></span>
+<span id="cb48-4"><a href="#cb48-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb48-5"><a href="#cb48-5" tabindex="-1"></a>  <span class="fu">facet_grid</span>(tmp_anm_df2<span class="sc">$</span>Month <span class="sc">~</span> .)  <span class="sc">+</span></span>
+<span id="cb48-6"><a href="#cb48-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="tsplots_files/figure-html/tsplots-21-1.png" width="80%" height="80%" /></p>
+<p>The plot seems quite wide relative to the vertical space occupied by
+each monthly time series, which makes it difficult to notice any trends
+in the data. The aspect ratio of the plot can be adjusted, guided by the
+Bill Cleveland’s notion of “banking to 45 (degrees)”. The function
+<code>bank_slopes()</code> in the package <code>ggthemes</code> can find
+the aspect ratio that optimizes that notion for a single time series
+(here, the values for December):</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="fu">bank_slopes</span>(tmp_anm_df2<span class="sc">$</span>Year[tmp_anm_df2<span class="sc">$</span>Month <span class="sc">==</span> <span class="st">&quot;Dec&quot;</span>], tmp_anm_df2<span class="sc">$</span>Anomaly[tmp_anm_df2<span class="sc">$</span>Month <span class="sc">==</span> <span class="st">&quot;Dec&quot;</span>])</span></code></pre></div>
+<pre><code>## [1] 0.04767961</code></pre>
+<p>A good first-guess aspect ratio can then be found by multiplying this
+value by the number of panels. However, experience shows that
+multiplying by the half the number of panels provides a more pleasing
+result:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tmp_anm_df2, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Anomaly)) <span class="sc">+</span></span>
+<span id="cb52-2"><a href="#cb52-2" tabindex="-1"></a>  <span class="co"># geom_smooth(method = &quot;lm&quot;, size=2, color=&quot;pink&quot;) +</span></span>
+<span id="cb52-3"><a href="#cb52-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, <span class="at">color=</span><span class="st">&quot;purple&quot;</span>) <span class="sc">+</span></span>
+<span id="cb52-4"><a href="#cb52-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb52-5"><a href="#cb52-5" tabindex="-1"></a>  <span class="fu">facet_grid</span>(Month <span class="sc">~</span> .) <span class="sc">+</span></span>
+<span id="cb52-6"><a href="#cb52-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb52-7"><a href="#cb52-7" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">aspect.ratio =</span> (<span class="fl">0.04</span> <span class="sc">*</span> (nm<span class="sc">/</span><span class="dv">2</span>))) </span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="tsplots_files/figure-html/tsplots-23-1.png" width="80%" height="80%" /></p>
+<p>Another approach for comparing months is to use the
+<code>ggplot2()</code> <code>facet_wrap()</code> function:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tmp_anm_df2, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Anomaly)) <span class="sc">+</span></span>
+<span id="cb54-2"><a href="#cb54-2" tabindex="-1"></a>  <span class="co"># geom_smooth(method = &quot;lm&quot;, size=2, color=&quot;pink&quot;) +</span></span>
+<span id="cb54-3"><a href="#cb54-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, <span class="at">color=</span><span class="st">&quot;purple&quot;</span>) <span class="sc">+</span></span>
+<span id="cb54-4"><a href="#cb54-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb54-5"><a href="#cb54-5" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(tmp_anm_df2<span class="sc">$</span>Month <span class="sc">~</span> ., <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb54-6"><a href="#cb54-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
+<p><img src="tsplots_files/figure-html/tsplots-24-1.png" width="80%" height="80%" /></p>
+<p><a href="tsplots.html">[Back to top]</a></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

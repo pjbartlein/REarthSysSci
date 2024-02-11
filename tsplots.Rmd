@@ -1,0 +1,273 @@
+---
+title: "Time-series plots"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r tsplots-1, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "80%", out.height = "80%", verbose=TRUE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2024, but may undergo further edits.</span></p>
+
+# Time-Series plots #
+
+A basic way of visualizing data in, for example, a 3-D netCDF file, with time being the third dimension, is to plot time series of individual grid points or areal averages. Here we’ll plot the CRU temperature anomalies for the grid point closest to Eugene, both as a single time series with the monthly values in consecutive order, and in a multi-panel plot, with the data for each month of the year in a differnt panel. 
+
+# Read the data #
+
+Load the necessary packages, and set paths and filenames:
+
+```{r tsplots-2, messages=FALSE, results="hide"}
+# load the ncdf4 package
+library(ncdf4)
+library(CFtime)
+library(ggplot2)
+library(ggthemes)
+```
+
+```{r tsplots-3 }
+# set path and filename
+ncpath <- "/Users/bartlein/Projects/RESS/data/nc_files/"
+ncname <- "cru_ts4.07.1901.2022.tmp.anm.nc"  
+ncfname <- paste(ncpath, ncname, sep="")
+dname <- "tmp_anm"  # note: tmp means temperature (not temporary)
+```
+
+## Read dimensions and attributes of the data set ##
+
+Open the netCDF file (and list its contents), and read dimension variables:
+
+```{r tsplots-4 }
+# open a netCDF file
+ncin <- nc_open(ncfname)
+print(ncin)
+```
+
+Read latitude, longitude, and time:
+
+```{r tsplots-5, cache = TRUE}
+# get longitude and latitude
+lon <- ncvar_get(ncin,"lon")
+nlon <- dim(lon)
+head(lon)
+lat <- ncvar_get(ncin,"lat")
+nlat <- dim(lat)
+head(lat)
+print(c(nlon,nlat))
+
+# get time
+time <- ncvar_get(ncin,"time")
+tunits <- ncatt_get(ncin,"time","units")
+nt <- dim(time)
+
+nm <- 12
+ny <- nt/nm
+```
+
+Decode the time variable (but don't overwrite anything):
+
+```{r tsplots-6 }
+# decode time
+cf <- CFtime(tunits$value, calendar = "proleptic_gregorian", time) # convert time to CFtime class
+timestamps <- CFtimestamp(cf) # get character-string times
+time_cf <- CFparse(cf, timestamps) # parse the string into date components
+# list a few values
+head(time_cf)
+```
+
+## Read the array ##
+
+Read the data, and get variable and global attributes:
+
+```{r tsplots-7, cache = FALSE}
+# get temperature
+tmp_array <- ncvar_get(ncin,dname)
+dlname <- ncatt_get(ncin,dname,"long_name")
+dunits <- ncatt_get(ncin,dname,"units")
+fillvalue <- ncatt_get(ncin,dname,"_FillValue")
+dim(tmp_array)
+
+# get global attributes
+title <- ncatt_get(ncin,0,"title")
+institution <- ncatt_get(ncin,0,"institution")
+datasource <- ncatt_get(ncin,0,"source")
+references <- ncatt_get(ncin,0,"references")
+history <- ncatt_get(ncin,0,"history")
+Conventions <- ncatt_get(ncin,0,"Conventions")
+```
+
+Close the netCDF data set.
+
+```{r tsplots-8 }
+# close the netCDF file
+nc_close(ncin)
+```
+
+Replace netCDF fill values with R `NA`'s
+
+```{r tsplots-9, cache = FALSE}
+# replace netCDF fill values with NA's
+tmp_array[tmp_array==fillvalue$value] <- NA
+length(na.omit(as.vector(tmp_array[,,1])))
+```
+
+Get the beginning and ending year of the time series:
+
+```{r tsplots-10 }
+# get beginning year and ending year, number of years, and set nm)
+beg_yr <- time_cf$year[1]
+end_yr <- time_cf$year[nt]
+print(c(beg_yr, end_yr, nt, ny, nm))
+```
+
+Generate a decimal year value for plotting consecutive values:
+
+```{r tsplots-11 }
+# generate a decimal year ("YrMn") time coordinate
+YrMn <- seq(beg_yr, end_yr+1-(1/12), by=(1/12))
+head(YrMn); tail(YrMn)
+```
+
+Generate month names for creating the dataframe that will be used to get multi-panel plots:
+
+```{r tsplots-12 }
+# month
+month_names <- c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec")
+month <- rep(month_names, ny)
+head(month); tail(month)
+month <- factor(month, levels=month_names)
+class(month)
+```
+
+Note that `month` is a factor, and without intervention, the monthly panels will plot in the default order for a factor:  alphabetical.  This would be a little counterintuitive to interpret, but the factor order can be reset using the code fragment:  
+`month <- factor(month, levels=month_names)`, as was done above.
+
+Now find the grid cell closest to Eugene (approximatly 123.1167 W and 44.08333 N).  This is done by using the `which.min()` function:
+
+```{r tsplots-13 }
+# get indices of the grid cell closest to Eugene
+tlon <- -123.1167; tlat <- 44.0833
+j <- which.min(abs(lon-tlon))
+k <- which.min(abs(lat-tlat))
+print(c(j, lon[j], k, lat[k]))
+```
+
+```{r tsplots-14 }
+# get time series for the closest gridpoint
+tmp_anm_ts <- tmp_array[j, k, ]
+```
+
+# Time-series plot of consecutive values #
+
+The data in the netCDF file are arranged in consecutive order, and so this is straightforward, using the decimal year value `YrMn` as the x-variable. Make a dataframe of the consecutive monthly data;
+
+```{r tsplots-15}
+tmp_anm_df <- data.frame(YrMn, tmp_anm_ts, month)
+names(tmp_anm_df) <- c("Year", "Anomaly", "Month")
+head(tmp_anm_df)
+```
+
+Now plot the data as a base R plot:
+
+```{r tsplots-16}
+# plot time series of grid point
+plot_title <- paste(dlname$value, as.character(tlon), as.character(tlat), sep = " ")
+plot(tmp_anm_df$Year, tmp_anm_df$Anomaly, type="l", xlab="Year", ylab=dname, main=plot_title, col="red")
+```
+
+Here's a more elaborate `ggplot2()` version, with points and a straight line (`lm`) and a smooth curve (`loess`)  added:
+
+```{r tsplots-17}
+ggplot(tmp_anm_df, aes(x = Year, y = Anomaly)) +
+  geom_line(color = "red") +
+  geom_point(size = 0.75) +
+  geom_smooth(method = "lm", size=1, color="pink") + # straight line
+  geom_smooth(method = "loess", size=1, color="purple") # loess curve
+```
+
+# Multi-panel plot of monthly time series data #
+
+Although the single-panel plot works fine for showing the overall trend, one question that usually comes up in looking at local, regional, and global tre3nds in temperatrure is whether or not the changes in individual months or seasons are consistent, or whether, say, winter months are warming more than summer. Multi-panel plots can help answering those questions.
+
+Make a second dataframe consisting of `nt` values of the temperature time series `tmp_ts`, and the `year` and the `month` variables generated above:
+
+```{r tsplots-18 }
+# make dataframe
+tmp_anm_df2 <- data.frame(time_cf$year, month, tmp_anm_ts)
+names(tmp_anm_df2) <- c("Year", "Month", "Anomaly")
+str(tmp_anm_df2)
+head(tmp_anm_df2); tail(tmp_anm_df2)
+```
+
+Now, construct a `ggplot2` multi-panel (e.g. "faceted") plot.  The plot will be constructed with a lowess-smoother line in the background, overplotted by the yearly values of each month in a separate panel.  
+
+```{r tsplots-19 }
+ggplot(data = tmp_anm_df2, aes(x = Year, y = Anomaly)) +
+  # geom_smooth(method = "lm", size=2, color="pink") + # straight line
+  geom_smooth(method = "loess", size=0.5, color="purple") + # loess curve
+  geom_line() + 
+  facet_grid(tmp_anm_df2$Month ~ .)  +
+  theme_bw()
+```
+
+The months can be reorganized to put December at the top, by reorganizing the `Month` factor:
+
+```{r tsplots-20}
+# reorganize months
+tmp_anm_df2$Month <- factor(tmp_anm_df2$Month, levels = 
+    c("Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov"))
+str(tmp_anm_df2$Month)
+```
+
+Make the plot:
+
+```{r tsplots-21 }
+ggplot(data = tmp_anm_df2, aes(x = Year, y = Anomaly)) +
+  # geom_smooth(method = "lm", size=2, color="pink") + # straight line
+  geom_smooth(method = "loess", size=0.5, color="purple") + # loess curve
+  geom_line() + 
+  facet_grid(tmp_anm_df2$Month ~ .)  +
+  theme_bw()
+```
+
+The plot seems quite wide relative to the vertical space occupied by each monthly time series, which makes it difficult to notice any trends in the data.  The aspect ratio of the plot can be adjusted, guided by the Bill Cleveland's notion of "banking to 45 (degrees)".  The function `bank_slopes()` in the package `ggthemes` can find the aspect ratio that optimizes that notion for a single time series (here, the values for December):
+
+```{r tsplots-22 }
+bank_slopes(tmp_anm_df2$Year[tmp_anm_df2$Month == "Dec"], tmp_anm_df2$Anomaly[tmp_anm_df2$Month == "Dec"])
+```
+
+A good first-guess aspect ratio can then be found by multiplying this value by the number of panels.  However, experience shows that multiplying by the half the number of panels provides a more pleasing result:
+
+```{r tsplots-23 }
+ggplot(data = tmp_anm_df2, aes(x = Year, y = Anomaly)) +
+  # geom_smooth(method = "lm", size=2, color="pink") +
+  geom_smooth(method = "loess", size=0.5, color="purple") +
+  geom_line() + 
+  facet_grid(Month ~ .) +
+  theme_bw() + 
+  theme(aspect.ratio = (0.04 * (nm/2))) 
+```
+
+Another approach for comparing months is to use the `ggplot2()` `facet_wrap()` function:
+
+
+```{r tsplots-24 }
+ggplot(data = tmp_anm_df2, aes(x = Year, y = Anomaly)) +
+  # geom_smooth(method = "lm", size=2, color="pink") +
+  geom_smooth(method = "loess", size=0.5, color="purple") +
+  geom_line() + 
+  facet_wrap(tmp_anm_df2$Month ~ ., nrow = 4, ncol = 3) +
+  theme_bw()
+```
+
+[[Back to top]](tsplots.html)
+
+

@@ -46,14 +46,14 @@ dname <- "tmp"  # note: tmp means temperature (not temporary)
 
 ## Read dimensions and attributes of the data set ##
 
-Open the netCDF file (and list its contents), and read longitudes, latitudes and times:
+Open the netCDF file (and list its contents), and read the dimension variables:
 
 ```{r anomalies-4 }
 # open a netCDF file
 ncin <- nc_open(ncfname)
 print(ncin)
 ```
-Read latitude, longituide and time:
+Read latitude, longitude, and time:
 
 ```{r anomalies-5, cache = TRUE}
 # get longitude and latitude
@@ -119,7 +119,7 @@ nc_close(ncin)
 
 ## Set up for long-term mean calculation ##
 
-Replace netCDF fill values with R NA's
+Replace netCDF fill values with R `NA`'s
 
 ```{r anomalies-9, cache = FALSE}
 # replace netCDF fill values with NA's
