@@ -11,7 +11,7 @@ output:
 
 ```{r tsplots-1, echo=FALSE}
 options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "80%", out.height = "80%", verbose=TRUE)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE, out.width = "80%", out.height = "80%", verbose=TRUE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
