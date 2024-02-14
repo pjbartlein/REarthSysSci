@@ -70,10 +70,12 @@ navbar:
       href: dataselection.html
     - text: "Markdown and RMarkdown"
       href: markdown.html
-    - text: "Pandoc"
-      href: pandoc.html
-    - text: "GitHub and UO pages.uoregon.edu"
+    - text: "R Scripts and R Markdown"
+      href: scripts_and_md.html
+    - text: "GitHub"
       href: GitHub.html
+    - text: "pages.uoregon.edu"
+      href: pages.html
     - text: "Local websites"
       href: localweb.html
   - text: Other
