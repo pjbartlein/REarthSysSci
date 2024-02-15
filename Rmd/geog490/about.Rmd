@@ -1,0 +1,23 @@
+---
+title: "GEOG 4/590:  R for Earth-System Science"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: no
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+```
+P.J. Bartlein  
+Dept. Geography  
+Univ. Oregon  
+bartlein@uoregon.edu
+
+The GitHub repository for this web site is at:  
+[https://github.com/pjbartlein/geog490](https://github.com/pjbartlein/geog490)

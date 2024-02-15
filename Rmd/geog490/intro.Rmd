@@ -1,0 +1,22 @@
+---
+title: "Introduction to the project"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: no
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+```
+
+The visualization developed here uses the `{terra}` and `{rasterVis}` packages to map the global 
+pattern of alpha, calculated using the CRU CL2 climate data set.  The maps also include a 
+world outline with coastlines and country borders.
+
+More introductory material...

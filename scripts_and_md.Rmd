@@ -1,0 +1,60 @@
+---
+title: "Example R Script and R Markdown files"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options_all, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+# Introduction #
+
+The `*.R` and `*.Rmd` scripts on the page illustrate a range of possible approaches for building a "project" `*.html` document, ranging from a very simple RMarkdown Notebook to a multi-page website. This page focues on the scripts and not the procedures for constructing a GitHub repository with a GitHub Pages web page, nor for serving web pages on `https://pages.uoregon.edu`/
+
+The examples can be replicated by copying the scripts, and creating the appropriate files in RStudio (e.g. `plot\_alpha\_RScript.R` for this first example).
+
+# Example 1 -- alpha\_plot\_RScript.R #
+
+Output is text in Console pane and graphics in Plots pane.
+
+This is an example of "bare" code that reads a netCDF file, does some setup, and plots a map. The output could conceivably be collected from the Console and Plot windows, and used to make an `*.html` file, but that's what computers are for. It would still be worth running the script, chunk-by-chunk to get an idea of what the basic task is.
+Note: Copy everything in the box.
+
+````
+  `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/examples/alpha_plot_RScript.R"), collapse = "\n")`
+````
+# Example 2 -- alpha\_plot\_RMarkdown\_Notebook.Rmd #
+
+Single-page R Notebook `.html` file as output.
+
+This RMarkdown `*.Rmd` file produces the simplest of .html output. Note that it does not do any Markdown-type formatting, but simply embeds the output in the document.
+
+````
+  `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/examples/alpha_plot_RNotebook.Rmd"), collapse = "\n")`
+````
+
+# Example 3 -- alpha\_plot\_RMarkdown\_1Page.Rmd #
+
+This example produces a single-page `.html` file as output.
+
+````
+  `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown_1Page.Rmd"), collapse = "\n")`
+````
+
+# Example 4 -- alpha\_plot\_RMarkdown.Rmd #
+
+Output is `.html` page, with formatting and some navigation.
+
+````
+  `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown.Rmd"), collapse = "\n")`
+````
+
+

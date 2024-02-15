@@ -1,0 +1,135 @@
+---
+title:  Raster mapping
+output:
+  html_document:
+    css: html-md-01.css
+    fig_caption: yes
+    highlight: haddock
+    number_sections: yes
+    theme: spacelab
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE, strip.white=TRUE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+```
+
+# Introduction #
+
+This RMarkdown document describes reading a netCDF file consisting of several bioclimatic variables, and plots one of them, `alpha`.
+
+## Load packages ## 
+
+```{r alpha-plot-RMarkdown_Site-1 }
+# load libraries
+library(sf)
+library(stars)
+library(ggplot2)
+```
+
+# Read data #
+
+## World outline ##
+
+### Read map data from the `{maps}` package ###
+
+Read a map file of  world coastlines and countries, and convert to an `sf` object.
+
+```{r alpha-plot-RMarkdown_Site-2 }
+# world_sf
+world_sf <- st_as_sf(maps::map("world", plot = FALSE, fill = TRUE))
+world_otl_sf <- st_geometry(world_sf)
+```
+
+### Plot the world outline ###
+
+```{r alpha-plot-RMarkdown_Site-3 }
+# ggplot map of world_outline
+ggplot() + 
+  geom_sf(data = world_otl_sf, fill = NA, col = "blue") + 
+  scale_x_continuous(breaks = seq(-180, 180, 30)) +
+  scale_y_continuous(breaks = seq(-90, 90, 30)) +
+  coord_sf(xlim = c(-180, +180), ylim = c(-90, 90), expand = FALSE) +
+  theme_bw()
+```
+
+## Read alpha ##
+
+Now read in alpha from a netCDF file of bioclimatic variables using stars.
+
+```{r alpha-plot-RMarkdown_Site-4 }
+# read alpha (AE/PE)
+# change path as necessary
+nc_path <- "/Users/bartlein/Projects/RESS/data/nc_files/"
+nc_name <- "cru10min30_bio.nc"
+nc_file <- paste(nc_path, nc_name, sep="")
+alpha <- read_ncdf(nc_file, var="alpha", proxy = FALSE)
+```
+
+List alpha to show contents of the object.
+
+```{r alpha-plot-RMarkdown_Site-5 }
+# list alpha
+alpha
+```
+
+Convert the `stars` object to an `sf` object:
+
+```{r alpha-plot-RMarkdown_Site-6 }
+# convert stars to sf
+alpha_sf <- st_as_sf(alpha, as_points = TRUE)
+alpha_sf
+plot(alpha_sf, pch = 16, cex = 0.3)
+```
+
+# Plot the data #
+
+## Setup ##
+
+Do some setting up befor plotting.
+
+```{r alpha-plot-RMarkdown_Site-7 }
+# setup for plotting alpha
+# make a data.frame
+lon <- st_coordinates(alpha_sf)[,1]
+lat <- st_coordinates(alpha_sf)[,2]
+alpha <- as.vector(alpha_sf)
+alpha_df <- data.frame(lon, lat, alpha)
+dim(alpha_df)
+head(alpha_df)
+```
+
+Set axis labels or breaks:
+
+```{r alpha-plot-RMarkdown_Site-8 }
+# set axis labels (breaks)
+breaks_x <- c(seq(-180, 180, by = 60)) 
+breaks_y <- c(seq(-90, 90, by = 30)) 
+labels_x <- as.character(breaks_x) 
+labels_y <- as.character(breaks_y)
+```
+
+## Plot alpha ##
+
+Make a `{ggplot2}` maps of alpha.
+
+```{r alpha-plot-RMarkdown_Site-9 }
+# ggplot2 map of alpha
+ggplot() +
+  geom_tile(data = alpha_df, aes(x = lon, y = lat, fill = alpha)) +
+  scale_fill_gradient2(low = "brown", mid="white", high = "darkgreen", midpoint = 0.50) +
+  geom_sf(data = world_otl_sf, col = "black", fill = NA) +
+  coord_sf(xlim = c(-180, +175.0), ylim = c(-90, 90), expand = FALSE) +
+  scale_x_continuous(breaks = breaks_x) +
+  scale_y_continuous(breaks = breaks_y) +
+  labs(x = "Longitude", y = "Latitude", title="Priestley-Taylor Coefficient (alpha) (AE/PE)", fill="alpha") +
+  theme_bw()
+```
+
+# Discussion #
+
+(A few paragraphs on map patterns, trends, etc.)

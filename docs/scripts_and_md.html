@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Example R Script and R Markdown files</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Earth-System Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="intro.html">Introduction: R, RStudio, and other infrastructure</a>
+    </li>
+    <li>
+      <a href="usingR.html">Using R</a>
+    </li>
+    <li>
+      <a href="ESSdata.html">Earth-system science data</a>
+    </li>
+    <li>
+      <a href="netCDF.html">netCDF in R</a>
+    </li>
+    <li>
+      <a href="netcdf_terra.html">netCDF and terra</a>
+    </li>
+    <li>
+      <a href="plots1.html">Plots (1)</a>
+    </li>
+    <li>
+      <a href="plots2.html">Plots (2)</a>
+    </li>
+    <li>
+      <a href="maps1.html">Maps (1)</a>
+    </li>
+    <li>
+      <a href="maps2.html">Maps (2)</a>
+    </li>
+    <li>
+      <a href="geospatial.html">Geospatial analyses</a>
+    </li>
+    <li>
+      <a href="correlation.html">Correlation and regression</a>
+    </li>
+    <li>
+      <a href="prediction.html">Prediction</a>
+    </li>
+    <li>
+      <a href="pca.html">PCA</a>
+    </li>
+    <li>
+      <a href="svd.html">Singular Value Decomposistion</a>
+    </li>
+    <li>
+      <a href="highdim.html">High-resolution &amp; high-dimensional data</a>
+    </li>
+    <li>
+      <a href="multivariate.html">Multivariate methods</a>
+    </li>
+    <li>
+      <a href="timeseries.html">Time-series analysis</a>
+    </li>
+    <li>
+      <a href="otherlang.html">Other Languages</a>
+    </li>
+    <li class="dropdown-header">Other topics</li>
+    <li>
+      <a href="sf_stars_sftime.html">sf / stars / sftime</a>
+    </li>
+    <li>
+      <a href="hdf5_intro.html">HDF in R</a>
+    </li>
+    <li>
+      <a href="anomalies.html">Long-term means and anomalies</a>
+    </li>
+    <li>
+      <a href="tsplots.html">Time-series plots</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Tasks
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Tasks</li>
+    <li>
+      <a href="installR.html">Install R and RStudio</a>
+    </li>
+    <li>
+      <a href="Ex_UsingR.html">Using R exercise</a>
+    </li>
+    <li>
+      <a href="install_netCDF.html">Install netCDF &amp; Panoply</a>
+    </li>
+    <li>
+      <a href="transfer.html">File transfer</a>
+    </li>
+    <li>
+      <a href="texteditor.html">Install a text editor</a>
+    </li>
+    <li>
+      <a href="dataselection.html">Project data set selection</a>
+    </li>
+    <li>
+      <a href="markdown.html">Markdown and RMarkdown</a>
+    </li>
+    <li>
+      <a href="scripts_and_md.html">R Scripts and R Markdown</a>
+    </li>
+    <li>
+      <a href="GitHub.html">GitHub</a>
+    </li>
+    <li>
+      <a href="pages.html">pages.uoregon.edu</a>
+    </li>
+    <li>
+      <a href="localweb.html">Local websites</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="websites.html">Old course web pages</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Example R Script and R Markdown files</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+<li><a href="#example-1-alpha_plot_rscript.r"
+id="toc-example-1-alpha_plot_rscript.r">Example 1 –
+alpha_plot_RScript.R</a></li>
+<li><a href="#example-2-alpha_plot_rmarkdown_notebook.rmd"
+id="toc-example-2-alpha_plot_rmarkdown_notebook.rmd">Example 2 –
+alpha_plot_RMarkdown_Notebook.Rmd</a></li>
+<li><a href="#example-3-alpha_plot_rmarkdown_1page.rmd"
+id="toc-example-3-alpha_plot_rmarkdown_1page.rmd">Example 3 –
+alpha_plot_RMarkdown_1Page.Rmd</a></li>
+<li><a href="#example-4-alpha_plot_rmarkdown.rmd"
+id="toc-example-4-alpha_plot_rmarkdown.rmd">Example 4 –
+alpha_plot_RMarkdown.Rmd</a></li>
+</ul>
+</div>
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The <code>*.R</code> and <code>*.Rmd</code> scripts on the page
+illustrate a range of possible approaches for building a “project”
+<code>*.html</code> document, ranging from a very simple RMarkdown
+Notebook to a multi-page website. This page focues on the scripts and
+not the procedures for constructing a GitHub repository with a GitHub
+Pages web page, nor for serving web pages on
+<code>https://pages.uoregon.edu</code>/</p>
+<p>The examples can be replicated by copying the scripts, and creating
+the appropriate files in RStudio
+(e.g. <code>plot\_alpha\_RScript.R</code> for this first example).</p>
+</div>
+<div id="example-1-alpha_plot_rscript.r" class="section level1">
+<h1>Example 1 – alpha_plot_RScript.R</h1>
+<p>Output is text in Console pane and graphics in Plots pane.</p>
+<p>This is an example of “bare” code that reads a netCDF file, does some
+setup, and plots a map. The output could conceivably be collected from
+the Console and Plot windows, and used to make an <code>*.html</code>
+file, but that’s what computers are for. It would still be worth running
+the script, chunk-by-chunk to get an idea of what the basic task is.
+Note: Copy everything in the box.</p>
+<pre><code>  
+# alpha_plot_RScript.R
+# reads and plots &quot;alpha&quot; (Priestley-Taylor coefficient) (AE/PE)
+
+# load libraries
+library(maps)
+library(sf)
+library(stars)
+library(ggplot2)
+
+# get a world outline object for plotting
+
+# world_sf
+world_sf &lt;- st_as_sf(maps::map(&quot;world&quot;, plot = FALSE, fill = TRUE))
+world_otl_sf &lt;- st_geometry(world_sf)
+
+# ggplot map of world_outline
+ggplot() + 
+  geom_sf(data = world_otl_sf, fill = NA, col = &quot;black&quot;) + 
+  scale_x_continuous(breaks = seq(-180, 180, 30)) +
+  scale_y_continuous(breaks = seq(-90, 90, 30)) +
+  coord_sf(xlim = c(-180, +180), ylim = c(-90, 90), expand = FALSE) +
+  theme_bw()
+
+# read alpha from a netCDF file of bioclimatic variables using stars
+
+# change path as necessary
+nc_path &lt;- &quot;/Users/bartlein/Projects/RESS/data/nc_files/&quot;
+nc_name &lt;- &quot;cru10min30_bio.nc&quot;
+nc_file &lt;- paste(nc_path, nc_name, sep=&quot;&quot;)
+alpha &lt;- read_ncdf(nc_file, var=&quot;alpha&quot;, proxy = FALSE)
+
+# list alpha
+alpha
+
+# convert stars to sf
+alpha_sf &lt;- st_as_sf(alpha, as_points = TRUE)
+alpha_sf
+plot(alpha_sf, pch = 16, cex = 0.3)
+
+# setup for plotting alpha
+
+# make a data.frame
+lon &lt;- st_coordinates(alpha_sf)[,1]
+lat &lt;- st_coordinates(alpha_sf)[,2]
+alpha &lt;- as.vector(alpha_sf)
+alpha_df &lt;- data.frame(lon, lat, alpha)
+dim(alpha_df)
+head(alpha_df)
+
+# set axis labels (breaks)
+breaks_x &lt;- c(seq(-180, 180, by = 60)) 
+breaks_y &lt;- c(seq(-90, 90, by = 30)) 
+labels_x &lt;- as.character(breaks_x) 
+labels_y &lt;- as.character(breaks_y) 
+
+# plot alpha
+
+# ggplot2 map of alpha
+ggplot() +
+  geom_tile(data = alpha_df, aes(x = lon, y = lat, fill = alpha)) +
+  scale_fill_gradient2(low = &quot;brown&quot;, mid=&quot;white&quot;, high = &quot;darkgreen&quot;, midpoint = 0.50) +
+  geom_sf(data = world_otl_sf, col = &quot;black&quot;, fill = NA) +
+  coord_sf(xlim = c(-180, +175.0), ylim = c(-90, 90), expand = FALSE) +
+  scale_x_continuous(breaks = breaks_x) +
+  scale_y_continuous(breaks = breaks_y) +
+  labs(x = &quot;Longitude&quot;, y = &quot;Latitude&quot;, title=&quot;Priestley-Taylor Coefficient (alpha) (AE/PE)&quot;, fill=&quot;alpha&quot;) +
+  theme_bw()</code></pre>
+</div>
+<div id="example-2-alpha_plot_rmarkdown_notebook.rmd"
+class="section level1">
+<h1>Example 2 – alpha_plot_RMarkdown_Notebook.Rmd</h1>
+<p>Single-page R Notebook <code>.html</code> file as output.</p>
+<p>This RMarkdown <code>*.Rmd</code> file produces the simplest of .html
+output. Note that it does not do any Markdown-type formatting, but
+simply embeds the output in the document.</p>
+<pre><code>  
+---
+title: &quot;R Notebook&quot;
+output:
+  html_document:
+    df_print: paged
+---
+
+This RNotebook script reads a netCDF file consisting of several bioclimatic variables, and plots one of them, `alpha`
+
+```{r alpha-plot-RNotebook-1 }
+# load libraries
+library(maps)
+library(sf)
+library(stars)
+library(ggplot2)
+```
+
+Get a world outline object for plotting.
+
+```{r alpha-plot-RNotebook-2 }
+# world_sf
+world_sf &lt;- st_as_sf(maps::map(&quot;world&quot;, plot = FALSE, fill = TRUE))
+world_otl_sf &lt;- st_geometry(world_sf)
+```
+
+```{r alpha-plot-RNotebook-3 }
+# ggplot map of world_outline
+ggplot() + 
+  geom_sf(data = world_otl_sf, fill = NA, col = &quot;black&quot;) + 
+  scale_x_continuous(breaks = seq(-180, 180, 30)) +
+  scale_y_continuous(breaks = seq(-90, 90, 30)) +
+  coord_sf(xlim = c(-180, +180), ylim = c(-90, 90), expand = FALSE) +
+  theme_bw()
+```
+
+Read alpha from a netCDF file of bioclimatic variables using `stars`.
+
+```{r alpha-plot-RNotebook-4 }
+# change path as necessary
+nc_path &lt;- &quot;/Users/bartlein/Projects/RESS/data/nc_files/&quot;
+nc_name &lt;- &quot;cru10min30_bio.nc&quot;
+nc_file &lt;- paste(nc_path, nc_name, sep=&quot;&quot;)
+alpha &lt;- read_ncdf(nc_file, var=&quot;alpha&quot;, proxy = FALSE)
+```
+
+```{r alpha-plot-RNotebook-5 }
+# list alpha
+alpha
+```
+
+Convert to an `sf` object.
+
+```{r alpha-plot-RNotebook-6 }
+# convert stars to sf
+alpha_sf &lt;- st_as_sf(alpha, as_points = TRUE)
+alpha_sf
+plot(alpha_sf, pch = 16, cex = 0.3)
+```
+
+Setup for making a `{ggplot2}` map of alpha.
+
+```{r alpha-plot-RNotebook-7 }
+# make a data.frame
+lon &lt;- st_coordinates(alpha_sf)[,1]
+lat &lt;- st_coordinates(alpha_sf)[,2]
+alpha &lt;- as.vector(alpha_sf)
+alpha_df &lt;- data.frame(lon, lat, alpha)
+dim(alpha_df)
+head(alpha_df)
+```
+
+```{r alpha-plot-RNotebook-8 }
+# set axis labels (breaks)
+breaks_x &lt;- c(seq(-180, 180, by = 60)) 
+breaks_y &lt;- c(seq(-90, 90, by = 30)) 
+labels_x &lt;- as.character(breaks_x) 
+labels_y &lt;- as.character(breaks_y)
+```
+
+Plot alpha.
+
+```{r alpha-plot-RNotebook-9 }
+# ggplot2 map of alpha
+ggplot() +
+  geom_tile(data = alpha_df, aes(x = lon, y = lat, fill = alpha)) +
+  scale_fill_gradient2(low = &quot;brown&quot;, mid=&quot;white&quot;, high = &quot;darkgreen&quot;, midpoint = 0.50) +
+  geom_sf(data = world_otl_sf, col = &quot;black&quot;, fill = NA) +
+  coord_sf(xlim = c(-180, +175.0), ylim = c(-90, 90), expand = FALSE) +
+  scale_x_continuous(breaks = breaks_x) +
+  scale_y_continuous(breaks = breaks_y) +
+  labs(x = &quot;Longitude&quot;, y = &quot;Latitude&quot;, title=&quot;Priestley-Taylor Coefficient (alpha) (AE/PE)&quot;, fill=&quot;alpha&quot;) +
+  theme_bw()
+```
+
+Some discussion could go here.</code></pre>
+</div>
+<div id="example-3-alpha_plot_rmarkdown_1page.rmd"
+class="section level1">
+<h1>Example 3 – alpha_plot_RMarkdown_1Page.Rmd</h1>
+<p>This example produces a single-page <code>.html</code> file as
+output.</p>
+<pre><code>  
+---
+title: Raster Mapping
+output:
+  html_document:
+    css: html-md-01.css
+---
+
+# Introduction #
+
+This RMarkdown document describes reading a netCDF file consisting of several bioclimatic variables, and plots one of them, `alpha`.
+
+## Load packages ## 
+
+```{r alpha-plot-RMarkdown-1page-1 }
+# load libraries
+library(sf)
+library(stars)
+library(ggplot2)
+```
+
+# Read data #
+
+## World outline ##
+
+### Read map data from the `{maps}` package ###
+
+Read a map file of  world coastlines and countries, and convert to an `sf` object.
+
+```{r alpha-plot-RMarkdown-1page-2 }
+# world_sf
+world_sf &lt;- st_as_sf(maps::map(&quot;world&quot;, plot = FALSE, fill = TRUE))
+world_otl_sf &lt;- st_geometry(world_sf)
+```
+
+### plot the world outline ###
+
+```{r alpha-plot-RMarkdown-1page-3 }
+# ggplot map of world_outline
+ggplot() + 
+  geom_sf(data = world_otl_sf, fill = NA, col = &quot;black&quot;) + 
+  scale_x_continuous(breaks = seq(-180, 180, 30)) +
+  scale_y_continuous(breaks = seq(-90, 90, 30)) +
+  coord_sf(xlim = c(-180, +180), ylim = c(-90, 90), expand = FALSE) +
+  theme_bw()
+```
+
+## Read alpha ##
+
+Now read in alpha alpha from a netCDF file of bioclimatic variables using stars.
+
+```{r alpha-plot-RMarkdown-1page-4 }
+# read alpha (AE/PE)
+# change path as necessary
+nc_path &lt;- &quot;/Users/bartlein/Projects/RESS/data/nc_files/&quot;
+nc_name &lt;- &quot;cru10min30_bio.nc&quot;
+nc_file &lt;- paste(nc_path, nc_name, sep=&quot;&quot;)
+alpha &lt;- read_ncdf(nc_file, var=&quot;alpha&quot;, proxy = FALSE)
+```
+
+List alpha to show contents of the object.
+
+```{r alpha-plot-RMarkdown-1page-5}
+# list alpha
+alpha
+```
+
+Convert the `stars` object to an `sf` object:
+
+```{r alpha-plot-RMarkdown-1page-6}
+# convert stars to sf
+alpha_sf &lt;- st_as_sf(alpha, as_points = TRUE)
+alpha_sf
+plot(alpha_sf, pch = 16, cex = 0.3)
+```
+
+# Plot the data #
+
+## Setup ##
+
+Do some setting up befor plotting.
+
+```{r alpha-plot-RMarkdown-1page-7}
+# setup for plotting alpha
+# make a data.frame
+lon &lt;- st_coordinates(alpha_sf)[,1]
+lat &lt;- st_coordinates(alpha_sf)[,2]
+alpha &lt;- as.vector(alpha_sf)
+alpha_df &lt;- data.frame(lon, lat, alpha)
+dim(alpha_df)
+head(alpha_df)
+```
+
+Set axis labels or breaks:
+
+```{r alpha-plot-RMarkdown-1page-8}
+# set axis labels (breaks)
+breaks_x &lt;- c(seq(-180, 180, by = 60)) 
+breaks_y &lt;- c(seq(-90, 90, by = 30)) 
+labels_x &lt;- as.character(breaks_x) 
+labels_y &lt;- as.character(breaks_y)
+```
+
+## Plot alpha ##
+
+Make a `{ggplot2}` maps of alpha.
+
+```{r alpha-plot-RMarkdown-1page-9}
+# ggplot2 map of alpha
+ggplot() +
+  geom_tile(data = alpha_df, aes(x = lon, y = lat, fill = alpha)) +
+  scale_fill_gradient2(low = &quot;brown&quot;, mid=&quot;white&quot;, high = &quot;darkgreen&quot;, midpoint = 0.50) +
+  geom_sf(data = world_otl_sf, col = &quot;black&quot;, fill = NA) +
+  coord_sf(xlim = c(-180, +175.0), ylim = c(-90, 90), expand = FALSE) +
+  scale_x_continuous(breaks = breaks_x) +
+  scale_y_continuous(breaks = breaks_y) +
+  labs(x = &quot;Longitude&quot;, y = &quot;Latitude&quot;, title=&quot;Priestley-Taylor Coefficient (alpha) (AE/PE)&quot;, fill=&quot;alpha&quot;) +
+  theme_bw()
+```
+
+# Discussion #
+
+(A few paragraphs on map patterns, trends, etc.)</code></pre>
+</div>
+<div id="example-4-alpha_plot_rmarkdown.rmd" class="section level1">
+<h1>Example 4 – alpha_plot_RMarkdown.Rmd</h1>
+<p>Output is <code>.html</code> page, with formatting and some
+navigation.</p>
+<pre><code>  
+---
+title:  Raster mapping
+output:
+  html_document:
+    css: html-md-01.css
+    fig_caption: yes
+    highlight: haddock
+    number_sections: yes
+    theme: cerulean
+    toc: yes
+    toc_float: true
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE, strip.white=TRUE}
+options(width = 105)
+knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+```
+
+# Introduction #
+
+This RMarkdown document describes reading a netCDF file consisting of several bioclimatic variables, and plots one of them, `alpha`.
+
+## Load packages ## 
+
+```{r alpha-plot-RMarkdown-1 }
+# load libraries
+library(sf)
+library(stars)
+library(ggplot2)
+```
+
+# Read data #
+
+## World outline ##
+
+### Read map data from the `{maps}` package ###
+
+Read a map file of  world coastlines and countries, and convert to an `sf` object.
+
+```{r alpha-plot-RMarkdown-2 }
+# world_sf
+world_sf &lt;- st_as_sf(maps::map(&quot;world&quot;, plot = FALSE, fill = TRUE))
+world_otl_sf &lt;- st_geometry(world_sf)
+```
+
+### Plot the world outline ###
+
+```{r alpha-plot-RMarkdown-3 }
+# ggplot map of world_outline
+ggplot() + 
+  geom_sf(data = world_otl_sf, fill = NA, col = &quot;black&quot;) + 
+  scale_x_continuous(breaks = seq(-180, 180, 30)) +
+  scale_y_continuous(breaks = seq(-90, 90, 30)) +
+  coord_sf(xlim = c(-180, +180), ylim = c(-90, 90), expand = FALSE) +
+  theme_bw()
+```
+
+## Read alpha ##
+
+Now read in alpha alpha from a netCDF file of bioclimatic variables using stars.
+
+```{r alpha-plot-RMarkdown-4 }
+# read alpha (AE/PE)
+# change path as necessary
+nc_path &lt;- &quot;/Users/bartlein/Projects/RESS/data/nc_files/&quot;
+nc_name &lt;- &quot;cru10min30_bio.nc&quot;
+nc_file &lt;- paste(nc_path, nc_name, sep=&quot;&quot;)
+alpha &lt;- read_ncdf(nc_file, var=&quot;alpha&quot;, proxy = FALSE)
+```
+
+List alpha to show contents of the object.
+
+```{r alpha-plot-RMarkdown-5 }
+# list alpha
+alpha
+```
+
+Convert the `stars` object to an `sf` object:
+
+```{r alpha-plot-RMarkdown-6 }
+# convert stars to sf
+alpha_sf &lt;- st_as_sf(alpha, as_points = TRUE)
+alpha_sf
+plot(alpha_sf, pch = 16, cex = 0.3)
+```
+
+# Plot the data #
+
+## Setup ##
+
+Do some setting up befor plotting.
+
+```{r alpha-plot-RMarkdown-7 }
+# setup for plotting alpha
+# make a data.frame
+lon &lt;- st_coordinates(alpha_sf)[,1]
+lat &lt;- st_coordinates(alpha_sf)[,2]
+alpha &lt;- as.vector(alpha_sf)
+alpha_df &lt;- data.frame(lon, lat, alpha)
+dim(alpha_df)
+head(alpha_df)
+```
+
+Set axis labels or breaks:
+
+```{r alpha-plot-RMarkdown-8 }
+# set axis labels (breaks)
+breaks_x &lt;- c(seq(-180, 180, by = 60)) 
+breaks_y &lt;- c(seq(-90, 90, by = 30)) 
+labels_x &lt;- as.character(breaks_x) 
+labels_y &lt;- as.character(breaks_y)
+```
+
+## Plot alpha ##
+
+Make a `{ggplot2}` maps of alpha.
+
+```{r alpha-plot-RMarkdown-9 }
+# ggplot2 map of alpha
+ggplot() +
+  geom_tile(data = alpha_df, aes(x = lon, y = lat, fill = alpha)) +
+  scale_fill_gradient2(low = &quot;brown&quot;, mid=&quot;white&quot;, high = &quot;darkgreen&quot;, midpoint = 0.50) +
+  geom_sf(data = world_otl_sf, col = &quot;black&quot;, fill = NA) +
+  coord_sf(xlim = c(-180, +175.0), ylim = c(-90, 90), expand = FALSE) +
+  scale_x_continuous(breaks = breaks_x) +
+  scale_y_continuous(breaks = breaks_y) +
+  labs(x = &quot;Longitude&quot;, y = &quot;Latitude&quot;, title=&quot;Priestley-Taylor Coefficient (alpha) (AE/PE)&quot;, fill=&quot;alpha&quot;) +
+  theme_bw()
+```
+
+# Discussion #
+
+(A few paragraphs on map patterns, trends, etc.)</code></pre>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
