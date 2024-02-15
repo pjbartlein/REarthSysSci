@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>GitHub Project Repository and Web Page</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+
+
+
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Earth-System Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="intro.html">Introduction: R, RStudio, and other infrastructure</a>
+    </li>
+    <li>
+      <a href="usingR.html">Using R</a>
+    </li>
+    <li>
+      <a href="ESSdata.html">Earth-system science data</a>
+    </li>
+    <li>
+      <a href="netCDF.html">netCDF in R</a>
+    </li>
+    <li>
+      <a href="netcdf_terra.html">netCDF and terra</a>
+    </li>
+    <li>
+      <a href="plots1.html">Plots (1)</a>
+    </li>
+    <li>
+      <a href="plots2.html">Plots (2)</a>
+    </li>
+    <li>
+      <a href="maps1.html">Maps (1)</a>
+    </li>
+    <li>
+      <a href="maps2.html">Maps (2)</a>
+    </li>
+    <li>
+      <a href="geospatial.html">Geospatial analyses</a>
+    </li>
+    <li>
+      <a href="correlation.html">Correlation and regression</a>
+    </li>
+    <li>
+      <a href="prediction.html">Prediction</a>
+    </li>
+    <li>
+      <a href="pca.html">PCA</a>
+    </li>
+    <li>
+      <a href="svd.html">Singular Value Decomposistion</a>
+    </li>
+    <li>
+      <a href="highdim.html">High-resolution &amp; high-dimensional data</a>
+    </li>
+    <li>
+      <a href="multivariate.html">Multivariate methods</a>
+    </li>
+    <li>
+      <a href="timeseries.html">Time-series analysis</a>
+    </li>
+    <li>
+      <a href="otherlang.html">Other Languages</a>
+    </li>
+    <li class="dropdown-header">Other topics</li>
+    <li>
+      <a href="sf_stars_sftime.html">sf / stars / sftime</a>
+    </li>
+    <li>
+      <a href="hdf5_intro.html">HDF in R</a>
+    </li>
+    <li>
+      <a href="anomalies.html">Long-term means and anomalies</a>
+    </li>
+    <li>
+      <a href="tsplots.html">Time-series plots</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Tasks
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Tasks</li>
+    <li>
+      <a href="installR.html">Install R and RStudio</a>
+    </li>
+    <li>
+      <a href="Ex_UsingR.html">Using R exercise</a>
+    </li>
+    <li>
+      <a href="install_netCDF.html">Install netCDF &amp; Panoply</a>
+    </li>
+    <li>
+      <a href="transfer.html">File transfer</a>
+    </li>
+    <li>
+      <a href="texteditor.html">Install a text editor</a>
+    </li>
+    <li>
+      <a href="dataselection.html">Project data set selection</a>
+    </li>
+    <li>
+      <a href="markdown.html">Markdown and RMarkdown</a>
+    </li>
+    <li>
+      <a href="scripts_and_md.html">R Scripts and R Markdown</a>
+    </li>
+    <li>
+      <a href="GitHub.html">GitHub</a>
+    </li>
+    <li>
+      <a href="pages.html">pages.uoregon.edu</a>
+    </li>
+    <li>
+      <a href="localweb.html">Local websites</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="websites.html">Old course web pages</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">GitHub Project Repository and Web Page</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#getting-going" id="toc-getting-going"><span
+class="toc-section-number">1</span> Getting going</a></li>
+<li><a href="#creating-a-repository"
+id="toc-creating-a-repository"><span class="toc-section-number">2</span>
+Creating a repository</a>
+<ul>
+<li><a href="#set-up" id="toc-set-up"><span
+class="toc-section-number">2.1</span> Set up</a></li>
+<li><a href="#web-site-setup" id="toc-web-site-setup"><span
+class="toc-section-number">2.2</span> Web site setup</a></li>
+</ul></li>
+</ul>
+</div>
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<p>A repository is a collection of files, including code, data, and
+documents, that can be used to store multiple versions of files as the
+development of a project proceeds. Repositories can be local (i.e. file
+on the machine being used for development), but they are most effective
+if that are <em>remote</em> or offsite. Offsite repositories provide two
+important advantages: 1) they backup files that could be lost for any
+number of reasons (hard-drive failures, machine loss or meltdown), and
+2) they are accessible from other machines, and by collaborators.</p>
+<p>“Git” is one version-control system that creates and manages
+repositories (and note “Git” is purported not to mean anything), and
+“GitHub” is a website that hosts remote repositories, web pages, and
+some (smallish) data sets.</p>
+<p>The use of Git and GitHub in R and RStudio is excellently described
+in the Bookdown document <a
+href="https://happygitwithr.com/index.html">[<em>Happy Git and GitHub
+for the useR (HappyGitWithR)</em>]</a> by Jenny Bryan at the Univ.
+British Columbia. This is the primary source for guidance and use of Git
+and GitHub from within RStudio.</p>
+<div id="getting-going" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Getting going</h1>
+<p>The key steps include:</p>
+<ol style="list-style-type: decimal">
+<li>registering a (free) GitHub account at <a
+href="github.com">[github.com]</a> (see Section 4 of
+<em>HappyGitWithR</em>) (See also the <a
+href="https://education.github.com">[GitHub Education]</a> page.)</li>
+<li>installing Git (Section 6)</li>
+<li>installing a Git client (GitHub Desktop)</li>
+<li>configuring RStudio and GitHub (Sections 9-14)</li>
+<li>starting a new project (Section 15)</li>
+</ol>
+<p>The basic idea is to create a (mostly) empty new repository on
+GitHub, and then “clone” to a local machine. T# Introduction #</p>
+<p>There is a hierarchy of output formats that could be used for
+completing the data analysis project, ranging from a simple R script, to
+a multi-page web site. These formats include</p>
+<ul>
+<li>an R script file (<code>*.R</code>), where the output would be
+produced by downloading the script file, and executing it locally;</li>
+<li>an R Markdown “Notebook” file (<code>*.Rmd</code>) that combines
+code and output in a single file, which can be saved as a self-contained
+<code>.html</code> file;</li>
+<li>an R Markdown file (<code>*.Rmd</code>) that creates a single-page
+<code>.html</code> file (or a single-file Word (<code>*.docx</code>) or
+PDF (<code>*.pdf</code>) file, with some additional installations
+required) that combines text, code, and output, and also contains
+internal navigation (i.e. a table of contents) which could be posted on
+a web page;</li>
+<li>a multiple-page <code>*.html</code> web site, that includes several
+<code>Rmd</code> files, a “site YAML” file (<code>_site.yml</code>), and
+possibly a style sheet (<code>*.css</code>).</li>
+</ul>
+<p>The single-page <code>*.Rmd</code> file that produces a stand-alone
+<code>*.html</code> file that is hosted on GitHub will probably be the
+ultimate choice for most people, but the multiple-page web site might
+also be worth attempting.</p>
+<p>Implementing these approaches will be described sequentially below.
+Various files and folders will be created in each example, and some of
+these will have to be deleted before moving on to the next example. See
+the “CLEAN UP” steps at the beginning of the second, third and fourth
+examples</p>
+</div>
+<div id="creating-a-repository" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Creating a
+repository</h1>
+<p>The key steps include:</p>
+<ol style="list-style-type: decimal">
+<li>registering a (free) GitHub account at <a
+href="github.com">[github.com]</a> (see Section 4 of <a
+href="https://happygitwithr.com/index.html">[<em>Happy Git and GitHub
+for the useR (HappyGitWithR)</em>]</a>) (See also the <a
+href="https://education.github.com">[GitHub Education]</a> page.)</li>
+<li>installing Git (Chapter 6)</li>
+<li>installing a Git client (Chapter 8)</li>
+<li>configuring RStudio and GitHub (Chapters 9-14, and see Chapter 10 in
+particular about cacheing credentials)</li>
+<li>starting a new project (Chapter 15)</li>
+</ol>
+<div id="set-up" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Set up</h2>
+<p>The basic idea is to create a (mostly) empty new repository on
+GitHub, and then “clone” to a local machine. The steps include:</p>
+<p>At GitHub:</p>
+<ol start="6" style="list-style-type: decimal">
+<li>create a new repository (e.g. <code>geog490</code> (or
+<code>geog590</code>);</li>
+<li>create and edit its <code>README.md</code> file.</li>
+<li>copy or write down its URL.</li>
+</ol>
+<p>On the local machine:</p>
+<ol start="8" style="list-style-type: decimal">
+<li>create a folder,
+e.g. <code>/Users/bartlein/Projects/geog490</code></li>
+</ol>
+<p>In RStudio:</p>
+<ol start="9" style="list-style-type: decimal">
+<li>create a project in an existing folder (File &gt; New Project… &gt;
+Version Control &gt; Git<br />
+</li>
+<li>Repository URL (e.g.):
+<code>https://github.com/pjbartlein/geog490</code><br />
+</li>
+<li>Project directory name: <code>geog490</code><br />
+</li>
+<li>Browse to folder: <code>/Users/Projects/</code></li>
+<li>click on “Create Project”</li>
+</ol>
+<p>(note that <code>.gitignore</code>, <code>README.md</code> and
+<code>REarthSysSci</code> will have turned up in the working
+directory)</p>
+<p>Then, on the local machine:</p>
+<ol start="14" style="list-style-type: decimal">
+<li>Edit <code>README.md</code> and save (perhaps using a Markdown
+editor, or in RStudio)</li>
+<li>Click on <code>Tools &gt; Version Control &gt; Commit</code><br />
+</li>
+<li>Click on checkboxes to “stage” files</li>
+<li>Click on the <code>Push</code> button to synchronize the local
+repository with the remote GitHub repository.</li>
+</ol>
+<p>At this point, the project folder should contain the following
+folders and files:</p>
+<pre><code>/.git
+/.Rproj.user
+.gitignore
+geog490.Rproj
+README.md</code></pre>
+</div>
+<div id="web-site-setup" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Web site setup</h2>
+<p>Go back to the repository
+(e.g. <code>https://github.com/pjbartlein/geog490</code>, if it’s not
+still open in your web browser). Check to see that you’re still logged
+in. Then:</p>
+<ol style="list-style-type: decimal">
+<li>Click on “Create new file”;</li>
+<li>In the “Name your file…” box, type (exactly):
+<code>docs/</code></li>
+<li>The path will expand to (e.g.) <code>geog490/docs/</code> and in the
+“Name your file…” box, enter <code>index.html</code>.</li>
+<li>In the <code>&lt;&gt; Edit new file</code> panel, type something
+like “GEOG490 temporary page”</li>
+<li>Scroll down and click on the “Commit new file” button.</li>
+</ol>
+<p>If you back up to the top-level <code>geog490</code> page, you’ll see
+a new folder. Then click on “Settings” and scroll down to “GitHub
+Pages”.</p>
+<ol style="list-style-type: decimal">
+<li>Click on the drop-down box below “Source”.</li>
+<li>Click on the “master branch/docs folder”</li>
+</ol>
+<p>Sometimes it takes a little while, but you should see a the message
+“Your site is ready to be published at
+<code>https://pjbartlein.github.io/geog490</code>” (but with your GitHub
+user name and repository name instead), just below the top of “GitHub
+Pages”. If you open a new tab or window on the browser and type or paste
+in that URL, you should see a new web page with the text “GEOG490
+temporary page” (or whatever you typed in above). Notice that in the
+projects folder you’ll see a new folder <code>/docs</code>.</p>
+<p>Note that there are two web pages associated with the project
+now:</p>
+<ul>
+<li><a
+href="https://github.com/pjbartlein/geog490/"><code>https://github.com/pjbartlein/geog490/</code></a>
+(the GitHub repository page); and</li>
+<li><a
+href="https://pjbartlein.github.io/geog490/index.html"><code>https://pjbartlein.github.io/geog490/index.html</code></a>
+(the projects web page).</li>
+</ul>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

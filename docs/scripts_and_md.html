@@ -409,7 +409,11 @@ id="toc-example-4-a-single-page-.html-file-with-styling-and-navigation">Example
 4 – A single-page *.html file, with styling and navigation #</a></li>
 <li><a href="#example-5-a-multi-page-web-site"
 id="toc-example-5-a-multi-page-web-site">Example 5 – A multi-page web
-site</a></li>
+site</a>
+<ul>
+<li><a href="#the-github-repository" id="toc-the-github-repository">The
+GitHub repository</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -1269,7 +1273,59 @@ output:
     self_contained: no
 output_dir: docs
 </code></pre>
-<p><a href="scripts_and_md.html">[Back to top]</a></p>
+<div id="the-github-repository" class="section level2">
+<h2>The GitHub repository</h2>
+<p>The <code>knitr()</code> package is quite fussy about formatting of
+the <code>_site.yml</code> file so check it first in the case of later
+errors.</p>
+<p>In RStudio, the “build tools” needed to create the web site will need
+to be configured. On the RStudio menu, click on Build. If there is a
+menu choice that says “Install Tools” do that first, otherwise click on
+“Configure Build Tools…” A “Project Options” dialog will open. On the
+“Project build tools:” dropdown box, select “Website” The initial
+choices are probably fine, with the “Site directory” set to “(Project
+Root)” and the “Preview” and “Re-knit” checkboxes checked. Upon clicking
+OK, a “Build” tab should appear in the upper-right pane. If it doesn’t,
+restart R Studio (Session &gt; Restart R). Select the build tab, and
+click on “Build Website”.</p>
+<p>At this point, the project folder should contain:</p>
+<pre><code>/.git
+/.Rproj.user
+/docs
+/alpha_plot_RMarkdown_Site_cache
+/alpha_plot_RMarkdown_Site_files
+
+html-md-01.css
+
+.gitignore
+.RData
+.Rhistory
+
+about.Rmd
+index.Rmd
+intro.Rmd
+alpha_plot_RMarkdown_Site.Rmd
+
+geog490.Rproj
+
+README.md
+_site.yml</code></pre>
+<p>… and the docs folder,</p>
+<pre><code>/site_libs
+/plot_alpha_RMarkdown_Site_files
+
+html-md-01.css
+
+about.html
+index.html
+intro.html
+alpha_plot_RMarkdown_Site.html
+README.html</code></pre>
+<p>The website should be viewable at: <a
+href="https://pjbartlein.github.io/geog490/index.html"><code>https://pjbartlein.github.io/geog490/index.html</code></a>
+(the project’s web page) <a href="scripts_and_md.html">[Back to
+top]</a></p>
+</div>
 </div>
 
 

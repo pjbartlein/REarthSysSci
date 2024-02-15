@@ -181,4 +181,52 @@ Here is the code:
   `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/geog490/_site.yml"), collapse = "\n")`
 ````
 
+## The GitHub repository ##
+
+The `knitr()` package is quite fussy about formatting of the `_site.yml` file so check it first in the case of later errors.
+
+In RStudio, the "build tools" needed to create the web site will need to be configured.  On the RStudio menu, click on Build.  If there is a menu choice that says "Install Tools" do that first, otherwise click on "Configure Build Tools…"  A "Project Options" dialog will open.  On the "Project build tools:" dropdown box, select "Website"  The initial choices are probably fine, with the "Site directory" set to "(Project Root)" and the "Preview" and "Re-knit" checkboxes checked.  Upon clicking OK, a "Build" tab should appear in the upper-right pane.  If it doesn't, restart R Studio (Session > Restart R).  Select the build tab, and click on "Build Website".
+
+At this point, the project folder should contain:	
+
+```
+/.git
+/.Rproj.user
+/docs
+/alpha_plot_RMarkdown_Site_cache
+/alpha_plot_RMarkdown_Site_files
+
+html-md-01.css
+
+.gitignore
+.RData
+.Rhistory
+
+about.Rmd
+index.Rmd
+intro.Rmd
+alpha_plot_RMarkdown_Site.Rmd
+
+geog490.Rproj
+
+README.md
+_site.yml
+```
+
+… and the docs folder, 
+
+```
+/site_libs
+/plot_alpha_RMarkdown_Site_files
+
+html-md-01.css
+
+about.html
+index.html
+intro.html
+alpha_plot_RMarkdown_Site.html
+README.html
+```
+
+The website should be viewable at:   [`https://pjbartlein.github.io/geog490/index.html`](https://pjbartlein.github.io/geog490/index.html) (the project's web page)
 [[Back to top]](scripts_and_md.html)
