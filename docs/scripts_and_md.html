@@ -400,12 +400,16 @@ script</a></li>
 <li><a href="#example-2-an-rmarkdown-notebook-file"
 id="toc-example-2-an-rmarkdown-notebook-file">Example 2 – An RMarkdown
 Notebook file</a></li>
-<li><a href="#example-3-alpha_plot_rmarkdown_1page.rmd"
-id="toc-example-3-alpha_plot_rmarkdown_1page.rmd">Example 3 –
-alpha_plot_RMarkdown_1Page.Rmd</a></li>
-<li><a href="#example-4-alpha_plot_rmarkdown.rmd"
-id="toc-example-4-alpha_plot_rmarkdown.rmd">Example 4 –
-alpha_plot_RMarkdown.Rmd</a></li>
+<li><a href="#example-3-a-single-page-.html-file-with-some-styling"
+id="toc-example-3-a-single-page-.html-file-with-some-styling">Example 3
+– A single-page *.html file, with some styling #</a></li>
+<li><a
+href="#example-4-a-single-page-.html-file-with-styling-and-navigation"
+id="toc-example-4-a-single-page-.html-file-with-styling-and-navigation">Example
+4 – A single-page *.html file, with styling and navigation #</a></li>
+<li><a href="#example-5-a-multi-page-web-site"
+id="toc-example-5-a-multi-page-web-site">Example 5 – A multi-page web
+site</a></li>
 </ul>
 </div>
 
@@ -415,28 +419,44 @@ alpha_plot_RMarkdown.Rmd</a></li>
 </script>
 <div id="introduction" class="section level1">
 <h1>Introduction</h1>
-<p>The <code>*.R</code> and <code>*.Rmd</code> scripts on the page
+<p>The <code>*.R</code> and <code>*.Rmd</code> scripts on this page
 illustrate a range of possible approaches for building a “project”
-<code>*.html</code> document, ranging from a very simple RMarkdown
-Notebook to a multi-page website. This page focues on the scripts and
-not the procedures for constructing a GitHub repository with a GitHub
-Pages web page, nor for serving web pages on
-<code>https://pages.uoregon.edu</code>/</p>
+<code>*.html</code> document. The examples range from a very simple R
+Markdown Notebook to a multi-page website. This page focues on the
+scripts and not the procedures for constructing a GitHub repository with
+a GitHub Pages web page, nor for serving web pages on
+<code>https://pages.uoregon.edu</code>/.</p>
 <p>The examples can be replicated by copying the scripts, and creating
-the appropriate files in RStudio
-(e.g. <code>plot\_alpha\_RScript.R</code> for this first example).</p>
+the appropriate files in RStudio (e.g. as
+<code>alpha\_plot\_RScript.R</code> for this first example).</p>
 </div>
 <div id="example-1-a-simple-r-script" class="section level1">
 <h1>Example 1 – A simple R script</h1>
-<p>Script file: <a
-href="https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RScript.R">[alpha_plot_RScript.R]</a></p>
-<p>Output is text in Console pane and graphics in Plots pane.</p>
+<ul>
+<li>Script file: <a
+href="https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RScript.R">[alpha_plot_RScript.R]</a></li>
+<li>Output is text in the Console pane and graphics in the Plots
+pane.</li>
+</ul>
 <p>This is an example of “bare” code that reads a netCDF file, does some
 setup, and plots a map. The output could conceivably be collected from
 the Console and Plot windows, and used to make an <code>*.html</code>
-file, but that’s what computers are for. It would still be worth running
-the script, chunk-by-chunk to get an idea of what the basic task is.
-Note: Copy everything in the box.</p>
+file, but, that’s what computers are for. This would involve:</p>
+<ul>
+<li>creating a <code>*.md</code> file, perhaps with VS Code,</li>
+<li>copying text from the Console pane into it,</li>
+<li>including saved images from the Plot pane (saving an image, say, as
+<code>alpha.png</code> and then including it in the Markdown file using
+the code fragment <code>![](alpha.png)</code>), and then finally</li>
+<li>exporting the <code>*.md</code> file as an <code>*.html</code> file,
+or using Pandoc to render the <code>*.md</code> file.</li>
+</ul>
+<p>That would be tedious.</p>
+<p>It would still be worth running the script, chunk-by-chunk, to get an
+idea of what the basic task of inputting data, setting up, and plotting
+is.</p>
+<p><strong>Note: Copy everything in the boxes, except the first line if
+it’s blank.</strong></p>
 <pre><code>  
 # alpha_plot_RScript.R
 # reads and plots &quot;alpha&quot; (Priestley-Taylor coefficient) (AE/PE)
@@ -508,12 +528,26 @@ ggplot() +
 </div>
 <div id="example-2-an-rmarkdown-notebook-file" class="section level1">
 <h1>Example 2 – An RMarkdown Notebook file</h1>
-<p>Script file: <a
-href="https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RNotebook.Rmd">[alpha_plot_RNotebook.Rmd]</a></p>
-<p>Output is a single-page R Notebook <code>.html</code> file.</p>
-<p>This RMarkdown <code>*.Rmd</code> file produces the simplest of .html
-output. Note that it does not do any Markdown-type formatting, but
-simply embeds the output in the document.</p>
+<ul>
+<li>Script file: <a
+href="https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RNotebook.Rmd">[alpha_plot_RNotebook.Rmd]</a></li>
+<li>Output is a single-page R Notebook <code>.html</code> file.</li>
+</ul>
+<p>This R Notebook <code>*.Rmd</code> file produces the simplest of
+.html output. Note that it does not do any Markdown-type formatting, but
+simply embeds the output in the document. What makes this an R Notebook
+file (despite having the <code>*.Rmd</code> extension), is the presence
+of a “YAML” (“Yet Another Markup Language/YAML Ain’t Markup Language”)
+header that looks like the following:</p>
+<pre><code>
+---
+title: &quot;R Notebook&quot;
+output:
+  html_document:
+    df_print: paged
+---</code></pre>
+<p>This header specifies that the output of “kniting” the file should be
+an <code>*.html</code> file. Here’s the code:</p>
 <pre><code>  
 ---
 title: &quot;R Notebook&quot;
@@ -611,13 +645,26 @@ ggplot() +
 
 Some discussion could go here.</code></pre>
 </div>
-<div id="example-3-alpha_plot_rmarkdown_1page.rmd"
+<div id="example-3-a-single-page-.html-file-with-some-styling"
 class="section level1">
-<h1>Example 3 – alpha_plot_RMarkdown_1Page.Rmd</h1>
-<p>Script file: <a
-href="https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown_1Page.Rmd">[alpha_plot_RMarkdown_1Page.Rmd]</a></p>
+<h1>Example 3 – A single-page *.html file, with some styling #</h1>
+<ul>
+<li>Script file: <a
+href="https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown_1Page.Rmd">[alpha_plot_RMarkdown_1Page.Rmd]</a></li>
+<li>Output is a single-page <code>*.html</code> file.</li>
+</ul>
 <p>This example produces a single-page <code>.html</code> file as
-output.</p>
+output, this time styled using the <code>html-md-01.css</code>
+stylesheet (the same one used for the course web page). The YAML header
+looks like</p>
+<pre><code>---
+
+title: Raster Mapping
+output:
+  html_document:
+    css: html-md-01.css
+---</code></pre>
+<p>Here’s the code:</p>
 <pre><code>  
 ---
 title: Raster Mapping
@@ -742,12 +789,37 @@ ggplot() +
 
 (A few paragraphs on map patterns, trends, etc.)</code></pre>
 </div>
-<div id="example-4-alpha_plot_rmarkdown.rmd" class="section level1">
-<h1>Example 4 – alpha_plot_RMarkdown.Rmd</h1>
-<p>Script file: <a
-href="https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown.Rmd">[alpha_plot_RMarkdown.Rmd]</a></p>
-<p>Output is <code>.html</code> page, with formatting and some
-navigation.</p>
+<div id="example-4-a-single-page-.html-file-with-styling-and-navigation"
+class="section level1">
+<h1>Example 4 – A single-page *.html file, with styling and navigation
+#</h1>
+<ul>
+<li>Script file: <a
+href="https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown.Rmd">[alpha_plot_RMarkdown.Rmd]</a></li>
+<li>Output is a single-page <code>.html</code> file, with styling and
+some navigation.</li>
+</ul>
+<p>The YAML header is more elaborate now, speciying a code
+syntax-highlighting scheme (<code>haddock</code>), and a output
+“Bootstrap” theme (<code>cerulean</code>) (See <a
+href="https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style">[https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style]</a>)</p>
+<pre><code>
+---
+title:  Raster mapping
+output:
+  html_document:
+    css: html-md-01.css
+    fig_caption: yes
+    highlight: haddock
+    number_sections: yes
+    theme: cerulean
+    toc: yes
+    toc_float: true
+    collapsed: no
+---</code></pre>
+<p>There is also a “code-chunk” that sets some <code>knitr</code>
+options.</p>
+<p>Here’s the code:</p>
 <pre><code>  
 ---
 title:  Raster mapping
@@ -884,6 +956,9 @@ ggplot() +
 # Discussion #
 
 (A few paragraphs on map patterns, trends, etc.)</code></pre>
+</div>
+<div id="example-5-a-multi-page-web-site" class="section level1">
+<h1>Example 5 – A multi-page web site</h1>
 </div>
 
 

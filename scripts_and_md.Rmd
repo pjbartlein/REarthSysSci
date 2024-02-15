@@ -17,52 +17,110 @@ klippy::klippy(position = c('top', 'right'))
 ```
 # Introduction #
 
-The `*.R` and `*.Rmd` scripts on the page illustrate a range of possible approaches for building a "project" `*.html` document, ranging from a very simple RMarkdown Notebook to a multi-page website. This page focues on the scripts and not the procedures for constructing a GitHub repository with a GitHub Pages web page, nor for serving web pages on `https://pages.uoregon.edu`/
+The `*.R` and `*.Rmd` scripts on this page illustrate a range of possible approaches for building a "project" `*.html` document. The examples range from a very simple R Markdown Notebook to a multi-page website. This page focues on the scripts and not the procedures for constructing a GitHub repository with a GitHub Pages web page, nor for serving web pages on `https://pages.uoregon.edu`/.
 
-The examples can be replicated by copying the scripts, and creating the appropriate files in RStudio (e.g. `plot\_alpha\_RScript.R` for this first example).
+The examples can be replicated by copying the scripts, and creating the appropriate files in RStudio (e.g. as `alpha\_plot\_RScript.R` for this first example).
 
 # Example 1 -- A simple R script #
 
-Script file: [[alpha_plot_RScript.R]](https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RScript.R)
+- Script file: [[alpha_plot_RScript.R]](https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RScript.R)
+- Output is text in the Console pane and graphics in the Plots pane.
 
-Output is text in Console pane and graphics in Plots pane.
+This is an example of "bare" code that reads a netCDF file, does some setup, and plots a map. The output could conceivably be collected from the Console and Plot windows, and used to make an `*.html` file, but, that's what computers are for. This would involve:
 
-This is an example of "bare" code that reads a netCDF file, does some setup, and plots a map. The output could conceivably be collected from the Console and Plot windows, and used to make an `*.html` file, but that's what computers are for. It would still be worth running the script, chunk-by-chunk to get an idea of what the basic task is.
-Note: Copy everything in the box.
+- creating a `*.md` file, perhaps with VS Code, 
+- copying text from the Console pane into it, 
+- including saved images from the Plot pane (saving an image, say, as `alpha.png` and then including it in the Markdown file using the code fragment `![](alpha.png)`), and then finally 
+- exporting the `*.md` file as an `*.html` file, or using Pandoc to render the `*.md` file. 
+
+That would be tedious.
+
+It would still be worth running the script, chunk-by-chunk, to get an idea of what the basic task of inputting data, setting up, and plotting is.
+
+**Note: Copy everything in the boxes, except the first line if it's blank.**
 
 ````
   `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/examples/alpha_plot_RScript.R"), collapse = "\n")`
 ````
+
 # Example 2 -- An RMarkdown Notebook file #
 
-Script file: [[alpha_plot_RNotebook.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RNotebook.Rmd)
+- Script file: [[alpha_plot_RNotebook.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RNotebook.Rmd)
+- Output is a single-page R Notebook `.html` file.
 
-Output is a single-page R Notebook `.html` file.
+This R Notebook `*.Rmd` file produces the simplest of .html output. Note that it does not do any Markdown-type formatting, but simply embeds the output in the document. What makes this an R Notebook file (despite having the `*.Rmd` extension), is the presence of a "YAML" ("Yet Another Markup Language/YAML Ain't Markup Language") header that looks like the following:
 
-This RMarkdown `*.Rmd` file produces the simplest of .html output. Note that it does not do any Markdown-type formatting, but simply embeds the output in the document.
+````
+
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+````
+
+This header specifies that the output of "kniting" the file should be an `*.html` file. Here's the code:
 
 ````
   `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/examples/alpha_plot_RNotebook.Rmd"), collapse = "\n")`
 ````
 
-# Example 3 -- alpha\_plot\_RMarkdown\_1Page.Rmd #
+# Example 3 -- A single-page *.html file, with some styling #
 
-Script file: [[alpha_plot_RMarkdown_1Page.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown_1Page.Rmd)
+- Script file: [[alpha_plot_RMarkdown_1Page.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown_1Page.Rmd)
+- Output is a single-page `*.html` file.
 
-This example produces a single-page `.html` file as output.
+This example produces a single-page `.html` file as output, this time styled using the `html-md-01.css` stylesheet (the same one used for the course web page). The YAML header looks like
+
+````
+---
+
+title: Raster Mapping
+output:
+  html_document:
+    css: html-md-01.css
+---
+````
+
+Here's the code:
 
 ````
   `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown_1Page.Rmd"), collapse = "\n")`
 ````
 
-# Example 4 -- alpha\_plot\_RMarkdown.Rmd #
+# Example 4 -- A single-page *.html file, with styling and navigation #
 
-Script file: [[alpha_plot_RMarkdown.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown.Rmd)
+- Script file: [[alpha_plot_RMarkdown.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown.Rmd)
+- Output is a single-page `.html` file, with styling and some navigation.
 
-Output is `.html` page, with formatting and some navigation.
+The YAML header is more elaborate now, speciying a code syntax-highlighting scheme (`haddock`), and a output "Bootstrap" theme (`cerulean`) (See [[https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style]](https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style))
+
+````
+
+---
+title:  Raster mapping
+output:
+  html_document:
+    css: html-md-01.css
+    fig_caption: yes
+    highlight: haddock
+    number_sections: yes
+    theme: cerulean
+    toc: yes
+    toc_float: true
+    collapsed: no
+---
+````
+
+There is also a "code-chunk" that sets some `knitr` options.
+
+Here's the code:
 
 ````
   `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown.Rmd"), collapse = "\n")`
 ````
+
+# Example 5 -- A multi-page web site #
 
 
