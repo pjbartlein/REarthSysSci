@@ -37,11 +37,13 @@ That would be tedious.
 
 It would still be worth running the script, chunk-by-chunk, to get an idea of what the basic task of inputting data, setting up, and plotting is.
 
-**Note: Copy everything in the boxes, except the first line if it's blank.**
+**Note: Copy everything in the boxes (except the first line if it's blank).**
 
 ````
   `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/examples/alpha_plot_RScript.R"), collapse = "\n")`
 ````
+
+[[Back to top]](scripts_and_md.html)
 
 # Example 2 -- An RMarkdown Notebook file #
 
@@ -66,6 +68,8 @@ This header specifies that the output of "kniting" the file should be an `*.html
   `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/examples/alpha_plot_RNotebook.Rmd"), collapse = "\n")`
 ````
 
+[[Back to top]](scripts_and_md.html)
+
 # Example 3 -- A single-page *.html file, with some styling #
 
 - Script file: [[alpha_plot_RMarkdown_1Page.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown_1Page.Rmd)
@@ -88,6 +92,8 @@ Here's the code:
 ````
   `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown_1Page.Rmd"), collapse = "\n")`
 ````
+
+[[Back to top]](scripts_and_md.html)
 
 # Example 4 -- A single-page *.html file, with styling and navigation #
 
@@ -174,3 +180,5 @@ Here is the code:
 ````
   `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/geog490/_site.yml"), collapse = "\n")`
 ````
+
+[[Back to top]](scripts_and_md.html)
