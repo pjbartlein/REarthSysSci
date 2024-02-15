@@ -130,4 +130,47 @@ Here's the code:
   - [[about.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/about.Rmd)
   - [[README.md]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/README.md)
   - [[_site.yml]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/\_site.yml)
+- Output is a multi-page website.
+
+A multi-page R Markdown website, as the name suggests, includes a collection of `*.Rmd` files (that are each knit to create `*.html` files, plus a support file (`_site.yml`) that controls the navigation bar layout.  A sixth file is `README.md` file that appears on the main page of the GitHub repository. The steps below will create a minimalist multi-page web site.  The site will include an `index.html` page with a brief overview, a "Topics" tab with two pages, one an introduction, and the other being the "Raster mapping" page, and an "About" tab, implemented by four `*.Rmd` files (plus the `_site.yml` file).  Although R Studio contains great script-editing features, it's a little clunky as a text editor compared to Markdown-specific editors.  (In practice, if there is a lot of text to compose, edit, and format (as is the case with this page), it may be more efficient to do that in a Markdown editor, or VS Code, previewing while you go, and then include the contents of the `*.md` file created by the editor in a `*.Rmd` file using the Knitr "child document" chunk option (e.g. `{r child="index.md"}`)).  
+
+Start by creating an R Markdown file that will produce a single-page `.html` file as output, which will be incorporated into the web site later:  
+
+1. Create a new R Markdown file in the projects folder (File > New File > R Markdown);
+2. Delete the sample code in the new page; 
+2. Copy the contents of e.g. `index.Rmd`
+1. Edit the paths in the script file as appropriate in `alpha_plot_RMarkdown_Site.Rmd`;
+3. Knit the project.
+4. Commit the changes, and push the website to the GitHub repository (explained elsewhere).
+
+Here is the code:
+
+[[index.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/index.Rmd)
+````
+  `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/geog490/index.Rmd"), collapse = "\n")`
+````
+
+[[intro.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/intro.Rmd)
+````
+  `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/geog490/intro.Rmd"), collapse = "\n")`
+````
   
+[[alpha_plot_RMarkdown_Site.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/alpha_plot_RMarkdown_Site.Rmd)
+````
+  `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/geog490/alpha_plot_RMarkdown_Site.Rmd"), collapse = "\n")`
+````
+
+[[about.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/about.Rmd)
+````
+  `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/geog490/about.Rmd"), collapse = "\n")`
+````
+
+[[README.md]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/README.md)
+````
+  `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/geog490/README.md"), collapse = "\n")`
+````
+
+[[_site.yml]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/\_site.yml)
+````
+  `r paste(readLines("/Users/bartlein/Dropbox/DataVis/REarthSysSci/Rmd/geog490/_site.yml"), collapse = "\n")`
+````

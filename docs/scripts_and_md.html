@@ -975,7 +975,297 @@ href="https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/README.md">[README.m
 <li><a
 href="https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/_site.yml">[_site.yml]</a></li>
 </ul></li>
+<li>Output is a multi-page website.</li>
 </ul>
+<p>A multi-page R Markdown website, as the name suggests, includes a
+collection of <code>*.Rmd</code> files (that are each knit to create
+<code>*.html</code> files, plus a support file (<code>_site.yml</code>)
+that controls the navigation bar layout. A sixth file is
+<code>README.md</code> file that appears on the main page of the GitHub
+repository. The steps below will create a minimalist multi-page web
+site. The site will include an <code>index.html</code> page with a brief
+overview, a “Topics” tab with two pages, one an introduction, and the
+other being the “Raster mapping” page, and an “About” tab, implemented
+by four <code>*.Rmd</code> files (plus the <code>_site.yml</code> file).
+Although R Studio contains great script-editing features, it’s a little
+clunky as a text editor compared to Markdown-specific editors. (In
+practice, if there is a lot of text to compose, edit, and format (as is
+the case with this page), it may be more efficient to do that in a
+Markdown editor, or VS Code, previewing while you go, and then include
+the contents of the <code>*.md</code> file created by the editor in a
+<code>*.Rmd</code> file using the Knitr “child document” chunk option
+(e.g. <code>{r child="index.md"}</code>)).</p>
+<p>Start by creating an R Markdown file that will produce a single-page
+<code>.html</code> file as output, which will be incorporated into the
+web site later:</p>
+<ol style="list-style-type: decimal">
+<li>Create a new R Markdown file in the projects folder (File &gt; New
+File &gt; R Markdown);</li>
+<li>Delete the sample code in the new page;</li>
+<li>Copy the contents of e.g. <code>index.Rmd</code></li>
+<li>Edit the paths in the script file as appropriate in
+<code>alpha_plot_RMarkdown_Site.Rmd</code>;</li>
+<li>Knit the project.</li>
+<li>Commit the changes, and push the website to the GitHub repository
+(explained elsewhere).</li>
+</ol>
+<p>Here is the code:</p>
+<p><a
+href="https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/index.Rmd">[index.Rmd]</a></p>
+<pre><code>  
+---
+title: &quot;GEOG4/590: R for Earth-System Science&quot;
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: no
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+```
+
+## Project web page for GEOG 4/595 *R for Earth-System Science* ##
+    
+Topics covered here include:
+
+- An introduction to the project
+- A simple example of plotting a raster slice
+- (more to come…)</code></pre>
+<p><a
+href="https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/intro.Rmd">[intro.Rmd]</a></p>
+<pre><code>  
+---
+title: &quot;Introduction to the project&quot;
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: no
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+```
+
+The visualization developed here uses the `{terra}` and `{rasterVis}` packages to map the global 
+pattern of alpha, calculated using the CRU CL2 climate data set.  The maps also include a 
+world outline with coastlines and country borders.
+
+More introductory material...</code></pre>
+<p><a
+href="https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/alpha_plot_RMarkdown_Site.Rmd">[alpha_plot_RMarkdown_Site.Rmd]</a></p>
+<pre><code>  
+---
+title:  Raster mapping
+output:
+  html_document:
+    css: html-md-01.css
+    fig_caption: yes
+    highlight: haddock
+    number_sections: yes
+    theme: spacelab
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE, strip.white=TRUE}
+options(width = 105)
+knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+```
+
+# Introduction #
+
+This RMarkdown document describes reading a netCDF file consisting of several bioclimatic variables, and plots one of them, `alpha`.
+
+## Load packages ## 
+
+```{r alpha-plot-RMarkdown_Site-1 }
+# load libraries
+library(sf)
+library(stars)
+library(ggplot2)
+```
+
+# Read data #
+
+## World outline ##
+
+### Read map data from the `{maps}` package ###
+
+Read a map file of  world coastlines and countries, and convert to an `sf` object.
+
+```{r alpha-plot-RMarkdown_Site-2 }
+# world_sf
+world_sf &lt;- st_as_sf(maps::map(&quot;world&quot;, plot = FALSE, fill = TRUE))
+world_otl_sf &lt;- st_geometry(world_sf)
+```
+
+### Plot the world outline ###
+
+```{r alpha-plot-RMarkdown_Site-3 }
+# ggplot map of world_outline
+ggplot() + 
+  geom_sf(data = world_otl_sf, fill = NA, col = &quot;blue&quot;) + 
+  scale_x_continuous(breaks = seq(-180, 180, 30)) +
+  scale_y_continuous(breaks = seq(-90, 90, 30)) +
+  coord_sf(xlim = c(-180, +180), ylim = c(-90, 90), expand = FALSE) +
+  theme_bw()
+```
+
+## Read alpha ##
+
+Now read in alpha from a netCDF file of bioclimatic variables using stars.
+
+```{r alpha-plot-RMarkdown_Site-4 }
+# read alpha (AE/PE)
+# change path as necessary
+nc_path &lt;- &quot;/Users/bartlein/Projects/RESS/data/nc_files/&quot;
+nc_name &lt;- &quot;cru10min30_bio.nc&quot;
+nc_file &lt;- paste(nc_path, nc_name, sep=&quot;&quot;)
+alpha &lt;- read_ncdf(nc_file, var=&quot;alpha&quot;, proxy = FALSE)
+```
+
+List alpha to show contents of the object.
+
+```{r alpha-plot-RMarkdown_Site-5 }
+# list alpha
+alpha
+```
+
+Convert the `stars` object to an `sf` object:
+
+```{r alpha-plot-RMarkdown_Site-6 }
+# convert stars to sf
+alpha_sf &lt;- st_as_sf(alpha, as_points = TRUE)
+alpha_sf
+plot(alpha_sf, pch = 16, cex = 0.3)
+```
+
+# Plot the data #
+
+## Setup ##
+
+Do some setting up befor plotting.
+
+```{r alpha-plot-RMarkdown_Site-7 }
+# setup for plotting alpha
+# make a data.frame
+lon &lt;- st_coordinates(alpha_sf)[,1]
+lat &lt;- st_coordinates(alpha_sf)[,2]
+alpha &lt;- as.vector(alpha_sf)
+alpha_df &lt;- data.frame(lon, lat, alpha)
+dim(alpha_df)
+head(alpha_df)
+```
+
+Set axis labels or breaks:
+
+```{r alpha-plot-RMarkdown_Site-8 }
+# set axis labels (breaks)
+breaks_x &lt;- c(seq(-180, 180, by = 60)) 
+breaks_y &lt;- c(seq(-90, 90, by = 30)) 
+labels_x &lt;- as.character(breaks_x) 
+labels_y &lt;- as.character(breaks_y)
+```
+
+## Plot alpha ##
+
+Make a `{ggplot2}` maps of alpha.
+
+```{r alpha-plot-RMarkdown_Site-9 }
+# ggplot2 map of alpha
+ggplot() +
+  geom_tile(data = alpha_df, aes(x = lon, y = lat, fill = alpha)) +
+  scale_fill_gradient2(low = &quot;brown&quot;, mid=&quot;white&quot;, high = &quot;darkgreen&quot;, midpoint = 0.50) +
+  geom_sf(data = world_otl_sf, col = &quot;black&quot;, fill = NA) +
+  coord_sf(xlim = c(-180, +175.0), ylim = c(-90, 90), expand = FALSE) +
+  scale_x_continuous(breaks = breaks_x) +
+  scale_y_continuous(breaks = breaks_y) +
+  labs(x = &quot;Longitude&quot;, y = &quot;Latitude&quot;, title=&quot;Priestley-Taylor Coefficient (alpha) (AE/PE)&quot;, fill=&quot;alpha&quot;) +
+  theme_bw()
+```
+
+# Discussion #
+
+(A few paragraphs on map patterns, trends, etc.)</code></pre>
+<p><a
+href="https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/about.Rmd">[about.Rmd]</a></p>
+<pre><code>  
+---
+title: &quot;GEOG 4/590:  R for Earth-System Science&quot;
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: no
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+```
+P.J. Bartlein  
+Dept. Geography  
+Univ. Oregon  
+bartlein@uoregon.edu
+
+The GitHub repository for this web site is at:  
+[https://github.com/pjbartlein/geog490](https://github.com/pjbartlein/geog490)</code></pre>
+<p><a
+href="https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/README.md">[README.md]</a></p>
+<pre><code>  
+# geog490project
+GEOG 4/590 *R for Earth-System Science*
+Project Web Page Repository
+
+The web page is at:  [https://pjbartlein.github.io/geog490project/](https://pjbartlein.github.io/geog490project/)
+</code></pre>
+<p><a
+href="https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/_site.yml">[_site.yml]</a></p>
+<pre><code>  
+name: GEOG 4/590
+navbar:
+  title: &quot;Project Web Page:  R for Earth-System Science&quot;
+  left:
+  - text: Topics
+    menu:
+    - text: &quot;Introduction&quot;
+      href: intro.html
+    - text: &quot;Raster mapping example&quot;
+      href: alpha_plot_RMarkdown_Site.html
+  right:
+  - text: &quot;About&quot;
+    href: about.html
+output:
+  html_document:
+    theme: cosmo
+    version: 4
+    highlight: haddock
+    css: html-md-01.css
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: no
+    collapsed: no
+    lib_dir: site_libs
+    self_contained: no
+output_dir: docs
+</code></pre>
 </div>
 
 
