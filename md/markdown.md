@@ -8,7 +8,6 @@ RMarkdown thereby facilitates the concepts of "literate programming" [link](http
 
 Here's a simple Markdown file:
 
-<hr>
 <pre><code># Introduction
 Some text, and little discussion, including a bulleted list
 -&nbsp;first list item
@@ -18,7 +17,6 @@ Here is a little code (and note the different font):
 `plot(orstationc$elev, orstationc$tann)`
 and some more text, possibly *decorated* or **otherwise formatted**.
 </code></pre>
-<hr>
 
 And here is what the file looks like when rendered:
 <hr>
