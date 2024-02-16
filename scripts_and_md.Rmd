@@ -61,7 +61,6 @@ This R Notebook `*.Rmd` file produces the simplest of .html output. Note that it
 title: "R Notebook"
 output:
   html_document:
-    df_print: paged
 ---
 ````
 
@@ -82,8 +81,7 @@ This example produces a single-page `.html` file as output, this time styled usi
 
 ````
 ---
-
-title: Raster Mapping
+title: "Example 3 – A single-page *.html file, with some styling"
 output:
   html_document:
     css: html-md-01.css

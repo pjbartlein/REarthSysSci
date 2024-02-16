@@ -561,7 +561,6 @@ header that looks like the following:</p>
 title: &quot;R Notebook&quot;
 output:
   html_document:
-    df_print: paged
 ---</code></pre>
 <p>This header specifies that the output of “kniting” the file should be
 an <code>*.html</code> file. Here’s the code:</p>
@@ -674,8 +673,7 @@ output, this time styled using the <code>html-md-01.css</code>
 stylesheet (the same one used for the course web page). The YAML header
 looks like</p>
 <pre><code>---
-
-title: Raster Mapping
+title: &quot;Example 3 – A single-page *.html file, with some styling&quot;
 output:
   html_document:
     css: html-md-01.css
@@ -852,7 +850,7 @@ output:
     collapsed: no
 ---
 
-```{r set-options, echo=FALSE, strip.white=TRUE}
+```{r set-options, echo=FALSE, strip.white=TRUE, style=&quot;background:  gray_80;&quot;}
 options(width = 105)
 knitr::opts_chunk$set(dev=&#39;png&#39;, dpi=300, cache=TRUE)
 pdf.options(useDingbats = TRUE)
