@@ -59,8 +59,7 @@ This R Notebook `*.Rmd` file produces the simplest of .html output. Note that it
 
 ---
 title: "R Notebook"
-output:
-  html_document:
+output: html_document
 ---
 ````
 
