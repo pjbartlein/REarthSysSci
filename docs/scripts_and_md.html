@@ -402,11 +402,11 @@ id="toc-example-2-an-rmarkdown-notebook-file">Example 2 – An RMarkdown
 Notebook file</a></li>
 <li><a href="#example-3-a-single-page-.html-file-with-some-styling"
 id="toc-example-3-a-single-page-.html-file-with-some-styling">Example 3
-– A single-page *.html file, with some styling #</a></li>
+– A single-page *.html file, with some styling</a></li>
 <li><a
 href="#example-4-a-single-page-.html-file-with-styling-and-navigation"
 id="toc-example-4-a-single-page-.html-file-with-styling-and-navigation">Example
-4 – A single-page *.html file, with styling and navigation #</a></li>
+4 – A single-page *.html file, with styling and navigation</a></li>
 <li><a href="#example-5-a-multi-page-web-site"
 id="toc-example-5-a-multi-page-web-site">Example 5 – A multi-page web
 site</a>
@@ -433,6 +433,18 @@ a GitHub Pages web page, nor for serving web pages on
 <p>The examples can be replicated by copying the scripts, and creating
 the appropriate files in RStudio (e.g. as
 <code>alpha\_plot\_RScript.R</code> for this first example).</p>
+<p><strong>Important:</strong> When replicating Example 5 (a multi-page
+<code>*.html</code> document), the file <code>_site.yml</code> must be
+present in the R working directory. This file describes the “navbar”
+(navigation bar) and the layout of the page. If it is present, it will
+influence the other examples. So, for example, if <code>_site.yml</code>
+is present, it will try to add a navbar to the <code>*.html</code> file
+created by, say, Example 4, which has its own formating information this
+will produce unexpected results. To repeat, <code>_site.yml</code>
+<em>should</em> be in the working directory only for Example 5, and
+<em>should not</em> be in the working directory for the other examples.
+(Note, instead of adding and deleting <code>_site.yml</code>, just
+rename it: <code>not_site.yml</code>.)</p>
 </div>
 <div id="example-1-a-simple-r-script" class="section level1">
 <h1>Example 1 – A simple R script</h1>
@@ -555,10 +567,8 @@ output:
 an <code>*.html</code> file. Here’s the code:</p>
 <pre><code>  
 ---
-title: &quot;R Notebook&quot;
-output:
-  html_document:
-    df_print: paged
+title: &quot;Example 2 -- An RMarkdown Notebook file &quot;
+output: html_document
 ---
 
 This RNotebook script reads a netCDF file consisting of several bioclimatic variables, and plots one of them, `alpha`
@@ -653,7 +663,7 @@ Some discussion could go here.</code></pre>
 </div>
 <div id="example-3-a-single-page-.html-file-with-some-styling"
 class="section level1">
-<h1>Example 3 – A single-page *.html file, with some styling #</h1>
+<h1>Example 3 – A single-page *.html file, with some styling</h1>
 <ul>
 <li>Script file: <a
 href="https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown_1Page.Rmd">[alpha_plot_RMarkdown_1Page.Rmd]</a></li>
@@ -673,7 +683,7 @@ output:
 <p>Here’s the code:</p>
 <pre><code>  
 ---
-title: Raster Mapping
+title: &quot;Example 3 – A single-page *.html file, with some styling&quot;
 output:
   html_document:
     css: html-md-01.css
@@ -798,8 +808,8 @@ ggplot() +
 </div>
 <div id="example-4-a-single-page-.html-file-with-styling-and-navigation"
 class="section level1">
-<h1>Example 4 – A single-page *.html file, with styling and navigation
-#</h1>
+<h1>Example 4 – A single-page *.html file, with styling and
+navigation</h1>
 <ul>
 <li>Script file: <a
 href="https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown.Rmd">[alpha_plot_RMarkdown.Rmd]</a></li>
@@ -829,7 +839,7 @@ options.</p>
 <p>Here’s the code:</p>
 <pre><code>  
 ---
-title:  Raster mapping
+title:  &quot;Example 4 – A single-page *.html file, with styling and navigation&quot;
 output:
   html_document:
     css: html-md-01.css
@@ -966,6 +976,9 @@ ggplot() +
 </div>
 <div id="example-5-a-multi-page-web-site" class="section level1">
 <h1>Example 5 – A multi-page web site</h1>
+<p><strong>Important</strong> To replicate this example, it would be
+best to creat an entirely new project in a differnt folder than the one
+you may have been working in.</p>
 <ul>
 <li>Script files:
 <ul>
@@ -1012,7 +1025,8 @@ File &gt; R Markdown);</li>
 <li>Copy the contents of e.g. <code>index.Rmd</code></li>
 <li>Edit the paths in the script file as appropriate in
 <code>alpha_plot_RMarkdown_Site.Rmd</code>;</li>
-<li>Knit the project.</li>
+<li>Knit the project to run the code and create the various
+<code>*.html</code> files.</li>
 <li>Commit the changes, and push the website to the GitHub repository
 (explained elsewhere).</li>
 </ol>
@@ -1323,8 +1337,8 @@ alpha_plot_RMarkdown_Site.html
 README.html</code></pre>
 <p>The website should be viewable at: <a
 href="https://pjbartlein.github.io/geog490/index.html"><code>https://pjbartlein.github.io/geog490/index.html</code></a>
-(the project’s web page) <a href="scripts_and_md.html">[Back to
-top]</a></p>
+(the project’s web page)</p>
+<p><a href="scripts_and_md.html">[Back to top]</a></p>
 </div>
 </div>
 

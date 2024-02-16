@@ -21,6 +21,9 @@ The `*.R` and `*.Rmd` scripts on this page illustrate a range of possible approa
 
 The examples can be replicated by copying the scripts, and creating the appropriate files in RStudio (e.g. as `alpha\_plot\_RScript.R` for this first example).
 
+**Important:** When replicating Example 5 (a multi-page `*.html` document), the file `_site.yml` must be present in the R working directory. This file describes the "navbar" (navigation bar) and the layout of the page. If it is present, it will influence the other examples. So, for example, if `_site.yml` is present, it will try to add a navbar to the `*.html` file created by, say, Example 4, which has its own formating information this will produce unexpected results. To repeat, `_site.yml` *should* be in the working directory only for Example 5, and *should not* be in the working directory for the other examples.
+(Note, instead of adding and deleting `_site.yml`, just rename it: `not_site.yml`.)
+
 # Example 1 -- A simple R script #
 
 - Script file: [[alpha_plot_RScript.R]](https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RScript.R)
@@ -70,7 +73,7 @@ This header specifies that the output of "kniting" the file should be an `*.html
 
 [[Back to top]](scripts_and_md.html)
 
-# Example 3 -- A single-page *.html file, with some styling #
+# Example 3 -- A single-page *.html file, with some styling
 
 - Script file: [[alpha_plot_RMarkdown_1Page.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown_1Page.Rmd)
 - Output is a single-page `*.html` file.
@@ -95,7 +98,7 @@ Here's the code:
 
 [[Back to top]](scripts_and_md.html)
 
-# Example 4 -- A single-page *.html file, with styling and navigation #
+# Example 4 -- A single-page *.html file, with styling and navigation
 
 - Script file: [[alpha_plot_RMarkdown.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/examples/alpha_plot_RMarkdown.Rmd)
 - Output is a single-page `.html` file, with styling and some navigation.
@@ -129,6 +132,8 @@ Here's the code:
 
 # Example 5 -- A multi-page web site #
 
+**Important** To replicate this example, it would be best to creat an entirely new project in a differnt folder than the one you may have been working in.
+
 - Script files:
   - [[index.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/index.Rmd)
   - [[intro.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/intro.Rmd)
@@ -146,7 +151,7 @@ Start by creating an R Markdown file that will produce a single-page `.html` fil
 2. Delete the sample code in the new page; 
 2. Copy the contents of e.g. `index.Rmd`
 1. Edit the paths in the script file as appropriate in `alpha_plot_RMarkdown_Site.Rmd`;
-3. Knit the project.
+3. Knit the project to run the code and create the various `*.html` files.
 4. Commit the changes, and push the website to the GitHub repository (explained elsewhere).
 
 Here is the code:
@@ -229,4 +234,5 @@ README.html
 ```
 
 The website should be viewable at:   [`https://pjbartlein.github.io/geog490/index.html`](https://pjbartlein.github.io/geog490/index.html) (the project's web page)
+
 [[Back to top]](scripts_and_md.html)
