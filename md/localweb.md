@@ -64,4 +64,8 @@ In a new browser window or tab, type `localhost:8000` (8000 is the default port 
 
 In this example, the `*.html` files created by knitting and building the website are in the folder `docs/`. Click on `docs/` and you should see the `index.html` file displayed.
 
+# Closing down the server #
+
+Return to the CMD/Terminal window, and type `ctrl-C` to stop the server.
+
 
