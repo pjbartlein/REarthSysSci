@@ -5,11 +5,11 @@ Uploading files to GitHub or pages.uoregon.edu is pretty straightforward, but so
 There are multiple ways of install full-featured web servers on either Windows or MacOS, but an easy solution is to use the`http.server` module built into Python: [[Mozilla MDN: Running a simple local HTTP server -- Python]](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Tools_and_setup/set_up_a_local_testing_server#using_python). This, of course, requires that Python is installed on your machine. Python is usually installed on MacOS, and on Windows it can be downloaded from [[python.org]](https://www.python.org/). 
 
 To see if Python is installed, open a CMD (Windows) or Terminal (MacOS) window and try typing:
-		
+
 		python -V
-		
-or if that fails, (i.e. if the response on MacOS is "`command not found: python`" or on Windows "`'python' is not recognized as an internal or external command, operable program or batch file.type`" try
 	
+or if that fails, (i.e. if the response on MacOS is "`command not found: python`" or on Windows "`'python' is not recognized as an internal or external command, operable program or batch file.type`" try
+
 		python3 -V	
 
 The command should return a version number. If not, Python will need to be installed.
