@@ -1,0 +1,19 @@
+---
+title: "Local websites"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+```
+
+```{r child="md/localweb.md"}
+```
