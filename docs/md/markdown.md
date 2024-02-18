@@ -1,10 +1,10 @@
-# Markdown and RMarkdown #
+# Introduction #
 
 This document is written in Markdown, which is a "lightweight" markup language (like HTML), that uses a relatively simple syntax, and facilitates the transformation of human-readible text files into .html or .pdf documents.  RMarkdown is a an R package, and a set of tools that are deeply embedded in RStudio that facilitates the construction of documents that combine text, R code and the output from the execution of that code, and that range in complexity from a single .html or .pdf file, to multi-page web sites, to books.
 
 RMarkdown thereby facilitates the concepts of "literate programming" [link](https://en.wikipedia.org/wiki/Literate_programming), and "reproducible research" [link](https://en.wikipedia.org/wiki/Reproducibility), which, in addition to explaining or documenting itself, also allows others (including an original investigator after some time has passed) to reproduce a data analysis or other research result.
 
-## Markdown ##
+# Markdown #
 
 Here's a simple Markdown file:
 
@@ -38,7 +38,7 @@ and some more text, possibly <em>decorated</em> or <strong>otherwise formatted</
 
 Although the syntax of Markdown is relatively simple, quite complex documents can be generated using conversion tools like Pandoc (see the Resources section below).
 
-## RStudio/RMarkdown ##
+# RStudio/RMarkdown #
 
 RStudio allows the use of Markdown formatting styles within RMarkdown `.Rmd` files, allowing the resulting combinations of text, code and output to be nicely formatted.  RNotebook and RMarkdown files in RStudio can be viewed as elements in a hierarchy of increasingly well-documented and reproducible code, with ordinary R script files `*.R` as the lowest level, and complicated RMarkdown web sites or even books at the highest level.
 
@@ -48,15 +48,15 @@ RMarkdown is implemented by two packages (and their dependencies), `rmarkdown` a
 	install.packages("knitr")
 
 
-## Markdown resources
+# Markdown resources
 
-### Markdown
+## Markdown
 
 -   Markdown site <http://daringfireball.net/projects/markdown/>
 -   Markdown (Wikipedia) <https://en.wikipedia.org/wiki/Markdown>
 -   Markdown Guide <https://www.markdownguide.org>
 
-### Markdown editors
+## Markdown editors
 
 The easiest way to learn Markdown is to use a dual pane (editing and previewing) Markdown editor, where it's easy to instantly see the consequences of applying Markdown formatting.
 
@@ -72,7 +72,7 @@ To get the formatting style used in this document (and the course web page), dow
 	- Download the file to e.g. `/Users/bartlein/Library/Application Support/MacDown/Styles/`. (Note that the Library folder is usually hidden from Finder, and you may have to use a file manager that can reveal hidden files.)
 	-  Restart Macdown, and use the Preferences \> Rendering tab to set `html-md-01.css` in the CSS field. 
 
-###  Pandoc
+##  Pandoc
 
 Pandoc is the rendering engine that RMarkdown uses, and it can also be
 used by itself to convert a large array of document types.
@@ -80,22 +80,22 @@ used by itself to convert a large array of document types.
 -   Pandoc [pandoc.org](pandoc.org)
 
 
-## RStudio resources
+# RStudio resources
 
-###  RMarkdown
+##  RMarkdown
 
 -   RMarkdown guide: <http://rmarkdown.rstudio.com/index.html>
 -   RNotebooks: <http://rmarkdown.rstudio.com/r_notebooks.html>
 -   Websites: <http://rmarkdown.rstudio.com/rmarkdown_websites.html>
 -   Bookdown: <https://bookdown.org>
 
-### Cheatsheetshttps:
+## Cheatsheets:
 -   RMarkdown cheat sheet:  
     <https://rstudio.github.io/cheatsheets/html/rmarkdown.html>
 -   RMarkdown reference guide:  
     <https://www.rstudio.com/wp-content/uploads/2015/03/rmarkdown-reference.pdf>
 
-### Publishing
+## Publishing
 
 -   RPubs <http://rpubs.com/>
 -   RMarkdown websites:

@@ -1,19 +1,20 @@
-# Online books and documents (With geospatial emphases) #
+# Online books and documents (with geospatial emphases) #
 
 Wimberly, M.C., 2023, *Geographic Data Science With R, Visualizing and Analyzing Environmental Change* (CRC Press) [[https://bookdown.org/mcwimberly/gdswr-book/]](https://bookdown.org/mcwimberly/gdswr-book/)
 
 Pebesma, E. and R. Bivand, 2023, *Spatial Data Science with Applications in R* (CRC Press) [[https://r-spatial.org/book/]](https://r-spatial.org/book/)
 
-Hijmans, R., 2016, *Spatial Data Analysis and Modeling with R* [[http://rspatial.org]](http://rspatial.org) 
+Hijmans, R., 2023, *Spatial Data Analysis and Modeling with R and "terra"* [[http://rspatial.org]](http://rspatial.org) 
 
-Lovelace, R., J. Novosad, and J. Muenchow, 2024, *Geocomputation with R* [[https://r.geocompx.org/]](https://r.geocompx.org/)
+Lovelace, R., J. Novosad, and J. Muenchow, 2024, *Geocomputation with R and "terra"* [[https://r.geocompx.org/]](https://r.geocompx.org/)
 
-Davis, J., 2024, *Introduction to Environmental Data Science* [[https://bookdown.org/igisc/EnvDataSci/]]
-(https://bookdown.org/igisc/EnvDataSci/)
+Davis, J., 2024, *Introduction to Environmental Data Science* [[https://bookdown.org/igisc/EnvDataSci/]](https://bookdown.org/igisc/EnvDataSci/)
 
 Mieno, T, 2023, *R as GIS for Economists* [[https://tmieno2.github.io/R-as-GIS-for-Economists/]](https://tmieno2.github.io/R-as-GIS-for-Economists/) 
 
 # Other online books and documents #
+
+Bryan, J., 2022, *Happy Git and GitHub for the useR (HappyGitWithR)* [[https://happygitwithr.com/index.html]](https://happygitwithr.com/index.html)
 
 Healy, K., 2019, *Data Visualization, a practical introduction.*  (Princeton Univ. Press) [[https://kjhealy.github.io/socviz/]](https://kjhealy.github.io/socviz/)
 

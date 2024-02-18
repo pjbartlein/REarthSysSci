@@ -12,7 +12,7 @@ Individual users have 50 GB of web space, with files and folders stored in the `
 - User: your DuckID user name (not your email address, e.g. `bartlein` as opposed to `bartlein@uoregon.edu`
 - Password: your DuckID password.
 
-Note that while the while the web pages will have URLs like `https://pages.uoregon.edu/bartlein/geog490project/` the server name is `sftp.uoregon.edu`
+Note that while the while the web pages will have URLs like `https://pages.uoregon.edu/DuckID/geog490project/` the server name is `sftp.uoregon.edu`
 
 To copy, for example, the "Example 5" multi-page website files to `pages.uoregon.edu`, where the various source files are in the folder `~/Projects/geog490project/`, start FileZilla, and :
 
@@ -30,8 +30,11 @@ To copy, for example, the "Example 5" multi-page website files to `pages.uoregon
 
 The uploaded web site can then be browsed using the following URL:
 
-- [[https://pages.uoregon.edu/bartlein/geog490project/]](https://pages.uoregon.edu/bartlein/geog490project/)
+- [[https://pages.uoregon.edu/DuckID/geog490project/]]
+- here's an example [[https://pages.uoregon.edu/bartlein/geog490project/]](https://pages.uoregon.edu/bartlein/geog490project/)
 
-(Similarly, any one of the single-page `*.html` files produced by the R Markdown, or R Markdown Notebook examples could be renamed to `index.html` copied to a folder in the `public_html` folder on `pages.uoregon.edu` as above, where it could be viewed by browsing to `https://pages.uoregon.edu/bartlein/geog490project/`. Or, the original name of the file could be retained (e.g. `alpha_plot_RNotebook.html`) in which case the URL would become `https://pages.uoregon.edu/bartlein/geog490project/alpha_plot_RNotebook.html`.)
+(Similarly, any one of the single-page `*.html` files produced by the R Markdown, or R Markdown Notebook examples could be renamed to `index.html` copied to a folder in the `public_html` folder on `pages.uoregon.edu` as above, where it could be viewed by browsing to `https://pages.uoregon.edu/DuckID/geog490project/`. 
+
+Or, the original name of the file could be retained (e.g. `alpha_plot_RNotebook.html`) in which case the URL would become `https://pages.uoregon.edu/DuckID/geog490project/alpha_plot_RNotebook.html`.)
 
 

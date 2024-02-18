@@ -394,32 +394,29 @@ $(document).ready(function () {
 <div id="TOC">
 <ul>
 <li><a href="#getting-going" id="toc-getting-going"><span
-class="toc-section-number">1</span> Getting going</a>
-<ul>
+class="toc-section-number">1</span> Getting going</a></li>
 <li><a href="#make-a-new-repository"
-id="toc-make-a-new-repository"><span
-class="toc-section-number">1.1</span> Make a new repository</a>
+id="toc-make-a-new-repository"><span class="toc-section-number">2</span>
+Make a new repository</a>
 <ul>
 <li><a href="#at-github" id="toc-at-github"><span
-class="toc-section-number">1.1.1</span> At GitHub</a></li>
+class="toc-section-number">2.1</span> At GitHub</a></li>
 <li><a href="#on-your-local-machine"
 id="toc-on-your-local-machine"><span
-class="toc-section-number">1.1.2</span> On your “local” machine</a></li>
+class="toc-section-number">2.2</span> On your “local” machine</a></li>
 </ul></li>
 <li><a href="#web-site-setup-i.e.-a-github-pages-web-site"
 id="toc-web-site-setup-i.e.-a-github-pages-web-site"><span
-class="toc-section-number">1.2</span> Web site setup (i.e. a GitHub
-Pages web site)</a>
+class="toc-section-number">3</span> Web site setup (i.e. a GitHub Pages
+web site)</a>
 <ul>
 <li><a href="#back-to-github" id="toc-back-to-github"><span
-class="toc-section-number">1.2.1</span> Back to GitHub</a></li>
+class="toc-section-number">3.1</span> Back to GitHub</a></li>
 <li><a href="#back-on-the-local-machine"
 id="toc-back-on-the-local-machine"><span
-class="toc-section-number">1.2.2</span> Back on the local
-machine</a></li>
+class="toc-section-number">3.2</span> Back on the local machine</a></li>
 <li><a href="#synchronizing-files" id="toc-synchronizing-files"><span
-class="toc-section-number">1.2.3</span> Synchronizing files</a></li>
-</ul></li>
+class="toc-section-number">3.3</span> Synchronizing files</a></li>
 </ul></li>
 </ul>
 </div>
@@ -449,40 +446,62 @@ href="https://happygitwithr.com/index.html">[<em>Happy Git and GitHub
 for the useR (HappyGitWithR)</em>]</a> by Jenny Bryan at the Univ.
 British Columbia. This is the primary source for guidance and use of Git
 and GitHub from within RStudio.</p>
+<p>Note: In the following examples, when describing paths on the local
+computer, it is assumed that the current working directory is a
+subfolder in a folder named <code>/Projects</code>, which in turn is a
+subfolder in <code>/Users</code>, and that you should substitute your
+username on the local computer for <code>username</code> in the paths,
+so</p>
+<ul>
+<li>on Windows, the path name might look like
+“<code>\Users\username\Projects\geog490project</code>”,</li>
+<li>while on MacOS, the path name might look like
+“<code>/Users/username/Projects/geog490project</code>,</li>
+</ul>
+<p>where in both cases, <code>username</code> is your login user name on
+the local computer.</p>
+<p>When discussing URLs and repositories at GitHub,
+e.g. <code>https://github.com/gh-username/geog490project</code>,
+<code>gh-username</code> is your GitHub username, not your login
+username on the local computer.</p>
 <div id="getting-going" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Getting going</h1>
 <p>The key steps include:</p>
 <ol style="list-style-type: decimal">
 <li>registering a (free) GitHub account at <a
-href="github.com">[github.com]</a> (see Section 4 of
-<em>HappyGitWithR</em>) (See also the <a
-href="https://education.github.com">[GitHub Education]</a> page.) Note
-that this will involve selecting a username and password for the GitHub
-site. This is distinct from the personal access token that will be
-generated later.</li>
-<li>installing Git (Sections 6 &amp; 7 – <em>use Option 1 for both MacOS
-and Windows</em>)</li>
+href="github.com">[github.com]</a> (see Section 4 of <a
+href="https://happygitwithr.com/index.html">[HappyGitWithR]</a>) (See
+also the <a href="https://education.github.com">[GitHub Education]</a>
+page.) Note that this will involve selecting a username and password for
+the GitHub site. This is distinct from the personal access token that
+will be generated later.</li>
+<li>installing Git (Sections 6 – <em>use Option 1 for both MacOS and
+Windows</em>)</li>
+<li>introducing yourself to GitHub (Section 7 – use the
+<code>usethis</code> package in RStudio approach)</li>
 <li>installing a Git client (Section 8 – <em>install GitHub
 Desktop</em>)</li>
 <li>configuring RStudio and GitHub (Sections 9-14)
 <ul>
-<li>use a personal access token (PAT) (Section 9)</li>
+<li>use a personal access token (PAT) (Section 9, and Section 9.1 in
+particular)</li>
 <li>connect to GitHub (Section 10)</li>
 <li>connect RStudio to Git and GitHub (section 12)</li>
 </ul></li>
-<li>See Section 14 <em>RStudio, Git, GitHub Hell</em> for help.</li>
+<li>see Section 14 <em>RStudio, Git, GitHub Hell</em> for help.</li>
 <li>starting a new project (Section 15)</li>
 </ol>
 <p>The basic idea is to create a (mostly) empty new repository on
-GitHub, and then “clone” to a local machine.</p>
-<div id="make-a-new-repository" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> Make a new
-repository</h2>
-<div id="at-github" class="section level3" number="1.1.1">
-<h3><span class="header-section-number">1.1.1</span> At GitHub</h3>
-<p>The basic idea is to create a (mostly) empty new repository on
-GitHub, and then “clone” to a local machine. The steps include:</p>
-<p>At GitHub:</p>
+GitHub, and then “clone” it to a local machine, modify it (adding files
+and images, etc.) and then “push” it back to GitHub.</p>
+</div>
+<div id="make-a-new-repository" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Make a new
+repository</h1>
+<div id="at-github" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> At GitHub</h2>
+<p>To create a new repository on GitHub, after logging in, the steps
+include:</p>
 <ol style="list-style-type: decimal">
 <li>create a new repository (e.g. <code>geog490project</code> (or just
 <code>geog490</code> or <code>geog590</code>);
@@ -501,13 +520,13 @@ new repository”</li>
 <li>Copy or write down the URL of the repository</li>
 </ol>
 </div>
-<div id="on-your-local-machine" class="section level3" number="1.1.2">
-<h3><span class="header-section-number">1.1.2</span> On your “local”
-machine</h3>
+<div id="on-your-local-machine" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> On your “local”
+machine</h2>
 <p>On the local machine:</p>
 <ol start="8" style="list-style-type: decimal">
 <li>create a folder,
-e.g. <code>/Users/bartlein/Projects/geog490project</code> (Note that
+e.g. <code>/Users/username/Projects/geog490project</code> (Note that
 there is no connection between the folder names, the
 <code>/Projects</code> folder is just that, the ’/geog490project` is
 named for the course project.</li>
@@ -518,7 +537,7 @@ named for the course project.</li>
 created): File &gt; New Project… &gt; Version Control &gt; Git<br />
 </li>
 <li>Set the epository URL (e.g.):
-<code>https://github.com/pjbartlein/geog490project</code><br />
+<code>https://github.com/gh-username/geog490project</code><br />
 </li>
 <li>Project directory name: <code>geog490project</code><br />
 </li>
@@ -533,7 +552,7 @@ directory)</p>
 <li>Edit <code>README.md</code> and save (perhaps using a Markdown
 editor, or in RStudio). For example, add the line “The URL for the
 webpage is
-<code>https://pjbartlein.github.io/geog490project/</code>”</li>
+<code>https://gh-username.github.io/geog490project/</code>”</li>
 <li>Click on <code>Tools &gt; Version Control &gt; Commit</code> or
 (click on the “Git” pane, and Commit tab);</li>
 <li>Click on checkboxes to “stage” files;</li>
@@ -561,14 +580,14 @@ folders and files:</p>
 </div>
 </div>
 <div id="web-site-setup-i.e.-a-github-pages-web-site"
-class="section level2" number="1.2">
-<h2><span class="header-section-number">1.2</span> Web site setup
-(i.e. a GitHub Pages web site)</h2>
-<div id="back-to-github" class="section level3" number="1.2.1">
-<h3><span class="header-section-number">1.2.1</span> Back to GitHub</h3>
+class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Web site setup (i.e. a
+GitHub Pages web site)</h1>
+<div id="back-to-github" class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Back to GitHub</h2>
 <p>Go back to the repository
-(e.g. <code>https://github.com/pjbartlein/geog490project</code>, if it’s
-not still open in your web browser). Check to see that you’re still
+(e.g. <code>https://github.com/gh-username/geog490project/</code>, if
+it’s not still open in your web browser). Check to see that you’re still
 logged in. Then:</p>
 <ol style="list-style-type: decimal">
 <li>Click on “Add file”;</li>
@@ -595,7 +614,7 @@ currently being built from the <code>/docs</code> folder in the main
 branch.</p>
 <p>Sometimes it takes a little while, but you should see a the message
 “Your site is live at at
-<code>https://pjbartlein.github.io/geog490project/</code>” (but with
+<code>https://gh-username.github.io/geog490project/</code>” (but with
 your GitHub user name and repository name instead), just below the top
 of “GitHub Pages”. If you open a new tab or window on the browser and
 type or paste in that URL, or click on the “Visit Site” button, you
@@ -605,20 +624,19 @@ whatever you typed in above).</p>
 now:</p>
 <ul>
 <li><a
-href="https://github.com/pjbartlein/geog490/"><code>https://github.com/pjbartlein/geog490/</code></a>
+href="https://github.com/gh-username/geog490/"><code>https://github.com/pjbartlein/geog490/</code></a>
 (the GitHub repository page); and</li>
 <li><a
-href="https://pjbartlein.github.io/geog490/index.html"><code>https://pjbartlein.github.io/geog490/index.html</code></a>
+href="https://gh-username.github.io/geog490/index.html"><code>https://pjbartlein.github.io/geog490/index.html</code></a>
 (the projects web page).</li>
 </ul>
 </div>
-<div id="back-on-the-local-machine" class="section level3"
-number="1.2.2">
-<h3><span class="header-section-number">1.2.2</span> Back on the local
-machine</h3>
+<div id="back-on-the-local-machine" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Back on the local
+machine</h2>
 <p>Notice that in the projects folder on your computer you’ll see a new
 folder <code>/docs</code>.</p>
-<p>Anything that winds up in the <code>docs/</code> folder will be
+<p>Anything that winds up in the <code>/docs</code> folder will be
 available to the <code>*.html</code> webpages there. This includes files
 placed there “manually”, or by knitting an <code>*.Rmd</code> file or
 building a website in RStudio. For example, any one of the single-page
@@ -626,32 +644,32 @@ building a website in RStudio. For example, any one of the single-page
 Notebook examples could be renamed to <code>index.html</code> and copied
 to the local <code>/docs</code> folder, and Committed and Pushed to
 GitHub, where it could be viewed by browsing to
-<code>https://pjbartlein.github.io/geog490project/</code>. Or, the
+<code>https://gh-username.github.io/geog490project/</code>. Or, the
 original name of the file could be retained
 (e.g. <code>alpha_plot_RNotebook.html</code>) in which case the URL
 would become
-<code>https://pjbartlein.github.io/geog490project/alpha_plot_RNotebook.html</code>.</p>
+<code>https://gh-username.github.io/geog490project/alpha_plot_RNotebook.html</code>.</p>
 <p>Once the repository is setup and serving pages, then RStudio can be
 used to create new RMarkdown files that can be knitted to produce
 single-page <code>*.html</code> files (including an
 <code>index.Rmd</code> file that produces an <code>index.html</code>
 file), that are organized by the <code>_site.yml</code> file.</p>
 </div>
-<div id="synchronizing-files" class="section level3" number="1.2.3">
-<h3><span class="header-section-number">1.2.3</span> Synchronizing
-files</h3>
+<div id="synchronizing-files" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Synchronizing
+files</h2>
 <p>Simply placing a file in,
-e.g. <code>~/Projects/geog490project/docs/</code> does not move it to
-the GitHub repository, and onto GitHub pages. There are two ways to move
-move the files: 1) using the GitHub client built into RStudio, and 2)
-using the GitHub Desktop app (<code>GitHub Desktop.app</code> on MacOS,
+e.g. <code>/User/username/Projects/geog490project/docs/</code> does not
+move it to the GitHub repository, and onto GitHub pages. There are two
+ways to move move the files: 1) using the GitHub client built into
+RStudio, and 2) using the GitHub Desktop app
+(<code>GitHub Desktop.app</code> on MacOS,
 <code>GitHubDesktop.exe</code> on Windows. Both work approximately the
 same way, comparing files between the local computer and the local
 repository (in the <code>.git</code> folder), and noting which files are
 newer. Those files can then be “staged” and “committed” to the local
 repository. Once there, they can be “pushed” to the GitHub
 repository.</p>
-</div>
 </div>
 </div>
 
