@@ -32,4 +32,6 @@ The uploaded web site can then be browsed using the following URL:
 
 - [[https://pages.uoregon.edu/bartlein/geog490project/]](https://pages.uoregon.edu/bartlein/geog490project/)
 
+(Similarly, any one of the single-page `*.html` files produced by the R Markdown, or R Markdown Notebook examples could be renamed to `index.html` copied to a folder in the `public_html` folder on `pages.uoregon.edu` as above, where it could be viewed by browsing to `https://pages.uoregon.edu/bartlein/geog490project/`. Or, the original name of the file could be retained (e.g. `alpha_plot_RNotebook.html`) in which case the URL would become `https://pages.uoregon.edu/bartlein/geog490project/alpha_plot_RNotebook.html`.)
+
 
