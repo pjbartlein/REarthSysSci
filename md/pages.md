@@ -3,7 +3,7 @@
 
 ## Copying files to the server ##
 
-Individual users have 50 GB of web space, with files and folders stored in the `/public_html` folder in the user's space. There are multiple ways to copy files, but FileZilla is pretty easy. To copy files via FileZilla, create a new Site Manager entry (see the [[File transfer]](https://pjbartlein.github.io/REarthSysSci/transfer.html) topic), with the follwing on the General tab:
+Individual users have 50 GB of web space, with files and folders stored in the `/public_html` folder in the user's space. There are multiple ways to copy files, but FileZilla is pretty easy. To copy files via FileZilla, create a new Site Manager entry (see the [[File transfer]](https://pjbartlein.github.io/REarthSysSci/transfer.html) topic), with the following on the General tab:
 
 - New site name: `sftp.uoregon.edu` (or some other name, e.g. `UO pages`
 - Protocol: `SFTP - SSH File Transfer Protocol`
@@ -12,7 +12,7 @@ Individual users have 50 GB of web space, with files and folders stored in the `
 - User: your DuckID user name (not your email address, e.g. `bartlein` as opposed to `bartlein@uoregon.edu`
 - Password: your DuckID password.
 
-Note that while the while the web pages will have URLs like `https://pages.uoregon.edu/DuckID/geog490project/` the server name is `sftp.uoregon.edu`
+Note that while the web pages will have URLs like `https://pages.uoregon.edu/DuckID/geog490project/` the server name is `sftp.uoregon.edu`
 
 To copy, for example, the "Example 5" multi-page website files to `pages.uoregon.edu`, where the various source files are in the folder `/Users/username/Projects/geog490project/`, start FileZilla, and :
 

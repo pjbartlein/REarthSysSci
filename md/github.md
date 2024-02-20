@@ -57,7 +57,7 @@ On the local machine:
 In RStudio:  
 
 9. create a project in an existing folder (e.g. the one you just created): File > New Project…  > Version Control  > Git  
-1. Set the epository URL (e.g.):  `https://github.com/gh-username/geog490project`  
+1. Set the repository URL (e.g.):  `https://github.com/gh-username/geog490project`  
 1. Project directory name:  `geog490project`  
 1. Browse to folder:  `/Users/Projects/`
 1. click on "Create Project" 
@@ -111,7 +111,7 @@ On the GitHub Pages dialog
 
 Nothing dramatic will happen, but you see "Your GitHub Pages site is currently being built from the `/docs` folder in the main branch.
 
-Sometimes it takes a little while, but you should see a the message "Your site is live at at `https://gh-username.github.io/geog490project/`" (but with your GitHub user name and repository name instead), just below the top of "GitHub Pages".  If you open a new tab or window on the browser and type or paste in that URL, or click on the "Visit Site" button, you should see a new web page with the text "GEOG 4/590 temporary page" (or whatever you typed in above).  
+Sometimes it takes a little while, but you should see the message "Your site is live at at `https://gh-username.github.io/geog490project/`" (but with your GitHub user name and repository name instead), just below the top of "GitHub Pages".  If you open a new tab or window on the browser and type or paste in that URL, or click on the "Visit Site" button, you should see a new web page with the text "GEOG 4/590 temporary page" (or whatever you typed in above).  
 
 Note that there are two web pages associated with the project now:
 
@@ -128,5 +128,5 @@ Once the repository is setup and serving pages, then RStudio can be used to crea
 
 ## Synchronizing files ##
 
-Simply placing a file in, e.g. `/User/username/Projects/geog490project/docs/` does not move it to the GitHub repository, and onto GitHub pages. There are two ways to move move the files: 1) using the GitHub client built into RStudio, and 2) using the GitHub Desktop app (`GitHub Desktop.app` on MacOS, `GitHubDesktop.exe` on Windows. Both work approximately the same way, comparing files between the local computer and the local repository (in the `.git` folder), and noting which files are newer. Those files can then be "staged" and "committed" to the local repository. Once there, they can be "pushed" to the GitHub repository.
+Simply placing a file in, e.g. `/User/username/Projects/geog490project/docs/` does not move it to the GitHub repository, and onto GitHub pages. There are two ways to move the files: 1) using the GitHub client built into RStudio, and 2) using the GitHub Desktop app (`GitHub Desktop.app` on MacOS, `GitHubDesktop.exe` on Windows. Both work approximately the same way, comparing files between the local computer and the local repository (in the `.git` folder), and noting which files are newer. Those files can then be "staged" and "committed" to the local repository. Once there, they can be "pushed" to the GitHub repository.
 
