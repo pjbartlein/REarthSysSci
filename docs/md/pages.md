@@ -1,6 +1,8 @@
 
 `pages.uoregon.edu` is an `https` web server, which provides web page hosting for students, staff, and faculty. See [[Web hosting on pages.uoregon.edu]](https://service.uoregon.edu/TDClient/2030/Portal/KB/ArticleDet?ID=43068). 
 
+Note (from the UO Service Portal):  "Pages websites are only available to currently-enrolled students.  A student's Pages website will be removed as a part of the decommissioning of a student's DuckID when they graduate. The Pages content will be available for 75 days after graduation."
+
 ## Copying files to the server ##
 
 Individual users have 50 GB of web space, with files and folders stored in the `/public_html` folder in the user's space. There are multiple ways to copy files, but FileZilla is pretty easy. To copy files via FileZilla, create a new Site Manager entry (see the [[File transfer]](https://pjbartlein.github.io/REarthSysSci/transfer.html) topic), with the following on the General tab:
