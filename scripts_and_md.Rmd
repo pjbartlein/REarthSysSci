@@ -19,7 +19,7 @@ klippy::klippy(position = c('top', 'right'))
 
 The `*.R` and `*.Rmd` scripts on this page illustrate a range of possible approaches for building a "project" `*.html` document. The examples range from a very simple R Markdown Notebook to a multi-page website. This page focues on the scripts and not the procedures for constructing a GitHub repository with a GitHub Pages web page, nor for serving web pages on `https://pages.uoregon.edu`/.
 
-The examples can be replicated by copying the scripts, and creating the appropriate files in RStudio (e.g. as `alpha\_plot\_RScript.R` for this first example).
+The examples can be replicated by copying the scripts, and creating the appropriate files in RStudio (e.g. as `alpha_plot_RScript.R` for this first example).
 
 **Important:** When replicating Example 5 (a multi-page `*.html` document), the file `_site.yml` must be present in the R working directory. This file describes the "navbar" (navigation bar) and the layout of the page. If it is present, it will influence the other examples. So, for example, if `_site.yml` is present, it will try to add a navbar to the `*.html` file created by, say, Example 4, which has its own formating information this will produce unexpected results. To repeat, `_site.yml` *should* be in the working directory only for Example 5, and *should not* be in the working directory for the other examples.
 (Note, instead of adding and deleting `_site.yml`, just rename it: `not_site.yml`.)

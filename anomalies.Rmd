@@ -115,10 +115,6 @@ Close the netCDF data set.
 nc_close(ncin)
 ```
 
-# Long-term means #
-
-## Set up for long-term mean calculation ##
-
 Replace netCDF fill values with R `NA`'s
 
 ```{r anomalies-9, cache = FALSE}
@@ -126,19 +122,41 @@ Replace netCDF fill values with R `NA`'s
 tmp_array[tmp_array==fillvalue$value] <- NA
 length(na.omit(as.vector(tmp_array[,,1])))
 ```
-Get a single slice of the array, say, December 2022 (n = 1464), and make a quick levelplot.
+
+# Why anomalies are useful
+
+There several reasons why anomalies (or deviations from a particular, say, month from the long-term mean values for that month of the year) are useful. The main motivation is that for many climate variables, like temperature, the spatial variations of climate are much greater than temporal variations, and will dominate the map patterns in comparing any two months (say, one at the beginning of the 20th Century and one at the end). By subtracting the long-term mean values (over, say, a 30-year period), which will also contain the high spatial variability of climate, the temporal difference between the two months will become evident. Another reason for looking at anomalies, is that features that anomaly maps reveal can be regarded as entities in their own right, and correlated among variables, while observing their evolution over time.
+
+To get a idea of the first motivation, get the values for the first observation in the data set, January 1901, and get a quick levelplot:
 
 ```{r anomalies-10 }
+# levelplot of the slice
+n <- 1
+grid <- expand.grid(lon=lon, lat=lat)
+cutpts <- c(-50,-40,-30,-20,-10,0,10,20,30,40,50)
+levelplot(tmp_array[,, n] ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T, 
+  col.regions=(rev(brewer.pal(10,"RdBu"))), main = "Jan 1901")
+```
+
+Now get a single slice of the array, for, January 2022 (n = 1453), and make a quick levelplot.
+
+```{r anomalies-11 }
 # levelplot of the slice
 n <- 1464
 grid <- expand.grid(lon=lon, lat=lat)
 cutpts <- c(-50,-40,-30,-20,-10,0,10,20,30,40,50)
 levelplot(tmp_array[,, n] ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T, 
-  col.regions=(rev(brewer.pal(10,"RdBu"))))
+  col.regions=(rev(brewer.pal(10,"RdBu"))), main = "Jan 2022")
 ```
 
+The maps are quite similar, despite the fact that we know significant climate change has take place over this interval.
+
+# Long-term means #
+
+## Set up for long-term mean calculation ##
+
 Get the indices for the beginning and end of the base period, and save them as a string.
-```{r anomalies-11 }
+```{r anomalies-12 }
 # get beginning obs of base period
 begyr <- 1961; endyr <- 1990; nyrs <- endyr - begyr + 1
 begobs <- ((begyr - time_cf$year[1]) * nm) + 1
@@ -149,7 +167,7 @@ print(c(begyr, endyr, begobs, endobs, base_period))
 
 Get a levelplot of the first observation in the base period.
 
-```{r anomalies-12 }
+```{r anomalies-13 }
 # levelplot of begobs
 tmp_slice <- tmp_array[,, begobs]
 grid <- expand.grid(lon=lon, lat=lat)
@@ -159,7 +177,7 @@ levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T,
 ```
 
 Create a new array with just the base period data in it.
-```{r anomalies-13 }
+```{r anomalies-14 }
 # base-period array
 tmp_array_base <- array(dim = c(nlon, nlat, nyrs * nm))
 dim(tmp_array_base)
@@ -168,7 +186,7 @@ tmp_array_base <- tmp_array[,, begobs:endobs]
 
 Get a levelplot of the first time-slice of that, which should match the previous plot
 
-```{r anomalies-14 }
+```{r anomalies-15 }
 # levelplot of tmp_array_base
 tmp_slice <- tmp_array_base[,, 1]
 grid <- expand.grid(lon=lon, lat=lat)
@@ -181,7 +199,7 @@ levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T,
 
 The long-term means are calculated by looping over the grid cells and months.
 
-```{r anomalies-15 }
+```{r anomalies-16 }
 # long-term means
 tmp_ltm <- array(NA, dim = c(nlon, nlat, nm))
 dim(tmp_ltm)
@@ -197,7 +215,7 @@ for (j in 1:nlon) {
 
 Levelplot of the January long-term means:
 
-```{r anomalies-16 }
+```{r anomalies-17 }
 # levelplot of tmp_ltm
 tmp_slice <- tmp_ltm[,, 1]
 grid <- expand.grid(lon=lon, lat=lat)
@@ -208,7 +226,7 @@ levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T,
 
 A `{ggplot2}` multi-panel maps of the long-term means can be made by turning the `tmp_ltm` array into a dataframe as follow:
 
-```{r anomalies-17 }
+```{r anomalies-18 }
 # unwrap the array to a long vector, stacking the months
 tmp_ltm_vector <- as.vector(tmp_ltm)
 lonlat <- as.matrix(expand.grid(lon, lat))
@@ -223,7 +241,7 @@ names(tmp_ltm_df) <- c("lon", "lat", "tmp_ltm", "month")
 
 Get a world outline:
 
-```{r anomalies-18 }
+```{r anomalies-19 }
 # world_sf
 world_sf <- st_as_sf(maps::map("world", plot = FALSE, fill = TRUE))
 world_otl_sf <- st_geometry(world_sf)
@@ -231,7 +249,7 @@ world_otl_sf <- st_geometry(world_sf)
 
 Make the map.
 
-```{r anomalies-19, cache = TRUE}
+```{r anomalies-20, cache = TRUE}
 # ggplot2 map of tmp_ltm
 ggplot() + 
   geom_tile(data = tmp_ltm_df, aes(x = lon, y = lat, fill = tmp_ltm)) +
@@ -255,13 +273,13 @@ Note the rearrangement of the months ("Dec", ..., "Nov") in the `factor()` funct
 
 The anomalies are obtaimed for each grid point by simply expanding the twelve ltm values (one for each month of the year) over the `ny` years of the record, and then differencing.  In this way, the anomaly for each January in the record is the difference between the "absolute" (but not "absolute value" (`abs()`)) or observed value, and the January long-term mean.
 
-```{r anomalies-20, eval = FALSE, echo = FALSE}
+```{r anomalies-21, eval = FALSE, echo = FALSE}
 library(usethis) 
 usethis::edit_r_environ()
 ```
 
 
-```{r anomalies-21 }
+```{r anomalies-22 }
 # anomalies
 tmp_anm <- array(NA, dim = c(nlon, nlat, nt))
 tmp_anm <- tmp_array - rep(tmp_ltm, ny)
@@ -269,7 +287,7 @@ tmp_anm <- tmp_array - rep(tmp_ltm, ny)
 
 Get a levelplot of an anomaly.  Note the different cutpoints.
 
-```{r anomalies-22 }
+```{r anomalies-23 }
 # levelplot of tmp_ltm
 tmp_slice <- tmp_anm[,, 1]
 grid <- expand.grid(lon=lon, lat=lat)
@@ -282,7 +300,7 @@ levelplot(tmp_slice ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T,
 
 Write out netCDF files of the long-term means and anomalies in the usual way.
 
-```{r anomalies-23, echo=TRUE, eval=FALSE}
+```{r anomalies-24, echo=TRUE, eval=FALSE}
 # netCDF file of ltm's
 
 # path and file name, set dname
@@ -335,7 +353,7 @@ ncout
 nc_close(ncout)
 ```
 
-```{r anomalies-24, echo=TRUE, eval=FALSE}
+```{r anomalies-25, echo=TRUE, eval=FALSE}
 
 # netCDF file of anomalies
 

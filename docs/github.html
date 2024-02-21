@@ -403,7 +403,19 @@ Make a new repository</a>
 class="toc-section-number">2.1</span> At GitHub</a></li>
 <li><a href="#on-your-local-machine"
 id="toc-on-your-local-machine"><span
-class="toc-section-number">2.2</span> On your “local” machine</a></li>
+class="toc-section-number">2.2</span> On your “local” machine</a>
+<ul>
+<li><a href="#clone-the-repository" id="toc-clone-the-repository"><span
+class="toc-section-number">2.2.1</span> Clone the repository</a></li>
+<li><a href="#generate-a-personal-access-token"
+id="toc-generate-a-personal-access-token"><span
+class="toc-section-number">2.2.2</span> Generate a Personal Access
+Token</a></li>
+<li><a href="#editupdate-a-file-then-commit-and-push-to-github"
+id="toc-editupdate-a-file-then-commit-and-push-to-github"><span
+class="toc-section-number">2.2.3</span> Edit/update a file, then
+“Commit” and “Push” to GitHub</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#web-site-setup-i.e.-a-github-pages-web-site"
 id="toc-web-site-setup-i.e.-a-github-pages-web-site"><span
@@ -414,7 +426,13 @@ web site)</a>
 class="toc-section-number">3.1</span> Back to GitHub</a></li>
 <li><a href="#back-on-the-local-machine"
 id="toc-back-on-the-local-machine"><span
-class="toc-section-number">3.2</span> Back on the local machine</a></li>
+class="toc-section-number">3.2</span> Back on the local machine</a>
+<ul>
+<li><a href="#build-a-multi-page-web-site"
+id="toc-build-a-multi-page-web-site"><span
+class="toc-section-number">3.2.1</span> Build a multi-page web
+site</a></li>
+</ul></li>
 <li><a href="#synchronizing-files" id="toc-synchronizing-files"><span
 class="toc-section-number">3.3</span> Synchronizing files</a></li>
 </ul></li>
@@ -425,6 +443,10 @@ class="toc-section-number">3.3</span> Synchronizing files</a></li>
   addClassKlippyTo("pre.r, pre.markdown");
   addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
 </script>
+<p>
+<span style="color: #00cc00;">NOTE: This page has been revised for
+Winter 2024, but may undergo further edits.</span>
+</p>
 <p>A repository is a collection of files, including code, data, and
 documents, that can be used to store multiple versions of files as the
 development of a project proceeds. Repositories can be local (i.e. file
@@ -466,8 +488,8 @@ e.g. <code>https://github.com/gh-username/geog490project</code>,
 username on the local computer.</p>
 <div id="getting-going" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Getting going</h1>
-<p>The key steps include:</p>
-<ol style="list-style-type: decimal">
+<p>The key steps (that will be followed below) are:</p>
+<ul>
 <li>registering a (free) GitHub account at <a
 href="github.com">[github.com]</a> (see Section 4 of <a
 href="https://happygitwithr.com/index.html">[HappyGitWithR]</a>) (See
@@ -485,12 +507,11 @@ Desktop</em>)</li>
 <ul>
 <li>use a personal access token (PAT) (Section 9, and Section 9.1 in
 particular)</li>
-<li>connect to GitHub (Section 10)</li>
 <li>connect RStudio to Git and GitHub (section 12)</li>
 </ul></li>
 <li>see Section 14 <em>RStudio, Git, GitHub Hell</em> for help.</li>
 <li>starting a new project (Section 15)</li>
-</ol>
+</ul>
 <p>The basic idea is to create a (mostly) empty new repository on
 GitHub, and then “clone” it to a local machine, modify it (adding files
 and images, etc.) and then “push” it back to GitHub.</p>
@@ -500,16 +521,18 @@ and images, etc.) and then “push” it back to GitHub.</p>
 repository</h1>
 <div id="at-github" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> At GitHub</h2>
-<p>To create a new repository on GitHub, after logging in, the steps
+<p>To create a new repository on GitHub, after logging in at
+<code>https://github.com/gh-username/</code> (where
+<code>gh-username</code> is your GitHub username), the steps
 include:</p>
-<ol style="list-style-type: decimal">
+<ul>
 <li>create a new repository (e.g. <code>geog490project</code> (or just
 <code>geog490</code> or <code>geog590</code>);
 <ul>
 <li>click on the dropdown box with a plus sign, and click on “Create a
 new repository”</li>
 <li>enter a name (which will be tested for availability)</li>
-<li>enter a short description</li>
+<li>enter a short description, e.g. GEOG 4/590 Project</li>
 <li>make the repository “Public”</li>
 <li>check on “Add a README file”</li>
 <li>Add .gitignore – select the R template in the dropdown box</li>
@@ -518,37 +541,72 @@ new repository”</li>
 </ul></li>
 <li>Edit the README file if you wish.</li>
 <li>Copy or write down the URL of the repository</li>
-</ol>
+</ul>
 </div>
 <div id="on-your-local-machine" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> On your “local”
 machine</h2>
-<p>On the local machine:</p>
-<ol start="8" style="list-style-type: decimal">
-<li>create a folder,
-e.g. <code>/Users/username/Projects/geog490project</code> (Note that
-there is no connection between the folder names, the
-<code>/Projects</code> folder is just that, the ’/geog490project` is
-named for the course project.</li>
-</ol>
-<p>In RStudio:</p>
-<ol start="9" style="list-style-type: decimal">
-<li>create a project in an existing folder (e.g. the one you just
+<div id="clone-the-repository" class="section level3" number="2.2.1">
+<h3><span class="header-section-number">2.2.1</span> Clone the
+repository</h3>
+<p>Start RStudio, and:</p>
+<ul>
+<li>create a project in an existing folder (i.e. the one you just
 created): File &gt; New Project… &gt; Version Control &gt; Git<br />
 </li>
 <li>Set the repository URL (e.g.):
-<code>https://github.com/gh-username/geog490project</code><br />
-</li>
+<code>https://github.com/gh-username/geog490project</code> (copy and
+paste from the browser address bar);</li>
 <li>Project directory name: <code>geog490project</code><br />
 </li>
-<li>Browse to folder: <code>/Users/Projects/</code></li>
+<li>Browse to the folder: <code>/Users/Projects/</code> (but not
+<code>/Users/username/Projects/geog490project</code>)</li>
 <li>click on “Create Project”</li>
-</ol>
+<li>(Note that there is no connection between the folder names, the
+<code>/Projects</code> folder is just that, the
+<code>/geog490project</code> is named for the course project.)</li>
+</ul>
 <p>(note that <code>.gitignore</code>, <code>README.md</code> and
-<code>REarthSysSci</code> files will have turned up in the working
-directory)</p>
+<code>geog490test.Rproj</code> files, and two folders <code>/.git</code>
+and <code>/Rproj.user</code> will have turned up in the working
+directory. You might not be able to see them if hidden files (that begin
+with a <code>.</code> on the Mac), are indeed hidden. Don’t worry if you
+don’t see them.</p>
+</div>
+<div id="generate-a-personal-access-token" class="section level3"
+number="2.2.2">
+<h3><span class="header-section-number">2.2.2</span> Generate a Personal
+Access Token</h3>
+<p>Now, using RStudio, generate a personal access code (PAT):</p>
+<ul>
+<li><p>install the <code>{usethis}</code> package
+(install.packages(“usethis”);</p></li>
+<li><p>type the following at the command line in the Console pane:</p>
+<pre><code>  library(usethis)
+  usethis::create_github_token()</code></pre></li>
+</ul>
+<p>Note the double colons (“<code>::</code>”). This will open up a web
+page at GitHub, where you will be invited to</p>
+<ul>
+<li>enter the PAT’s “use case” (enter “RStudio”);</li>
+<li>select an expiration time (“No expiration” is ok);</li>
+<li>scroll to the bottom, and click on the “Generate token” button.</li>
+</ul>
+<p>A new page will open, with the new token in a green box. Copy the
+token, and save it on your computer somewhere you’ll be able to find it
+again.</p>
+<p>Then, switch back to RStudio, and type the following at the command
+line in the Console pane:</p>
+<pre><code>    credentials::set_github_pat()</code></pre>
+<p>A “Password” box should pop up. Paste the PAT into the box. This sets
+the PAT.</p>
+</div>
+<div id="editupdate-a-file-then-commit-and-push-to-github"
+class="section level3" number="2.2.3">
+<h3><span class="header-section-number">2.2.3</span> Edit/update a file,
+then “Commit” and “Push” to GitHub</h3>
 <p>Then, still on the local machine:</p>
-<ol start="14" style="list-style-type: decimal">
+<ul>
 <li>Edit <code>README.md</code> and save (perhaps using a Markdown
 editor, or in RStudio). For example, add the line “The URL for the
 webpage is
@@ -562,12 +620,9 @@ repository;</li>
 <li>Close the <code>Git Commit</code> window;</li>
 <li>Click on the <code>Push</code> button to synchronize the local
 repository with the remote GitHub repository.</li>
-</ol>
-<p>Note: The first time you do this, you may have to sign in. If you
-followed the instructions in <a
-href="https://happygitwithr.com/index.html">[<em>Happy Git and
-GitHub</em>]</a>, it should be straightforward to sign in with your
-browser.</p>
+</ul>
+<p>Note: The first time you do this, you may have to sign in. If the
+sign-in dialog asks for a password, enter the PAT.</p>
 <p>At this point, the project folder should contain the following
 folders and files:</p>
 <pre><code>    ```
@@ -577,6 +632,7 @@ folders and files:</p>
     geog490.Rproj
     README.md
     ```</code></pre>
+</div>
 </div>
 </div>
 <div id="web-site-setup-i.e.-a-github-pages-web-site"
@@ -589,37 +645,38 @@ GitHub Pages web site)</h1>
 (e.g. <code>https://github.com/gh-username/geog490project/</code>, if
 it’s not still open in your web browser). Check to see that you’re still
 logged in. Then:</p>
-<ol style="list-style-type: decimal">
+<ul>
 <li>Click on “Add file”;</li>
 <li>In the “Name your file…” box, type (exactly):
 <code>docs/</code></li>
 <li>The path will expand to (e.g.) <code>geog490project/docs/</code> and
 in the “Name your file…” box, enter <code>index.html</code>.</li>
 <li>In the <code>Edit</code> panel, type over the “Enter file contents
-here” with something like “GEOG 4/590 Project temporary page”</li>
+here” with something like “GEOG 4/590 Project temporary home page”</li>
 <li>Scroll down and click on the “Commit changes” button.</li>
 <li>A “Commit changes” dialog will pop up, click on the “Commit changes”
 button.</li>
-</ol>
+</ul>
 <p>If you back up to the top-level <code>geog490project</code> page,
-you’ll see a new folder.</p>
+you’ll see a new folder. You may see a “pending” message for a few
+seconds.</p>
 <p>Then click on “Settings” (the little gear) and click on the “Pages”
 link in the sidebar.</p>
-<p>On the GitHub Pages dialog 1. Click on the drop-down box below
-“Branch”. 2. Click on the “main”, then click on the dropdown box just to
-the right, that probably says <code>/root</code>, and 3. Select
-<code>/docs</code> 4. Click on “Save”</p>
-<p>Nothing dramatic will happen, but you see “Your GitHub Pages site is
-currently being built from the <code>/docs</code> folder in the main
+<p>On the GitHub Pages dialog - Click on the drop-down box below
+“Branch”. - Click on the “main”, then click on the dropdown box just to
+the right, that probably says <code>/root</code>, and - Select
+<code>/docs</code> - Click on “Save”</p>
+<p>Nothing dramatic will happen, but you’ll see “Your GitHub Pages site
+is currently being built from the <code>/docs</code> folder in the main
 branch.</p>
-<p>Sometimes it takes a little while, but you should see the message
-“Your site is live at at
+<p>Sometimes it takes a little while, but you should eventually see the
+message “Your site is live at at
 <code>https://gh-username.github.io/geog490project/</code>” (but with
 your GitHub user name and repository name instead), just below the top
 of “GitHub Pages”. If you open a new tab or window on the browser and
 type or paste in that URL, or click on the “Visit Site” button, you
-should see a new web page with the text “GEOG 4/590 temporary page” (or
-whatever you typed in above).</p>
+should see a new web page with the text “GEOG 4/590 temporary home page”
+(or whatever you typed in above).</p>
 <p>Note that there are two web pages associated with the project
 now:</p>
 <ul>
@@ -634,8 +691,10 @@ href="https://gh-username.github.io/geog490/index.html"><code>https://pjbartlein
 <div id="back-on-the-local-machine" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> Back on the local
 machine</h2>
-<p>Notice that in the projects folder on your computer you’ll see a new
-folder <code>/docs</code>.</p>
+<p>In RStudio, on the Git tab, click on “Pull”. Notice that in the
+projects folder on your computer you’ll now see a new folder
+<code>/docs</code>, with the recently created <code>index.html</code>
+file in it.</p>
 <p>Anything that winds up in the <code>/docs</code> folder will be
 available to the <code>*.html</code> webpages there. This includes files
 placed there “manually”, or by knitting an <code>*.Rmd</code> file or
@@ -649,11 +708,37 @@ original name of the file could be retained
 (e.g. <code>alpha_plot_RNotebook.html</code>) in which case the URL
 would become
 <code>https://gh-username.github.io/geog490project/alpha_plot_RNotebook.html</code>.</p>
+<div id="build-a-multi-page-web-site" class="section level3"
+number="3.2.1">
+<h3><span class="header-section-number">3.2.1</span> Build a multi-page
+web site</h3>
+<p>Restart RStudio. (<strong>Important</strong>)</p>
+<p>As an example, download or copy the following “Example 5” files into
+<code>https://github.com/gh-username/geog490project</code>:</p>
+<ul>
+<li><a
+href="https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/index.Rmd">[index.Rmd]</a></li>
+<li><a
+href="https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/intro.Rmd">[intro.Rmd]</a></li>
+<li><a
+href="https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/alpha_plot_RMarkdown_Site.Rmd">[alpha_plot_RMarkdown_Site.Rmd]</a></li>
+<li><a
+href="https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/about.Rmd">[about.Rmd]</a></li>
+<li><a
+href="https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/_site.yml">[_site.yml]</a></li>
+</ul>
+<p>Knit the files (except for <code>_site.yml</code>) by clicking on the
+“knit” button, and Build the website (see the Build pane). The files
+created will wind up in the <code>/docs</code> folder.</p>
+<p>Go to the “Git` tab in RStudio, and Commit and Push the newly created
+files.</p>
+<p>It may take a few minutes for the upload to finish.</p>
 <p>Once the repository is setup and serving pages, then RStudio can be
 used to create new RMarkdown files that can be knitted to produce
 single-page <code>*.html</code> files (including an
 <code>index.Rmd</code> file that produces an <code>index.html</code>
 file), that are organized by the <code>_site.yml</code> file.</p>
+</div>
 </div>
 <div id="synchronizing-files" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> Synchronizing

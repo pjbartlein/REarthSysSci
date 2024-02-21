@@ -15,18 +15,17 @@ When discussing URLs and repositories at GitHub, e.g. `https://github.com/gh-use
 
 # Getting going #
 
-The key steps include:
+The key steps (that will be followed below) are:
 
-1. registering a (free) GitHub account at [[github.com]](github.com) (see Section 4 of [[HappyGitWithR]](https://happygitwithr.com/index.html)) (See also the [[GitHub Education]](https://education.github.com) page.) Note that this will involve selecting a username and password for the GitHub site. This is distinct from the personal access token that will be generated later.
-2. installing Git (Sections 6 -- *use Option 1 for both MacOS and Windows*)
-3. introducing yourself to GitHub (Section 7 -- use the `usethis` package in RStudio approach)
-3. installing a Git client (Section 8 -- *install GitHub Desktop*) 
-4. configuring RStudio and GitHub (Sections 9-14)
+- registering a (free) GitHub account at [[github.com]](github.com) (see Section 4 of [[HappyGitWithR]](https://happygitwithr.com/index.html)) (See also the [[GitHub Education]](https://education.github.com) page.) Note that this will involve selecting a username and password for the GitHub site. This is distinct from the personal access token that will be generated later.
+- installing Git (Sections 6 -- *use Option 1 for both MacOS and Windows*)
+- introducing yourself to GitHub (Section 7 -- use the `usethis` package in RStudio approach)
+- installing a Git client (Section 8 -- *install GitHub Desktop*) 
+- configuring RStudio and GitHub (Sections 9-14)
 	- use a personal access token (PAT) (Section 9, and Section 9.1 in particular)
-	- connect to GitHub (Section 10)
 	- connect RStudio to Git and GitHub (section 12) 
-5. see Section 14 *RStudio, Git, GitHub Hell* for help.
-6. starting a new project (Section 15)
+- see Section 14 *RStudio, Git, GitHub Hell* for help.
+- starting a new project (Section 15)
 
 The basic idea is to create a (mostly) empty new repository on GitHub, and then "clone" it to a local machine, modify it (adding files and images, etc.) and then "push" it back to GitHub.  
 
@@ -34,47 +33,73 @@ The basic idea is to create a (mostly) empty new repository on GitHub, and then 
 
 ## At GitHub ##
 
-To create a new repository on GitHub, after logging in, the steps include:  
+To create a new repository on GitHub, after logging in at `https://github.com/gh-username/` (where `gh-username` is your GitHub username), the steps include:  
 
-1. create a new repository (e.g. `geog490project` (or just `geog490` or  `geog590`);
+- create a new repository (e.g. `geog490project` (or just `geog490` or  `geog590`);
 	- click on the dropdown box with a plus sign, and click on "Create a new repository"
 	- enter a name (which will be tested for availability)
-	- enter a short description
+	- enter a short description, e.g. GEOG 4/590 Project
 	- make the repository "Public"
 	- check on "Add a README file"
 	- Add .gitignore -- select the R template in the dropdown box
 	- Choose a license: GNU General Public License is fine;
 	- Click on the green "Create repository" button.
-2. Edit the README file if you wish.
-3. Copy or write down the URL of the repository
+- Edit the README file if you wish.
+- Copy or write down the URL of the repository
 
 ## On your "local" machine ##
 
-On the local machine:
+### Clone the repository ###
 
-8. create a folder, e.g. `/Users/username/Projects/geog490project` (Note that there is no connection between the folder names, the `/Projects` folder is just that, the '/geog490project` is named for the course project.
+Start RStudio, and:  
 
-In RStudio:  
+- create a project in an existing folder (i.e. the one you just created): File > New Project…  > Version Control  > Git  
+- Set the repository URL (e.g.):  `https://github.com/gh-username/geog490project`  (copy and paste from the browser address bar);
+- Project directory name:  `geog490project`  
+- Browse to the folder:  `/Users/Projects/` (but not `/Users/username/Projects/geog490project`) 
+- click on "Create Project" 
+- 
+(Note that there is no connection between the folder names, the `/Projects` folder is just that, the `/geog490project` is named for the course project.)
 
-9. create a project in an existing folder (e.g. the one you just created): File > New Project…  > Version Control  > Git  
-1. Set the repository URL (e.g.):  `https://github.com/gh-username/geog490project`  
-1. Project directory name:  `geog490project`  
-1. Browse to folder:  `/Users/Projects/`
-1. click on "Create Project" 
+(note that `.gitignore`, `README.md` and `geog490test.Rproj` files, and two folders `/.git` and `/Rproj.user` will have turned up in the working directory. You might not be able to see them if hidden files (that begin with a `.` on the Mac), are indeed hidden. Don't worry if you don't see them.
 
-(note that `.gitignore`, `README.md` and `REarthSysSci` files will have turned up in the working directory)  
+### Generate a Personal Access Token ###
+
+Now, using RStudio, generate a personal access code (PAT):
+
+- install the `{usethis}` package (install.packages("usethis");
+- type the following at the command line in the Console pane:
+	
+		library(usethis)
+		usethis::create_github_token()
+
+Note the double colons ("`::`"). This will open up a web page at GitHub, where you will be invited to 
+
+- enter the PAT's "use case" (enter "RStudio");
+- select an expiration time ("No expiration" is ok);
+- scroll to the bottom, and click on the "Generate token" button.
+
+A new page will open, with the new token in a green box. Copy the token, and save it on your computer somewhere you'll be able to find it again.
+
+Then, switch back to RStudio, and type the following at the command line in the Console pane:
+
+		credentials::set_github_pat()
+
+A "Password" box should pop up. Paste the PAT into the box. This sets the PAT.
+
+### Edit/update a file, then "Commit" and "Push" to GitHub
 
 Then, still on the local machine:
 
-14. Edit `README.md` and save (perhaps using a Markdown editor, or in RStudio). For example, add the line "The URL for the webpage is `https://gh-username.github.io/geog490project/`"
-1. Click on `Tools > Version Control > Commit` or (click on the "Git" pane, and Commit tab); 
-1. Click on checkboxes to "stage" files;
-2. Type a `Commit message`, perhaps "update"; 
-3. Click on the `Commit` button, this updates the local repository; 
-4. Close the `Git Commit` window;
-2. Click on the `Push` button to synchronize the local repository with the remote GitHub repository.
+- Edit `README.md` and save (perhaps using a Markdown editor, or in RStudio). For example, add the line "The URL for the webpage is `https://gh-username.github.io/geog490project/`"
+- Click on `Tools > Version Control > Commit` or (click on the "Git" pane, and Commit tab); 
+- Click on checkboxes to "stage" files;
+- Type a `Commit message`, perhaps "update"; 
+- Click on the `Commit` button, this updates the local repository; 
+- Close the `Git Commit` window;
+- Click on the `Push` button to synchronize the local repository with the remote GitHub repository.
 
-Note: The first time you do this, you may have to sign in. If you followed the instructions in [[*Happy Git and GitHub*]](https://happygitwithr.com/index.html), it should be straightforward to sign in with your browser. 
+Note: The first time you do this, you may have to sign in. If the sign-in dialog asks for a password, enter the PAT.
 
 At this point, the project folder should contain the following folders and files:
 
@@ -92,26 +117,26 @@ At this point, the project folder should contain the following folders and files
 
 Go back to the repository (e.g. `https://github.com/gh-username/geog490project/`, if it's not still open in your web browser).  Check to see that you're still logged in.  Then:
 
-1. Click on "Add file";
-2. In the "Name your file…" box, type (exactly):  `docs/`
-3. The path will expand to (e.g.) `geog490project/docs/` and in the "Name your file…" box, enter `index.html`.
-4. In the `Edit` panel, type over the "Enter file contents here" with something like "GEOG 4/590 Project temporary page"
-5. Scroll down and click on the "Commit changes" button.
-6. A "Commit changes" dialog will pop up, click on the "Commit changes" button.
+- Click on "Add file";
+- In the "Name your file…" box, type (exactly):  `docs/`
+- The path will expand to (e.g.) `geog490project/docs/` and in the "Name your file…" box, enter `index.html`.
+- In the `Edit` panel, type over the "Enter file contents here" with something like "GEOG 4/590 Project temporary home page"
+- Scroll down and click on the "Commit changes" button.
+- A "Commit changes" dialog will pop up, click on the "Commit changes" button.
 
-If you back up to the top-level `geog490project` page, you'll see a new folder.  
+If you back up to the top-level `geog490project` page, you'll see a new folder.  You may see a "pending" message for a few seconds.
 
 Then click on "Settings" (the little gear) and click on the "Pages" link in the sidebar. 
 
 On the GitHub Pages dialog
-1. Click on the drop-down box below "Branch".
-2. Click on the "main", then click on the dropdown box just to the right, that probably says `/root`, and
-3. Select `/docs`
-4. Click on "Save"
+- Click on the drop-down box below "Branch".
+- Click on the "main", then click on the dropdown box just to the right, that probably says `/root`, and
+- Select `/docs`
+- Click on "Save"
 
-Nothing dramatic will happen, but you see "Your GitHub Pages site is currently being built from the `/docs` folder in the main branch.
+Nothing dramatic will happen, but you'll see "Your GitHub Pages site is currently being built from the `/docs` folder in the main branch.
 
-Sometimes it takes a little while, but you should see the message "Your site is live at at `https://gh-username.github.io/geog490project/`" (but with your GitHub user name and repository name instead), just below the top of "GitHub Pages".  If you open a new tab or window on the browser and type or paste in that URL, or click on the "Visit Site" button, you should see a new web page with the text "GEOG 4/590 temporary page" (or whatever you typed in above).  
+Sometimes it takes a little while, but you should eventually see the message "Your site is live at at `https://gh-username.github.io/geog490project/`" (but with your GitHub user name and repository name instead), just below the top of "GitHub Pages".  If you open a new tab or window on the browser and type or paste in that URL, or click on the "Visit Site" button, you should see a new web page with the text "GEOG 4/590 temporary home page" (or whatever you typed in above).  
 
 Note that there are two web pages associated with the project now:
 
@@ -120,9 +145,23 @@ Note that there are two web pages associated with the project now:
 
 ## Back on the local machine ##
 
-Notice that in the projects folder on your computer you'll see a new folder `/docs`.
+In RStudio, on the Git tab, click on "Pull". Notice that in the projects folder on your computer you'll now see a new folder `/docs`, with the recently created `index.html` file in it.
 
 Anything that winds up in the `/docs` folder will be available to the `*.html` webpages there. This includes files placed there "manually", or by knitting an `*.Rmd` file or building a website in RStudio. For example, any one of the single-page `*.html` files produced by the R Markdown, or R Markdown Notebook examples could be renamed to `index.html` and copied to the local `/docs` folder, and Committed and Pushed to GitHub, where it could be viewed by browsing to `https://gh-username.github.io/geog490project/`. Or, the original name of the file could be retained (e.g. `alpha_plot_RNotebook.html`) in which case the URL would become `https://gh-username.github.io/geog490project/alpha_plot_RNotebook.html`.
+
+### Build a multi-page web site ###
+
+Restart RStudio. (**Important**)
+
+As an example, download or copy the following "Example 5" files into  `https://github.com/gh-username/geog490project`:
+
+  - [[index.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/index.Rmd)  - [[intro.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/intro.Rmd)  - [[alpha_plot_RMarkdown_Site.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/alpha_plot_RMarkdown_Site.Rmd)  - [[about.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/about.Rmd)  - [[_site.yml]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/\_site.yml)
+
+Knit the files (except for `_site.yml`) by clicking on the "knit" button, and Build the website (see the Build pane). The files created will wind up in the `/docs` folder. 
+
+Go to the "Git` tab in RStudio, and Commit and Push the newly created files.
+
+It may take a few minutes for the upload to finish.
 
 Once the repository is setup and serving pages, then RStudio can be used to create new RMarkdown files that can be knitted to produce single-page `*.html` files (including an `index.Rmd` file that produces an `index.html` file), that are organized by the `_site.yml` file.
 
