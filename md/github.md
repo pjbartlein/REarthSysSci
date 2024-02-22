@@ -87,6 +87,8 @@ Then, switch back to RStudio, and type the following at the command line in the 
 
 A "Password" box should pop up. Paste the PAT into the box. This sets the PAT.
 
+Restart R: Session > Restart R.
+
 ### Edit/update a file, then "Commit" and "Push" to GitHub
 
 Then, still on the local machine:
