@@ -58,34 +58,46 @@ Start RStudio, and:
 - Project directory name:  `geog490project`  
 - Browse to the folder:  `/Users/Projects/` (but not `/Users/username/Projects/geog490project`) 
 - click on "Create Project" 
-- 
+
 (Note that there is no connection between the folder names, the `/Projects` folder is just that, the `/geog490project` is named for the course project.)
 
-(note that `.gitignore`, `README.md` and `geog490test.Rproj` files, and two folders `/.git` and `/Rproj.user` will have turned up in the working directory. You might not be able to see them if hidden files (that begin with a `.` on the Mac), are indeed hidden. Don't worry if you don't see them.
+(Note that `.gitignore`, `README.md` and `geog490test.Rproj` files, and two folders `/.git` and `/Rproj.user` will have turned up in the working directory. You might not be able to see them if hidden files (that begin with a `.` on the Mac), are indeed hidden. Don't worry if you don't see them.
 
 ### Generate a Personal Access Token ###
 
+See Section 9.1 of [[HappyGitWithR]](https://happygitwithr.com/index.html). There is a similar, but a bit more detailed discussion in the documentation for the `{usethis}` package at: [[https://usethis.r-lib.org/articles/git-credentials.html]](https://usethis.r-lib.org/articles/git-credentials.html) (TL;DR = "Too long; didn't read"!)
+
 Now, using RStudio, generate a personal access code (PAT):
 
-- install the `{usethis}` package (install.packages("usethis");
-- type the following at the command line in the Console pane:
-	
-		library(usethis)
-		usethis::create_github_token()
+- install the `{usethis}` package (install.packages("usethis"). (This will also install the `{gh}` and `{gitcreds}` packages.) 
+- type the following at the command line in the Console pane:  
 
+		library(usethis)		
+		usethis::create_github_token()
+		
 Note the double colons ("`::`"). This will open up a web page at GitHub, where you will be invited to 
 
 - enter the PAT's "use case" (enter "RStudio");
 - select an expiration time ("No expiration" is ok);
 - scroll to the bottom, and click on the "Generate token" button.
 
-A new page will open, with the new token in a green box. Copy the token, and save it on your computer somewhere you'll be able to find it again.
+A new page will open, with the new token in a green box. Copy the token, and save it on your computer somewhere you'll be able to find it again. (But don't save it in `/Users/username/Projects/geog490project`; GitHub scans for PATs in uploaded files.)
 
 Then, switch back to RStudio, and type the following at the command line in the Console pane:
 
-		credentials::set_github_pat()
+		gitcreds::gitcreds_set() 
 
 A "Password" box should pop up. Paste the PAT into the box. This sets the PAT.
+
+**Important:** Restart R. (Session > Restart R)
+
+There are three functions in the various packages that handle communications with GitHub that can be used to see if the PAT has been installed and working; each reports something a little different:
+
+		usethis::gh_token_help()
+		gh::gh_whoami()
+		usethis::git_sitrep()
+
+The `gh::gh_whoami()` is particularly useful, because it prints out a fragment of the PAT. If it doesn't look right, the PAT can be deleted using `gitcreds::gitcreds_delete()` and process above repeated. You probably won't have to do that.
 
 ### Edit/update a file, then "Commit" and "Push" to GitHub
 
@@ -151,11 +163,15 @@ Anything that winds up in the `/docs` folder will be available to the `*.html` w
 
 ### Build a multi-page web site ###
 
-Restart RStudio. (**Important**)
+**Important**: Restart RStudio
 
 As an example, download or copy the following "Example 5" files into  `https://github.com/gh-username/geog490project`:
 
-  - [[index.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/index.Rmd)  - [[intro.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/intro.Rmd)  - [[alpha_plot_RMarkdown_Site.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/alpha_plot_RMarkdown_Site.Rmd)  - [[about.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/about.Rmd)  - [[_site.yml]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/\_site.yml)
+  - [[index.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/index.Rmd)
+  - [[intro.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/intro.Rmd)
+  - [[alpha_plot_RMarkdown_Site.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/alpha_plot_RMarkdown_Site.Rmd)
+  - [[about.Rmd]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/about.Rmd)
+  - [[_site.yml]](https://pjbartlein.github.io/REarthSysSci/Rmd/geog490/\_site.yml)
 
 Knit the files (except for `_site.yml`) by clicking on the "knit" button, and Build the website (see the Build pane). The files created will wind up in the `/docs` folder. 
 

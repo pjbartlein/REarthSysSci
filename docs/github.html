@@ -559,11 +559,11 @@ paste from the browser address bar);</li>
 <li>Browse to the folder: <code>/Users/Projects/</code> (but not
 <code>/Users/username/Projects/geog490project</code>)</li>
 <li>click on “Create Project”</li>
-<li>(Note that there is no connection between the folder names, the
-<code>/Projects</code> folder is just that, the
-<code>/geog490project</code> is named for the course project.)</li>
 </ul>
-<p>(note that <code>.gitignore</code>, <code>README.md</code> and
+<p>(Note that there is no connection between the folder names, the
+<code>/Projects</code> folder is just that, the
+<code>/geog490project</code> is named for the course project.)</p>
+<p>(Note that <code>.gitignore</code>, <code>README.md</code> and
 <code>geog490test.Rproj</code> files, and two folders <code>/.git</code>
 and <code>/Rproj.user</code> will have turned up in the working
 directory. You might not be able to see them if hidden files (that begin
@@ -574,12 +574,19 @@ don’t see them.</p>
 number="2.2.2">
 <h3><span class="header-section-number">2.2.2</span> Generate a Personal
 Access Token</h3>
+<p>See Section 9.1 of <a
+href="https://happygitwithr.com/index.html">[HappyGitWithR]</a>. There
+is a similar, but a bit more detailed discussion in the documentation
+for the <code>{usethis}</code> package at: <a
+href="https://usethis.r-lib.org/articles/git-credentials.html">[https://usethis.r-lib.org/articles/git-credentials.html]</a>
+(TL;DR = “Too long; didn’t read”!)</p>
 <p>Now, using RStudio, generate a personal access code (PAT):</p>
 <ul>
 <li><p>install the <code>{usethis}</code> package
-(install.packages(“usethis”);</p></li>
+(install.packages(“usethis”). (This will also install the
+<code>{gh}</code> and <code>{gitcreds}</code> packages.)</p></li>
 <li><p>type the following at the command line in the Console pane:</p>
-<pre><code>  library(usethis)
+<pre><code>  library(usethis)        
   usethis::create_github_token()</code></pre></li>
 </ul>
 <p>Note the double colons (“<code>::</code>”). This will open up a web
@@ -591,12 +598,25 @@ page at GitHub, where you will be invited to</p>
 </ul>
 <p>A new page will open, with the new token in a green box. Copy the
 token, and save it on your computer somewhere you’ll be able to find it
-again.</p>
+again. (But don’t save it in
+<code>/Users/username/Projects/geog490project</code>; GitHub scans for
+PATs in uploaded files.)</p>
 <p>Then, switch back to RStudio, and type the following at the command
 line in the Console pane:</p>
-<pre><code>    credentials::set_github_pat()</code></pre>
+<pre><code>    gitcreds::gitcreds_set() </code></pre>
 <p>A “Password” box should pop up. Paste the PAT into the box. This sets
 the PAT.</p>
+<p><strong>Important:</strong> Restart R. (Session &gt; Restart R)</p>
+<p>There are three functions in the various packages that handle
+communications with GitHub that can be used to see if the PAT has been
+installed and working; each reports something a little different:</p>
+<pre><code>    usethis::gh_token_help()
+    gh::gh_whoami()
+    usethis::git_sitrep()</code></pre>
+<p>The <code>gh::gh_whoami()</code> is particularly useful, because it
+prints out a fragment of the PAT. If it doesn’t look right, the PAT can
+be deleted using <code>gitcreds::gitcreds_delete()</code> and process
+above repeated. You probably won’t have to do that.</p>
 </div>
 <div id="editupdate-a-file-then-commit-and-push-to-github"
 class="section level3" number="2.2.3">
@@ -709,7 +729,7 @@ would become
 number="3.2.1">
 <h3><span class="header-section-number">3.2.1</span> Build a multi-page
 web site</h3>
-<p>Restart RStudio. (<strong>Important</strong>)</p>
+<p><strong>Important</strong>: Restart RStudio</p>
 <p>As an example, download or copy the following “Example 5” files into
 <code>https://github.com/gh-username/geog490project</code>:</p>
 <ul>
