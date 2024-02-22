@@ -7,7 +7,7 @@ The use of Git and GitHub in R and RStudio is excellently described in the Bookd
 Note: In the following examples, when describing paths on the local computer, it is assumed that the current working directory is a subfolder in a folder named `/Projects`, which in turn is a subfolder in `/Users`, and that you should substitute your username on the local computer for `username` in the paths, so 
 
 - on Windows, the path name might look like "`\Users\username\Projects\geog490project`",
-- while on MacOS, the path name might look like "`/Users/username/Projects/geog490project`,
+- while on MacOS, the path name might look like "`/Users/username/Projects/geog490project`",
 
 where in both cases, `username` is your login user name on the local computer.
 

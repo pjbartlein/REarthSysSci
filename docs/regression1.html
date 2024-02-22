@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Regression analysis</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Earth-System Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="intro.html">Introduction: R, RStudio, and other infrastructure</a>
+    </li>
+    <li>
+      <a href="usingR.html">Using R</a>
+    </li>
+    <li>
+      <a href="ESSdata.html">Earth-system science data</a>
+    </li>
+    <li>
+      <a href="netCDF.html">netCDF in R</a>
+    </li>
+    <li>
+      <a href="netcdf_terra.html">netCDF and terra</a>
+    </li>
+    <li>
+      <a href="plots1.html">Plots (1)</a>
+    </li>
+    <li>
+      <a href="plots2.html">Plots (2)</a>
+    </li>
+    <li>
+      <a href="maps1.html">Maps (1)</a>
+    </li>
+    <li>
+      <a href="maps2.html">Maps (2)</a>
+    </li>
+    <li>
+      <a href="geospatial.html">Geospatial analyses</a>
+    </li>
+    <li>
+      <a href="regression1.html">Regression and correlation</a>
+    </li>
+    <li>
+      <a href="regression2.html">Regression 2</a>
+    </li>
+    <li>
+      <a href="pca.html">PCA</a>
+    </li>
+    <li>
+      <a href="svd.html">Singular Value Decomposistion</a>
+    </li>
+    <li>
+      <a href="highdim.html">High-resolution &amp; high-dimensional data</a>
+    </li>
+    <li>
+      <a href="multivariate.html">Multivariate methods</a>
+    </li>
+    <li>
+      <a href="timeseries.html">Time-series analysis</a>
+    </li>
+    <li class="dropdown-header">Other topics</li>
+    <li>
+      <a href="sf_stars_sftime.html">sf / stars / sftime</a>
+    </li>
+    <li>
+      <a href="hdf5_intro.html">HDF in R</a>
+    </li>
+    <li>
+      <a href="anomalies.html">Long-term means and anomalies</a>
+    </li>
+    <li>
+      <a href="tsplots.html">Time-series plots</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Tasks
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Tasks</li>
+    <li>
+      <a href="installR.html">Install R and RStudio</a>
+    </li>
+    <li>
+      <a href="Ex_UsingR.html">Using R exercise</a>
+    </li>
+    <li>
+      <a href="install_netCDF.html">Install netCDF &amp; Panoply</a>
+    </li>
+    <li>
+      <a href="transfer.html">File transfer</a>
+    </li>
+    <li>
+      <a href="texteditor.html">Install a text editor</a>
+    </li>
+    <li>
+      <a href="dataselection.html">Project data set selection</a>
+    </li>
+    <li>
+      <a href="markdown.html">Markdown and RMarkdown</a>
+    </li>
+    <li>
+      <a href="scripts_and_md.html">R Scripts and R Markdown</a>
+    </li>
+    <li>
+      <a href="github.html">GitHub</a>
+    </li>
+    <li>
+      <a href="pages.html">pages.uoregon.edu</a>
+    </li>
+    <li>
+      <a href="localweb.html">Local websites</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="websites.html">Old course web pages</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Regression analysis</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction" id="toc-introduction"><span
+class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#regression-basics" id="toc-regression-basics"><span
+class="toc-section-number">2</span> Regression basics</a></li>
+<li><a href="#example" id="toc-example"><span
+class="toc-section-number">3</span> Example</a>
+<ul>
+<li><a href="#fitting-a-regression-equation-or-linear-model"
+id="toc-fitting-a-regression-equation-or-linear-model"><span
+class="toc-section-number">3.1</span> Fitting a regression equation (or
+linear model)</a></li>
+<li><a href="#examining-the-regression-equation"
+id="toc-examining-the-regression-equation"><span
+class="toc-section-number">3.2</span> Examining the regression
+equation</a></li>
+<li><a href="#a-second-example" id="toc-a-second-example"><span
+class="toc-section-number">3.3</span> A second example</a></li>
+<li><a href="#residual-plots-and-case-wise-statistics"
+id="toc-residual-plots-and-case-wise-statistics"><span
+class="toc-section-number">3.4</span> Residual plots and case-wise
+statistics</a></li>
+</ul></li>
+<li><a
+href="#iterative-fitting-i.e.-brute-force-optimzation-of-a-regression-equation"
+id="toc-iterative-fitting-i.e.-brute-force-optimzation-of-a-regression-equation"><span
+class="toc-section-number">4</span> Iterative fitting (i.e. brute-force
+optimzation) of a regression equation</a></li>
+<li><a href="#examining-the-regression-equation-1"
+id="toc-examining-the-regression-equation-1"><span
+class="toc-section-number">5</span> Examining the regression
+equation</a></li>
+<li><a href="#analysis-of-variance" id="toc-analysis-of-variance"><span
+class="toc-section-number">6</span> Analysis of Variance</a></li>
+</ul>
+</div>
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<p>
+<span style="color: #00cc00;">NOTE: This page has been revised for
+Winter 2024, but may undergo further edits.</span>
+</p>
+<div id="introduction" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p><em>Regression analysis</em> aims at constructing relationships
+between a single dependent or response variable and one or more
+independent or predictor variables, and is one of the more widely used
+methods in data analysis. Although the computations and analysis that
+underlie regression analysis appear more complicated than those for
+other procedures, simple analyses are quite straightforward. (Most of
+this discussion was taken from
+(<code>https://pjbartlein.github.io/GeogDataAnalysis/lec12.html</code>)</p>
+<p>The general model that underlies regression analysis is</p>
+<p>        <em>data = predictable component + unpredictable
+component</em></p>
+<p>“Data” in this case are the observed values of the dependent
+variable, the predictable component consists of the predictions
+generated by the regression equation, and the unpredictable component
+consists of the “residuals” or unpredictable parts of the data. The
+general idea in regression analysis is to move information into the
+predictable component, leaving the unpredictable component with no
+information or pattern.</p>
+</div>
+<div id="regression-basics" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Regression basics</h1>
+<p>Details of regression analysis, including:</p>
+<ul>
+<li>the regression model and alternative representations</li>
+<li>other quantities in regression analysis (fitted values, residuals,
+sums of squares)</li>
+<li>“fitting” the regression equation</li>
+</ul>
+<p>can be found <a
+href="https://pjbartlein.github.io/REarthSystemSci/topics/regression1.pdf">[here]</a>.</p>
+<p><a href="lec12.html">[Back to top]</a></p>
+</div>
+<div id="example" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Example</h1>
+<p>The simplest regression model is the bivariate one, in which there is
+one response or dependent variable, and one predictor or independent
+variable, and the relationship between the two is represented by a
+straight line.</p>
+<p>Read an example data set:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># read regrex1.csv</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co"># modify the following path to reflect local files</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a>csv_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/projects/RESS/data/csv_files/&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>csv_name <span class="ot">&lt;-</span> <span class="st">&quot;regrex1.csv&quot;</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>csv_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(csv_path, csv_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a>regrex1 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csv_file) </span></code></pre></div>
+<div id="fitting-a-regression-equation-or-linear-model"
+class="section level2" number="3.1">
+<h2><span class="header-section-number">3.1</span> Fitting a regression
+equation (or linear model)</h2>
+<p>Building a bivariate linear regression model to represent the
+relationship between two variables by a straight line involves
+determining the coefficients of that line, a process known as “fitting”
+the regression line. First plot the data!</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">plot</span>(y <span class="sc">~</span> x, <span class="at">data=</span>regrex1)</span></code></pre></div>
+<p><img src="regression1_files/figure-html/regression1-3-1.png" width="2100" /></p>
+<p>Fit the model. The <code>lm()</code> (linear model) function creates
+an object that contains the coefficients of the regression equation,
+fitted values, residuals, etc. which are saved here in the object
+<code>ex1_lm</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># fit the model</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>ex1_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x, <span class="at">data=</span>regrex1)</span></code></pre></div>
+<p>Examine the model. “Printing” the object gives a very short summary,
+while the <code>summary()</code> function produces a a few more details,
+and the <code>attributes()</code> function reveals what’s contained in
+the <code>exa1_lm</code> object.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># examine the model object</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">print</span>(ex1_lm)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x, data = regrex1)
+## 
+## Coefficients:
+## (Intercept)            x  
+##      2.2481       0.4691</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">summary</span>(ex1_lm)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x, data = regrex1)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.66121 -0.53286 -0.02869  0.50436  2.36786 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  2.24814    0.29365   7.656 2.44e-08 ***
+## x            0.46906    0.02444  19.194  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.8779 on 28 degrees of freedom
+## Multiple R-squared:  0.9294, Adjusted R-squared:  0.9268 
+## F-statistic: 368.4 on 1 and 28 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">attributes</span>(ex1_lm)</span></code></pre></div>
+<pre><code>## $names
+##  [1] &quot;coefficients&quot;  &quot;residuals&quot;     &quot;effects&quot;       &quot;rank&quot;          &quot;fitted.values&quot; &quot;assign&quot;       
+##  [7] &quot;qr&quot;            &quot;df.residual&quot;   &quot;xlevels&quot;       &quot;call&quot;          &quot;terms&quot;         &quot;model&quot;        
+## 
+## $class
+## [1] &quot;lm&quot;</code></pre>
+<p>The regression line can be visualized by adding it to the existing
+plot using the <code>abline()</code> function</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co"># plot the regression line</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">plot</span>(y <span class="sc">~</span> x, <span class="at">data=</span>regrex1)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">abline</span>(ex1_lm, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="regression1_files/figure-html/regression1-6-1.png" width="2100" /></p>
+<p>The individual “deviations” (one per observation) that are being
+minimized in the analysis can be visualized using the
+<code>segments()</code> function, which as might be expected plots a
+line between two points, i.e. between the predicted value of
+<code>y</code> (retrived using the <code>fitted()</code> function from
+<code>ex1_lm</code>) and the observed value, at each <code>x</code>
+value.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">plot</span> (y <span class="sc">~</span> x, <span class="at">data=</span>regrex1)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">abline</span>(ex1_lm, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="co"># plot deviations</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="fu">segments</span>(regrex1<span class="sc">$</span>x, <span class="fu">fitted</span>(ex1_lm), regrex1<span class="sc">$</span>x, regrex1<span class="sc">$</span>y, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="regression1_files/figure-html/regression1-7-1.png" width="2100" /></p>
+</div>
+<div id="examining-the-regression-equation" class="section level2"
+number="3.2">
+<h2><span class="header-section-number">3.2</span> Examining the
+regression equation</h2>
+<p>Once the regression equation has been fit to the data, the next step
+is to examine the results and the significance of several statistics.
+First, the standard output</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="co"># examine the model object</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>ex1_lm</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x, data = regrex1)
+## 
+## Coefficients:
+## (Intercept)            x  
+##      2.2481       0.4691</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">summary</span>(ex1_lm)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x, data = regrex1)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.66121 -0.53286 -0.02869  0.50436  2.36786 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  2.24814    0.29365   7.656 2.44e-08 ***
+## x            0.46906    0.02444  19.194  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.8779 on 28 degrees of freedom
+## Multiple R-squared:  0.9294, Adjusted R-squared:  0.9268 
+## F-statistic: 368.4 on 1 and 28 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>The fit of the regression model can also be displayed by plotting
+confidence intervals (which allow variability in the regression line to
+be visually assessed) and prediction intervals (which allow variability
+in the data to be assessed).</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># get and plot prediction intervals and confidence intervals</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>pred_data <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x=</span><span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">25</span>))</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>pred_int <span class="ot">&lt;-</span> <span class="fu">predict</span>(ex1_lm, <span class="at">int=</span><span class="st">&quot;p&quot;</span>, <span class="at">newdata=</span>pred_data)</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>conf_int <span class="ot">&lt;-</span> <span class="fu">predict</span>(ex1_lm, <span class="at">int=</span><span class="st">&quot;c&quot;</span>, <span class="at">newdata=</span>pred_data)</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co"># plot the data</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>ylim<span class="ot">=</span><span class="fu">range</span>(regrex1<span class="sc">$</span>y, pred_int, <span class="at">na.rm=</span>T, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="fu">plot</span>(regrex1<span class="sc">$</span>x, regrex1<span class="sc">$</span>y, <span class="at">ylim=</span>ylim)</span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>pred_ex1 <span class="ot">&lt;-</span> pred_data<span class="sc">$</span>x</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a><span class="fu">matlines</span>(pred_ex1, pred_int, <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>), <span class="at">col=</span><span class="st">&quot;black&quot;</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="fu">matlines</span>(pred_ex1, conf_int, <span class="at">lty=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">2</span>), <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="regression1_files/figure-html/regression1-9-1.png" width="2100" /></p>
+</div>
+<div id="a-second-example" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> A second example</h2>
+<p>Side-by-side comparisons of results of regression analyses provide a
+means for understanding just what is being described by the summary
+statistics. A second example shows how the regression equation and
+goodness-of-fit statistics vary as a function of the strength of the
+relationship between the response and predictor variable.</p>
+<p>Read the second example data set:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># read regrex2.csv</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co"># modify the following path to reflect local files</span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>csv_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/projects/RESS/data/csv_files/&quot;</span></span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>csv_name <span class="ot">&lt;-</span> <span class="st">&quot;regrex2.csv&quot;</span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>csv_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(csv_path, csv_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>regrex2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csv_file) </span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">summary</span>(regrex2)</span></code></pre></div>
+<pre><code>##        e                  x                 y1               y2               y3        
+##  Min.   :-1.66120   Min.   : 0.8347   Min.   : 2.281   Min.   : 2.492   Min.   : 2.598  
+##  1st Qu.:-0.53280   1st Qu.: 3.6437   1st Qu.: 3.830   1st Qu.: 3.766   1st Qu.: 3.840  
+##  Median :-0.02865   Median : 9.8750   Median : 7.006   Median : 6.975   Median : 7.001  
+##  Mean   : 0.00001   Mean   :10.0678   Mean   : 6.971   Mean   : 6.970   Mean   : 6.970  
+##  3rd Qu.: 0.50430   3rd Qu.:14.4428   3rd Qu.: 9.257   3rd Qu.: 8.935   3rd Qu.: 9.084  
+##  Max.   : 2.36790   Max.   :25.0000   Max.   :15.000   Max.   :14.487   Max.   :14.231  
+##        y4               y5               y6        
+##  Min.   : 2.662   Min.   : 1.154   Min.   :-1.766  
+##  1st Qu.: 3.913   1st Qu.: 4.154   1st Qu.: 3.682  
+##  Median : 6.928   Median : 7.278   Median : 6.297  
+##  Mean   : 6.971   Mean   : 6.971   Mean   : 6.970  
+##  3rd Qu.: 9.126   3rd Qu.: 9.036   3rd Qu.: 9.756  
+##  Max.   :14.077   Max.   :16.025   Max.   :18.076</code></pre>
+<p>The variables x and y1 are the same as in the previous example, so as
+a second example look at the relationship between y2 and x:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfcol =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="fu">plot</span>(y1 <span class="sc">~</span> x, <span class="at">data=</span>regrex2, <span class="at">main=</span><span class="st">&quot;Example 1&quot;</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="fu">plot</span>(y2 <span class="sc">~</span> x, <span class="at">data=</span>regrex2, <span class="at">main=</span><span class="st">&quot;Example 2&quot;</span>)</span></code></pre></div>
+<p><img src="regression1_files/figure-html/regression1-12-1.png" width="2700" /></p>
+<p>Get the second regression:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>ex2_lm <span class="ot">&lt;-</span> <span class="fu">lm</span>(y2 <span class="sc">~</span> x, <span class="at">data=</span>regrex2)</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">summary</span>(ex2_lm)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y2 ~ x, data = regrex2)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.83062 -0.26641 -0.01437  0.25222  1.18393 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  2.24810    0.14682   15.31  3.9e-15 ***
+## x            0.46906    0.01222   38.39  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.439 on 28 degrees of freedom
+## Multiple R-squared:  0.9814, Adjusted R-squared:  0.9807 
+## F-statistic:  1474 on 1 and 28 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>And compare it with the first:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">summary</span>(ex1_lm)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x, data = regrex1)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -1.66121 -0.53286 -0.02869  0.50436  2.36786 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  2.24814    0.29365   7.656 2.44e-08 ***
+## x            0.46906    0.02444  19.194  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.8779 on 28 degrees of freedom
+## Multiple R-squared:  0.9294, Adjusted R-squared:  0.9268 
+## F-statistic: 368.4 on 1 and 28 DF,  p-value: &lt; 2.2e-16</code></pre>
+<p>Note that the intercept and slope parameter estimates are identical,
+but all of the measures of goodness-of-fit or of the uncertainty of the
+parameter values (their standard errors) and significance (t-tests and
+p-values) are “better” in the second example. Compare the two regression
+lines and note the differences in the deviations that are being
+minimized.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfcol =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">plot</span>(y1 <span class="sc">~</span> x, <span class="at">data=</span>regrex2, <span class="at">main=</span><span class="st">&quot;Example 1&quot;</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="fu">abline</span>(ex1_lm, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="fu">segments</span>(regrex2<span class="sc">$</span>x, <span class="fu">fitted</span>(ex1_lm), regrex2<span class="sc">$</span>x, regrex2<span class="sc">$</span>y1, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a><span class="fu">plot</span>(y2 <span class="sc">~</span> x, <span class="at">data=</span>regrex2, <span class="at">main=</span><span class="st">&quot;Example 2&quot;</span>)</span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a><span class="fu">abline</span>(ex2_lm, <span class="at">col=</span><span class="st">&quot;blue&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a><span class="fu">segments</span>(regrex2<span class="sc">$</span>x, <span class="fu">fitted</span>(ex2_lm), regrex2<span class="sc">$</span>x, regrex2<span class="sc">$</span>y2, <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<p><img src="regression1_files/figure-html/regression1-15-1.png" width="2700" /></p>
+</div>
+<div id="residual-plots-and-case-wise-statistics" class="section level2"
+number="3.4">
+<h2><span class="header-section-number">3.4</span> Residual plots and
+case-wise statistics</h2>
+<p>There are a number of residual diagnostic plots that can be generated
+to examine the regression results as well as to assess the importance of
+any assumption violations.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="co"># standard regression diagnostics (4-up)</span></span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>oldpar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="fu">plot</span>(ex1_lm, <span class="at">which=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>))</span></code></pre></div>
+<p><img src="regression1_files/figure-html/regression1-16-1.png" width="2700" /></p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">par</span>(oldpar)</span></code></pre></div>
+<p>The residual scatterplot (upper left) shows the relationship between
+the residuals and the fitted values and should show no systematic
+pattern (“meagaphone” or “arch”) that would signal model inadequecy
+(i.e., it should be a featureless cloud of points). The red lowess curve
+helps summarize any trend that might be apparent. The Normal QQ plot
+(upper right) provides a quick look at the distribution of the
+residuals, which should be approximately normal (i.e., the individual
+values should plot along a straight line). Points that plot off the line
+are labeled with their case numbers (i.e. rows in the data frame). The
+two plots on the bottom, of Cook’s distance (lower left) and leverage
+(lower right) provide information on the influence of each observation
+on the overall regression.</p>
+<p><a href="regression1.html">[Back to top]</a></p>
+</div>
+</div>
+<div
+id="iterative-fitting-i.e.-brute-force-optimzation-of-a-regression-equation"
+class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Iterative fitting
+(i.e. brute-force optimzation) of a regression equation</h1>
+<p>Regression equations can also be fit by perturbing (or iteratively
+considering different) regression parameter values, and choosing the
+combination that minimizes the sum of squares of residuals. The
+following code sets up a range of potential regression
+coeffiecient/parameter values that will be interatively considered,
+keeping track of the sum of squares of deviations for each combination
+(expressed as the residual standard error for comparison with the the
+results produced by <code>lm()</code>). (The optimal combination is then
+the one that minimizes the sum of squares.)</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="co"># fit a linear regression equation by</span></span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="co"># minimizing the sum of squared residuals</span></span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a><span class="co"># uses regrex1.csv</span></span>
+<span id="cb28-4"><a href="#cb28-4" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" tabindex="-1"></a><span class="co"># set some constant values</span></span>
+<span id="cb28-6"><a href="#cb28-6" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(regrex2<span class="sc">$</span>y1)</span>
+<span id="cb28-7"><a href="#cb28-7" tabindex="-1"></a>K <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb28-8"><a href="#cb28-8" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" tabindex="-1"></a><span class="co"># intercept values range</span></span>
+<span id="cb28-10"><a href="#cb28-10" tabindex="-1"></a>n_b0 <span class="ot">&lt;-</span> <span class="dv">11</span></span>
+<span id="cb28-11"><a href="#cb28-11" tabindex="-1"></a>b0_min <span class="ot">&lt;-</span> <span class="fl">1.0</span> <span class="co"># 2.00 # 2.24</span></span>
+<span id="cb28-12"><a href="#cb28-12" tabindex="-1"></a>b0_max <span class="ot">&lt;-</span> <span class="fl">3.0</span> <span class="co"># 2.40 # 2.25</span></span>
+<span id="cb28-13"><a href="#cb28-13" tabindex="-1"></a><span class="co"># slope values range</span></span>
+<span id="cb28-14"><a href="#cb28-14" tabindex="-1"></a>n_b1 <span class="ot">&lt;-</span> <span class="dv">11</span></span>
+<span id="cb28-15"><a href="#cb28-15" tabindex="-1"></a>b1_min <span class="ot">&lt;-</span> <span class="fl">0.0</span> <span class="co"># 0.4 # 0.46</span></span>
+<span id="cb28-16"><a href="#cb28-16" tabindex="-1"></a>b1_max <span class="ot">&lt;-</span> <span class="fl">1.0</span> <span class="co"># 0.5 # 0.47</span></span>
+<span id="cb28-17"><a href="#cb28-17" tabindex="-1"></a><span class="co"># coefficents</span></span>
+<span id="cb28-18"><a href="#cb28-18" tabindex="-1"></a>b0 <span class="ot">&lt;-</span> <span class="fu">seq</span>(b0_min, b0_max, <span class="at">len=</span>n_b0)</span>
+<span id="cb28-19"><a href="#cb28-19" tabindex="-1"></a>b1 <span class="ot">&lt;-</span> <span class="fu">seq</span>(b1_min, b1_max, <span class="at">len=</span>n_b1)</span>
+<span id="cb28-20"><a href="#cb28-20" tabindex="-1"></a> </span>
+<span id="cb28-21"><a href="#cb28-21" tabindex="-1"></a><span class="co"># space for residual standard-error values</span></span>
+<span id="cb28-22"><a href="#cb28-22" tabindex="-1"></a>rse <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">nrow=</span>n_b0<span class="sc">*</span>n_b1, <span class="at">ncol=</span><span class="dv">3</span>)</span>
+<span id="cb28-23"><a href="#cb28-23" tabindex="-1"></a><span class="fu">colnames</span>(rse) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;b0&quot;</span>, <span class="st">&quot;b1&quot;</span>, <span class="st">&quot;rse&quot;</span>)</span>
+<span id="cb28-24"><a href="#cb28-24" tabindex="-1"></a></span>
+<span id="cb28-25"><a href="#cb28-25" tabindex="-1"></a><span class="co"># matrix for residual sum of squares</span></span>
+<span id="cb28-26"><a href="#cb28-26" tabindex="-1"></a>rss <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, <span class="at">nrow=</span>n_b0, <span class="at">ncol=</span>n_b1)</span></code></pre></div>
+<p>Now iterate over the combinations of intercept and slope values,
+keeping track of the residual standard errors and drawing the line
+produced by each combination.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="fu">plot</span>(y1 <span class="sc">~</span> x, <span class="at">data=</span>regrex2)</span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_b0) {</span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a>    <span class="cf">for</span> (k <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_b1) {</span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a>        m <span class="ot">&lt;-</span> m <span class="sc">+</span> <span class="dv">1</span></span>
+<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a>        sse <span class="ot">&lt;-</span> <span class="fl">0.0</span></span>
+<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a>        <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n) {</span>
+<span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a>            sse <span class="ot">&lt;-</span> sse <span class="sc">+</span> (regrex2<span class="sc">$</span>y1[i] <span class="sc">-</span> b0[j] <span class="sc">-</span> b1[k]<span class="sc">*</span>regrex2<span class="sc">$</span>x[i])<span class="sc">^</span><span class="dv">2</span></span>
+<span id="cb29-9"><a href="#cb29-9" tabindex="-1"></a>        }</span>
+<span id="cb29-10"><a href="#cb29-10" tabindex="-1"></a>        rss[j, k] <span class="ot">&lt;-</span> sse</span>
+<span id="cb29-11"><a href="#cb29-11" tabindex="-1"></a>        rse[m,<span class="dv">1</span>] <span class="ot">&lt;-</span> b0[j]</span>
+<span id="cb29-12"><a href="#cb29-12" tabindex="-1"></a>        rse[m,<span class="dv">2</span>] <span class="ot">&lt;-</span> b1[k]</span>
+<span id="cb29-13"><a href="#cb29-13" tabindex="-1"></a>        rse[m,<span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(sse<span class="sc">/</span>(n<span class="sc">-</span>K<span class="dv">-1</span>))</span>
+<span id="cb29-14"><a href="#cb29-14" tabindex="-1"></a>        <span class="fu">abline</span>(b0[j], b1[k], <span class="at">col=</span><span class="st">&quot;gray&quot;</span>)</span>
+<span id="cb29-15"><a href="#cb29-15" tabindex="-1"></a>    }</span>
+<span id="cb29-16"><a href="#cb29-16" tabindex="-1"></a>}</span>
+<span id="cb29-17"><a href="#cb29-17" tabindex="-1"></a></span>
+<span id="cb29-18"><a href="#cb29-18" tabindex="-1"></a><span class="co"># find the coefficients that minimize the rse</span></span>
+<span id="cb29-19"><a href="#cb29-19" tabindex="-1"></a>m_min <span class="ot">&lt;-</span> <span class="fu">which.min</span>(rse[,<span class="dv">3</span>])</span>
+<span id="cb29-20"><a href="#cb29-20" tabindex="-1"></a><span class="fu">print</span>(m_min)</span></code></pre></div>
+<pre><code>## [1] 61</code></pre>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(rse[m_min,<span class="dv">1</span>],rse[m_min,<span class="dv">2</span>],rse[m_min,<span class="dv">3</span>]))</span></code></pre></div>
+<pre><code>##        b0        b1       rse 
+## 2.0000000 0.5000000 0.9050813</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># plot the line for the optimal coefficients</span></span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="fu">abline</span>(rse[m_min,<span class="dv">1</span>],rse[m_min,<span class="dv">2</span>], <span class="at">col=</span><span class="st">&quot;purple&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a><span class="co"># plot the OLS regression line</span></span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a><span class="fu">abline</span>(ex1_lm, <span class="at">col=</span><span class="st">&quot;red&quot;</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="regression1_files/figure-html/regression1-18-1.png" width="2100" /></p>
+<p>The <code>which.min()</code> function determines the row in the
+<code>rse</code> matrix of the minimum (i.e. “optimal”) residual
+standard error, and the corresponding parameter values are then printed
+out. The regression line generated by those values is plotted in blue,
+and can be compared with the OLS estimates in red. Pretty close.</p>
+<p>It’s useful to see the residual-sum-of-squares surface, which shows
+graphically how the goodness-of-fit varies as the regression coefficient
+values change.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="fu">image</span>(b0, b1, rss, <span class="at">col  =</span> <span class="fu">gray</span>((<span class="dv">9</span><span class="sc">:</span><span class="dv">64</span>)<span class="sc">/</span><span class="dv">64</span>))</span></code></pre></div>
+<p><img src="regression1_files/figure-html/regression1-19-1.png" width="2100" /></p>
+<p>The values in the <code>rss</code> matrix can be inspected using the
+<code>View()</code> function.</p>
+<p><a href="regression1.html">[Back to top]</a></p>
+</div>
+<div id="examining-the-regression-equation-1" class="section level1"
+number="5">
+<h1><span class="header-section-number">5</span> Examining the
+regression equation</h1>
+<p>Examination of the regression equation involves an assessment of the
+“strength” of the relationship between the response variable and the
+predictor variable(s). Two hypothesis tests are considered:</p>
+<ul>
+<li>a test of the null hypothesis that the proportion of the variance of
+the response variable “explained” by the predictor variable(s) is not
+significant (an <em>F</em>-test, analogous to the one in ANOVA of the
+hypothesis that the group means are not different)</li>
+<li>individual tests of the null hypotheses that the estimated
+regression coefficients (<em>b<sub>0</sub></em>, <em>b<sub>1</sub></em>)
+are equal to zero.</li>
+</ul>
+<p>The two hypotheses are tested by examining the regression equation
+and related statistics</p>
+<ul>
+<li>decomposition of individual deviations</li>
+<li>how strong is the relationship? (<em>F</em>-test,
+<em>R<sup>2</sup></em>)</li>
+<li>are the coefficients significant? (<em>t</em>-tests and standard
+errors of the predictions)</li>
+</ul>
+<p>The fit of the regression model can also be displayed by plotting
+confidence intervals (which allow variability in the regression line to
+be visually assessed) and prediction intervals (which allow variability
+in the data to be assessed).</p>
+<p><a href="regression1.html">[Back to top]</a></p>
+</div>
+<div id="analysis-of-variance" class="section level1" number="6">
+<h1><span class="header-section-number">6</span> Analysis of
+Variance</h1>
+<p>One of the main elements of the output in fitting a regression
+equation is the <em>analysis of variance table</em>, which as sounds,
+has some parallels with “Analysis of Variance” (ANOVA) the procedure for
+testing for equality of group means. In regression analysis, the
+decomposition of the variance of the dependent variable is</p>
+<p>        <em>variance of response = variance “explained” by regression
++ residual variance (noise)</em></p>
+<p>In ANOVA, the total variance of the variable of interest is
+decomposed as</p>
+<p>        <em>total variance = between-group variance + within-group
+variance</em></p>
+<p>If ANOVA is thought of as evaluating how much of the variability of a
+“response” variable can be explained by knowing which group each
+observation belongs to, then the similarity of the analyses can be
+seen.</p>
+<p><a href="regression1.html">[Back to top]</a></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

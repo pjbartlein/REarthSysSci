@@ -1,5 +1,5 @@
 options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, cache.lazy = FALSE, out.width = "80%", out.height = "80%", verbose=TRUE)
+knitr::opts_chunk$set(dev='png', dpi=300, cache.lazy = FALSE, out.width = "80%", out.height = "80%", verbose=TRUE)
 pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 
@@ -68,11 +68,18 @@ tmp_array[tmp_array==fillvalue$value] <- NA
 length(na.omit(as.vector(tmp_array[,,1])))
 
 # levelplot of the slice
+n <- 1
+grid <- expand.grid(lon=lon, lat=lat)
+cutpts <- c(-50,-40,-30,-20,-10,0,10,20,30,40,50)
+levelplot(tmp_array[,, n] ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T, 
+  col.regions=(rev(brewer.pal(10,"RdBu"))), main = "Jan 1901")
+
+# levelplot of the slice
 n <- 1464
 grid <- expand.grid(lon=lon, lat=lat)
 cutpts <- c(-50,-40,-30,-20,-10,0,10,20,30,40,50)
 levelplot(tmp_array[,, n] ~ lon * lat, data=grid, at=cutpts, cuts=11, pretty=T, 
-  col.regions=(rev(brewer.pal(10,"RdBu"))))
+  col.regions=(rev(brewer.pal(10,"RdBu"))), main = "Jan 2022")
 
 # get beginning obs of base period
 begyr <- 1961; endyr <- 1990; nyrs <- endyr - begyr + 1

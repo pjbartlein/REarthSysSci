@@ -27,10 +27,10 @@ navbar:
       href: maps2.html
     - text: "Geospatial analyses"
       href: geospatial.html
-    - text: "Correlation and regression"
-      href: correlation.html
-    - text: "Prediction"
-      href: prediction.html
+    - text: "Regression and correlation"
+      href: regression1.html
+    - text: "Regression 2"
+      href: regression2.html
     - text: "PCA"
       href: pca.html
     - text: "Singular Value Decomposistion"
@@ -41,8 +41,6 @@ navbar:
       href: multivariate.html
     - text: "Time-series analysis"
       href: timeseries.html
-    - text: "Other Languages"
-      href: otherlang.html
     - text: "Other topics"
     - text: "sf / stars / sftime"
       href: sf_stars_sftime.html
