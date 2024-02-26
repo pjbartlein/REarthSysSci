@@ -32,7 +32,7 @@ A couple of illustrations jointly describe the idea of fitting a plane:
 The mathematics behind multiple regression analysis is more complicated than that for bivariate regression, but can be elegantly presented using matrix algebra  
 
 - [matrix algebra](https://pjbartlein.github.io/REarthSysSci/topics/matrix.pdf)
-- [regression analysis in matrix algebra terms](https://pjbartlein.github.io/REarthSysSci/topics/matreg.pdf)
+- [regression analysis in matrix algebra terms](https://pjbartlein.github.io/REarthSysSci/topics/matreg.html)
 
 The following example provide a short illustration of the use of matrix algebra to obtain the regression coefficients.  
 The  example data set for illustrating the use of regression diagnostics (`/Users/bartlein/projects/RESS/data/csv_files/`) is used here, in particular, the multiple regression using `x1` and `x2` as predictors for the response variable `y5`
@@ -133,6 +133,8 @@ If the assumptions are violated, then there may be two consequences--the estimat
 - illustrations using repeated simulations of data sets with built-in assumption violations [[examples]](https://pjbartlein.github.io/REarthSysSci/images/violate1.gif), [[solutions]](https://pjbartlein.github.io/REarthSysSci/images/violate2.gif)
 
 [[Back to top]](regression2.html)
+
+# Example -- NOAA Global Land + Ocean temperature
 
 
 [[Back to top]](regression2.html)
