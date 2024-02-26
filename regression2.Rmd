@@ -24,18 +24,18 @@ Multiple regression is (conceptually) a simple extension of bivariate regression
 
 A couple of illustrations jointly describe the idea of fitting a plane:  
 
-- [fitting a plane using two predictor variables](https://pjbartlein.github.io/GeogDataAnalysis/images/nwk7_1.gif)
-- [one data point and its deviation from the regression plane or response surface](https://pjbartlein.github.io/GeogDataAnalysis/images/mreg.gif)
+- [fitting a plane using two predictor variables](https://pjbartlein.github.io/REarthSysSci/images/nwk7_1.gif)
+- [one data point and its deviation from the regression plane or response surface](https://pjbartlein.github.io/REarthSysSci/images/mreg.gif)
 
 # Fitting a multiple regression equation #
 
 The mathematics behind multiple regression analysis is more complicated than that for bivariate regression, but can be elegantly presented using matrix algebra  
 
-- [matrix algebra](https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.pdf)
-- [regression analysis in matrix algebra terms](https://pjbartlein.github.io/GeogDataAnalysis/topics/matreg.pdf)
+- [matrix algebra](https://pjbartlein.github.io/REarthSysSci/topics/matrix.pdf)
+- [regression analysis in matrix algebra terms](https://pjbartlein.github.io/REarthSysSci/topics/matreg.pdf)
 
 The following example provide a short illustration of the use of matrix algebra to obtain the regression coefficients.  
-The  example data set for illustrating the use of regression diagnostics [[regrex3.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/regrex3.csv) is used here, in particular, the multiple regression using `x1` and `x2` as predictors for the response variable `y5`
+The  example data set for illustrating the use of regression diagnostics (`/Users/bartlein/projects/RESS/data/csv_files/`) is used here, in particular, the multiple regression using `x1` and `x2` as predictors for the response variable `y5`
 
 Read the data:
 
@@ -109,5 +109,30 @@ head(cbind(yhat,lm1$fitted.values))
 ```
 
 In addition to being able to efficiently represent the derivation of terms and thier properties in regression analysis in general, matrix algebra also provides a an efficient way of doing the actual calculations.
+
+[[Back to top]](regression2.html)
+
+# Regression Assumptions #
+
+The basic regression model (as well as more complicated ones) have certain underlying assumptions, violations of which have an impact on the optimality of the fitted model, i.e., the extent to which the model and its parameters represent the best model that can be fit, that is, the one that performs the best in the tasks of representing the relationship between the response variable and the predictor variable(s), or predicting future values of the response variable given new values of the predictor variables.  
+
+The main assumptions that underlie regression analysis:
+
+- the prediction errors or residuals are assumed to be independent, identically normally distributed random variables, with a mean of 0 and a standard deviation of *s*,
+- the *X*'s (predictor or independent variables) are known without error,
+- the *X*'s are not correlated.
+- the correct model has been specified (i.e. the right predictors have been included in the model.
+
+If the assumptions are not violated, then the Gauss-Markov theorem indicates that the usual OLS estimates are optimal in the sense of being unbiased and having minimum variance. If one or more of the assumptions are violated, then estimated regression coefficients may be biased (i.e. they may be systematically in error), and not minimum variance (i.e. there may be more uncertainty in the coefficients than is apparent from the results).
+
+## Consequences of assumption violations ##
+
+If the assumptions are violated, then there may be two consequences--the estimated coefficients may be biased (i.e. systematically wrong), and they may longer have minimum variance (i.e. their uncertainty increases).
+
+- the notion of variability of the regression coefficients
+- illustrations using repeated simulations of data sets with built-in assumption violations [[examples]](https://pjbartlein.github.io/REarthSysSci/images/violate1.gif), [[solutions]](https://pjbartlein.github.io/REarthSysSci/images/violate2.gif)
+
+[[Back to top]](regression2.html)
+
 
 [[Back to top]](regression2.html)

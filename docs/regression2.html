@@ -493,6 +493,15 @@ class="toc-section-number">1</span> Introduction</a></li>
 id="toc-fitting-a-multiple-regression-equation"><span
 class="toc-section-number">2</span> Fitting a multiple regression
 equation</a></li>
+<li><a href="#regression-assumptions"
+id="toc-regression-assumptions"><span
+class="toc-section-number">3</span> Regression Assumptions</a>
+<ul>
+<li><a href="#consequences-of-assumption-violations"
+id="toc-consequences-of-assumption-violations"><span
+class="toc-section-number">3.1</span> Consequences of assumption
+violations</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -519,10 +528,10 @@ algebra.</p>
 plane:</p>
 <ul>
 <li><a
-href="https://pjbartlein.github.io/GeogDataAnalysis/images/nwk7_1.gif">fitting
+href="https://pjbartlein.github.io/REarthSysSci/images/nwk7_1.gif">fitting
 a plane using two predictor variables</a></li>
 <li><a
-href="https://pjbartlein.github.io/GeogDataAnalysis/images/mreg.gif">one
+href="https://pjbartlein.github.io/REarthSysSci/images/mreg.gif">one
 data point and its deviation from the regression plane or response
 surface</a></li>
 </ul>
@@ -536,20 +545,19 @@ complicated than that for bivariate regression, but can be elegantly
 presented using matrix algebra</p>
 <ul>
 <li><a
-href="https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.pdf">matrix
+href="https://pjbartlein.github.io/REarthSysSci/topics/matrix.pdf">matrix
 algebra</a></li>
 <li><a
-href="https://pjbartlein.github.io/GeogDataAnalysis/topics/matreg.pdf">regression
+href="https://pjbartlein.github.io/REarthSysSci/topics/matreg.pdf">regression
 analysis in matrix algebra terms</a></li>
 </ul>
 <p>The following example provide a short illustration of the use of
 matrix algebra to obtain the regression coefficients.<br />
 The example data set for illustrating the use of regression diagnostics
-<a
-href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/regrex3.csv">[regrex3.csv]</a>
-is used here, in particular, the multiple regression using
-<code>x1</code> and <code>x2</code> as predictors for the response
-variable <code>y5</code></p>
+(<code>/Users/bartlein/projects/RESS/data/csv_files/</code>) is used
+here, in particular, the multiple regression using <code>x1</code> and
+<code>x2</code> as predictors for the response variable
+<code>y5</code></p>
 <p>Read the data:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># read regrex3.csv</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co"># modify the following path to reflect local files</span></span>
@@ -664,6 +672,55 @@ terms and thier properties in regression analysis in general, matrix
 algebra also provides a an efficient way of doing the actual
 calculations.</p>
 <p><a href="regression2.html">[Back to top]</a></p>
+</div>
+<div id="regression-assumptions" class="section level1" number="3">
+<h1><span class="header-section-number">3</span> Regression
+Assumptions</h1>
+<p>The basic regression model (as well as more complicated ones) have
+certain underlying assumptions, violations of which have an impact on
+the optimality of the fitted model, i.e., the extent to which the model
+and its parameters represent the best model that can be fit, that is,
+the one that performs the best in the tasks of representing the
+relationship between the response variable and the predictor
+variable(s), or predicting future values of the response variable given
+new values of the predictor variables.</p>
+<p>The main assumptions that underlie regression analysis:</p>
+<ul>
+<li>the prediction errors or residuals are assumed to be independent,
+identically normally distributed random variables, with a mean of 0 and
+a standard deviation of <em>s</em>,</li>
+<li>the <em>X</em>’s (predictor or independent variables) are known
+without error,</li>
+<li>the <em>X</em>’s are not correlated.</li>
+<li>the correct model has been specified (i.e. the right predictors have
+been included in the model.</li>
+</ul>
+<p>If the assumptions are not violated, then the Gauss-Markov theorem
+indicates that the usual OLS estimates are optimal in the sense of being
+unbiased and having minimum variance. If one or more of the assumptions
+are violated, then estimated regression coefficients may be biased
+(i.e. they may be systematically in error), and not minimum variance
+(i.e. there may be more uncertainty in the coefficients than is apparent
+from the results).</p>
+<div id="consequences-of-assumption-violations" class="section level2"
+number="3.1">
+<h2><span class="header-section-number">3.1</span> Consequences of
+assumption violations</h2>
+<p>If the assumptions are violated, then there may be two
+consequences–the estimated coefficients may be biased
+(i.e. systematically wrong), and they may longer have minimum variance
+(i.e. their uncertainty increases).</p>
+<ul>
+<li>the notion of variability of the regression coefficients</li>
+<li>illustrations using repeated simulations of data sets with built-in
+assumption violations <a
+href="https://pjbartlein.github.io/REarthSysSci/images/violate1.gif">[examples]</a>,
+<a
+href="https://pjbartlein.github.io/REarthSysSci/images/violate2.gif">[solutions]</a></li>
+</ul>
+<p><a href="regression2.html">[Back to top]</a></p>
+<p><a href="regression2.html">[Back to top]</a></p>
+</div>
 </div>
 
 
