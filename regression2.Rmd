@@ -1,0 +1,113 @@
+---
+title: "Regression 2 -- Multiple regression"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r regression1-1, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2024, but may undergo further edits.</span></p>
+
+# Introduction #
+
+Multiple regression is (conceptually) a simple extension of bivariate regression, in which the influence of more than one predictor variable on the response can be estimated.   For the case with two predictor variables, the analysis can be thought of as involving the fitting of a plane (as opposed to a line in the bivariate regression case), and the equations for the OLS estimates of the regression equations are only a little more complicated algebraically.  For three or more predictors, the algebra is also quite simple, but requires the use of matrix algebra.
+
+A couple of illustrations jointly describe the idea of fitting a plane:  
+
+- [fitting a plane using two predictor variables](https://pjbartlein.github.io/GeogDataAnalysis/images/nwk7_1.gif)
+- [one data point and its deviation from the regression plane or response surface](https://pjbartlein.github.io/GeogDataAnalysis/images/mreg.gif)
+
+# Fitting a multiple regression equation #
+
+The mathematics behind multiple regression analysis is more complicated than that for bivariate regression, but can be elegantly presented using matrix algebra  
+
+- [matrix algebra](https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.pdf)
+- [regression analysis in matrix algebra terms](https://pjbartlein.github.io/GeogDataAnalysis/topics/matreg.pdf)
+
+The following example provide a short illustration of the use of matrix algebra to obtain the regression coefficients.  
+The  example data set for illustrating the use of regression diagnostics [[regrex3.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/regrex3.csv) is used here, in particular, the multiple regression using `x1` and `x2` as predictors for the response variable `y5`
+
+Read the data:
+
+```{r regression1-2}
+# read regrex3.csv
+# modify the following path to reflect local files
+csv_path <- "/Users/bartlein/projects/RESS/data/csv_files/"
+csv_name <- "regrex3.csv"
+csv_file <- paste(csv_path, csv_name, sep="")
+regrex3 <- read.csv(csv_file) 
+```
+
+First, take a look at the different variables in the example data set.
+
+```{r matreg}
+# regrex3
+attach(regrex3)
+summary(regrex3)
+head(cbind(y5,x1,x2))
+```
+
+Create an *n* row by 1 column matrix (i.e. a column vector) called **y**:
+
+```{r create y}
+# create the column vector y
+n <- length(y5)
+y <- matrix(y5, nrow=n, ncol=1)
+dim(y)
+head(y)
+```
+
+Create an *n* row by *p*+1 matrix, **X**, with 1's in the first column, and `x1` and `x2` in the second and third columns:
+
+```{r create x}
+# create the predictor-variable matrix
+X <- matrix(cbind(rep(1,n),x1,x2), nrow=n, ncol=3)
+dim(X)
+head(X)
+```
+
+Now use matrix algebra to calculate **b**, the *p*+1 row by 1 column matrix (e.g. a column vector) of regression coefficients, *b*<sub>0</sub>, *b*<sub>1</sub> and *b*<sub>2</sub>:  **b** = (**X'X**)<sup>-1</sup>**X'y**.
+
+```{r b}
+# calculate the regression coefficients
+b <- solve(t(X) %*% X) %*% (t(X) %*% y)
+print(b)
+dim(b)
+```
+
+The matrix functions and operators used in the above expression include `t()`, which transposes a matrix, `%*%`, which is the matrix multiplication operator, and `solve()`, which inverts a matrix.
+
+Compare these values with those obtained using the `lm()` function:
+
+```{r lm1}
+# linear model with lm()
+lm1 <- lm(y5 ~ x1+x2, data=regrex3)
+lm1
+```
+
+Now calculate the fitted values (*y-hats*), i.e. \(\mathbf{\widehat{y}}\) = **Xb**:
+
+```{r matrix fitted values}
+# matrix fitted values
+yhat <- X %*% b
+```
+
+and compare these with those obtained using the `lm()` function
+
+```{r compare fitted}
+head(cbind(yhat,lm1$fitted.values))
+```
+
+In addition to being able to efficiently represent the derivation of terms and thier properties in regression analysis in general, matrix algebra also provides a an efficient way of doing the actual calculations.
+
+[[Back to top]](regression2.html)

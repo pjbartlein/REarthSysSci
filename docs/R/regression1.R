@@ -1,8 +1,3 @@
-options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE)
-pdf.options(useDingbats = TRUE)
-klippy::klippy(position = c('top', 'right'))
-
 # read regrex1.csv
 # modify the following path to reflect local files
 csv_path <- "/Users/bartlein/projects/RESS/data/csv_files/"

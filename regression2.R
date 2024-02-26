@@ -1,0 +1,572 @@
+# https://data.giss.nasa.gov/modelforce/ghgases/
+# https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.txt
+
+# https://www.climate.gov/news-features/understanding-climate/climate-variability-oceanic-nino-index
+# https://origin.cpc.ncep.noaa.gov/products/analysis_monitoring/ensostuff/ONI_v5.php
+# https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt
+
+library(ggplot2)
+
+# read NOAA monthly temperature, ONI (ENSO), and CO2
+# read GCDv3 sites
+# modify the following path to reflect local files
+csv_path <- "/Users/bartlein/projects/RESS/data/csv_files/"
+csv_name <- "NOAA_Globe_T_ENSO_CO2_1950-2023.csv"
+csv_file <- paste(csv_path, csv_name, sep="")
+NOAA <- read.csv(csv_file) 
+str(NOAA)
+summary(NOAA)
+tail(NOAA, 100)
+
+# recode ONI_code as a factor
+NOAA$ONI_code <- factor(NOAA$ONI_code, levels = c("La Niña", "Neutral", "El Niño"))
+
+# plots
+plot(T_LandOcean ~ YrMn, type = "l", col = "gray70", lwd = 1.5, data = NOAA)
+points(T_LandOcean ~ YrMn, pch = 16, cex =0.8, data = NOAA)
+
+# ggplot2 version
+ggplot(data = NOAA, aes(x=YrMn, y=T_LandOcean)) + 
+  geom_line(color = "gray70") +
+  geom_point(size = 2) + 
+  scale_x_continuous(breaks = seq(1950, 2025, by = 10)) +
+  scale_y_continuous(limits = c(-0.75, 1.25), breaks = seq(-1.75, 1.25, by = 0.25),
+                     minor_breaks = seq(-0.75, 1.25, by = 0.05)) +
+  labs(title = paste("NOAA Global Average Temperature Anomalies (","°","C)", sep = ""), 
+       x = "Year", y = "Land + Ocean") + 
+  theme_bw()
+
+
+# remove records with missing CO2
+NOAA2 <- NOAA[!is.na(NOAA[, 10]), ]
+summary(NOAA2)
+str(NOAA2)
+tail(NOAA2)
+class(NOAA2)
+
+# plots
+plot(T_LandOcean ~ YrMn, type = "l", col = "gray70", lwd = 1.5, data = NOAA2)
+points(T_LandOcean ~ YrMn, pch = 16, cex =0.8, data = NOAA2)
+
+
+# ggplot2 version
+ggplot(data = NOAA, aes(x=YrMn, y=T_LandOcean)) + 
+  geom_line(color = "gray70") +
+  geom_point(size = 2) + 
+  scale_x_continuous(breaks = seq(1960, 2025, by = 10)) +
+  scale_y_continuous(limits = c(-0.75, 1.25), breaks = seq(-1.75, 1.25, by = 0.25), 
+                     minor_breaks = seq(-0.75, 1.25, by = 0.05)) +
+  labs(title = paste("NOAA Global Average Temperature Anomalies (","°","C)", sep = ""), 
+       x = "Year", y = "Land + Ocean") + 
+  theme_bw()
+
+# simple linear regression (lm_01) ============================================
+
+# simple linear (OLS) regression line
+lm_01 <- lm(T_LandOcean ~ YrMn, data = NOAA)
+lm_01
+summary(lm_01)
+AIC(lm_01)
+
+attributes(lm_01)
+
+# regression diagnostics
+oldpar <- par(mfrow = c(2, 2))
+plot(lm_01, which=c(1,2,4))
+acf(lm_01$residuals)
+par(oldpar)
+
+# examine the fitted model -- residuals
+plot(T_LandOcean ~ YrMn, data = NOAA, type="n")
+abline(lm_01)
+segments(NOAA$YrMn, fitted(lm_01), NOAA$YrMn, NOAA$T_LandOcean, col = "gray")
+points(T_LandOcean ~ YrMn, data = NOAA, pch = 16, cex = 0.5)
+
+# examine the fitted model -- prediction and confidence limits
+plot(T_LandOcean ~ YrMn, data = NOAA, type="n")
+abline(lm_01)
+points(T_LandOcean ~ YrMn, data = NOAA, pch = 16, cex = 0.5)
+pred_data <- data.frame(YrMn=NOAA$YrMn)
+pred_int <- predict(lm_01, int="p", newdata=pred_data)
+conf_int <- predict(lm_01, int="c", newdata=pred_data)
+matlines(pred_data$YrMn, pred_int, lty=c(1,2,2), col="black")
+matlines(pred_data$YrMn, conf_int, lty=c(1,2,2), col="orange")
+
+# examine the regression equation again, by ENSO state
+pal <- c("blue", "gray", "red")
+plot(T_LandOcean ~ YrMn, data = NOAA, type="n")
+abline(lm_01)
+segments(NOAA$YrMn, fitted(lm_01), NOAA$YrMn, NOAA$T_LandOcean, col = "gray")
+points(T_LandOcean ~ YrMn, data = NOAA, pch = 16, cex = 0.8, col = pal[ONI_code])
+
+# ggplot2 plot with regression line
+ggplot(data = NOAA, aes(x = YrMn, y = T_LandOcean)) + 
+  geom_line(color = "gray70") +
+  geom_point(size = 1, color = "gray70") + 
+  geom_smooth(method = "lm", se = TRUE, level = 0.95) +
+  geom_abline(intercept = lm_01$coefficients[1], slope = lm_01$coefficients[2], color = "red") +
+  scale_x_continuous(breaks = seq(1950, 2025, by = 10)) +
+  scale_y_continuous(limits = c(-0.75, 1.25), breaks = seq(-1.75, 1.25, by = 0.25), 
+                     minor_breaks = seq(-0.75, 1.25, by = 0.05)) +
+  labs(title = paste("NOAA Global Average Temperature Anomalies (","°","C)", sep = ""), 
+       x = "Year", y = "Land + Ocean") + 
+  theme_bw() 
+
+# residual grouped boxplot
+opar <- par(mfrow=c(1,3))
+boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
+par(opar)
+
+
+# points colored by ENSO state
+ggplot() + 
+  geom_line(data = NOAA, aes(x = YrMn, y = T_LandOcean)) +
+  geom_point(data = NOAA, aes(x = YrMn, y = T_LandOcean, color = ONI_code), size = 2) + 
+  geom_point(data = NOAA, aes(x = YrMn, y = T_LandOcean), color = "black", shape = 1, size = 2) +
+  scale_color_manual(values = c("blue", "gray", "red"),
+                     limits = c("La Niña", "Neutral", "El Niño")) +
+  scale_x_continuous(breaks = seq(1950, 2025, by = 10)) +
+  scale_y_continuous(limits = c(-0.75, 1.25), breaks = seq(-1.75, 1.25, by = 0.25), 
+                     minor_breaks = seq(-0.75, 1.25, by = 0.05)) +
+  labs(title = paste("NOAA Global Average Temperature Anomalies (","°","C)", sep = ""), 
+       x = "Year", y = "Land + Ocean") + 
+  guides(color = guide_legend(override.aes = list(size = 3))) +
+  theme_bw()
+
+# residuals
+ggplot() + 
+  geom_line(data = NOAA, aes(x = YrMn, y = residuals(lm_01))) +
+  geom_point(data = NOAA, aes(x = YrMn, y = residuals(lm_01), color = ONI_code), size = 2) + 
+  geom_point(data = NOAA, aes(x = YrMn, y = residuals(lm_01)), color = "black", shape = 1, size = 2) +
+  scale_color_manual(values = c("blue", "gray", "red"),
+                     limits = c("La Niña", "Neutral", "El Niño")) +
+  scale_x_continuous(breaks = seq(1950, 2025, by = 10)) +
+  scale_y_continuous(limits = c(-0.75, 1.25), breaks = seq(-1.75, 1.25, by = 0.25)
+                     , minor_breaks = seq(-0.75, 1.25, by = 0.05)) +
+  labs(title = paste("NOAA Global Average Temperature Anomalies (","°","C)", sep = ""), 
+       x = "Year", y = "Land + Ocean") + 
+  guides(color = guide_legend(override.aes = list(size = 3))) +
+  theme_bw()
+
+# dummy-variable regression, intercepts only (lm_02) ==========================
+
+# dummy-variable regression
+lm_02 <- lm(T_LandOcean ~ YrMn + ONI_code, data = NOAA)
+lm_02
+summary(lm_02)
+print(c(AIC(lm_01), AIC(lm_02)))
+anova(lm_01, lm_02)
+
+# # regression diagnostics
+# oldpar <- par(mfrow = c(2, 2))
+# plot(lm_02, which=c(1,2,4,5))
+# par(oldpar)
+# 
+# acf(lm_01$residuals) 
+
+# display the fitted lines
+plot(T_LandOcean ~ YrMn, data = NOAA, type="n")
+points(T_LandOcean ~ YrMn, data = NOAA, pch = 16, cex = 0.5)
+legend("bottomright", legend=c("La Niña", "Neutral", "El Niño"), lty=c(1,1,1), lwd=3, cex=1, col=c("blue","gray","red"))
+
+lines(fitted(lm_02)[NOAA$ONI_code == "La Niña"] ~ NOAA2$YrMn[NOAA$ONI_code == "La Niña"], lwd=2, col="blue")
+lines(fitted(lm_02)[NOAA$ONI_code == "Neutral"] ~ NOAA2$YrMn[NOAA$ONI_code == "Neutral"], lwd=2, col="gray")
+lines(fitted(lm_02)[NOAA$ONI_code == "El Niño"] ~ NOAA2$YrMn[NOAA$ONI_code == "El Niño"], lwd=2, col="red")
+
+# residual grouped boxplot
+opar <- par(mfrow=c(1,3))
+boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
+boxplot(residuals(lm_02) ~ NOAA$ONI_code, ylim=c(-1,1))
+par(opar)
+
+# dummy-variable regression, slope and intercept varying (lm_03 ================
+
+# dummy-variable regression, slope and intercept varying
+lm_03 <- lm(T_LandOcean ~ YrMn * ONI_code, data = NOAA)
+lm_03
+summary(lm_03)
+print(c(AIC(lm_01), AIC(lm_02), AIC(lm_03)))
+anova(lm_02, lm_03)
+
+# # regression diagnostics
+# oldpar <- par(mfrow = c(2, 2))
+# plot(lm_03, which=c(1,2,4,5))
+# par(oldpar)
+# 
+# acf(lm_01$residuals) 
+
+# display the fitted lines
+plot(T_LandOcean ~ YrMn, data = NOAA, type="n")
+points(T_LandOcean ~ YrMn, data = NOAA, pch = 16, cex = 0.5)
+legend("bottomright", legend=c("La Niña", "Neutral", "El Niño"), lty=c(1,1,1), lwd=3, cex=1, col=c("blue","gray","red"))
+
+lines(fitted(lm_03)[NOAA$ONI_code == "La Niña"] ~ NOAA$YrMn[NOAA$ONI_code == "La Niña"], lwd=2, col="blue")
+lines(fitted(lm_03)[NOAA$ONI_code == "Neutral"] ~ NOAA$YrMn[NOAA$ONI_code == "Neutral"], lwd=2, col="gray")
+lines(fitted(lm_03)[NOAA$ONI_code == "El Niño"] ~ NOAA$YrMn[NOAA$ONI_code == "El Niño"], lwd=2, col="red")
+
+# residual grouped boxplot
+opar <- par(mfrow=c(1,3))
+boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
+boxplot(residuals(lm_02) ~ NOAA$ONI_code, ylim=c(-1,1))
+boxplot(residuals(lm_03) ~ NOAA$ONI_code, ylim=c(-1,1))
+par(opar)
+
+# list coefficients
+lm_03$coefficients
+
+# intercepts and slopes lm_03
+ln_intercept <- lm_03$coeff[1]
+ln_slope <- lm_03$coeff[2]
+n_intercept <- lm_03$coeff[1] + lm_03$coeff[3]
+n_slope <- lm_03$coeff[2] + lm_03$coeff[5]
+en_intercept <- lm_03$coeff[1] + lm_03$coeff[4]
+en_slope <- lm_03$coeff[2] + lm_03$coeff[6]
+
+# ggplot2 plot with regression lines
+ggplot(data = NOAA, aes(x = YrMn, y = T_LandOcean)) + 
+  geom_line(color = "gray70") +
+  geom_abline(intercept = ln_intercept, slope = ln_slope, color = "blue") +
+  geom_abline(intercept = n_intercept, slope = n_slope, color = "gray40") +
+  geom_abline(intercept = en_intercept, slope = en_slope, color = "red") +
+  geom_point(data = NOAA, aes(x=YrMn, y=T_LandOcean, color = ONI_code), size = 2) + 
+  geom_point(data = NOAA, aes(x=YrMn, y=T_LandOcean), color = "black",shape = 1, size = 2 ) +
+  scale_color_manual(values = c("blue", "gray", "red"),
+                     limits = c("La Niña", "Neutral", "El Niño")) + 
+  scale_x_continuous(breaks = seq(1950, 2025, by = 10)) +
+  scale_y_continuous(limits = c(-0.75, 1.25), breaks = seq(-1.75, 1.25, by = 0.25),
+                     minor_breaks = seq(-0.75, 1.25, by = 0.05)) +
+  labs(title = paste("NOAA Global Average Temperature Anomalies (","°","C)", sep = ""), 
+       x = "Year", y = "Land + Ocean") + 
+  theme_bw() 
+
+# ===========================
+
+plot(CO2_mean ~ YrMn, data = NOAA2, pch = 16, cex = 0.5)
+plot(CO2_deseas ~ YrMn, data = NOAA2, pch = 16, cex = 0.5)
+plot(CO2_local_anm ~ YrMn, data = NOAA2, pch = 16, cex = 0.5)
+
+# plots
+plot(T_LandOcean ~ CO2_mean, type = "l", col = "gray70", lwd = 1.5, data = NOAA2)
+points(T_LandOcean ~ CO2_mean, pch = 16, cex =0.8, data = NOAA2)
+
+plot(T_LandOcean ~ CO2_deseas, type = "l", col = "gray70", lwd = 1.5, data = NOAA2)
+points(T_LandOcean ~ CO2_deseas, pch = 16, cex =0.8, data = NOAA2)
+
+plot(T_LandOcean ~ CO2_mean, pch = 16, cex =0.8, data = NOAA2)
+plot(T_LandOcean ~ CO2_deseas, pch = 16, cex =0.8, data = NOAA2)
+
+cor(NOAA2$CO2_mean, NOAA2$T_LandOcean)
+cor(NOAA2$CO2_deseas, NOAA2$T_LandOcean)
+
+# simple rergression again, NOAA2 data ========================================
+
+# simple linear (OLS) regression line, only with NOAA2
+lm_04 <- lm(T_LandOcean ~ YrMn, data = NOAA2)
+lm_04
+summary(lm_04)
+AIC(lm_04)
+
+# regression diagnostics
+oldpar <- par(mfrow = c(2, 2))
+plot(lm_04, which=c(1,2,4))
+acf(residuals(lm_04))
+par(oldpar)
+
+# plot(NOAA2$CO2_local_anm, residuals(lm_04))
+# plot(NOAA2$CO2_local_anm, NOAA2$CO2_mean)
+
+# simple linear regression, CO2 as predictor ==================================
+
+# simple linear (OLS) regression line
+lm_05 <- lm(T_LandOcean ~ CO2_deseas, data = NOAA2)
+lm_05
+summary(lm_05)
+AIC(lm_05)
+
+# regression diagnostics
+oldpar <- par(mfrow = c(2, 2))
+plot(lm_05, which=c(1,2,4))
+acf(residuals(lm_05))
+par(oldpar)
+
+
+print(c(AIC(lm_04), AIC(lm_05)))
+anova(lm_04, lm_05)
+
+# points colored by ENSO state
+ggplot() + 
+  geom_abline(intercept = lm_05$coeff[1], slope = lm_05$coeff[2], color = "black") +
+  geom_point(data = NOAA2, aes(x = CO2_deseas, y = T_LandOcean, color = ONI_code), size = 2) + 
+  geom_point(data = NOAA2, aes(x = CO2_deseas, y = T_LandOcean), color = "black", shape = 1, size = 2) +
+  scale_color_manual(values = c("blue", "gray", "red"),
+                     limits = c("La Niña", "Neutral", "El Niño")) +
+  scale_x_continuous(breaks = seq(315, 430, by = 15)) +
+  scale_y_continuous(limits = c(-0.75, 1.25), breaks = seq(-1.75, 1.25, by = 0.25),
+                     minor_breaks = seq(-0.75, 1.25, by = 0.05)) +
+  labs(title = paste("NOAA Global Average Temperature Anomalies (","°","C)", sep = ""), 
+       x = expression(CO[2]~" "(ppm)), y = "Land + Ocean") + 
+  guides(color = guide_legend(override.aes = list(size = 3))) +
+  theme_bw()
+
+# dummary-variable regression, intercepts only, CO2 as predictor ==============
+
+# dummy-variable regression
+lm_06 <- lm(T_LandOcean ~ CO2_deseas + ONI_code, data = NOAA2)
+lm_06
+summary(lm_06)
+print(c(AIC(lm_05), AIC(lm_06)))
+anova(lm_05, lm_06)
+
+# # regression diagnostics
+# oldpar <- par(mfrow = c(2, 2))
+# plot(lm_02, which=c(1,2,4,5))
+# par(oldpar)
+# 
+# acf(lm_01$residuals) 
+
+# display the fitted lines
+plot(T_LandOcean ~ CO2_deseas, data = NOAA2, type="n")
+points(T_LandOcean ~ CO2_deseas, data = NOAA2, pch = 16, cex = 0.5)
+legend("bottomright", legend=c("La Niña", "Neutral", "El Niño"), lty=c(1,1,1), lwd=3, cex=1, col=c("blue","gray","red"))
+
+lines(fitted(lm_06)[NOAA2$ONI_code == "La Niña"] ~ NOAA2$CO2_deseas[NOAA2$ONI_code == "La Niña"], lwd=2, col="blue")
+lines(fitted(lm_06)[NOAA2$ONI_code == "Neutral"] ~ NOAA2$CO2_deseas[NOAA2$ONI_code == "Neutral"], lwd=2, col="gray")
+lines(fitted(lm_06)[NOAA2$ONI_code == "El Niño"] ~ NOAA2$CO2_deseas[NOAA2$ONI_code == "El Niño"], lwd=2, col="red")
+
+# list coefficients
+lm_06$coefficients
+
+# intercepts and slopes lm_06
+ln_intercept <- lm_06$coeff[1]
+ln_slope <- lm_06$coeff[2]
+n_intercept <- lm_06$coeff[1] + lm_06$coeff[3]
+n_slope <- lm_06$coeff[2] 
+en_intercept <- lm_06$coeff[1] + lm_06$coeff[4]
+en_slope <- lm_06$coeff[2] 
+
+# ggplot2 plot with regression line
+ggplot(data = NOAA2, aes(x = CO2_deseas, y = T_LandOcean)) + 
+  geom_abline(intercept = ln_intercept, slope = ln_slope, color = "blue") +
+  geom_abline(intercept = n_intercept, slope = n_slope, color = "gray40") +
+  geom_abline(intercept = en_intercept, slope = en_slope, color = "red") +
+  geom_point(data = NOAA2, aes(x=CO2_deseas, y=T_LandOcean, color = ONI_code), size = 2) + 
+  geom_point(data = NOAA2, aes(x=CO2_deseas, y=T_LandOcean), color = "black",shape = 1, size = 2 ) +
+  scale_color_manual(values = c("blue", "gray", "red"),
+                     limits = c("La Niña", "Neutral", "El Niño")) + 
+  scale_x_continuous(breaks = seq(315, 430, by = 15)) +
+  scale_y_continuous(limits = c(-0.75, 1.25), breaks = seq(-1.75, 1.25, by = 0.25), 
+                     minor_breaks = seq(-0.75, 1.25, by = 0.05)) +
+  labs(title = paste("NOAA Global Average Temperature Anomalies (","°","C)", sep = ""), 
+       x = expression(CO[2]~" "(ppm)), y = "Land + Ocean") + 
+  theme_bw()
+
+# scatter plot with CO2-fitted values ===============================
+
+ln_fit <- ln_intercept + ln_slope*NOAA2$CO2_deseas
+n_fit <- n_intercept + n_slope*NOAA2$CO2_deseas
+en_fit <- en_intercept + n_slope*NOAA2$CO2_deseas
+
+# ggplot2 plot with fitted values line
+ggplot(data = NOAA2, aes(x = YrMn, y = T_LandOcean)) + 
+  geom_point(aes(x = NOAA2$YrMn, y = ln_fit), color = "blue", shape = 4, size = 0.5) +
+  geom_point(aes(x = NOAA2$YrMn, y = n_fit), color = "gray", shape = 4, size = 0.5) +
+  geom_point(aes(x = NOAA2$YrMn, y = en_fit), color = "red", shape = 4, size = 0.5) +
+  geom_point(data = NOAA2, aes(x=YrMn, y=T_LandOcean, color = ONI_code), size = 2) + 
+  geom_point(data = NOAA2, aes(x=YrMn, y=T_LandOcean), color = "black",shape = 1, size = 2 ) +
+  scale_color_manual(values = c("blue", "gray", "red"),
+                     limits = c("La Niña", "Neutral", "El Niño")) + 
+  scale_x_continuous(breaks = seq(1960, 2025, by = 10)) +
+  scale_y_continuous(limits = c(-0.75, 1.25), breaks = seq(-1.75, 1.25, by = 0.25), 
+                     minor_breaks = seq(-0.75, 1.25, by = 0.05)) +
+  labs(title = paste("NOAA Global Average Temperature Anomalies (","°","C)", sep = ""), 
+       x = "Year", y = "Land + Ocean") + 
+  theme_bw()
+
+# polynomial fit (lm_07) ======================================================
+
+# polynomial fit
+
+# simple linear (OLS) regression line
+lm_07 <- lm(T_LandOcean ~ poly(YrMn, 2, raw = TRUE), data = NOAA)
+lm_07
+summary(lm_07)
+AIC(lm_07)
+
+# regression diagnostics
+oldpar <- par(mfrow = c(2, 2))
+plot(lm_07, which=c(1,2,4))
+acf(lm_07$residuals)
+par(oldpar)
+
+
+# examine the regression equation again, by ENSO state
+pal <- c("blue", "gray", "red")
+plot(T_LandOcean ~ YrMn, data = NOAA, type="n")
+segments(NOAA$YrMn, fitted(lm_07), NOAA$YrMn, NOAA$T_LandOcean, col = "gray")
+lines(NOAA$YrMn, fitted(lm_07))
+points(T_LandOcean ~ YrMn, data = NOAA, pch = 16, cex = 0.8, col = pal[ONI_code])
+
+# ggplot2 plot with regression line
+ggplot(data = NOAA, aes(x = YrMn, y = T_LandOcean)) + 
+  geom_line(color = "gray70") +
+  geom_point(data = NOAA, aes(x = YrMn, y = T_LandOcean, color = ONI_code), size = 2) + 
+  geom_point(data = NOAA, aes(x = YrMn, y = T_LandOcean), color = "black", shape = 1, size = 2) +
+  scale_color_manual(values = c("blue", "gray", "red"),
+                     limits = c("La Niña", "Neutral", "El Niño")) +
+  geom_smooth(method = "lm", se = TRUE, level = 0.95) +
+  geom_smooth(method = "loess", se = TRUE, level = 0.95, col = "purple") +
+  geom_line(aes(x = YrMn, y = fitted(lm_07)), color = "black", size = 1) +
+  scale_x_continuous(breaks = seq(1950, 2025, by = 10)) +
+  scale_y_continuous(limits = c(-0.75, 1.25), breaks = seq(-1.75, 1.25, by = 0.25), 
+                     minor_breaks = seq(-0.75, 1.25, by = 0.05)) +
+  labs(title = paste("NOAA Global Average Temperature Anomalies (","°","C)", sep = ""), 
+       x = "Year", y = "Land + Ocean") + 
+  theme_bw() 
+
+# residual grouped boxplot
+opar <- par(mfrow=c(1,3))
+boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
+boxplot(residuals(lm_07) ~ NOAA$ONI_code, ylim=c(-1,1))
+par(opar)
+
+# polynomial dummy-variable regression (lm_08)
+
+# polynomial fit
+
+# simple linear (OLS) regression line
+lm_08 <- lm(T_LandOcean ~ poly(YrMn, 2, raw = TRUE) + ONI_code, data = NOAA)
+lm_08
+summary(lm_08)
+AIC(lm_08)
+
+# regression diagnostics
+oldpar <- par(mfrow = c(2, 2))
+plot(lm_08, which=c(1,2,4))
+acf(lm_08$residuals)
+par(oldpar)
+
+# list coefficients
+lm_08$coefficients
+
+ln_fit <- lm_08$coeff[1] + lm_08$coeff[2] * NOAA2$YrMn + lm_08$coeff[3] * NOAA2$YrMn^2
+n_fit <- (lm_08$coeff[1] + lm_08$coeff[4]) + lm_08$coeff[2] * NOAA2$YrMn + lm_08$coeff[3] * NOAA2$YrMn^2
+en_fit <- (lm_08$coeff[1] + lm_08$coeff[5]) + lm_08$coeff[2] * NOAA2$YrMn + lm_08$coeff[3] * NOAA2$YrMn^2
+
+# ggplot2 plot with fitted values line
+ggplot(data = NOAA2, aes(x = YrMn, y = T_LandOcean)) + 
+  geom_line(aes(x = NOAA2$YrMn, y = ln_fit), color = "blue", size = 1.0) +
+  geom_line(aes(x = NOAA2$YrMn, y = n_fit), color = "gray", size = 1.0) +
+  geom_line(aes(x = NOAA2$YrMn, y = en_fit), color = "red", size = 1.0) +
+  geom_point(data = NOAA2, aes(x=YrMn, y=T_LandOcean, color = ONI_code), size = 2) + 
+  geom_point(data = NOAA2, aes(x=YrMn, y=T_LandOcean), color = "black",shape = 1, size = 2 ) +
+  scale_color_manual(values = c("blue", "gray", "red"),
+                     limits = c("La Niña", "Neutral", "El Niño")) + 
+  scale_x_continuous(breaks = seq(1960, 2025, by = 10)) +
+  scale_y_continuous(limits = c(-0.75, 1.25), breaks = seq(-1.75, 1.25, by = 0.25), 
+                     minor_breaks = seq(-0.75, 1.25, by = 0.05)) +
+  labs(title = paste("NOAA Global Average Temperature Anomalies (","°","C)", sep = ""), 
+       x = "Year", y = "Land + Ocean") + 
+  theme_bw()
+
+print(c(AIC(lm_01), AIC(lm_03), AIC(lm_08)))
+anova(lm_07, lm_08)
+anova(lm_01, lm_08)
+
+# residual grouped boxplot
+opar <- par(mfrow=c(1,3))
+boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
+boxplot(residuals(lm_02) ~ NOAA$ONI_code, ylim=c(-1,1))
+boxplot(residuals(lm_08) ~ NOAA$ONI_code, ylim=c(-1,1))
+par(opar)
+
+
+# autocorrelated residuals
+
+# regression with autocorrelated residuals
+
+# make the dummy variables
+dum_ln <- rep(0, length(NOAA$YrMn))
+dum_n <- rep(0, length(NOAA$YrMn))
+dum_en <- rep(0, length(NOAA$YrMn))
+dum_ln[NOAA$ONI_code == "La Niña"] <- 1
+dum_n[NOAA$ONI_code == "Neutral"] <- 1
+dum_en[NOAA$ONI_code == "El Niño"] <- 1
+head(cbind(dum_ln, dum_n, dum_en), 30)
+
+# make regression dataframe
+xreg <- data.frame(NOAA$YrMn, NOAA$YrMn^2, dum_n, dum_en) # note: leave dum_ln out
+names(xreg) <- c("YrMn", "YrMn^2", "Neutral", "El Niño")
+head(xreg)
+
+# time series regression
+tsreg_01 <- arima(NOAA$T_LandOcean, order = c(2, 0, 0),  seasonal = list(order = c(2, 0, 0), period = 12), xreg = xreg, include.mean = TRUE)
+# tsreg_01 <- arima(NOAA$T_LandOcean, order = c(4, 0, 0), xreg = xreg, include.mean = TRUE)
+# tsreg_01 <- arima(NOAA$T_LandOcean, order = c(2, 0, 2), xreg = xreg, include.mean = TRUE)
+tsreg_01
+
+checkresiduals(tsreg_01, test = "LB", lag = 12)
+
+tsreg_01$coef
+
+c1 <- 5
+ln_fit <- tsreg_01$coef[c1] + tsreg_01$coef[c1 + 1] * NOAA2$YrMn + tsreg_01$coef[c1 + 2] * NOAA2$YrMn^2
+n_fit <- (tsreg_01$coef[c1] + tsreg_01$coef[c1 + 3]) + tsreg_01$coef[c1 + 1] * NOAA2$YrMn + tsreg_01$coef[c1 + 2] * NOAA2$YrMn^2
+en_fit <- (tsreg_01$coef[c1] + tsreg_01$coef[c1 + 4]) + tsreg_01$coef[c1 + 1] * NOAA2$YrMn + tsreg_01$coef[c1 + 2] * NOAA2$YrMn^2
+head(cbind(ln_fit, n_fit, en_fit))
+
+# ggplot2 plot with fitted values line
+ggplot(data = NOAA2, aes(x = YrMn, y = T_LandOcean)) + 
+  geom_line(aes(x = NOAA2$YrMn, y = ln_fit), color = "blue", size = 1.0) +
+  geom_line(aes(x = NOAA2$YrMn, y = n_fit), color = "gray", size = 1.0) +
+  geom_line(aes(x = NOAA2$YrMn, y = en_fit), color = "red", size = 1.0) +
+  geom_point(data = NOAA2, aes(x=YrMn, y=T_LandOcean, color = ONI_code), size = 2) + 
+  geom_point(data = NOAA2, aes(x=YrMn, y=T_LandOcean), color = "black",shape = 1, size = 2 ) +
+  scale_color_manual(values = c("blue", "gray", "red"),
+                     limits = c("La Niña", "Neutral", "El Niño")) + 
+  scale_x_continuous(breaks = seq(1960, 2025, by = 10)) +
+  scale_y_continuous(limits = c(-0.75, 1.25), breaks = seq(-1.75, 1.25, by = 0.25)
+                     , minor_breaks = seq(-0.75, 1.25, by = 0.05)) +
+  labs(title = paste("NOAA Global Average Temperature Anomalies (","°","C)", sep = ""), 
+       x = "Year", y = "Land + Ocean") + 
+  theme_bw()
+
+# residual diagnostics
+oldpar <- par(mfrow = c(2, 2))
+plot(fitted(tsreg_01), tsreg_01$residuals)
+qqnorm(tsreg_01$residuals)
+qqline(tsreg_01$residuals)
+acf(tsreg_01$residuals)
+par(oldpar)
+
+print(c(AIC(lm_01), AIC(lm_08), AIC(tsreg_01)))
+
+# residual grouped boxplot
+opar <- par(mfrow=c(1,3))
+boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
+boxplot(residuals(lm_08) ~ NOAA$ONI_code, ylim=c(-1,1))
+boxplot(residuals(tsreg_01) ~ NOAA$ONI_code, ylim=c(-1,1))
+par(opar)
+
+plot(NOAA$YrMn, residuals(lm_08), type = "l", col = "magenta")
+lines(NOAA$YrMn, tsreg_01$residuals, type = "l", col = "green")
+
+# use auto.arima
+class(xreg)
+dim(xreg)
+xreg_matrix <- as.matrix(xreg)
+dim(xreg_matrix)
+
+tsreg_02 <- auto.arima(NOAA$T_LandOcean, xreg = xreg_matrix, stationary = TRUE, seasonal = TRUE, stepwise = FALSE, allowmean = TRUE)
+tsreg_02
+
+# residual diagnostics
+oldpar <- par(mfrow = c(2, 2))
+plot(fitted(tsreg_02), tsreg_02$residuals)
+qqnorm(tsreg_02$residuals)
+qqline(tsreg_02$residuals)
+acf(tsreg_02$residuals)
+par(oldpar)
+
+checkresiduals(tsreg_01, test = "LB", lag = 12)
+checkresiduals(tsreg_02, test = "LB", lag = 12)
+

@@ -1,8 +1,3 @@
-options(width = 105)
-knitr::opts_chunk$set(dev='png', dpi=300, cache.lazy = FALSE, out.width = "80%", out.height = "80%", verbose=TRUE)
-pdf.options(useDingbats = TRUE)
-klippy::klippy(position = c('top', 'right'))
-
 # load the ncdf4 package
 library(ncdf4)
 library(CFtime)
