@@ -540,7 +540,7 @@ methods in data analysis. Although the computations and analysis that
 underlie regression analysis appear more complicated than those for
 other procedures, simple analyses are quite straightforward. (Most of
 this discussion was taken from
-(<code>https://pjbartlein.github.io/GeogDataAnalysis/lec12.html</code>)</p>
+(<code>https://pjbartlein.github.io/GeogDataAnalysis/regression1.html</code>)</p>
 <p>The general model that underlies regression analysis is</p>
 <p>        <em>data = predictable component + unpredictable
 component</em></p>
@@ -563,7 +563,7 @@ sums of squares)</li>
 </ul>
 <p>can be found <a
 href="https://pjbartlein.github.io/REarthSysSci/topics/regression1.pdf">[here]</a>.</p>
-<p><a href="lec12.html">[Back to top]</a></p>
+<p><a href="regression1.html">[Back to top]</a></p>
 </div>
 <div id="example" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Example</h1>
@@ -643,7 +643,7 @@ plot using the <code>abline()</code> function</p>
 minimized in the analysis can be visualized using the
 <code>segments()</code> function, which as might be expected plots a
 line between two points, i.e. between the predicted value of
-<code>y</code> (retrived using the <code>fitted()</code> function from
+<code>y</code> (retrieved using the <code>fitted()</code> function from
 <code>ex1_lm</code>) and the observed value, at each <code>x</code>
 value.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">plot</span> (y <span class="sc">~</span> x, <span class="at">data=</span>regrex1)</span>
@@ -806,9 +806,9 @@ any assumption violations.</p>
 <span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="fu">plot</span>(ex1_lm, <span class="at">which=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">4</span>,<span class="dv">5</span>))</span></code></pre></div>
 <p><img src="regression1_files/figure-html/regression1-16-1.png" width="2700" /></p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">par</span>(oldpar)</span></code></pre></div>
-<p>The residual scatterplot (upper left) shows the relationship between
+<p>The residual scatter plot (upper left) shows the relationship between
 the residuals and the fitted values and should show no systematic
-pattern (“meagaphone” or “arch”) that would signal model inadequecy
+pattern (“megaphone” or “arch”) that would signal model inadequacy
 (i.e., it should be a featureless cloud of points). The red lowess curve
 helps summarize any trend that might be apparent. The Normal QQ plot
 (upper right) provides a quick look at the distribution of the
@@ -830,7 +830,7 @@ class="section level1" number="4">
 considering different) regression parameter values, and choosing the
 combination that minimizes the sum of squares of residuals. The
 following code sets up a range of potential regression
-coeffiecient/parameter values that will be interatively considered,
+coefficient/parameter values that will be iteratively considered,
 keeping track of the sum of squares of deviations for each combination
 (expressed as the residual standard error for comparison with the the
 results produced by <code>lm()</code>). (The optimal combination is then
@@ -851,7 +851,7 @@ the one that minimizes the sum of squares.)</p>
 <span id="cb28-14"><a href="#cb28-14" tabindex="-1"></a>n_b1 <span class="ot">&lt;-</span> <span class="dv">11</span></span>
 <span id="cb28-15"><a href="#cb28-15" tabindex="-1"></a>b1_min <span class="ot">&lt;-</span> <span class="fl">0.0</span> <span class="co"># 0.4 # 0.46</span></span>
 <span id="cb28-16"><a href="#cb28-16" tabindex="-1"></a>b1_max <span class="ot">&lt;-</span> <span class="fl">1.0</span> <span class="co"># 0.5 # 0.47</span></span>
-<span id="cb28-17"><a href="#cb28-17" tabindex="-1"></a><span class="co"># coefficents</span></span>
+<span id="cb28-17"><a href="#cb28-17" tabindex="-1"></a><span class="co"># coefficients</span></span>
 <span id="cb28-18"><a href="#cb28-18" tabindex="-1"></a>b0 <span class="ot">&lt;-</span> <span class="fu">seq</span>(b0_min, b0_max, <span class="at">len=</span>n_b0)</span>
 <span id="cb28-19"><a href="#cb28-19" tabindex="-1"></a>b1 <span class="ot">&lt;-</span> <span class="fu">seq</span>(b1_min, b1_max, <span class="at">len=</span>n_b1)</span>
 <span id="cb28-20"><a href="#cb28-20" tabindex="-1"></a> </span>

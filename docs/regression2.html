@@ -738,7 +738,7 @@ function</p>
 ## 5 121.61691 121.61691
 ## 6  48.11730  48.11730</code></pre>
 <p>In addition to being able to efficiently represent the derivation of
-terms and thier properties in regression analysis in general, matrix
+terms and their properties in regression analysis in general, matrix
 algebra also provides a an efficient way of doing the actual
 calculations.</p>
 <p><a href="regression2.html">[Back to top]</a></p>
@@ -833,14 +833,14 @@ trend in global temperatures is not mechanistically controlled by time,
 but is controlled by CO<sub>2</sub>, we’ll also use the monthly
 Scripps/NOAA CO<sub>2</sub> trends data <a
 href="https://gml.noaa.gov/ccgg/trends/">[https://gml.noaa.gov/ccgg/trends/]</a>
-(March 1958 onwareds). The data can be found here: <a
+(March 1958 onward). The data can be found here: <a
 href="https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.txt">[NOAA
 CO<sub>2</sub> Trends]</a>. The input data set
 (<code>NOAA_Globe_T_ENSO_CO2_1950-2023.csv</code>) contains the year,
 month, decimal year, temperatures of the land, ocean, and land plus
 ocean, the ONI monthly total value, the anomaly and code, and the
 monthly mean CO<sub>2</sub>, the deseasonalized CO<sub>2</sub> value,
-and thier differnce (the “local” CO<sub>2</sub> anomaly.)</p>
+and their difference (the “local” CO<sub>2</sub> anomaly.)</p>
 <div id="read-the-noaa-data" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Read the NOAA
 data</h2>
@@ -897,7 +897,7 @@ data</h2>
 ##  Max.   : 3.52000  
 ##  NA&#39;s   :98</code></pre>
 <p>Note the missing CO<sub>2</sub> data prior to 1958.</p>
-<p>Recode the ONI_code variable, a character on input, in to a factor
+<p>Decode the ONI_code variable, a character on input, in to a factor
 and order the factors from “La Niña” to “El Niño” (with “Neutral” in the
 middle.</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># recode ONI_code as a factor</span></span>
@@ -919,10 +919,10 @@ middle.</p>
 <span id="cb31-9"><a href="#cb31-9" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Year&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Land + Ocean&quot;</span>) <span class="sc">+</span> </span>
 <span id="cb31-10"><a href="#cb31-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <p><img src="regression2_files/figure-html/regression2-14-1.png" width="2100" /></p>
-<p>Even at this point, there’s some visual evidece that the relationship
-is curvilinear, with the slope of the trend increasing over time. We’ll
-postpone dealing with that for a little while.</p>
-<p>For later use, create another dataframe, removing the observations
+<p>Even at this point, there’s some visual evidence that the
+relationship is curvilinear, with the slope of the trend increasing over
+time. We’ll postpone dealing with that for a little while.</p>
+<p>For later use, create another data frame, removing the observations
 with missing CO<sub>2</sub> data.</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="co"># remove records with missing CO2</span></span>
 <span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a>NOAA2 <span class="ot">&lt;-</span> NOAA[<span class="sc">!</span><span class="fu">is.na</span>(NOAA[, <span class="dv">10</span>]), ]</span>
@@ -977,7 +977,7 @@ number="4.2">
 <h2><span class="header-section-number">4.2</span> Simple linear
 regression (lm_01)</h2>
 <p>First, do a simple linear regression with <code>YrMn</code> as the
-precitor and land plus ocean temperatures <code>T_LandOcean</code> as
+predictor and land plus ocean temperatures <code>T_LandOcean</code> as
 the response.</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="co"># simple linear (OLS) regression line</span></span>
 <span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a>lm_01 <span class="ot">&lt;-</span> <span class="fu">lm</span>(T_LandOcean <span class="sc">~</span> YrMn, <span class="at">data =</span> NOAA)</span>
@@ -1006,7 +1006,7 @@ the response.</p>
 good: the <em>R<sup>2</sup></em> value is 0.8135, which is almost
 identical to the adjusted <em>R<sup>2</sup></em>, which also
 incorporates the automatic increase in <em>R<sup>2</sup></em> that
-occurs as more predictors are added. The Akaike Information Critereon
+occurs as more predictors are added. The Akaike Information Criterion
 (AIC) (-803.5893 here( is a similar statistic that trades off the
 goodness of fit again the number of parameters that have to be
 estimated. In practice we would choose the model with the lowest AIC
@@ -1040,7 +1040,7 @@ regression line.</p>
 farther away from the centroid of the data. The fitted line always goes
 through the centroid of the data (the mean of the response and the mean
 of the predictor), which acts more-or-less as a “pivot” and so it makes
-sense that the uncertaintis are greater the farther away from that
+sense that the uncertainties are greater the farther away from that
 centroid one goes.</p>
 <p>The assumptions can be checked using a few diagnostic plots:</p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="co"># regression diagnostics</span></span>
@@ -1069,7 +1069,7 @@ class="section level3" number="4.2.1">
 influence of ENSO on the regression model</h3>
 <p>The potential influence of ENSO on the trend in the data can be
 illustrated by simply labeling the points by the ONI_code values, red
-for El Niño, blue for La Niña, and gray for Neutral condiions:</p>
+for El Niño, blue for La Niña, and gray for Neutral conditions:</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="co"># examine the regression equation again, by ENSO state</span></span>
 <span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a>pal <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;blue&quot;</span>, <span class="st">&quot;gray&quot;</span>, <span class="st">&quot;red&quot;</span>)</span>
 <span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a><span class="fu">plot</span>(T_LandOcean <span class="sc">~</span> YrMn, <span class="at">data =</span> NOAA, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
@@ -1078,8 +1078,8 @@ for El Niño, blue for La Niña, and gray for Neutral condiions:</p>
 <span id="cb46-6"><a href="#cb46-6" tabindex="-1"></a><span class="fu">points</span>(T_LandOcean <span class="sc">~</span> YrMn, <span class="at">data =</span> NOAA, <span class="at">pch =</span> <span class="dv">16</span>, <span class="at">cex =</span> <span class="fl">0.8</span>, <span class="at">col =</span> pal[ONI_code])</span></code></pre></div>
 <p><img src="regression2_files/figure-html/regression2-20-1.png" width="2100" /></p>
 <p>It’s easy to see that many positive residuals are red, and that many
-negative residuals are blue, suggesting that the regression line
-underpredicts during El Niño conditions and overpredicts during La Niña
+negative residuals are blue, suggesting that the regression line under
+predicts during El Niño conditions and over predicts during La Niña
 conditions.</p>
 <p>Here’s a <code>{ggplot2}</code> package version of the labeled
 plot:</p>
@@ -1119,22 +1119,22 @@ plot:</p>
 <p>The plot of the residuals from the first model versus time again
 hints and some non-linearity in the trend and the sorting of the
 residual values by ENSO state is quite evident. To look at this further,
-we can use a grouped boxplot:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="co"># residual grouped boxplot</span></span>
+we can use a grouped box plot:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="co"># residual grouped box plot</span></span>
 <span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span>
 <span id="cb49-3"><a href="#cb49-3" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">residuals</span>(lm_01) <span class="sc">~</span> NOAA<span class="sc">$</span>ONI_code, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
 <span id="cb49-4"><a href="#cb49-4" tabindex="-1"></a><span class="fu">par</span>(opar)</span></code></pre></div>
 <p><img src="regression2_files/figure-html/regression2-23-1.png" width="2100" /></p>
-<p>From the boxplots, it’s possible to infer that the median of the
+<p>From the box plots, it’s possible to infer that the median of the
 residuals during El Niño conditions is about 0.1 <sup>o</sup>C higher
 than during La Niña” conditions, while the median during Neutral
 conditions is very close to 0.0.</p>
 <p>The assumptions that underlie ordinary least-squares regression
-essentially state that there should be no discernable pattern in the
+essentially state that there should be no discernible pattern in the
 residuals, apart from being normally distributed random numbers. When
 that assumption is satisfied, then the Gauss-Markov theorem assures us
 that there is no better way to estimate the regression coefficients.
-Here, howver, there are clear patterns in the residuals: they have a
+Here, however, there are clear patterns in the residuals: they have a
 slight curvilinear trend, are autocorrelated, but mainly show
 considerable bias related to ENSO state.</p>
 <p><a href="regression2.html">[Back to top]</a></p>
@@ -1146,10 +1146,10 @@ number="4.3">
 regression (lm_02)</h2>
 <p>One approach for easily learning about the consequences of a “group
 membership” variable like ENSO state as represented by the
-<code>ONI_code</code> is the unfortuantely named “dummy variable
+<code>ONI_code</code> is the unfortunately named “dummy variable
 regression.” The name arises from the generation of various “dummy” (or
 indicator) variables, that can be employed to estimate separate
-intercept and slope values for the differnt groups. For example, a set
+intercept and slope values for the different groups. For example, a set
 of variables for examining the variations in intercepts across groups
 would take on the value 0.0, except when the particular ENSO state
 occurs, when it would be set equal to 1.0, and likewise, to examine
@@ -1168,7 +1168,7 @@ interpret the results, the intercept and slope for La Niña conditions
 would simply be the overall intercept and slope of the fitted model. The
 intercept for El Niño conditions would be the sum of the overall
 intercept and the coefficient of the El Niño-condition (0 or 1)
-intercept dummy variable, whille the slope for El Niño conditions would
+intercept dummy variable, while the slope for El Niño conditions would
 be the sum of the overall slope and the coefficient of the El Niño
 condition (0 or <code>YrMn</code>) slope dummy variable. Dummy-variable
 regression is much more elegant than its name implies.</p>
@@ -1235,8 +1235,8 @@ regression model (lm_01).</p>
 <span id="cb56-7"><a href="#cb56-7" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">fitted</span>(lm_02)[NOAA<span class="sc">$</span>ONI_code <span class="sc">==</span> <span class="st">&quot;Neutral&quot;</span>] <span class="sc">~</span> NOAA<span class="sc">$</span>YrMn[NOAA<span class="sc">$</span>ONI_code <span class="sc">==</span> <span class="st">&quot;Neutral&quot;</span>], <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&quot;gray&quot;</span>)</span>
 <span id="cb56-8"><a href="#cb56-8" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">fitted</span>(lm_02)[NOAA<span class="sc">$</span>ONI_code <span class="sc">==</span> <span class="st">&quot;El Niño&quot;</span>] <span class="sc">~</span> NOAA<span class="sc">$</span>YrMn[NOAA<span class="sc">$</span>ONI_code <span class="sc">==</span> <span class="st">&quot;El Niño&quot;</span>], <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
 <p><img src="regression2_files/figure-html/regression2-27-1.png" width="2100" /></p>
-<p>Here is comparison of the grouped boxplots for the two models:</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a><span class="co"># residual grouped boxplot</span></span>
+<p>Here is comparison of the grouped box plots for the two models:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a><span class="co"># residual grouped box plot</span></span>
 <span id="cb57-2"><a href="#cb57-2" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span>
 <span id="cb57-3"><a href="#cb57-3" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">residuals</span>(lm_01) <span class="sc">~</span> NOAA<span class="sc">$</span>ONI_code, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
 <span id="cb57-4"><a href="#cb57-4" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">residuals</span>(lm_02) <span class="sc">~</span> NOAA<span class="sc">$</span>ONI_code, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
@@ -1293,7 +1293,7 @@ vary. (Note the subtle difference, an <code>*</code> instead of a
 ## 1    884 18.519                           
 ## 2    882 18.424  2  0.095464 2.2851 0.1024</code></pre>
 <p>The AIC value for this third (intercept + slope varying model) is a
-little lower than for the second, but the analysis of variance suggets
+little lower than for the second, but the analysis of variance suggest
 there’s not much difference in the explained variance. (Small
 <em>F</em>-statistic, large “p*-value.)</p>
 <p>The fitted lines show little variation:</p>
@@ -1323,7 +1323,7 @@ explanation.</p>
 <span id="cb65-10"><a href="#cb65-10" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">fitted</span>(lm_02)[NOAA<span class="sc">$</span>ONI_code <span class="sc">==</span> <span class="st">&quot;Neutral&quot;</span>] <span class="sc">~</span> NOAA<span class="sc">$</span>YrMn[NOAA<span class="sc">$</span>ONI_code <span class="sc">==</span> <span class="st">&quot;Neutral&quot;</span>], <span class="at">lwd=</span><span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">2</span>,<span class="at">col=</span><span class="st">&quot;black&quot;</span>)</span>
 <span id="cb65-11"><a href="#cb65-11" tabindex="-1"></a><span class="fu">lines</span>(<span class="fu">fitted</span>(lm_02)[NOAA<span class="sc">$</span>ONI_code <span class="sc">==</span> <span class="st">&quot;El Niño&quot;</span>] <span class="sc">~</span> NOAA<span class="sc">$</span>YrMn[NOAA<span class="sc">$</span>ONI_code <span class="sc">==</span> <span class="st">&quot;El Niño&quot;</span>], <span class="at">lwd=</span><span class="dv">1</span>, <span class="at">lty =</span> <span class="dv">2</span>,<span class="at">col=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
 <p><img src="regression2_files/figure-html/regression2-33-1.png" width="2100" /></p>
-<p>With negledgable improvement in the goodness of fit of
+<p>With negligible improvement in the goodness of fit of
 <code>lm_03</code>, and no practical differences in the curves, there
 seems to be little reason to declare the model where both intercept and
 slope vary among ENSO states as any better than the one where just the
@@ -1342,7 +1342,7 @@ know that in fact, it’s the level of CO<sub>2</sub> and other greenhouse
 gasses (GHGs) that are responsible for the temperature increase. The
 NOAA data set from Mauna Loa contains both the mean monthly values of
 CO<sub>2</sub> (plotted in red below) and a “deseasonalized” value (that
-takes out the prominant annual cycle in the CO<sub>2</sub> data related
+takes out the prominent annual cycle in the CO<sub>2</sub> data related
 to the “respiration” of the Northern Hemisphere biosphere, plotted in
 black.) There is some spatial variability inn monthly CO<sub>2</sub>
 values, with the Northern and Southern Hemispheres being “antiphased”,
@@ -1355,7 +1355,7 @@ use the deseasonalized values as a potential predictor.</p>
 class="section level2" number="5.1">
 <h2><span class="header-section-number">5.1</span> Simple linear
 regression, CO<sub>2</sub> as a predictor (lm_05)</h2>
-<p>For comparison, using now the <code>NOAA2</code> dataframe, in which
+<p>For comparison, using now the <code>NOAA2</code> data frame, in which
 the earlier months when CO<sub>2</sub> data were not yet available, the
 simple linear model with <code>YrMn</code> as a predictor is:</p>
 <div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="co"># simple linear (OLS) regression line, only with NOAA2</span></span>
@@ -1519,7 +1519,7 @@ dummy-variable regression performs better. Here’s a plot”</p>
 <p><img src="regression2_files/figure-html/regression2-42-1.png" width="2100" /></p>
 <p>The CO<sub>2</sub> have an evident non-linear trend, while the
 relationship with temperature seems quite linear. Recalling that there
-is a slight tendancy in the relationship of temperature with time to be
+is a slight tendency in the relationship of temperature with time to be
 slightly curvilinear, this suggests global temperatures indeed have a
 curvilinear as opposed to linear trend. An interesting addition to a
 scatter plot of temperature vs. time, is the fitted values of the
@@ -1629,10 +1629,10 @@ ENSO states that the linear regression line did. Here’s a
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;
 ## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="regression2_files/figure-html/regression2-47-1.png" width="2100" />
-And the residual grouped boxplot shows that, realtive to the original
+And the residual grouped box plot shows that, relative to the original
 model <code>lm_01</code> the variability of the residuals is smaller,
 but they are still biased by ENSO state:</p>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" tabindex="-1"></a><span class="co"># residual grouped boxplot</span></span>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" tabindex="-1"></a><span class="co"># residual grouped box plot</span></span>
 <span id="cb99-2"><a href="#cb99-2" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span>
 <span id="cb99-3"><a href="#cb99-3" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">residuals</span>(lm_01) <span class="sc">~</span> NOAA<span class="sc">$</span>ONI_code, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
 <span id="cb99-4"><a href="#cb99-4" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">residuals</span>(lm_07) <span class="sc">~</span> NOAA<span class="sc">$</span>ONI_code, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
@@ -1738,7 +1738,7 @@ class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="#cb1
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <div class="sourceCode" id="cb114"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" tabindex="-1"></a><span class="co"># residual grouped boxplot</span></span>
+class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" tabindex="-1"></a><span class="co"># residual grouped box plot</span></span>
 <span id="cb114-2"><a href="#cb114-2" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span>
 <span id="cb114-3"><a href="#cb114-3" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">residuals</span>(lm_01) <span class="sc">~</span> NOAA<span class="sc">$</span>ONI_code, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
 <span id="cb114-4"><a href="#cb114-4" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">residuals</span>(lm_02) <span class="sc">~</span> NOAA<span class="sc">$</span>ONI_code, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
@@ -1761,7 +1761,7 @@ ENSO SST variability is all about. However, the autocorrelation does
 violate the OLS assumptions. The autocorrelation can be explicitly
 accounted for (and hopefully removed) by simultaneously fitting a
 “Box-Jenkins” type of time series model to the data while fitting the
-polynomial dummy-variable regression. This can be accomplshed using the
+polynomial dummy-variable regression. This can be accomplished using the
 ‘arima()’ function from the base <code>{stats}</code> package. The
 process requires a little more set-up, but is not difficult.</p>
 <p>Box-Jenkins, or “ARIMA” (autoregressive integrated moving-average)
@@ -1789,9 +1789,9 @@ class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="#cb1
 <span id="cb116-8"><a href="#cb116-8" tabindex="-1"></a><span class="co"># head(cbind(dum_ln, dum_n, dum_en), 30)</span></span></code></pre></div>
 <p>Note that we made dummy variables for all three ENSO states, but only
 two will be included in the model to avoid collinearity. Next, make a
-dataframe of the the regression predictors, <code>xreg</code>:</p>
+data frame of the the regression predictors, <code>xreg</code>:</p>
 <div class="sourceCode" id="cb117"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" tabindex="-1"></a><span class="co"># make regression dataframe</span></span>
+class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" tabindex="-1"></a><span class="co"># make regression data frame</span></span>
 <span id="cb117-2"><a href="#cb117-2" tabindex="-1"></a>xreg <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(NOAA<span class="sc">$</span>YrMn, NOAA<span class="sc">$</span>YrMn<span class="sc">^</span><span class="dv">2</span>, dum_n, dum_en) <span class="co"># note: leave dum_ln out</span></span>
 <span id="cb117-3"><a href="#cb117-3" tabindex="-1"></a><span class="fu">names</span>(xreg) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;YrMn&quot;</span>, <span class="st">&quot;YrMn^2&quot;</span>, <span class="st">&quot;Neutral&quot;</span>, <span class="st">&quot;El Niño&quot;</span>)</span>
 <span id="cb117-4"><a href="#cb117-4" tabindex="-1"></a><span class="fu">head</span>(xreg)</span></code></pre></div>
@@ -1901,9 +1901,9 @@ terms;</p>
 <div class="sourceCode" id="cb130"><pre
 class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="#cb130-1" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(<span class="fu">AIC</span>(lm_01), <span class="fu">AIC</span>(lm_08), <span class="fu">AIC</span>(tsreg_01)))</span></code></pre></div>
 <pre><code>## [1]  -803.5893 -1171.7138 -1634.2587</code></pre>
-<p>Here are the residual grouped boxplots:</p>
+<p>Here are the residual grouped box plots:</p>
 <div class="sourceCode" id="cb132"><pre
-class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" tabindex="-1"></a><span class="co"># residual grouped boxplot</span></span>
+class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" tabindex="-1"></a><span class="co"># residual grouped box plot</span></span>
 <span id="cb132-2"><a href="#cb132-2" tabindex="-1"></a>opar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</span>
 <span id="cb132-3"><a href="#cb132-3" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">residuals</span>(lm_01) <span class="sc">~</span> NOAA<span class="sc">$</span>ONI_code, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>
 <span id="cb132-4"><a href="#cb132-4" tabindex="-1"></a><span class="fu">boxplot</span>(<span class="fu">residuals</span>(lm_08) <span class="sc">~</span> NOAA<span class="sc">$</span>ONI_code, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>))</span>

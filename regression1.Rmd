@@ -20,7 +20,7 @@ klippy::klippy(position = c('top', 'right'))
 
 # Introduction #
 
-*Regression analysis* aims at constructing relationships between a single dependent or response variable and one or more independent or predictor variables, and is one of the more widely used methods in data analysis. Although the computations and analysis that underlie regression analysis appear more complicated than those for other procedures, simple analyses are quite straightforward. (Most of this discussion was taken from (`https://pjbartlein.github.io/GeogDataAnalysis/lec12.html`)
+*Regression analysis* aims at constructing relationships between a single dependent or response variable and one or more independent or predictor variables, and is one of the more widely used methods in data analysis. Although the computations and analysis that underlie regression analysis appear more complicated than those for other procedures, simple analyses are quite straightforward. (Most of this discussion was taken from (`https://pjbartlein.github.io/GeogDataAnalysis/regression1.html`)
 
 The general model that underlies regression analysis is
 
@@ -38,7 +38,7 @@ Details of regression analysis, including:
 
 can be found [[here]](https://pjbartlein.github.io/REarthSysSci/topics/regression1.pdf).
 
-[[Back to top]](lec12.html)
+[[Back to top]](regression1.html)
 
 # Example #
 
@@ -88,7 +88,7 @@ plot(y ~ x, data=regrex1)
 abline(ex1_lm, col="red", lwd=2)
 ```
  
-The individual "deviations" (one per observation) that are being minimized in the analysis can be visualized using the `segments()` function, which as might be expected plots a line between two points, i.e. between the predicted value of `y` (retrived using the `fitted()` function from `ex1_lm`) and the observed value, at each `x` value. 
+The individual "deviations" (one per observation) that are being minimized in the analysis can be visualized using the `segments()` function, which as might be expected plots a line between two points, i.e. between the predicted value of `y` (retrieved using the `fitted()` function from `ex1_lm`) and the observed value, at each `x` value. 
 
 ```{r regression1-7, include=TRUE}
 plot (y ~ x, data=regrex1)
@@ -186,13 +186,13 @@ plot(ex1_lm, which=c(1,2,4,5))
 par(oldpar)
 ```
 
-The residual scatterplot (upper left) shows the relationship between the residuals and the fitted values and should show no systematic pattern ("meagaphone" or "arch") that would signal model inadequecy (i.e., it should be a featureless cloud of points).  The red lowess curve helps summarize any trend that might be apparent.  The Normal QQ plot (upper right) provides a quick look at the distribution of the residuals, which should be approximately normal (i.e., the individual values should plot along a straight line).  Points that plot off the line are labeled with their case numbers (i.e. rows in the data frame).  The two plots on the bottom, of Cook's distance (lower left) and leverage (lower right) provide information on the influence of each observation on the overall regression.
+The residual scatter plot (upper left) shows the relationship between the residuals and the fitted values and should show no systematic pattern ("megaphone" or "arch") that would signal model inadequacy (i.e., it should be a featureless cloud of points).  The red lowess curve helps summarize any trend that might be apparent.  The Normal QQ plot (upper right) provides a quick look at the distribution of the residuals, which should be approximately normal (i.e., the individual values should plot along a straight line).  Points that plot off the line are labeled with their case numbers (i.e. rows in the data frame).  The two plots on the bottom, of Cook's distance (lower left) and leverage (lower right) provide information on the influence of each observation on the overall regression.
 
 [[Back to top]](regression1.html)
 
 # Iterative fitting (i.e. brute-force optimzation) of a regression equation #
 
-Regression equations can also be fit by perturbing (or iteratively considering different) regression parameter values, and choosing the combination that minimizes the sum of squares of residuals.  The following code sets up a range of potential regression coeffiecient/parameter values that will be interatively considered, keeping track of the sum of squares of deviations for each combination (expressed as the residual standard error for comparison with the the results produced by `lm()`).  (The optimal combination is then the one that minimizes the sum of squares.)
+Regression equations can also be fit by perturbing (or iteratively considering different) regression parameter values, and choosing the combination that minimizes the sum of squares of residuals.  The following code sets up a range of potential regression coefficient/parameter values that will be iteratively considered, keeping track of the sum of squares of deviations for each combination (expressed as the residual standard error for comparison with the the results produced by `lm()`).  (The optimal combination is then the one that minimizes the sum of squares.)
 
 ```{r regression1-17 }
 # fit a linear regression equation by
@@ -211,7 +211,7 @@ b0_max <- 3.0 # 2.40 # 2.25
 n_b1 <- 11
 b1_min <- 0.0 # 0.4 # 0.46
 b1_max <- 1.0 # 0.5 # 0.47
-# coefficents
+# coefficients
 b0 <- seq(b0_min, b0_max, len=n_b0)
 b1 <- seq(b1_min, b1_max, len=n_b1)
  

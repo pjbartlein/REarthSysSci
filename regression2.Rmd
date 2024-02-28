@@ -108,7 +108,7 @@ and compare these with those obtained using the `lm()` function
 head(cbind(yhat,lm1$fitted.values))
 ```
 
-In addition to being able to efficiently represent the derivation of terms and thier properties in regression analysis in general, matrix algebra also provides a an efficient way of doing the actual calculations.
+In addition to being able to efficiently represent the derivation of terms and their properties in regression analysis in general, matrix algebra also provides a an efficient way of doing the actual calculations.
 
 [[Back to top]](regression2.html)
 
@@ -140,7 +140,7 @@ It's plain to see that Earth's average temperature is increasing (e.g. [[NOAA 20
 
 Because both things are going at at once (the trend toward increasing temperature overall, and the local ENSO-related increases and decreases), it's difficult to quantitatively assess or separate the trend and local variability from the inspection of figures alone. That's where quantitative estimation using regression comes in. The information for colorizing the 1950-present monthly temperature plot comes from the [[Oceanic Niño Index]](https://www.climate.gov/news-features/understanding-climate/climate-variability-oceanic-nino-index), a composite of several tropical Pacific sea-surface temperature (SST) indices, which has been detrended. The data are from [[ONI data]](https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt), see here for the data in tabular form [[ONI data table]](https://origin.cpc.ncep.noaa.gov/products/analysis_monitoring/ensostuff/ONI_v5.php).
 
-In addition to the ONI data, we'll also use the [[NOAA Global Monthly Land + Ocean time series]](https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/global/time-series/globe/land_ocean/ytd/12/1850-2023) (back to 1950). Because the trend in global temperatures is not mechanistically controlled by time, but is controlled by CO~2~, we'll also use the monthly Scripps/NOAA CO~2~ trends data [[https://gml.noaa.gov/ccgg/trends/]](https://gml.noaa.gov/ccgg/trends/) (March 1958 onwareds). The data can be found here: [[NOAA CO~2~ Trends]](https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.txt). The input data set (`NOAA_Globe_T_ENSO_CO2_1950-2023.csv`) contains the year, month, decimal year, temperatures of the land, ocean, and land plus ocean, the ONI monthly total value, the anomaly and code, and the monthly mean CO~2~, the deseasonalized CO~2~ value, and thier differnce (the "local" CO~2~ anomaly.)
+In addition to the ONI data, we'll also use the [[NOAA Global Monthly Land + Ocean time series]](https://www.ncei.noaa.gov/access/monitoring/climate-at-a-glance/global/time-series/globe/land_ocean/ytd/12/1850-2023) (back to 1950). Because the trend in global temperatures is not mechanistically controlled by time, but is controlled by CO~2~, we'll also use the monthly Scripps/NOAA CO~2~ trends data [[https://gml.noaa.gov/ccgg/trends/]](https://gml.noaa.gov/ccgg/trends/) (March 1958 onward). The data can be found here: [[NOAA CO~2~ Trends]](https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_mm_mlo.txt). The input data set (`NOAA_Globe_T_ENSO_CO2_1950-2023.csv`) contains the year, month, decimal year, temperatures of the land, ocean, and land plus ocean, the ONI monthly total value, the anomaly and code, and the monthly mean CO~2~, the deseasonalized CO~2~ value, and their difference (the "local" CO~2~ anomaly.)
 
 ## Read the NOAA data 
 
@@ -165,7 +165,7 @@ summary(NOAA)
 ```
 Note the missing CO~2~ data prior to 1958.
 
-Recode the ONI_code variable, a character on input, in to a factor and order the factors from "La Niña" to "El Niño" (with "Neutral" in the middle.
+Decode the ONI_code variable, a character on input, in to a factor and order the factors from "La Niña" to "El Niño" (with "Neutral" in the middle.
 
 ```{r regression2-12}
 # recode ONI_code as a factor
@@ -195,9 +195,9 @@ ggplot(data = NOAA, aes(x=YrMn, y=T_LandOcean)) +
   theme_bw()
 ```
 
-Even at this point, there's some visual evidece that the relationship is curvilinear, with the slope of the trend increasing over time. We'll postpone dealing with that for a little while.
+Even at this point, there's some visual evidence that the relationship is curvilinear, with the slope of the trend increasing over time. We'll postpone dealing with that for a little while.
 
-For later use, create another dataframe, removing the observations with missing CO~2~ data.
+For later use, create another data frame, removing the observations with missing CO~2~ data.
 
 ```{r regression2-15}
 
@@ -212,7 +212,7 @@ head(NOAA2)
 
 ## Simple linear regression (lm_01)
 
-First, do a simple linear regression with `YrMn` as the precitor and land plus ocean temperatures `T_LandOcean` as the response.
+First, do a simple linear regression with `YrMn` as the predictor and land plus ocean temperatures `T_LandOcean` as the response.
 
 ```{r regression2-16}
 # simple linear (OLS) regression line
@@ -220,7 +220,7 @@ lm_01 <- lm(T_LandOcean ~ YrMn, data = NOAA)
 summary(lm_01)
 AIC(lm_01)
 ```
-The fit of the "curve" (a straight line in this instance) is pretty good: the *R^2^* value is 0.8135, which is almost identical to the adjusted *R^2^*, which also incorporates the automatic increase in *R^2^* that occurs as more predictors are added. The Akaike Information Critereon (AIC) (-803.5893 here( is a similar statistic that trades off the goodness of fit again the number of parameters that have to be estimated. In practice we would choose the model with the lowest AIC value among choices. The *t*- and *F*-statistics are also significant. These are tests of the null hypothesis that the regression coefficients are 0.0, and that there is a significant relationship between the response and predictor(s). 
+The fit of the "curve" (a straight line in this instance) is pretty good: the *R^2^* value is 0.8135, which is almost identical to the adjusted *R^2^*, which also incorporates the automatic increase in *R^2^* that occurs as more predictors are added. The Akaike Information Criterion (AIC) (-803.5893 here( is a similar statistic that trades off the goodness of fit again the number of parameters that have to be estimated. In practice we would choose the model with the lowest AIC value among choices. The *t*- and *F*-statistics are also significant. These are tests of the null hypothesis that the regression coefficients are 0.0, and that there is a significant relationship between the response and predictor(s). 
 
 Here's a look at the data, fitted values (the line) and the residuals, whose sum-of-squares were minimized:
 
@@ -246,7 +246,7 @@ matlines(pred_data$YrMn, pred_int, lty=c(1,2,2), col="black")
 matlines(pred_data$YrMn, conf_int, lty=c(1,2,2), col="orange")
 ```
 
-Close inspection of both intervals shows that the slightly flare out farther away from the centroid of the data. The fitted line always goes through the centroid of the data (the mean of the response and the mean of the predictor), which acts more-or-less as a "pivot" and so it makes sense that the uncertaintis are greater the farther away from that centroid one goes.
+Close inspection of both intervals shows that the slightly flare out farther away from the centroid of the data. The fitted line always goes through the centroid of the data (the mean of the response and the mean of the predictor), which acts more-or-less as a "pivot" and so it makes sense that the uncertainties are greater the farther away from that centroid one goes.
 
 The assumptions can be checked using a few diagnostic plots:
 
@@ -262,7 +262,7 @@ The residual plot (residuals plotted as a function of the fitted values) has a d
 
 ### Eye-balling the influence of ENSO on the regression model
 
-The potential influence of ENSO on the trend in the data can be illustrated by simply labeling the points by the ONI_code values, red for El Niño, blue for La Niña, and gray for Neutral condiions: 
+The potential influence of ENSO on the trend in the data can be illustrated by simply labeling the points by the ONI_code values, red for El Niño, blue for La Niña, and gray for Neutral conditions: 
 
 ```{r regression2-20}
 # examine the regression equation again, by ENSO state
@@ -273,7 +273,7 @@ segments(NOAA$YrMn, fitted(lm_01), NOAA$YrMn, NOAA$T_LandOcean, col = "gray")
 points(T_LandOcean ~ YrMn, data = NOAA, pch = 16, cex = 0.8, col = pal[ONI_code])
 ```
 
-It's easy to see that many positive residuals are red, and that many negative residuals are blue, suggesting that the regression line underpredicts during El Niño conditions and overpredicts during La Niña conditions. 
+It's easy to see that many positive residuals are red, and that many negative residuals are blue, suggesting that the regression line under predicts during El Niño conditions and over predicts during La Niña conditions. 
 
 Here's a `{ggplot2}` package version of the labeled plot:
 
@@ -314,26 +314,26 @@ ggplot() +
   theme_bw()
 ```
 
-The plot of the residuals from the first model versus time again hints and some non-linearity in the trend and the sorting of the residual values by ENSO state is quite evident. To look at this further, we can use a grouped boxplot:
+The plot of the residuals from the first model versus time again hints and some non-linearity in the trend and the sorting of the residual values by ENSO state is quite evident. To look at this further, we can use a grouped box plot:
 
 ```{r regression2-23}
-# residual grouped boxplot
+# residual grouped box plot
 opar <- par(mfrow=c(1,3))
 boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
 par(opar)
 ```
 
-From the boxplots, it's possible to infer that the median of the residuals during El Niño conditions is about 0.1 ^o^C higher than during La Niña" conditions, while the median during Neutral conditions is very close to 0.0.
+From the box plots, it's possible to infer that the median of the residuals during El Niño conditions is about 0.1 ^o^C higher than during La Niña" conditions, while the median during Neutral conditions is very close to 0.0.
 
-The assumptions that underlie ordinary least-squares regression essentially state that there should be no discernable pattern in the residuals, apart from being normally distributed random numbers. When that assumption is satisfied, then the Gauss-Markov theorem assures us that there is no better way to estimate the regression coefficients. Here, howver, there are clear patterns in the residuals: they have a slight curvilinear trend, are autocorrelated, but mainly show considerable bias related to ENSO state.
+The assumptions that underlie ordinary least-squares regression essentially state that there should be no discernible pattern in the residuals, apart from being normally distributed random numbers. When that assumption is satisfied, then the Gauss-Markov theorem assures us that there is no better way to estimate the regression coefficients. Here, however, there are clear patterns in the residuals: they have a slight curvilinear trend, are autocorrelated, but mainly show considerable bias related to ENSO state.
 
 [[Back to top]](regression2.html)
 
 ## Dummy-variable regression (lm_02)
 
-One approach for easily learning about the consequences of a "group membership" variable like ENSO state as represented by the `ONI_code` is the unfortuantely named "dummy variable regression." The name arises from the generation of various "dummy" (or indicator) variables, that can be employed to estimate separate intercept and slope values for the differnt groups. For example, a set of variables for examining the variations in intercepts across groups would take on the value 0.0, except when the particular ENSO state occurs, when it would be set equal to 1.0, and likewise, to examine variations in slope the dummy variables would set equal to 0.0, except when the particular ENSO state occurs, when it would be set equal to the predictor variable, in this case `YrMn`. Although the dummy variables could be generated for all three ENSO states (in this example), only two of each kind would be included in what's now a multiple regression model because including all three would lead to linearities among predictors: the sum of the intercept-estimating dummy variables would equal 1.0 for every observation, while the sum of the slope-estimating variables would equal `YrMn`.
+One approach for easily learning about the consequences of a "group membership" variable like ENSO state as represented by the `ONI_code` is the unfortunately named "dummy variable regression." The name arises from the generation of various "dummy" (or indicator) variables, that can be employed to estimate separate intercept and slope values for the different groups. For example, a set of variables for examining the variations in intercepts across groups would take on the value 0.0, except when the particular ENSO state occurs, when it would be set equal to 1.0, and likewise, to examine variations in slope the dummy variables would set equal to 0.0, except when the particular ENSO state occurs, when it would be set equal to the predictor variable, in this case `YrMn`. Although the dummy variables could be generated for all three ENSO states (in this example), only two of each kind would be included in what's now a multiple regression model because including all three would lead to linearities among predictors: the sum of the intercept-estimating dummy variables would equal 1.0 for every observation, while the sum of the slope-estimating variables would equal `YrMn`.
 
-In the current example, we'll include the dummy variables for Neutral and El Niño conditions (omitting those for La Niña conditions). To interpret the results, the intercept and slope for La Niña conditions would simply be the overall intercept and slope of the fitted model. The intercept for El Niño conditions would be the sum of the overall intercept and the coefficient of the El Niño-condition (0 or 1) intercept dummy variable, whille the slope for El Niño conditions would be the sum of the overall slope and the coefficient of the El Niño condition (0 or `YrMn`) slope dummy variable. Dummy-variable regression is much more elegant than its name implies.
+In the current example, we'll include the dummy variables for Neutral and El Niño conditions (omitting those for La Niña conditions). To interpret the results, the intercept and slope for La Niña conditions would simply be the overall intercept and slope of the fitted model. The intercept for El Niño conditions would be the sum of the overall intercept and the coefficient of the El Niño-condition (0 or 1) intercept dummy variable, while the slope for El Niño conditions would be the sum of the overall slope and the coefficient of the El Niño condition (0 or `YrMn`) slope dummy variable. Dummy-variable regression is much more elegant than its name implies.
 
 It turns out that the "equation" language in R takes care of the generation of the dummy variables (and leaving one out). (But there will be an example of explicit generation of dummy variables below.) Here's the code to look at only the difference in intercept among ENSO-state groups.
 
@@ -371,10 +371,10 @@ lines(fitted(lm_02)[NOAA$ONI_code == "Neutral"] ~ NOAA$YrMn[NOAA$ONI_code == "Ne
 lines(fitted(lm_02)[NOAA$ONI_code == "El Niño"] ~ NOAA$YrMn[NOAA$ONI_code == "El Niño"], lwd=2, col="red")
 ```
 
-Here is comparison of the grouped boxplots for the two models:
+Here is comparison of the grouped box plots for the two models:
 
 ```{r regression2-28}
-# residual grouped boxplot
+# residual grouped box plot
 opar <- par(mfrow=c(1,3))
 boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
 boxplot(residuals(lm_02) ~ NOAA$ONI_code, ylim=c(-1,1))
@@ -406,7 +406,7 @@ print(c(AIC(lm_01), AIC(lm_02), AIC(lm_03)))
 anova(lm_02, lm_03)
 ```
 
-The AIC value for this third (intercept + slope varying model) is a little lower than for the second, but the analysis of variance suggets there's not much difference in the explained variance. (Small *F*-statistic, large "p*-value.)
+The AIC value for this third (intercept + slope varying model) is a little lower than for the second, but the analysis of variance suggest there's not much difference in the explained variance. (Small *F*-statistic, large "p*-value.)
 
 The fitted lines show little variation:
 
@@ -439,13 +439,13 @@ lines(fitted(lm_02)[NOAA$ONI_code == "Neutral"] ~ NOAA$YrMn[NOAA$ONI_code == "Ne
 lines(fitted(lm_02)[NOAA$ONI_code == "El Niño"] ~ NOAA$YrMn[NOAA$ONI_code == "El Niño"], lwd=1, lty = 2,col="red")
 ```
 
-With negledgable improvement in the goodness of fit of `lm_03`, and no practical differences in the curves, there seems to be little reason to declare the model where both intercept and slope vary among ENSO states as any better than the one where just the intercept varies. In fact the "principle of parsimony" in statistics would strongly argue for `lm_02` as the better model.
+With negligible  improvement in the goodness of fit of `lm_03`, and no practical differences in the curves, there seems to be little reason to declare the model where both intercept and slope vary among ENSO states as any better than the one where just the intercept varies. In fact the "principle of parsimony" in statistics would strongly argue for `lm_02` as the better model.
 
 [[Back to top]](regression2.html)
 
 # A model with CO~2~ as the predictor variable 
 
-Although it makes sense when trying to assess the overall trend in global temperatures to use time (`YrMn`) as a predictor, we know that in fact, it's the level of CO~2~ and other greenhouse gasses (GHGs) that are responsible for the temperature increase. The NOAA data set from Mauna Loa contains both the mean monthly values of CO~2~ (plotted in red below) and a "deseasonalized" value (that takes out the prominant annual cycle in the CO~2~ data related to the "respiration" of the Northern Hemisphere biosphere, plotted in black.) There is some spatial variability inn monthly CO~2~ values, with the Northern and Southern Hemispheres being "antiphased", and so for looking at global temperatures, it makes the most sense to use the deseasonalized values as a potential predictor.
+Although it makes sense when trying to assess the overall trend in global temperatures to use time (`YrMn`) as a predictor, we know that in fact, it's the level of CO~2~ and other greenhouse gasses (GHGs) that are responsible for the temperature increase. The NOAA data set from Mauna Loa contains both the mean monthly values of CO~2~ (plotted in red below) and a "deseasonalized" value (that takes out the prominent annual cycle in the CO~2~ data related to the "respiration" of the Northern Hemisphere biosphere, plotted in black.) There is some spatial variability inn monthly CO~2~ values, with the Northern and Southern Hemispheres being "antiphased", and so for looking at global temperatures, it makes the most sense to use the deseasonalized values as a potential predictor.
 
 
 ```{r regression2-34}
@@ -455,7 +455,7 @@ points(CO2_deseas ~ YrMn, data = NOAA2, pch = 16, col = "black", cex = 0.2)
 
 ## Simple linear regression, CO~2~ as a predictor (lm_05)
 
-For comparison, using now the `NOAA2` dataframe, in which the earlier months when CO~2~ data were not yet available, the simple linear model with `YrMn` as a predictor is:
+For comparison, using now the `NOAA2` data frame, in which the earlier months when CO~2~ data were not yet available, the simple linear model with `YrMn` as a predictor is:
 
 ```{r regression2-35}
 # simple linear (OLS) regression line, only with NOAA2
@@ -562,7 +562,7 @@ ggplot(data = NOAA2, aes(x = CO2_deseas, y = T_LandOcean)) +
   theme_bw()
 ```
 
-The CO~2~ have an evident non-linear trend, while the relationship with temperature seems quite linear. Recalling that there is a slight tendancy in the relationship of temperature with time to be slightly curvilinear, this suggests global temperatures indeed have a curvilinear as opposed to linear trend. An interesting addition to a scatter plot of temperature vs. time, is the fitted values of the regression with CO~2~ as the predictor:
+The CO~2~ have an evident non-linear trend, while the relationship with temperature seems quite linear. Recalling that there is a slight tendency in the relationship of temperature with time to be slightly curvilinear, this suggests global temperatures indeed have a curvilinear as opposed to linear trend. An interesting addition to a scatter plot of temperature vs. time, is the fitted values of the regression with CO~2~ as the predictor:
 
 ```{r regression2-43}
 # scatter plot with CO2-fitted values ===============================
@@ -644,10 +644,10 @@ ggplot(data = NOAA, aes(x = YrMn, y = T_LandOcean)) +
        x = "Year", y = "Land + Ocean") + 
   theme_bw() 
 ```
-And the residual grouped boxplot shows that, realtive to the original model `lm_01` the variability of the residuals is smaller, but they are still biased by ENSO state:
+And the residual grouped box plot shows that, relative to the original model `lm_01` the variability of the residuals is smaller, but they are still biased by ENSO state:
 
 ```{r regression2-48}
-# residual grouped boxplot
+# residual grouped box plot
 opar <- par(mfrow=c(1,3))
 boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
 boxplot(residuals(lm_07) ~ NOAA$ONI_code, ylim=c(-1,1))
@@ -715,7 +715,7 @@ anova(lm_01, lm_08)
 ```
 
 ```{r regression2-55}
-# residual grouped boxplot
+# residual grouped box plot
 opar <- par(mfrow=c(1,3))
 boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
 boxplot(residuals(lm_02) ~ NOAA$ONI_code, ylim=c(-1,1))
@@ -729,7 +729,7 @@ As was the case for the linear model, the dummy-variable polynomial model elimin
 
 # A regression model with autocorrelated residuals
 
-There is one remaining issue: the residual are autocorrelated. This is not really a surprise, either looking at the data or considering what ENSO SST variability is all about. However, the autocorrelation does violate the OLS assumptions. The autocorrelation can be explicitly accounted for (and hopefully removed) by simultaneously fitting a "Box-Jenkins" type of time series model to the data while fitting the polynomial dummy-variable regression. This can be accomplshed using the 'arima()' function from the base `{stats}` package. The process requires a little more set-up, but is not difficult.
+There is one remaining issue: the residual are autocorrelated. This is not really a surprise, either looking at the data or considering what ENSO SST variability is all about. However, the autocorrelation does violate the OLS assumptions. The autocorrelation can be explicitly accounted for (and hopefully removed) by simultaneously fitting a "Box-Jenkins" type of time series model to the data while fitting the polynomial dummy-variable regression. This can be accomplished using the 'arima()' function from the base `{stats}` package. The process requires a little more set-up, but is not difficult.
 
 Box-Jenkins, or "ARIMA" (autoregressive integrated moving-average) models are a topic in themselves, but they basically related the current value of a time series to its previous values, and to the current and previous values of "innovations" or "exogenous shocks". They thus can represent both "memory" in a system as well as current perturbations to its state. In the case of ENSO, this sounds like the memory incorporated by the simple thermal inertia of sea water displayed by the slow changes in SST anomalies, as will as the faster current and previous interactions with the atmosphere.
 
@@ -747,10 +747,10 @@ dum_n[NOAA$ONI_code == "Neutral"] <- 1
 dum_en[NOAA$ONI_code == "El Niño"] <- 1
 # head(cbind(dum_ln, dum_n, dum_en), 30)
 ```
-Note that we made dummy variables for all three ENSO states, but only two will be included in the model to avoid collinearity. Next, make a dataframe of the the regression predictors, `xreg`:
+Note that we made dummy variables for all three ENSO states, but only two will be included in the model to avoid collinearity. Next, make a data frame of the the regression predictors, `xreg`:
 
 ```{r regression2-57}
-# make regression dataframe
+# make regression data frame
 xreg <- data.frame(NOAA$YrMn, NOAA$YrMn^2, dum_n, dum_en) # note: leave dum_ln out
 names(xreg) <- c("YrMn", "YrMn^2", "Neutral", "El Niño")
 head(xreg)
@@ -827,10 +827,10 @@ These look good. The AIC values suggest that the model fits better still than th
 print(c(AIC(lm_01), AIC(lm_08), AIC(tsreg_01)))
 ```
 
-Here are the residual grouped boxplots:
+Here are the residual grouped box plots:
 
 ```{r regression2-65}
-# residual grouped boxplot
+# residual grouped box plot
 opar <- par(mfrow=c(1,3))
 boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
 boxplot(residuals(lm_08) ~ NOAA$ONI_code, ylim=c(-1,1))
