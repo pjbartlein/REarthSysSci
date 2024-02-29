@@ -636,7 +636,7 @@ box), and <code>diag</code> (longest diagonal that fits in a box).</p>
 variables:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">pty=</span><span class="st">&quot;s&quot;</span>) <span class="co"># square plotting frame</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">plot</span>(boxes_matrix)</span></code></pre></div>
-<p><img src="pca_files/figure-html/PCA-4-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/pca-4-1.png" width="75%" height="75%" /></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">cor</span>(boxes_matrix)</span></code></pre></div>
 <pre><code>##           long      diag
 ## long 1.0000000 0.9112586
@@ -684,7 +684,7 @@ component) as points represented by the observation numbers.</p>
 ## Proportion Var    0.5    0.5
 ## Cumulative Var    0.5    1.0</code></pre>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">biplot</span>(boxes_pca)</span></code></pre></div>
-<p><img src="pca_files/figure-html/PCA-5-1.png" width="75%" height="75%" />
+<p><img src="pca_files/figure-html/pca-5-1.png" width="75%" height="75%" />
 The component standard deviation values describe the importance of each
 component, and the proportion of the total variance of all variables
 being analyzed accounted for by each component.</p>
@@ -714,7 +714,7 @@ vectors (<em>θ</em>), or <em>r = cos(θ)</em>. Here the angle is
 <span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a>y2 <span class="ot">&lt;-</span> (y1<span class="sc">+</span>boxes_matrix[,<span class="dv">2</span>])<span class="sc">/</span><span class="fl">2.0</span></span>
 <span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> (x1<span class="sc">+</span>boxes_matrix[,<span class="dv">1</span>])<span class="sc">/</span><span class="fl">2.0</span></span>
 <span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a><span class="fu">segments</span>(boxes_matrix[,<span class="dv">1</span>],boxes_matrix[,<span class="dv">2</span>], x2, y2, <span class="at">lwd=</span><span class="dv">2</span>,<span class="at">col=</span><span class="st">&quot;purple&quot;</span>)</span></code></pre></div>
-<p><img src="pca_files/figure-html/PCA-6-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/pca-6-1.png" width="75%" height="75%" /></p>
 <p>This plot illustrates the idea of the first (or “principal”
 component) providing an optimal summary of the data–no other line drawn
 on this scatter plot would produce a set of projected values of the data
@@ -894,7 +894,7 @@ enough variables (24) to make that difficult to interpret. Another
 approach is to look at a <code>corrplot()</code> image:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>cor_mm_data <span class="ot">&lt;-</span> <span class="fu">cor</span>(mm_data)</span>
 <span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="fu">corrplot</span>(cor_mm_data, <span class="at">method=</span><span class="st">&quot;color&quot;</span>)</span></code></pre></div>
-<p><img src="pca_files/figure-html/PCA-11-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/pca-11-1.png" width="75%" height="75%" /></p>
 <p>The plaid-like appearance of the plot suggests that there are several
 groups of variables whose variations of long-term mean differences
 throughout the year are similar.</p>
@@ -908,7 +908,7 @@ negative).</p>
 <span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>  <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>  <span class="at">node.height=</span><span class="fl">0.5</span>, <span class="at">node.width=</span><span class="fl">0.5</span>, <span class="at">vTrans=</span><span class="dv">128</span>, <span class="at">edge.width=</span><span class="fl">0.75</span>, <span class="at">label.cex=</span><span class="fl">1.0</span>,</span>
 <span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>  <span class="at">width=</span><span class="dv">7</span>, <span class="at">height=</span><span class="dv">5</span>, <span class="at">normalize=</span><span class="cn">TRUE</span>, <span class="at">edge.width=</span><span class="fl">0.75</span> ) </span></code></pre></div>
-<p><img src="pca_files/figure-html/PCA-12-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/pca-12-1.png" width="75%" height="75%" /></p>
 <p>A useful variant of this plot is provided by using the strength of
 the correlations to arrange the nodes (i.e. the variables). This is done
 by using the “Fruchterman-Reingold” algorithm that invokes the concept
@@ -919,7 +919,7 @@ variables toward one another.</p>
 <span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>  <span class="at">node.height=</span><span class="fl">0.5</span>, <span class="at">node.width=</span><span class="fl">0.5</span>, <span class="at">vTrans=</span><span class="dv">128</span>, <span class="at">edge.width=</span><span class="fl">0.75</span>, <span class="at">label.cex=</span><span class="fl">1.0</span>,</span>
 <span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>  <span class="at">width=</span><span class="dv">7</span>, <span class="at">height=</span><span class="dv">5</span>, <span class="at">normalize=</span><span class="cn">TRUE</span>, <span class="at">edge.width=</span><span class="fl">0.75</span> ) </span></code></pre></div>
-<p><img src="pca_files/figure-html/PCA-13-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/pca-13-1.png" width="75%" height="75%" /></p>
 </div>
 <div id="pca-of-the-pmip-3-data" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> PCA of the PMIP 3
@@ -1033,13 +1033,13 @@ by applying the “spring” layout.</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>qg_pca <span class="ot">&lt;-</span> <span class="fu">qgraph</span>(<span class="fu">loadings</span>(mm_pca_unrot), </span>
 <span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>  <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>, </span>
 <span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>  <span class="at">labels=</span><span class="fu">c</span>(<span class="fu">names</span>(mm_data),<span class="fu">as.character</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>nfactors))), <span class="at">vTrans=</span><span class="dv">128</span>)</span></code></pre></div>
-<p><img src="pca_files/figure-html/PCA-16-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/pca-16-1.png" width="75%" height="75%" /></p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="fu">qgraph</span>(qg_pca, <span class="at">title=</span><span class="st">&quot;Component loadings, all models over all months&quot;</span>,</span>
 <span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>  <span class="at">layout =</span> <span class="st">&quot;spring&quot;</span>, </span>
 <span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>  <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a>  <span class="at">node.height=</span><span class="fl">0.5</span>, <span class="at">node.width=</span><span class="fl">0.5</span>, <span class="at">vTrans=</span><span class="dv">128</span>, <span class="at">edge.width=</span><span class="fl">0.75</span>, <span class="at">label.cex=</span><span class="fl">1.0</span>,</span>
 <span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a>  <span class="at">width=</span><span class="dv">7</span>, <span class="at">height=</span><span class="dv">5</span>, <span class="at">normalize=</span><span class="cn">TRUE</span>, <span class="at">edge.width=</span><span class="fl">0.75</span> )</span></code></pre></div>
-<p><img src="pca_files/figure-html/PCA-16-2.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/pca-16-2.png" width="75%" height="75%" /></p>
 </div>
 <div id="rotated-components" class="section level2" number="3.5">
 <h2><span class="header-section-number">3.5</span> Rotated
@@ -1102,12 +1102,12 @@ worth it.</p>
 <span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a>  <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>, </span>
 <span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a>  <span class="at">labels=</span><span class="fu">c</span>(<span class="fu">names</span>(mm_data),<span class="fu">as.character</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>nfactors))), <span class="at">vTrans=</span><span class="dv">128</span>) </span></code></pre></div>
 <pre><code>## Warning in Glabels[1:n] &lt;- labels: number of items to replace is not a multiple of replacement length</code></pre>
-<p><img src="pca_files/figure-html/PCA-17-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/pca-17-1.png" width="75%" height="75%" /></p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">qgraph</span>(qg_pca, <span class="at">title=</span><span class="st">&quot;Rotated component loadings, all models over all months&quot;</span>,</span>
 <span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>  <span class="at">layout =</span> <span class="st">&quot;spring&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>, </span>
 <span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a>  <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, </span>
 <span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a>  <span class="at">width=</span><span class="dv">7</span>, <span class="at">height=</span><span class="dv">5</span>, <span class="at">normalize=</span><span class="cn">TRUE</span>, <span class="at">edge.width=</span><span class="fl">0.75</span>) </span></code></pre></div>
-<p><img src="pca_files/figure-html/PCA-17-2.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/pca-17-2.png" width="75%" height="75%" /></p>
 <p><a href="pca.html">[Back to top]</a></p>
 </div>
 </div>
@@ -1250,7 +1250,7 @@ the first month of data. Grab a slice of the data, and plot it as an
 <div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a>world_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(maps<span class="sc">::</span><span class="fu">map</span>(<span class="st">&quot;world&quot;</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>, <span class="at">fill =</span> <span class="cn">TRUE</span>))</span>
 <span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a>world_otl_sf <span class="ot">&lt;-</span> <span class="fu">st_geometry</span>(world_sf)</span>
 <span id="cb61-3"><a href="#cb61-3" tabindex="-1"></a><span class="fu">plot</span>(world_otl_sf)</span></code></pre></div>
-<p><img src="pca_files/figure-html/PCA-26-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/pca-26-1.png" width="75%" height="75%" /></p>
 <div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a><span class="co"># select the first month of data, and make a data freame</span></span>
 <span id="cb62-2"><a href="#cb62-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1</span></span>
 <span id="cb62-3"><a href="#cb62-3" tabindex="-1"></a>map_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">expand.grid</span>(lon, lat), <span class="fu">as.vector</span>(var_array[, , n]))</span>
@@ -1273,7 +1273,7 @@ the first month of data. Grab a slice of the data, and plot it as an
 <span id="cb64-8"><a href="#cb64-8" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
 <span id="cb64-9"><a href="#cb64-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">title=</span><span class="st">&quot;20th Century Reanalysis 500 hPa Height Anomalies&quot;</span>, <span class="at">fill=</span><span class="st">&quot;hgt500&quot;</span>) <span class="sc">+</span></span>
 <span id="cb64-10"><a href="#cb64-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="pca_files/figure-html/PCA-28-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/pca-28-1.png" width="75%" height="75%" /></p>
 <p>The map looks similar to a map of the first month’s data using
 Panoply. (The artifact at 0<sup>o</sup> E is due to rotation of the
 original data from 0 to 360 degrees to -180 to +180 degrees.)</p>
@@ -1344,7 +1344,7 @@ correlation matrix. Note that the analysis will take a few minutes.</p>
 <span id="cb72-8"><a href="#cb72-8" tabindex="-1"></a>resPCA <span class="ot">&lt;-</span> <span class="fu">pca</span>(zd, <span class="at">method=</span>pcamethod, <span class="at">scale=</span><span class="st">&quot;uv&quot;</span>, <span class="at">center=</span><span class="cn">TRUE</span>, <span class="at">nPcs=</span>ncomp)</span>
 <span id="cb72-9"><a href="#cb72-9" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm <span class="co"># how long?</span></span></code></pre></div>
 <pre><code>##    user  system elapsed 
-## 178.541   1.842 181.318</code></pre>
+## 147.600   1.592 149.543</code></pre>
 <div id="results" class="section level2" number="5.1">
 <h2><span class="header-section-number">5.1</span> Results</h2>
 <p>Printing out the “results” object (<code>resPCA</code>) provides a
@@ -1396,7 +1396,7 @@ scores</p>
 <span id="cb79-9"><a href="#cb79-9" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
 <span id="cb79-10"><a href="#cb79-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">title=</span><span class="st">&quot;20th CRA 500 hPa Height Anomalies PCA Loadings&quot;</span>, <span class="at">fill=</span><span class="st">&quot; &quot;</span>) <span class="sc">+</span></span>
 <span id="cb79-11"><a href="#cb79-11" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="pca_files/figure-html/PCA-35-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/pca-35-1.png" width="75%" height="75%" /></p>
 <p>Recall that the loadings are the correlations between the time series
 of 500mb heights at each grid point and the time series of the (first,
 in this case) component and they describe the map pattern of the first
@@ -1405,7 +1405,7 @@ pattern represented by the first component as it varies over time:</p>
 <div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" tabindex="-1"></a><span class="co"># timeseries plot of scores</span></span>
 <span id="cb80-2"><a href="#cb80-2" tabindex="-1"></a>yrmn <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">1871.0</span>, <span class="fl">2011.0</span><span class="sc">-</span>(<span class="fl">1.0</span><span class="sc">/</span><span class="fl">12.0</span>), <span class="at">by=</span><span class="fl">1.0</span><span class="sc">/</span><span class="fl">12.0</span>)</span>
 <span id="cb80-3"><a href="#cb80-3" tabindex="-1"></a><span class="fu">plot</span>(yrmn, scores[,<span class="dv">1</span>], <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
-<p><img src="pca_files/figure-html/PCA-36-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/pca-36-1.png" width="75%" height="75%" /></p>
 <p>The first six components account for half of the variance of the
 original 16,380 variables, which is a pretty efficient reduction in
 dimensionality. The map pattern of the first component is positive in

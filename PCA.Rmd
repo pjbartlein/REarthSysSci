@@ -424,7 +424,7 @@ var_array <- var_array[,47:91,]
 
 The netCDF variable `hgt500_anm` is read in as a 3-dimensional array (`nlon` x `nlat` x `nt`), but for the PCA, it needs to be in the standard form of a data frame, with each column representing a variable (or grid point in this case) and each row representing an observation (or time).  The reshaping can be done by first flatting the 3-d array into a long vector of values, and then converting that to a 2-d array with `nlon` x `nlat` columns, and `nt' rows.
 
-```{r pca-30, cache=TRUE}
+```{r pca-30}
 # reshape the 3-d array
 var_vec_long <- as.vector(var_array)
 length(var_vec_long)
@@ -450,7 +450,7 @@ To install the `pcaMethods` package, first install the core Bioconductor package
 
 In this example, the first eight components are extracted from the correlation matrix.  Note that the analysis will take a few minutes.
 
-```{r pca-31, message=FALSE, cache=TRUE}
+```{r pca-31, message=FALSE}
 # PCA using pcaMethods
 library(pcaMethods)
 pcamethod="svd"
