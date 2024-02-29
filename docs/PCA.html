@@ -592,20 +592,20 @@ blocks with random dimensions (the long, intermediate and short axes of
 the boxes), plus some derived variables, like the length of the longest
 diagonal that can be contained within a box.</p>
 <p>Here’s the data: <a
-href="https://pjbartlein.github.io/GeogDataAnalysis/data/csv/boxes.csv">[boxes.csv]</a></p>
+href="https://pjbartlein.github.io/REarthSysSci/data/csv/boxes.csv">[boxes.csv]</a></p>
 <ul>
 <li>Example: Davis’ boxes (<a
-href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_data.png">data</a>,
+href="https://pjbartlein.github.io/REarthSysSci/images/Davis_PCA_data.png">data</a>,
 <a
-href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_boxes.png">plot</a>,
+href="https://pjbartlein.github.io/REarthSysSci/images/Davis_PCA_boxes.png">plot</a>,
 <a
-href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scatter.png">scatter</a>,
+href="https://pjbartlein.github.io/REarthSysSci/images/Davis_PCA_scatter.png">scatter</a>,
 <a
-href="https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scores.png">components</a>),
+href="https://pjbartlein.github.io/REarthSysSci/images/Davis_PCA_scores.png">components</a>),
 (Davis, J.C., 2001, <em>Statistics and Data Analysis in Geology</em>,
 Wiley)</li>
 <li><a
-href="https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html">Derivation
+href="https://pjbartlein.github.io/REarthSysSci/topics/pca_matrix.html">Derivation
 of principal components</a></li>
 </ul>
 </div>
@@ -636,7 +636,7 @@ box), and <code>diag</code> (longest diagonal that fits in a box).</p>
 variables:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">par</span>(<span class="at">pty=</span><span class="st">&quot;s&quot;</span>) <span class="co"># square plotting frame</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">plot</span>(boxes_matrix)</span></code></pre></div>
-<p><img src="PCA_files/figure-html/PCA-4-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/PCA-4-1.png" width="75%" height="75%" /></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">cor</span>(boxes_matrix)</span></code></pre></div>
 <pre><code>##           long      diag
 ## long 1.0000000 0.9112586
@@ -684,7 +684,7 @@ component) as points represented by the observation numbers.</p>
 ## Proportion Var    0.5    0.5
 ## Cumulative Var    0.5    1.0</code></pre>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">biplot</span>(boxes_pca)</span></code></pre></div>
-<p><img src="PCA_files/figure-html/PCA-5-1.png" width="75%" height="75%" />
+<p><img src="pca_files/figure-html/PCA-5-1.png" width="75%" height="75%" />
 The component standard deviation values describe the importance of each
 component, and the proportion of the total variance of all variables
 being analyzed accounted for by each component.</p>
@@ -714,14 +714,14 @@ vectors (<em>θ</em>), or <em>r = cos(θ)</em>. Here the angle is
 <span id="cb14-18"><a href="#cb14-18" tabindex="-1"></a>y2 <span class="ot">&lt;-</span> (y1<span class="sc">+</span>boxes_matrix[,<span class="dv">2</span>])<span class="sc">/</span><span class="fl">2.0</span></span>
 <span id="cb14-19"><a href="#cb14-19" tabindex="-1"></a>x2 <span class="ot">&lt;-</span> (x1<span class="sc">+</span>boxes_matrix[,<span class="dv">1</span>])<span class="sc">/</span><span class="fl">2.0</span></span>
 <span id="cb14-20"><a href="#cb14-20" tabindex="-1"></a><span class="fu">segments</span>(boxes_matrix[,<span class="dv">1</span>],boxes_matrix[,<span class="dv">2</span>], x2, y2, <span class="at">lwd=</span><span class="dv">2</span>,<span class="at">col=</span><span class="st">&quot;purple&quot;</span>)</span></code></pre></div>
-<p><img src="PCA_files/figure-html/PCA-6-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/PCA-6-1.png" width="75%" height="75%" /></p>
 <p>This plot illustrates the idea of the first (or “principal”
 component) providing an optimal summary of the data–no other line drawn
 on this scatter plot would produce a set of projected values of the data
 points onto the line with greater variance. The line also appears
 similar to a regression line, and in fact and PCA of two variables (as
 here) is equivalent to a “reduced major-axis” regression analysis.</p>
-<p><a href="PCA.html">[Back to top]</a></p>
+<p><a href="pca.html">[Back to top]</a></p>
 </div>
 </div>
 <div id="derivation-of-principal-components-and-their-properties"
@@ -735,7 +735,7 @@ use of matix algebra.</p>
 href="https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.html">[Matrix
 algebra]</a></li>
 <li><a
-href="https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html">[Derivation
+href="https://pjbartlein.github.io/GeogDataAnalysis/topics/pca_matrix.html">[Derivation
 of principal components]</a></li>
 </ul>
 <p>Because the components are derived by solving a particular
@@ -760,7 +760,7 @@ first <em>q</em> components;</li>
 <li>the components can be “<em>rotated</em>” to increase the
 interpretability of the components.</li>
 </ul>
-<p><a href="PCA.html">[Back to top]</a></p>
+<p><a href="pca.html">[Back to top]</a></p>
 </div>
 <div id="a-second-example-controls-of-mid-holocene-aridity-in-eurasia"
 class="section level1" number="3">
@@ -894,7 +894,7 @@ enough variables (24) to make that difficult to interpret. Another
 approach is to look at a <code>corrplot()</code> image:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a>cor_mm_data <span class="ot">&lt;-</span> <span class="fu">cor</span>(mm_data)</span>
 <span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="fu">corrplot</span>(cor_mm_data, <span class="at">method=</span><span class="st">&quot;color&quot;</span>)</span></code></pre></div>
-<p><img src="PCA_files/figure-html/PCA-11-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/PCA-11-1.png" width="75%" height="75%" /></p>
 <p>The plaid-like appearance of the plot suggests that there are several
 groups of variables whose variations of long-term mean differences
 throughout the year are similar.</p>
@@ -908,7 +908,7 @@ negative).</p>
 <span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>  <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a>  <span class="at">node.height=</span><span class="fl">0.5</span>, <span class="at">node.width=</span><span class="fl">0.5</span>, <span class="at">vTrans=</span><span class="dv">128</span>, <span class="at">edge.width=</span><span class="fl">0.75</span>, <span class="at">label.cex=</span><span class="fl">1.0</span>,</span>
 <span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a>  <span class="at">width=</span><span class="dv">7</span>, <span class="at">height=</span><span class="dv">5</span>, <span class="at">normalize=</span><span class="cn">TRUE</span>, <span class="at">edge.width=</span><span class="fl">0.75</span> ) </span></code></pre></div>
-<p><img src="PCA_files/figure-html/PCA-12-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/PCA-12-1.png" width="75%" height="75%" /></p>
 <p>A useful variant of this plot is provided by using the strength of
 the correlations to arrange the nodes (i.e. the variables). This is done
 by using the “Fruchterman-Reingold” algorithm that invokes the concept
@@ -919,7 +919,7 @@ variables toward one another.</p>
 <span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a>  <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a>  <span class="at">node.height=</span><span class="fl">0.5</span>, <span class="at">node.width=</span><span class="fl">0.5</span>, <span class="at">vTrans=</span><span class="dv">128</span>, <span class="at">edge.width=</span><span class="fl">0.75</span>, <span class="at">label.cex=</span><span class="fl">1.0</span>,</span>
 <span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a>  <span class="at">width=</span><span class="dv">7</span>, <span class="at">height=</span><span class="dv">5</span>, <span class="at">normalize=</span><span class="cn">TRUE</span>, <span class="at">edge.width=</span><span class="fl">0.75</span> ) </span></code></pre></div>
-<p><img src="PCA_files/figure-html/PCA-13-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/PCA-13-1.png" width="75%" height="75%" /></p>
 </div>
 <div id="pca-of-the-pmip-3-data" class="section level2" number="3.3">
 <h2><span class="header-section-number">3.3</span> PCA of the PMIP 3
@@ -1033,13 +1033,13 @@ by applying the “spring” layout.</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>qg_pca <span class="ot">&lt;-</span> <span class="fu">qgraph</span>(<span class="fu">loadings</span>(mm_pca_unrot), </span>
 <span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>  <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>, </span>
 <span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>  <span class="at">labels=</span><span class="fu">c</span>(<span class="fu">names</span>(mm_data),<span class="fu">as.character</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>nfactors))), <span class="at">vTrans=</span><span class="dv">128</span>)</span></code></pre></div>
-<p><img src="PCA_files/figure-html/PCA-16-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/PCA-16-1.png" width="75%" height="75%" /></p>
 <div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="fu">qgraph</span>(qg_pca, <span class="at">title=</span><span class="st">&quot;Component loadings, all models over all months&quot;</span>,</span>
 <span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>  <span class="at">layout =</span> <span class="st">&quot;spring&quot;</span>, </span>
 <span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>  <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a>  <span class="at">node.height=</span><span class="fl">0.5</span>, <span class="at">node.width=</span><span class="fl">0.5</span>, <span class="at">vTrans=</span><span class="dv">128</span>, <span class="at">edge.width=</span><span class="fl">0.75</span>, <span class="at">label.cex=</span><span class="fl">1.0</span>,</span>
 <span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a>  <span class="at">width=</span><span class="dv">7</span>, <span class="at">height=</span><span class="dv">5</span>, <span class="at">normalize=</span><span class="cn">TRUE</span>, <span class="at">edge.width=</span><span class="fl">0.75</span> )</span></code></pre></div>
-<p><img src="PCA_files/figure-html/PCA-16-2.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/PCA-16-2.png" width="75%" height="75%" /></p>
 </div>
 <div id="rotated-components" class="section level2" number="3.5">
 <h2><span class="header-section-number">3.5</span> Rotated
@@ -1102,13 +1102,13 @@ worth it.</p>
 <span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a>  <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>, </span>
 <span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a>  <span class="at">labels=</span><span class="fu">c</span>(<span class="fu">names</span>(mm_data),<span class="fu">as.character</span>(<span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>nfactors))), <span class="at">vTrans=</span><span class="dv">128</span>) </span></code></pre></div>
 <pre><code>## Warning in Glabels[1:n] &lt;- labels: number of items to replace is not a multiple of replacement length</code></pre>
-<p><img src="PCA_files/figure-html/PCA-17-1.png" width="75%" height="75%" /></p>
+<p><img src="pca_files/figure-html/PCA-17-1.png" width="75%" height="75%" /></p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">qgraph</span>(qg_pca, <span class="at">title=</span><span class="st">&quot;Rotated component loadings, all models over all months&quot;</span>,</span>
 <span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>  <span class="at">layout =</span> <span class="st">&quot;spring&quot;</span>, <span class="at">arrows =</span> <span class="cn">FALSE</span>, </span>
 <span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a>  <span class="at">posCol =</span> <span class="st">&quot;darkgreen&quot;</span>, <span class="at">negCol =</span> <span class="st">&quot;darkmagenta&quot;</span>, </span>
 <span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a>  <span class="at">width=</span><span class="dv">7</span>, <span class="at">height=</span><span class="dv">5</span>, <span class="at">normalize=</span><span class="cn">TRUE</span>, <span class="at">edge.width=</span><span class="fl">0.75</span>) </span></code></pre></div>
-<p><img src="PCA_files/figure-html/PCA-17-2.png" width="75%" height="75%" /></p>
-<p><a href="PCA.html">[Back to top]</a></p>
+<p><img src="pca_files/figure-html/PCA-17-2.png" width="75%" height="75%" /></p>
+<p><a href="pca.html">[Back to top]</a></p>
 </div>
 </div>
 <div id="pca-of-high-dimensional-data" class="section level1"
@@ -1238,18 +1238,24 @@ analysis</h2>
 the first month of data. Grab a slice of the data, and plot it as an
 <code>image()</code> plot. Get a world outline</p>
 <div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="co"># world_sf</span></span>
-<span id="cb56-2"><a href="#cb56-2" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb56-3"><a href="#cb56-3" tabindex="-1"></a><span class="fu">library</span>(maps)</span>
-<span id="cb56-4"><a href="#cb56-4" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb56-5"><a href="#cb56-5" tabindex="-1"></a>world_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(maps<span class="sc">::</span><span class="fu">map</span>(<span class="st">&quot;world&quot;</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>, <span class="at">fill =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb56-6"><a href="#cb56-6" tabindex="-1"></a>world_otl_sf <span class="ot">&lt;-</span> <span class="fu">st_geometry</span>(world_sf)</span>
-<span id="cb56-7"><a href="#cb56-7" tabindex="-1"></a><span class="fu">plot</span>(world_otl_sf)</span></code></pre></div>
-<p><img src="PCA_files/figure-html/PCA-26-1.png" width="75%" height="75%" /></p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a><span class="co"># select the first month of data, and make a data freame</span></span>
-<span id="cb57-2"><a href="#cb57-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb57-3"><a href="#cb57-3" tabindex="-1"></a>map_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">expand.grid</span>(lon, lat), <span class="fu">as.vector</span>(var_array[, , n]))</span>
-<span id="cb57-4"><a href="#cb57-4" tabindex="-1"></a><span class="fu">names</span>(map_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;hgt500_anm&quot;</span>)</span>
-<span id="cb57-5"><a href="#cb57-5" tabindex="-1"></a><span class="fu">head</span>(map_df)</span></code></pre></div>
+<span id="cb56-2"><a href="#cb56-2" tabindex="-1"></a><span class="fu">library</span>(sf)</span></code></pre></div>
+<pre><code>## Linking to GEOS 3.11.0, GDAL 3.5.3, PROJ 9.1.0; sf_use_s2() is TRUE</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a><span class="fu">library</span>(maps)</span>
+<span id="cb58-2"><a href="#cb58-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;ggplot2&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:psych&#39;:
+## 
+##     %+%, alpha</code></pre>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a>world_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(maps<span class="sc">::</span><span class="fu">map</span>(<span class="st">&quot;world&quot;</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>, <span class="at">fill =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a>world_otl_sf <span class="ot">&lt;-</span> <span class="fu">st_geometry</span>(world_sf)</span>
+<span id="cb61-3"><a href="#cb61-3" tabindex="-1"></a><span class="fu">plot</span>(world_otl_sf)</span></code></pre></div>
+<p><img src="pca_files/figure-html/PCA-26-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a><span class="co"># select the first month of data, and make a data freame</span></span>
+<span id="cb62-2"><a href="#cb62-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb62-3"><a href="#cb62-3" tabindex="-1"></a>map_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">expand.grid</span>(lon, lat), <span class="fu">as.vector</span>(var_array[, , n]))</span>
+<span id="cb62-4"><a href="#cb62-4" tabindex="-1"></a><span class="fu">names</span>(map_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;hgt500_anm&quot;</span>)</span>
+<span id="cb62-5"><a href="#cb62-5" tabindex="-1"></a><span class="fu">head</span>(map_df)</span></code></pre></div>
 <pre><code>##    lon lat hgt500_anm
 ## 1 -180 -90   -12.2334
 ## 2 -178 -90   -12.2334
@@ -1257,26 +1263,27 @@ the first month of data. Grab a slice of the data, and plot it as an
 ## 4 -174 -90   -12.2334
 ## 5 -172 -90   -12.2334
 ## 6 -170 -90   -12.2334</code></pre>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" tabindex="-1"></a><span class="co"># plot the first month</span></span>
-<span id="cb59-2"><a href="#cb59-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb59-3"><a href="#cb59-3" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">data =</span> map_df, <span class="fu">aes</span>(<span class="at">x =</span> lon, <span class="at">y =</span> lat, <span class="at">fill =</span> hgt500_anm)) <span class="sc">+</span></span>
-<span id="cb59-4"><a href="#cb59-4" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">mid=</span><span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkorange&quot;</span>, <span class="at">midpoint =</span> <span class="fl">0.0</span>) <span class="sc">+</span></span>
-<span id="cb59-5"><a href="#cb59-5" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb59-6"><a href="#cb59-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb59-7"><a href="#cb59-7" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="at">by =</span> <span class="dv">60</span>)) <span class="sc">+</span></span>
-<span id="cb59-8"><a href="#cb59-8" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
-<span id="cb59-9"><a href="#cb59-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">title=</span><span class="st">&quot;20th Century Reanalysis 500 hPa Height Anomalies&quot;</span>, <span class="at">fill=</span><span class="st">&quot;hgt500&quot;</span>) <span class="sc">+</span></span>
-<span id="cb59-10"><a href="#cb59-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="PCA_files/figure-html/PCA-28-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" tabindex="-1"></a><span class="co"># plot the first month</span></span>
+<span id="cb64-2"><a href="#cb64-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb64-3"><a href="#cb64-3" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">data =</span> map_df, <span class="fu">aes</span>(<span class="at">x =</span> lon, <span class="at">y =</span> lat, <span class="at">fill =</span> hgt500_anm)) <span class="sc">+</span></span>
+<span id="cb64-4"><a href="#cb64-4" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">mid=</span><span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkorange&quot;</span>, <span class="at">midpoint =</span> <span class="fl">0.0</span>) <span class="sc">+</span></span>
+<span id="cb64-5"><a href="#cb64-5" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb64-6"><a href="#cb64-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb64-7"><a href="#cb64-7" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="at">by =</span> <span class="dv">60</span>)) <span class="sc">+</span></span>
+<span id="cb64-8"><a href="#cb64-8" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb64-9"><a href="#cb64-9" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">title=</span><span class="st">&quot;20th Century Reanalysis 500 hPa Height Anomalies&quot;</span>, <span class="at">fill=</span><span class="st">&quot;hgt500&quot;</span>) <span class="sc">+</span></span>
+<span id="cb64-10"><a href="#cb64-10" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="pca_files/figure-html/PCA-28-1.png" width="75%" height="75%" /></p>
 <p>The map looks similar to a map of the first month’s data using
-Panoply.</p>
+Panoply. (The artifact at 0<sup>o</sup> E is due to rotation of the
+original data from 0 to 360 degrees to -180 to +180 degrees.)</p>
 <p>If desired, the analysis could be confined to the Northern Hemisphere
 by executing the following code (although this is not done here).</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a><span class="co"># (not run) trim data to N.H.</span></span>
-<span id="cb60-2"><a href="#cb60-2" tabindex="-1"></a>lat <span class="ot">&lt;-</span> lat[<span class="dv">47</span><span class="sc">:</span><span class="dv">91</span>]</span>
-<span id="cb60-3"><a href="#cb60-3" tabindex="-1"></a>nlat <span class="ot">&lt;-</span> <span class="fu">dim</span>(lat)</span>
-<span id="cb60-4"><a href="#cb60-4" tabindex="-1"></a><span class="fu">min</span>(lat); <span class="fu">max</span>(lat)</span>
-<span id="cb60-5"><a href="#cb60-5" tabindex="-1"></a>var_array <span class="ot">&lt;-</span> var_array[,<span class="dv">47</span><span class="sc">:</span><span class="dv">91</span>,]</span></code></pre></div>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a><span class="co"># (not run) trim data to N.H.</span></span>
+<span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a>lat <span class="ot">&lt;-</span> lat[<span class="dv">47</span><span class="sc">:</span><span class="dv">91</span>]</span>
+<span id="cb65-3"><a href="#cb65-3" tabindex="-1"></a>nlat <span class="ot">&lt;-</span> <span class="fu">dim</span>(lat)</span>
+<span id="cb65-4"><a href="#cb65-4" tabindex="-1"></a><span class="fu">min</span>(lat); <span class="fu">max</span>(lat)</span>
+<span id="cb65-5"><a href="#cb65-5" tabindex="-1"></a>var_array <span class="ot">&lt;-</span> var_array[,<span class="dv">47</span><span class="sc">:</span><span class="dv">91</span>,]</span></code></pre></div>
 <div id="reshape-the-array" class="section level3" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> Reshape the
 array</h3>
@@ -1288,20 +1295,20 @@ in this case) and each row representing an observation (or time). The
 reshaping can be done by first flatting the 3-d array into a long vector
 of values, and then converting that to a 2-d array with
 <code>nlon</code> x <code>nlat</code> columns, and `nt’ rows.</p>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a><span class="co"># reshape the 3-d array</span></span>
-<span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a>var_vec_long <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(var_array)</span>
-<span id="cb61-3"><a href="#cb61-3" tabindex="-1"></a><span class="fu">length</span>(var_vec_long)</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" tabindex="-1"></a><span class="co"># reshape the 3-d array</span></span>
+<span id="cb66-2"><a href="#cb66-2" tabindex="-1"></a>var_vec_long <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(var_array)</span>
+<span id="cb66-3"><a href="#cb66-3" tabindex="-1"></a><span class="fu">length</span>(var_vec_long)</span></code></pre></div>
 <pre><code>## [1] 27518400</code></pre>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a>var_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(var_vec_long, <span class="at">nrow =</span> nlon <span class="sc">*</span> nlat, <span class="at">ncol =</span> nt)</span>
-<span id="cb63-2"><a href="#cb63-2" tabindex="-1"></a><span class="fu">dim</span>(var_matrix)</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" tabindex="-1"></a>var_matrix <span class="ot">&lt;-</span> <span class="fu">matrix</span>(var_vec_long, <span class="at">nrow =</span> nlon <span class="sc">*</span> nlat, <span class="at">ncol =</span> nt)</span>
+<span id="cb68-2"><a href="#cb68-2" tabindex="-1"></a><span class="fu">dim</span>(var_matrix)</span></code></pre></div>
 <pre><code>## [1] 16380  1680</code></pre>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a>var_matrix <span class="ot">&lt;-</span> <span class="fu">t</span>(var_matrix)</span>
-<span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a><span class="fu">dim</span>(var_matrix)</span></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" tabindex="-1"></a>var_matrix <span class="ot">&lt;-</span> <span class="fu">t</span>(var_matrix)</span>
+<span id="cb70-2"><a href="#cb70-2" tabindex="-1"></a><span class="fu">dim</span>(var_matrix)</span></code></pre></div>
 <pre><code>## [1]  1680 16380</code></pre>
 <p>Note that this approach will only work if the netCDF file is
 configured in the standard “CF Conventions” way, i.e. as a
 <code>nlon</code> x <code>nlat</code> x <code>nt</code> array.</p>
-<p><a href="PCA.html">[Back to top]</a></p>
+<p><a href="pca.html">[Back to top]</a></p>
 </div>
 </div>
 </div>
@@ -1327,24 +1334,24 @@ href="http://bioconductor.org/install/#install-bioconductor-packages">[http://bi
 </ul>
 <p>In this example, the first eight components are extracted from the
 correlation matrix. Note that the analysis will take a few minutes.</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="co"># PCA using pcaMethods</span></span>
-<span id="cb67-2"><a href="#cb67-2" tabindex="-1"></a><span class="fu">library</span>(pcaMethods)</span>
-<span id="cb67-3"><a href="#cb67-3" tabindex="-1"></a>pcamethod<span class="ot">=</span><span class="st">&quot;svd&quot;</span></span>
-<span id="cb67-4"><a href="#cb67-4" tabindex="-1"></a>ncomp <span class="ot">&lt;-</span> <span class="dv">8</span></span>
-<span id="cb67-5"><a href="#cb67-5" tabindex="-1"></a>zd <span class="ot">&lt;-</span> <span class="fu">prep</span>(var_matrix, <span class="at">scale=</span><span class="st">&quot;uv&quot;</span>, <span class="at">center=</span><span class="cn">TRUE</span>)</span>
-<span id="cb67-6"><a href="#cb67-6" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
-<span id="cb67-7"><a href="#cb67-7" tabindex="-1"></a>ptm <span class="ot">&lt;-</span> <span class="fu">proc.time</span>() <span class="co"># time the analysis</span></span>
-<span id="cb67-8"><a href="#cb67-8" tabindex="-1"></a>resPCA <span class="ot">&lt;-</span> <span class="fu">pca</span>(zd, <span class="at">method=</span>pcamethod, <span class="at">scale=</span><span class="st">&quot;uv&quot;</span>, <span class="at">center=</span><span class="cn">TRUE</span>, <span class="at">nPcs=</span>ncomp)</span>
-<span id="cb67-9"><a href="#cb67-9" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm <span class="co"># how long?</span></span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" tabindex="-1"></a><span class="co"># PCA using pcaMethods</span></span>
+<span id="cb72-2"><a href="#cb72-2" tabindex="-1"></a><span class="fu">library</span>(pcaMethods)</span>
+<span id="cb72-3"><a href="#cb72-3" tabindex="-1"></a>pcamethod<span class="ot">=</span><span class="st">&quot;svd&quot;</span></span>
+<span id="cb72-4"><a href="#cb72-4" tabindex="-1"></a>ncomp <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb72-5"><a href="#cb72-5" tabindex="-1"></a>zd <span class="ot">&lt;-</span> <span class="fu">prep</span>(var_matrix, <span class="at">scale=</span><span class="st">&quot;uv&quot;</span>, <span class="at">center=</span><span class="cn">TRUE</span>)</span>
+<span id="cb72-6"><a href="#cb72-6" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb72-7"><a href="#cb72-7" tabindex="-1"></a>ptm <span class="ot">&lt;-</span> <span class="fu">proc.time</span>() <span class="co"># time the analysis</span></span>
+<span id="cb72-8"><a href="#cb72-8" tabindex="-1"></a>resPCA <span class="ot">&lt;-</span> <span class="fu">pca</span>(zd, <span class="at">method=</span>pcamethod, <span class="at">scale=</span><span class="st">&quot;uv&quot;</span>, <span class="at">center=</span><span class="cn">TRUE</span>, <span class="at">nPcs=</span>ncomp)</span>
+<span id="cb72-9"><a href="#cb72-9" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm <span class="co"># how long?</span></span></code></pre></div>
 <pre><code>##    user  system elapsed 
-## 158.573   2.017 161.151</code></pre>
+## 178.541   1.842 181.318</code></pre>
 <div id="results" class="section level2" number="5.1">
 <h2><span class="header-section-number">5.1</span> Results</h2>
 <p>Printing out the “results” object (<code>resPCA</code>) provides a
 summary of the analysis, and the loadings and scores are extracted from
 the results object.</p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" tabindex="-1"></a><span class="co"># print a summary of the results</span></span>
-<span id="cb69-2"><a href="#cb69-2" tabindex="-1"></a>resPCA</span></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" tabindex="-1"></a><span class="co"># print a summary of the results</span></span>
+<span id="cb74-2"><a href="#cb74-2" tabindex="-1"></a>resPCA</span></code></pre></div>
 <pre><code>## svd calculated PCA
 ## Importance of component(s):
 ##                  PC1    PC2     PC3     PC4     PC5     PC6     PC7     PC8
@@ -1360,17 +1367,17 @@ the results object.</p>
 ## [1] 1680    8
 ## Loadings structure:
 ## [1] 16380     8</code></pre>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" tabindex="-1"></a><span class="co"># extract loadings and scores</span></span>
-<span id="cb71-2"><a href="#cb71-2" tabindex="-1"></a>loadpca <span class="ot">&lt;-</span> <span class="fu">loadings</span>(resPCA)</span>
-<span id="cb71-3"><a href="#cb71-3" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">scores</span>(resPCA)<span class="sc">/</span><span class="fu">rep</span>(resPCA<span class="sc">@</span>sDev, <span class="at">each=</span><span class="fu">nrow</span>(<span class="fu">scores</span>(resPCA)))</span></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" tabindex="-1"></a><span class="co"># extract loadings and scores</span></span>
+<span id="cb76-2"><a href="#cb76-2" tabindex="-1"></a>loadpca <span class="ot">&lt;-</span> <span class="fu">loadings</span>(resPCA)</span>
+<span id="cb76-3"><a href="#cb76-3" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">scores</span>(resPCA)<span class="sc">/</span><span class="fu">rep</span>(resPCA<span class="sc">@</span>sDev, <span class="at">each=</span><span class="fu">nrow</span>(<span class="fu">scores</span>(resPCA)))</span></code></pre></div>
 <p>A quick look at the results can be gotten by mapping the loadings of
 the first component and plotting the time series of the component
 scores</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" tabindex="-1"></a><span class="co"># select the first month of data, and make a data freame</span></span>
-<span id="cb72-2"><a href="#cb72-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb72-3"><a href="#cb72-3" tabindex="-1"></a>comp_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">expand.grid</span>(lon, lat), <span class="fu">as.vector</span>(loadpca[, n]))</span>
-<span id="cb72-4"><a href="#cb72-4" tabindex="-1"></a><span class="fu">names</span>(comp_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;comp1&quot;</span>)</span>
-<span id="cb72-5"><a href="#cb72-5" tabindex="-1"></a><span class="fu">head</span>(comp_df)</span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" tabindex="-1"></a><span class="co"># select the first month of data, and make a data freame</span></span>
+<span id="cb77-2"><a href="#cb77-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb77-3"><a href="#cb77-3" tabindex="-1"></a>comp_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">expand.grid</span>(lon, lat), <span class="fu">as.vector</span>(loadpca[, n]))</span>
+<span id="cb77-4"><a href="#cb77-4" tabindex="-1"></a><span class="fu">names</span>(comp_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;comp1&quot;</span>)</span>
+<span id="cb77-5"><a href="#cb77-5" tabindex="-1"></a><span class="fu">head</span>(comp_df)</span></code></pre></div>
 <pre><code>##    lon lat         comp1
 ## 1 -180 -90 -0.0005038535
 ## 2 -178 -90 -0.0005038535
@@ -1378,27 +1385,27 @@ scores</p>
 ## 4 -174 -90 -0.0005038535
 ## 5 -172 -90 -0.0005038535
 ## 6 -170 -90 -0.0005038535</code></pre>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" tabindex="-1"></a><span class="co"># map the component loadings</span></span>
-<span id="cb74-2"><a href="#cb74-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb74-3"><a href="#cb74-3" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">data =</span> comp_df, <span class="fu">aes</span>(<span class="at">x =</span> lon, <span class="at">y =</span> lat, <span class="at">fill =</span> comp1)) <span class="sc">+</span></span>
-<span id="cb74-4"><a href="#cb74-4" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">mid=</span><span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkorange&quot;</span>, <span class="at">midpoint =</span> <span class="fl">0.0</span>, </span>
-<span id="cb74-5"><a href="#cb74-5" tabindex="-1"></a>                       <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.02</span>, <span class="fl">0.02</span>)) <span class="sc">+</span></span>
-<span id="cb74-6"><a href="#cb74-6" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
-<span id="cb74-7"><a href="#cb74-7" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb74-8"><a href="#cb74-8" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="at">by =</span> <span class="dv">60</span>)) <span class="sc">+</span></span>
-<span id="cb74-9"><a href="#cb74-9" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
-<span id="cb74-10"><a href="#cb74-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">title=</span><span class="st">&quot;20th CRA 500 hPa Height Anomalies PCA Loadings&quot;</span>, <span class="at">fill=</span><span class="st">&quot; &quot;</span>) <span class="sc">+</span></span>
-<span id="cb74-11"><a href="#cb74-11" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="PCA_files/figure-html/PCA-35-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" tabindex="-1"></a><span class="co"># map the component loadings</span></span>
+<span id="cb79-2"><a href="#cb79-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb79-3"><a href="#cb79-3" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">data =</span> comp_df, <span class="fu">aes</span>(<span class="at">x =</span> lon, <span class="at">y =</span> lat, <span class="at">fill =</span> comp1)) <span class="sc">+</span></span>
+<span id="cb79-4"><a href="#cb79-4" tabindex="-1"></a>  <span class="fu">scale_fill_gradient2</span>(<span class="at">low =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="at">mid=</span><span class="st">&quot;white&quot;</span>, <span class="at">high =</span> <span class="st">&quot;darkorange&quot;</span>, <span class="at">midpoint =</span> <span class="fl">0.0</span>, </span>
+<span id="cb79-5"><a href="#cb79-5" tabindex="-1"></a>                       <span class="at">limits =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.02</span>, <span class="fl">0.02</span>)) <span class="sc">+</span></span>
+<span id="cb79-6"><a href="#cb79-6" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb79-7"><a href="#cb79-7" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb79-8"><a href="#cb79-8" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="at">by =</span> <span class="dv">60</span>)) <span class="sc">+</span></span>
+<span id="cb79-9"><a href="#cb79-9" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb79-10"><a href="#cb79-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">title=</span><span class="st">&quot;20th CRA 500 hPa Height Anomalies PCA Loadings&quot;</span>, <span class="at">fill=</span><span class="st">&quot; &quot;</span>) <span class="sc">+</span></span>
+<span id="cb79-11"><a href="#cb79-11" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="pca_files/figure-html/PCA-35-1.png" width="75%" height="75%" /></p>
 <p>Recall that the loadings are the correlations between the time series
 of 500mb heights at each grid point and the time series of the (first,
 in this case) component and they describe the map pattern of the first
 component, and the scores illustrate the importance of the anomaly map
 pattern represented by the first component as it varies over time:</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" tabindex="-1"></a><span class="co"># timeseries plot of scores</span></span>
-<span id="cb75-2"><a href="#cb75-2" tabindex="-1"></a>yrmn <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">1871.0</span>, <span class="fl">2011.0</span><span class="sc">-</span>(<span class="fl">1.0</span><span class="sc">/</span><span class="fl">12.0</span>), <span class="at">by=</span><span class="fl">1.0</span><span class="sc">/</span><span class="fl">12.0</span>)</span>
-<span id="cb75-3"><a href="#cb75-3" tabindex="-1"></a><span class="fu">plot</span>(yrmn, scores[,<span class="dv">1</span>], <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
-<p><img src="PCA_files/figure-html/PCA-36-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" tabindex="-1"></a><span class="co"># timeseries plot of scores</span></span>
+<span id="cb80-2"><a href="#cb80-2" tabindex="-1"></a>yrmn <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">1871.0</span>, <span class="fl">2011.0</span><span class="sc">-</span>(<span class="fl">1.0</span><span class="sc">/</span><span class="fl">12.0</span>), <span class="at">by=</span><span class="fl">1.0</span><span class="sc">/</span><span class="fl">12.0</span>)</span>
+<span id="cb80-3"><a href="#cb80-3" tabindex="-1"></a><span class="fu">plot</span>(yrmn, scores[,<span class="dv">1</span>], <span class="at">type=</span><span class="st">&quot;l&quot;</span>)</span></code></pre></div>
+<p><img src="pca_files/figure-html/PCA-36-1.png" width="75%" height="75%" /></p>
 <p>The first six components account for half of the variance of the
 original 16,380 variables, which is a pretty efficient reduction in
 dimensionality. The map pattern of the first component is positive in
@@ -1414,17 +1421,17 @@ results</h1>
 <h2><span class="header-section-number">6.1</span> Component scores</h2>
 <p>Write out the component scores and statistics (to the working
 directory):</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" tabindex="-1"></a><span class="co"># write scores</span></span>
-<span id="cb76-2"><a href="#cb76-2" tabindex="-1"></a>scoresout <span class="ot">&lt;-</span> <span class="fu">cbind</span>(yrmn,scores)</span>
-<span id="cb76-3"><a href="#cb76-3" tabindex="-1"></a>scoresfile <span class="ot">&lt;-</span> <span class="st">&quot;hgt500_scores.csv&quot;</span></span>
-<span id="cb76-4"><a href="#cb76-4" tabindex="-1"></a><span class="fu">write.table</span>(scoresout, <span class="at">file=</span>scoresfile, <span class="at">row.names=</span><span class="cn">FALSE</span>, <span class="at">col.names=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">&quot;,&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" tabindex="-1"></a><span class="co"># write statistics</span></span>
-<span id="cb77-2"><a href="#cb77-2" tabindex="-1"></a>ncompchar <span class="ot">&lt;-</span> <span class="fu">paste</span> (<span class="st">&quot;0&quot;</span>, <span class="fu">as.character</span>(ncomp), <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb77-3"><a href="#cb77-3" tabindex="-1"></a><span class="cf">if</span> (ncomp <span class="sc">&gt;=</span> <span class="dv">10</span>) ncompchar <span class="ot">&lt;-</span> <span class="fu">as.character</span>(ncomp)</span>
-<span id="cb77-4"><a href="#cb77-4" tabindex="-1"></a>statsout <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span><span class="sc">:</span>resPCA<span class="sc">@</span>nPcs,resPCA<span class="sc">@</span>sDev,resPCA<span class="sc">@</span>R2,resPCA<span class="sc">@</span>R2cum)</span>
-<span id="cb77-5"><a href="#cb77-5" tabindex="-1"></a><span class="fu">colnames</span>(statsout) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;PC&quot;</span>, <span class="st">&quot;sDev&quot;</span>, <span class="st">&quot;R2&quot;</span>, <span class="st">&quot;R2cum&quot;</span>)</span>
-<span id="cb77-6"><a href="#cb77-6" tabindex="-1"></a>statsfile <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;hgt500&quot;</span>,pcamethod,<span class="st">&quot;_&quot;</span>,ncompchar,<span class="st">&quot;_stats.csv&quot;</span>,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb77-7"><a href="#cb77-7" tabindex="-1"></a><span class="fu">write.table</span>(statsout, <span class="at">file=</span>statsfile, <span class="at">row.names=</span><span class="cn">FALSE</span>, <span class="at">col.names=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">&quot;,&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" tabindex="-1"></a><span class="co"># write scores</span></span>
+<span id="cb81-2"><a href="#cb81-2" tabindex="-1"></a>scoresout <span class="ot">&lt;-</span> <span class="fu">cbind</span>(yrmn,scores)</span>
+<span id="cb81-3"><a href="#cb81-3" tabindex="-1"></a>scoresfile <span class="ot">&lt;-</span> <span class="st">&quot;hgt500_scores.csv&quot;</span></span>
+<span id="cb81-4"><a href="#cb81-4" tabindex="-1"></a><span class="fu">write.table</span>(scoresout, <span class="at">file=</span>scoresfile, <span class="at">row.names=</span><span class="cn">FALSE</span>, <span class="at">col.names=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">&quot;,&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" tabindex="-1"></a><span class="co"># write statistics</span></span>
+<span id="cb82-2"><a href="#cb82-2" tabindex="-1"></a>ncompchar <span class="ot">&lt;-</span> <span class="fu">paste</span> (<span class="st">&quot;0&quot;</span>, <span class="fu">as.character</span>(ncomp), <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb82-3"><a href="#cb82-3" tabindex="-1"></a><span class="cf">if</span> (ncomp <span class="sc">&gt;=</span> <span class="dv">10</span>) ncompchar <span class="ot">&lt;-</span> <span class="fu">as.character</span>(ncomp)</span>
+<span id="cb82-4"><a href="#cb82-4" tabindex="-1"></a>statsout <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span><span class="sc">:</span>resPCA<span class="sc">@</span>nPcs,resPCA<span class="sc">@</span>sDev,resPCA<span class="sc">@</span>R2,resPCA<span class="sc">@</span>R2cum)</span>
+<span id="cb82-5"><a href="#cb82-5" tabindex="-1"></a><span class="fu">colnames</span>(statsout) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;PC&quot;</span>, <span class="st">&quot;sDev&quot;</span>, <span class="st">&quot;R2&quot;</span>, <span class="st">&quot;R2cum&quot;</span>)</span>
+<span id="cb82-6"><a href="#cb82-6" tabindex="-1"></a>statsfile <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;hgt500&quot;</span>,pcamethod,<span class="st">&quot;_&quot;</span>,ncompchar,<span class="st">&quot;_stats.csv&quot;</span>,<span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb82-7"><a href="#cb82-7" tabindex="-1"></a><span class="fu">write.table</span>(statsout, <span class="at">file=</span>statsfile, <span class="at">row.names=</span><span class="cn">FALSE</span>, <span class="at">col.names=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">&quot;,&quot;</span>)</span></code></pre></div>
 </div>
 <div id="write-out-a-netcdf-file-of-component-loadings"
 class="section level2" number="6.2">
@@ -1437,49 +1444,49 @@ reshaped into an <code>nlon</code> x <code>nlat</code> x
 happens that this works because the original data (from the input netCDF
 file) was properly defined (as a <code>nlon</code> x <code>nlat</code> x
 <code>nt</code> array).</p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" tabindex="-1"></a><span class="co"># reshape loadings</span></span>
-<span id="cb78-2"><a href="#cb78-2" tabindex="-1"></a>dim.array <span class="ot">&lt;-</span> <span class="fu">c</span>(nlon,nlat,ncomp)</span>
-<span id="cb78-3"><a href="#cb78-3" tabindex="-1"></a>var_array <span class="ot">&lt;-</span> <span class="fu">array</span>(loadpca, dim.array)</span></code></pre></div>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" tabindex="-1"></a><span class="co"># reshape loadings</span></span>
+<span id="cb83-2"><a href="#cb83-2" tabindex="-1"></a>dim.array <span class="ot">&lt;-</span> <span class="fu">c</span>(nlon,nlat,ncomp)</span>
+<span id="cb83-3"><a href="#cb83-3" tabindex="-1"></a>var_array <span class="ot">&lt;-</span> <span class="fu">array</span>(loadpca, dim.array)</span></code></pre></div>
 <p>Next, the dimension (or coordinate) variables are defined, including
 one <code>ncomp</code> long:</p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" tabindex="-1"></a><span class="co"># define dimensions</span></span>
-<span id="cb79-2"><a href="#cb79-2" tabindex="-1"></a>londim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;degrees_east&quot;</span>, <span class="fu">as.double</span>(lon))</span>
-<span id="cb79-3"><a href="#cb79-3" tabindex="-1"></a>latdim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;lat&quot;</span>, <span class="st">&quot;degrees_north&quot;</span>, <span class="fu">as.double</span>(lat))</span>
-<span id="cb79-4"><a href="#cb79-4" tabindex="-1"></a>comp <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>ncomp)</span>
-<span id="cb79-5"><a href="#cb79-5" tabindex="-1"></a>ncompdim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;comp&quot;</span>, <span class="st">&quot;SVD component&quot;</span>, <span class="fu">as.integer</span>(comp))</span></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" tabindex="-1"></a><span class="co"># define dimensions</span></span>
+<span id="cb84-2"><a href="#cb84-2" tabindex="-1"></a>londim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;degrees_east&quot;</span>, <span class="fu">as.double</span>(lon))</span>
+<span id="cb84-3"><a href="#cb84-3" tabindex="-1"></a>latdim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;lat&quot;</span>, <span class="st">&quot;degrees_north&quot;</span>, <span class="fu">as.double</span>(lat))</span>
+<span id="cb84-4"><a href="#cb84-4" tabindex="-1"></a>comp <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span><span class="sc">:</span>ncomp)</span>
+<span id="cb84-5"><a href="#cb84-5" tabindex="-1"></a>ncompdim <span class="ot">&lt;-</span> <span class="fu">ncdim_def</span>(<span class="st">&quot;comp&quot;</span>, <span class="st">&quot;SVD component&quot;</span>, <span class="fu">as.integer</span>(comp))</span></code></pre></div>
 <p>Then the 3-d (lon x lat x ncomp) variable (the loadings) is
 defined:</p>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" tabindex="-1"></a><span class="co"># define variable</span></span>
-<span id="cb80-2"><a href="#cb80-2" tabindex="-1"></a>fillvalue <span class="ot">&lt;-</span> <span class="fl">1e+32</span></span>
-<span id="cb80-3"><a href="#cb80-3" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;hgt500 anomalies loadings&quot;</span></span>
-<span id="cb80-4"><a href="#cb80-4" tabindex="-1"></a>var_def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;hgt500_loadings&quot;</span>, <span class="st">&quot;1&quot;</span>, <span class="fu">list</span>(londim, latdim, ncompdim), fillvalue, </span>
-<span id="cb80-5"><a href="#cb80-5" tabindex="-1"></a>  dlname, <span class="at">prec =</span> <span class="st">&quot;single&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" tabindex="-1"></a><span class="co"># define variable</span></span>
+<span id="cb85-2"><a href="#cb85-2" tabindex="-1"></a>fillvalue <span class="ot">&lt;-</span> <span class="fl">1e+32</span></span>
+<span id="cb85-3"><a href="#cb85-3" tabindex="-1"></a>dlname <span class="ot">&lt;-</span> <span class="st">&quot;hgt500 anomalies loadings&quot;</span></span>
+<span id="cb85-4"><a href="#cb85-4" tabindex="-1"></a>var_def <span class="ot">&lt;-</span> <span class="fu">ncvar_def</span>(<span class="st">&quot;hgt500_loadings&quot;</span>, <span class="st">&quot;1&quot;</span>, <span class="fu">list</span>(londim, latdim, ncompdim), fillvalue, </span>
+<span id="cb85-5"><a href="#cb85-5" tabindex="-1"></a>  dlname, <span class="at">prec =</span> <span class="st">&quot;single&quot;</span>)</span></code></pre></div>
 <p>Then the netCDF file is created, and the loadings and additional
 attributes are added:</p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" tabindex="-1"></a><span class="co"># create netCDF file and put arrays</span></span>
-<span id="cb81-2"><a href="#cb81-2" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="st">&quot;hgt500_loadings.nc&quot;</span></span>
-<span id="cb81-3"><a href="#cb81-3" tabindex="-1"></a>ncout <span class="ot">&lt;-</span> <span class="fu">nc_create</span>(ncfname, <span class="fu">list</span>(var_def), <span class="at">force_v4 =</span> T)</span>
-<span id="cb81-4"><a href="#cb81-4" tabindex="-1"></a></span>
-<span id="cb81-5"><a href="#cb81-5" tabindex="-1"></a><span class="co"># put loadings</span></span>
-<span id="cb81-6"><a href="#cb81-6" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout, var_def, var_array)</span>
-<span id="cb81-7"><a href="#cb81-7" tabindex="-1"></a></span>
-<span id="cb81-8"><a href="#cb81-8" tabindex="-1"></a><span class="co"># put additional attributes into dimension and data variables</span></span>
-<span id="cb81-9"><a href="#cb81-9" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="st">&quot;lon&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;X&quot;</span>)  <span class="co">#,verbose=FALSE) #,definemode=FALSE)</span></span>
-<span id="cb81-10"><a href="#cb81-10" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;Y&quot;</span>)</span>
-<span id="cb81-11"><a href="#cb81-11" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="st">&quot;comp&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;PC&quot;</span>)</span>
-<span id="cb81-12"><a href="#cb81-12" tabindex="-1"></a></span>
-<span id="cb81-13"><a href="#cb81-13" tabindex="-1"></a><span class="co"># add global attributes</span></span>
-<span id="cb81-14"><a href="#cb81-14" tabindex="-1"></a>title2 <span class="ot">&lt;-</span> <span class="fu">paste</span>(title<span class="sc">$</span>value, <span class="st">&quot;SVD component analysis using pcaMethods&quot;</span>, <span class="at">sep=</span><span class="st">&quot;--&quot;</span>)</span>
-<span id="cb81-15"><a href="#cb81-15" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;title&quot;</span>, title2)</span>
-<span id="cb81-16"><a href="#cb81-16" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;institution&quot;</span>, institution<span class="sc">$</span>value)</span>
-<span id="cb81-17"><a href="#cb81-17" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;source&quot;</span>, datasource<span class="sc">$</span>value)</span>
-<span id="cb81-18"><a href="#cb81-18" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;references&quot;</span>, references<span class="sc">$</span>value)</span>
-<span id="cb81-19"><a href="#cb81-19" tabindex="-1"></a>history <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;P.J. Bartlein&quot;</span>, <span class="fu">date</span>(), <span class="at">sep =</span> <span class="st">&quot;, &quot;</span>)</span>
-<span id="cb81-20"><a href="#cb81-20" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;history&quot;</span>, history)</span>
-<span id="cb81-21"><a href="#cb81-21" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;Conventions&quot;</span>, Conventions<span class="sc">$</span>value)</span></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" tabindex="-1"></a><span class="co"># create netCDF file and put arrays</span></span>
+<span id="cb86-2"><a href="#cb86-2" tabindex="-1"></a>ncfname <span class="ot">&lt;-</span> <span class="st">&quot;hgt500_loadings.nc&quot;</span></span>
+<span id="cb86-3"><a href="#cb86-3" tabindex="-1"></a>ncout <span class="ot">&lt;-</span> <span class="fu">nc_create</span>(ncfname, <span class="fu">list</span>(var_def), <span class="at">force_v4 =</span> T)</span>
+<span id="cb86-4"><a href="#cb86-4" tabindex="-1"></a></span>
+<span id="cb86-5"><a href="#cb86-5" tabindex="-1"></a><span class="co"># put loadings</span></span>
+<span id="cb86-6"><a href="#cb86-6" tabindex="-1"></a><span class="fu">ncvar_put</span>(ncout, var_def, var_array)</span>
+<span id="cb86-7"><a href="#cb86-7" tabindex="-1"></a></span>
+<span id="cb86-8"><a href="#cb86-8" tabindex="-1"></a><span class="co"># put additional attributes into dimension and data variables</span></span>
+<span id="cb86-9"><a href="#cb86-9" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="st">&quot;lon&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;X&quot;</span>)  <span class="co">#,verbose=FALSE) #,definemode=FALSE)</span></span>
+<span id="cb86-10"><a href="#cb86-10" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;Y&quot;</span>)</span>
+<span id="cb86-11"><a href="#cb86-11" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="st">&quot;comp&quot;</span>, <span class="st">&quot;axis&quot;</span>, <span class="st">&quot;PC&quot;</span>)</span>
+<span id="cb86-12"><a href="#cb86-12" tabindex="-1"></a></span>
+<span id="cb86-13"><a href="#cb86-13" tabindex="-1"></a><span class="co"># add global attributes</span></span>
+<span id="cb86-14"><a href="#cb86-14" tabindex="-1"></a>title2 <span class="ot">&lt;-</span> <span class="fu">paste</span>(title<span class="sc">$</span>value, <span class="st">&quot;SVD component analysis using pcaMethods&quot;</span>, <span class="at">sep=</span><span class="st">&quot;--&quot;</span>)</span>
+<span id="cb86-15"><a href="#cb86-15" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;title&quot;</span>, title2)</span>
+<span id="cb86-16"><a href="#cb86-16" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;institution&quot;</span>, institution<span class="sc">$</span>value)</span>
+<span id="cb86-17"><a href="#cb86-17" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;source&quot;</span>, datasource<span class="sc">$</span>value)</span>
+<span id="cb86-18"><a href="#cb86-18" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;references&quot;</span>, references<span class="sc">$</span>value)</span>
+<span id="cb86-19"><a href="#cb86-19" tabindex="-1"></a>history <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;P.J. Bartlein&quot;</span>, <span class="fu">date</span>(), <span class="at">sep =</span> <span class="st">&quot;, &quot;</span>)</span>
+<span id="cb86-20"><a href="#cb86-20" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;history&quot;</span>, history)</span>
+<span id="cb86-21"><a href="#cb86-21" tabindex="-1"></a><span class="fu">ncatt_put</span>(ncout, <span class="dv">0</span>, <span class="st">&quot;Conventions&quot;</span>, Conventions<span class="sc">$</span>value)</span></code></pre></div>
 <p>Finally, the netCDF file is closed, writing the data to disk.</p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" tabindex="-1"></a><span class="fu">nc_close</span>(ncout)</span></code></pre></div>
-<p><a href="PCA.html">[Back to top]</a></p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" tabindex="-1"></a><span class="fu">nc_close</span>(ncout)</span></code></pre></div>
+<p><a href="pca.html">[Back to top]</a></p>
 </div>
 </div>
 

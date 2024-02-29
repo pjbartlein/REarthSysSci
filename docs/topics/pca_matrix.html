@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>PCA</title>
+
+
+<style type="text/css">
+body, td {
+   font-family: Times, TimesNewRoman, serif;
+   background-color: white;
+   font-size: 1.0em;
+   margin: 40px;
+   width:  720px;
+   text-align:justify;
+}
+
+tt, code, pre {
+   font-family: Arial, Helvetica, Geneva, sans-serif;
+   font-size: 0.88em;
+}
+
+h1 {
+   font-size:1.8em;
+   font-weight: normal;
+}
+
+h2 {
+   font-size:1.6em;
+   font-weight: normal;
+}
+
+h3 {
+   font-size:1.4em;
+   font-weight: normal;
+   font-style: italic;
+}
+
+h4 {
+   font-size:1.2em;
+   font-weight: normal;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre { 
+   margin-top: 0;
+   max-width: 100%;
+   border: 1px solid #ccc;
+   white-space: pre-wrap;
+}
+
+pre code {
+   display: block; padding: 0.5em;
+   background-color:  #E0E0E0;
+}
+
+code.r, code.noeval, code.cpp {
+   background-color: #eeeeee;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#000000;
+   margin:0;
+   padding-left: 1em;
+   padding-right: 1em;
+   border-left: 0.5em #E0E0E0 solid;
+   border-right: 0.5em #E0E0E0 solid
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+</style>
+
+<style type="text/css">
+/**
+ * prism.js default theme for JavaScript, CSS and HTML
+ * Based on dabblet (http://dabblet.com)
+ * @author Lea Verou
+ */
+
+code[class*="language-"],
+pre[class*="language-"] {
+	color: black;
+	background: none;
+	text-shadow: 0 1px white;
+	font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+pre[class*="language-"]::-moz-selection, pre[class*="language-"] ::-moz-selection,
+code[class*="language-"]::-moz-selection, code[class*="language-"] ::-moz-selection {
+	text-shadow: none;
+	background: #b3d4fc;
+}
+
+pre[class*="language-"]::selection, pre[class*="language-"] ::selection,
+code[class*="language-"]::selection, code[class*="language-"] ::selection {
+	text-shadow: none;
+	background: #b3d4fc;
+}
+
+@media print {
+	code[class*="language-"],
+	pre[class*="language-"] {
+		text-shadow: none;
+	}
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+	padding: 1em;
+	margin: .5em 0;
+	overflow: auto;
+}
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+	background: #f5f2f0;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+	padding: .1em;
+	border-radius: .3em;
+	white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+	color: slategray;
+}
+
+.token.punctuation {
+	color: #999;
+}
+
+.namespace {
+	opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol,
+.token.deleted {
+	color: #905;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+	color: #690;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+	color: #a67f59;
+	background: hsla(0, 0%, 100%, .5);
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+	color: #07a;
+}
+
+.token.function {
+	color: #DD4A68;
+}
+
+.token.regex,
+.token.important,
+.token.variable {
+	color: #e90;
+}
+
+.token.important,
+.token.bold {
+	font-weight: bold;
+}
+.token.italic {
+	font-style: italic;
+}
+
+.token.entity {
+	cursor: help;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<h2 id="toc_0">Principal Components Analysis</h2>
+
+<p>The objective in a principal components analysis (or PCA) of a set of variables is to find a new set of variables that have certain desirable properties, and that efficiently represent the information in the original set of variables (efficiently here means with a smaller number of new variables than the original set.)
+The numerical analysis problem that must be solved in PCA is that given p variables, \({X_1},{X_{2,}} \ldots ,{X_p},\) find the linear combinations (new variables) \({Z_1},{Z_2}, \ldots ,{Z_p},\) e.g.</p>
+
+<p>\[{Z_{1i}} = {a_{11}}{X_{1i}} + {a_{12}}{X_{2i}} +  \cdots  + {a_{1p}}{X_{pi}},{\rm{ }}i = 1, \ldots ,n,\] </p>
+
+<p>that have the following properties:</p>
+
+<ul>
+<li>\({\mathop{\rm var}} ({Z_1}) \ge {\mathop{\rm var}} ({Z_2}) \ge  \ldots  \ge {\mathop{\rm var}} ({Z_p}),\) </li>
+<li>the a’s should have the maximum simultaneous resemblance to all X’s, and </li>
+<li>\({\mathop{\rm cov}} ({Z_j},{Z_k}) = 0,{\rm{ all }}k \ne j.\) </li>
+</ul>
+
+<p>Usually, but not always, the X’s have been rescaled to have a mean of 0 and a standard deviation of 1 (i.e. transformed to z-scores).</p>
+
+<p>The first linear combination, \({Z_1},\) looks somewhat like a regression equation, and the properties are designed so that a) the (new) components are defined in decreasing order of importance, b) the components represent the “underlying dimensions” of the set of original variables, and c) are not correlated with one another.</p>
+
+<p>The first, or principal, component (hence the name of the analysis) is </p>
+
+<p>\[{Z_{1i}} = {a_{11}}{X_{1i}} + {a_{12}}{X_{2i}} +  \cdots  + {a_{1p}}{X_{pi}},{\rm{ }}i = 1, \ldots ,n,\]</p>
+
+<p>and is defined by choosing the a’s in order to </p>
+
+<p>\[\max ({\lambda _1}) = {\mathop{\rm var}} ({Z_1}) = (1/n)\sum\limits_{i = 1}^n {Z_{1i}^2,}\]</p>
+
+<p>subject to the constraint that \(a_{11}^2 + a_{12}^2 +  \cdots  + a_{1p}^2 = 1.\)  This constraint ensures that \({\lambda _1}\) is not made arbitrarily large simply by increasing the values of the a’s. </p>
+
+<p>A second component </p>
+
+<p>\[{Z_{2i}} = {a_{21}}{X_{1i}} + {a_{22}}{X_{2i}} +  \cdots  + {a_{2p}}{X_{pi}},{\rm{ }}i = 1, \ldots ,n,\]</p>
+
+<p>can also be defined in order to</p>
+
+<p>\[\max ({\lambda _2}) = {\mathop{\rm var}} ({Z_2}) = (1/n)\sum\limits_{i = 1}^n {Z_{2i}^2,}\]</p>
+
+<p>subject to the constraints that \(a_{21}^2 + a_{22}^2 +  \cdots  + a_{2p}^2 = 1\), and \({\mathop{\rm cov}} ({Z_1},{Z_2}) = 0.\)  </p>
+
+<p>These constraints again make sure that \({\lambda _2}\) is not made arbitrarily large, and that the first and second components are independent or uncorrelated with one another.
+The optimization problem amounts to requiring the first component to be defined in such a way as to have the maximum variance over the n observations.  The optimization problem may be stated as:</p>
+
+<p>\[\begin{array}{c}\max ({\lambda _1}) = (1/n)\sum\limits_{i = 1}^n 
+{Z_{1i}^2,{\rm{ s.t. }}\sum\limits_{i = 1}^n {a_{1i}^2} }  = 1\\ = (1/n){({{{\bf{a&#39;}}}_1}{\bf{X}})^2},{\rm{ s.t.}}\space{{{\bf{a&#39;}}}_1}{{\bf{a}}_1} = 1\\ = (1/n)({{{\bf{a&#39;}}}_1}{\bf{X}})({\bf{X&#39;}}{{\bf{a}}_1}),{\rm{ s.t.}}\space{{{\bf{a&#39;}}}_1}{{\bf{a}}_1} = 1\\ = {{{\bf{a&#39;}}}_1}((1/n){\bf{XX&#39;}}){{\bf{a}}_1},{\rm{ s.t.}}\space{{{\bf{a&#39;}}}_1}{{\bf{a}}_1} = 1.\end{array} \]</p>
+
+<p>Note that if \({\mu _X} = 0,\) and \({\sigma _X} = 1,\) (i.e. that the X’s are z-scores), \((1/n){\bf{XX&#39;}} = {\bf{R}},\) the correlation matrix.</p>
+
+<p>Maximizing \({\lambda _1},\) i.e. </p>
+
+<p>\[\max ({\lambda _1}) = {{\bf{a&#39;}}_1}{\bf{R}}{{\bf{a}}_1},{\rm{ s.t.}\space}{{\bf{a&#39;}}_1}{{\bf{a}}_1} = 1\] </p>
+
+<p>is equivalent to maximizing \({u_1}\), i.e.</p>
+
+<p>\[\max ({u_1}) = {{\bf{a&#39;}}_1}{\bf{R}}{{\bf{a}}_1} - {\lambda _1}({{\bf{a&#39;}}_1}{{\bf{a}}_1} - 1),\]</p>
+
+<p>where \({\lambda _1}\) appears in the equation as a “Lagrange multiplier” which incorporates the constraint into the equation.</p>
+
+<p>To maximize \({u_1}\), set the partial derivative of \({u_1}\) with respect to \({a}\) to zero, i.e.,</p>
+
+<p>\[{{\partial {u_1}}}/{{\partial {\bf{a}}}} = 2{\bf{Ra}} - 2{\lambda _1}{{\bf{a}}_1} = {\bf{0}},{\rm{ or}}\] </p>
+
+<p>\[({\bf{R}} - {\lambda _1}){{\bf{a}}_1} = {\bf{0}}.\]</p>
+
+<p>This last expression contains p simultaneous equations that must be solved for \({{\bf{a}}_1}.\) 
+Comparison of this expression with that describing the “eigenstructure” of a square matrix reveals that choosing \({{\bf{a}}_1}\) to be the first eigenvector of R, with \({\lambda _1}\) as the first eigenvalue, solves the optimization problem in PCA.  It also happens that the second and higher-numbered components are described by the second and higher-numbered eigenvectors and eigenvalues of the matrix R.
+There is a second way to state the optimization problem that winds up leading to the same result.  In this second case, instead of choosing the coefficients, \({{\bf{a}}_1},\) such that the first component has the maximum variability over the observations, instead \({{\bf{a}}_1}\) is defined to have the maximum simultaneous resemblance to the X’s, i.e.,</p>
+
+<p>\[\begin{array}{c}\max ({\lambda _1}) = \frac{1}{n}\sum\limits_{i = 1}^n {\left( {\sum\limits_{j = 1}^p {{{({a_{1j}}{X_{ji}})}^2}/\sum\limits_{j = 1}^p {a_{1j}^2} } } \right)} \\ = \frac{1}{n}{({{{\bf{a&#39;}}}_1}{\bf{X}})^2}/({\bf{a&#39;a}})\\ = \frac{1}{n}({{{\bf{a&#39;}}}_1}{\bf{XX&#39;}}{{\bf{a}}_1})/({\bf{a&#39;a}})\\ = ({{{\bf{a&#39;}}}_1}{\bf{R&#39;}}{{\bf{a}}_1})/({\bf{a&#39;a}}),\end{array}\]</p>
+
+<p>which leads to the same problem as before, i.e.
+\(\max ({\lambda _1}) = {{\bf{a&#39;}}_1}{\bf{R}}{{\bf{a}}_1},{\rm{ s.t. }}{{\bf{a&#39;}}_1}{{\bf{a}}_1} = 1.\)</p>
+
+
+
+<script type="text/javascript">
+var _self="undefined"!=typeof window?window:"undefined"!=typeof WorkerGlobalScope&&self instanceof WorkerGlobalScope?self:{},Prism=function(){var e=/\blang(?:uage)?-(\w+)\b/i,t=0,n=_self.Prism={util:{encode:function(e){return e instanceof a?new a(e.type,n.util.encode(e.content),e.alias):"Array"===n.util.type(e)?e.map(n.util.encode):e.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/\u00a0/g," ")},type:function(e){return Object.prototype.toString.call(e).match(/\[object (\w+)\]/)[1]},objId:function(e){return e.__id||Object.defineProperty(e,"__id",{value:++t}),e.__id},clone:function(e){var t=n.util.type(e);switch(t){case"Object":var a={};for(var r in e)e.hasOwnProperty(r)&&(a[r]=n.util.clone(e[r]));return a;case"Array":return e.map&&e.map(function(e){return n.util.clone(e)})}return e}},languages:{extend:function(e,t){var a=n.util.clone(n.languages[e]);for(var r in t)a[r]=t[r];return a},insertBefore:function(e,t,a,r){r=r||n.languages;var l=r[e];if(2==arguments.length){a=arguments[1];for(var i in a)a.hasOwnProperty(i)&&(l[i]=a[i]);return l}var o={};for(var s in l)if(l.hasOwnProperty(s)){if(s==t)for(var i in a)a.hasOwnProperty(i)&&(o[i]=a[i]);o[s]=l[s]}return n.languages.DFS(n.languages,function(t,n){n===r[e]&&t!=e&&(this[t]=o)}),r[e]=o},DFS:function(e,t,a,r){r=r||{};for(var l in e)e.hasOwnProperty(l)&&(t.call(e,l,e[l],a||l),"Object"!==n.util.type(e[l])||r[n.util.objId(e[l])]?"Array"!==n.util.type(e[l])||r[n.util.objId(e[l])]||(r[n.util.objId(e[l])]=!0,n.languages.DFS(e[l],t,l,r)):(r[n.util.objId(e[l])]=!0,n.languages.DFS(e[l],t,null,r)))}},plugins:{},highlightAll:function(e,t){var a={callback:t,selector:'code[class*="language-"], [class*="language-"] code, code[class*="lang-"], [class*="lang-"] code'};n.hooks.run("before-highlightall",a);for(var r,l=a.elements||document.querySelectorAll(a.selector),i=0;r=l[i++];)n.highlightElement(r,e===!0,a.callback)},highlightElement:function(t,a,r){for(var l,i,o=t;o&&!e.test(o.className);)o=o.parentNode;o&&(l=(o.className.match(e)||[,""])[1],i=n.languages[l]),t.className=t.className.replace(e,"").replace(/\s+/g," ")+" language-"+l,o=t.parentNode,/pre/i.test(o.nodeName)&&(o.className=o.className.replace(e,"").replace(/\s+/g," ")+" language-"+l);var s=t.textContent,u={element:t,language:l,grammar:i,code:s};if(!s||!i)return n.hooks.run("complete",u),void 0;if(n.hooks.run("before-highlight",u),a&&_self.Worker){var c=new Worker(n.filename);c.onmessage=function(e){u.highlightedCode=e.data,n.hooks.run("before-insert",u),u.element.innerHTML=u.highlightedCode,r&&r.call(u.element),n.hooks.run("after-highlight",u),n.hooks.run("complete",u)},c.postMessage(JSON.stringify({language:u.language,code:u.code,immediateClose:!0}))}else u.highlightedCode=n.highlight(u.code,u.grammar,u.language),n.hooks.run("before-insert",u),u.element.innerHTML=u.highlightedCode,r&&r.call(t),n.hooks.run("after-highlight",u),n.hooks.run("complete",u)},highlight:function(e,t,r){var l=n.tokenize(e,t);return a.stringify(n.util.encode(l),r)},tokenize:function(e,t){var a=n.Token,r=[e],l=t.rest;if(l){for(var i in l)t[i]=l[i];delete t.rest}e:for(var i in t)if(t.hasOwnProperty(i)&&t[i]){var o=t[i];o="Array"===n.util.type(o)?o:[o];for(var s=0;s<o.length;++s){var u=o[s],c=u.inside,g=!!u.lookbehind,h=!!u.greedy,f=0,d=u.alias;u=u.pattern||u;for(var p=0;p<r.length;p++){var m=r[p];if(r.length>e.length)break e;if(!(m instanceof a)){u.lastIndex=0;var y=u.exec(m),v=1;if(!y&&h&&p!=r.length-1){var b=r[p+1].matchedStr||r[p+1],k=m+b;if(p<r.length-2&&(k+=r[p+2].matchedStr||r[p+2]),u.lastIndex=0,y=u.exec(k),!y)continue;var w=y.index+(g?y[1].length:0);if(w>=m.length)continue;var _=y.index+y[0].length,P=m.length+b.length;if(v=3,P>=_){if(r[p+1].greedy)continue;v=2,k=k.slice(0,P)}m=k}if(y){g&&(f=y[1].length);var w=y.index+f,y=y[0].slice(f),_=w+y.length,S=m.slice(0,w),O=m.slice(_),j=[p,v];S&&j.push(S);var A=new a(i,c?n.tokenize(y,c):y,d,y,h);j.push(A),O&&j.push(O),Array.prototype.splice.apply(r,j)}}}}}return r},hooks:{all:{},add:function(e,t){var a=n.hooks.all;a[e]=a[e]||[],a[e].push(t)},run:function(e,t){var a=n.hooks.all[e];if(a&&a.length)for(var r,l=0;r=a[l++];)r(t)}}},a=n.Token=function(e,t,n,a,r){this.type=e,this.content=t,this.alias=n,this.matchedStr=a||null,this.greedy=!!r};if(a.stringify=function(e,t,r){if("string"==typeof e)return e;if("Array"===n.util.type(e))return e.map(function(n){return a.stringify(n,t,e)}).join("");var l={type:e.type,content:a.stringify(e.content,t,r),tag:"span",classes:["token",e.type],attributes:{},language:t,parent:r};if("comment"==l.type&&(l.attributes.spellcheck="true"),e.alias){var i="Array"===n.util.type(e.alias)?e.alias:[e.alias];Array.prototype.push.apply(l.classes,i)}n.hooks.run("wrap",l);var o="";for(var s in l.attributes)o+=(o?" ":"")+s+'="'+(l.attributes[s]||"")+'"';return"<"+l.tag+' class="'+l.classes.join(" ")+'" '+o+">"+l.content+"</"+l.tag+">"},!_self.document)return _self.addEventListener?(_self.addEventListener("message",function(e){var t=JSON.parse(e.data),a=t.language,r=t.code,l=t.immediateClose;_self.postMessage(n.highlight(r,n.languages[a],a)),l&&_self.close()},!1),_self.Prism):_self.Prism;var r=document.currentScript||[].slice.call(document.getElementsByTagName("script")).pop();return r&&(n.filename=r.src,document.addEventListener&&!r.hasAttribute("data-manual")&&document.addEventListener("DOMContentLoaded",n.highlightAll)),_self.Prism}();"undefined"!=typeof module&&module.exports&&(module.exports=Prism),"undefined"!=typeof global&&(global.Prism=Prism);
+</script>
+
+<script type="text/x-mathjax-config">
+(function () {
+
+MathJax.Hub.Config({
+	'showProcessingMessages': false,
+	'messageStyle': 'none'
+});
+
+if (typeof MathJaxListener !== 'undefined') {
+	MathJax.Hub.Register.StartupHook('End', function () {
+		MathJaxListener.invokeCallbackForKey_('End');
+	});
+}
+
+})();
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+</body>
+
+</html>
