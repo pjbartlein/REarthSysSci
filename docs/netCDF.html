@@ -374,16 +374,13 @@ $(document).ready(function () {
       <a href="geospatial.html">Geospatial analyses</a>
     </li>
     <li>
-      <a href="regression1.html">Regression and correlation</a>
+      <a href="regression1.html">Regression 1</a>
     </li>
     <li>
       <a href="regression2.html">Regression 2</a>
     </li>
     <li>
       <a href="pca.html">PCA</a>
-    </li>
-    <li>
-      <a href="svd.html">Singular Value Decomposistion</a>
     </li>
     <li>
       <a href="highdim.html">High-resolution &amp; high-dimensional data</a>
@@ -1454,7 +1451,7 @@ a 3-d array.</p>
 <pre><code>## [1] 720 360</code></pre>
 <div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm <span class="co"># how long?</span></span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.050   0.008   0.059</code></pre>
+##   0.041   0.007   0.048</code></pre>
 </div>
 <div id="check-the-conversion" class="section level3" number="4.1.3">
 <h3><span class="header-section-number">4.1.3</span> Check the
@@ -1598,7 +1595,7 @@ proper location in the array.</p>
 <span id="cb86-4"><a href="#cb86-4" tabindex="-1"></a>mat_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(tmp_df03<span class="sc">$</span>mat) </span>
 <span id="cb86-5"><a href="#cb86-5" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.861   0.255   1.127</code></pre>
+##   0.656   0.190   0.847</code></pre>
 </div>
 <div id="complete-loop-avoidance-approach" class="section level3"
 number="4.2.4">
@@ -1620,7 +1617,7 @@ first two columns):</p>
 <span id="cb88-8"><a href="#cb88-8" tabindex="-1"></a>mat_array3[<span class="fu">cbind</span>(j2,k2)] <span class="ot">&lt;-</span> <span class="fu">array</span>(tmp_df03<span class="sc">$</span>mat) </span>
 <span id="cb88-9"><a href="#cb88-9" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.045   0.000   0.046</code></pre>
+##   0.030   0.000   0.031</code></pre>
 <div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" tabindex="-1"></a><span class="co"># some plots to check creation of arrays</span></span>
 <span id="cb90-2"><a href="#cb90-2" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
 <span id="cb90-3"><a href="#cb90-3" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
@@ -1839,7 +1836,7 @@ self-documenting properties of netCDF files.</p>
 ##         institution: http://www.cru.uea.ac.uk/
 ##         source: http://www.cru.uea.ac.uk/~markn/cru05/cru05_intro.html
 ##         references: New et al. (2002) Climate Res 21:1-25
-##         history: P.J. Bartlein, Wed Feb 21 17:29:17 2024
+##         history: P.J. Bartlein, Wed Feb 28 20:35:39 2024
 ##         Conventions: CF-1.0</code></pre>
 <p>Finally, close the file, which writes the data to disk.</p>
 <div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" tabindex="-1"></a><span class="co"># close the file, writing data to disk</span></span>
@@ -2236,7 +2233,7 @@ class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="#cb1
 ##         title: test output of projected data
 ##         institution: NOAA ESRL PSD
 ##         source: soilm.mon.ltm.nc
-##         history: P.J. Bartlein, Wed Feb 21 17:29:18 2024
+##         history: P.J. Bartlein, Wed Feb 28 20:35:40 2024
 ##         Conventions: CF=1.6</code></pre>
 <p>Finally, close the file, which writes the data to disk.</p>
 <div class="sourceCode" id="cb127"><pre

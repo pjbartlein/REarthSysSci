@@ -1,0 +1,600 @@
+---
+title: "Principal Components Analysis"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r PCA-1, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=FALSE, out.width = "75%", out.height = "75%")
+knitr::opts_knit$set(progress = TRUE, verbose = TRUE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2024, but may undergo further edits.</span></p>
+
+# Introduction #
+
+Principal components analysis (PCA) is a widely used multivariate analysis method, the general aim of which is to reveal systematic covariations among a group of variables. The analysis can be motivated in a number of different ways, including (in geographical or Earth-system science contexts) finding groups of variables that measure the same underlying dimensions of a data set, describing the basic anomaly patterns that appear in spatial data sets, or producing a general index of the common variation of a set of variables.  The analysis is also known as *factor analysis* in many contexts, or *eigenvector analysis* or *EOF analysis* (for "empirical orthogonal functions") in meteorology and climatology.  
+
+## A simple example ##
+
+A classic data set for illustrating PCA is one that appears in John C. Davis's 2002 book *Statistics and data analysis in geology*, Wiley (UO Library, QE48.8 .D38 2002).  The data consist of 25 boxes or blocks with random dimensions (the long, intermediate and short axes of the boxes), plus some derived variables, like the length of the longest diagonal that can be contained within a box.
+
+Here's the data: [[boxes.csv]](https://pjbartlein.github.io/GeogDataAnalysis/data/csv/boxes.csv) 
+
+- Example:  Davis' boxes ([data](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_data.png), [plot](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_boxes.png), [scatter](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scatter.png), [components](https://pjbartlein.github.io/GeogDataAnalysis/images/Davis_PCA_scores.png)), (Davis, J.C., 2001, *Statistics and Data Analysis in Geology*, Wiley)
+- [Derivation of principal components](https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html) 
+
+## Read and subset the data ##
+
+First, only two variables will be analyzed, in order to be able to visualize how the components are defined.  Read the data:
+
+```{r PCA-2 }
+# read a .csv file of Davis's data
+boxes_path <- "/Users/bartlein/Projects/RESS/data/csv_files/"
+boxes_name <- "boxes.csv"
+boxes_file <- paste(boxes_path, boxes_name, sep="")
+boxes <- read.csv(boxes_file) 
+str(boxes)
+```
+
+Make a matrix of two variables `long` (long axis of each box), and `diag` (longest diagonal that fits in a box).
+
+```{r PCA-3 }
+boxes_matrix <- data.matrix(cbind(boxes[,1],boxes[,4]))
+dimnames(boxes_matrix) <- list(NULL, cbind("long","diag"))
+```
+
+Examine a scatter plot, and get the correlations between the variables:
+
+```{r PCA-4 }
+par(pty="s") # square plotting frame
+plot(boxes_matrix)
+cor(boxes_matrix)
+```
+The two variables are obviously related, but not exactly (because the other dimensions of the box, the short and intermediate axis length) also influence the longest diagonal value.
+
+## PCA of the two-variable example ##
+
+Do a PCA using the `princomp()` function from the `stats` package.  The `loadings()` function extracts the *loadings* or the correlations between the input variables and the new components, and the the `biplot()` function creates a biplot -- a single figure that plots the loadings as vectors and the component *scores* (or the value of each component) as points represented by the observation numbers. 
+
+```{r PCA-5 }
+boxes_pca <- princomp(boxes_matrix, cor=T)
+boxes_pca
+summary(boxes_pca)
+print(loadings(boxes_pca),cutoff=0.0)
+biplot(boxes_pca)
+```
+The component standard deviation values describe the importance of each component, and the proportion of the total variance of all variables being analyzed accounted for by each component.
+
+Note the angle between the vectors on the bipolt--the correlation between two variables is equal to the cosine of the angle between the vectors (*&theta;*), or *r = cos(&theta;)*.  Here the angle is `r acos(cor(boxes_matrix[,1],boxes_matrix[,2]))/((2*pi)/360)`, which is found by the following R code: `acos(cor(boxes_matrix[,1],boxes_matrix[,2]))/((2*pi)/360)`.
+
+The components can be drawn on the scatter plot as follows: 
+
+```{r PCA-6 }
+# get parameters of component lines (after Everitt & Rabe-Hesketh)
+load <- boxes_pca$loadings
+slope <- load[2,]/load[1,]
+mn <- apply(boxes_matrix,2,mean)
+intcpt <- mn[2]-(slope*mn[1])
+
+# scatter plot with the two new axes added
+par(pty="s") # square plotting frame
+xlim <- range(boxes_matrix) # overall min, max
+plot(boxes_matrix, xlim=xlim, ylim=xlim, pch=16, cex=0.5, col="purple") # both axes same length
+abline(intcpt[1],slope[1],lwd=2) # first component solid line
+abline(intcpt[2],slope[2],lwd=2,lty=2) # second component dashed
+legend("right", legend = c("PC 1", "PC 2"), lty = c(1, 2), lwd = 2, cex = 1)
+
+# projections of points onto PCA 1
+y1 <- intcpt[1]+slope[1]*boxes_matrix[,1]
+x1 <- (boxes_matrix[,2]-intcpt[1])/slope[1]
+y2 <- (y1+boxes_matrix[,2])/2.0
+x2 <- (x1+boxes_matrix[,1])/2.0
+segments(boxes_matrix[,1],boxes_matrix[,2], x2, y2, lwd=2,col="purple")
+```
+
+This plot illustrates the idea of the first (or "principal" component) providing an optimal summary of the data--no other line drawn on this scatter plot would produce a set of projected values of the data points onto the line with greater variance.  The line also appears similar to a regression line, and in fact and PCA of two variables (as here) is equivalent to a "reduced major-axis" regression analysis.
+
+[[Back to top]](PCA.html)
+
+# Derivation of principal components and their properties
+
+The formal derivation of principal components analysis requires the use of matix algebra.
+
+- [[Matrix algebra]](https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.html) 
+- [[Derivation of principal components]](https://pjbartlein.github.io/GeogDataAnalysis/topics/pca.html) 
+
+Because the components are derived by solving a particular optimization problem, they naturally have some "built-in" properties that are desirable in practice (e.g. maximum variability).  In addition, there are a number of other properties of the components that can be derived:
+
+- *variances* of each component, and the *proportion of the total variance* of the original variables are are given by the eigenvalues;
+- component *scores* may be calculated, that illustrate the value of each component at each observation;
+- component *loadings* that describe the correlation between each component and each variable may also be obtained;
+- the *correlations among the original variables* can be reproduced by the *p*-components, as can that part of the correlations "explained" by the first q components.
+- the *original data can be reproduced* by the *p* components, as can those parts of the original data "explained" by the first *q* components;
+- the components can be "*rotated*" to increase the interpretability of the components.
+
+[[Back to top]](PCA.html)
+
+# A second example:  Controls of mid-Holocene aridity in Eurasia #
+
+The data set here is a "stacked" data set of output from thirteen "PMIP3" simulations of mid-Holocene climate (in particular, the long-term mean differences between the mid-Holocene simulations and those for the pre-industrial period) for a region in northern Eurasia.  The objective of the analysis was to examine the systematic relationship among a number of different climate variables as part of understanding the mismatch between the simulations and paleoenvironmental observations (reconstructions), where the simulations were in general drier and warmer than the climate reconstructed from the data.  (See Bartlein, P.J., S.P. Harrison and K. Izumi, 2017, Underlying causes of Eurasian mid-continental aridity in simulations of mid-Holocene climate, *Geophysical Research Letters* 44:1-9, [http://dx.doi.org/10.1002/2017GL074476](http://dx.doi.org/10.1002/2017GL074476))
+
+The variable include: 
+- `Kext`: Insolation at the top of the atmosphere 
+- `Kn`: Net shortwave radiation 
+- `Ln`: Net longwave ratiation   
+- `Qn`: Net radiation
+- `Qe`: Latent heating
+- `Qh`: Sensible heating  
+- `Qg`: Substrate heating
+- `bowen`: Bowen ratio (`Qh/Qn`) 
+- `alb`: Albedo 
+- `ta`: 850 mb temperature 
+- `tas`: Near-surface (2 m) air temperature 
+- `ts`: Surface (skin) temperature 
+- `ua`: Eastward wind component, 500 hpa level 
+- `va`: Northward wind component, 500 hPa level 
+- `omg`: 500 hPa vertical velocity 
+- `uas`: Eastward wind component, surface 
+- `vas`: Northward  wind component, surface 
+- `slp`: Mean sea-level pressure
+- `Qdv`: Moisture divergence 
+- `shm`: Specific humidity 
+- `clt`: Cloudiness 
+- `pre`: Precipitation rate 
+- `evap`: Evaporation rate 
+- `pme`: P-E rate 
+- `sm`: Soil moisture
+- `ro`: Runoff 
+- `dS`: Change in moisture storage 
+- `snd`: Snow depth
+
+The data set was assebled by stacking the monthly long-term mean differneces from each model on top of one another, creating a 13 x 12 row by 24 column array.  This arrangement of the data will reveal the common variations in the seasonal cycles of the long-term mean differences.
+
+## Read and transform the data ## 
+
+Load necessary packages.
+
+```{r PCA-7, message=FALSE}
+# pca of multimodel means
+library(corrplot)
+library(qgraph)
+library(psych)
+```
+
+Read the data:
+
+```{r PCA-8 }
+# read data
+datapath <- "/Users/bartlein/Projects/RESS/data/csv_files/"
+csvfile <- "aavesModels_ltmdiff_NEurAsia.csv"
+input_data <- read.csv(paste(datapath, csvfile, sep=""))
+mm_data_in <- input_data[,3:30]
+names(mm_data_in)
+summary(mm_data_in)
+```
+
+There are a few fix-ups to do.  Recode a few missing (NA) values of snow depth to 0.0:
+
+```{r PCA-9 }
+# recode a few NA's to zero
+mm_data_in$snd[is.na(mm_data_in$snd)] <- 0.0
+```
+
+Remove some uncessary or redundant variable:
+
+```{r PCA-10 }
+# remove uneccesary variables
+dropvars <- names(mm_data_in) %in% c("Kext","bowen","sm","evap")
+mm_data <- mm_data_in[!dropvars]
+names(mm_data)
+```
+
+## Correlations among variables ##
+
+It's useful to look at the correlations among the long-term mean differences among the variables.  This could be done using a matrix scatterplot (`plot(mm_data, pch=16, cex=0.5`), but there are enough variables (24) to make that difficult to interpret.  Another approach is to look at a `corrplot()` image:
+
+```{r PCA-11 }
+cor_mm_data <- cor(mm_data)
+corrplot(cor_mm_data, method="color")
+```
+
+The plaid-like appearance of the plot suggests that there are several groups of variables whose variations of long-term mean differences throughout the year are similar.
+
+The correlations can also be illustrated by plotting the correlations as a network graph using the `qgraph()` function, with the strength of the correlations indicated by the width of the lines (or "edges"), and the sign by the color (green = positive and magenta = negative).
+
+```{r PCA-12, warning = FALSE}
+qgraph(cor_mm_data, title="Correlations, multi-model ltm differences over months",
+  # layout = "spring", 
+  posCol = "darkgreen", negCol = "darkmagenta", arrows = FALSE,
+  node.height=0.5, node.width=0.5, vTrans=128, edge.width=0.75, label.cex=1.0,
+  width=7, height=5, normalize=TRUE, edge.width=0.75 ) 
+```
+
+A useful variant of this plot is provided by using the strength of the correlations to arrange the nodes (i.e. the variables).  This is done by using the "Fruchterman-Reingold" algorithm that invokes the concept of spring tension pulling the nodes of the more highly correlated variables toward one another.
+
+```{r PCA-13, warning = FALSE}
+qgraph(cor_mm_data, title="Correlations, multi-model ltm differences over months",
+  layout = "spring", repulsion = 0.75,
+  posCol = "darkgreen", negCol = "darkmagenta", arrows = FALSE,
+  node.height=0.5, node.width=0.5, vTrans=128, edge.width=0.75, label.cex=1.0,
+  width=7, height=5, normalize=TRUE, edge.width=0.75 ) 
+```
+
+## PCA of the PMIP 3 data
+
+Do a principal components analysis of the long-term mean differneces using the `principal()` function from the `psych` package.  Initiall, extract eight components:
+
+```{r PCA-14 }
+nfactors <- 8
+mm_pca_unrot <- principal(mm_data, nfactors = nfactors, rotate = "none")
+mm_pca_unrot
+```
+
+The analysis suggests that only five components are as "important" as any of the original (standardized) variables, so repeate the analysis extracting just five components:
+
+```{r PCA-15 }
+nfactors <- 5
+mm_pca_unrot <- principal(mm_data, nfactors = nfactors, rotate = "none")
+mm_pca_unrot
+```
+## qgraph plot of the principal components ##
+
+The first plot below shows the components as square nodes, and the orignal variables as circular nodes.  The second modifies that first plot by applying the "spring" layout.
+
+```{r PCA-16, warning = FALSE}
+qg_pca <- qgraph(loadings(mm_pca_unrot), 
+  posCol = "darkgreen", negCol = "darkmagenta", arrows = FALSE, 
+  labels=c(names(mm_data),as.character(seq(1:nfactors))), vTrans=128)
+
+qgraph(qg_pca, title="Component loadings, all models over all months",
+  layout = "spring", 
+  posCol = "darkgreen", negCol = "darkmagenta", arrows = FALSE,
+  node.height=0.5, node.width=0.5, vTrans=128, edge.width=0.75, label.cex=1.0,
+  width=7, height=5, normalize=TRUE, edge.width=0.75 )
+```
+
+## Rotated components ##
+
+The interpretability of the componets can often be improved by "rotation" of the components, which amounts to slightly moving the PCA axes relative to the original variable axes, while still maintaining the orthogonality (or "uncorrelatedness") of the components.  This has the effect of reducing the importance of the first component(s) (because the adjusted axes are no longer optimal), but this trade-off is usually worth it.
+
+Here are the results:
+
+```{r PCA-17 }
+nfactors <- 4
+mm_pca_rot <- principal(mm_data, nfactors = nfactors, rotate = "varimax")
+mm_pca_rot
+
+qg_pca <- qgraph(loadings(mm_pca_rot), 
+  posCol = "darkgreen", negCol = "darkmagenta", arrows = FALSE, 
+  labels=c(names(mm_data),as.character(seq(1:nfactors))), vTrans=128) 
+
+qgraph(qg_pca, title="Rotated component loadings, all models over all months",
+  layout = "spring", arrows = FALSE, 
+  posCol = "darkgreen", negCol = "darkmagenta", 
+  width=7, height=5, normalize=TRUE, edge.width=0.75) 
+```
+
+
+[[Back to top]](PCA.html)
+
+# PCA of high-dimensional data #
+
+This example illustrates the application of principal components analysis (also known as EOF, emperical orthogonal functions in meteorology, or "eigenvector analysis") to a data set that consists of 16,380 variables (grid points) and 1680 observations (times) from a data set called the 20th Century Reanalysis V. 2. [[http://www.esrl.noaa.gov/psd/data/gridded/data.20thC_ReanV2.html]](http://www.esrl.noaa.gov/psd/data/gridded/data.20thC_ReanV2.html).
+
+The paticular data set used here consists of anomalies (difference from the long-term means) of 500mb hieghts, which describe upper level circulation patterns, over the interval 1871-2010, and monthly time steps.  The objective is to describe the basic anomaly patterns that occur in the data, and to look at their variation over time (and because climate is changing, there are likely to be long-term trends in the importance of these patterns.)  The data are available in netCDF files, and so this analysis also describes how to read and write netCDF data sets (or *.nc files).  This data set is not particularly huge, but is large enough to illustrate the general idea, which basically involves using the singular-value decomposition approach.
+
+## Read the netCDF file of 20th Century Reanalysis Data ##
+
+```{r PCA-18, eval=TRUE, echo=TRUE}
+# load some libraries
+library(ncdf4)
+library(RColorBrewer)
+```
+
+```{r PCA-19 }
+# Read the data
+ncpath <- "/Users/bartlein/Projects/RESS/data/nc_files/"
+ncname <- "R20C2_anm19812010_1871-2010_gcm_hgt500.nc" 
+ncfname <- paste(ncpath, ncname, sep="")
+dname <- "hgt_anm"
+```
+
+Open the netCDF file.  Printing the file object (`ncin`) produces output similar to that of `ncdump`:
+
+```{r PCA-20 }
+# open a netCDF file
+ncin <- nc_open(ncfname)
+print(ncin)
+```
+
+Get the latitudes and longitudes (dimensions):
+
+```{r PCA-21 }
+# lons and lats
+lon <- ncvar_get(ncin, "lon")
+nlon <- dim(lon)
+head(lon)
+
+lat <- ncvar_get(ncin, "lat", verbose = F)
+nlat <- dim(lat)
+head(lat)
+```
+
+Get the time variable, and the "CF" "time since" units attribute:
+
+```{r PCA-22 }
+# time variable
+t <- ncvar_get(ncin, "time")
+head(t); tail(t)
+
+tunits <- ncatt_get(ncin, "time", "units")
+tunits$value
+nt <- dim(t)
+nt
+```
+
+Next, get the data (`hgt500_anm`), and the attributes like the "long name", units and fill values (missing data codes):
+
+```{r PCA-23 }
+# get the data array
+var_array <- ncvar_get(ncin, dname)
+dlname <- ncatt_get(ncin, dname, "long_name")
+dunits <- ncatt_get(ncin, dname, "units")
+fillvalue <- ncatt_get(ncin, dname, "_FillValue")
+dim(var_array)
+```
+
+Then get the global attributes:
+
+```{r PCA-24 }
+# global attributes
+title <- ncatt_get(ncin, 0, "title")
+institution <- ncatt_get(ncin, 0, "institution")
+datasource <- ncatt_get(ncin, 0, "source")
+references <- ncatt_get(ncin, 0, "references")
+history <- ncatt_get(ncin, 0, "history")
+Conventions <- ncatt_get(ncin, 0, "Conventions")
+```
+
+Finally, close the netCDF file:
+
+```{r PCA-25 }
+nc_close(ncin)
+```
+
+## Set-up for the analysis ##
+
+Check that the data have been read correctly by displaying a map of the first month of data.  Grab a slice of the data, and plot it as an `image()` plot. Get a world outline
+
+```{r PCA-26, messages = FALSE}
+# world_sf
+library(sf)
+library(maps)
+library(ggplot2)
+world_sf <- st_as_sf(maps::map("world", plot = FALSE, fill = TRUE))
+world_otl_sf <- st_geometry(world_sf)
+plot(world_otl_sf)
+```
+
+
+```{r PCA-27 }
+# select the first month of data, and make a data freame
+n <- 1
+map_df <- data.frame(expand.grid(lon, lat), as.vector(var_array[, , n]))
+names(map_df) <- c("lon", "lat", "hgt500_anm")
+head(map_df)
+```
+
+```{r PCA-28 }
+# plot the first month
+ggplot() +
+  geom_tile(data = map_df, aes(x = lon, y = lat, fill = hgt500_anm)) +
+  scale_fill_gradient2(low = "darkblue", mid="white", high = "darkorange", midpoint = 0.0) +
+  geom_sf(data = world_otl_sf, col = "black", fill = NA) +
+  coord_sf(xlim = c(-180, +180), ylim = c(-90, 90), expand = FALSE) +
+  scale_x_continuous(breaks = seq(-180, 180, by = 60)) +
+  scale_y_continuous(breaks = seq(-90, 90, by = 30)) +
+  labs(x = "Longitude", y = "Latitude", title="20th Century Reanalysis 500 hPa Height Anomalies", fill="hgt500") +
+  theme_bw()
+```
+
+The map looks similar to a map of the first month's data using Panoply.
+
+If desired, the analysis could be confined to the Northern Hemisphere by executing the following code (although this is not done here).
+
+```{r PCA-29, eval=FALSE}
+# (not run) trim data to N.H.
+lat <- lat[47:91]
+nlat <- dim(lat)
+min(lat); max(lat)
+var_array <- var_array[,47:91,]
+```
+
+### Reshape the array ###
+
+The netCDF variable `hgt500_anm` is read in as a 3-dimensional array (`nlon` x `nlat` x `nt`), but for the PCA, it needs to be in the standard form of a data frame, with each column representing a variable (or grid point in this case) and each row representing an observation (or time).  The reshaping can be done by first flatting the 3-d array into a long vector of values, and then converting that to a 2-d array with `nlon` x `nlat` columns, and `nt' rows.
+
+```{r PCA-30 }
+# reshape the 3-d array
+var_vec_long <- as.vector(var_array)
+length(var_vec_long)
+var_matrix <- matrix(var_vec_long, nrow = nlon * nlat, ncol = nt)
+dim(var_matrix)
+var_matrix <- t(var_matrix)
+dim(var_matrix)
+```
+
+Note that this approach will only work if the netCDF file is configured in the standard "CF Conventions" way, i.e. as a `nlon` x `nlat` x `nt` array.
+
+[[Back to top]](PCA.html)
+
+# PCA using the pcaMethods package #
+
+The `pcaMethods` package from the Bioconductor repository is a very flexible set of routines for doing PCA. Here the "singular value decomposition" (SVD) approach will be used, because it can handle cases where there are more variables than observations. The `pcaMethods` package is described at: 
+
+- [[http://bioconductor.org/packages/release/bioc/html/pcaMethods.html]](http://bioconductor.org/packages/release/bioc/html/pcaMethods.html) 
+
+To install the `pcaMethods` package, first install the core Bioconductor packages, and then use the `biocLite()` function to install `pcaMethods`.  See the following link:
+
+- [[http://bioconductor.org/install/#install-bioconductor-packages]](http://bioconductor.org/install/#install-bioconductor-packages)
+
+In this example, the first eight components are extracted from the correlation matrix.  Note that the analysis will take a few minutes.
+
+```{r PCA-31, message=FALSE}
+# PCA using pcaMethods
+library(pcaMethods)
+pcamethod="svd"
+ncomp <- 8
+zd <- prep(var_matrix, scale="uv", center=TRUE)
+set.seed(1)
+ptm <- proc.time() # time the analysis
+resPCA <- pca(zd, method=pcamethod, scale="uv", center=TRUE, nPcs=ncomp)
+proc.time() - ptm # how long?
+```
+
+## Results ##
+
+Printing out the "results" object (`resPCA`) provides a summary of the analysis, and the loadings and scores are extracted from the results object.
+
+```{r PCA-32 }
+# print a summary of the results
+resPCA
+```
+
+```{r PCA-33 }
+# extract loadings and scores
+loadpca <- loadings(resPCA)
+scores <- scores(resPCA)/rep(resPCA@sDev, each=nrow(scores(resPCA)))
+```
+
+A quick look at the results can be gotten by mapping the loadings of the first component and plotting the time series of the component scores
+
+```{r PCA-34 }
+# select the first month of data, and make a data freame
+n <- 1
+comp_df <- data.frame(expand.grid(lon, lat), as.vector(loadpca[, n]))
+names(comp_df) <- c("lon", "lat", "comp1")
+head(comp_df)
+```
+
+```{r PCA-35 }
+# map the component loadings
+ggplot() +
+  geom_tile(data = comp_df, aes(x = lon, y = lat, fill = comp1)) +
+  scale_fill_gradient2(low = "darkblue", mid="white", high = "darkorange", midpoint = 0.0, 
+                       limits = c(-0.02, 0.02)) +
+  geom_sf(data = world_otl_sf, col = "black", fill = NA) +
+  coord_sf(xlim = c(-180, +180), ylim = c(-90, 90), expand = FALSE) +
+  scale_x_continuous(breaks = seq(-180, 180, by = 60)) +
+  scale_y_continuous(breaks = seq(-90, 90, by = 30)) +
+  labs(x = "Longitude", y = "Latitude", title="20th CRA 500 hPa Height Anomalies PCA Loadings", fill=" ") +
+  theme_bw()
+```
+
+
+
+
+Recall that the loadings are the correlations between the time series of 500mb heights at each grid point and the time series of the (first, in this case) component and they describe the map pattern of the first component, and the scores illustrate the importance of the anomaly map pattern represented by the first component as it varies over time:
+
+```{r PCA-36 }
+# timeseries plot of scores
+yrmn <- seq(1871.0, 2011.0-(1.0/12.0), by=1.0/12.0)
+plot(yrmn, scores[,1], type="l")
+```
+
+The first six components account for half of the variance of the original 16,380 variables, which is a pretty efficient reduction in dimensionality.  The map pattern of the first component is positive in the tropics (and is more-or-less positive everywhere), and the time series of scores shows that it is increasing over time.  This pattern and time series is consitent with global warming over the last century.
+
+# Write out the results #
+
+## Component scores ##
+
+Write out the component scores and statistics (to the working directory):
+
+```{r PCA-37 }
+# write scores
+scoresout <- cbind(yrmn,scores)
+scoresfile <- "hgt500_scores.csv"
+write.table(scoresout, file=scoresfile, row.names=FALSE, col.names=TRUE, sep=",")
+```
+
+```{r PCA-38 }
+# write statistics
+ncompchar <- paste ("0", as.character(ncomp), sep="")
+if (ncomp >= 10) ncompchar <- as.character(ncomp)
+statsout <- cbind(1:resPCA@nPcs,resPCA@sDev,resPCA@R2,resPCA@R2cum)
+colnames(statsout) <- c("PC", "sDev", "R2", "R2cum")
+statsfile <- paste("hgt500",pcamethod,"_",ncompchar,"_stats.csv",sep="")
+write.table(statsout, file=statsfile, row.names=FALSE, col.names=TRUE, sep=",")
+```
+
+## Write out a netCDF file of component loadings ##
+
+The loading matrix has `nlon` x `nlat` rows and `ncomp` (eight in this case) columns, and needs to be reshaped into an `nlon` x `nlat` x `ncomp` array.  Note that the reshaping is not automatic--it happens that this works because the original data (from the input netCDF file) was properly defined (as a `nlon` x `nlat` x `nt` array).
+
+```{r PCA-39 }
+# reshape loadings
+dim.array <- c(nlon,nlat,ncomp)
+var_array <- array(loadpca, dim.array)
+```
+
+Next, the dimension (or coordinate) variables are defined, including one `ncomp` long:
+
+```{r PCA-40 }
+# define dimensions
+londim <- ncdim_def("lon", "degrees_east", as.double(lon))
+latdim <- ncdim_def("lat", "degrees_north", as.double(lat))
+comp <- seq(1:ncomp)
+ncompdim <- ncdim_def("comp", "SVD component", as.integer(comp))
+```
+
+Then the 3-d (lon x lat x ncomp) variable (the loadings) is defined:
+
+```{r PCA-41 }
+# define variable
+fillvalue <- 1e+32
+dlname <- "hgt500 anomalies loadings"
+var_def <- ncvar_def("hgt500_loadings", "1", list(londim, latdim, ncompdim), fillvalue, 
+  dlname, prec = "single")
+```
+
+Then the netCDF file is created, and the loadings and additional attributes are added:
+
+```{r PCA-42 }
+# create netCDF file and put arrays
+ncfname <- "hgt500_loadings.nc"
+ncout <- nc_create(ncfname, list(var_def), force_v4 = T)
+
+# put loadings
+ncvar_put(ncout, var_def, var_array)
+
+# put additional attributes into dimension and data variables
+ncatt_put(ncout, "lon", "axis", "X")  #,verbose=FALSE) #,definemode=FALSE)
+ncatt_put(ncout, "lat", "axis", "Y")
+ncatt_put(ncout, "comp", "axis", "PC")
+
+# add global attributes
+title2 <- paste(title$value, "SVD component analysis using pcaMethods", sep="--")
+ncatt_put(ncout, 0, "title", title2)
+ncatt_put(ncout, 0, "institution", institution$value)
+ncatt_put(ncout, 0, "source", datasource$value)
+ncatt_put(ncout, 0, "references", references$value)
+history <- paste("P.J. Bartlein", date(), sep = ", ")
+ncatt_put(ncout, 0, "history", history)
+ncatt_put(ncout, 0, "Conventions", Conventions$value)
+```
+
+Finally, the netCDF file is closed, writing the data to disk.
+
+```{r PCA-43 }
+nc_close(ncout)
+```
+[[Back to top]](PCA.html)

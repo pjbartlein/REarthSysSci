@@ -374,16 +374,13 @@ $(document).ready(function () {
       <a href="geospatial.html">Geospatial analyses</a>
     </li>
     <li>
-      <a href="regression1.html">Regression and correlation</a>
+      <a href="regression1.html">Regression 1</a>
     </li>
     <li>
       <a href="regression2.html">Regression 2</a>
     </li>
     <li>
       <a href="pca.html">PCA</a>
-    </li>
-    <li>
-      <a href="svd.html">Singular Value Decomposistion</a>
     </li>
     <li>
       <a href="highdim.html">High-resolution &amp; high-dimensional data</a>
@@ -711,10 +708,6 @@ and a straight line (<code>lm</code>) and a smooth curve
 <span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
 <span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">size=</span><span class="dv">1</span>, <span class="at">color=</span><span class="st">&quot;pink&quot;</span>) <span class="sc">+</span> <span class="co"># straight line</span></span>
 <span id="cb36-5"><a href="#cb36-5" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">size=</span><span class="dv">1</span>, <span class="at">color=</span><span class="st">&quot;purple&quot;</span>) <span class="co"># loess curve</span></span></code></pre></div>
-<pre><code>## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
-## ℹ Please use `linewidth` instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was generated.</code></pre>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;
 ## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="tsplots_files/figure-html/tsplots-17-1.png" width="80%" height="80%" /></p>
@@ -732,15 +725,15 @@ answering those questions.</p>
 <p>Make a second dataframe consisting of <code>nt</code> values of the
 temperature time series <code>tmp_ts</code>, and the <code>year</code>
 and the <code>month</code> variables generated above:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="co"># make dataframe</span></span>
-<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>tmp_anm_df2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(time_cf<span class="sc">$</span>year, month, tmp_anm_ts)</span>
-<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a><span class="fu">names</span>(tmp_anm_df2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;Month&quot;</span>, <span class="st">&quot;Anomaly&quot;</span>)</span>
-<span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a><span class="fu">str</span>(tmp_anm_df2)</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="co"># make dataframe</span></span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a>tmp_anm_df2 <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(time_cf<span class="sc">$</span>year, month, tmp_anm_ts)</span>
+<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a><span class="fu">names</span>(tmp_anm_df2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Year&quot;</span>, <span class="st">&quot;Month&quot;</span>, <span class="st">&quot;Anomaly&quot;</span>)</span>
+<span id="cb38-4"><a href="#cb38-4" tabindex="-1"></a><span class="fu">str</span>(tmp_anm_df2)</span></code></pre></div>
 <pre><code>## &#39;data.frame&#39;:    1464 obs. of  3 variables:
 ##  $ Year   : int  1901 1901 1901 1901 1901 1901 1901 1901 1901 1901 ...
 ##  $ Month  : Factor w/ 12 levels &quot;Jan&quot;,&quot;Feb&quot;,&quot;Mar&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
 ##  $ Anomaly: num  -0.71 -0.903 -0.637 -1.27 -0.293 ...</code></pre>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="fu">head</span>(tmp_anm_df2); <span class="fu">tail</span>(tmp_anm_df2)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a><span class="fu">head</span>(tmp_anm_df2); <span class="fu">tail</span>(tmp_anm_df2)</span></code></pre></div>
 <pre><code>##   Year Month    Anomaly
 ## 1 1901   Jan -0.7100001
 ## 2 1901   Feb -0.9033334
@@ -759,28 +752,28 @@ and the <code>month</code> variables generated above:</p>
 plot. The plot will be constructed with a lowess-smoother line in the
 background, overplotted by the yearly values of each month in a separate
 panel.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tmp_anm_df2, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Anomaly)) <span class="sc">+</span></span>
-<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a>  <span class="co"># geom_smooth(method = &quot;lm&quot;, size=2, color=&quot;pink&quot;) + # straight line</span></span>
-<span id="cb44-3"><a href="#cb44-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, <span class="at">color=</span><span class="st">&quot;purple&quot;</span>) <span class="sc">+</span> <span class="co"># loess curve</span></span>
-<span id="cb44-4"><a href="#cb44-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb44-5"><a href="#cb44-5" tabindex="-1"></a>  <span class="fu">facet_grid</span>(tmp_anm_df2<span class="sc">$</span>Month <span class="sc">~</span> .)  <span class="sc">+</span></span>
-<span id="cb44-6"><a href="#cb44-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tmp_anm_df2, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Anomaly)) <span class="sc">+</span></span>
+<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a>  <span class="co"># geom_smooth(method = &quot;lm&quot;, size=2, color=&quot;pink&quot;) + # straight line</span></span>
+<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, <span class="at">color=</span><span class="st">&quot;purple&quot;</span>) <span class="sc">+</span> <span class="co"># loess curve</span></span>
+<span id="cb43-4"><a href="#cb43-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb43-5"><a href="#cb43-5" tabindex="-1"></a>  <span class="fu">facet_grid</span>(tmp_anm_df2<span class="sc">$</span>Month <span class="sc">~</span> .)  <span class="sc">+</span></span>
+<span id="cb43-6"><a href="#cb43-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="tsplots_files/figure-html/tsplots-19-1.png" width="80%" height="80%" /></p>
 <p>The months can be reorganized to put December at the top, by
 reorganizing the <code>Month</code> factor:</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="co"># reorganize months</span></span>
-<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a>tmp_anm_df2<span class="sc">$</span>Month <span class="ot">&lt;-</span> <span class="fu">factor</span>(tmp_anm_df2<span class="sc">$</span>Month, <span class="at">levels =</span> </span>
-<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;Dec&quot;</span>, <span class="st">&quot;Jan&quot;</span>, <span class="st">&quot;Feb&quot;</span>, <span class="st">&quot;Mar&quot;</span>, <span class="st">&quot;Apr&quot;</span>, <span class="st">&quot;May&quot;</span>, <span class="st">&quot;Jun&quot;</span>, <span class="st">&quot;Jul&quot;</span>, <span class="st">&quot;Aug&quot;</span>, <span class="st">&quot;Sep&quot;</span>, <span class="st">&quot;Oct&quot;</span>, <span class="st">&quot;Nov&quot;</span>))</span>
-<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a><span class="fu">str</span>(tmp_anm_df2<span class="sc">$</span>Month)</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="co"># reorganize months</span></span>
+<span id="cb45-2"><a href="#cb45-2" tabindex="-1"></a>tmp_anm_df2<span class="sc">$</span>Month <span class="ot">&lt;-</span> <span class="fu">factor</span>(tmp_anm_df2<span class="sc">$</span>Month, <span class="at">levels =</span> </span>
+<span id="cb45-3"><a href="#cb45-3" tabindex="-1"></a>    <span class="fu">c</span>(<span class="st">&quot;Dec&quot;</span>, <span class="st">&quot;Jan&quot;</span>, <span class="st">&quot;Feb&quot;</span>, <span class="st">&quot;Mar&quot;</span>, <span class="st">&quot;Apr&quot;</span>, <span class="st">&quot;May&quot;</span>, <span class="st">&quot;Jun&quot;</span>, <span class="st">&quot;Jul&quot;</span>, <span class="st">&quot;Aug&quot;</span>, <span class="st">&quot;Sep&quot;</span>, <span class="st">&quot;Oct&quot;</span>, <span class="st">&quot;Nov&quot;</span>))</span>
+<span id="cb45-4"><a href="#cb45-4" tabindex="-1"></a><span class="fu">str</span>(tmp_anm_df2<span class="sc">$</span>Month)</span></code></pre></div>
 <pre><code>##  Factor w/ 12 levels &quot;Dec&quot;,&quot;Jan&quot;,&quot;Feb&quot;,..: 2 3 4 5 6 7 8 9 10 11 ...</code></pre>
 <p>Make the plot:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tmp_anm_df2, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Anomaly)) <span class="sc">+</span></span>
-<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a>  <span class="co"># geom_smooth(method = &quot;lm&quot;, size=2, color=&quot;pink&quot;) + # straight line</span></span>
-<span id="cb48-3"><a href="#cb48-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, <span class="at">color=</span><span class="st">&quot;purple&quot;</span>) <span class="sc">+</span> <span class="co"># loess curve</span></span>
-<span id="cb48-4"><a href="#cb48-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb48-5"><a href="#cb48-5" tabindex="-1"></a>  <span class="fu">facet_grid</span>(tmp_anm_df2<span class="sc">$</span>Month <span class="sc">~</span> .)  <span class="sc">+</span></span>
-<span id="cb48-6"><a href="#cb48-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tmp_anm_df2, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Anomaly)) <span class="sc">+</span></span>
+<span id="cb47-2"><a href="#cb47-2" tabindex="-1"></a>  <span class="co"># geom_smooth(method = &quot;lm&quot;, size=2, color=&quot;pink&quot;) + # straight line</span></span>
+<span id="cb47-3"><a href="#cb47-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, <span class="at">color=</span><span class="st">&quot;purple&quot;</span>) <span class="sc">+</span> <span class="co"># loess curve</span></span>
+<span id="cb47-4"><a href="#cb47-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb47-5"><a href="#cb47-5" tabindex="-1"></a>  <span class="fu">facet_grid</span>(tmp_anm_df2<span class="sc">$</span>Month <span class="sc">~</span> .)  <span class="sc">+</span></span>
+<span id="cb47-6"><a href="#cb47-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="tsplots_files/figure-html/tsplots-21-1.png" width="80%" height="80%" /></p>
 <p>The plot seems quite wide relative to the vertical space occupied by
@@ -790,29 +783,29 @@ Bill Cleveland’s notion of “banking to 45 (degrees)”. The function
 <code>bank_slopes()</code> in the package <code>ggthemes</code> can find
 the aspect ratio that optimizes that notion for a single time series
 (here, the values for December):</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="fu">bank_slopes</span>(tmp_anm_df2<span class="sc">$</span>Year[tmp_anm_df2<span class="sc">$</span>Month <span class="sc">==</span> <span class="st">&quot;Dec&quot;</span>], tmp_anm_df2<span class="sc">$</span>Anomaly[tmp_anm_df2<span class="sc">$</span>Month <span class="sc">==</span> <span class="st">&quot;Dec&quot;</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="fu">bank_slopes</span>(tmp_anm_df2<span class="sc">$</span>Year[tmp_anm_df2<span class="sc">$</span>Month <span class="sc">==</span> <span class="st">&quot;Dec&quot;</span>], tmp_anm_df2<span class="sc">$</span>Anomaly[tmp_anm_df2<span class="sc">$</span>Month <span class="sc">==</span> <span class="st">&quot;Dec&quot;</span>])</span></code></pre></div>
 <pre><code>## [1] 0.04767961</code></pre>
 <p>A good first-guess aspect ratio can then be found by multiplying this
 value by the number of panels. However, experience shows that
 multiplying by the half the number of panels provides a more pleasing
 result:</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tmp_anm_df2, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Anomaly)) <span class="sc">+</span></span>
-<span id="cb52-2"><a href="#cb52-2" tabindex="-1"></a>  <span class="co"># geom_smooth(method = &quot;lm&quot;, size=2, color=&quot;pink&quot;) +</span></span>
-<span id="cb52-3"><a href="#cb52-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, <span class="at">color=</span><span class="st">&quot;purple&quot;</span>) <span class="sc">+</span></span>
-<span id="cb52-4"><a href="#cb52-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb52-5"><a href="#cb52-5" tabindex="-1"></a>  <span class="fu">facet_grid</span>(Month <span class="sc">~</span> .) <span class="sc">+</span></span>
-<span id="cb52-6"><a href="#cb52-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
-<span id="cb52-7"><a href="#cb52-7" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">aspect.ratio =</span> (<span class="fl">0.04</span> <span class="sc">*</span> (nm<span class="sc">/</span><span class="dv">2</span>))) </span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tmp_anm_df2, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Anomaly)) <span class="sc">+</span></span>
+<span id="cb51-2"><a href="#cb51-2" tabindex="-1"></a>  <span class="co"># geom_smooth(method = &quot;lm&quot;, size=2, color=&quot;pink&quot;) +</span></span>
+<span id="cb51-3"><a href="#cb51-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, <span class="at">color=</span><span class="st">&quot;purple&quot;</span>) <span class="sc">+</span></span>
+<span id="cb51-4"><a href="#cb51-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb51-5"><a href="#cb51-5" tabindex="-1"></a>  <span class="fu">facet_grid</span>(Month <span class="sc">~</span> .) <span class="sc">+</span></span>
+<span id="cb51-6"><a href="#cb51-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb51-7"><a href="#cb51-7" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">aspect.ratio =</span> (<span class="fl">0.04</span> <span class="sc">*</span> (nm<span class="sc">/</span><span class="dv">2</span>))) </span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="tsplots_files/figure-html/tsplots-23-1.png" width="80%" height="80%" /></p>
 <p>Another approach for comparing months is to use the
 <code>ggplot2()</code> <code>facet_wrap()</code> function:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tmp_anm_df2, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Anomaly)) <span class="sc">+</span></span>
-<span id="cb54-2"><a href="#cb54-2" tabindex="-1"></a>  <span class="co"># geom_smooth(method = &quot;lm&quot;, size=2, color=&quot;pink&quot;) +</span></span>
-<span id="cb54-3"><a href="#cb54-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, <span class="at">color=</span><span class="st">&quot;purple&quot;</span>) <span class="sc">+</span></span>
-<span id="cb54-4"><a href="#cb54-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
-<span id="cb54-5"><a href="#cb54-5" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(tmp_anm_df2<span class="sc">$</span>Month <span class="sc">~</span> ., <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
-<span id="cb54-6"><a href="#cb54-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> tmp_anm_df2, <span class="fu">aes</span>(<span class="at">x =</span> Year, <span class="at">y =</span> Anomaly)) <span class="sc">+</span></span>
+<span id="cb53-2"><a href="#cb53-2" tabindex="-1"></a>  <span class="co"># geom_smooth(method = &quot;lm&quot;, size=2, color=&quot;pink&quot;) +</span></span>
+<span id="cb53-3"><a href="#cb53-3" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">size=</span><span class="fl">0.5</span>, <span class="at">color=</span><span class="st">&quot;purple&quot;</span>) <span class="sc">+</span></span>
+<span id="cb53-4"><a href="#cb53-4" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> </span>
+<span id="cb53-5"><a href="#cb53-5" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(tmp_anm_df2<span class="sc">$</span>Month <span class="sc">~</span> ., <span class="at">nrow =</span> <span class="dv">4</span>, <span class="at">ncol =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb53-6"><a href="#cb53-6" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
 <pre><code>## `geom_smooth()` using formula = &#39;y ~ x&#39;</code></pre>
 <p><img src="tsplots_files/figure-html/tsplots-24-1.png" width="80%" height="80%" /></p>
 <p><a href="tsplots.html">[Back to top]</a></p>

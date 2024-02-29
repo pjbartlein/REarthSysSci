@@ -27,14 +27,12 @@ navbar:
       href: maps2.html
     - text: "Geospatial analyses"
       href: geospatial.html
-    - text: "Regression and correlation"
+    - text: "Regression 1"
       href: regression1.html
     - text: "Regression 2"
       href: regression2.html
     - text: "PCA"
       href: pca.html
-    - text: "Singular Value Decomposistion"
-      href: svd.html
     - text: "High-resolution & high-dimensional data"
       href: highdim.html
     - text: "Multivariate methods"
