@@ -29,7 +29,7 @@ Each of these packages has functions for reading and writing data sets in a numb
 ```
                 read netCDF                 write netCDF
   base R        ncdf4, RNetCDF packages     ncdf4, RNetCDF packages
-  sf            sf_read()                   sf_write()
+  sf            st_read()                   st_write()
   terra         rast()                      writeCDF()
   stars         read_netcdf()               write_stars()
 ```  
