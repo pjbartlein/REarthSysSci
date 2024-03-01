@@ -13,6 +13,7 @@ regrex3 <- read.csv(csv_file)
 # regrex3
 attach(regrex3)
 summary(regrex3)
+
 head(cbind(y5,x1,x2))
 
 # create the column vector y
@@ -142,7 +143,7 @@ ggplot() +
   guides(color = guide_legend(override.aes = list(size = 3))) +
   theme_bw()
 
-# residual grouped boxplot
+# residual grouped box plot
 opar <- par(mfrow=c(1,3))
 boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
 par(opar)
@@ -166,7 +167,7 @@ lines(fitted(lm_02)[NOAA$ONI_code == "La Niña"] ~ NOAA$YrMn[NOAA$ONI_code == "L
 lines(fitted(lm_02)[NOAA$ONI_code == "Neutral"] ~ NOAA$YrMn[NOAA$ONI_code == "Neutral"], lwd=2, col="gray")
 lines(fitted(lm_02)[NOAA$ONI_code == "El Niño"] ~ NOAA$YrMn[NOAA$ONI_code == "El Niño"], lwd=2, col="red")
 
-# residual grouped boxplot
+# residual grouped box plot
 opar <- par(mfrow=c(1,3))
 boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
 boxplot(residuals(lm_02) ~ NOAA$ONI_code, ylim=c(-1,1))
@@ -334,7 +335,7 @@ ggplot(data = NOAA, aes(x = YrMn, y = T_LandOcean)) +
        x = "Year", y = "Land + Ocean") + 
   theme_bw() 
 
-# residual grouped boxplot
+# residual grouped box plot
 opar <- par(mfrow=c(1,3))
 boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
 boxplot(residuals(lm_07) ~ NOAA$ONI_code, ylim=c(-1,1))
@@ -378,7 +379,7 @@ print(c(AIC(lm_01), AIC(lm_03), AIC(lm_08)))
 anova(lm_07, lm_08)
 anova(lm_01, lm_08)
 
-# residual grouped boxplot
+# residual grouped box plot
 opar <- par(mfrow=c(1,3))
 boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
 boxplot(residuals(lm_02) ~ NOAA$ONI_code, ylim=c(-1,1))
@@ -394,7 +395,7 @@ dum_n[NOAA$ONI_code == "Neutral"] <- 1
 dum_en[NOAA$ONI_code == "El Niño"] <- 1
 # head(cbind(dum_ln, dum_n, dum_en), 30)
 
-# make regression dataframe
+# make regression data frame
 xreg <- data.frame(NOAA$YrMn, NOAA$YrMn^2, dum_n, dum_en) # note: leave dum_ln out
 names(xreg) <- c("YrMn", "YrMn^2", "Neutral", "El Niño")
 head(xreg)
@@ -441,7 +442,7 @@ par(oldpar)
 
 print(c(AIC(lm_01), AIC(lm_08), AIC(tsreg_01)))
 
-# residual grouped boxplot
+# residual grouped box plot
 opar <- par(mfrow=c(1,3))
 boxplot(residuals(lm_01) ~ NOAA$ONI_code, ylim=c(-1,1))
 boxplot(residuals(lm_08) ~ NOAA$ONI_code, ylim=c(-1,1))
