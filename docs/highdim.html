@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Visualizing high-dimensional data sets</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/clipboard-1.7.1/clipboard.min.js"></script>
+<link href="site_libs/primer-tooltips-1.4.0/build.css" rel="stylesheet" />
+<link href="site_libs/klippy-0.0.0.9500/css/klippy.min.css" rel="stylesheet" />
+<script src="site_libs/klippy-0.0.0.9500/js/klippy.min.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; } /* Alert */
+code span.an { color: #008000; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #0000ff; } /* ControlFlow */
+code span.ch { color: #008080; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #008000; } /* Comment */
+code span.cv { color: #008000; } /* CommentVar */
+code span.do { color: #008000; } /* Documentation */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.im { } /* Import */
+code span.in { color: #008000; } /* Information */
+code span.kw { color: #0000ff; } /* Keyword */
+code span.op { } /* Operator */
+code span.ot { color: #ff4000; } /* Other */
+code span.pp { color: #ff4000; } /* Preprocessor */
+code span.sc { color: #008080; } /* SpecialChar */
+code span.ss { color: #008080; } /* SpecialString */
+code span.st { color: #008080; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #008080; } /* VerbatimString */
+code span.wa { color: #008000; font-weight: bold; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="html-md-01.css" type="text/css" />
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">R for Earth-System Science</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="overview.html">Overview</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Topics
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Lecture topics</li>
+    <li>
+      <a href="intro.html">Introduction: R, RStudio, and other infrastructure</a>
+    </li>
+    <li>
+      <a href="usingR.html">Using R</a>
+    </li>
+    <li>
+      <a href="ESSdata.html">Earth-system science data</a>
+    </li>
+    <li>
+      <a href="netCDF.html">netCDF in R</a>
+    </li>
+    <li>
+      <a href="netcdf_terra.html">netCDF and terra</a>
+    </li>
+    <li>
+      <a href="plots1.html">Plots (1)</a>
+    </li>
+    <li>
+      <a href="plots2.html">Plots (2)</a>
+    </li>
+    <li>
+      <a href="maps1.html">Maps (1)</a>
+    </li>
+    <li>
+      <a href="maps2.html">Maps (2)</a>
+    </li>
+    <li>
+      <a href="geospatial.html">Geospatial analyses</a>
+    </li>
+    <li>
+      <a href="regression1.html">Regression 1</a>
+    </li>
+    <li>
+      <a href="regression2.html">Regression 2</a>
+    </li>
+    <li>
+      <a href="pca.html">PCA</a>
+    </li>
+    <li>
+      <a href="highdim.html">High-resolution &amp; high-dimensional data</a>
+    </li>
+    <li>
+      <a href="multivariate.html">Multivariate methods</a>
+    </li>
+    <li>
+      <a href="timeseries.html">Time-series analysis</a>
+    </li>
+    <li class="dropdown-header">Other topics</li>
+    <li>
+      <a href="sf_stars_sftime.html">sf / stars / sftime</a>
+    </li>
+    <li>
+      <a href="hdf5_intro.html">HDF in R</a>
+    </li>
+    <li>
+      <a href="anomalies.html">Long-term means and anomalies</a>
+    </li>
+    <li>
+      <a href="tsplots.html">Time-series plots</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Tasks
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Tasks</li>
+    <li>
+      <a href="installR.html">Install R and RStudio</a>
+    </li>
+    <li>
+      <a href="Ex_UsingR.html">Using R exercise</a>
+    </li>
+    <li>
+      <a href="install_netCDF.html">Install netCDF &amp; Panoply</a>
+    </li>
+    <li>
+      <a href="transfer.html">File transfer</a>
+    </li>
+    <li>
+      <a href="texteditor.html">Install a text editor</a>
+    </li>
+    <li>
+      <a href="dataselection.html">Project data set selection</a>
+    </li>
+    <li>
+      <a href="markdown.html">Markdown and RMarkdown</a>
+    </li>
+    <li>
+      <a href="scripts_and_md.html">R Scripts and R Markdown</a>
+    </li>
+    <li>
+      <a href="github.html">GitHub</a>
+    </li>
+    <li>
+      <a href="pages.html">pages.uoregon.edu</a>
+    </li>
+    <li>
+      <a href="localweb.html">Local websites</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Other
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="readings.html">Readings</a>
+    </li>
+    <li>
+      <a href="websites.html">Old course web pages</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="about.html">About</a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Visualizing high-dimensional data sets</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction" id="toc-introduction"><span
+class="toc-section-number">1</span> Introduction</a></li>
+<li><a href="#parallel-coordinate-plots"
+id="toc-parallel-coordinate-plots"><span
+class="toc-section-number">2</span> Parallel coordinate plots</a>
+<ul>
+<li><a href="#global-fire-data" id="toc-global-fire-data"><span
+class="toc-section-number">2.1</span> Global fire data</a></li>
+<li><a href="#plots" id="toc-plots"><span
+class="toc-section-number">2.2</span> Plots</a></li>
+</ul></li>
+<li><a href="#high-density-plots-with-the-tabplot-package"
+id="toc-high-density-plots-with-the-tabplot-package"><span
+class="toc-section-number">3</span> High-density plots with the tabplot
+package</a>
+<ul>
+<li><a href="#north-american-modern-pollen-data"
+id="toc-north-american-modern-pollen-data"><span
+class="toc-section-number">3.1</span> North American modern pollen
+data</a></li>
+<li><a href="#plots-1" id="toc-plots-1"><span
+class="toc-section-number">3.2</span> Plots</a></li>
+<li><a href="#global-fire-data-1" id="toc-global-fire-data-1"><span
+class="toc-section-number">3.3</span> Global fire data</a></li>
+<li><a href="#plots-2" id="toc-plots-2"><span
+class="toc-section-number">3.4</span> Plots</a></li>
+</ul></li>
+<li><a href="#plotting-multivariatemultiple-time-series"
+id="toc-plotting-multivariatemultiple-time-series"><span
+class="toc-section-number">4</span> Plotting multivariate/multiple time
+series</a>
+<ul>
+<li><a href="#carp-l.-pollen-data" id="toc-carp-l.-pollen-data"><span
+class="toc-section-number">4.1</span> Carp L. pollen data</a></li>
+<li><a href="#plots-3" id="toc-plots-3"><span
+class="toc-section-number">4.2</span> Plots</a></li>
+</ul></li>
+<li><a href="#interactive-plots" id="toc-interactive-plots"><span
+class="toc-section-number">5</span> Interactive plots</a>
+<ul>
+<li><a href="#data" id="toc-data"><span
+class="toc-section-number">5.1</span> Data</a></li>
+<li><a href="#cube-plot" id="toc-cube-plot"><span
+class="toc-section-number">5.2</span> Cube plot</a></li>
+</ul></li>
+</ul>
+</div>
+
+<script>
+  addClassKlippyTo("pre.r, pre.markdown");
+  addKlippy('right', 'top', 'auto', '1', 'Copy code', 'Copied!');
+</script>
+<p>
+<span style="color: #00cc00;">NOTE: This page has been revised for
+Winter 2024, but may undergo further edits.</span>
+</p>
+<div id="introduction" class="section level1" number="1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>One of the hallmarks of Earth-system science data is that it is
+either high-dimensional (i.e. many variables, as in a “wide” data
+frame), or high-resolution (i.e. many rows, as in a “tall” data frame).
+There has been a rapid increase in the availability of such data sets
+that may contain thousands of observations (high-resolution,
+i.e. high-density or high-frequency data sets) and tens or hundreds of
+variables or attributes (high-dimension). Data sets like these arise
+from:</p>
+<ul>
+<li>satellite remote sensing and other remote-sensing methods
+(e.g. hyperspectral methods)</li>
+<li>comprehensive censuses and other polling activities</li>
+<li>synthesis databases of existing data sets</li>
+<li>“reanalysis” sets of climatological variables that may consist of
+multiple observations per day over spans of multiple decades</li>
+<li>climate-model simulations of past, present and future climates</li>
+<li>grid-point and other forms of data exported from GIS-managed data
+sets.</li>
+</ul>
+<p>Although computing resources now permit the rapid production of such
+data sets, there is still a need for visualizing and understanding the
+results, and in many contexts, the analysis of the data sets is lagging
+the production of the data. Several approaches are evolving::</p>
+<ul>
+<li>methods for visualizing many hundreds or thousands (or more) data
+points using “conventional” approaches, with about a million points now
+(2010’s) considered to represent a “large” data set.</li>
+<li>methods for examining “linked” displays (usually interactively) that
+allow individual observations to be tracked across multiple views of a
+data</li>
+<li>special-purpose analysis methods for dealing with high-resolution
+(density or frequency) data sets</li>
+<li>traditional and novel methods for dealing with high-dimensional data
+sets (i.e. those with many variables, or more variables than
+observations)</li>
+</ul>
+</div>
+<div id="parallel-coordinate-plots" class="section level1" number="2">
+<h1><span class="header-section-number">2</span> Parallel coordinate
+plots</h1>
+<p>Parallel coordiate plots in a sense present an individual axis for
+each variable in a dataframe along which the individual values of the
+variable are plotted (usually rescaled to lie between 0 and 1), with the
+points for a particular observation joined by straight-line segments.
+Usually the points themselves are <em>not</em> plotted to avoid clutter,
+but all data values (or “cells” in the dataframe) explictly appear on
+the plot, nearly a million of them in the example here. Parallel
+coordinate plots can be generated using the <code>GGally</code>
+package.</p>
+<div id="global-fire-data" class="section level2" number="2.1">
+<h2><span class="header-section-number">2.1</span> Global fire data</h2>
+<p>The global fire data set provides a good instructional example of the
+development and use of parallel coordinate plots. The input data consist
+of the GFEDv3.1 burned fraction (of half-degree grid cells,
+<code>gfed</code>), several bioclimatic variables (mean annual
+temperature (<code>mat</code>), mean temperature of the warmest and
+coldest months (<code>mtwa</code> and <code>mtco</code> respectively),
+growing degree days (5-deg C base, <code>gdd5</code>), annual
+precipitation (<code>map</code>), annual equilibrium evapotranspiration
+(<code>aet</code>), precipitation minus evapotranspiration
+(<code>pme</code>), <code>alpha</code> (P-E),lightning-strike frequency
+(<code>hmrc</code>), population density (<code>gpw</code>), net primary
+productivity (<code>npp</code>), treecover (<code>treecov</code>), and
+two categorical variables describing “megabiomes” and potential natural
+vegetation types (<code>megabiome</code> and <code>vegtype</code>
+respectively).</p>
+<p>Load the necessary packages:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># load packages</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co">#library(gridExtra)</span></span></code></pre></div>
+<p>Read the data from an existing <code>.csv</code> file.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># read the data -- output suppressed</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>csvpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/csv_files/&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>csvname <span class="ot">&lt;-</span> <span class="st">&quot;global_fire.csv&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>csvfile <span class="ot">&lt;-</span> <span class="fu">paste</span>(csvpath, csvname, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>gf <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csvfile)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">str</span>(gf)</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="fu">summary</span>(gf)</span></code></pre></div>
+<p>The two categorical (i.e. factor) variables have levels arranged in
+the default alphabetical order. The following code reorders the levels
+into something more ecologically and climatically sensible:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># reorder megabiomes -- output suppressed</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>megabiome_name <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;TropF&quot;</span>, <span class="st">&quot;WarmF&quot;</span>, <span class="st">&quot;SavDWd&quot;</span>, <span class="st">&quot;GrsShrb&quot;</span>, <span class="st">&quot;Dsrt&quot;</span>, <span class="st">&quot;TempF&quot;</span>, <span class="st">&quot;BorF&quot;</span>, <span class="st">&quot;Tund&quot;</span>, <span class="st">&quot;None&quot;</span>, <span class="st">&quot;Ice&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>gf<span class="sc">$</span>megabiome <span class="ot">&lt;-</span> <span class="fu">factor</span>(gf<span class="sc">$</span>megabiome, <span class="at">levels=</span>megabiome_name)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co"># reorder vegtypes</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>vegtype_name <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;TrEFW&quot;</span>,<span class="st">&quot;TrDFW&quot;</span>,<span class="st">&quot;TeBEFW&quot;</span>,<span class="st">&quot;TeNEFW&quot;</span>,<span class="st">&quot;TeDFW&quot;</span>,<span class="st">&quot;BrEFW&quot;</span>,<span class="st">&quot;BrDFW&quot;</span>,<span class="st">&quot;EDMFW&quot;</span>,</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>                  <span class="st">&quot;Savan&quot;</span>,<span class="st">&quot;GrStp&quot;</span>,<span class="st">&quot;ShrbD&quot;</span>,<span class="st">&quot;ShrbO&quot;</span>,<span class="st">&quot;Tund&quot;</span>,<span class="st">&quot;Dsrt&quot;</span>,<span class="st">&quot;PDRI&quot;</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>gf<span class="sc">$</span>vegtype <span class="ot">&lt;-</span> <span class="fu">factor</span>(gf<span class="sc">$</span>vegtype, <span class="at">levels=</span>vegtype_name)</span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co"># check the new ordering of factor levels</span></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a><span class="fu">str</span>(gf[<span class="dv">16</span><span class="sc">:</span><span class="dv">17</span>])</span></code></pre></div>
+<p>Drop the last two categories</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># drop last two categories</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>mb2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;TropF&quot;</span>, <span class="st">&quot;WarmF&quot;</span>, <span class="st">&quot;SavDWd&quot;</span>, <span class="st">&quot;GrsShrb&quot;</span>, <span class="st">&quot;Dsrt&quot;</span>, <span class="st">&quot;TempF&quot;</span>, <span class="st">&quot;BorF&quot;</span>, <span class="st">&quot;Tund&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>gf <span class="ot">&lt;-</span> gf[gf<span class="sc">$</span>megabiome <span class="sc">%in%</span> mb2, ]</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">table</span>(gf<span class="sc">$</span>megabiome)</span></code></pre></div>
+<pre><code>## 
+##   TropF   WarmF  SavDWd GrsShrb    Dsrt   TempF    BorF    Tund    None     Ice 
+##    6678    2331    4719    9372    6728    7874   11356    4896       0       0</code></pre>
+<p>Do the usual transformations:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># transformations (output suppressed)</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">hist</span>(gf<span class="sc">$</span>hrmc)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>gf<span class="sc">$</span>hrmc <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(gf<span class="sc">$</span>hrmc)</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="fu">hist</span>(gf<span class="sc">$</span>hrmc)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="fu">hist</span>(<span class="fu">log10</span>(gf<span class="sc">$</span>gpw[gf<span class="sc">$</span>gpw <span class="sc">&gt;</span> <span class="dv">0</span>]))</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="fu">min</span>(<span class="fu">log10</span>(gf<span class="sc">$</span>gpw[gf<span class="sc">$</span>gpw <span class="sc">&gt;</span> <span class="dv">0</span>]))</span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>gf<span class="sc">$</span>gpw <span class="ot">&lt;-</span> <span class="fu">log10</span>(gf<span class="sc">$</span>gpw <span class="sc">+</span> <span class="fl">1e-10</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a><span class="fu">hist</span>(gf<span class="sc">$</span>gpw)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="fu">hist</span>(gf<span class="sc">$</span>map)</span>
+<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>gf<span class="sc">$</span>map <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(gf<span class="sc">$</span>map)</span>
+<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="fu">hist</span>(gf<span class="sc">$</span>map)</span>
+<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a></span>
+<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a><span class="fu">hist</span>(gf<span class="sc">$</span>pme)</span>
+<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>gf<span class="sc">$</span>pme <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(gf<span class="sc">$</span>pme <span class="sc">-</span> <span class="fu">min</span>(gf<span class="sc">$</span>pme))</span>
+<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a><span class="fu">hist</span>(gf<span class="sc">$</span>pme)</span></code></pre></div>
+<p>Get a shapefile too:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="co"># world_sf</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">library</span>(maps)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>world_sf <span class="ot">&lt;-</span> <span class="fu">st_as_sf</span>(maps<span class="sc">::</span><span class="fu">map</span>(<span class="st">&quot;world&quot;</span>, <span class="at">plot =</span> <span class="cn">FALSE</span>, <span class="at">fill =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>world_otl_sf <span class="ot">&lt;-</span> <span class="fu">st_geometry</span>(world_sf)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># ggplot map of world_outline</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="highdim_files/figure-html/unnamed-chunk-8-1.png" width="75%" height="75%" /></p>
+</div>
+<div id="plots" class="section level2" number="2.2">
+<h2><span class="header-section-number">2.2</span> Plots</h2>
+<p>Parallel coordinate plots can be made using the
+<code>ggparcoord()</code> function from the <code>GGally</code>
+package:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># parallel coordinate plot</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>pngfile <span class="ot">&lt;-</span> <span class="st">&quot;pcp01.png&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="fu">png</span>(pngfile, <span class="at">width=</span><span class="dv">600</span>, <span class="at">height=</span><span class="dv">600</span>) <span class="co"># open the file</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="fu">ggparcoord</span>(<span class="at">data =</span> gf[<span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>],</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="at">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="at">alphaLines =</span> <span class="fl">0.01</span>) <span class="sc">+</span> </span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;PCP of Global Fire Data&quot;</span>) <span class="sc">+</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x  =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">315</span>, <span class="at">vjust=</span><span class="fl">1.0</span>, <span class="at">hjust=</span><span class="fl">0.0</span>, <span class="at">size=</span><span class="dv">14</span>),</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(), </span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>() )</span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<pre><code>## quartz_off_screen 
+##                 2</code></pre>
+<p><img src="pcp01.png" /></p>
+<p>Note the use of transparency, specified by the
+<code>alphaLines</code> argument. Individual observations (gridpoints)
+that have similar values for each variable trace out dense bands of
+lines, and several distinct bands, corresponding to different “pyromes”
+(like biomes) can be observed.</p>
+<p>Parallel coordinate plots are most effective when paired with another
+display with points highlighted in one display similarly highlighted in
+the other. In the case of the global fire data set the logical other
+display is a map. There are (at least) two ways of doing the
+highlighting. Here, a particular megabiome (“BorF” – Boreal
+forest/Taiga) is used. First create a new variable that will be set to
+zero, except where <code>gf$megabiome == "BorF"</code>. Then, the data
+are sorted so that the non-“BorF” observations get plotted first.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="co"># select those points with megabiome = &quot;BorF&quot;</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>gf<span class="sc">$</span>points <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="dv">0</span>, <span class="fu">dim</span>(gf)[<span class="dv">1</span>])</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>gf<span class="sc">$</span>points[gf<span class="sc">$</span>megabiome <span class="sc">==</span> <span class="st">&quot;BorF&quot;</span>] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>gf<span class="sc">$</span>points <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(gf<span class="sc">$</span>points)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="fu">table</span>(gf<span class="sc">$</span>points)</span></code></pre></div>
+<pre><code>## 
+##     0     1 
+## 42598 11356</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># pcp</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>pngfile <span class="ot">&lt;-</span> <span class="st">&quot;pcp02.png&quot;</span></span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="fu">png</span>(pngfile, <span class="at">width=</span><span class="dv">600</span>, <span class="at">height=</span><span class="dv">600</span>) <span class="co"># open the file</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="fu">ggparcoord</span>(<span class="at">data =</span> gf[<span class="fu">order</span>(gf<span class="sc">$</span>points),],</span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>  <span class="at">columns =</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">16</span>), <span class="at">groupColumn =</span> <span class="st">&quot;points&quot;</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>  <span class="at">scale =</span> <span class="st">&quot;uniminmax&quot;</span>, <span class="at">alphaLines=</span><span class="fl">0.01</span>) <span class="sc">+</span> <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>)  <span class="sc">+</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span> </span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x  =</span> <span class="fu">element_text</span>(<span class="at">angle=</span><span class="dv">315</span>, <span class="at">vjust=</span><span class="fl">1.0</span>, <span class="at">hjust=</span><span class="fl">0.0</span>, <span class="at">size=</span><span class="dv">14</span>),</span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.2</span>), <span class="st">&quot;red&quot;</span>))</span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<pre><code>## quartz_off_screen 
+##                 2</code></pre>
+<p><img src="pcp02.png" /></p>
+<p>Plot the points.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="co"># map</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>pngfile <span class="ot">&lt;-</span> <span class="st">&quot;map02.png&quot;</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">png</span>(pngfile, <span class="at">width=</span><span class="dv">600</span>, <span class="at">height=</span><span class="dv">300</span>) <span class="co"># open the file</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> gf, <span class="fu">aes</span>(<span class="at">x =</span> lon, <span class="at">y =</span> lat, <span class="at">color =</span> points), <span class="at">size =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;gray80&quot;</span>, <span class="st">&quot;red&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">data =</span> world_otl_sf, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">col =</span> <span class="st">&quot;black&quot;</span>) <span class="sc">+</span> </span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="dv">180</span>, <span class="at">by =</span> <span class="dv">60</span>)) <span class="sc">+</span></span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="at">by =</span> <span class="dv">30</span>)) <span class="sc">+</span></span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">title=</span><span class="st">&quot;Selected Points&quot;</span>, <span class="at">fill=</span><span class="st">&quot; &quot;</span>) <span class="sc">+</span></span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<pre><code>## quartz_off_screen 
+##                 2</code></pre>
+<p><img src="map02.png" /></p>
+<p>Before moving on, delete the variable <code>select_points</code> from
+the <code>gf</code> dataframe:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>gf<span class="sc">$</span>points <span class="ot">&lt;-</span> <span class="cn">NULL</span></span></code></pre></div>
+<hr>
+</div>
+</div>
+<div id="high-density-plots-with-the-tabplot-package"
+class="section level1" number="3">
+<h1><span class="header-section-number">3</span> High-density plots with
+the tabplot package</h1>
+<p>The “tableplot” is an interesting visualization method that can be
+useful for discovering large-scale patterns in the covariations among a
+small (&lt; 15) set or subset of variables, which can be either
+continuous or categorical. The basic idea is to organize the rows of a
+data set along an axis of increasing or decreasing values of a
+continuous variable or the different “levels” of a categorical variable.
+A reduction in the density of the data is achieved by binning multiple
+rows of the data and plotting bin averages (or frequencies) of the
+variables. As in all compositing techniques, if there a consistent
+response in the other variables to the variable selected to organize the
+rows, then this will emerge, otherwise inconsistent reponses will wash
+each other out, and no apparent pattern will be evident in the plots of
+the other variables.</p>
+<div id="north-american-modern-pollen-data" class="section level2"
+number="3.1">
+<h2><span class="header-section-number">3.1</span> North American modern
+pollen data</h2>
+<p>This example makes use of a data set of 4360 modern pollen samples
+for North America, from Whitmore et al. (2005, <em>Quaternary Science
+Reviews</em> <a
+href="https://doi.org/10.1016/j.quascirev.2005.03.005">https://doi.org/10.1016/j.quascirev.2005.03.005</a>.
+The variables include the location and elevation of each sample, the
+relative abundances of the 12 most-abundant pollen types (transformed by
+taking square roots), and two categorical variables, Federova et
+al. (1994) vegetation types and USGS land-cover types from satellite
+remote-sensing data (see Whitmore et al. 2005 for details). This data
+set provides an interesting example, inasmuch as the resulting
+tableplots are reminiscent of “downcore”-plotted pollen diagrams.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="co"># read the North American modern pollen data</span></span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>csv_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/csv_files/&quot;</span></span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>csv_name <span class="ot">&lt;-</span> <span class="st">&quot;NAmodpol.csv&quot;</span></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>csv_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(csv_path, csv_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a>napol <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csv_file) <span class="co"># takes a while</span></span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="fu">str</span>(napol)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    4630 obs. of  17 variables:
+##  $ Lon    : num  -70 -79.2 -57 -85.5 -73.3 ...
+##  $ Lat    : num  61 46 52.5 36 45.5 ...
+##  $ Elev   : int  153 240 200 305 114 648 124 106 497 330 ...
+##  $ Alnus  : num  0 0.162 0 0.388 0 0 0.281 0.271 0.061 0 ...
+##  $ Artem  : num  0.109 0 0 0 0.051 0.041 0 0 0.061 0.047 ...
+##  $ Aster  : num  0.044 0 0 0.097 0 0.041 0 0.059 0.115 0 ...
+##  $ Betula : num  0.372 0.695 0.264 0.087 0.563 0.733 0.568 0.594 0.277 0.656 ...
+##  $ ChenoAm: num  0 0 0 0.061 0 0 0.057 0 0.061 0.047 ...
+##  $ Cupress: num  0 0 0 0.043 0.089 0.082 0.269 0.059 0 0.081 ...
+##  $ Cyper  : num  0.377 0 0.105 0.115 0.103 0.041 0 0 0.061 0.066 ...
+##  $ Picea  : num  0.118 0 0 0.097 0.051 0.058 0 0.059 0.13 0.047 ...
+##  $ Pinus  : num  0.204 0.53 0.075 0.221 0.352 0.158 0.207 0.345 0.233 0.203 ...
+##  $ Poaceae: num  0.109 0 0.091 0.184 0.073 0.187 0.275 0.196 0.241 0.197 ...
+##  $ Quercus: num  0 0.132 0 0.423 0.192 0.058 0.269 0.177 0.274 0.123 ...
+##  $ Salix  : num  0.166 0.094 0.075 0.061 0.051 0.058 0.081 0.084 0.075 0.047 ...
+##  $ Fed    : chr  &quot;ForestTundra&quot; &quot;ConiferHardwood&quot; &quot;BorealForest&quot; &quot;DeciduousForest&quot; ...
+##  $ USGS21 : chr  &quot;lc22&quot; &quot;lc15&quot; &quot;lc15&quot; &quot;lc6&quot; ...</code></pre>
+<p>Map the pollen site locations:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">library</span>(maps)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="fu">plot</span>(napol<span class="sc">$</span>Lat <span class="sc">~</span> napol<span class="sc">$</span>Lon, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="fu">map</span>(<span class="st">&quot;world&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&quot;gray&quot;</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="fu">points</span>(napol<span class="sc">$</span>Lat <span class="sc">~</span> napol<span class="sc">$</span>Lon, <span class="at">pch=</span><span class="dv">16</span>)</span></code></pre></div>
+<p><img src="highdim_files/figure-html/hd31-1.png" width="75%" height="75%" /></p>
+</div>
+<div id="plots-1" class="section level2" number="3.2">
+<h2><span class="header-section-number">3.2</span> Plots</h2>
+<p>Load the <code>tabplot</code> package. Note that <code>tabplot</code>
+loads some other packages (<code>ffbase</code>, <code>ff</code>,
+<code>bit</code>, etc.) that allow for efficient processing of large
+data sets and replace some of the functions in the <code>base</code>
+package. It might be good to restart R after using the
+<code>tabplot</code> package.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">library</span>(tabplot)</span></code></pre></div>
+<p>Here’s a simple tableplot, with the observations arranged by latitude
+(<code>sortCol="Lat"</code>) and linear scales specified for all
+continuous variables (<code>scales="lin"</code>, the
+<code>tabplot()</code> function attempts to find a suitable scale for
+each variable, but here the pollen variables were all transformed prior
+to the analysis, and so we want to suppress further transformation
+here).</p>
+<p>(Note that it just happens that the resulting plot looks like a
+standard pollen diagram–this isn’t designed in any way.)</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">tableplot</span>(napol, <span class="at">sortCol=</span><span class="st">&quot;Lat&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>)</span></code></pre></div>
+<p><img src="highdim_files/figure-html/hd34-1.png" width="90%" height="90%" /></p>
+<p>It’s possible to see broad trends in all of the pollen types, as well
+as in the frequency of different vegetationtypes as a function of
+latitude.</p>
+<p>Each bin the above plot represents a bin that, in this case, holds 46
+observations, and what is plotted as bars in each column is the
+bin-average or frequency for those observations. Here’s a second plot
+like the first, using more bins:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">tableplot</span>(napol, <span class="at">sortCol=</span><span class="st">&quot;Lat&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">nBins=</span><span class="dv">200</span>, <span class="at">fontsize =</span> <span class="dv">8</span>)</span></code></pre></div>
+<p><img src="highdim_files/figure-html/hd36-1.png" width="90%" height="90%" /></p>
+<p>The same broad-scale patterns are evident in this plot, suggesting
+that the approach is robust with respect to the number of bins. The next
+plot using the abundance of <em>Picea</em> (spruce to organize the
+data):</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">tableplot</span>(napol, <span class="at">sortCol=</span><span class="st">&quot;Picea&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">nBins=</span><span class="dv">100</span>, , <span class="at">fontsize =</span> <span class="dv">8</span>)</span></code></pre></div>
+<p><img src="highdim_files/figure-html/hd38-1.png" width="90%" height="90%" /></p>
+<p>The plot shows that <em>Aremisia</em> (sagebrush) pollen has a
+similar profile to <em>Picea</em> and both tend to be high at high
+elevation and low (western) longitudes. The next plot using one of the
+categorical variables to organize the data.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">tableplot</span>(napol, <span class="at">sortCol=</span><span class="st">&quot;Fed&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">nBins=</span><span class="dv">100</span>, <span class="at">fontsize =</span> <span class="dv">8</span>)</span></code></pre></div>
+<p><img src="highdim_files/figure-html/hd40-1.png" width="90%" height="90%" /></p>
+<p>The blockiness of the different profiles shows that the individual
+vegetation types have distinctive mixtures of the different pollen
+types.</p>
+</div>
+<div id="global-fire-data-1" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Global fire data</h2>
+<p>The global fire data set has roughly the same number of variables as
+the pollen data, but ten times the number of observations. The number of
+individual observations in each bin is therefore larger, increasing the
+likelihood that the contents of individual bins will be more
+heterogeneous, with an consequent loss of overall information.</p>
+</div>
+<div id="plots-2" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> Plots</h2>
+<p>To start, produce a tableplot, arranged by mean-annual temperature
+(<code>mat</code>), an obvious first-order preditor of biomass burning,
+as well as overall climate (through the dependence of the water balance
+on temperature via the Clausius-Clapyron relationship):</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">tableplot</span>(gf, <span class="at">sortCol=</span><span class="st">&quot;mat&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>, <span class="at">pals=</span><span class="fu">list</span>(<span class="at">megabiome=</span><span class="st">&quot;Set8&quot;</span>, <span class="at">vegtype=</span><span class="st">&quot;Set8&quot;</span>))</span></code></pre></div>
+<p><img src="highdim_files/figure-html/unnamed-chunk-12-1.png" width="90%" height="90%" /></p>
+<p>Overall, the trends of individual variables are relatively smooth,
+and it’s easy to see distiguish the temperature and moisture variables
+(as well as the population variable <code>gpw</code>). The
+vegetation-type variables <code>megabiome</code> and
+<code>vegtype</code> are also well sorted out along a mean annual
+temperature gradient. Burned fraction (<code>gfed</code>) obviously
+displays a threshold-type relationshion, where values are small at low
+temperatures, and higher at high values of <code>mat</code>.</p>
+<p>Next, the tableplot is sorted by precipitation minus
+evapotranspiration (<code>pme</code>, or P-E):</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">tableplot</span>(gf, <span class="at">sortCol=</span><span class="st">&quot;pme&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>, <span class="at">pals=</span><span class="fu">list</span>(<span class="at">megabiome=</span><span class="st">&quot;Set8&quot;</span>, <span class="at">vegtype=</span><span class="st">&quot;Set8&quot;</span>))</span></code></pre></div>
+<p><img src="highdim_files/figure-html/unnamed-chunk-13-1.png" width="90%" height="90%" /></p>
+<p>The relationship between burned fraction and P-E evident in
+univariate plots–the arch-shaped pattern, where burned fraction is
+highest at intermediate values of effective moisture–is also evident
+here: as P-E monotonically incrases, burned fraction (<code>gfed</code>)
+rises, then falls.</p>
+<p>Finally, the tableplot can be sorted by burned fraction
+(<code>gfed</code>):</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">tableplot</span>(gf, <span class="at">sortCol=</span><span class="st">&quot;gfed&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>, <span class="at">pals=</span><span class="fu">list</span>(<span class="at">megabiome=</span><span class="st">&quot;Set8&quot;</span>, <span class="at">vegtype=</span><span class="st">&quot;Set8&quot;</span>))</span></code></pre></div>
+<p><img src="highdim_files/figure-html/unnamed-chunk-14-1.png" width="90%" height="90%" /></p>
+<p>This plot confirms the existing relationships, where burned fraction
+broadly tracks temperature and P-E. However the plots also reveal a
+distinct threshold that is apparently related to a distinct
+discontinuity in vegetation: the transition beteen desert and tundra
+vegetation types, and grassland, shubland and forested ones.</p>
+<p><a href="highdim.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="plotting-multivariatemultiple-time-series"
+class="section level1" number="4">
+<h1><span class="header-section-number">4</span> Plotting
+multivariate/multiple time series</h1>
+<p>Although the tableplots of the North American pollen data above
+happened to look like conventional pollen diagrams, which were a
+comparatively early (over a century ago) attempt to visualize
+multivariate data, the data displayed by the <code>tableplot()</code>
+function does not necessarily need to be a series. The next example
+illustrates a display method in which the data <em>do</em> form a
+series, in this case pollen data again, only this time for a single
+site, which form a multivariate time series.</p>
+<div id="carp-l.-pollen-data" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Carp L. pollen
+data</h2>
+<p>The data here come from a long pollen record from Carp L., in
+Washinton State. (Whitlock, C.L. et al., 2000, <em>Palaeogeography
+Palaeoclimatology Palaeoecology</em> 155(1-2):7-29 [<a
+href="https://doi.org/10.1016/S0031-0182(99)00092-9"
+class="uri">https://doi.org/10.1016/S0031-0182(99)00092-9</a>] (<a
+href="https://doi.org/10.1016/S0031-0182\(99\)00092-9"
+class="uri">https://doi.org/10.1016/S0031-0182\(99\)00092-9</a>) and
+Whitlock, C. and P.J. Bartlein, 1997, <em>Nature</em> 388:57-61 <a
+href="https://doi.org/10.1038/40380">https://doi.org/10.1038/40380</a>.
+Pollen data are “long-tailed” and so the data were transformed earlier
+by taking the square root of the pollen percentages.</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="co"># read Carp L. pollen data (transformed to square-roots)</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a>csvpath <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/csv_files/&quot;</span></span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a>csvname <span class="ot">&lt;-</span> <span class="st">&quot;carp96t.csv&quot;</span> <span class="co"># square-root transformed data</span></span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a>carp <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="fu">paste</span>(csvpath, csvname, <span class="at">sep=</span><span class="st">&quot;&quot;</span>))</span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a><span class="fu">summary</span>(carp)</span></code></pre></div>
+<pre><code>##      Depth            Age                IS               Dippine         Happine          undpine     
+##  Min.   : 1.30   Min.   :  0.3983   Length:199         Min.   :0.000   Min.   :0.0000   Min.   :1.629  
+##  1st Qu.: 7.15   1st Qu.: 25.1045   Class :character   1st Qu.:1.220   1st Qu.:0.5585   1st Qu.:4.351  
+##  Median :12.80   Median : 57.6462   Mode  :character   Median :2.033   Median :1.1830   Median :5.827  
+##  Mean   :12.48   Mean   : 58.5209                      Mean   :2.048   Mean   :1.1933   Mean   :5.653  
+##  3rd Qu.:17.65   3rd Qu.: 89.0536                      3rd Qu.:2.813   3rd Qu.:1.7915   3rd Qu.:7.021  
+##  Max.   :23.15   Max.   :124.9092                      Max.   :5.247   Max.   :3.3850   Max.   :9.145  
+##      Picea           Abies          Pseudotsug       Juniperus           Thet            Tmert       
+##  Min.   :0.000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
+##  1st Qu.:0.681   1st Qu.:0.5655   1st Qu.:0.0000   1st Qu.:0.2950   1st Qu.:0.0000   1st Qu.:0.0000  
+##  Median :1.141   Median :0.8230   Median :0.5010   Median :0.5790   Median :0.4650   Median :0.0000  
+##  Mean   :1.252   Mean   :0.8382   Mean   :0.5850   Mean   :0.7792   Mean   :0.5844   Mean   :0.2315  
+##  3rd Qu.:1.802   3rd Qu.:1.0780   3rd Qu.:0.8375   3rd Qu.:1.0180   3rd Qu.:0.9345   3rd Qu.:0.4485  
+##  Max.   :3.741   Max.   :2.1440   Max.   :2.7850   Max.   :3.7170   Max.   :2.6690   Max.   :1.0670  
+##    Taxusbrev           Alnus             Arubra          Corylus           Betula           Salix       
+##  Min.   :0.00000   Min.   :0.00000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000   Min.   :0.0000  
+##  1st Qu.:0.00000   1st Qu.:0.00000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:0.0000  
+##  Median :0.00000   Median :0.00000   Median :0.4980   Median :0.0000   Median :0.0000   Median :0.3470  
+##  Mean   :0.02918   Mean   :0.06538   Mean   :0.5741   Mean   :0.2122   Mean   :0.2167   Mean   :0.2940  
+##  3rd Qu.:0.00000   3rd Qu.:0.00000   3rd Qu.:0.8970   3rd Qu.:0.4130   3rd Qu.:0.4745   3rd Qu.:0.5355  
+##  Max.   :0.84100   Max.   :1.02100   Max.   :3.1130   Max.   :1.7150   Max.   :1.0210   Max.   :1.1700  
+##     Fraxinus         Quercus          Poaceae        Artemisia        Ambrosia         Ivaciliat       
+##  Min.   :0.0000   Min.   :0.0000   Min.   :0.553   Min.   :0.000   Min.   :0.00000   Min.   :0.000000  
+##  1st Qu.:0.0000   1st Qu.:0.0000   1st Qu.:1.862   1st Qu.:3.205   1st Qu.:0.00000   1st Qu.:0.000000  
+##  Median :0.0000   Median :0.3550   Median :2.824   Median :4.605   Median :0.00000   Median :0.000000  
+##  Mean   :0.0344   Mean   :0.6227   Mean   :2.954   Mean   :4.377   Mean   :0.07275   Mean   :0.002111  
+##  3rd Qu.:0.0000   3rd Qu.:0.8030   3rd Qu.:4.071   3rd Qu.:5.891   3rd Qu.:0.00000   3rd Qu.:0.000000  
+##  Max.   :0.7670   Max.   :3.5530   Max.   :5.951   Max.   :8.121   Max.   :0.81700   Max.   :0.420000  
+##    Chenopodii    
+##  Min.   :0.0000  
+##  1st Qu.:0.3665  
+##  Median :0.5350  
+##  Mean   :0.6872  
+##  3rd Qu.:0.8965  
+##  Max.   :3.9650</code></pre>
+<p>Pollen data (expressed as proportions or percentages of individual
+pollen types) vary over an order of magnitude in value, and also have
+long-tailed distributions. Consequently they should be tranformed, and a
+useful transformation is to simply take the square root of the
+proportions.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="co"># transform </span></span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a>tcarp <span class="ot">&lt;-</span> carp</span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>tcarp[<span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>] <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(tcarp[<span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>])</span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a><span class="fu">names</span>(tcarp)</span></code></pre></div>
+<pre><code>##  [1] &quot;Depth&quot;      &quot;Age&quot;        &quot;IS&quot;         &quot;Dippine&quot;    &quot;Happine&quot;    &quot;undpine&quot;    &quot;Picea&quot;     
+##  [8] &quot;Abies&quot;      &quot;Pseudotsug&quot; &quot;Juniperus&quot;  &quot;Thet&quot;       &quot;Tmert&quot;      &quot;Taxusbrev&quot;  &quot;Alnus&quot;     
+## [15] &quot;Arubra&quot;     &quot;Corylus&quot;    &quot;Betula&quot;     &quot;Salix&quot;      &quot;Fraxinus&quot;   &quot;Quercus&quot;    &quot;Poaceae&quot;   
+## [22] &quot;Artemisia&quot;  &quot;Ambrosia&quot;   &quot;Ivaciliat&quot;  &quot;Chenopodii&quot;</code></pre>
+<p>As it appears in the spreadsheet, the data are not particularly well
+organized, but instead the columns are arranged according to the
+traditional style of pollen diagrams. An alternative approach is to
+arrange the indiviual variables (pollen types) according to their
+affinities as they vary over the core, which can be accomplished by
+doing a cluster analysis on a dissimilary matrix among pollen types:
+taxa that vary in a similar (or inverse) fashion downcore appear
+adjacent to one another.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># cluster rearrangement</span></span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a>carp_heat <span class="ot">&lt;-</span> <span class="fu">heatmap</span>(<span class="fu">as.matrix</span>(tcarp[<span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>]), <span class="at">Rowv =</span> <span class="cn">NA</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>)</span></code></pre></div>
+<p><img src="highdim_files/figure-html/unnamed-chunk-16-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="fu">attributes</span>(carp_heat)</span></code></pre></div>
+<pre><code>## $names
+## [1] &quot;rowInd&quot; &quot;colInd&quot; &quot;Rowv&quot;   &quot;Colv&quot;</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a>carp_heat<span class="sc">$</span>colInd</span></code></pre></div>
+<pre><code>##  [1]  3 18 19  4  2  1 13 20 21 10 16 11 15 14  9  6 12 17  8  5 22  7</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a>sort_cols <span class="ot">&lt;-</span> carp_heat<span class="sc">$</span>colInd <span class="sc">+</span> <span class="dv">3</span></span></code></pre></div>
+<p>The “heatmap” (which in itself provides an interesting way to look at
+the data), can be used to rearrange the columns of the dataframe to put
+similar (or inversely similar, when one type is high the other is low)
+next to one another:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="co"># rearrange matrix</span></span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a>stcarp <span class="ot">&lt;-</span> tcarp</span>
+<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a><span class="fu">names</span>(stcarp)</span></code></pre></div>
+<pre><code>##  [1] &quot;Depth&quot;      &quot;Age&quot;        &quot;IS&quot;         &quot;Dippine&quot;    &quot;Happine&quot;    &quot;undpine&quot;    &quot;Picea&quot;     
+##  [8] &quot;Abies&quot;      &quot;Pseudotsug&quot; &quot;Juniperus&quot;  &quot;Thet&quot;       &quot;Tmert&quot;      &quot;Taxusbrev&quot;  &quot;Alnus&quot;     
+## [15] &quot;Arubra&quot;     &quot;Corylus&quot;    &quot;Betula&quot;     &quot;Salix&quot;      &quot;Fraxinus&quot;   &quot;Quercus&quot;    &quot;Poaceae&quot;   
+## [22] &quot;Artemisia&quot;  &quot;Ambrosia&quot;   &quot;Ivaciliat&quot;  &quot;Chenopodii&quot;</code></pre>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a>stcarp[<span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>] <span class="ot">&lt;-</span> tcarp[sort_cols]</span>
+<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a><span class="fu">names</span>(stcarp) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Depth&quot;</span>, <span class="st">&quot;Age&quot;</span>, <span class="st">&quot;IS&quot;</span>, <span class="fu">names</span>(tcarp)[sort_cols])</span>
+<span id="cb41-3"><a href="#cb41-3" tabindex="-1"></a><span class="fu">names</span>(stcarp)</span></code></pre></div>
+<pre><code>##  [1] &quot;Depth&quot;      &quot;Age&quot;        &quot;IS&quot;         &quot;undpine&quot;    &quot;Poaceae&quot;    &quot;Artemisia&quot;  &quot;Picea&quot;     
+##  [8] &quot;Happine&quot;    &quot;Dippine&quot;    &quot;Corylus&quot;    &quot;Ambrosia&quot;   &quot;Ivaciliat&quot;  &quot;Taxusbrev&quot;  &quot;Fraxinus&quot;  
+## [15] &quot;Alnus&quot;      &quot;Salix&quot;      &quot;Betula&quot;     &quot;Tmert&quot;      &quot;Pseudotsug&quot; &quot;Arubra&quot;     &quot;Quercus&quot;   
+## [22] &quot;Thet&quot;       &quot;Abies&quot;      &quot;Chenopodii&quot; &quot;Juniperus&quot;</code></pre>
+</div>
+<div id="plots-3" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> Plots</h2>
+<p>The idea behind the <code>mvtsplots()</code> package (and function)
+is to use color to reveal underlying patterns in the data. The first
+plot shows the “raw” data, simply coded for each pollen taxon
+independently from low (magenta) to high (green). The plots on the
+margins are of boxplots for the individual series (right), and a time
+series of the median values across all series (bottom), which attempt to
+summarize the overall level of the series.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="fu">library</span>(mvtsplot)</span>
+<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a><span class="fu">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>], <span class="at">xtime=</span>carp<span class="sc">$</span>Age, <span class="at">levels=</span><span class="dv">9</span>, <span class="at">margin=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="highdim_files/figure-html/mvtsplots01-1.png" width="75%" height="75%" /></p>
+<p>PLotted this way, one begins to get an idea of some organization to
+the data along the time axis. The plot is a little noisy, and can be
+simplified by smoothing the individual series.</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="fu">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>], <span class="at">xtime=</span>carp<span class="sc">$</span>Age, <span class="at">smooth.df=</span><span class="dv">25</span>, <span class="at">levels=</span><span class="dv">9</span>, <span class="at">margin=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="highdim_files/figure-html/mtvsplot02-1.png" width="75%" height="75%" /></p>
+<p>Further simplification can be gotten by “normalizing” the data,
+transforming and assigning colors based on the range of values in each
+series individually.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="fu">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>], <span class="at">xtime=</span>carp<span class="sc">$</span>Age, <span class="at">smooth.df=</span><span class="dv">2</span>, <span class="at">norm=</span><span class="st">&quot;internal&quot;</span>, <span class="at">levels=</span><span class="dv">9</span>, <span class="at">margin=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="highdim_files/figure-html/mtvsplot03-1.png" width="75%" height="75%" /></p>
+<p>The color field now shows that the data are well organized in time,
+which can be verified by adding a plot of the variable <code>IS</code>
+i.e. the MIS (Marine Isotopic Stage) to the plot (on the last row). The
+progression of plots can also be seen to have proceeded from a fairly
+chaotic pattern to one with coherent patches:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="fu">mvtsplot</span>(stcarp[, <span class="dv">3</span><span class="sc">:</span><span class="dv">25</span>], <span class="at">xtime=</span>carp<span class="sc">$</span>Age, <span class="at">smooth.df=</span><span class="dv">2</span>, <span class="at">norm=</span><span class="st">&quot;internal&quot;</span>, <span class="at">levels=</span><span class="dv">9</span>, <span class="at">margin=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="highdim_files/figure-html/mvtsplot04-1.png" width="75%" height="75%" /></p>
+<p><a href="highdim.html">[Back to top]</a></p>
+</div>
+</div>
+<div id="interactive-plots" class="section level1" number="5">
+<h1><span class="header-section-number">5</span> Interactive plots</h1>
+<p>R has a long history of attempts to develop interactive plots,
+usually consisting of the basic plots developed from low-dimensional
+data. RStudio’s <em>Shiny</em> package <a
+href="https://shiny.rstudio.com">https://shiny.rstudio.com</a> and the
+<em>Plotly R Open Source Graphics Library</em> <a
+href="https://plot.ly/r/">https://plot.ly/r/</a> are examples that are
+rapidly developing. An interesting plot for displaying high-dimensional
+data is the <em>cubeplot</em>, which is easiest to explain by looking at
+one. The data here come from the <em>TraCE-21k</em> transient climate
+simulation from 21,000 years ago to present (at monthly resolution)
+(Liu, Z., et al. 2009, Science 325(5938): 310-314). A data set of of
+decadal-average “anomaly” values (the difference between past and
+present) is examined here.</p>
+<div id="data" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Data</h2>
+<p>The data are read using <code>{ncdf4}</code> subsampled and
+rearranged, and then coverted to a <code>{stars}</code> object for
+plotting using the <code>{cubeplot}</code> package. First, load the
+packages:</p>
+<p>Read the data:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="co"># read TraCE21-ka transient climate-model simulation decadal data</span></span>
+<span id="cb47-2"><a href="#cb47-2" tabindex="-1"></a>tr21dec_path <span class="ot">&lt;-</span> <span class="st">&quot;/Users/bartlein/Projects/RESS/data/nc_files/&quot;</span></span>
+<span id="cb47-3"><a href="#cb47-3" tabindex="-1"></a>tr21dec_name <span class="ot">&lt;-</span> <span class="st">&quot;Trace21_TREFHT_anm2.nc&quot;</span></span>
+<span id="cb47-4"><a href="#cb47-4" tabindex="-1"></a>tr21dec_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(tr21dec_path, tr21dec_name, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb47-5"><a href="#cb47-5" tabindex="-1"></a>dname <span class="ot">&lt;-</span> <span class="st">&quot;tas_anm_ann&quot;</span></span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="co"># read the data using ncdf4</span></span>
+<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a>nc_in <span class="ot">&lt;-</span> <span class="fu">nc_open</span>(tr21dec_file)</span>
+<span id="cb48-3"><a href="#cb48-3" tabindex="-1"></a><span class="fu">print</span>(nc_in)</span></code></pre></div>
+<pre><code>## File /Users/bartlein/Projects/RESS/data/nc_files/Trace21_TREFHT_anm2.nc (NC_FORMAT_CLASSIC):
+## 
+##      5 variables (excluding dimension variables):
+##         float tas_anm_ann[lon,lat,time]   
+##             name: tas_anm_ann
+##             long_name: tas anomalies
+##             units: C
+##             _FillValue: 1.00000003318135e+32
+##             comment: K transformed to degrees C
+##         float tas_anm_djf[lon,lat,time]   
+##             name: tas_anm_djf
+##             long_name: tas anomalies
+##             units: C
+##             _FillValue: 1.00000003318135e+32
+##             comment: K transformed to degrees C
+##         float tas_anm_mam[lon,lat,time]   
+##             name: tas_anm_mam
+##             long_name: tas anomalies
+##             units: C
+##             _FillValue: 1.00000003318135e+32
+##             comment: K transformed to degrees C
+##         float tas_anm_jja[lon,lat,time]   
+##             name: tas_anm_jja
+##             long_name: tas anomalies
+##             units: C
+##             _FillValue: 1.00000003318135e+32
+##             comment: K transformed to degrees C
+##         float tas_anm_son[lon,lat,time]   
+##             name: tas_anm_son
+##             long_name: tas anomalies
+##             units: C
+##             _FillValue: 1.00000003318135e+32
+##             comment: K transformed to degrees C
+## 
+##      3 dimensions:
+##         lon  Size:96 
+##             name: lon
+##             long_name: Longitude
+##             units: degrees_east
+##             axis: X
+##             standard_name: longitude
+##             coodinate_defines: gridcell_center
+##         lat  Size:48 
+##             name: lat
+##             long_name: Latitude
+##             units: degrees_north
+##             axis: Y
+##             standard_name: latitude
+##             coodinate_defines: gridcell_center
+##         time  Size:2204 
+##             standard_name: time
+##             long_name: time
+##             units: ka BP
+##             axis: T
+##             calendar: noleap
+##             CoordinateAxisType: time
+## 
+##     8 global attributes:
+##         title: TraCE 21 Transient Simulation
+##         model: CCSM3
+##         experiment: Trace 21
+##         references: Liu et al. (2009), Science 325:310-314
+##         history: P.J. Bartlein, 21 Aug 2014
+##         source_file: b30.00_4kaDVTd.cam2.ncrcat
+##         Conventions: CF-1.0
+##         comment: anomaly ltm base period:  1820, 1830, 1840</code></pre>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(nc_in,<span class="st">&quot;lon&quot;</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(nc_in,<span class="st">&quot;lat&quot;</span>)</span>
+<span id="cb50-3"><a href="#cb50-3" tabindex="-1"></a>tmp_array <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(nc_in, dname)</span></code></pre></div>
+<p>Take a look at the data.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="fu">dim</span>(tmp_array)</span></code></pre></div>
+<pre><code>## [1]   96   48 2204</code></pre>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="fu">class</span>(tmp_array)</span></code></pre></div>
+<pre><code>## [1] &quot;array&quot;</code></pre>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" tabindex="-1"></a><span class="fu">head</span>(lon); <span class="fu">tail</span>(lon)</span></code></pre></div>
+<pre><code>## [1]  0.00  3.75  7.50 11.25 15.00 18.75</code></pre>
+<pre><code>## [1] 337.50 341.25 345.00 348.75 352.50 356.25</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a><span class="fu">image</span>(tmp_array[,, <span class="dv">1</span>], <span class="at">col =</span> <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>)))</span></code></pre></div>
+<p><img src="highdim_files/figure-html/unnamed-chunk-19-1.png" width="75%" height="75%" /></p>
+<p>The data appear to run from 0 to 360, so rotate the longitudes:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" tabindex="-1"></a>temp <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="cn">NA</span>, <span class="at">dim =</span> <span class="fu">dim</span>(tmp_array))</span>
+<span id="cb59-2"><a href="#cb59-2" tabindex="-1"></a>lon_temp <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(lon))</span>
+<span id="cb59-3"><a href="#cb59-3" tabindex="-1"></a>temp <span class="ot">&lt;-</span> tmp_array</span>
+<span id="cb59-4"><a href="#cb59-4" tabindex="-1"></a>lon_temp <span class="ot">&lt;-</span> lon</span>
+<span id="cb59-5"><a href="#cb59-5" tabindex="-1"></a>tmp_array[<span class="dv">1</span><span class="sc">:</span><span class="dv">48</span>,,] <span class="ot">&lt;-</span> temp[<span class="dv">49</span><span class="sc">:</span><span class="dv">96</span>,,]</span>
+<span id="cb59-6"><a href="#cb59-6" tabindex="-1"></a>tmp_array[<span class="dv">49</span><span class="sc">:</span><span class="dv">96</span>,,] <span class="ot">&lt;-</span> temp[<span class="dv">1</span><span class="sc">:</span><span class="dv">48</span>,,]</span>
+<span id="cb59-7"><a href="#cb59-7" tabindex="-1"></a>lon[<span class="dv">1</span><span class="sc">:</span><span class="dv">48</span>] <span class="ot">&lt;-</span> lon_temp[<span class="dv">49</span><span class="sc">:</span><span class="dv">96</span>]</span>
+<span id="cb59-8"><a href="#cb59-8" tabindex="-1"></a>lon[<span class="dv">49</span><span class="sc">:</span><span class="dv">96</span>] <span class="ot">&lt;-</span> lon_temp[<span class="dv">1</span><span class="sc">:</span><span class="dv">48</span>]</span>
+<span id="cb59-9"><a href="#cb59-9" tabindex="-1"></a><span class="fu">image</span>(tmp_array[,, <span class="dv">1</span>], <span class="at">col =</span> <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>)))</span></code></pre></div>
+<p><img src="highdim_files/figure-html/unnamed-chunk-20-1.png" width="75%" height="75%" /></p>
+<p>Even though the data is decadal resolution, it’s still a lot of data,
+and so for this example, the data are downsampled in time to produce
+century time-step decadal average values.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a><span class="co"># get every 10-th slice</span></span>
+<span id="cb60-2"><a href="#cb60-2" tabindex="-1"></a>tmp2 <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="cn">NA</span>, <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">96</span>, <span class="dv">48</span>, <span class="dv">221</span>))</span>
+<span id="cb60-3"><a href="#cb60-3" tabindex="-1"></a><span class="fu">class</span>(tmp2)</span></code></pre></div>
+<pre><code>## [1] &quot;array&quot;</code></pre>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a><span class="fu">dim</span>(tmp2)</span></code></pre></div>
+<pre><code>## [1]  96  48 221</code></pre>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">96</span>)) {</span>
+<span id="cb64-2"><a href="#cb64-2" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">48</span>)) {</span>
+<span id="cb64-3"><a href="#cb64-3" tabindex="-1"></a>    <span class="cf">for</span> (l <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">221</span>)) {</span>
+<span id="cb64-4"><a href="#cb64-4" tabindex="-1"></a>      tmp2[j, k, l] <span class="ot">&lt;-</span> tmp_array[j, k, (<span class="dv">1</span> <span class="sc">+</span> (l<span class="dv">-1</span>)<span class="sc">*</span><span class="dv">10</span>)]</span>
+<span id="cb64-5"><a href="#cb64-5" tabindex="-1"></a>    }</span>
+<span id="cb64-6"><a href="#cb64-6" tabindex="-1"></a>  }</span>
+<span id="cb64-7"><a href="#cb64-7" tabindex="-1"></a>}</span>
+<span id="cb64-8"><a href="#cb64-8" tabindex="-1"></a><span class="fu">image</span>(tmp2[,, <span class="dv">2</span>], <span class="at">col =</span> <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>)))</span></code></pre></div>
+<p><img src="highdim_files/figure-html/tr21%20subset-1.png" width="75%" height="75%" /></p>
+<p>Convert to a <code>{stars}</code> object:</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a>tmp2_stars <span class="ot">&lt;-</span> <span class="fu">st_as_stars</span>(tmp2)</span>
+<span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a>tmp2_stars</span></code></pre></div>
+<pre><code>## stars object with 3 dimensions and 1 attribute
+## attribute(s), summary of first 1e+05 cells:
+##          Min.   1st Qu.    Median      Mean   3rd Qu.     Max.
+## A1  -30.39512 -9.487306 -3.701955 -5.887813 -2.000974 9.242142
+## dimension(s):
+##    from  to offset delta point x/y
+## X1    1  96      0     1 FALSE [x]
+## X2    1  48      0     1 FALSE [y]
+## X3    1 221      0     1 FALSE</code></pre>
+</div>
+<div id="cube-plot" class="section level2" number="5.2">
+<h2><span class="header-section-number">5.2</span> Cube plot</h2>
+<p>Then, the cubeplot can be produced using the <code>cubeview()</code>
+function from the <code>cubeview</code> package. The plot is
+interactively controlled as follows (from the <code>cubeview()</code>
+help file:</p>
+<p>The location of the slices can be controlled by keys:</p>
+<ul>
+<li>x-axis: LEFT / RIGHT arrow key</li>
+<li>y-axis: DOWN / UP arrow key</li>
+<li>z-axis: PAGE_DOWN / PAGE_UP key</li>
+</ul>
+<p>Other controls:</p>
+<ul>
+<li>Press and hold left mouse-button to rotate the cube</li>
+<li>Press and hold right mouse-button to move the cube</li>
+<li>Spin mouse-wheel or press and hold middle mouse-button and move
+mouse down/up to zoom the cube</li>
+<li>Press space bar to show/hide slice position guides</li>
+</ul>
+<p>The cubeplot, as rendered here, displays a map on the “front (or
+rear) face” of the brick, and Hovmöller plots on the top (or bottom) and
+sides.</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="co"># cubeplot</span></span>
+<span id="cb67-2"><a href="#cb67-2" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">40</span>,<span class="sc">-</span><span class="dv">10</span>,<span class="sc">-</span><span class="dv">5</span>,<span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>)</span>
+<span id="cb67-3"><a href="#cb67-3" tabindex="-1"></a>col <span class="ot">=</span> <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))</span>
+<span id="cb67-4"><a href="#cb67-4" tabindex="-1"></a><span class="fu">cubeView</span>(tmp2_stars, <span class="at">at=</span>cutpts, <span class="at">col.regions=</span>col)</span></code></pre></div>
+<p><img src="tr21cube.png" /></p>
+<p>Here is a link to the plot on the server: <a
+href="https://pjbartlein.github.io/REarthSysSci/tr21cube.html">https://pjbartlein.github.io/REarthSysSci/tr21cube.html</a></p>
+<p><a href="highdim.html">[Back to top]</a></p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
