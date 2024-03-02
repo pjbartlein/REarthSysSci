@@ -9,7 +9,7 @@ output:
     collapsed: no
 ---
 
-```{r, set-options, echo=FALSE}
+```{r highdim-1, set-options, echo=FALSE}
 options(width = 105)
 knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE, out.width = "75%", out.height = "75%")
 knitr::opts_knit$set(progress = TRUE, verbose = TRUE)
@@ -47,7 +47,7 @@ The global fire data set provides a good instructional example of the developmen
 
 Load the necessary packages:
 
-```{r  message=FALSE}
+```{r highdim-2,  message=FALSE}
 # load packages
 library(sf)
 library(ggplot2)
@@ -58,7 +58,7 @@ library(GGally)
 
  Read the data from an existing `.csv` file.
  
-```{r, echo=TRUE, eval=TRUE, results='hide'}
+```{r highdim-3, echo=TRUE, eval=TRUE, results='hide'}
 # read the data -- output suppressed
 csvpath <- "/Users/bartlein/Projects/RESS/data/csv_files/"
 csvname <- "global_fire.csv"
@@ -70,7 +70,7 @@ summary(gf)
 
 The two categorical (i.e. factor) variables have levels arranged in the default alphabetical order.  The following code reorders the levels into something more ecologically and climatically sensible:
 
-```{r, echo=TRUE, eval=TRUE, results='hide'}
+```{r highdim-4, echo=TRUE, eval=TRUE, results='hide'}
 # reorder megabiomes -- output suppressed
 megabiome_name <- c("TropF", "WarmF", "SavDWd", "GrsShrb", "Dsrt", "TempF", "BorF", "Tund", "None", "Ice")
 gf$megabiome <- factor(gf$megabiome, levels=megabiome_name)
@@ -86,7 +86,7 @@ str(gf[16:17])
 
 Drop the last two categories
 
-```{r}
+```{r highdim-5}
 # drop last two categories
 mb2 <- c("TropF", "WarmF", "SavDWd", "GrsShrb", "Dsrt", "TempF", "BorF", "Tund")
 gf <- gf[gf$megabiome %in% mb2, ]
@@ -95,14 +95,14 @@ table(gf$megabiome)
 
 Do the usual transformations:
 
-```{r, eval=TRUE, echo=FALSE, results='hide'}
+```{r highdim-6, eval=TRUE, echo=FALSE, results='hide'}
 gf$hrmc <- sqrt(gf$hrmc)
 min(log10(gf$gpw[gf$gpw > 0]))
 gf$gpw <- log10(gf$gpw + 1e-10)
 gf$map <- sqrt(gf$map)
 gf$pme <- sqrt(gf$pme - min(gf$pme))
 ```
-```{r, eval=FALSE, echo=TRUE}
+```{r highdim-7, eval=FALSE, echo=TRUE}
 # transformations (output suppressed)
 hist(gf$hrmc)
 gf$hrmc <- sqrt(gf$hrmc)
@@ -124,13 +124,13 @@ hist(gf$pme)
 
 Get a shapefile too:
 
-```{r, messages = FALSE}
+```{r highdim-8, messages = FALSE}
 # world_sf
 library(maps)
 world_sf <- st_as_sf(maps::map("world", plot = FALSE, fill = TRUE))
 world_otl_sf <- st_geometry(world_sf)
 ```
-```{r}
+```{r highdim-9}
 # ggplot map of world_outline
 ggplot() + 
   geom_sf(data = world_otl_sf, fill = NA, col = "black") + 
@@ -145,7 +145,7 @@ ggplot() +
 
 Parallel coordinate plots can be made using the `ggparcoord()` function from the `GGally` package:
 
-```{r, pcp01}
+```{r highdim-10, pcp01}
 # parallel coordinate plot
 pngfile <- "pcp01.png"
 png(pngfile, width=600, height=600) # open the file
@@ -164,7 +164,7 @@ Note the use of transparency, specified by the `alphaLines` argument.  Individua
 
 Parallel coordinate plots are most effective when paired with another display with points highlighted in one display similarly highlighted in the other.  In the case of the global fire data set the logical other display is a map. There are (at least) two ways of doing the highlighting.  Here, a particular megabiome ("BorF" -- Boreal forest/Taiga) is used.  First create a new variable that will be set to zero, except where `gf$megabiome == "BorF"`.  Then, the data are sorted so that the non-"BorF" observations get plotted first.
 
-```{r}
+```{r highdim-11}
 # select those points with megabiome = "BorF"
 gf$points <- rep(0, dim(gf)[1])
 gf$points[gf$megabiome == "BorF"] <- 1
@@ -173,7 +173,7 @@ table(gf$points)
 ```
 
 
-```{r pcp02}
+```{r highdim-12 }
 # pcp
 pngfile <- "pcp02.png"
 png(pngfile, width=600, height=600) # open the file
@@ -191,7 +191,7 @@ dev.off()
 ![](pcp02.png)
 
 Plot the points.
-```{r}  
+```{r highdim-13  }
 # map
 pngfile <- "map02.png"
 png(pngfile, width=600, height=300) # open the file
@@ -211,7 +211,7 @@ dev.off()
 
 Before moving on, delete the variable `select_points` from the `gf` dataframe:
 
-```{r}
+```{r highdim-14}
 gf$points <- NULL
 ```
 
@@ -224,7 +224,7 @@ The "tableplot" is an interesting visualization method that can be useful for di
 
 This example makes use of a data set of 4360 modern pollen samples for North America, from Whitmore et al. (2005, *Quaternary Science Reviews* [https://doi.org/10.1016/j.quascirev.2005.03.005](https://doi.org/10.1016/j.quascirev.2005.03.005).  The variables include the location and elevation of each sample, the relative abundances of the 12 most-abundant pollen types (transformed by taking square roots), and two categorical variables, Federova et al. (1994) vegetation types and USGS land-cover types from satellite remote-sensing data (see Whitmore et al. 2005 for details).  This data set provides an interesting example, inasmuch as the resulting tableplots are reminiscent of "downcore"-plotted pollen diagrams.
 
-```{r, napollen}
+```{r highdim-15, napollen}
 # read the North American modern pollen data
 csv_path <- "/Users/bartlein/Projects/RESS/data/csv_files/"
 csv_name <- "NAmodpol.csv"
@@ -235,7 +235,7 @@ str(napol)
 
 Map the pollen site locations:
   
-```{r, hd31, fig.width=6, fig.height=5}
+```{r highdim-16, hd31, fig.width=6, fig.height=5}
 library(maps)
 plot(napol$Lat ~ napol$Lon, type="n")
 map("world", add=TRUE, lwd=2, col="gray")
@@ -245,7 +245,7 @@ points(napol$Lat ~ napol$Lon, pch=16)
 ## Plots ##
 Load the `tabplot` package.  Note that `tabplot` loads some other packages (`ffbase`, `ff`, `bit`, etc.) that allow for efficient processing of large data sets and replace some of the functions in the `base` package.  It might be good to restart R after using the `tabplot` package.
 
-```{r, hd32, message=FALSE}
+```{r highdim-17, hd32, message=FALSE}
 library(tabplot)
 ```
 
@@ -253,10 +253,10 @@ Here's a simple tableplot, with the observations arranged by latitude (`sortCol=
 
 (Note that it just happens that the resulting plot looks like a standard pollen diagram--this isn't designed in any way.)
 
-```{r, hd33, echo=TRUE, fig.width=10, eval=FALSE}
+```{r highdim-18, hd33, echo=TRUE, fig.width=10, eval=FALSE}
 tableplot(napol, sortCol="Lat", scales="lin", fontsize = 8)
 ```
-```{r, hd34, out.height="90%", out.width="90%", message=FALSE, echo=FALSE}
+```{r highdim-19, hd34, out.height="90%", out.width="90%", message=FALSE, echo=FALSE}
 suppressWarnings(tableplot(napol, sortCol="Lat", scales="lin", fontsize = 8))
 ```
 
@@ -264,28 +264,28 @@ It's possible to see broad trends in all of the pollen types, as well as in the 
 
 Each bin the above plot represents a bin that, in this case, holds 46 observations, and what is plotted as bars in each column  is the bin-average or frequency for those observations. Here's a second plot like the first, using more bins:
   
-```{r, hd35, echo=TRUE, eval=FALSE}
+```{r highdim-20, hd35, echo=TRUE, eval=FALSE}
 tableplot(napol, sortCol="Lat", scales="lin", nBins=200, fontsize = 8)
 ```
-```{r, hd36, out.height="90%", out.width="90%", message=FALSE, echo=FALSE}
+```{r highdim-21, hd36, out.height="90%", out.width="90%", message=FALSE, echo=FALSE}
 suppressWarnings(tableplot(napol, sortCol="Lat", scales="lin", nBins=200, fontsize = 8))
 ```
 
 The same broad-scale patterns are evident in this plot, suggesting that the approach is robust with respect to the number of bins.  The next plot using the abundance of *Picea* (spruce to organize the data):
   
-```{r, hd37, echo=TRUE, eval=FALSE}
+```{r highdim-22, hd37, echo=TRUE, eval=FALSE}
 tableplot(napol, sortCol="Picea", scales="lin", nBins=100, , fontsize = 8)
 ```
-```{r, hd38, out.height="90%", out.width="90%", message=FALSE, echo=FALSE}
+```{r highdim-23, hd38, out.height="90%", out.width="90%", message=FALSE, echo=FALSE}
 suppressWarnings(tableplot(napol, sortCol="Picea", scales="lin", nBins=100, fontsize = 8))
 ```
 
 The plot shows that *Aremisia* (sagebrush) pollen has a similar profile to *Picea* and both tend to be high at high elevation and low (western) longitudes.  The next plot using one of the categorical variables to organize the data.
 
-```{r, hd39, echo=TRUE, eval=FALSE}
+```{r highdim-24, hd39, echo=TRUE, eval=FALSE}
 tableplot(napol, sortCol="Fed", scales="lin", nBins=100, fontsize = 8)
 ```
-```{r, hd40, out.height="90%", out.width="90%", message=FALSE, echo=FALSE}
+```{r highdim-25, hd40, out.height="90%", out.width="90%", message=FALSE, echo=FALSE}
 suppressWarnings(tableplot(napol, sortCol="Fed", scales="lin", nBins=100, fontsize = 8))
 ```
 
@@ -299,7 +299,7 @@ The global fire data set has roughly the same number of variables as the pollen 
 
 To start, produce a tableplot, arranged by mean-annual temperature (`mat`), an obvious first-order preditor of biomass burning, as well as overall climate (through the dependence of the water balance on temperature via the Clausius-Clapyron relationship):
 
-```{r, out.height="90%", out.width="90%"}
+```{r highdim-26, out.height="90%", out.width="90%"}
 tableplot(gf, sortCol="mat", scales="lin", fontsize = 8, pals=list(megabiome="Set8", vegtype="Set8"))
 ```
 
@@ -307,7 +307,7 @@ Overall, the trends of individual variables are relatively smooth, and it's easy
 
 Next, the tableplot is sorted by precipitation minus evapotranspiration (`pme`, or P-E):  
 
-```{r, out.height="90%", out.width="90%"}
+```{r highdim-27, out.height="90%", out.width="90%"}
 tableplot(gf, sortCol="pme", scales="lin", fontsize = 8, pals=list(megabiome="Set8", vegtype="Set8"))
 ```
 
@@ -315,7 +315,7 @@ The relationship between burned fraction and P-E evident in univariate plots--th
 
 Finally, the tableplot can be sorted by burned fraction (`gfed`):
 
-```{r, out.height="90%", out.width="90%"}
+```{r highdim-28, out.height="90%", out.width="90%"}
 tableplot(gf, sortCol="gfed", scales="lin", fontsize = 8, pals=list(megabiome="Set8", vegtype="Set8"))
 ```
 
@@ -331,7 +331,7 @@ Although the tableplots of the North American pollen data above happened to look
 
 The data here come from a long pollen record from Carp L., in Washinton State.  (Whitlock, C.L. et al., 2000, *Palaeogeography Palaeoclimatology Palaeoecology* 155(1-2):7-29 [https://doi.org/10.1016/S0031-0182(99)00092-9] (https://doi.org/10.1016/S0031-0182\(99\)00092-9) and Whitlock, C. and P.J. Bartlein, 1997, *Nature* 388:57-61 [https://doi.org/10.1038/40380](https://doi.org/10.1038/40380).  Pollen data are "long-tailed" and so the data were transformed earlier by taking the square root of the pollen percentages.
 
-```{r, read carp}
+```{r highdim-29}
 # read Carp L. pollen data (transformed to square-roots)
 csvpath <- "/Users/bartlein/Projects/RESS/data/csv_files/"
 csvname <- "carp96t.csv" # square-root transformed data
@@ -341,7 +341,7 @@ summary(carp)
 
 Pollen data (expressed as proportions or percentages of individual pollen types) vary over an order of magnitude in value, and also have long-tailed distributions.  Consequently they should be tranformed, and a useful transformation is to simply take the square root of the proportions.
 
-```{r}
+```{r highdim-30}
 # transform 
 tcarp <- carp
 tcarp[4:25] <- sqrt(tcarp[4:25])
@@ -350,7 +350,7 @@ names(tcarp)
 
 As it appears in the spreadsheet, the data are not particularly well organized, but instead the columns are arranged according to the traditional style of pollen diagrams.  An alternative approach is to arrange the indiviual variables (pollen types) according to their affinities as they vary over the core, which can be accomplished by doing a cluster analysis on a dissimilary matrix among pollen types: taxa that vary in a similar (or inverse) fashion downcore appear adjacent to one another.
 
-```{r}
+```{r highdim-31}
 # cluster rearrangement
 carp_heat <- heatmap(as.matrix(tcarp[4:25]), Rowv = NA, scale="none")
 attributes(carp_heat)
@@ -360,7 +360,7 @@ sort_cols <- carp_heat$colInd + 3
 
 The "heatmap" (which in itself provides an interesting way to look at the data), can be used to rearrange the columns of the dataframe to put similar (or inversely similar, when one type is high the other is low) next to one another:
 
-```{r}
+```{r highdim-32}
 # rearrange matrix
 stcarp <- tcarp
 names(stcarp)
@@ -373,26 +373,26 @@ names(stcarp)
 
 The idea behind the `mvtsplots()` package (and function) is to use color to reveal underlying patterns in the data.  The first plot shows the "raw" data, simply coded for each pollen taxon independently from low (magenta) to high (green).  The plots on the margins are of boxplots for the individual series (right), and a time series of the median values across all series (bottom), which attempt to summarize the overall level of the series.
 
-```{r, mvtsplots01}
+```{r highdim-33, mvtsplots01}
 library(mvtsplot)
 mvtsplot(stcarp[, 4:25], xtime=carp$Age, levels=9, margin=TRUE)
 ```
 
 PLotted this way, one begins to get an idea of some organization to the data along the time axis.  The plot is a little noisy, and can be simplified by smoothing the individual series.
 
-```{r, mtvsplot02}
+```{r highdim-34, mtvsplot02}
 mvtsplot(stcarp[, 4:25], xtime=carp$Age, smooth.df=25, levels=9, margin=TRUE)
 ```
 
 Further simplification can be gotten by "normalizing" the data, transforming and assigning colors based on the range of values in each series individually.
 
-```{r, mtvsplot03}
+```{r highdim-35, mtvsplot03}
 mvtsplot(stcarp[, 4:25], xtime=carp$Age, smooth.df=2, norm="internal", levels=9, margin=TRUE)
 ```
 
 The color field now shows that the data are well organized in time, which can be verified by adding a plot of the variable `IS` i.e. the MIS (Marine Isotopic Stage) to the plot (on the last row).  The progression of plots can also be seen to have proceeded from a fairly chaotic pattern to one with coherent patches:
 
-```{r, mvtsplot04}
+```{r highdim-36, mvtsplot04}
 mvtsplot(stcarp[, 3:25], xtime=carp$Age, smooth.df=2, norm="internal", levels=9, margin=TRUE)
 ```
 
@@ -406,7 +406,7 @@ R has a long history of attempts to develop interactive plots, usually consistin
 
 The data are read using `{ncdf4}` subsampled and rearranged, and then coverted to a `{stars}` object for plotting using the `{cubeplot}` package.  First, load the packages:
 
-```{r cube, echo=FALSE, eval=TRUE, include=FALSE, results="hide", messages=FALSE, cache=FALSE}
+```{r highdim-37, echo=FALSE, eval=TRUE, include=FALSE, results="hide", messages=FALSE, cache=FALSE}
 # load packages
 library(ncdf4)
 library(sf)
@@ -417,7 +417,7 @@ library(cubeview)
 
 Read the data:
 
-```{r read tr21, echo=TRUE, eval=TRUE, results="hide", warning=FALSE, cache=FALSE}
+```{r highdim-38, echo=TRUE, eval=TRUE, results="hide", warning=FALSE, cache=FALSE}
 # read TraCE21-ka transient climate-model simulation decadal data
 tr21dec_path <- "/Users/bartlein/Projects/RESS/data/nc_files/"
 tr21dec_name <- "Trace21_TREFHT_anm2.nc"
@@ -425,7 +425,7 @@ tr21dec_file <- paste(tr21dec_path, tr21dec_name, sep="")
 dname <- "tas_anm_ann"
 ```
 
-```{r}
+```{r highdim-39}
 # read the data using ncdf4
 nc_in <- nc_open(tr21dec_file)
 print(nc_in)
@@ -434,40 +434,54 @@ lat <- ncvar_get(nc_in,"lat")
 tmp_array <- ncvar_get(nc_in, dname)
 ```
 
+Generate some age values (22,000 yrs ago to 1989 CE)
+
+```{r highdim-40}
+time <- seq(22000, -30, by = -10)
+head(time); tail(time)
+length(time)
+```
+
 Take a look at the data.
 
-```{r}
+```{r highdim-41}
 dim(tmp_array)
 class(tmp_array)
-head(lon); tail(lon)
+head(lon); tail(lon); head(lat); tail(lat)
 image(tmp_array[,, 1], col = rev(brewer.pal(10,"RdBu")))
 ```
 
-The data appear to run from 0 to 360, so rotate the longitudes:
+The data appear to run from 0 to 360, so rotate the longitudes, and also flip the latitudes.
 
-```{r}
+```{r highdim-42}
+# rotate longitude
 temp <- array(NA, dim = dim(tmp_array))
 lon_temp <- rep(NA, length(lon))
 temp <- tmp_array
 lon_temp <- lon
-tmp_array[1:48,,] <- temp[49:96,,]
+tmp_array[1:48,,] <- temp[49:96,,] 
 tmp_array[49:96,,] <- temp[1:48,,]
-lon[1:48] <- lon_temp[49:96]
+lon[1:48] <- lon_temp[49:96] - 360.0
 lon[49:96] <- lon_temp[1:48]
+# flip latitude
+lat <- rev(lat)
 image(tmp_array[,, 1], col = rev(brewer.pal(10,"RdBu")))
 ```
 
-Even though the data is decadal resolution, it's still a lot of data, and so for this example, the data are downsampled in time to produce century time-step decadal average values.
 
-```{r tr21 subset, echo=TRUE, cache=FALSE}
+Even though the data are of decadal resolution, that's still a lot of data, and so for this example, the data are downsampled in time to produce century time-step decadal average values. A `time2` value of 0 is equivalent to 1950 CE (or 0 yrs BP).
+
+```{r highdim-43, echo=TRUE, cache=FALSE}
 # get every 10-th slice
 tmp2 <- array(NA, dim = c(96, 48, 221))
+time2 <- rep(NA, 221)
 class(tmp2)
 dim(tmp2)
 for (j in (1:96)) {
   for (k in (1:48)) {
     for (l in (1:221)) {
       tmp2[j, k, l] <- tmp_array[j, k, (1 + (l-1)*10)]
+      time2[l] <- time[(1 + (l-1)*10)]
     }
   }
 }
@@ -476,7 +490,7 @@ image(tmp2[,, 2], col = rev(brewer.pal(10,"RdBu")))
 
 Convert to a `{stars}` object:
 
-```{r}
+```{r highdim-44}
 tmp2_stars <- st_as_stars(tmp2)
 tmp2_stars
 ```
@@ -484,7 +498,7 @@ tmp2_stars
 
 ## Cube plot ## 
 
-Then, the cubeplot can be produced using the `cubeview()` function from the `cubeview` package.  The plot is interactively controlled as follows (from the `cubeview()` help file:
+The "cubeplot" can be produced using the `cubeView()` function from the `{cubeview}` package.  The plot is interactively controlled as follows (from the `cubeView()` help file:
 
 The location of the slices can be controlled by keys:
 
@@ -499,9 +513,16 @@ Other controls:
 - Spin mouse-wheel or press and hold middle mouse-button and move mouse down/up to zoom the cube
 - Press space bar to show/hide slice position guides
 
-The cubeplot, as rendered here, displays a map on the "front (or rear) face" of the brick, and Hovmöller plots on the top (or bottom) and sides.
+The `cubeView()` function renders the raster brick, and displays a "map view" on the front (or rear) face of the brick, and Hovmöller plots on the top (or bottom) and sides. The location of the intersection of the slices is listed as x-, y-, and z- coordinates in the legend. The following code fragment can be used to retrieve the real longitude, latitude and time values:
 
-```{r tr21 cube, echo=TRUE, eval=FALSE, cache=FALSE}
+```{r highdim-45}
+# get lon, lat, and time from the x-, y-, and z- coorinates
+x <- 33; y <- 14; z <- 78
+print(c(lon[x], lat[y], time2[z]))
+```
+
+
+```{r highdim-46, echo=TRUE, eval=FALSE, cache=FALSE}
 # cubeplot
 cutpts <- c(-40,-10,-5,-2,-1,0,1,2,5,10,20)
 col = rev(brewer.pal(10,"RdBu"))
@@ -509,6 +530,8 @@ cubeView(tmp2_stars, at=cutpts, col.regions=col)
 ```
 
 ![](tr21cube.png)
+
+To save the interactive cubeplot, in the RStudio Plots window, click on Export > Save as Web Page...
 
 Here is a link to the plot on the server:  [https://pjbartlein.github.io/REarthSysSci/tr21cube.html](https://pjbartlein.github.io/REarthSysSci/tr21cube.html)  
 

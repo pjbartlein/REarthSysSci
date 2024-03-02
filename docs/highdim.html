@@ -675,7 +675,7 @@ into something more ecologically and climatically sensible:</p>
 <span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>, <span class="dv">30</span>)) <span class="sc">+</span></span>
 <span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>  <span class="fu">coord_sf</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">180</span>, <span class="sc">+</span><span class="dv">180</span>), <span class="at">ylim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">90</span>, <span class="dv">90</span>), <span class="at">expand =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
 <span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="highdim_files/figure-html/unnamed-chunk-8-1.png" width="75%" height="75%" /></p>
+<p><img src="highdim_files/figure-html/highdim-9-1.png" width="75%" height="75%" /></p>
 </div>
 <div id="plots" class="section level2" number="2.2">
 <h2><span class="header-section-number">2.2</span> Plots</h2>
@@ -818,7 +818,7 @@ tableplots are reminiscent of “downcore”-plotted pollen diagrams.</p>
 <span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="fu">plot</span>(napol<span class="sc">$</span>Lat <span class="sc">~</span> napol<span class="sc">$</span>Lon, <span class="at">type=</span><span class="st">&quot;n&quot;</span>)</span>
 <span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="fu">map</span>(<span class="st">&quot;world&quot;</span>, <span class="at">add=</span><span class="cn">TRUE</span>, <span class="at">lwd=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&quot;gray&quot;</span>)</span>
 <span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="fu">points</span>(napol<span class="sc">$</span>Lat <span class="sc">~</span> napol<span class="sc">$</span>Lon, <span class="at">pch=</span><span class="dv">16</span>)</span></code></pre></div>
-<p><img src="highdim_files/figure-html/hd31-1.png" width="75%" height="75%" /></p>
+<p><img src="highdim_files/figure-html/highdim-16,%20hd31-1.png" width="75%" height="75%" /></p>
 </div>
 <div id="plots-1" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span> Plots</h2>
@@ -839,7 +839,7 @@ here).</p>
 <p>(Note that it just happens that the resulting plot looks like a
 standard pollen diagram–this isn’t designed in any way.)</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">tableplot</span>(napol, <span class="at">sortCol=</span><span class="st">&quot;Lat&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>)</span></code></pre></div>
-<p><img src="highdim_files/figure-html/hd34-1.png" width="90%" height="90%" /></p>
+<p><img src="highdim_files/figure-html/highdim-19,%20hd34-1.png" width="90%" height="90%" /></p>
 <p>It’s possible to see broad trends in all of the pollen types, as well
 as in the frequency of different vegetationtypes as a function of
 latitude.</p>
@@ -848,19 +848,19 @@ observations, and what is plotted as bars in each column is the
 bin-average or frequency for those observations. Here’s a second plot
 like the first, using more bins:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">tableplot</span>(napol, <span class="at">sortCol=</span><span class="st">&quot;Lat&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">nBins=</span><span class="dv">200</span>, <span class="at">fontsize =</span> <span class="dv">8</span>)</span></code></pre></div>
-<p><img src="highdim_files/figure-html/hd36-1.png" width="90%" height="90%" /></p>
+<p><img src="highdim_files/figure-html/highdim-21,%20hd36-1.png" width="90%" height="90%" /></p>
 <p>The same broad-scale patterns are evident in this plot, suggesting
 that the approach is robust with respect to the number of bins. The next
 plot using the abundance of <em>Picea</em> (spruce to organize the
 data):</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">tableplot</span>(napol, <span class="at">sortCol=</span><span class="st">&quot;Picea&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">nBins=</span><span class="dv">100</span>, , <span class="at">fontsize =</span> <span class="dv">8</span>)</span></code></pre></div>
-<p><img src="highdim_files/figure-html/hd38-1.png" width="90%" height="90%" /></p>
+<p><img src="highdim_files/figure-html/highdim-23,%20hd38-1.png" width="90%" height="90%" /></p>
 <p>The plot shows that <em>Aremisia</em> (sagebrush) pollen has a
 similar profile to <em>Picea</em> and both tend to be high at high
 elevation and low (western) longitudes. The next plot using one of the
 categorical variables to organize the data.</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">tableplot</span>(napol, <span class="at">sortCol=</span><span class="st">&quot;Fed&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">nBins=</span><span class="dv">100</span>, <span class="at">fontsize =</span> <span class="dv">8</span>)</span></code></pre></div>
-<p><img src="highdim_files/figure-html/hd40-1.png" width="90%" height="90%" /></p>
+<p><img src="highdim_files/figure-html/highdim-25,%20hd40-1.png" width="90%" height="90%" /></p>
 <p>The blockiness of the different profiles shows that the individual
 vegetation types have distinctive mixtures of the different pollen
 types.</p>
@@ -880,7 +880,7 @@ heterogeneous, with an consequent loss of overall information.</p>
 as well as overall climate (through the dependence of the water balance
 on temperature via the Clausius-Clapyron relationship):</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">tableplot</span>(gf, <span class="at">sortCol=</span><span class="st">&quot;mat&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>, <span class="at">pals=</span><span class="fu">list</span>(<span class="at">megabiome=</span><span class="st">&quot;Set8&quot;</span>, <span class="at">vegtype=</span><span class="st">&quot;Set8&quot;</span>))</span></code></pre></div>
-<p><img src="highdim_files/figure-html/unnamed-chunk-12-1.png" width="90%" height="90%" /></p>
+<p><img src="highdim_files/figure-html/highdim-26-1.png" width="90%" height="90%" /></p>
 <p>Overall, the trends of individual variables are relatively smooth,
 and it’s easy to see distiguish the temperature and moisture variables
 (as well as the population variable <code>gpw</code>). The
@@ -892,7 +892,7 @@ temperatures, and higher at high values of <code>mat</code>.</p>
 <p>Next, the tableplot is sorted by precipitation minus
 evapotranspiration (<code>pme</code>, or P-E):</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">tableplot</span>(gf, <span class="at">sortCol=</span><span class="st">&quot;pme&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>, <span class="at">pals=</span><span class="fu">list</span>(<span class="at">megabiome=</span><span class="st">&quot;Set8&quot;</span>, <span class="at">vegtype=</span><span class="st">&quot;Set8&quot;</span>))</span></code></pre></div>
-<p><img src="highdim_files/figure-html/unnamed-chunk-13-1.png" width="90%" height="90%" /></p>
+<p><img src="highdim_files/figure-html/highdim-27-1.png" width="90%" height="90%" /></p>
 <p>The relationship between burned fraction and P-E evident in
 univariate plots–the arch-shaped pattern, where burned fraction is
 highest at intermediate values of effective moisture–is also evident
@@ -901,7 +901,7 @@ rises, then falls.</p>
 <p>Finally, the tableplot can be sorted by burned fraction
 (<code>gfed</code>):</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a><span class="fu">tableplot</span>(gf, <span class="at">sortCol=</span><span class="st">&quot;gfed&quot;</span>, <span class="at">scales=</span><span class="st">&quot;lin&quot;</span>, <span class="at">fontsize =</span> <span class="dv">8</span>, <span class="at">pals=</span><span class="fu">list</span>(<span class="at">megabiome=</span><span class="st">&quot;Set8&quot;</span>, <span class="at">vegtype=</span><span class="st">&quot;Set8&quot;</span>))</span></code></pre></div>
-<p><img src="highdim_files/figure-html/unnamed-chunk-14-1.png" width="90%" height="90%" /></p>
+<p><img src="highdim_files/figure-html/highdim-28-1.png" width="90%" height="90%" /></p>
 <p>This plot confirms the existing relationships, where burned fraction
 broadly tracks temperature and P-E. However the plots also reveal a
 distinct threshold that is apparently related to a distinct
@@ -999,7 +999,7 @@ taxa that vary in a similar (or inverse) fashion downcore appear
 adjacent to one another.</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="co"># cluster rearrangement</span></span>
 <span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a>carp_heat <span class="ot">&lt;-</span> <span class="fu">heatmap</span>(<span class="fu">as.matrix</span>(tcarp[<span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>]), <span class="at">Rowv =</span> <span class="cn">NA</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>)</span></code></pre></div>
-<p><img src="highdim_files/figure-html/unnamed-chunk-16-1.png" width="75%" height="75%" /></p>
+<p><img src="highdim_files/figure-html/highdim-31-1.png" width="75%" height="75%" /></p>
 <div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="fu">attributes</span>(carp_heat)</span></code></pre></div>
 <pre><code>## $names
 ## [1] &quot;rowInd&quot; &quot;colInd&quot; &quot;Rowv&quot;   &quot;Colv&quot;</code></pre>
@@ -1036,24 +1036,24 @@ series of the median values across all series (bottom), which attempt to
 summarize the overall level of the series.</p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="fu">library</span>(mvtsplot)</span>
 <span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a><span class="fu">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>], <span class="at">xtime=</span>carp<span class="sc">$</span>Age, <span class="at">levels=</span><span class="dv">9</span>, <span class="at">margin=</span><span class="cn">TRUE</span>)</span></code></pre></div>
-<p><img src="highdim_files/figure-html/mvtsplots01-1.png" width="75%" height="75%" /></p>
+<p><img src="highdim_files/figure-html/highdim-33,%20mvtsplots01-1.png" width="75%" height="75%" /></p>
 <p>PLotted this way, one begins to get an idea of some organization to
 the data along the time axis. The plot is a little noisy, and can be
 simplified by smoothing the individual series.</p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="fu">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>], <span class="at">xtime=</span>carp<span class="sc">$</span>Age, <span class="at">smooth.df=</span><span class="dv">25</span>, <span class="at">levels=</span><span class="dv">9</span>, <span class="at">margin=</span><span class="cn">TRUE</span>)</span></code></pre></div>
-<p><img src="highdim_files/figure-html/mtvsplot02-1.png" width="75%" height="75%" /></p>
+<p><img src="highdim_files/figure-html/highdim-34,%20mtvsplot02-1.png" width="75%" height="75%" /></p>
 <p>Further simplification can be gotten by “normalizing” the data,
 transforming and assigning colors based on the range of values in each
 series individually.</p>
 <div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="fu">mvtsplot</span>(stcarp[, <span class="dv">4</span><span class="sc">:</span><span class="dv">25</span>], <span class="at">xtime=</span>carp<span class="sc">$</span>Age, <span class="at">smooth.df=</span><span class="dv">2</span>, <span class="at">norm=</span><span class="st">&quot;internal&quot;</span>, <span class="at">levels=</span><span class="dv">9</span>, <span class="at">margin=</span><span class="cn">TRUE</span>)</span></code></pre></div>
-<p><img src="highdim_files/figure-html/mtvsplot03-1.png" width="75%" height="75%" /></p>
+<p><img src="highdim_files/figure-html/highdim-35,%20mtvsplot03-1.png" width="75%" height="75%" /></p>
 <p>The color field now shows that the data are well organized in time,
 which can be verified by adding a plot of the variable <code>IS</code>
 i.e. the MIS (Marine Isotopic Stage) to the plot (on the last row). The
 progression of plots can also be seen to have proceeded from a fairly
 chaotic pattern to one with coherent patches:</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="fu">mvtsplot</span>(stcarp[, <span class="dv">3</span><span class="sc">:</span><span class="dv">25</span>], <span class="at">xtime=</span>carp<span class="sc">$</span>Age, <span class="at">smooth.df=</span><span class="dv">2</span>, <span class="at">norm=</span><span class="st">&quot;internal&quot;</span>, <span class="at">levels=</span><span class="dv">9</span>, <span class="at">margin=</span><span class="cn">TRUE</span>)</span></code></pre></div>
-<p><img src="highdim_files/figure-html/mvtsplot04-1.png" width="75%" height="75%" /></p>
+<p><img src="highdim_files/figure-html/highdim-36,%20mvtsplot04-1.png" width="75%" height="75%" /></p>
 <p><a href="highdim.html">[Back to top]</a></p>
 </div>
 </div>
@@ -1156,48 +1156,64 @@ packages:</p>
 <div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a>lon <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(nc_in,<span class="st">&quot;lon&quot;</span>)</span>
 <span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(nc_in,<span class="st">&quot;lat&quot;</span>)</span>
 <span id="cb50-3"><a href="#cb50-3" tabindex="-1"></a>tmp_array <span class="ot">&lt;-</span> <span class="fu">ncvar_get</span>(nc_in, dname)</span></code></pre></div>
+<p>Generate some age values (22,000 yrs ago to 1989 CE)</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a>time <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">22000</span>, <span class="sc">-</span><span class="dv">30</span>, <span class="at">by =</span> <span class="sc">-</span><span class="dv">10</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" tabindex="-1"></a><span class="fu">head</span>(time); <span class="fu">tail</span>(time)</span></code></pre></div>
+<pre><code>## [1] 22000 21990 21980 21970 21960 21950</code></pre>
+<pre><code>## [1]  20  10   0 -10 -20 -30</code></pre>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="fu">length</span>(time)</span></code></pre></div>
+<pre><code>## [1] 2204</code></pre>
 <p>Take a look at the data.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="fu">dim</span>(tmp_array)</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="fu">dim</span>(tmp_array)</span></code></pre></div>
 <pre><code>## [1]   96   48 2204</code></pre>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="fu">class</span>(tmp_array)</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a><span class="fu">class</span>(tmp_array)</span></code></pre></div>
 <pre><code>## [1] &quot;array&quot;</code></pre>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" tabindex="-1"></a><span class="fu">head</span>(lon); <span class="fu">tail</span>(lon)</span></code></pre></div>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a><span class="fu">head</span>(lon); <span class="fu">tail</span>(lon); <span class="fu">head</span>(lat); <span class="fu">tail</span>(lat)</span></code></pre></div>
 <pre><code>## [1]  0.00  3.75  7.50 11.25 15.00 18.75</code></pre>
 <pre><code>## [1] 337.50 341.25 345.00 348.75 352.50 356.25</code></pre>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a><span class="fu">image</span>(tmp_array[,, <span class="dv">1</span>], <span class="at">col =</span> <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>)))</span></code></pre></div>
-<p><img src="highdim_files/figure-html/unnamed-chunk-19-1.png" width="75%" height="75%" /></p>
-<p>The data appear to run from 0 to 360, so rotate the longitudes:</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" tabindex="-1"></a>temp <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="cn">NA</span>, <span class="at">dim =</span> <span class="fu">dim</span>(tmp_array))</span>
-<span id="cb59-2"><a href="#cb59-2" tabindex="-1"></a>lon_temp <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(lon))</span>
-<span id="cb59-3"><a href="#cb59-3" tabindex="-1"></a>temp <span class="ot">&lt;-</span> tmp_array</span>
-<span id="cb59-4"><a href="#cb59-4" tabindex="-1"></a>lon_temp <span class="ot">&lt;-</span> lon</span>
-<span id="cb59-5"><a href="#cb59-5" tabindex="-1"></a>tmp_array[<span class="dv">1</span><span class="sc">:</span><span class="dv">48</span>,,] <span class="ot">&lt;-</span> temp[<span class="dv">49</span><span class="sc">:</span><span class="dv">96</span>,,]</span>
-<span id="cb59-6"><a href="#cb59-6" tabindex="-1"></a>tmp_array[<span class="dv">49</span><span class="sc">:</span><span class="dv">96</span>,,] <span class="ot">&lt;-</span> temp[<span class="dv">1</span><span class="sc">:</span><span class="dv">48</span>,,]</span>
-<span id="cb59-7"><a href="#cb59-7" tabindex="-1"></a>lon[<span class="dv">1</span><span class="sc">:</span><span class="dv">48</span>] <span class="ot">&lt;-</span> lon_temp[<span class="dv">49</span><span class="sc">:</span><span class="dv">96</span>]</span>
-<span id="cb59-8"><a href="#cb59-8" tabindex="-1"></a>lon[<span class="dv">49</span><span class="sc">:</span><span class="dv">96</span>] <span class="ot">&lt;-</span> lon_temp[<span class="dv">1</span><span class="sc">:</span><span class="dv">48</span>]</span>
-<span id="cb59-9"><a href="#cb59-9" tabindex="-1"></a><span class="fu">image</span>(tmp_array[,, <span class="dv">1</span>], <span class="at">col =</span> <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>)))</span></code></pre></div>
-<p><img src="highdim_files/figure-html/unnamed-chunk-20-1.png" width="75%" height="75%" /></p>
-<p>Even though the data is decadal resolution, it’s still a lot of data,
-and so for this example, the data are downsampled in time to produce
-century time-step decadal average values.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" tabindex="-1"></a><span class="co"># get every 10-th slice</span></span>
-<span id="cb60-2"><a href="#cb60-2" tabindex="-1"></a>tmp2 <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="cn">NA</span>, <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">96</span>, <span class="dv">48</span>, <span class="dv">221</span>))</span>
-<span id="cb60-3"><a href="#cb60-3" tabindex="-1"></a><span class="fu">class</span>(tmp2)</span></code></pre></div>
+<pre><code>## [1] -87.15909 -83.47894 -79.77705 -76.07024 -72.36158 -68.65202</code></pre>
+<pre><code>## [1] 68.65202 72.36158 76.07024 79.77705 83.47894 87.15909</code></pre>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a><span class="fu">image</span>(tmp_array[,, <span class="dv">1</span>], <span class="at">col =</span> <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>)))</span></code></pre></div>
+<p><img src="highdim_files/figure-html/highdim-41-1.png" width="75%" height="75%" /></p>
+<p>The data appear to run from 0 to 360, so rotate the longitudes, and
+also flip the latitudes.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" tabindex="-1"></a><span class="co"># rotate longitude</span></span>
+<span id="cb66-2"><a href="#cb66-2" tabindex="-1"></a>temp <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="cn">NA</span>, <span class="at">dim =</span> <span class="fu">dim</span>(tmp_array))</span>
+<span id="cb66-3"><a href="#cb66-3" tabindex="-1"></a>lon_temp <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="fu">length</span>(lon))</span>
+<span id="cb66-4"><a href="#cb66-4" tabindex="-1"></a>temp <span class="ot">&lt;-</span> tmp_array</span>
+<span id="cb66-5"><a href="#cb66-5" tabindex="-1"></a>lon_temp <span class="ot">&lt;-</span> lon</span>
+<span id="cb66-6"><a href="#cb66-6" tabindex="-1"></a>tmp_array[<span class="dv">1</span><span class="sc">:</span><span class="dv">48</span>,,] <span class="ot">&lt;-</span> temp[<span class="dv">49</span><span class="sc">:</span><span class="dv">96</span>,,] </span>
+<span id="cb66-7"><a href="#cb66-7" tabindex="-1"></a>tmp_array[<span class="dv">49</span><span class="sc">:</span><span class="dv">96</span>,,] <span class="ot">&lt;-</span> temp[<span class="dv">1</span><span class="sc">:</span><span class="dv">48</span>,,]</span>
+<span id="cb66-8"><a href="#cb66-8" tabindex="-1"></a>lon[<span class="dv">1</span><span class="sc">:</span><span class="dv">48</span>] <span class="ot">&lt;-</span> lon_temp[<span class="dv">49</span><span class="sc">:</span><span class="dv">96</span>] <span class="sc">-</span> <span class="fl">360.0</span></span>
+<span id="cb66-9"><a href="#cb66-9" tabindex="-1"></a>lon[<span class="dv">49</span><span class="sc">:</span><span class="dv">96</span>] <span class="ot">&lt;-</span> lon_temp[<span class="dv">1</span><span class="sc">:</span><span class="dv">48</span>]</span>
+<span id="cb66-10"><a href="#cb66-10" tabindex="-1"></a><span class="co"># flip latitude</span></span>
+<span id="cb66-11"><a href="#cb66-11" tabindex="-1"></a>lat <span class="ot">&lt;-</span> <span class="fu">rev</span>(lat)</span>
+<span id="cb66-12"><a href="#cb66-12" tabindex="-1"></a><span class="fu">image</span>(tmp_array[,, <span class="dv">1</span>], <span class="at">col =</span> <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>)))</span></code></pre></div>
+<p><img src="highdim_files/figure-html/highdim-42-1.png" width="75%" height="75%" /></p>
+<p>Even though the data are of decadal resolution, that’s still a lot of
+data, and so for this example, the data are downsampled in time to
+produce century time-step decadal average values. A <code>time2</code>
+value of 0 is equivalent to 1950 CE (or 0 yrs BP).</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="co"># get every 10-th slice</span></span>
+<span id="cb67-2"><a href="#cb67-2" tabindex="-1"></a>tmp2 <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="cn">NA</span>, <span class="at">dim =</span> <span class="fu">c</span>(<span class="dv">96</span>, <span class="dv">48</span>, <span class="dv">221</span>))</span>
+<span id="cb67-3"><a href="#cb67-3" tabindex="-1"></a>time2 <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="cn">NA</span>, <span class="dv">221</span>)</span>
+<span id="cb67-4"><a href="#cb67-4" tabindex="-1"></a><span class="fu">class</span>(tmp2)</span></code></pre></div>
 <pre><code>## [1] &quot;array&quot;</code></pre>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" tabindex="-1"></a><span class="fu">dim</span>(tmp2)</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" tabindex="-1"></a><span class="fu">dim</span>(tmp2)</span></code></pre></div>
 <pre><code>## [1]  96  48 221</code></pre>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">96</span>)) {</span>
-<span id="cb64-2"><a href="#cb64-2" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">48</span>)) {</span>
-<span id="cb64-3"><a href="#cb64-3" tabindex="-1"></a>    <span class="cf">for</span> (l <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">221</span>)) {</span>
-<span id="cb64-4"><a href="#cb64-4" tabindex="-1"></a>      tmp2[j, k, l] <span class="ot">&lt;-</span> tmp_array[j, k, (<span class="dv">1</span> <span class="sc">+</span> (l<span class="dv">-1</span>)<span class="sc">*</span><span class="dv">10</span>)]</span>
-<span id="cb64-5"><a href="#cb64-5" tabindex="-1"></a>    }</span>
-<span id="cb64-6"><a href="#cb64-6" tabindex="-1"></a>  }</span>
-<span id="cb64-7"><a href="#cb64-7" tabindex="-1"></a>}</span>
-<span id="cb64-8"><a href="#cb64-8" tabindex="-1"></a><span class="fu">image</span>(tmp2[,, <span class="dv">2</span>], <span class="at">col =</span> <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>)))</span></code></pre></div>
-<p><img src="highdim_files/figure-html/tr21%20subset-1.png" width="75%" height="75%" /></p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">96</span>)) {</span>
+<span id="cb71-2"><a href="#cb71-2" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">48</span>)) {</span>
+<span id="cb71-3"><a href="#cb71-3" tabindex="-1"></a>    <span class="cf">for</span> (l <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">221</span>)) {</span>
+<span id="cb71-4"><a href="#cb71-4" tabindex="-1"></a>      tmp2[j, k, l] <span class="ot">&lt;-</span> tmp_array[j, k, (<span class="dv">1</span> <span class="sc">+</span> (l<span class="dv">-1</span>)<span class="sc">*</span><span class="dv">10</span>)]</span>
+<span id="cb71-5"><a href="#cb71-5" tabindex="-1"></a>      time2[l] <span class="ot">&lt;-</span> time[(<span class="dv">1</span> <span class="sc">+</span> (l<span class="dv">-1</span>)<span class="sc">*</span><span class="dv">10</span>)]</span>
+<span id="cb71-6"><a href="#cb71-6" tabindex="-1"></a>    }</span>
+<span id="cb71-7"><a href="#cb71-7" tabindex="-1"></a>  }</span>
+<span id="cb71-8"><a href="#cb71-8" tabindex="-1"></a>}</span>
+<span id="cb71-9"><a href="#cb71-9" tabindex="-1"></a><span class="fu">image</span>(tmp2[,, <span class="dv">2</span>], <span class="at">col =</span> <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>)))</span></code></pre></div>
+<p><img src="highdim_files/figure-html/highdim-43-1.png" width="75%" height="75%" /></p>
 <p>Convert to a <code>{stars}</code> object:</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a>tmp2_stars <span class="ot">&lt;-</span> <span class="fu">st_as_stars</span>(tmp2)</span>
-<span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a>tmp2_stars</span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" tabindex="-1"></a>tmp2_stars <span class="ot">&lt;-</span> <span class="fu">st_as_stars</span>(tmp2)</span>
+<span id="cb72-2"><a href="#cb72-2" tabindex="-1"></a>tmp2_stars</span></code></pre></div>
 <pre><code>## stars object with 3 dimensions and 1 attribute
 ## attribute(s), summary of first 1e+05 cells:
 ##          Min.   1st Qu.    Median      Mean   3rd Qu.     Max.
@@ -1210,9 +1226,9 @@ century time-step decadal average values.</p>
 </div>
 <div id="cube-plot" class="section level2" number="5.2">
 <h2><span class="header-section-number">5.2</span> Cube plot</h2>
-<p>Then, the cubeplot can be produced using the <code>cubeview()</code>
-function from the <code>cubeview</code> package. The plot is
-interactively controlled as follows (from the <code>cubeview()</code>
+<p>The “cubeplot” can be produced using the <code>cubeView()</code>
+function from the <code>{cubeview}</code> package. The plot is
+interactively controlled as follows (from the <code>cubeView()</code>
 help file:</p>
 <p>The location of the slices can be controlled by keys:</p>
 <ul>
@@ -1228,14 +1244,23 @@ help file:</p>
 mouse down/up to zoom the cube</li>
 <li>Press space bar to show/hide slice position guides</li>
 </ul>
-<p>The cubeplot, as rendered here, displays a map on the “front (or
-rear) face” of the brick, and Hovmöller plots on the top (or bottom) and
-sides.</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="co"># cubeplot</span></span>
-<span id="cb67-2"><a href="#cb67-2" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">40</span>,<span class="sc">-</span><span class="dv">10</span>,<span class="sc">-</span><span class="dv">5</span>,<span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>)</span>
-<span id="cb67-3"><a href="#cb67-3" tabindex="-1"></a>col <span class="ot">=</span> <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))</span>
-<span id="cb67-4"><a href="#cb67-4" tabindex="-1"></a><span class="fu">cubeView</span>(tmp2_stars, <span class="at">at=</span>cutpts, <span class="at">col.regions=</span>col)</span></code></pre></div>
+<p>The <code>cubeView()</code> function renders the raster brick, and
+displays a “map view” on the front (or rear) face of the brick, and
+Hovmöller plots on the top (or bottom) and sides. The location of the
+intersection of the slices is listed as x-, y-, and z- coordinates in
+the legend. The following code fragment can be used to retrieve the real
+longitude, latitude and time values:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" tabindex="-1"></a><span class="co"># get lon, lat, and time from the x-, y-, and z- coorinates</span></span>
+<span id="cb74-2"><a href="#cb74-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="dv">33</span>; y <span class="ot">&lt;-</span> <span class="dv">14</span>; z <span class="ot">&lt;-</span> <span class="dv">78</span></span>
+<span id="cb74-3"><a href="#cb74-3" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">c</span>(lon[x], lat[y], time2[z]))</span></code></pre></div>
+<pre><code>## [1]   -60.00000    38.96661 14300.00000</code></pre>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" tabindex="-1"></a><span class="co"># cubeplot</span></span>
+<span id="cb76-2"><a href="#cb76-2" tabindex="-1"></a>cutpts <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">40</span>,<span class="sc">-</span><span class="dv">10</span>,<span class="sc">-</span><span class="dv">5</span>,<span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>)</span>
+<span id="cb76-3"><a href="#cb76-3" tabindex="-1"></a>col <span class="ot">=</span> <span class="fu">rev</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;RdBu&quot;</span>))</span>
+<span id="cb76-4"><a href="#cb76-4" tabindex="-1"></a><span class="fu">cubeView</span>(tmp2_stars, <span class="at">at=</span>cutpts, <span class="at">col.regions=</span>col)</span></code></pre></div>
 <p><img src="tr21cube.png" /></p>
+<p>To save the interactive cubeplot, in the RStudio Plots window, click
+on Export &gt; Save as Web Page…</p>
 <p>Here is a link to the plot on the server: <a
 href="https://pjbartlein.github.io/REarthSysSci/tr21cube.html">https://pjbartlein.github.io/REarthSysSci/tr21cube.html</a></p>
 <p><a href="highdim.html">[Back to top]</a></p>
