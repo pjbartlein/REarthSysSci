@@ -43,7 +43,7 @@ library(sf)
 library(ggplot2)
 library(RColorBrewer)
 library(lattice)
-library(corrplot)
+library(GGally)
 library(MASS)
 library(ncdf4)
 library(terra)
@@ -53,7 +53,7 @@ library(parallelDist)
 library(gplots)
 ```
 
-Some of these packages are familiar, but `{stringr}` manages the manipulation of strings, `{parallelDist}` exploits multiple processors/cores to efficiently calculate large dissimilarlty/distance matrices, and '{gplots}` calculates heat maps.  
+Some of these packages are familiar, but `{GGally}` provides some enhanced `{ggplot2}` plots, `{stringr}` manages the manipulation of strings, `{parallelDist}` exploits multiple processors/cores to efficiently calculate large dissimilarlty/distance matrices, and '{gplots}` calculates heat maps.  
 
 # A simple cluster analysis #
 
@@ -68,7 +68,7 @@ orotl_sf <- st_read(shapefile)
 
 Add a coordinate reference system and plot:
 
-```{r multivariate-4}
+```{r multivariate-4 }
 # add a CRS
 st_crs(orotl_sf) <- st_crs("+proj=longlat")
 or_otl_sf <- st_geometry(orotl_sf)
@@ -110,10 +110,12 @@ ggplot() +
 
 Take a quick look at the correlations among variables.
 
-```{r multivariate-8 }
-# correllation plot
-corrplot(cor(orstationc[2:10]), method = "color")
+```{r multivariate-8, message=FALSE}
+# matrix scatter plot and correlations
+ggpairs(orstationc[2:10])
 ```
+
+The off-diagonal cells for the climate variables indicate that there are some strong correlations among the climate variables (the asterisks indicate significance in the usual way).
 
 ## Distance/Dissimilarity matrices
 
@@ -134,6 +136,7 @@ levelplot(as.matrix(X_dist)/max(X_dist) ~ obs1*obs2, data=grid,
 In the code above, for convenience, a matrix **X** was created to omit the variables we don’t want to include in the clustering (i.e. the non-climatic information). The levelplot() function plots the dissimilarity matrix that the cluster analysis works with. The dark diagonal line is formed from the Eucldean distance values of 0.0 from the comparison of each observation with itself.
 
 There is a range of different styles of patterns that may show up 
+
 - If the climates at the individual stations were completely unrelated to on another, or if they were identical, the plot would appear light gray (with black pixels along the diagonal).The "plaid" as opposed to completely random appearance of the plot indicates that it is likely that natural groups will exist in the data.  
 - If stations near to one another had similar climates then one would see a plaid pattern.
 
@@ -148,7 +151,7 @@ levelplot(as.matrix(X_dist)/max(X_dist) ~ obs1*obs2, data=grid,
     col.regions = gray(seq(0,1,by=0.0625)), xlab="observation", ylab="observation")
 ```
 
-The "plaid and blocks" pattern suggests that, as we might have expected, there is a longitudinal pattern in Oregon climates.
+The "plaid and blocks" pattern suggests that, as we might have expected, there is a longitudinal trend in Oregon climates.
 
 ## The cluster analysis
 
@@ -161,16 +164,16 @@ X_dist <- dist(scale(X))
 
 # cluster analysis
 X_clusters <- hclust(X_dist, method = "ward.D2")
-plot(X_clusters, labels=station, cex=0.5)
+plot(X_clusters, labels=station, cex=0.4)
 ```
 
 The function `hclust()` performs a "Wards's single-linkage" analysis, and the `plot()` function plots the dendrogram.  Notice that the individual "leaves" of the plot are labeled by the climate-station names.
 
-The dendrogram can be inspected to get an idea of how many distinct clusters there are (and it can also identify unusual points–look for Crater Lake `CLK`). As a first guess, let’s say there were three distinct clusters evident in the dendrogram.  The `cuttree()` function can be used to "cut" the dendrogram at a particular level:
+The dendrogram can be inspected to get an idea of how many distinct clusters there are (and it can also identify unusual points–look for Crater Lake `CLK`). As a first guess, let’s say there were four distinct clusters evident in the dendrogram.  The `cuttree()` function can be used to "cut" the dendrogram at a particular level:
 
 ```{r multivariate-12 }
 # cut dendrogram and plot points in each cluster 
-nclust <- 3
+nclust <- 4
 clusternum <- cutree(X_clusters, k=nclust)
 ```
 
@@ -186,6 +189,8 @@ ggplot() +
   theme_bw()
 ```
 
+Cluster 1 picks out the stations in eastern Oregon's "High Desert" region, while Cluster 2 highlights lower elevation stations in eastern Oregon. Cluster 3 includes stations in the valleys of western Oregon, while Cluster 4 indentifies coastal and lower Columbia Valley stations.
+
 (A listing of the cluster number that each station belongs to can be gotten by the following code.)
 
 
@@ -200,19 +205,19 @@ The efficacy of the analyis in regionalizing or grouping the stations can be gau
 ```{r multivariate-15 }
 # examine clusters -- simple plots 
 tapply(tjan, clusternum, mean)
-histogram(~ tjan | factor(clusternum), nint=20, layout=c(1,3))
+histogram(~ tjan | factor(clusternum), nint=20, layout=c(2,2))
 ```
 
-Note how the histogram for cluster 3 seems multimodal–this is a clear sign of inhomogeneity of the clusters. Let’s see how the clusters differ.  This can be done via discriminant analysis [Discriminant Analysis](https://pjbartlein.github.io/REarthSysSci/topics/da.html), which (like PCA) defines some new variables with desirable properties, in this case, new variables that maximally "spread out" the groups along the new variable axes:
+Note how the histograms for some of the clusters seem multimodal multimodal–this is a clear sign of inhomogeneity of the clusters. Let’s see how the clusters differ.  This can be done via discriminant analysis [Discriminant Analysis](https://pjbartlein.github.io/REarthSysSci/topics/da.html), which (like PCA) defines some new variables with desirable properties, in this case, new variables that maximally "spread out" the groups along the new variable axes:
 
 ```{r multivariate-16 }
 # discriminant analysis 
 cluster_lda1 <- lda(clusternum ~ tjan + tjul + tann + pjan + pjul + pann)
 cluster_lda1
-plot(cluster_lda1)
+plot(cluster_lda1, col = "red")
 ```
 
-Get the discriminat scores (the values of the new discriminant function):
+Get the discriminant scores (the values of the new discriminant function):
 
 ```{r multivariate-17 }
 # discriminant scores
@@ -226,8 +231,11 @@ Produce a grouped box plot for each of first three discriminant function:
 opar <- par(mfrow=c(1,3))
 boxplot(cluster_dscore[, 1] ~ clusternum, ylab = "LD 1", ylim=c(-8,8))
 boxplot(cluster_dscore[, 2] ~ clusternum, ylab = "LD 2", ylim=c(-8,8))
+boxplot(cluster_dscore[, 3] ~ clusternum, ylab = "LD 2", ylim=c(-8,8))
 par(opar)
 ```
+
+The first discriminant function clearly spreads out the four clusters, while the second could be used to discriminate between clusters 1 and 4 and clusters 2 and 3.
 
 Finally, get the discriminant function loadings, which measure the relationship or correlation between each original variables and the new discriminant function:
 
@@ -236,7 +244,7 @@ Finally, get the discriminant function loadings, which measure the relationship 
 cor(orstationc[5:10],cluster_dscore)
 ```
 
-The loadings can be used to interpret or describe the discriminant functions. Here January temperature and January and annual precipitation are most highly correlated with the first discriminant function. Each of these have strong latitudinal gradient across the state: high in the west, low in the east. Notet that this gradient correspons well with a similar longitudinal gradient in cluster number.
+The loadings can be used to interpret or describe the discriminant functions. Here January temperature and January and annual precipitation are most highly correlated with the first discriminant function. Each of these have strong latitudinal gradient across the state: high in the west, low in the east. Note that this gradient corresponds well with a similar longitudinal gradient in cluster number.
 
 The discriminant analysis here is used to answer the question “how do the clusters of stations differ climatically?” In this case, it looks like `pann` and `tann` are the variables most closely correlated with each discriminant function, and because each of these variables are more-or-less averages of the seasonal extreme variables, that might explain why the clusters seem inhomogeneous.
 
@@ -244,7 +252,7 @@ The analysis can be repeated, extracting different numbers of clusters. The easi
 
 # Distances:  among observations and among variables
 
-As noted above, distance matrices are interesting in their own right, as well as being input to a cluster analysis.  In a typical rectangular data set, there are two distance matrices that could be calculated, one comparing variables (i.e. the columns in a data frame), and the other comparing observations (or rows).  In the examples below the "TraCE 21ka" decadal data are used. There are (96 x 48) 4608 grid points and 2204 observations.  Read the raster brick in the netCDF file (`Trace21_TREFHT_anm2.nc`): 
+As noted above, in addition to being the input to a cluster analysis, distance matrices are interesting in their own right.  In a typical rectangular data set, there are two distance matrices that could be calculated, one comparing variables (i.e. the columns in a data frame), and the other comparing observations (or rows).  In the examples below the "TraCE 21ka" decadal data are used. There are (96 x 48) 4608 grid points and 2204 observations.  Read the raster brick in the netCDF file (`Trace21_TREFHT_anm2.nc`): 
 
 ```{r multivariate-20 }
 # read the TraCE21 temperature data
@@ -254,6 +262,7 @@ tr21dec_name <- "Trace21_TREFHT_anm2.nc"
 tr21dec_file <- paste(tr21dec_path, tr21dec_name, sep="")
 dname <- "tas_anm_ann"
 ```
+
 ```{r multivariate-21 }
 # read the data using ncdf4
 nc_in <- nc_open(tr21dec_file)
@@ -281,7 +290,7 @@ dim(X)
 
 ## Distances among times
 
-Notice the use of the transposition function (`t()`) to get the data in the proper "tidy" arrangement for a data frame (variables in columns, observations in rows).  Distance matrix calculation can take a while, but the `{parallelDist}` package can be used to greatly speed things up, by handing off the creation of different blocks of the matrix to different processors in a multi-processor machines.
+Notice the use of the transposition function (`t()`) to get the data in the proper "tidy" arrangement for a data frame (variables in columns, observations in rows).  Distance matrix calculation can take a while, but the `{parallelDist}` package can be used to greatly speed things up, by handing off the creation of different blocks of the matrix to different processors in a multi-processor machine.
 
 The `parDist()` function gets the dissimilarity matrix:
 
@@ -291,15 +300,15 @@ dist_obs <- as.matrix(parDist(X))
 dim(dist_obs)
 ```
 
-The dissimilarity matrix (`dist_obs`) can be conveniently visualized by turning it into a `{terra}` SpatRaster, and then using the `{terra}` `plot()` function to visualize it. The rendering of the image is faster if the image is written to a file:
+The dissimilarity matrix (`dist_obs`) can be conveniently visualized by turning it into a `{terra}` SpatRaster, and then using the `{tidyterra}` `geom_spatraster()` function to visualize it. The rendering of the image is faster if the image is written to a file:
 
 ```{r multivariate-24, echo=TRUE, eval=FALSE}
 # turn matrix into a SpatRaster
-dist_var_terra <- flip(rast(dist_var))
-dist_var_terra
+dist_obs_terra <- flip(rast(dist_obs))
+dist_obs_terra
 ```
 
-Use `ggplot2` to plot the matrix
+Use `ggplot2()` to plot the matrix (writing the *.png image to a file):
 
 ```{r multivariate-25, echo=TRUE, eval=FALSE}
 # plot the dissimilarity matrix
@@ -311,7 +320,9 @@ png("TraCE_decadal_dist_obs_v1.png", width=720, height=720) # open the file
       scale_y_continuous(breaks = seq(0, 2200, by=500), minor_breaks = seq(0, 2200, by=100)) +
       labs(title = "Dissimilarity matrix among observations (times)",
         x = "Decades since 0 BP", y = "Decades since 0 BP", fill="distance") +
-      theme(panel.grid.major=element_line(colour="black"), panel.grid.minor=element_line(colour="black"))
+      theme(panel.grid.major=element_line(colour="black"), panel.grid.minor=element_line(colour="black"),
+            axis.text=element_text(size=12), axis.title=element_text(size=14), aspect.ratio = 1,
+            plot.title = element_text(size=20))
 dev.off()
 ```
 
@@ -319,7 +330,7 @@ Here's the image:
 
 ![](images/TraCE_decadal_dist_obs_v1.png)
 
-The observations here are ordered in time, and the blocks in the distance matrix indicate that there are two distinct climate regimes: one from the beginning of the record to around 14.7 ka (14,700 years before 1950 CE, e.g. in decade 1470 before the end of the record at 0 BP). Within each major interval, there are subintervals indicated by the dark squares. For example during the Holocene (the past 11,700 years, there are two blocks, the early Holocene, 11,700 to 8200 yr BP, and the middle and late Holocene, after 8200 yr BP). There are also patterns within the blocks. During the interval from 14,700 to 11,700 yr BP, the warm by variable Bølling-Allerød from 14,700 yr BP to 12,900 yr BP, followed by the colder Younger Dryas interval, 12,900 to 11,700 yr BP can be seen.
+The observations here are ordered in time, and the blocks in the distance matrix indicate that there are two distinct climate regimes: one from the beginning of the record to around 14.7 ka (14,700 years before 1950 CE, e.g. in decade 1470 before the end of the record at 0 BP). Within each major interval, there are subintervals indicated by the dark squares. For example during the Holocene (the past 11,700 years, there are two blocks, the early Holocene, 11,700 to 8200 yr BP, and the middle and late Holocene, after 8200 yr BP). There are also patterns within the blocks. During the interval from 14,700 to 11,700 yr BP, the warm, but variable, Bølling-Allerød from 14,700 yr BP to 12,900 yr BP, can be seen followed by the colder Younger Dryas interval, 12,900 to 11,700 yr BP.
 
 ## Distance among locations
 
@@ -340,12 +351,6 @@ dist_var_terra
 Plot the matrix:
 
 ```{r multivariate-28 }
-# turn matrix into a SpatRaster
-dist_var_terra <- flip(rast(dist_var))
-dist_var_terra
-```
-
-```{r multivariate-29 }
 # plot the dissimilarity matrix
 png("TraCE_decadal_dist_var_v1.png", width=720, height=720) # open the file
 ggplot() +
@@ -355,31 +360,28 @@ ggplot() +
   scale_y_continuous(breaks = seq(0, 4600, by=500), minor_breaks = seq(0, 4600, by=250)) +
   labs(title = "Dissimilarity matrix among variables (grid points/locations)",
        x = "Location", y = "Location", fill="distance") +
-  theme(panel.grid.major=element_line(colour="black"), panel.grid.minor=element_line(colour="black"))
+  theme(panel.grid.major=element_line(colour="black"), panel.grid.minor=element_line(colour="black"),
+            axis.text=element_text(size=12), axis.title=element_text(size=14), aspect.ratio = 1,
+            plot.title = element_text(size=20))
 dev.off()
 ```
-
-The image is sort of a map:  The grid points are arranged in the data frame with longitudes varying rapidly (forming the small squares), and the latitudes slowly, such that the square dark area (low dissimilarities) in the middle is the tropics, where the spatial variability of climate is low, while the more spatially variable higher-latitude regions (at all longitudes) frame the low-variability region.
-
-
-
 ![](images/TraCE_decadal_dist_var_v1.png)
 
-Here the temporal variability of is emphasized.  
+The image is a sort of map:  The grid points are arranged in the data frame with longitudes varying rapidly, and the latitudes slowly (forming the small squares in the image), such that the square dark area (low dissimilarities) in the middle is the tropics, where the spatial variability of climate is low, while the more spatially variable higher-latitude regions (at all longitudes) frame the low-variability region. There is also a pronounced Northern Hemisphere/Southern Hemisphere contrast
 
-# Heatmaps (2-way, time and space clustering)
+# Heatmaps (2-way, time-and-space clustering)
 
-"Heatmaps" are a visualization approach that is implemented in the `base` package of R.  A heatmap basically consists of the raster-image type plot of the data frame, with the rows and columns of the matrix reaggranged using cluster analyses of the varables and observations.  (Note that the cluster analyses are carried out individually, as opposed to simultaneously, an approach known as "biclustering".)  Typically, for small data sets, the matrix plot is augmented by dendrograms, and by "side bars" which plot some additional attribute of the data (location or time, for example) using a scatter plot, gradient plot, etc.
+"Heatmaps" are a visualization approach that is implemented in the `{base}` package of R, but is extended by the `{gplots}` package.  A heatmap basically consists of the raster-image type plot of the data frame, with the rows and columns of the matrix rearranged using cluster analyses of the varables and observations.  (Note that the cluster analyses are carried out sequentially, as opposed to simultaneously, this latter approach known as "biclustering".)  Typically, for small data sets, the matrix plot is augmented by dendrograms, and by "side bars" which plot some additional attribute of the data (location or time, for example) using a scatter plot, gradient plot, etc.
 
 ## A simple example with Hovmöller-matrix data
 
-A simple heatmap can be generated for a "Hovmöller matrix" calculated using the gridded data.  The Hovmöller matrix contains longitudinal averages and is laid out with one row for each latitude and one column for each time.
+A simple heatmap can be generated for a "Hovmöller matrix" calculated using the gridded data.  The Hovmöller matrix contains longitudinal averages, and is laid out with one row for each latitude and one column for each time.
 
 ### Set up
 
 Create the Hovmöller matrix:
 
-```{r multivariate-30, echo=TRUE, eval=FALSE}
+```{r multivariate-29, echo=TRUE, eval=FALSE}
 # Hovmöller matrix
 Y <- matrix(0.0, nrow=nlat, ncol=nt)
 dim(X)
@@ -397,7 +399,7 @@ ncols <- dim(Y)[2]
 
 Set row and column names for the matrix.
 
-```{r multivariate-31, echo=TRUE, eval=FALSE}
+```{r multivariate-30, echo=TRUE, eval=FALSE}
 # set row and column names
 rownames(Y) <- str_pad(sprintf("%.3f", lat), 5, pad="0")
 head(rownames(Y));tail(rownames(Y)); length(rownames(Y))
@@ -407,33 +409,33 @@ head(colnames(Y));tail(colnames(Y)); length(colnames(Y))
 
 A matrix plot of the Hovmöller matrix will illustrate the data (and is an actual Hovmöller plot).  To get high (northern) latitudes at the top of the plot, and high (southern) latitudes at the bottom, flip the data:
 
-```{r multivariate-32, echo=TRUE, eval=FALSE}
-# flip X
+```{r multivariate-31, echo=TRUE, eval=FALSE}
+# flip Y
 Y <- Y[(nlat:1),]
 head(rownames(Y)); tail(rownames(Y)); length(rownames(Y))
 ```
 
 For this example, the data are subsampled, by taking every 20th observation (to allow the dendrograms to be visualized):
 
-```{r multivariate-33, echo=TRUE, eval=FALSE}
+```{r multivariate-32, echo=TRUE, eval=FALSE}
 # subset
-Y2 <- Y[,seq(1, 2201, by=20)]
+Y2 <- Y[, seq(1, 2201, by=20)]
 dim(Y2)
 ncols2 <- dim(Y2)[2]
 rownames(Y2)
 ```
 
-More set up,  Generate colors for the matrix pot and the side bars, which here will illustrate the latitude and time of each data point.
+More set up.  Generate colors for the matrix pot and the side bars, which here will illustrate the latitude and time of each data point. The rows will be labeled by a diverging color scale, purple for the Northern Hemisphere, green for the Southern Hemisphere, while time will be labeled from past to present by increasingly saturated purples.
 
-```{r multivariate-34, echo=TRUE, eval=FALSE}
+```{r multivariate-33, echo=TRUE, eval=FALSE}
 # generate colors for side bars
 rcol <- colorRampPalette(brewer.pal(10,"PRGn"))(nlat)
 ccol <- colorRampPalette(brewer.pal(9,"Purples"))(ncols)
 ccol2 <- colorRampPalette(brewer.pal(9,"Purples"))(ncols2)
 ```
 
-Generate colors for the heatmap
-```{r multivariate-35, echo = TRUE, eval = FALSE}
+Generate colors for the heatmap of temperature
+```{r multivariate-34, echo = TRUE, eval = FALSE}
 nclr <- 10
 zcol <- (rev(brewer.pal(nclr,"RdBu")))
 breaks = c(-20,-10,-5,-2,-1,0,1,2,5,10,20)
@@ -442,9 +444,9 @@ length(breaks)
 
 ### Hovmöller-matrix plot (subsetted decadal data)
 
-Produce the heatmap for the Hovmöller matrix:  
+Produce the heatmap for the Hovmöller matrix. Note that the `system.time()` function is being used here to gauge the time it takes to calculate and display the various heatmaps.
 
-```{r multivariate-36, echo=TRUE, eval=FALSE}
+```{r multivariate-35, echo=TRUE, eval=FALSE}
 file_label <-  "TraCE_decadal"
 png_file <- paste(file_label, "_hov_01", ".png", sep="")
 png(png_file, width=960, height=960)
@@ -456,16 +458,22 @@ system.time( X_heatmap <- heatmap.2(Y2, cexRow = 0.8, cexCol = 0.8, scale="none"
 )
 dev.off()
 ```
+```
+##   user  system elapsed 
+##  0.029   0.001   0.038 
+```
 
 ![](images/TraCE_decadal_hov_01.png)
 
-Notice the way the side bars work in illustrating the location and time of each data value.
+Notice the way the side bars work in illustrating the location and time of each data value. The Hovmöller plot nicely shows the latitudinal variations in climate from the Last Glacial Maximum to present, with the insolation-driven warming in the Northern Hemisphere clearly expressed.
 
 ### Hovmöller-matrix heatmap (subsetted decadal data)
 
+The heatmap of the Hovmöller-matrix reorganizes the rows and columns in such a way as to place variables (i.e. latitudes) with similar variations over time, and observations (times) with similar latitudinal patterns, next to one another.
+
 Now here's the heatmap: 
 
-```{r multivariate-37, echo=TRUE, eval=FALSE}
+```{r multivariate-36, echo=TRUE, eval=FALSE}
 png_file <- paste(file_label, "_heatmap_01", ".png", sep="")
 png(png_file, width=960, height=960)
 system.time( X_heatmap <- heatmap.2(Y2, cexRow = 0.8, cexCol = 0.8, scale="none",
@@ -475,18 +483,22 @@ system.time( X_heatmap <- heatmap.2(Y2, cexRow = 0.8, cexCol = 0.8, scale="none"
 )
 dev.off()
 ```
+```
+##   user  system elapsed 
+##  0.096   0.003   0.099 
+```
 
 ![](images/TraCE_decadal_heatmap_01.png)
 
-The heatmap has rearranged the data according to the cluster analyses of the observations and variables, placing more similar data points next to one another.  Notice how the side bars allow one to figure out the location and time of individual points.  Here, and not surprisingly, there appear to be four distinct time-space clusters (or "regimes") in the data): glacial vs. interglacial (Holocene) and high latitudes (in both hemispheres) vs. low latitudes.
+The heatmap has rearranged the data according to the cluster analyses of the observations and variables, placing more similar data points next to one another.  Notice how the side bars allow one to figure out the location and time of individual points.  Here, and not surprisingly, there appear to be four distinct time-space clusters (or "regimes") in the data): glacial vs. interglacial (Holocene) and high latitudes (in both hemispheres) vs. low latitudes. Notice that the rearrangement in time is relatively modest (see the column color bar), while that in location is more dramatic. Spatial variations of climate are always larger in amplitude than temporal variations.
 
 ## A second example with decadal data
 
-A second example uses the decadal data directly. 
+A second example uses the decadal data directly (as opposed to subsampling)
 
 ### Hovmöller-matrix plot 
 
-```{r multivariate-38, echo=TRUE, eval=FALSE}
+```{r multivariate-37, echo=TRUE, eval=FALSE}
 png_file <- paste(file_label, "_hov_02", ".png", sep="")
 png(png_file, width=960, height=960)
 system.time( X_heatmap <- heatmap.2(Y, cexRow = 0.8, cexCol = 0.8, scale="none", 
@@ -497,12 +509,16 @@ system.time( X_heatmap <- heatmap.2(Y, cexRow = 0.8, cexCol = 0.8, scale="none",
 )
 dev.off()
 ```
+```
+##   user  system elapsed 
+## 35.070   0.091  35.195 
+```
 
 ![](images/TraCE_decadal_hov_02.png)
 
 ### Hovmöller-matrix heatmap 
 
-```{r multivariate-39, echo=TRUE, eval=FALSE}
+```{r multivariate-38, echo=TRUE, eval=FALSE}
 png_file <- paste(file_label, "_heatmap_02", ".png", sep="")
 png(png_file, width=960, height=960)
 system.time( X_heatmap <- heatmap.2(Y, cexRow = 0.8, cexCol = 0.8, scale="none", 
@@ -512,8 +528,14 @@ system.time( X_heatmap <- heatmap.2(Y, cexRow = 0.8, cexCol = 0.8, scale="none",
 )
 dev.off()
 ```
+```
+##   user  system elapsed 
+##  1.582   0.073   1.657 
+```
 
 ![](images/TraCE_decadal_heatmap_02.png)
+
+The results are similar to those for the subsetted data, but the execution times are longer
 
 ## Full-grid example
 
@@ -523,7 +545,7 @@ Finally, a heatmap of the gridded data (as opposed to the Hovmöller matrix data
 
 There are several set up steps necessary.  Reshape the input array again, and generate row and column names:
 
-```{r multivariate-40, echo=TRUE, eval=FALSE}
+```{r multivariate-39, echo=TRUE, eval=FALSE}
 # reshape the 3-d array
 var_vec_long <- as.vector(var_array)
 length(var_vec_long)
@@ -532,7 +554,7 @@ dim(X)
 ncols <- dim(X)[3]
 ```
 
-```{r multivariate-41, echo=TRUE, eval=FALSE}
+```{r multivariate-40, echo=TRUE, eval=FALSE}
 # generate row and column names
 grid <- expand.grid(lon, lat)
 names(grid) <- c("lon", "lat")
@@ -546,7 +568,7 @@ head(colnames(X)); tail(colnames(X)); length(colnames(X))
 
 Flip the data...
 
-```{r multivariate-42, echo=TRUE, eval=FALSE}
+```{r multivariate-41, echo=TRUE, eval=FALSE}
 # flip X
 X <- X[((nlon*nlat):1),]
 head(rownames(X)); tail(rownames(X)); length(rownames(X))
@@ -554,7 +576,7 @@ head(rownames(X)); tail(rownames(X)); length(rownames(X))
 
 ... and generate colors:
 
-```{r multivariate-43, echo=TRUE, eval=FALSE}
+```{r multivariate-42, echo=TRUE, eval=FALSE}
 # generate colors for vertical and horizontal side bars
 icol <- colorRampPalette(brewer.pal(10,"PRGn"))(nlat)
 idx <- sort(rep((1:nlat), nlon))
@@ -567,7 +589,7 @@ ccol <- colorRampPalette(brewer.pal(9,"Purples"))(nt)
 Here's a matrix plot of the data:
 Here, there are too many points to make the dendrograms interpretable in any way, and so they are suppressed.
 
-```{r multivariate-44, echo=TRUE, eval=FALSE}
+```{r multivariate-43, echo=TRUE, eval=FALSE}
 png_file <- paste(file_label, "_hov_03", ".png", sep="")
 png(png_file, width=960, height=960)
 system.time( X_heatmap <- heatmap.2(X, cexRow = 0.8, cexCol = 0.8, scale="none",
@@ -589,7 +611,7 @@ dev.off()
 
 Heatmap of the grid-point data
 
-```{r multivariate-45, echo=TRUE, eval=FALSE}
+```{r multivariate-44, echo=TRUE, eval=FALSE}
 png_file <- paste(file_label, "_heatmap_03", ".png", sep="")
 png(png_file, width=960, height=960)
 system.time( X_heatmap <- heatmap.2(X, cexRow = 0.8, cexCol = 0.8, scale="none", dendrogram = "none",
