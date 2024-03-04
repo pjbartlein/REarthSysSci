@@ -279,7 +279,7 @@ The object `plt_xvals` is used to easily access time labels for some of the late
 
 Reshape the 3-d array into a 2-d "tidy" matrix with individual variables (grid-point locations) in columns, and observations (time) in rows:
 
-```{r multivariate-22, ehco=TRUE, eval=FALSE}
+```{r multivariate-22}
 # reshape the 3-d array
 nlon <- dim(var_array)[1]; nlat <- dim(var_array)[2]; nt <- dim(var_array)[3]
 var_vec_long <- as.vector(var_array)
@@ -294,7 +294,7 @@ Notice the use of the transposition function (`t()`) to get the data in the prop
 
 The `parDist()` function gets the dissimilarity matrix:
 
-```{r multivariate-23, echo=TRUE, eval=FALSE}
+```{r multivariate-23}
 # disatances among observations (time)
 dist_obs <- as.matrix(parDist(X)) 
 dim(dist_obs)
@@ -302,7 +302,7 @@ dim(dist_obs)
 
 The dissimilarity matrix (`dist_obs`) can be conveniently visualized by turning it into a `{terra}` SpatRaster, and then using the `{tidyterra}` `geom_spatraster()` function to visualize it. The rendering of the image is faster if the image is written to a file:
 
-```{r multivariate-24, echo=TRUE, eval=FALSE}
+```{r multivariate-24}
 # turn matrix into a SpatRaster
 dist_obs_terra <- flip(rast(dist_obs))
 dist_obs_terra
@@ -460,7 +460,7 @@ dev.off()
 ```
 ```
 ##   user  system elapsed 
-##  0.029   0.001   0.038 
+##  0.033   0.002   0.044 
 ```
 
 ![](images/TraCE_decadal_hov_01.png)
@@ -485,7 +485,7 @@ dev.off()
 ```
 ```
 ##   user  system elapsed 
-##  0.096   0.003   0.099 
+##  0.106   0.003   0.109 
 ```
 
 ![](images/TraCE_decadal_heatmap_01.png)
@@ -535,11 +535,11 @@ dev.off()
 
 ![](images/TraCE_decadal_heatmap_02.png)
 
-The results are similar to those for the subsetted data, but the execution times are longer
+The results are similar to those for the subsetted data, but the execution times are longer.
 
 ## Full-grid example
 
-Finally, a heatmap of the gridded data (as opposed to the Hovmöller matrix data) can be obtained
+Finally, a heatmap of the actual   gridded data (as opposed to the Hovmöller matrix data) can be obtained
 
 ### Set up
 
@@ -586,8 +586,7 @@ ccol <- colorRampPalette(brewer.pal(9,"Purples"))(nt)
 
 ### Matrix plot
 
-Here's a matrix plot of the data:
-Here, there are too many points to make the dendrograms interpretable in any way, and so they are suppressed.
+Here's a matrix plot of the data (there are too many points to make the dendrograms interpretable in any way, and so they are suppressed).
 
 ```{r multivariate-43, echo=TRUE, eval=FALSE}
 png_file <- paste(file_label, "_hov_03", ".png", sep="")
@@ -602,7 +601,7 @@ dev.off()
 ```
 ```
 ##    user  system elapsed 
-## 1700.08   42.51 1744.53
+## 899.489   5.013 910.259 
 ```
 
 ![](images/TraCE_decadal_hov_03.png)
@@ -622,8 +621,8 @@ system.time( X_heatmap <- heatmap.2(X, cexRow = 0.8, cexCol = 0.8, scale="none",
 dev.off()
 ```
 ```
-##    user  system elapsed 
-##  643.89   42.26  688.10 
- ```
+##   user  system elapsed 
+## 416.186   3.236 422.134  
+```
 
 ![](images/TraCE_decadal_heatmap_03.png)
