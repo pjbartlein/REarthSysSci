@@ -761,7 +761,7 @@ head(xreg)
 
 ## Time-series regression model
 
-Next, the time-series regression. There is a regular set of procedures for iteratively determining the form of the ARIMA model (model identification), fitting the model (estimation), and diagnostic checking that are beyond this example. Here, it looks like an ARMA(2,2) (two autoregressive terms, two moving average terms) will be apt. 
+Next, the time-series regression. There is a regular set of procedures for iteratively determining the form of the ARIMA model (model identification), fitting the model (estimation), and diagnostic checking that are beyond this example. Here, it looks like an ARMA(2,2) (two autoregressive terms, two moving average terms) will be apt. The model is a little complicated, but the equation that is being fit to the data (by minimizing the sum-of-squares of the residuals) is *Y~t~ = &phi;~1~Y~t-1~ + &phi;~2~Y~t-2~ + &theta;~1~a~t-1~ + &theta;~2~a~t-2~ + b~0~ + b~1~X~t~ + b~2~X~t~^2^ + b~3~D~(1)t~ + b~4~D~(2)t~ + a~t~*, where *Y~t~* is the current temperature value, the *X~t~*'s are the predictors, including `YrMn` and the dummy variables, *a~t~* is the residual or prediction errors, and *&phi;~p~*, *&theta;~q~*, and *b~r~*, are autoregressive (AR), moving average (MA) and regression coefficients.
 
 ```{r regression2-58}
 # time series regression, AR(2) and MA(2)

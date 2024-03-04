@@ -1808,7 +1808,21 @@ regression model</h2>
 procedures for iteratively determining the form of the ARIMA model
 (model identification), fitting the model (estimation), and diagnostic
 checking that are beyond this example. Here, it looks like an ARMA(2,2)
-(two autoregressive terms, two moving average terms) will be apt.</p>
+(two autoregressive terms, two moving average terms) will be apt. The
+model is a little complicated, but the equation that is being fit to the
+data (by minimizing the sum-of-squares of the residuals) is
+<em>Y<sub>t</sub> = φ<sub>1</sub>Y<sub>t-1</sub> +
+φ<sub>2</sub>Y<sub>t-2</sub> + θ<sub>1</sub>a<sub>t-1</sub> +
+θ<sub>2</sub>a<sub>t-2</sub> + b<sub>0</sub> +
+b<sub>1</sub>X<sub>t</sub> + b<sub>2</sub>X<sub>t</sub><sup>2</sup> +
+b<sub>3</sub>D<sub>(1)t</sub> + b<sub>4</sub>D<sub>(2)t</sub> +
+a<sub>t</sub></em>, where <em>Y<sub>t</sub></em> is the current
+temperature value, the <em>X<sub>t</sub></em>’s are the predictors,
+including <code>YrMn</code> and the dummy variables,
+<em>a<sub>t</sub></em> is the residual or prediction errors, and
+<em>φ<sub>p</sub></em>, <em>θ<sub>q</sub></em>, and
+<em>b<sub>r</sub></em>, are autoregressive (AR), moving average (MA) and
+regression coefficients.</p>
 <div class="sourceCode" id="cb119"><pre
 class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" tabindex="-1"></a><span class="co"># time series regression, AR(2) and MA(2)</span></span>
 <span id="cb119-2"><a href="#cb119-2" tabindex="-1"></a>tsreg_01 <span class="ot">&lt;-</span> <span class="fu">arima</span>(NOAA<span class="sc">$</span>T_LandOcean, <span class="at">order =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="at">xreg =</span> xreg, <span class="at">include.mean =</span> <span class="cn">TRUE</span>)</span>

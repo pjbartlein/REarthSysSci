@@ -310,7 +310,7 @@ dist_obs_terra
 
 Use `ggplot2()` to plot the matrix (writing the *.png image to a file):
 
-```{r multivariate-25, echo=TRUE, eval=FALSE}
+```{r multivariate-25}
 # plot the dissimilarity matrix
 png("TraCE_decadal_dist_obs_v1.png", width=720, height=720) # open the file
   ggplot() +
