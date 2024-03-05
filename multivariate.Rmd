@@ -250,6 +250,8 @@ The discriminant analysis here is used to answer the question “how do the clus
 
 The analysis can be repeated, extracting different numbers of clusters. The easiest way to do this is to copy the three chunks of code above into a text editor, changing the assignment to nclust and including or excluding before executing each chunk, one at a time.
 
+[[Back to top]](multivariate.html)
+
 # Distances:  among observations and among variables
 
 As noted above, in addition to being the input to a cluster analysis, distance matrices are interesting in their own right.  In a typical rectangular data set, there are two distance matrices that could be calculated, one comparing variables (i.e. the columns in a data frame), and the other comparing observations (or rows).  In the examples below the "TraCE 21ka" decadal data are used. There are (96 x 48) 4608 grid points and 2204 observations.  Read the raster brick in the netCDF file (`Trace21_TREFHT_anm2.nc`): 
@@ -369,6 +371,8 @@ dev.off()
 ![](images/TraCE_decadal_dist_var_v1.png)
 
 The image is a sort of map:  The grid points are arranged in the data frame with longitudes varying rapidly, and the latitudes slowly (forming the small squares in the image), such that the square dark area (low dissimilarities) in the middle is the tropics, where the spatial variability of climate is low, while the more spatially variable higher-latitude regions (at all longitudes) frame the low-variability region. There is also a pronounced Northern Hemisphere/Southern Hemisphere contrast
+
+[[Back to top]](multivariate.html)
 
 # Heatmaps (2-way, time-and-space clustering)
 
@@ -494,6 +498,8 @@ dev.off()
 
 The heatmap has rearranged the data according to the cluster analyses of the observations and variables, placing more similar data points next to or near to one another.  Notice how the colored side bars allow one to figure out the location and time of individual points.  Here, and not surprisingly, there appear to be four distinct time-space clusters (or "regimes") in the data): glacial vs. interglacial (Holocene) and high latitudes (in both hemispheres) vs. low latitudes. Notice that the rearrangement in time is relatively modest (see the column color bar), while the rearrangement in location is more dramatic. On the row color bar, high latitudes are represented by more saturated colors. Spatial variations of climate are always larger in amplitude than temporal variations.
 
+[[Back to top]](multivariate.html)
+
 ## A second example with decadal data
 
 A second example uses the decadal data directly (as opposed to subsampling)
@@ -538,6 +544,8 @@ dev.off()
 ![](images/TraCE_decadal_heatmap_02.png)
 
 The results are similar to those for the subsetted data, but the execution times are longer.
+
+[[Back to top]](multivariate.html)
 
 ## Full-grid example
 
@@ -633,3 +641,5 @@ dev.off()
 ![](images/TraCE_decadal_heatmap_03.png)
 
 There is a lot going on in the full-grid heatmap. 
+
+[[Back to top]](multivariate.html)
