@@ -72,6 +72,7 @@ summary(boxes_pca)
 print(loadings(boxes_pca),cutoff=0.0)
 biplot(boxes_pca)
 ```
+
 The component standard deviation values describe the importance of each component, and the proportion of the total variance of all variables being analyzed accounted for by each component.
 
 Note the angle between the vectors on the bipolt--the correlation between two variables is equal to the cosine of the angle between the vectors (*&theta;*), or *r = cos(&theta;)*.  Here the angle is `r acos(cor(boxes_matrix[,1],boxes_matrix[,2]))/((2*pi)/360)`, which is found by the following R code: `acos(cor(boxes_matrix[,1],boxes_matrix[,2]))/((2*pi)/360)`.
@@ -109,8 +110,8 @@ This plot illustrates the idea of the first (or "principal" component) providing
 
 The formal derivation of principal components analysis requires the use of matix algebra.
 
-- [[Matrix algebra]](https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.html) 
-- [[Derivation of principal components]](https://pjbartlein.github.io/GeogDataAnalysis/topics/pca_matrix.html) 
+- [[Matrix algebra]](https://pjbartlein.github.io/REarthSysSci/topics/matrix.pdf) 
+- [[Derivation of principal components]](https://pjbartlein.github.io/REarthSysSci/topics/pca_matrix.html) 
 
 Because the components are derived by solving a particular optimization problem, they naturally have some "built-in" properties that are desirable in practice (e.g. maximum variability).  In addition, there are a number of other properties of the components that can be derived:
 
@@ -128,6 +129,7 @@ Because the components are derived by solving a particular optimization problem,
 The data set here is a "stacked" data set of output from thirteen "PMIP3" simulations of mid-Holocene climate (in particular, the long-term mean differences between the mid-Holocene simulations and those for the pre-industrial period) for a region in northern Eurasia.  The objective of the analysis was to examine the systematic relationship among a number of different climate variables as part of understanding the mismatch between the simulations and paleoenvironmental observations (reconstructions), where the simulations were in general drier and warmer than the climate reconstructed from the data.  (See Bartlein, P.J., S.P. Harrison and K. Izumi, 2017, Underlying causes of Eurasian mid-continental aridity in simulations of mid-Holocene climate, *Geophysical Research Letters* 44:1-9, [http://dx.doi.org/10.1002/2017GL074476](http://dx.doi.org/10.1002/2017GL074476))
 
 The variable include: 
+
 - `Kext`: Insolation at the top of the atmosphere 
 - `Kn`: Net shortwave radiation 
 - `Ln`: Net longwave ratiation   

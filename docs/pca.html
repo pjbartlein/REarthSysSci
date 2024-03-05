@@ -684,10 +684,10 @@ component) as points represented by the observation numbers.</p>
 ## Proportion Var    0.5    0.5
 ## Cumulative Var    0.5    1.0</code></pre>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">biplot</span>(boxes_pca)</span></code></pre></div>
-<p><img src="pca_files/figure-html/pca-5-1.png" width="75%" height="75%" />
-The component standard deviation values describe the importance of each
-component, and the proportion of the total variance of all variables
-being analyzed accounted for by each component.</p>
+<p><img src="pca_files/figure-html/pca-5-1.png" width="75%" height="75%" /></p>
+<p>The component standard deviation values describe the importance of
+each component, and the proportion of the total variance of all
+variables being analyzed accounted for by each component.</p>
 <p>Note the angle between the vectors on the bipolt–the correlation
 between two variables is equal to the cosine of the angle between the
 vectors (<em>θ</em>), or <em>r = cos(θ)</em>. Here the angle is
@@ -732,10 +732,10 @@ components and their properties</h1>
 use of matix algebra.</p>
 <ul>
 <li><a
-href="https://pjbartlein.github.io/GeogDataAnalysis/topics/matrix.html">[Matrix
+href="https://pjbartlein.github.io/REarthSysSci/topics/matrix.pdf">[Matrix
 algebra]</a></li>
 <li><a
-href="https://pjbartlein.github.io/GeogDataAnalysis/topics/pca_matrix.html">[Derivation
+href="https://pjbartlein.github.io/REarthSysSci/topics/pca_matrix.html">[Derivation
 of principal components]</a></li>
 </ul>
 <p>Because the components are derived by solving a particular
@@ -779,25 +779,39 @@ P.J., S.P. Harrison and K. Izumi, 2017, Underlying causes of Eurasian
 mid-continental aridity in simulations of mid-Holocene climate,
 <em>Geophysical Research Letters</em> 44:1-9, <a
 href="http://dx.doi.org/10.1002/2017GL074476">http://dx.doi.org/10.1002/2017GL074476</a>)</p>
-<p>The variable include: - <code>Kext</code>: Insolation at the top of
-the atmosphere - <code>Kn</code>: Net shortwave radiation -
-<code>Ln</code>: Net longwave ratiation<br />
-- <code>Qn</code>: Net radiation - <code>Qe</code>: Latent heating -
-<code>Qh</code>: Sensible heating<br />
-- <code>Qg</code>: Substrate heating - <code>bowen</code>: Bowen ratio
-(<code>Qh/Qn</code>) - <code>alb</code>: Albedo - <code>ta</code>: 850
-mb temperature - <code>tas</code>: Near-surface (2 m) air temperature -
-<code>ts</code>: Surface (skin) temperature - <code>ua</code>: Eastward
-wind component, 500 hpa level - <code>va</code>: Northward wind
-component, 500 hPa level - <code>omg</code>: 500 hPa vertical velocity -
-<code>uas</code>: Eastward wind component, surface - <code>vas</code>:
-Northward wind component, surface - <code>slp</code>: Mean sea-level
-pressure - <code>Qdv</code>: Moisture divergence - <code>shm</code>:
-Specific humidity - <code>clt</code>: Cloudiness - <code>pre</code>:
-Precipitation rate - <code>evap</code>: Evaporation rate -
-<code>pme</code>: P-E rate - <code>sm</code>: Soil moisture -
-<code>ro</code>: Runoff - <code>dS</code>: Change in moisture storage -
-<code>snd</code>: Snow depth</p>
+<p>The variable include:</p>
+<ul>
+<li><code>Kext</code>: Insolation at the top of the atmosphere</li>
+<li><code>Kn</code>: Net shortwave radiation</li>
+<li><code>Ln</code>: Net longwave ratiation<br />
+</li>
+<li><code>Qn</code>: Net radiation</li>
+<li><code>Qe</code>: Latent heating</li>
+<li><code>Qh</code>: Sensible heating<br />
+</li>
+<li><code>Qg</code>: Substrate heating</li>
+<li><code>bowen</code>: Bowen ratio (<code>Qh/Qn</code>)</li>
+<li><code>alb</code>: Albedo</li>
+<li><code>ta</code>: 850 mb temperature</li>
+<li><code>tas</code>: Near-surface (2 m) air temperature</li>
+<li><code>ts</code>: Surface (skin) temperature</li>
+<li><code>ua</code>: Eastward wind component, 500 hpa level</li>
+<li><code>va</code>: Northward wind component, 500 hPa level</li>
+<li><code>omg</code>: 500 hPa vertical velocity</li>
+<li><code>uas</code>: Eastward wind component, surface</li>
+<li><code>vas</code>: Northward wind component, surface</li>
+<li><code>slp</code>: Mean sea-level pressure</li>
+<li><code>Qdv</code>: Moisture divergence</li>
+<li><code>shm</code>: Specific humidity</li>
+<li><code>clt</code>: Cloudiness</li>
+<li><code>pre</code>: Precipitation rate</li>
+<li><code>evap</code>: Evaporation rate</li>
+<li><code>pme</code>: P-E rate</li>
+<li><code>sm</code>: Soil moisture</li>
+<li><code>ro</code>: Runoff</li>
+<li><code>dS</code>: Change in moisture storage</li>
+<li><code>snd</code>: Snow depth</li>
+</ul>
 <p>The data set was assebled by stacking the monthly long-term mean
 differneces from each model on top of one another, creating a 13 x 12
 row by 24 column array. This arrangement of the data will reveal the
@@ -1344,7 +1358,7 @@ correlation matrix. Note that the analysis will take a few minutes.</p>
 <span id="cb72-8"><a href="#cb72-8" tabindex="-1"></a>resPCA <span class="ot">&lt;-</span> <span class="fu">pca</span>(zd, <span class="at">method=</span>pcamethod, <span class="at">scale=</span><span class="st">&quot;uv&quot;</span>, <span class="at">center=</span><span class="cn">TRUE</span>, <span class="at">nPcs=</span>ncomp)</span>
 <span id="cb72-9"><a href="#cb72-9" tabindex="-1"></a><span class="fu">proc.time</span>() <span class="sc">-</span> ptm <span class="co"># how long?</span></span></code></pre></div>
 <pre><code>##    user  system elapsed 
-## 156.276   1.831 158.788</code></pre>
+## 150.627   1.099 152.188</code></pre>
 <div id="results" class="section level2" number="5.1">
 <h2><span class="header-section-number">5.1</span> Results</h2>
 <p>Printing out the “results” object (<code>resPCA</code>) provides a
