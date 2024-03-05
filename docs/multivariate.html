@@ -1018,7 +1018,7 @@ creation of different blocks of the matrix to different processors in a
 multi-processor machine.</p>
 <p>The <code>parDist()</code> function gets the dissimilarity
 matrix:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="co"># disatances among observations (time)</span></span>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="co"># distances among observations (time)</span></span>
 <span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a>dist_obs <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">parDist</span>(X)) </span>
 <span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a><span class="fu">dim</span>(dist_obs)</span></code></pre></div>
 <pre><code>## [1] 2204 2204</code></pre>
@@ -1052,8 +1052,11 @@ image to a file):</p>
 <span id="cb42-9"><a href="#cb42-9" tabindex="-1"></a>        <span class="at">x =</span> <span class="st">&quot;Decades since 0 BP&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Decades since 0 BP&quot;</span>, <span class="at">fill=</span><span class="st">&quot;distance&quot;</span>) <span class="sc">+</span></span>
 <span id="cb42-10"><a href="#cb42-10" tabindex="-1"></a>      <span class="fu">theme</span>(<span class="at">panel.grid.major=</span><span class="fu">element_line</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>), <span class="at">panel.grid.minor=</span><span class="fu">element_line</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>),</span>
 <span id="cb42-11"><a href="#cb42-11" tabindex="-1"></a>            <span class="at">axis.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>), <span class="at">axis.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>), <span class="at">aspect.ratio =</span> <span class="dv">1</span>,</span>
-<span id="cb42-12"><a href="#cb42-12" tabindex="-1"></a>            <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">20</span>))</span>
-<span id="cb42-13"><a href="#cb42-13" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<span id="cb42-12"><a href="#cb42-12" tabindex="-1"></a>            <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">20</span>))</span></code></pre></div>
+<pre><code>## &lt;SpatRaster&gt; resampled to 501264 cells for plotting</code></pre>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<pre><code>## quartz_off_screen 
+##                 2</code></pre>
 <p>Here’s the image:</p>
 <p><img src="images/TraCE_decadal_dist_obs_v1.png" /></p>
 <p>The observations here are ordered in time, and the blocks in the
@@ -1076,13 +1079,13 @@ locations</h2>
 similar fashion, but note the use of the transpose function
 <code>t()</code> to get the variables in rows, and observations in
 columns:</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a><span class="co"># variables (grid points)</span></span>
-<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a>dist_var <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">parDist</span>(<span class="fu">t</span>(X)))</span>
-<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a><span class="fu">dim</span>(dist_var)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a><span class="co"># variables (grid points)</span></span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a>dist_var <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">parDist</span>(<span class="fu">t</span>(X)))</span>
+<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a><span class="fu">dim</span>(dist_var)</span></code></pre></div>
 <pre><code>## [1] 4608 4608</code></pre>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="co"># turn matrix into a SpatRaster</span></span>
-<span id="cb45-2"><a href="#cb45-2" tabindex="-1"></a>dist_var_terra <span class="ot">&lt;-</span> <span class="fu">flip</span>(<span class="fu">rast</span>(dist_var))</span>
-<span id="cb45-3"><a href="#cb45-3" tabindex="-1"></a>dist_var_terra</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="co"># turn matrix into a SpatRaster</span></span>
+<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a>dist_var_terra <span class="ot">&lt;-</span> <span class="fu">flip</span>(<span class="fu">rast</span>(dist_var))</span>
+<span id="cb48-3"><a href="#cb48-3" tabindex="-1"></a>dist_var_terra</span></code></pre></div>
 <pre><code>## class       : SpatRaster 
 ## dimensions  : 4608, 4608, 1  (nrow, ncol, nlyr)
 ## resolution  : 1, 1  (x, y)
@@ -1093,20 +1096,20 @@ columns:</p>
 ## min value   :    0.000 
 ## max value   : 1058.149</code></pre>
 <p>Plot the matrix:</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="co"># plot the dissimilarity matrix</span></span>
-<span id="cb47-2"><a href="#cb47-2" tabindex="-1"></a><span class="fu">png</span>(<span class="st">&quot;TraCE_decadal_dist_var_v1.png&quot;</span>, <span class="at">width=</span><span class="dv">720</span>, <span class="at">height=</span><span class="dv">720</span>) <span class="co"># open the file</span></span>
-<span id="cb47-3"><a href="#cb47-3" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb47-4"><a href="#cb47-4" tabindex="-1"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> <span class="fu">t</span>(dist_var_terra)) <span class="sc">+</span></span>
-<span id="cb47-5"><a href="#cb47-5" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">type =</span> <span class="st">&quot;seq&quot;</span>, <span class="at">palette =</span> <span class="st">&quot;Greens&quot;</span>) <span class="sc">+</span></span>
-<span id="cb47-6"><a href="#cb47-6" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">4600</span>, <span class="at">by=</span><span class="dv">500</span>), <span class="at">minor_breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">4600</span>, <span class="at">by=</span><span class="dv">250</span>)) <span class="sc">+</span></span>
-<span id="cb47-7"><a href="#cb47-7" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">4600</span>, <span class="at">by=</span><span class="dv">500</span>), <span class="at">minor_breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">4600</span>, <span class="at">by=</span><span class="dv">250</span>)) <span class="sc">+</span></span>
-<span id="cb47-8"><a href="#cb47-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Dissimilarity matrix among variables (grid points/locations)&quot;</span>,</span>
-<span id="cb47-9"><a href="#cb47-9" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Location&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Location&quot;</span>, <span class="at">fill=</span><span class="st">&quot;distance&quot;</span>) <span class="sc">+</span></span>
-<span id="cb47-10"><a href="#cb47-10" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major=</span><span class="fu">element_line</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>), <span class="at">panel.grid.minor=</span><span class="fu">element_line</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>),</span>
-<span id="cb47-11"><a href="#cb47-11" tabindex="-1"></a>            <span class="at">axis.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>), <span class="at">axis.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>), <span class="at">aspect.ratio =</span> <span class="dv">1</span>,</span>
-<span id="cb47-12"><a href="#cb47-12" tabindex="-1"></a>            <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">20</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="co"># plot the dissimilarity matrix</span></span>
+<span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a><span class="fu">png</span>(<span class="st">&quot;TraCE_decadal_dist_var_v1.png&quot;</span>, <span class="at">width=</span><span class="dv">720</span>, <span class="at">height=</span><span class="dv">720</span>) <span class="co"># open the file</span></span>
+<span id="cb50-3"><a href="#cb50-3" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb50-4"><a href="#cb50-4" tabindex="-1"></a>  <span class="fu">geom_spatraster</span>(<span class="at">data =</span> <span class="fu">t</span>(dist_var_terra)) <span class="sc">+</span></span>
+<span id="cb50-5"><a href="#cb50-5" tabindex="-1"></a>  <span class="fu">scale_fill_distiller</span>(<span class="at">type =</span> <span class="st">&quot;seq&quot;</span>, <span class="at">palette =</span> <span class="st">&quot;Greens&quot;</span>) <span class="sc">+</span></span>
+<span id="cb50-6"><a href="#cb50-6" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">4600</span>, <span class="at">by=</span><span class="dv">500</span>), <span class="at">minor_breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">4600</span>, <span class="at">by=</span><span class="dv">250</span>)) <span class="sc">+</span></span>
+<span id="cb50-7"><a href="#cb50-7" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">4600</span>, <span class="at">by=</span><span class="dv">500</span>), <span class="at">minor_breaks =</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">4600</span>, <span class="at">by=</span><span class="dv">250</span>)) <span class="sc">+</span></span>
+<span id="cb50-8"><a href="#cb50-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Dissimilarity matrix among variables (grid points/locations)&quot;</span>,</span>
+<span id="cb50-9"><a href="#cb50-9" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Location&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Location&quot;</span>, <span class="at">fill=</span><span class="st">&quot;distance&quot;</span>) <span class="sc">+</span></span>
+<span id="cb50-10"><a href="#cb50-10" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major=</span><span class="fu">element_line</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>), <span class="at">panel.grid.minor=</span><span class="fu">element_line</span>(<span class="at">colour=</span><span class="st">&quot;black&quot;</span>),</span>
+<span id="cb50-11"><a href="#cb50-11" tabindex="-1"></a>            <span class="at">axis.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">12</span>), <span class="at">axis.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>), <span class="at">aspect.ratio =</span> <span class="dv">1</span>,</span>
+<span id="cb50-12"><a href="#cb50-12" tabindex="-1"></a>            <span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">20</span>))</span></code></pre></div>
 <pre><code>## &lt;SpatRaster&gt; resampled to 501264 cells for plotting</code></pre>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <pre><code>## quartz_off_screen 
 ##                 2</code></pre>
 <p><img src="images/TraCE_decadal_dist_var_v1.png" /></p>
@@ -1146,53 +1149,69 @@ for each time.</p>
 <div id="set-up" class="section level3" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Set up</h3>
 <p>Create the Hovmöller matrix:</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="co"># Hovmöller matrix</span></span>
-<span id="cb51-2"><a href="#cb51-2" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fl">0.0</span>, <span class="at">nrow=</span>nlat, <span class="at">ncol=</span>nt)</span>
-<span id="cb51-3"><a href="#cb51-3" tabindex="-1"></a><span class="fu">dim</span>(X)</span>
-<span id="cb51-4"><a href="#cb51-4" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span>nt)) {</span>
-<span id="cb51-5"><a href="#cb51-5" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span>nlat)) {</span>
-<span id="cb51-6"><a href="#cb51-6" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span>nlon)) {</span>
-<span id="cb51-7"><a href="#cb51-7" tabindex="-1"></a>      Y[k, n] <span class="ot">&lt;-</span> Y[k, n] <span class="sc">+</span> var_array[j, k, n]</span>
-<span id="cb51-8"><a href="#cb51-8" tabindex="-1"></a>    }</span>
-<span id="cb51-9"><a href="#cb51-9" tabindex="-1"></a>    Y[k, n] <span class="ot">&lt;-</span> Y[k, n]<span class="sc">/</span>nlon</span>
-<span id="cb51-10"><a href="#cb51-10" tabindex="-1"></a>  }</span>
-<span id="cb51-11"><a href="#cb51-11" tabindex="-1"></a>}</span>
-<span id="cb51-12"><a href="#cb51-12" tabindex="-1"></a><span class="fu">dim</span>(Y)</span>
-<span id="cb51-13"><a href="#cb51-13" tabindex="-1"></a>ncols <span class="ot">&lt;-</span> <span class="fu">dim</span>(Y)[<span class="dv">2</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="co"># Hovmöller matrix</span></span>
+<span id="cb54-2"><a href="#cb54-2" tabindex="-1"></a>Y <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fl">0.0</span>, <span class="at">nrow=</span>nlat, <span class="at">ncol=</span>nt)</span>
+<span id="cb54-3"><a href="#cb54-3" tabindex="-1"></a><span class="fu">dim</span>(X)</span></code></pre></div>
+<pre><code>## [1] 2204 4608</code></pre>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a><span class="cf">for</span> (n <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span>nt)) {</span>
+<span id="cb56-2"><a href="#cb56-2" tabindex="-1"></a>  <span class="cf">for</span> (k <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span>nlat)) {</span>
+<span id="cb56-3"><a href="#cb56-3" tabindex="-1"></a>    <span class="cf">for</span> (j <span class="cf">in</span> (<span class="dv">1</span><span class="sc">:</span>nlon)) {</span>
+<span id="cb56-4"><a href="#cb56-4" tabindex="-1"></a>      Y[k, n] <span class="ot">&lt;-</span> Y[k, n] <span class="sc">+</span> var_array[j, k, n]</span>
+<span id="cb56-5"><a href="#cb56-5" tabindex="-1"></a>    }</span>
+<span id="cb56-6"><a href="#cb56-6" tabindex="-1"></a>    Y[k, n] <span class="ot">&lt;-</span> Y[k, n]<span class="sc">/</span>nlon</span>
+<span id="cb56-7"><a href="#cb56-7" tabindex="-1"></a>  }</span>
+<span id="cb56-8"><a href="#cb56-8" tabindex="-1"></a>}</span>
+<span id="cb56-9"><a href="#cb56-9" tabindex="-1"></a><span class="fu">dim</span>(Y)</span></code></pre></div>
+<pre><code>## [1]   48 2204</code></pre>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a>ncols <span class="ot">&lt;-</span> <span class="fu">dim</span>(Y)[<span class="dv">2</span>]</span></code></pre></div>
 <p>Set row and column names for the matrix.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a><span class="co"># set row and column names</span></span>
-<span id="cb52-2"><a href="#cb52-2" tabindex="-1"></a><span class="fu">rownames</span>(Y) <span class="ot">&lt;-</span> <span class="fu">str_pad</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, lat), <span class="dv">5</span>, <span class="at">pad=</span><span class="st">&quot;0&quot;</span>)</span>
-<span id="cb52-3"><a href="#cb52-3" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rownames</span>(Y));<span class="fu">tail</span>(<span class="fu">rownames</span>(Y)); <span class="fu">length</span>(<span class="fu">rownames</span>(Y))</span>
-<span id="cb52-4"><a href="#cb52-4" tabindex="-1"></a><span class="fu">colnames</span>(Y) <span class="ot">&lt;-</span> <span class="fu">str_pad</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, plt_xvals), <span class="dv">5</span>, <span class="at">pad=</span><span class="st">&quot;0&quot;</span>)</span>
-<span id="cb52-5"><a href="#cb52-5" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">colnames</span>(Y));<span class="fu">tail</span>(<span class="fu">colnames</span>(Y)); <span class="fu">length</span>(<span class="fu">colnames</span>(Y))</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" tabindex="-1"></a><span class="co"># set row and column names</span></span>
+<span id="cb59-2"><a href="#cb59-2" tabindex="-1"></a><span class="fu">rownames</span>(Y) <span class="ot">&lt;-</span> <span class="fu">str_pad</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, lat), <span class="dv">5</span>, <span class="at">pad=</span><span class="st">&quot;0&quot;</span>)</span>
+<span id="cb59-3"><a href="#cb59-3" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rownames</span>(Y));<span class="fu">tail</span>(<span class="fu">rownames</span>(Y)); <span class="fu">length</span>(<span class="fu">rownames</span>(Y))</span></code></pre></div>
+<pre><code>## [1] &quot;-87.159&quot; &quot;-83.479&quot; &quot;-79.777&quot; &quot;-76.070&quot; &quot;-72.362&quot; &quot;-68.652&quot;</code></pre>
+<pre><code>## [1] &quot;68.652&quot; &quot;72.362&quot; &quot;76.070&quot; &quot;79.777&quot; &quot;83.479&quot; &quot;87.159&quot;</code></pre>
+<pre><code>## [1] 48</code></pre>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a><span class="fu">colnames</span>(Y) <span class="ot">&lt;-</span> <span class="fu">str_pad</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, plt_xvals), <span class="dv">5</span>, <span class="at">pad=</span><span class="st">&quot;0&quot;</span>)</span>
+<span id="cb63-2"><a href="#cb63-2" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">colnames</span>(Y));<span class="fu">tail</span>(<span class="fu">colnames</span>(Y)); <span class="fu">length</span>(<span class="fu">colnames</span>(Y))</span></code></pre></div>
+<pre><code>## [1] &quot;22.000&quot; &quot;21.990&quot; &quot;21.980&quot; &quot;21.970&quot; &quot;21.960&quot; &quot;21.950&quot;</code></pre>
+<pre><code>## [1] &quot;0.020&quot;  &quot;0.010&quot;  &quot;0.000&quot;  &quot;-0.010&quot; &quot;-0.020&quot; &quot;-0.030&quot;</code></pre>
+<pre><code>## [1] 2204</code></pre>
 <p>A matrix plot of the Hovmöller matrix will illustrate the data (and
 is an actual Hovmöller plot). To get high (northern) latitudes at the
 top of the plot, and high (southern) latitudes at the bottom, flip the
 data:</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="co"># flip Y</span></span>
-<span id="cb53-2"><a href="#cb53-2" tabindex="-1"></a>Y <span class="ot">&lt;-</span> Y[(nlat<span class="sc">:</span><span class="dv">1</span>),]</span>
-<span id="cb53-3"><a href="#cb53-3" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rownames</span>(Y)); <span class="fu">tail</span>(<span class="fu">rownames</span>(Y)); <span class="fu">length</span>(<span class="fu">rownames</span>(Y))</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="co"># flip Y</span></span>
+<span id="cb67-2"><a href="#cb67-2" tabindex="-1"></a>Y <span class="ot">&lt;-</span> Y[(nlat<span class="sc">:</span><span class="dv">1</span>),]</span>
+<span id="cb67-3"><a href="#cb67-3" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rownames</span>(Y)); <span class="fu">tail</span>(<span class="fu">rownames</span>(Y)); <span class="fu">length</span>(<span class="fu">rownames</span>(Y))</span></code></pre></div>
+<pre><code>## [1] &quot;87.159&quot; &quot;83.479&quot; &quot;79.777&quot; &quot;76.070&quot; &quot;72.362&quot; &quot;68.652&quot;</code></pre>
+<pre><code>## [1] &quot;-68.652&quot; &quot;-72.362&quot; &quot;-76.070&quot; &quot;-79.777&quot; &quot;-83.479&quot; &quot;-87.159&quot;</code></pre>
+<pre><code>## [1] 48</code></pre>
 <p>For this example, the data are subsampled, by taking every 20th
 observation (to allow the dendrograms to be visualized):</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a><span class="co"># subset</span></span>
-<span id="cb54-2"><a href="#cb54-2" tabindex="-1"></a>Y2 <span class="ot">&lt;-</span> Y[, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">2201</span>, <span class="at">by=</span><span class="dv">20</span>)]</span>
-<span id="cb54-3"><a href="#cb54-3" tabindex="-1"></a><span class="fu">dim</span>(Y2)</span>
-<span id="cb54-4"><a href="#cb54-4" tabindex="-1"></a>ncols2 <span class="ot">&lt;-</span> <span class="fu">dim</span>(Y2)[<span class="dv">2</span>]</span>
-<span id="cb54-5"><a href="#cb54-5" tabindex="-1"></a><span class="fu">rownames</span>(Y2)</span></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" tabindex="-1"></a><span class="co"># subset</span></span>
+<span id="cb71-2"><a href="#cb71-2" tabindex="-1"></a>Y2 <span class="ot">&lt;-</span> Y[, <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">2201</span>, <span class="at">by=</span><span class="dv">20</span>)]</span>
+<span id="cb71-3"><a href="#cb71-3" tabindex="-1"></a><span class="fu">dim</span>(Y2)</span></code></pre></div>
+<pre><code>## [1]  48 111</code></pre>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" tabindex="-1"></a>ncols2 <span class="ot">&lt;-</span> <span class="fu">dim</span>(Y2)[<span class="dv">2</span>]</span>
+<span id="cb73-2"><a href="#cb73-2" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rownames</span>(Y2))</span></code></pre></div>
+<pre><code>## [1] &quot;87.159&quot; &quot;83.479&quot; &quot;79.777&quot; &quot;76.070&quot; &quot;72.362&quot; &quot;68.652&quot;</code></pre>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">colnames</span>(Y2))</span></code></pre></div>
+<pre><code>## [1] &quot;22.000&quot; &quot;21.800&quot; &quot;21.600&quot; &quot;21.400&quot; &quot;21.200&quot; &quot;21.000&quot;</code></pre>
 <p>More set up. Generate colors for the matrix pot and the side bars,
 which here will illustrate the latitude and time of each data point. The
 rows will be labeled by a diverging color scale, purple for the Northern
 Hemisphere, green for the Southern Hemisphere, while time will be
 labeled from past to present by increasingly saturated purples.</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" tabindex="-1"></a><span class="co"># generate colors for side bars</span></span>
-<span id="cb55-2"><a href="#cb55-2" tabindex="-1"></a>rcol <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;PRGn&quot;</span>))(nlat)</span>
-<span id="cb55-3"><a href="#cb55-3" tabindex="-1"></a>ccol <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Purples&quot;</span>))(ncols)</span>
-<span id="cb55-4"><a href="#cb55-4" tabindex="-1"></a>ccol2 <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Purples&quot;</span>))(ncols2)</span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" tabindex="-1"></a><span class="co"># generate colors for side bars</span></span>
+<span id="cb77-2"><a href="#cb77-2" tabindex="-1"></a>rcol <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;PRGn&quot;</span>))(nlat)</span>
+<span id="cb77-3"><a href="#cb77-3" tabindex="-1"></a>ccol <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Purples&quot;</span>))(ncols)</span>
+<span id="cb77-4"><a href="#cb77-4" tabindex="-1"></a>ccol2 <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Purples&quot;</span>))(ncols2)</span></code></pre></div>
 <p>Generate colors for the heatmap of temperature</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a>nclr <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb56-2"><a href="#cb56-2" tabindex="-1"></a>zcol <span class="ot">&lt;-</span> (<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(nclr,<span class="st">&quot;RdBu&quot;</span>)))</span>
-<span id="cb56-3"><a href="#cb56-3" tabindex="-1"></a>breaks <span class="ot">=</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">20</span>,<span class="sc">-</span><span class="dv">10</span>,<span class="sc">-</span><span class="dv">5</span>,<span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>)</span>
-<span id="cb56-4"><a href="#cb56-4" tabindex="-1"></a><span class="fu">length</span>(breaks)</span></code></pre></div>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" tabindex="-1"></a>nclr <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb78-2"><a href="#cb78-2" tabindex="-1"></a>zcol <span class="ot">&lt;-</span> (<span class="fu">rev</span>(<span class="fu">brewer.pal</span>(nclr,<span class="st">&quot;RdBu&quot;</span>)))</span>
+<span id="cb78-3"><a href="#cb78-3" tabindex="-1"></a>breaks <span class="ot">=</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">20</span>,<span class="sc">-</span><span class="dv">10</span>,<span class="sc">-</span><span class="dv">5</span>,<span class="sc">-</span><span class="dv">2</span>,<span class="sc">-</span><span class="dv">1</span>,<span class="dv">0</span>,<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">5</span>,<span class="dv">10</span>,<span class="dv">20</span>)</span>
+<span id="cb78-4"><a href="#cb78-4" tabindex="-1"></a><span class="fu">length</span>(breaks)</span></code></pre></div>
+<pre><code>## [1] 11</code></pre>
 </div>
 <div id="hovmöller-matrix-plot-subsetted-decadal-data"
 class="section level3" number="4.1.2">
@@ -1201,16 +1220,16 @@ plot (subsetted decadal data)</h3>
 <p>Produce the heatmap for the Hovmöller matrix. Note that the
 <code>system.time()</code> function is being used here to gauge the time
 it takes to calculate and display the various heatmaps.</p>
-<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a>file_label <span class="ot">&lt;-</span>  <span class="st">&quot;TraCE_decadal&quot;</span></span>
-<span id="cb57-2"><a href="#cb57-2" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_hov_01&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb57-3"><a href="#cb57-3" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
-<span id="cb57-4"><a href="#cb57-4" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(Y2, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>,</span>
-<span id="cb57-5"><a href="#cb57-5" tabindex="-1"></a>        <span class="at">Rowv=</span><span class="cn">NA</span>, <span class="at">Colv=</span><span class="cn">NA</span>, <span class="at">dendrogram =</span> <span class="st">&quot;none&quot;</span>, <span class="co"># just plot data, don&#39;t do clustering</span></span>
-<span id="cb57-6"><a href="#cb57-6" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol2, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
-<span id="cb57-7"><a href="#cb57-7" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>),</span>
-<span id="cb57-8"><a href="#cb57-8" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>)</span>
-<span id="cb57-9"><a href="#cb57-9" tabindex="-1"></a>)</span>
-<span id="cb57-10"><a href="#cb57-10" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" tabindex="-1"></a>file_label <span class="ot">&lt;-</span>  <span class="st">&quot;TraCE_decadal&quot;</span></span>
+<span id="cb80-2"><a href="#cb80-2" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_hov_01&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb80-3"><a href="#cb80-3" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
+<span id="cb80-4"><a href="#cb80-4" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(Y2, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>,</span>
+<span id="cb80-5"><a href="#cb80-5" tabindex="-1"></a>        <span class="at">Rowv=</span><span class="cn">NA</span>, <span class="at">Colv=</span><span class="cn">NA</span>, <span class="at">dendrogram =</span> <span class="st">&quot;none&quot;</span>, <span class="co"># just plot data, don&#39;t do clustering</span></span>
+<span id="cb80-6"><a href="#cb80-6" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol2, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb80-7"><a href="#cb80-7" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>),</span>
+<span id="cb80-8"><a href="#cb80-8" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>)</span>
+<span id="cb80-9"><a href="#cb80-9" tabindex="-1"></a>)</span>
+<span id="cb80-10"><a href="#cb80-10" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <pre><code>##   user  system elapsed 
 ##  0.033   0.002   0.044 </code></pre>
 <p><img src="images/TraCE_decadal_hov_01.png" /></p>
@@ -1229,27 +1248,29 @@ in such a way as to place variables (i.e. latitudes) with similar
 variations over time, and observations (times) with similar latitudinal
 patterns, next to one another.</p>
 <p>Now here’s the heatmap:</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_heatmap_01&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb59-2"><a href="#cb59-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
-<span id="cb59-3"><a href="#cb59-3" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(Y2, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>,</span>
-<span id="cb59-4"><a href="#cb59-4" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol2, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
-<span id="cb59-5"><a href="#cb59-5" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>),</span>
-<span id="cb59-6"><a href="#cb59-6" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>)</span>
-<span id="cb59-7"><a href="#cb59-7" tabindex="-1"></a>)</span>
-<span id="cb59-8"><a href="#cb59-8" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_heatmap_01&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb82-2"><a href="#cb82-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
+<span id="cb82-3"><a href="#cb82-3" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(Y2, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>,</span>
+<span id="cb82-4"><a href="#cb82-4" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol2, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb82-5"><a href="#cb82-5" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>),</span>
+<span id="cb82-6"><a href="#cb82-6" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>)</span>
+<span id="cb82-7"><a href="#cb82-7" tabindex="-1"></a>)</span>
+<span id="cb82-8"><a href="#cb82-8" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <pre><code>##   user  system elapsed 
 ##  0.106   0.003   0.109 </code></pre>
 <p><img src="images/TraCE_decadal_heatmap_01.png" /></p>
 <p>The heatmap has rearranged the data according to the cluster analyses
 of the observations and variables, placing more similar data points next
-to one another. Notice how the side bars allow one to figure out the
-location and time of individual points. Here, and not surprisingly,
-there appear to be four distinct time-space clusters (or “regimes”) in
-the data): glacial vs. interglacial (Holocene) and high latitudes (in
-both hemispheres) vs. low latitudes. Notice that the rearrangement in
-time is relatively modest (see the column color bar), while that in
-location is more dramatic. Spatial variations of climate are always
-larger in amplitude than temporal variations.</p>
+to or near to one another. Notice how the colored side bars allow one to
+figure out the location and time of individual points. Here, and not
+surprisingly, there appear to be four distinct time-space clusters (or
+“regimes”) in the data): glacial vs. interglacial (Holocene) and high
+latitudes (in both hemispheres) vs. low latitudes. Notice that the
+rearrangement in time is relatively modest (see the column color bar),
+while the rearrangement in location is more dramatic. On the row color
+bar, high latitudes are represented by more saturated colors. Spatial
+variations of climate are always larger in amplitude than temporal
+variations.</p>
 </div>
 </div>
 <div id="a-second-example-with-decadal-data" class="section level2"
@@ -1261,15 +1282,15 @@ subsampling)</p>
 <div id="hovmöller-matrix-plot" class="section level3" number="4.2.1">
 <h3><span class="header-section-number">4.2.1</span> Hovmöller-matrix
 plot</h3>
-<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_hov_02&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb61-2"><a href="#cb61-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
-<span id="cb61-3"><a href="#cb61-3" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(Y, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>, </span>
-<span id="cb61-4"><a href="#cb61-4" tabindex="-1"></a>        <span class="at">Rowv=</span><span class="cn">NA</span>, <span class="at">Colv=</span><span class="cn">NA</span>, <span class="at">dendrogram =</span> <span class="st">&quot;none&quot;</span>, <span class="co"># just plot data, don&#39;t do clustering</span></span>
-<span id="cb61-5"><a href="#cb61-5" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
-<span id="cb61-6"><a href="#cb61-6" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>),</span>
-<span id="cb61-7"><a href="#cb61-7" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>)</span>
-<span id="cb61-8"><a href="#cb61-8" tabindex="-1"></a>)</span>
-<span id="cb61-9"><a href="#cb61-9" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_hov_02&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb84-2"><a href="#cb84-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
+<span id="cb84-3"><a href="#cb84-3" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(Y, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>, </span>
+<span id="cb84-4"><a href="#cb84-4" tabindex="-1"></a>        <span class="at">Rowv=</span><span class="cn">NA</span>, <span class="at">Colv=</span><span class="cn">NA</span>, <span class="at">dendrogram =</span> <span class="st">&quot;none&quot;</span>, <span class="co"># just plot data, don&#39;t do clustering</span></span>
+<span id="cb84-5"><a href="#cb84-5" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb84-6"><a href="#cb84-6" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>),</span>
+<span id="cb84-7"><a href="#cb84-7" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>)</span>
+<span id="cb84-8"><a href="#cb84-8" tabindex="-1"></a>)</span>
+<span id="cb84-9"><a href="#cb84-9" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <pre><code>##   user  system elapsed 
 ## 35.070   0.091  35.195 </code></pre>
 <p><img src="images/TraCE_decadal_hov_02.png" /></p>
@@ -1278,14 +1299,14 @@ plot</h3>
 number="4.2.2">
 <h3><span class="header-section-number">4.2.2</span> Hovmöller-matrix
 heatmap</h3>
-<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_heatmap_02&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb63-2"><a href="#cb63-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
-<span id="cb63-3"><a href="#cb63-3" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(Y, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>, </span>
-<span id="cb63-4"><a href="#cb63-4" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
-<span id="cb63-5"><a href="#cb63-5" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>),</span>
-<span id="cb63-6"><a href="#cb63-6" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>)</span>
-<span id="cb63-7"><a href="#cb63-7" tabindex="-1"></a>)</span>
-<span id="cb63-8"><a href="#cb63-8" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_heatmap_02&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb86-2"><a href="#cb86-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
+<span id="cb86-3"><a href="#cb86-3" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(Y, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>, </span>
+<span id="cb86-4"><a href="#cb86-4" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb86-5"><a href="#cb86-5" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>),</span>
+<span id="cb86-6"><a href="#cb86-6" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>)</span>
+<span id="cb86-7"><a href="#cb86-7" tabindex="-1"></a>)</span>
+<span id="cb86-8"><a href="#cb86-8" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <pre><code>##   user  system elapsed 
 ##  1.582   0.073   1.657 </code></pre>
 <p><img src="images/TraCE_decadal_heatmap_02.png" /></p>
@@ -1297,69 +1318,101 @@ execution times are longer.</p>
 <h2><span class="header-section-number">4.3</span> Full-grid
 example</h2>
 <p>Finally, a heatmap of the actual gridded data (as opposed to the
-Hovmöller matrix data) can be obtained</p>
+Hovmöller matrix data) can be obtained. The next set of plots will
+display values for each of the 4608 grid points and 2204 time steps,
+over ten million points, over ten times the number of pixels in the
+output *.png files (960 x 960). We’ll trust the graphics subsystem in R
+along with whatever web browser is being used to view the images to get
+it right.</p>
 <div id="set-up-1" class="section level3" number="4.3.1">
 <h3><span class="header-section-number">4.3.1</span> Set up</h3>
-<p>There are several set up steps necessary. Reshape the input array
+<p>There are several set-up steps necessary. Reshape the input array
 again, and generate row and column names:</p>
-<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" tabindex="-1"></a><span class="co"># reshape the 3-d array</span></span>
-<span id="cb65-2"><a href="#cb65-2" tabindex="-1"></a>var_vec_long <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(var_array)</span>
-<span id="cb65-3"><a href="#cb65-3" tabindex="-1"></a><span class="fu">length</span>(var_vec_long)</span>
-<span id="cb65-4"><a href="#cb65-4" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(var_vec_long, <span class="at">nrow =</span> nlon <span class="sc">*</span> nlat, <span class="at">ncol =</span> nt) <span class="co"># Don&#39;t transpose as usual this time</span></span>
-<span id="cb65-5"><a href="#cb65-5" tabindex="-1"></a><span class="fu">dim</span>(X)</span>
-<span id="cb65-6"><a href="#cb65-6" tabindex="-1"></a>ncols <span class="ot">&lt;-</span> <span class="fu">dim</span>(X)[<span class="dv">3</span>]</span></code></pre></div>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" tabindex="-1"></a><span class="co"># generate row and column names</span></span>
-<span id="cb66-2"><a href="#cb66-2" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(lon, lat)</span>
-<span id="cb66-3"><a href="#cb66-3" tabindex="-1"></a><span class="fu">names</span>(grid) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>)</span>
-<span id="cb66-4"><a href="#cb66-4" tabindex="-1"></a><span class="fu">rownames</span>(X) <span class="ot">&lt;-</span> <span class="fu">paste</span>(<span class="st">&quot;E&quot;</span>, <span class="fu">str_pad</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%.2f&quot;</span>, <span class="fu">round</span>(grid<span class="sc">$</span>lon, <span class="dv">2</span>)), <span class="dv">5</span>, <span class="at">pad=</span><span class="st">&quot;0&quot;</span>),</span>
-<span id="cb66-5"><a href="#cb66-5" tabindex="-1"></a>  <span class="st">&quot;N&quot;</span>, <span class="fu">str_pad</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%.2f&quot;</span>, <span class="fu">round</span>(grid<span class="sc">$</span>lat, <span class="dv">2</span>)), <span class="dv">5</span>, <span class="at">pad=</span><span class="st">&quot;0&quot;</span>), <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb66-6"><a href="#cb66-6" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rownames</span>(X), <span class="dv">20</span>); <span class="fu">tail</span>(<span class="fu">rownames</span>(X), <span class="dv">20</span>); <span class="fu">length</span>(<span class="fu">rownames</span>(X))</span>
-<span id="cb66-7"><a href="#cb66-7" tabindex="-1"></a></span>
-<span id="cb66-8"><a href="#cb66-8" tabindex="-1"></a><span class="fu">colnames</span>(X) <span class="ot">&lt;-</span> <span class="fu">str_pad</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, t), <span class="dv">5</span>, <span class="at">pad=</span><span class="st">&quot;0&quot;</span>)</span>
-<span id="cb66-9"><a href="#cb66-9" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">colnames</span>(X)); <span class="fu">tail</span>(<span class="fu">colnames</span>(X)); <span class="fu">length</span>(<span class="fu">colnames</span>(X))</span></code></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" tabindex="-1"></a><span class="co"># reshape the 3-d array</span></span>
+<span id="cb88-2"><a href="#cb88-2" tabindex="-1"></a>var_vec_long <span class="ot">&lt;-</span> <span class="fu">as.vector</span>(var_array)</span>
+<span id="cb88-3"><a href="#cb88-3" tabindex="-1"></a><span class="fu">length</span>(var_vec_long)</span></code></pre></div>
+<pre><code>## [1] 10156032</code></pre>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">matrix</span>(var_vec_long, <span class="at">nrow =</span> nlon <span class="sc">*</span> nlat, <span class="at">ncol =</span> nt) <span class="co"># Don&#39;t transpose as usual this time</span></span>
+<span id="cb90-2"><a href="#cb90-2" tabindex="-1"></a><span class="fu">dim</span>(X)</span></code></pre></div>
+<pre><code>## [1] 4608 2204</code></pre>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" tabindex="-1"></a>ncols <span class="ot">&lt;-</span> <span class="fu">dim</span>(X)[<span class="dv">3</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" tabindex="-1"></a><span class="co"># generate row and column names</span></span>
+<span id="cb93-2"><a href="#cb93-2" tabindex="-1"></a>grid <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(lon, lat)</span>
+<span id="cb93-3"><a href="#cb93-3" tabindex="-1"></a><span class="fu">names</span>(grid) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>)</span>
+<span id="cb93-4"><a href="#cb93-4" tabindex="-1"></a><span class="co"># rownames(X) &lt;- paste(&quot;E&quot;, str_pad(sprintf(&quot;%.2f&quot;, round(grid$lon, 2)), 5, pad=&quot;0&quot;),</span></span>
+<span id="cb93-5"><a href="#cb93-5" tabindex="-1"></a><span class="co">#   &quot;N&quot;, str_pad(sprintf(&quot;%.2f&quot;, round(grid$lat, 2)), 5, pad=&quot;0&quot;), sep=&quot;&quot;)</span></span>
+<span id="cb93-6"><a href="#cb93-6" tabindex="-1"></a><span class="fu">rownames</span>(X) <span class="ot">&lt;-</span> <span class="fu">round</span>(grid<span class="sc">$</span>lat, <span class="dv">2</span>)</span>
+<span id="cb93-7"><a href="#cb93-7" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rownames</span>(X), <span class="dv">20</span>); <span class="fu">tail</span>(<span class="fu">rownames</span>(X), <span class="dv">20</span>); <span class="fu">length</span>(<span class="fu">rownames</span>(X))</span></code></pre></div>
+<pre><code>##  [1] &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot;
+## [12] &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot;</code></pre>
+<pre><code>##  [1] &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot;
+## [13] &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot;</code></pre>
+<pre><code>## [1] 4608</code></pre>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" tabindex="-1"></a><span class="fu">colnames</span>(X) <span class="ot">&lt;-</span> <span class="fu">str_pad</span>(<span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, t), <span class="dv">5</span>, <span class="at">pad=</span><span class="st">&quot;0&quot;</span>)</span>
+<span id="cb97-2"><a href="#cb97-2" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">colnames</span>(X)); <span class="fu">tail</span>(<span class="fu">colnames</span>(X)); <span class="fu">length</span>(<span class="fu">colnames</span>(X))</span></code></pre></div>
+<pre><code>## [1] &quot;22.000&quot; &quot;21.990&quot; &quot;21.980&quot; &quot;21.970&quot; &quot;21.960&quot; &quot;21.950&quot;</code></pre>
+<pre><code>## [1] &quot;0.020&quot;  &quot;0.010&quot;  &quot;0.000&quot;  &quot;-0.010&quot; &quot;-0.020&quot; &quot;-0.030&quot;</code></pre>
+<pre><code>## [1] 2204</code></pre>
 <p>Flip the data…</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" tabindex="-1"></a><span class="co"># flip X</span></span>
-<span id="cb67-2"><a href="#cb67-2" tabindex="-1"></a>X <span class="ot">&lt;-</span> X[((nlon<span class="sc">*</span>nlat)<span class="sc">:</span><span class="dv">1</span>),]</span>
-<span id="cb67-3"><a href="#cb67-3" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rownames</span>(X)); <span class="fu">tail</span>(<span class="fu">rownames</span>(X)); <span class="fu">length</span>(<span class="fu">rownames</span>(X))</span></code></pre></div>
+<div class="sourceCode" id="cb101"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" tabindex="-1"></a><span class="co"># flip X</span></span>
+<span id="cb101-2"><a href="#cb101-2" tabindex="-1"></a>X <span class="ot">&lt;-</span> X[((nlon<span class="sc">*</span>nlat)<span class="sc">:</span><span class="dv">1</span>),]</span>
+<span id="cb101-3"><a href="#cb101-3" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">rownames</span>(X)); <span class="fu">tail</span>(<span class="fu">rownames</span>(X)); <span class="fu">length</span>(<span class="fu">rownames</span>(X))</span></code></pre></div>
+<pre><code>## [1] &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot; &quot;87.16&quot;</code></pre>
+<pre><code>## [1] &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot; &quot;-87.16&quot;</code></pre>
+<pre><code>## [1] 4608</code></pre>
 <p>… and generate colors:</p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" tabindex="-1"></a><span class="co"># generate colors for vertical and horizontal side bars</span></span>
-<span id="cb68-2"><a href="#cb68-2" tabindex="-1"></a>icol <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;PRGn&quot;</span>))(nlat)</span>
-<span id="cb68-3"><a href="#cb68-3" tabindex="-1"></a>idx <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">rep</span>((<span class="dv">1</span><span class="sc">:</span>nlat), nlon))</span>
-<span id="cb68-4"><a href="#cb68-4" tabindex="-1"></a>rcol <span class="ot">&lt;-</span> icol[idx]</span>
-<span id="cb68-5"><a href="#cb68-5" tabindex="-1"></a>ccol <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Purples&quot;</span>))(nt)</span></code></pre></div>
+<div class="sourceCode" id="cb105"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" tabindex="-1"></a><span class="co"># generate colors for vertical and horizontal side bars</span></span>
+<span id="cb105-2"><a href="#cb105-2" tabindex="-1"></a>icol <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">10</span>,<span class="st">&quot;PRGn&quot;</span>))(nlat)</span>
+<span id="cb105-3"><a href="#cb105-3" tabindex="-1"></a>idx <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">rep</span>((<span class="dv">1</span><span class="sc">:</span>nlat), nlon))</span>
+<span id="cb105-4"><a href="#cb105-4" tabindex="-1"></a>rcol <span class="ot">&lt;-</span> icol[idx]</span>
+<span id="cb105-5"><a href="#cb105-5" tabindex="-1"></a>ccol <span class="ot">&lt;-</span> <span class="fu">colorRampPalette</span>(<span class="fu">brewer.pal</span>(<span class="dv">9</span>,<span class="st">&quot;Purples&quot;</span>))(nt)</span></code></pre></div>
 </div>
 <div id="matrix-plot" class="section level3" number="4.3.2">
 <h3><span class="header-section-number">4.3.2</span> Matrix plot</h3>
 <p>Here’s a matrix plot of the data (there are too many points to make
 the dendrograms interpretable in any way, and so they are
 suppressed).</p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_hov_03&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb69-2"><a href="#cb69-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
-<span id="cb69-3"><a href="#cb69-3" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(X, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>,</span>
-<span id="cb69-4"><a href="#cb69-4" tabindex="-1"></a>        <span class="at">Rowv=</span><span class="cn">NA</span>, <span class="at">Colv=</span><span class="cn">NA</span>, <span class="at">dendrogram =</span> <span class="st">&quot;none&quot;</span>,</span>
-<span id="cb69-5"><a href="#cb69-5" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
-<span id="cb69-6"><a href="#cb69-6" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>),</span>
-<span id="cb69-7"><a href="#cb69-7" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Locations&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>, <span class="at">labRow =</span> <span class="cn">FALSE</span>, <span class="at">labCol =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb69-8"><a href="#cb69-8" tabindex="-1"></a>)</span>
-<span id="cb69-9"><a href="#cb69-9" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb106"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_hov_03&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb106-2"><a href="#cb106-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
+<span id="cb106-3"><a href="#cb106-3" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(X, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>,</span>
+<span id="cb106-4"><a href="#cb106-4" tabindex="-1"></a>        <span class="at">Rowv=</span><span class="cn">NA</span>, <span class="at">Colv=</span><span class="cn">NA</span>, <span class="at">dendrogram =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb106-5"><a href="#cb106-5" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb106-6"><a href="#cb106-6" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>),</span>
+<span id="cb106-7"><a href="#cb106-7" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Locations&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>)</span>
+<span id="cb106-8"><a href="#cb106-8" tabindex="-1"></a>)</span>
+<span id="cb106-9"><a href="#cb106-9" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <pre><code>##    user  system elapsed 
-## 899.489   5.013 910.259 </code></pre>
+## 938.290   2.605 941.988 </code></pre>
 <p><img src="images/TraCE_decadal_hov_03.png" /></p>
+<p>The dimensions of the input netCDF file (96 longitudes x 48 latitudes
+x 2204 times) are such that when the 3-d arrays is reshaped, the
+longitudes vary most rapidly, followed by the latitudes and times. This
+gives rise to the horizontal banding in the image, with 48 bands
+organized from top to bottom. Within each band, the longitudes vary from
+top (west) to bottom (east). The N. Pacific/Beringia warm patch during
+glacial times (related to the influece of the North American Ice Sheet)
+is evident as the thin streaks of higher temperatures in the upper left
+corner of the image.</p>
 </div>
 <div id="heatmap" class="section level3" number="4.3.3">
 <h3><span class="header-section-number">4.3.3</span> Heatmap</h3>
-<p>Heatmap of the grid-point data</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_heatmap_03&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
-<span id="cb71-2"><a href="#cb71-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
-<span id="cb71-3"><a href="#cb71-3" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(X, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>, <span class="at">dendrogram =</span> <span class="st">&quot;none&quot;</span>,</span>
-<span id="cb71-4"><a href="#cb71-4" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
-<span id="cb71-5"><a href="#cb71-5" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>),</span>
-<span id="cb71-6"><a href="#cb71-6" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Locations&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>, <span class="at">labRow =</span> <span class="cn">FALSE</span>, <span class="at">labCol =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb71-7"><a href="#cb71-7" tabindex="-1"></a>)</span>
-<span id="cb71-8"><a href="#cb71-8" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
+<p>Now here is the reorganized heatmap of the grid-point data:</p>
+<div class="sourceCode" id="cb108"><pre
+class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="#cb108-1" tabindex="-1"></a>png_file <span class="ot">&lt;-</span> <span class="fu">paste</span>(file_label, <span class="st">&quot;_heatmap_03&quot;</span>, <span class="st">&quot;.png&quot;</span>, <span class="at">sep=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb108-2"><a href="#cb108-2" tabindex="-1"></a><span class="fu">png</span>(png_file, <span class="at">width=</span><span class="dv">960</span>, <span class="at">height=</span><span class="dv">960</span>)</span>
+<span id="cb108-3"><a href="#cb108-3" tabindex="-1"></a><span class="fu">system.time</span>( X_heatmap <span class="ot">&lt;-</span> <span class="fu">heatmap.2</span>(X, <span class="at">cexRow =</span> <span class="fl">0.8</span>, <span class="at">cexCol =</span> <span class="fl">0.8</span>, <span class="at">scale=</span><span class="st">&quot;none&quot;</span>, <span class="at">dendrogram =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb108-4"><a href="#cb108-4" tabindex="-1"></a>        <span class="at">RowSideColors=</span>rcol, <span class="at">ColSideColors=</span>ccol, <span class="at">col=</span>zcol, <span class="at">breaks=</span>breaks, <span class="at">trace=</span><span class="st">&quot;none&quot;</span>, <span class="at">density.info =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb108-5"><a href="#cb108-5" tabindex="-1"></a>        <span class="at">lmat=</span><span class="fu">rbind</span>(<span class="fu">c</span>(<span class="dv">6</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">2</span>), <span class="fu">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">3</span>)), <span class="at">lwid=</span><span class="fu">c</span>(<span class="fl">1.0</span>, <span class="fl">0.2</span>, <span class="fl">5.0</span>), <span class="at">lhei =</span> <span class="fu">c</span>(<span class="fl">1.5</span>, <span class="fl">0.2</span>, <span class="fl">4.0</span>),</span>
+<span id="cb108-6"><a href="#cb108-6" tabindex="-1"></a>        <span class="at">xlab =</span> <span class="st">&quot;ka&quot;</span>, <span class="at">ylab =</span> <span class="st">&quot;Locations&quot;</span>, <span class="at">key =</span> <span class="cn">TRUE</span>, <span class="at">key.title =</span> <span class="cn">NA</span>)</span>
+<span id="cb108-7"><a href="#cb108-7" tabindex="-1"></a>)</span>
+<span id="cb108-8"><a href="#cb108-8" tabindex="-1"></a><span class="fu">dev.off</span>()</span></code></pre></div>
 <pre><code>##   user  system elapsed 
 ## 416.186   3.236 422.134  </code></pre>
 <p><img src="images/TraCE_decadal_heatmap_03.png" /></p>
+<p>There is a lot going on in the full-grid heatmap.</p>
 </div>
 </div>
 </div>
