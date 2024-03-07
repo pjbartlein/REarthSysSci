@@ -18,9 +18,7 @@ Bryan, J., 2022, *Happy Git and GitHub for the useR (HappyGitWithR)* [[https://h
 
 Healy, K., 2019, *Data Visualization, a practical introduction.*  (Princeton Univ. Press) [[https://kjhealy.github.io/socviz/]](https://kjhealy.github.io/socviz/)
 
-Peng, R.D., 2022, *R Programming for Data Science*  [[https://bookdown.org/rdpeng/rprogdatascience/]](https://bookdown.org/rdpeng/rprogdatascience/)
-
-Grolemund, G. and H. Wickham, 2023, *R for Data Science*, [[https://r4ds.hadley.nz/](https://r4ds.hadley.nz/)]
+Wickham, H., M. Centinkaya-Rundel and G. Grolemund, 2024, *R for Data Science (2e)*, [[https://r4ds.hadley.nz/](https://r4ds.hadley.nz/)]
 
 Xie, Y., J.J.Allaire, G. Grolemund, 2023, *R Markdown: The Definitive Guide* (CRC Press) [[https://bookdown.org/yihui/rmarkdown/]](https://bookdown.org/yihui/rmarkdown/)
 
@@ -32,12 +30,19 @@ Ismay, C. 2016, *Getting used to R, RStudio, and Markdown* [[https://bookdown.or
 
 Kabacoff, R., 2024, *Data Visualization with R* [[https://rkabacoff.github.io/datavis/]](https://rkabacoff.github.io/datavis/)
 
-
 # Geospatial developments in R #
 
-Simple features (`sf`) web site [[https://r-spatial.github.io/sf/index.html]](https://r-spatial.github.io/sf/index.html)
+Simple features `{sf}` web site [[https://r-spatial.github.io/sf/index.html]](https://r-spatial.github.io/sf/index.html)
 
-Stars project (`stars`) web site [[http://r-spatial.org/]](http://r-spatial.org/)
+Stars project `{stars}` web site [[http://r-spatial.org/]](http://r-spatial.org/)
+
+# R Programming #
+
+Peng, R.D., 2022, *R Programming for Data Science*  [[https://bookdown.org/rdpeng/rprogdatascience/]](https://bookdown.org/rdpeng/rprogdatascience/)
+
+Gagolewski, M., 2024, *Deep R Programming*, [[https://deepr.gagolewski.com/index.html]](https://deepr.gagolewski.com/index.html)
+
+Peng, R.D., S. Kross, and B. Anderson, 2020. *Mastering Software Development in R*, [[https://bookdown.org/rdpeng/RProgDA/]](https://bookdown.org/rdpeng/RProgDA/)
 
 # RMarkdown guides #
 
