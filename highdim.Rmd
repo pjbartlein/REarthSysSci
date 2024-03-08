@@ -529,7 +529,7 @@ col = rev(brewer.pal(10,"RdBu"))
 cubeView(tmp2_stars, at=cutpts, col.regions=col)
 ```
 
-![](tr21cube.png)
+![](images/TraCE_brick.png)
 
 To save the interactive cubeplot, in the RStudio Plots window, click on Export > Save as Web Page...
 
