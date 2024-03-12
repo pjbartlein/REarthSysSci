@@ -49,8 +49,8 @@ library(ncdf4)
 library(terra)
 library(tidyterra)
 library(stringr)
-library(parallelDist)
 library(gplots)
+library(parallelDist)
 ```
 
 Some of these packages are familiar, but `{GGally}` provides some enhanced `{ggplot2}` plots, `{stringr}` manages the manipulation of strings, `{parallelDist}` exploits multiple processors/cores to efficiently calculate large dissimilarlty/distance matrices, and '{gplots}` calculates heat maps.  
@@ -200,7 +200,7 @@ print(cbind(station, clusternum, as.character(Name)))
 
 ## Examining the cluster analysis
 
-The efficacy of the analyis in regionalizing or grouping the stations can be gauged usigns plots and a analysis that looks at the "separation" of the groups of stations.
+The efficacy of the analyis in regionalizing or grouping the stations can be gauged using plots and a analysis that looks at the "separation" of the groups of stations.
 
 ```{r multivariate-15 }
 # examine clusters -- simple plots 
@@ -263,6 +263,7 @@ tr21dec_path <- "/Users/bartlein/Projects/RESS/data/nc_files/"
 tr21dec_name <- "Trace21_TREFHT_anm2.nc"
 tr21dec_file <- paste(tr21dec_path, tr21dec_name, sep="")
 dname <- "tas_anm_ann"
+file_label <- "TraCE_decadal_"
 ```
 
 ```{r multivariate-21 }
@@ -281,7 +282,7 @@ The object `plt_xvals` is used to easily access time labels for some of the late
 
 Reshape the 3-d array into a 2-d "tidy" matrix with individual variables (grid-point locations) in columns, and observations (time) in rows:
 
-```{r multivariate-22}
+```{r multivariate-22 }
 # reshape the 3-d array
 nlon <- dim(var_array)[1]; nlat <- dim(var_array)[2]; nt <- dim(var_array)[3]
 var_vec_long <- as.vector(var_array)
@@ -296,7 +297,7 @@ Notice the use of the transposition function (`t()`) to get the data in the prop
 
 The `parDist()` function gets the dissimilarity matrix:
 
-```{r multivariate-23}
+```{r multivariate-23 }
 # distances among observations (time)
 dist_obs <- as.matrix(parDist(X)) 
 dim(dist_obs)
@@ -304,7 +305,7 @@ dim(dist_obs)
 
 The dissimilarity matrix (`dist_obs`) can be conveniently visualized by turning it into a `{terra}` SpatRaster, and then using the `{tidyterra}` `geom_spatraster()` function to visualize it. The rendering of the image is faster if the image is written to a file:
 
-```{r multivariate-24}
+```{r multivariate-24 }
 # turn matrix into a SpatRaster
 dist_obs_terra <- flip(rast(dist_obs))
 dist_obs_terra
@@ -312,9 +313,9 @@ dist_obs_terra
 
 Use `ggplot2()` to plot the matrix (writing the *.png image to a file):
 
-```{r multivariate-25}
+```{r multivariate-25, echo=TRUE, eval=FALSE }
 # plot the dissimilarity matrix
-png("TraCE_decadal_dist_obs_v1.png", width=720, height=720) # open the file
+png(paste(file_label, "dist_obs_v1.png", sep=""), width=720, height=720) # open the file
   ggplot() +
     geom_spatraster(data = t(dist_obs_terra)) +
       scale_fill_distiller(type = "seq", palette = "Greens") +
@@ -352,9 +353,9 @@ dist_var_terra
 
 Plot the matrix:
 
-```{r multivariate-28 }
+```{r multivariate-28, echo=TRUE, eval=FALSE }
 # plot the dissimilarity matrix
-png("TraCE_decadal_dist_var_v1.png", width=720, height=720) # open the file
+png(paste(file_label, "dist_var_v1.png", sep=""), width=720, height=720) # open the file
 ggplot() +
   geom_spatraster(data = t(dist_var_terra)) +
   scale_fill_distiller(type = "seq", palette = "Greens") +
@@ -386,10 +387,10 @@ A simple heatmap can be generated for a "Hovmöller matrix" calculated using the
 
 Create the Hovmöller matrix:
 
-```{r multivariate-29}
+```{r multivariate-29 }
 # Hovmöller matrix
 Y <- matrix(0.0, nrow=nlat, ncol=nt)
-dim(X)
+dim(Y)
 for (n in (1:nt)) {
   for (k in (1:nlat)) {
     for (j in (1:nlon)) {
@@ -402,9 +403,19 @@ dim(Y)
 ncols <- dim(Y)[2]
 ```
 
+The Hovmöller matrix could also have been gotten using the `apply()` function:
+
+```{r multivariate-30, echo = TRUE, eval = FALSE}
+Y <- matrix(0.0, nrow=nlat, ncol=nt)
+dim(Y)
+Y <- apply(var_array, c(2,3), mean, na.rm=TRUE)
+dim(Y)
+ncols <- dim(Y)[2]
+```
+
 Set row and column names for the matrix.
 
-```{r multivariate-30}
+```{r multivariate-31 }
 # set row and column names
 rownames(Y) <- str_pad(sprintf("%.3f", lat), 5, pad="0")
 head(rownames(Y));tail(rownames(Y)); length(rownames(Y))
@@ -414,7 +425,7 @@ head(colnames(Y));tail(colnames(Y)); length(colnames(Y))
 
 A matrix plot of the Hovmöller matrix will illustrate the data (and is an actual Hovmöller plot).  To get high (northern) latitudes at the top of the plot, and high (southern) latitudes at the bottom, flip the data:
 
-```{r multivariate-31}
+```{r multivariate-32 }
 # flip Y
 Y <- Y[(nlat:1),]
 head(rownames(Y)); tail(rownames(Y)); length(rownames(Y))
@@ -422,7 +433,7 @@ head(rownames(Y)); tail(rownames(Y)); length(rownames(Y))
 
 For this example, the data are subsampled, by taking every 20th observation (to allow the dendrograms to be visualized):
 
-```{r multivariate-32}
+```{r multivariate-33 }
 # subset
 Y2 <- Y[, seq(1, 2201, by=20)]
 dim(Y2)
@@ -433,7 +444,7 @@ head(colnames(Y2))
 
 More set up.  Generate colors for the matrix pot and the side bars, which here will illustrate the latitude and time of each data point. The rows will be labeled by a diverging color scale, purple for the Northern Hemisphere, green for the Southern Hemisphere, while time will be labeled from past to present by increasingly saturated purples.
 
-```{r multivariate-33}
+```{r multivariate-34 }
 # generate colors for side bars
 rcol <- colorRampPalette(brewer.pal(10,"PRGn"))(nlat)
 ccol <- colorRampPalette(brewer.pal(9,"Purples"))(ncols)
@@ -441,7 +452,7 @@ ccol2 <- colorRampPalette(brewer.pal(9,"Purples"))(ncols2)
 ```
 
 Generate colors for the heatmap of temperature
-```{r multivariate-34}
+```{r multivariate-35 }
 nclr <- 10
 zcol <- (rev(brewer.pal(nclr,"RdBu")))
 breaks = c(-20,-10,-5,-2,-1,0,1,2,5,10,20)
@@ -450,23 +461,24 @@ length(breaks)
 
 ### Hovmöller-matrix plot (subsetted decadal data)
 
-Produce the heatmap for the Hovmöller matrix. Note that the `system.time()` function is being used here to gauge the time it takes to calculate and display the various heatmaps.
+Produce an unclustered heatmap for the Hovmöller matrix. Note that the `system.time()` function is being used here to gauge the time it takes to calculate and display the various heatmaps.
 
-```{r multivariate-35, echo=TRUE, eval=FALSE}
-file_label <-  "TraCE_decadal"
-png_file <- paste(file_label, "_hov_01", ".png", sep="")
+```{r multivariate-36, echo=TRUE, eval=FALSE}
+# unclustered heatmap of latitude by time Hovmöller matrix
+time1 <- proc.time() 
+png_file <- paste(file_label, "hov_01", ".png", sep="")
 png(png_file, width=960, height=960)
-system.time( X_heatmap <- heatmap.2(Y2, cexRow = 0.8, cexCol = 0.8, scale="none",
+Y2_heatmap <- heatmap.2(Y2, cexRow = 0.8, cexCol = 0.8, scale="none", 
         Rowv=NA, Colv=NA, dendrogram = "none", # just plot data, don't do clustering
         RowSideColors=rcol, ColSideColors=ccol2, col=zcol, breaks=breaks, trace="none", density.info = "none",
         lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
         xlab = "ka", ylab = "Latitude", key = TRUE, key.title = NA)
-)
 dev.off()
+print (proc.time() - time1)
 ```
 ```
 ##   user  system elapsed 
-##  0.033   0.002   0.044 
+##  0.076   0.025   0.264 
 ```
 
 ![](images/TraCE_decadal_hov_01.png)
@@ -475,28 +487,62 @@ Notice the way the side bars work in illustrating the location and time of each 
 
 ### Hovmöller-matrix heatmap (subsetted decadal data)
 
-The heatmap of the Hovmöller-matrix reorganizes the rows and columns in such a way as to place variables (i.e. latitudes) with similar variations over time, and observations (times) with similar latitudinal patterns, next to one another.
+The heatmap of the Hovmöller-matrix reorganizes the rows and columns in such a way as to place variables (i.e. latitudes) with similar variations over time, and observations (times) with similar latitudinal patterns, next to one another. The row and column clustering will be done explicitly, in order to "reorder" the dendrograms, which could aid in their interpretability. 
 
-Now here's the heatmap: 
 
-```{r multivariate-36, echo=TRUE, eval=FALSE}
-png_file <- paste(file_label, "_heatmap_01", ".png", sep="")
+
+```{r multivariate-37, echo=TRUE, eval=FALSE}
+# heatmap of Hovmöller matrix
+time1 <- proc.time() 
+png_file <- paste(file_label, "heatmap_01", ".png", sep="")
 png(png_file, width=960, height=960)
-system.time( X_heatmap <- heatmap.2(Y2, cexRow = 0.8, cexCol = 0.8, scale="none",
+# row and column clustering
+cluster_row <- hclust(parDist(Y2), method = "ward.D2")
+cluster_col <- hclust(parDist(t(Y2)), method = "ward.D2")
+# heatmap
+Y2_heatmap <- heatmap.2(Y2, cexRow = 0.8, cexCol = 0.8, scale="none",
+        Rowv = as.dendrogram(cluster_row),
+        Colv = as.dendrogram(cluster_col),
         RowSideColors=rcol, ColSideColors=ccol2, col=zcol, breaks=breaks, trace="none", density.info = "none",
         lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
         xlab = "ka", ylab = "Latitude", key = TRUE, key.title = NA)
-)
 dev.off()
+print (proc.time() - time1)
 ```
 ```
 ##   user  system elapsed 
-##  0.106   0.003   0.109 
+##  0.225   0.058   0.490 
 ```
 
 ![](images/TraCE_decadal_heatmap_01.png)
 
 The heatmap has rearranged the data according to the cluster analyses of the observations and variables, placing more similar data points next to or near to one another.  Notice how the colored side bars allow one to figure out the location and time of individual points.  Here, and not surprisingly, there appear to be four distinct time-space clusters (or "regimes") in the data): glacial vs. interglacial (Holocene) and high latitudes (in both hemispheres) vs. low latitudes. Notice that the rearrangement in time is relatively modest (see the column color bar), while the rearrangement in location is more dramatic. On the row color bar, high latitudes are represented by more saturated colors. Spatial variations of climate are always larger in amplitude than temporal variations.
+
+The purple column color bar suggests that the reorganized columns are almost in chronological order, while the colorbar for the rows shows a distinct high-latitude/low-latitude contrast. Because dendrograms are like a decorative mobile, and can be rotated without destroying the cluster or branch mememberships, it's sometimes useful to try that.  This can be done with the `reorder.dendrogram()` (or just `reorder()`), with the cluster information and set of weights as input arguments.
+
+```{r multivariate-38, echo=TRUE, eval=FALSE}
+# reordered heatmap of Hovmöller matrix
+time1 <- proc.time() 
+png_file <- paste(file_label, "heatmap_01b", ".png", sep="")
+png(png_file, width=960, height=960)
+# heatmap
+Y2_heatmap <- heatmap.2(Y2, cexRow = 0.8, cexCol = 0.8, scale="none",
+        Rowv = reorder(as.dendrogram(cluster_row), 1:dim(Y2)[1]),
+        Colv = reorder(as.dendrogram(cluster_col), 1:dim(Y2)[2]),
+        RowSideColors=rcol, ColSideColors=ccol2, col=zcol, breaks=breaks, trace="none", density.info = "none",
+        lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
+        xlab = "ka", ylab = "Latitude", key = TRUE, key.title = NA)
+dev.off()
+print (proc.time() - time1)
+```
+```{r multivariate-39}
+#   user  system elapsed 
+#  0.292   0.064   0.516
+```
+
+![](images/TraCE_decadal_heatmap_01b.png)
+
+In this instance, the reordering of the dendrograms didn't accomplish much.
 
 [[Back to top]](multivariate.html)
 
@@ -506,16 +552,18 @@ A second example uses the decadal data directly (as opposed to subsampling)
 
 ### Hovmöller-matrix plot 
 
-```{r multivariate-37, echo=TRUE, eval=FALSE}
-png_file <- paste(file_label, "_hov_02", ".png", sep="")
+```{r multivariate-40, echo=TRUE, eval=FALSE}
+# Hovmöller-matrix plot 
+time1 <- proc.time() 
+png_file <- paste(file_label, "hov_02", ".png", sep="")
 png(png_file, width=960, height=960)
-system.time( X_heatmap <- heatmap.2(Y, cexRow = 0.8, cexCol = 0.8, scale="none", 
+Y_heatmap <- heatmap.2(Y, cexRow = 0.8, cexCol = 0.8, scale="none", 
         Rowv=NA, Colv=NA, dendrogram = "none", # just plot data, don't do clustering
-        RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks=breaks, trace="none", density.info = "none",
+        RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks = breaks, trace="none", density.info = "none",
         lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
         xlab = "ka", ylab = "Latitude", key = TRUE, key.title = NA)
-)
 dev.off()
+print (proc.time() - time1)
 ```
 ```
 ##   user  system elapsed 
@@ -526,15 +574,22 @@ dev.off()
 
 ### Hovmöller-matrix heatmap 
 
-```{r multivariate-38, echo=TRUE, eval=FALSE}
-png_file <- paste(file_label, "_heatmap_02", ".png", sep="")
+```{r multivariate-41, echo=TRUE, eval=FALSE}
+# Hovmöller-matrix heatmap 
+time1 <- proc.time() 
+png_file <- paste(file_label, "heatmap_02", ".png", sep="")
 png(png_file, width=960, height=960)
-system.time( X_heatmap <- heatmap.2(Y, cexRow = 0.8, cexCol = 0.8, scale="none", 
+cluster_row <- hclust(parDist(Y), method = "ward.D2")
+cluster_col <- hclust(parDist(t(Y)), method = "ward.D2")
+# heatmap
+Y_heatmap <- heatmap.2(Y, cexRow = 0.8, cexCol = 0.8, scale="none", 
+        Rowv = as.dendrogram(cluster_row),
+        Colv = as.dendrogram(cluster_col),
         RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks=breaks, trace="none", density.info = "none",
         lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
         xlab = "ka", ylab = "Latitude", key = TRUE, key.title = NA)
-)
 dev.off()
+print (proc.time() - time1)
 ```
 ```
 ##   user  system elapsed 
@@ -555,16 +610,16 @@ Finally, a heatmap of the actual gridded data (as opposed to the Hovmöller matr
 
 There are several set-up steps necessary.  Reshape the input array again, and generate row and column names:
 
-```{r multivariate-39}
+```{r multivariate-42 }
 # reshape the 3-d array
 var_vec_long <- as.vector(var_array)
 length(var_vec_long)
 X <- matrix(var_vec_long, nrow = nlon * nlat, ncol = nt) # Don't transpose as usual this time
 dim(X)
-ncols <- dim(X)[3]
+ncols <- dim(X)[2]
 ```
 
-```{r multivariate-40}
+```{r multivariate-43 }
 # generate row and column names
 grid <- expand.grid(lon, lat)
 names(grid) <- c("lon", "lat")
@@ -579,7 +634,7 @@ head(colnames(X)); tail(colnames(X)); length(colnames(X))
 
 Flip the data...
 
-```{r multivariate-41}
+```{r multivariate-44 }
 # flip X
 X <- X[((nlon*nlat):1),]
 head(rownames(X)); tail(rownames(X)); length(rownames(X))
@@ -587,7 +642,7 @@ head(rownames(X)); tail(rownames(X)); length(rownames(X))
 
 ... and generate colors:
 
-```{r multivariate-42}
+```{r multivariate-45 }
 # generate colors for vertical and horizontal side bars
 icol <- colorRampPalette(brewer.pal(10,"PRGn"))(nlat)
 idx <- sort(rep((1:nlat), nlon))
@@ -595,51 +650,177 @@ rcol <- icol[idx]
 ccol <- colorRampPalette(brewer.pal(9,"Purples"))(nt)
 ```
 
-### Matrix plot
+### Matrix plot -- full grid
 
 Here's a matrix plot of the data (there are too many points to make the dendrograms interpretable in any way, and so they are suppressed).
 
-```{r multivariate-43, echo=TRUE, eval=FALSE}
-png_file <- paste(file_label, "_hov_03", ".png", sep="")
+```{r multivariate-46, echo=TRUE, eval=FALSE}
+# matrix plot of the full dataset
+time1 <- proc.time() 
+png_file <- paste(file_label, "hov_03", ".png", sep="")
 png(png_file, width=960, height=960)
-system.time( X_heatmap <- heatmap.2(X, cexRow = 0.8, cexCol = 0.8, scale="none",
+X_heatmap <- heatmap.2(X, cexRow = 0.8, cexCol = 0.8, scale="none",
         Rowv=NA, Colv=NA, dendrogram = "none",
         RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks=breaks, trace="none", density.info = "none",
         lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
-        xlab = "ka", ylab = "Locations", key = TRUE, key.title = NA)
-)
+        xlab = "ka", ylab = "Locations (by Latitude, then Longitude", key = TRUE, key.title = NA)
 dev.off()
+print (proc.time() - time1)
 ```
 ```
-##    user  system elapsed 
-## 938.290   2.605 941.988 
+##   user  system elapsed 
+## 802.255   6.391 814.750 
 ```
 
 ![](images/TraCE_decadal_hov_03.png)
 
 The dimensions of the input netCDF file (96 longitudes x 48 latitudes x 2204 times) are such that when the 3-d arrays is reshaped, the longitudes vary most rapidly, followed by the latitudes and times. This gives rise to the horizontal banding in the image, with 48 bands organized from top to bottom. Within each band, the longitudes vary from top (west) to bottom (east). The N. Pacific/Beringia warm patch during glacial times (related to the influece of the North American Ice Sheet) is evident as the thin streaks of higher temperatures in the upper left corner of the image.
 
-### Heatmap
+### Heatmap (Locations (by Latitude, then Longitude))
 
 Now here is the reorganized heatmap of the grid-point data:
 
-```{r multivariate-44, echo=TRUE, eval=FALSE}
-png_file <- paste(file_label, "_heatmap_03", ".png", sep="")
+```{r multivariate-47, echo=TRUE, eval=FALSE}
+# Heatmap (Locations (by Latitude, then Longitude))
+time1 <- proc.time() 
+png_file <- paste(file_label, "heatmap_03", ".png", sep="")
 png(png_file, width=960, height=960)
-system.time( X_heatmap <- heatmap.2(X, cexRow = 0.8, cexCol = 0.8, scale="none", dendrogram = "none",
+cluster_row <- hclust(parDist(X), method = "ward.D2")
+cluster_col <- hclust(parDist(t(X)), method = "ward.D2")
+# heatmap
+X_heatmap <- heatmap.2(X, cexRow = 0.8, cexCol = 0.8, scale="none", dendrogram = "none",
+        Rowv = as.dendrogram(cluster_row),
+        Colv = as.dendrogram(cluster_col),
         RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks=breaks, trace="none", density.info = "none",
         lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
-        xlab = "ka", ylab = "Locations", key = TRUE, key.title = NA)
-)
+        xlab = "ka", ylab = "Locations (by Latitude, then Longitude)", key = TRUE, key.title = NA)
 dev.off()
+print (proc.time() - time1)
 ```
 ```
-##   user  system elapsed 
-## 416.186   3.236 422.134  
+##     user   system  elapsed 
+## 1086.889   11.852  124.951 
 ```
 
 ![](images/TraCE_decadal_heatmap_03.png)
 
 There is a lot going on in the full-grid heatmap. 
+
+Let's see if reordering would contribute to the interpretability.
+
+```{r multivariate-48, echo=TRUE, eval=FALSE}
+# reordered reorganized heat map
+time1 <- proc.time() 
+png_file <- paste(file_label, "heatmap_03b", ".png", sep="")
+png(png_file, width=960, height=960)
+# heatmap
+X_heatmap <- heatmap.2(X, cexRow = 0.8, cexCol = 0.8, scale="none", dendrogram = "none",
+        Rowv = reorder(as.dendrogram(cluster_row), 1:dim(X)[1]),
+        Colv = reorder(as.dendrogram(cluster_col), 1:dim(X)[2]),
+        RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks=breaks, trace="none", density.info = "none",
+        lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
+        xlab = "ka", ylab = "Locations (by Latitude, then Longitude)", key = TRUE, key.title = NA)
+dev.off()
+print (proc.time() - time1)
+```
+```{r multivariate-49}
+##   user  system elapsed 
+## 23.215   0.441  23.845 
+```
+
+![](images/TraCE_decadal_heatmap_03b.png)
+
+The reorganization seems to contrast low-variability (top) and high-variability locations and times (bottom).
+
+[[Back to top]](multivariate.html)
+
+### Heatmap (Locations (by Longitude, then Latitude))
+
+```{r multivariate-50}
+# reshape the 3-d array
+dim(var_array)
+var_array2 <- array(NA, dim = c(48, 96, 2204))
+for (k in (1:nlat)) {
+  for (j in (1:nlon)) {
+    var_array2[k, j, 1:nt] <- var_array[j, k, 1:nt] 
+  }
+}
+dim(var_array2)
+```
+
+```{r multivariate-51}
+var_vec_long2 <- as.vector(var_array2)
+length(var_vec_long2)
+X2 <- matrix(var_vec_long2, nrow = nlat * nlon, ncol = nt) # Don't transpose as usual this time
+dim(X2)
+ncols <- dim(X2)[2]
+```
+
+```{r multivariate-52}
+# generate row and column names
+grid <- expand.grid(lat, lon)
+names(grid) <- c("lat", "lon")
+rownames(X2) <- paste("N", str_pad(sprintf("%.2f", round(grid$lat, 2)), 5, pad="0"),
+  "E", str_pad(sprintf("%.2f", round(grid$lon, 2)), 5, pad="0"), sep="")
+rownames(X2) <- round(grid$lon, 2)
+head(rownames(X2), 20); tail(rownames(X2), 20); length(rownames(X2))
+
+colnames(X2) <- str_pad(sprintf("%.3f", t), 5, pad="0")
+head(colnames(X2)); tail(colnames(X2)); length(colnames(X2))
+```
+
+
+```{r multivariate-53}
+# generate colors for vertical and horizontal side bars
+icol <- colorRampPalette(brewer.pal(10,"PRGn"))(nlon)
+idx <- sort(rep((1:nlon), nlat))
+rcol <- icol[idx]
+ccol <- colorRampPalette(brewer.pal(9,"Purples"))(nt)
+```
+
+
+```{r multivariate-54, echo=TRUE, eval=FALSE}
+time1 <- proc.time() 
+png_file <- paste(file_label, "hov_04", ".png", sep="")
+png(png_file, width=960, height=960)
+# heatmap 
+X2_heatmap <- heatmap.2(X2, cexRow = 0.8, cexCol = 0.8, scale="none",
+      Rowv=NA, Colv=NA, dendrogram = "none",
+      RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks=breaks, trace="none", density.info = "none",
+      lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
+      xlab = "ka", ylab = "Locations (by Longitude, then Latitude)", key = TRUE, key.title = NA)
+dev.off()
+print (proc.time() - time1)
+```
+```{r multivariate-55}
+##    user  system elapsed 
+## 759.900   5.545 767.357 
+```
+
+![](images/TraCE_decadal_hov_04.png)
+
+```{r multivariate-56, echo=TRUE, eval=FALSE}
+time1 <- proc.time() 
+png_file <- paste(file_label, "heatmap_04", ".png", sep="")
+png(png_file, width=960, height=960)
+cluster_row <- hclust(parDist(X2), method = "ward.D2")
+cluster_col <- hclust(parDist(t(X2)), method = "ward.D2")
+# heatmap
+X2_heatmap <- heatmap.2(X2, cexRow = 0.8, cexCol = 0.8, scale="none", dendrogram = "none",
+      Rowv = as.dendrogram(cluster_row),
+      Colv = as.dendrogram(cluster_col),
+      RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks=breaks, trace="none", density.info = "none",
+      lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
+      xlab = "ka", ylab = "Locations (by Longitude, then Latitude)", key = TRUE, key.title = NA)
+dev.off()
+print (proc.time() - time1)
+```
+
+```{r multivariate-57}
+##     user   system  elapsed 
+## 1039.207    9.595  133.119 
+```
+
+![](images/TraCE_decadal_heatmap_04.png)
 
 [[Back to top]](multivariate.html)

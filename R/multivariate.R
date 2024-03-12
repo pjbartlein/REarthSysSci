@@ -8,8 +8,8 @@ library(ncdf4)
 library(terra)
 library(tidyterra)
 library(stringr)
-library(parallelDist)
 library(gplots)
+library(parallelDist)
 
 # read county outlines
 # orotl_sf
@@ -111,6 +111,7 @@ tr21dec_path <- "/Users/bartlein/Projects/RESS/data/nc_files/"
 tr21dec_name <- "Trace21_TREFHT_anm2.nc"
 tr21dec_file <- paste(tr21dec_path, tr21dec_name, sep="")
 dname <- "tas_anm_ann"
+file_label <- "TraCE_decadal_"
 
 # read the data using ncdf4
 nc_in <- nc_open(tr21dec_file)
@@ -138,7 +139,7 @@ dist_obs_terra <- flip(rast(dist_obs))
 dist_obs_terra
 
 # plot the dissimilarity matrix
-png("TraCE_decadal_dist_obs_v1.png", width=720, height=720) # open the file
+png(paste(file_label, "dist_obs_v1.png", sep=""), width=720, height=720) # open the file
   ggplot() +
     geom_spatraster(data = t(dist_obs_terra)) +
       scale_fill_distiller(type = "seq", palette = "Greens") +
@@ -160,7 +161,7 @@ dist_var_terra <- flip(rast(dist_var))
 dist_var_terra
 
 # plot the dissimilarity matrix
-png("TraCE_decadal_dist_var_v1.png", width=720, height=720) # open the file
+png(paste(file_label, "dist_var_v1.png", sep=""), width=720, height=720) # open the file
 ggplot() +
   geom_spatraster(data = t(dist_var_terra)) +
   scale_fill_distiller(type = "seq", palette = "Greens") +
@@ -175,7 +176,7 @@ dev.off()
 
 # Hovmöller matrix
 Y <- matrix(0.0, nrow=nlat, ncol=nt)
-dim(X)
+dim(Y)
 for (n in (1:nt)) {
   for (k in (1:nlat)) {
     for (j in (1:nlon)) {
@@ -186,6 +187,12 @@ for (n in (1:nt)) {
 }
 dim(Y)
 ncols <- dim(Y)[2]
+
+## Y <- matrix(0.0, nrow=nlat, ncol=nt)
+## dim(Y)
+## Y <- apply(var_array, c(2,3), mean, na.rm=TRUE)
+## dim(Y)
+## ncols <- dim(Y)[2]
 
 # set row and column names
 rownames(Y) <- str_pad(sprintf("%.3f", lat), 5, pad="0")
@@ -214,51 +221,85 @@ zcol <- (rev(brewer.pal(nclr,"RdBu")))
 breaks = c(-20,-10,-5,-2,-1,0,1,2,5,10,20)
 length(breaks)
 
-## file_label <-  "TraCE_decadal"
-## png_file <- paste(file_label, "_hov_01", ".png", sep="")
+## # unclustered heatmap of latitude by time Hovmöller matrix
+## time1 <- proc.time()
+## png_file <- paste(file_label, "hov_01", ".png", sep="")
 ## png(png_file, width=960, height=960)
-## system.time( X_heatmap <- heatmap.2(Y2, cexRow = 0.8, cexCol = 0.8, scale="none",
+## Y2_heatmap <- heatmap.2(Y2, cexRow = 0.8, cexCol = 0.8, scale="none",
 ##         Rowv=NA, Colv=NA, dendrogram = "none", # just plot data, don't do clustering
 ##         RowSideColors=rcol, ColSideColors=ccol2, col=zcol, breaks=breaks, trace="none", density.info = "none",
 ##         lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
 ##         xlab = "ka", ylab = "Latitude", key = TRUE, key.title = NA)
-## )
 ## dev.off()
+## print (proc.time() - time1)
 
-## png_file <- paste(file_label, "_heatmap_01", ".png", sep="")
+## # heatmap of Hovmöller matrix
+## time1 <- proc.time()
+## png_file <- paste(file_label, "heatmap_01", ".png", sep="")
 ## png(png_file, width=960, height=960)
-## system.time( X_heatmap <- heatmap.2(Y2, cexRow = 0.8, cexCol = 0.8, scale="none",
+## # row and column clustering
+## cluster_row <- hclust(parDist(Y2), method = "ward.D2")
+## cluster_col <- hclust(parDist(t(Y2)), method = "ward.D2")
+## # heatmap
+## Y2_heatmap <- heatmap.2(Y2, cexRow = 0.8, cexCol = 0.8, scale="none",
+##         Rowv = as.dendrogram(cluster_row),
+##         Colv = as.dendrogram(cluster_col),
 ##         RowSideColors=rcol, ColSideColors=ccol2, col=zcol, breaks=breaks, trace="none", density.info = "none",
 ##         lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
 ##         xlab = "ka", ylab = "Latitude", key = TRUE, key.title = NA)
-## )
 ## dev.off()
+## print (proc.time() - time1)
 
-## png_file <- paste(file_label, "_hov_02", ".png", sep="")
+# reordered heatmap of Hovmöller matrix
+time1 <- proc.time() 
+png_file <- paste(file_label, "heatmap_01b", ".png", sep="")
+png(png_file, width=960, height=960)
+# heatmap
+Y2_heatmap <- heatmap.2(Y2, cexRow = 0.8, cexCol = 0.8, scale="none",
+        Rowv = reorder(as.dendrogram(cluster_row), 1:dim(Y2)[1]),
+        Colv = reorder(as.dendrogram(cluster_col), 1:dim(Y2)[2]),
+        RowSideColors=rcol, ColSideColors=ccol2, col=zcol, breaks=breaks, trace="none", density.info = "none",
+        lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
+        xlab = "ka", ylab = "Latitude", key = TRUE, key.title = NA)
+dev.off()
+print (proc.time() - time1)
+#   user  system elapsed 
+#  0.292   0.064   0.516
+
+## # Hovmöller-matrix plot
+## time1 <- proc.time()
+## png_file <- paste(file_label, "hov_02", ".png", sep="")
 ## png(png_file, width=960, height=960)
-## system.time( X_heatmap <- heatmap.2(Y, cexRow = 0.8, cexCol = 0.8, scale="none",
+## Y_heatmap <- heatmap.2(Y, cexRow = 0.8, cexCol = 0.8, scale="none",
 ##         Rowv=NA, Colv=NA, dendrogram = "none", # just plot data, don't do clustering
-##         RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks=breaks, trace="none", density.info = "none",
+##         RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks = breaks, trace="none", density.info = "none",
 ##         lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
 ##         xlab = "ka", ylab = "Latitude", key = TRUE, key.title = NA)
-## )
 ## dev.off()
+## print (proc.time() - time1)
 
-## png_file <- paste(file_label, "_heatmap_02", ".png", sep="")
+## # Hovmöller-matrix heatmap
+## time1 <- proc.time()
+## png_file <- paste(file_label, "heatmap_02", ".png", sep="")
 ## png(png_file, width=960, height=960)
-## system.time( X_heatmap <- heatmap.2(Y, cexRow = 0.8, cexCol = 0.8, scale="none",
+## cluster_row <- hclust(parDist(Y), method = "ward.D2")
+## cluster_col <- hclust(parDist(t(Y)), method = "ward.D2")
+## # heatmap
+## Y_heatmap <- heatmap.2(Y, cexRow = 0.8, cexCol = 0.8, scale="none",
+##         Rowv = as.dendrogram(cluster_row),
+##         Colv = as.dendrogram(cluster_col),
 ##         RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks=breaks, trace="none", density.info = "none",
 ##         lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
 ##         xlab = "ka", ylab = "Latitude", key = TRUE, key.title = NA)
-## )
 ## dev.off()
+## print (proc.time() - time1)
 
 # reshape the 3-d array
 var_vec_long <- as.vector(var_array)
 length(var_vec_long)
 X <- matrix(var_vec_long, nrow = nlon * nlat, ncol = nt) # Don't transpose as usual this time
 dim(X)
-ncols <- dim(X)[3]
+ncols <- dim(X)[2]
 
 # generate row and column names
 grid <- expand.grid(lon, lat)
@@ -281,21 +322,111 @@ idx <- sort(rep((1:nlat), nlon))
 rcol <- icol[idx]
 ccol <- colorRampPalette(brewer.pal(9,"Purples"))(nt)
 
-## png_file <- paste(file_label, "_hov_03", ".png", sep="")
+## # matrix plot of the full dataset
+## time1 <- proc.time()
+## png_file <- paste(file_label, "hov_03", ".png", sep="")
 ## png(png_file, width=960, height=960)
-## system.time( X_heatmap <- heatmap.2(X, cexRow = 0.8, cexCol = 0.8, scale="none",
+## X_heatmap <- heatmap.2(X, cexRow = 0.8, cexCol = 0.8, scale="none",
 ##         Rowv=NA, Colv=NA, dendrogram = "none",
 ##         RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks=breaks, trace="none", density.info = "none",
 ##         lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
-##         xlab = "ka", ylab = "Locations", key = TRUE, key.title = NA)
-## )
+##         xlab = "ka", ylab = "Locations (by Latitude, then Longitude", key = TRUE, key.title = NA)
 ## dev.off()
+## print (proc.time() - time1)
 
-## png_file <- paste(file_label, "_heatmap_03", ".png", sep="")
+## # Heatmap (Locations (by Latitude, then Longitude))
+## time1 <- proc.time()
+## png_file <- paste(file_label, "heatmap_03", ".png", sep="")
 ## png(png_file, width=960, height=960)
-## system.time( X_heatmap <- heatmap.2(X, cexRow = 0.8, cexCol = 0.8, scale="none", dendrogram = "none",
+## cluster_row <- hclust(parDist(X), method = "ward.D2")
+## cluster_col <- hclust(parDist(t(X)), method = "ward.D2")
+## # heatmap
+## X_heatmap <- heatmap.2(X, cexRow = 0.8, cexCol = 0.8, scale="none", dendrogram = "none",
+##         Rowv = as.dendrogram(cluster_row),
+##         Colv = as.dendrogram(cluster_col),
 ##         RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks=breaks, trace="none", density.info = "none",
 ##         lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
-##         xlab = "ka", ylab = "Locations", key = TRUE, key.title = NA)
-## )
+##         xlab = "ka", ylab = "Locations (by Latitude, then Longitude)", key = TRUE, key.title = NA)
 ## dev.off()
+## print (proc.time() - time1)
+
+## # reordered reorganized heat map
+## time1 <- proc.time()
+## png_file <- paste(file_label, "heatmap_03b", ".png", sep="")
+## png(png_file, width=960, height=960)
+## # heatmap
+## X_heatmap <- heatmap.2(X, cexRow = 0.8, cexCol = 0.8, scale="none", dendrogram = "none",
+##         Rowv = reorder(as.dendrogram(cluster_row), 1:dim(X)[1]),
+##         Colv = reorder(as.dendrogram(cluster_col), 1:dim(X)[2]),
+##         RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks=breaks, trace="none", density.info = "none",
+##         lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
+##         xlab = "ka", ylab = "Locations (by Latitude, then Longitude)", key = TRUE, key.title = NA)
+## dev.off()
+## print (proc.time() - time1)
+##   user  system elapsed 
+## 23.215   0.441  23.845 
+
+# reshape the 3-d array
+dim(var_array)
+var_array2 <- array(NA, dim = c(48, 96, 2204))
+for (k in (1:nlat)) {
+  for (j in (1:nlon)) {
+    var_array2[k, j, 1:nt] <- var_array[j, k, 1:nt] 
+  }
+}
+dim(var_array2)
+
+var_vec_long2 <- as.vector(var_array2)
+length(var_vec_long2)
+X2 <- matrix(var_vec_long2, nrow = nlat * nlon, ncol = nt) # Don't transpose as usual this time
+dim(X2)
+ncols <- dim(X2)[2]
+
+# generate row and column names
+grid <- expand.grid(lat, lon)
+names(grid) <- c("lat", "lon")
+rownames(X2) <- paste("N", str_pad(sprintf("%.2f", round(grid$lat, 2)), 5, pad="0"),
+  "E", str_pad(sprintf("%.2f", round(grid$lon, 2)), 5, pad="0"), sep="")
+rownames(X2) <- round(grid$lon, 2)
+head(rownames(X2), 20); tail(rownames(X2), 20); length(rownames(X2))
+
+colnames(X2) <- str_pad(sprintf("%.3f", t), 5, pad="0")
+head(colnames(X2)); tail(colnames(X2)); length(colnames(X2))
+
+# generate colors for vertical and horizontal side bars
+icol <- colorRampPalette(brewer.pal(10,"PRGn"))(nlon)
+idx <- sort(rep((1:nlon), nlat))
+rcol <- icol[idx]
+ccol <- colorRampPalette(brewer.pal(9,"Purples"))(nt)
+
+## time1 <- proc.time()
+## png_file <- paste(file_label, "hov_04", ".png", sep="")
+## png(png_file, width=960, height=960)
+## # heatmap
+## X2_heatmap <- heatmap.2(X2, cexRow = 0.8, cexCol = 0.8, scale="none",
+##       Rowv=NA, Colv=NA, dendrogram = "none",
+##       RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks=breaks, trace="none", density.info = "none",
+##       lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
+##       xlab = "ka", ylab = "Locations (by Longitude, then Latitude)", key = TRUE, key.title = NA)
+## dev.off()
+## print (proc.time() - time1)
+##    user  system elapsed 
+## 759.900   5.545 767.357 
+
+## time1 <- proc.time()
+## png_file <- paste(file_label, "heatmap_04", ".png", sep="")
+## png(png_file, width=960, height=960)
+## cluster_row <- hclust(parDist(X2), method = "ward.D2")
+## cluster_col <- hclust(parDist(t(X2)), method = "ward.D2")
+## # heatmap
+## X2_heatmap <- heatmap.2(X2, cexRow = 0.8, cexCol = 0.8, scale="none", dendrogram = "none",
+##       Rowv = as.dendrogram(cluster_row),
+##       Colv = as.dendrogram(cluster_col),
+##       RowSideColors=rcol, ColSideColors=ccol, col=zcol, breaks=breaks, trace="none", density.info = "none",
+##       lmat=rbind(c(6, 0, 5), c(0, 0, 2), c(4, 1, 3)), lwid=c(1.0, 0.2, 5.0), lhei = c(1.5, 0.2, 4.0),
+##       xlab = "ka", ylab = "Locations (by Longitude, then Latitude)", key = TRUE, key.title = NA)
+## dev.off()
+## print (proc.time() - time1)
+
+##     user   system  elapsed 
+## 1039.207    9.595  133.119 
