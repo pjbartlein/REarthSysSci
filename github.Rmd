@@ -16,7 +16,7 @@ pdf.options(useDingbats = TRUE)
 klippy::klippy(position = c('top', 'right'))
 ```
 
-<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2024, but may undergo further edits.</span></p>
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2024, but may undergo further edits.</span></p>x
 
 ```{r child="md/github.md"}
 ```
