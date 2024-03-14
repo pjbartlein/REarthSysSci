@@ -51,7 +51,7 @@
 [[https://marcia-shiyu.github.io/Final-Project-for-R-for-Earth-System-Science/]](https://marcia-shiyu.github.io/Final-Project-for-R-for-Earth-System-Science/)  
 
 - Eli Borrevik -- US January Temperature Analysis 2000-2020   
-[[Borrevik_index.html]](https://pjbartlein.github.io/REarthSysSci/projects/)  
+[[Borrevik_index.html]](https://pjbartlein.github.io/REarthSysSci/projects/Borrevik_index.html)  
 
 - Lucy Roberts -- Visualizing the Swirling Seas  
 [[https://lucymakesmaps2.github.io/SwirlingERA.html]](https://lucymakesmaps2.github.io/SwirlingERA.html)  
@@ -69,7 +69,7 @@
 [[https://niamhhouston.github.io/GEOG490/]](https://niamhhouston.github.io/GEOG490/)  
 
 - Hannah Neuman -- Tide Buoy and Seismometer Data from 2011 Japan Earthquake   
-[[Neuman_index.html]](https://pjbartlein.github.io/REarthSysSci/projects/)  
+[[Neuman_index.html]](https://pjbartlein.github.io/REarthSysSci/projects/Neuman_index.html)  
 
 
 <https://pjbartlein.github.io/REarthSysSci/projects/>
