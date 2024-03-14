@@ -27,4 +27,5 @@
 [[DeHart_index.html]](/docs/projects/DeHart_index.html)  
 
 - Zachary Smith -- Radon Hazard Potential in Oregon   
-[[https://pages.uoregon.edu/zsmith4/geog490project/FinalProject.html]](https://pages.uoregon.edu/zsmith4/geog490project/FinalProject.html)
+[[https://pages.uoregon.edu/zsmith4/geog490project/FinalProject.html]](https://pages.uoregon.edu/zsmith4/geog490project/FinalProject.html)  
+
