@@ -29,6 +29,9 @@
 - Zachary Smith -- Radon Hazard Potential in Oregon   
 [[https://pages.uoregon.edu/zsmith4/geog490project/FinalProject.html]](https://pages.uoregon.edu/zsmith4/geog490project/FinalProject.html)  
 
+- Bran Blundell -- California Wildfires   
+[[https://branstenb.github.io/geog490project/]](https://branstenb.github.io/geog490project/)  
+
 
 
 <https://pjbartlein.github.io/REarthSysSci/projects/>
