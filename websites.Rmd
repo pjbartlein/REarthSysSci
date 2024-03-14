@@ -1,0 +1,22 @@
+---
+title: "Old course web pages"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: no
+    toc: no
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+
+<p><span style="color: #00cc00;">NOTE:  This page has been revised for Winter 2024, but may undergo further edits.</span></p>
+
+- GEOG 4/595: Geographical data analysis  
+[[https://pjbartlein.github.io/GeogDataAnalysis/index.html]](https://pjbartlein.github.io/GeogDataAnalysis/index.html)

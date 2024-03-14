@@ -1,0 +1,20 @@
+---
+title: "Times-eries analysis"
+output: 
+  html_document:
+    fig_caption: no
+    number_sections: yes
+    toc: yes
+    toc_float: false
+    collapsed: no
+---
+
+```{r set-options, echo=FALSE}
+options(width = 105)
+knitr::opts_chunk$set(dev='png', dpi=300, cache=TRUE)
+pdf.options(useDingbats = TRUE)
+klippy::klippy(position = c('top', 'right'))
+```
+
+<p><span style="color: #cc0000;">NOTE:  This page will be posted later (April 2024).</span></p>
+
