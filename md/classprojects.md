@@ -17,11 +17,14 @@
 - Isaac Bell -- Drought in the Western US: 2000-2024   
 [[https://ibell13.github.io/490-R-final/R_project_v2.html]](https://ibell13.github.io/490-R-final/R_project_v2.html)  
 
-- Josephina Cruz -- Analyzing CO2 Trends from 2000 to 2020
+- Josephina Cruz -- Analyzing CO2 Trends from 2000 to 2020  
 [[Cruz_index.html]](/docs/projects/Cruz_index.html)
 
 - Jame Maze -- SWOT with R (SWOTR)   
 [[https://jtmaze.github.io/GEOG590-SWOTR/]](https://jtmaze.github.io/GEOG590-SWOTR/)  
 
 - Katherine DeHart -- ESS Ocean Acidification  
-[[DeHart_index.html]](/docs/projects/DeHart_index.html)
+[[DeHart_index.html]](/docs/projects/DeHart_index.html)  
+
+- Zachary Smith -- Radon Hazard Potential in Oregon   
+[[https://pages.uoregon.edu/zsmith4/geog490project/FinalProject.html]](https://pages.uoregon.edu/zsmith4/geog490project/FinalProject.html)
