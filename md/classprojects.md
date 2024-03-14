@@ -51,7 +51,26 @@
 [[https://marcia-shiyu.github.io/Final-Project-for-R-for-Earth-System-Science/]](https://marcia-shiyu.github.io/Final-Project-for-R-for-Earth-System-Science/)  
 
 - Eli Borrevik -- US January Temperature Analysis 2000-2020   
-[[Borrevik_index.html]](https://pjbartlein.github.io/REarthSysSci/projects/)
+[[Borrevik_index.html]](https://pjbartlein.github.io/REarthSysSci/projects/)  
+
+- Lucy Roberts -- Visualizing the Swirling Seas  
+[[https://lucymakesmaps2.github.io/SwirlingERA.html]](https://lucymakesmaps2.github.io/SwirlingERA.html)  
+
+- Jett Rugebregt -- Mapping Carbon Flux and Storage in the Continental US  
+[[https://rpubs.com/jettr/Final490]](https://rpubs.com/jettr/Final490)  
+
+- MaKayla Etheridge -- Galeras, Volcano vs Popocatepetl, Volcano SO2 Emission Trends (2008-2013)   
+[[https://rpubs.com/metered/1161437]](https://rpubs.com/metered/1161437)  
+
+- Ava Lomax -- Potential Vegetation Types  
+[[https://rpubs.com/alomax/pot_veg]](https://rpubs.com/alomax/pot_veg)  
+
+- Niamh Houston -- Creating a Normalized Difference Vegetation Index Using R   
+[[https://niamhhouston.github.io/GEOG490/]](https://niamhhouston.github.io/GEOG490/)  
+
+- Hannah Neuman -- Tide Buoy and Seismometer Data from 2011 Japan Earthquake   
+[[Neuman_index.html]](https://pjbartlein.github.io/REarthSysSci/projects/)  
+
 
 <https://pjbartlein.github.io/REarthSysSci/projects/>
 
