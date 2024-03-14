@@ -32,7 +32,26 @@
 - Bran Blundell -- California Wildfires   
 [[https://branstenb.github.io/geog490project/]](https://branstenb.github.io/geog490project/)  
 
+- Jamie Ishimaru -- Analyzing Salinity Level Around the World in 1998  
+[[https://jamie598.github.io/Salinity/Main.html]](https://jamie598.github.io/Salinity/Main.html)  
 
+- Juliette Setudeh Nejad -- Fires in Oregon   
+[[https://jsetudeh.github.io/geog490/]](https://jsetudeh.github.io/geog490/)  
+
+- Dana Sylvester -- National Park Search and Rescue   
+[[https://danasylvester.github.io/danasylvestergithub.io/]](https://danasylvester.github.io/danasylvestergithub.io/)  
+
+- Makayla Slick -- ODF Fire Analysis Between 2000 and 2022   
+[[https://makaylaslick.github.io/geog490_finalproject.github.io/]](https://makaylaslick.github.io/geog490_finalproject.github.io/)  
+
+- Louisa Hahn -- Temperature, Treecover, and Wildfires in the US   
+[[https://pages.uoregon.edu/lhahn2/geog490/RNotebook.nb.html]](https://pages.uoregon.edu/lhahn2/geog490/RNotebook.nb.html)  
+
+- Shiyu Zhang -- Tapwater Geochemistry   
+[[https://marcia-shiyu.github.io/Final-Project-for-R-for-Earth-System-Science/]](https://marcia-shiyu.github.io/Final-Project-for-R-for-Earth-System-Science/)  
+
+- Eli Borrevik -- US January Temperature Analysis 2000-2020   
+[[Borrevik_index.html]](https://pjbartlein.github.io/REarthSysSci/projects/)
 
 <https://pjbartlein.github.io/REarthSysSci/projects/>
 
