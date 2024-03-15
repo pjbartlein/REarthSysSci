@@ -24,7 +24,7 @@
 [[https://jtmaze.github.io/GEOG590-SWOTR/]](https://jtmaze.github.io/GEOG590-SWOTR/)  
 
 - Katherine DeHart -- ESS Ocean Acidification  
-[[DeHart_index.html]](https://pjbartlein.github.io/REarthSysSci/projects/DeHart_index.html)  
+[[https://rpubs.com/kdehart24/OceanAcidification]](https://rpubs.com/kdehart24/OceanAcidification)  
 
 - Zachary Smith -- Radon Hazard Potential in Oregon   
 [[https://pages.uoregon.edu/zsmith4/geog490project/FinalProject.html]](https://pages.uoregon.edu/zsmith4/geog490project/FinalProject.html)  
