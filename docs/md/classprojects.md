@@ -18,7 +18,7 @@
 [[https://ibell13.github.io/490-R-final/R_project_v2.html]](https://ibell13.github.io/490-R-final/R_project_v2.html)  
 
 - Josefina Cruz -- Analyzing CO2 Trends from 2000 to 2020  
-[[Cruz_index.html]](https://pjbartlein.github.io/REarthSysSci/projects/Cruz_index.html)
+[[https://rpubs.com/jcruz/1161587]](https://rpubs.com/jcruz/1161587)
 
 - Jame Maze -- SWOT with R (SWOTR)   
 [[https://jtmaze.github.io/GEOG590-SWOTR/]](https://jtmaze.github.io/GEOG590-SWOTR/)  
