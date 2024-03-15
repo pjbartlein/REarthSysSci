@@ -17,7 +17,7 @@
 - Isaac Bell -- Drought in the Western US: 2000-2024   
 [[https://ibell13.github.io/490-R-final/R_project_v2.html]](https://ibell13.github.io/490-R-final/R_project_v2.html)  
 
-- Josephina Cruz -- Analyzing CO2 Trends from 2000 to 2020  
+- Josefina Cruz -- Analyzing CO2 Trends from 2000 to 2020  
 [[Cruz_index.html]](https://pjbartlein.github.io/REarthSysSci/projects/Cruz_index.html)
 
 - Jame Maze -- SWOT with R (SWOTR)   
