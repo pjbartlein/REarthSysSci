@@ -20,7 +20,7 @@
 - Josefina Cruz -- Analyzing CO2 Trends from 2000 to 2020  
 [[https://rpubs.com/jcruz/1161587]](https://rpubs.com/jcruz/1161587)
 
-- Jame Maze -- SWOT with R (SWOTR)   
+- James Maze -- SWOT with R (SWOTR)   
 [[https://jtmaze.github.io/GEOG590-SWOTR/]](https://jtmaze.github.io/GEOG590-SWOTR/)  
 
 - Katherine DeHart -- ESS Ocean Acidification  
