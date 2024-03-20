@@ -9,7 +9,7 @@
 [[https://annekebrouwer.github.io/geog490project/final_project_geog490_r.html]](https://annekebrouwer.github.io/geog490project/final_project_geog490_r.html)  
 
 - Tessa Wright -- Reduced vegetation due to fire  
-[[https://pages.uoregon.edu/twright2/482%20VSC/FINAL.html]](https://pages.uoregon.edu/twright2/482%20VSC/FINAL.html)  
+[[https://pages.uoregon.edu/twright2/482%20VSC%20FINAL/FINAL.html]](https://pages.uoregon.edu/twright2/482%20VSC%20FINAL/FINAL.html)  
 
 - Mae Marston -- Coastline of california   
 [[https://pages.uoregon.edu/maem/coast_reclassification/coastline.nb.html]](https://pages.uoregon.edu/maem/coast_reclassification/coastline.nb.html)  
