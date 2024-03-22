@@ -3,7 +3,7 @@
 [[https://alyghanson.github.io/geog490project/intro.html]](https://alyghanson.github.io/geog490project/intro.html)
 
 - Eliza Lawrence -- Long Term Global Mean Average Monthly Rate of Precipitation    
-[[Lawrence_index.html]](https://pjbartlein.github.io/REarthSysSci/projects/Lawrence_index.html)
+[[https://elizalaw.github.io/geog490finalproject/]](https://elizalaw.github.io/geog490finalproject/)
 
 - Anneke Brouwer -- Exploring North American Fire Occurrences 1986-2013  
 [[https://annekebrouwer.github.io/geog490project/final_project_geog490_r.html]](https://annekebrouwer.github.io/geog490project/final_project_geog490_r.html)  
