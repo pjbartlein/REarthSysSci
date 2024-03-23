@@ -63,13 +63,16 @@
 [[https://rpubs.com/metered/1161437]](https://rpubs.com/metered/1161437)  
 
 - Ava Lomax -- Potential Vegetation Types  
-[[https://rpubs.com/alomax/pot_veg]](https://rpubs.com/alomax/pot_veg)  
+[[[https://rpubs.com/alomax/1161445]](https://rpubs.com/alomax/1161445))  
 
 - Niamh Houston -- Creating a Normalized Difference Vegetation Index Using R   
 [[https://niamhhouston.github.io/GEOG490/]](https://niamhhouston.github.io/GEOG490/)  
 
 - Hannah Neuman -- Tide Buoy and Seismometer Data from 2011 Japan Earthquake   
 [[https://rpubs.com/kelsay927/1164052]](https://rpubs.com/kelsay927/1164052)  
+
+- Jesse Brodrick --  Global Forest Watch  
+[[https://jessebrodrick003.github.io/geog490/]](https://jessebrodrick003.github.io/geog490/)
 
 
 <https://pjbartlein.github.io/REarthSysSci/projects/>
